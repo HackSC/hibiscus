@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@hacksc-platforms/api-interfaces": ["libs/api-interfaces/src/index.ts"]
+      "@hacksc-platforms/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@hacksc-platforms/utility": ["libs/utility/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

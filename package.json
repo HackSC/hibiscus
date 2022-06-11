@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "nx serve",
-    "build": "nx build",
-    "test": "nx test"
+    "start": "nx run-many --target=serve --all",
+    "build": "nx run-many --target=build --all",
+    "test": "nx run-many --target=test --all",
+    "format": "prettier --write ."
   },
   "private": true,
   "dependencies": {

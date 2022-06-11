@@ -1,9 +1,10 @@
 import * as express from 'express';
 import { Message } from '@hacksc-platforms/api-interfaces';
+import { utility } from '@hacksc-platforms/utility';
 
 const app = express();
 
-const greeting: Message = { message: 'Welcome to api!' };
+const greeting: Message = { message: 'Welcome to api!', code: utility() };
 
 app.get('/api', (req, res) => {
   res.send(greeting);

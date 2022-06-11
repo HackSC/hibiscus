@@ -13,9 +13,10 @@
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "nx/tasks-runners/default",
+      "runner": "@nrwl/nx-cloud",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"]
+        "cacheableOperations": ["build", "lint", "test", "e2e"],
+        "accessToken": "Yzk0Yzc3OGEtNzlhZS00Mzg5LWExMDktMzcxZDE5YmFjZmRifHJlYWQtd3JpdGU="
       }
     }
   },
@@ -42,6 +43,5 @@
         "linter": "eslint"
       }
     }
-  },
-  "defaultProject": "monorepo-test"
+  }
 }

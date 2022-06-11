@@ -5,6 +5,7 @@
     "api": "apps/api",
     "api-interfaces": "libs/api-interfaces",
     "monorepo-test": "apps/monorepo-test",
-    "monorepo-test-e2e": "apps/monorepo-test-e2e"
+    "monorepo-test-e2e": "apps/monorepo-test-e2e",
+    "utility": "libs/utility"
   }
 }
