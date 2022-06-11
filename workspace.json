@@ -3,8 +3,8 @@
   "version": 2,
   "projects": {
     "api-interfaces": "libs/api-interfaces",
-    "landing-page": "apps/landing-page",
-    "landing-page-e2e": "apps/landing-page-e2e",
-    "utility": "libs/utility"
+    "utility": "libs/utility",
+    "www-2023": "apps/www-2023",
+    "www-2023-e2e": "apps/www-2023-e2e"
   }
 }

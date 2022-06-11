@@ -1,23 +1,23 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/landing-page-e2e/src",
+  "sourceRoot": "apps/www-2023-e2e/src",
   "projectType": "application",
   "targets": {
     "e2e": {
       "executor": "@nrwl/cypress:cypress",
       "options": {
-        "cypressConfig": "apps/landing-page-e2e/cypress.json",
-        "devServerTarget": "landing-page:serve:development"
+        "cypressConfig": "apps/www-2023-e2e/cypress.json",
+        "devServerTarget": "www-2023:serve:development"
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/landing-page-e2e/**/*.{js,ts}"]
+        "lintFilePatterns": ["apps/www-2023-e2e/**/*.{js,ts}"]
       }
     }
   },
   "tags": [],
-  "implicitDependencies": ["landing-page"]
+  "implicitDependencies": ["www-2023"]
 }

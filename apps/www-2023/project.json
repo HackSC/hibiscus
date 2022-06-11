@@ -1,6 +1,6 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/landing-page",
+  "sourceRoot": "apps/www-2023",
   "projectType": "application",
   "targets": {
     "build": {
@@ -8,8 +8,8 @@
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "root": "apps/landing-page",
-        "outputPath": "dist/apps/landing-page"
+        "root": "apps/www-2023",
+        "outputPath": "dist/apps/www-2023"
       },
       "configurations": {
         "development": {},
@@ -20,16 +20,16 @@
       "executor": "@nrwl/next:server",
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "landing-page:build",
+        "buildTarget": "www-2023:build",
         "dev": true
       },
       "configurations": {
         "development": {
-          "buildTarget": "landing-page:build:development",
+          "buildTarget": "www-2023:build:development",
           "dev": true
         },
         "production": {
-          "buildTarget": "landing-page:build:production",
+          "buildTarget": "www-2023:build:production",
           "dev": false
         }
       }
@@ -37,14 +37,14 @@
     "export": {
       "executor": "@nrwl/next:export",
       "options": {
-        "buildTarget": "landing-page:build:production"
+        "buildTarget": "www-2023:build:production"
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/landing-page"],
+      "outputs": ["coverage/apps/www-2023"],
       "options": {
-        "jestConfig": "apps/landing-page/jest.config.ts",
+        "jestConfig": "apps/www-2023/jest.config.ts",
         "passWithNoTests": true
       }
     },
@@ -52,7 +52,7 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/landing-page/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": ["apps/www-2023/**/*.{ts,tsx,js,jsx}"]
       }
     }
   },
