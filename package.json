@@ -12,18 +12,21 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "express": "4.17.2",
+    "next": "12.1.5",
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "regenerator-runtime": "0.13.7",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
+    "@cypress/webpack-preprocessor": "^5.12.0",
     "@nrwl/cli": "14.2.2",
     "@nrwl/cypress": "14.2.2",
     "@nrwl/eslint-plugin-nx": "14.2.2",
     "@nrwl/express": "14.2.2",
     "@nrwl/jest": "14.2.2",
     "@nrwl/linter": "14.2.2",
+    "@nrwl/next": "^14.2.4",
     "@nrwl/node": "14.2.2",
     "@nrwl/nx-cloud": "latest",
     "@nrwl/react": "14.2.2",
@@ -40,6 +43,7 @@
     "babel-jest": "27.5.1",
     "cypress": "^9.1.0",
     "eslint": "~8.15.0",
+    "eslint-config-next": "12.1.5",
     "eslint-config-prettier": "8.1.0",
     "eslint-plugin-cypress": "^2.10.3",
     "eslint-plugin-import": "2.26.0",
@@ -50,8 +54,11 @@
     "nx": "14.2.2",
     "prettier": "^2.6.2",
     "react-test-renderer": "18.1.0",
+    "sass": "1.43.2",
     "ts-jest": "27.1.4",
+    "ts-loader": "^9.3.0",
     "ts-node": "~10.8.0",
-    "typescript": "~4.7.2"
+    "typescript": "~4.7.2",
+    "webpack": "^5.73.0"
   }
 }
