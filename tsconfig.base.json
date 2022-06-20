@@ -16,7 +16,9 @@
     "baseUrl": ".",
     "paths": {
       "@hacksc-platforms/api-interfaces": ["libs/api-interfaces/src/index.ts"],
-      "@hacksc-platforms/utility": ["libs/utility/src/index.ts"]
+      "@hacksc-platforms/generator-scripts": [
+        "libs/generator-scripts/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

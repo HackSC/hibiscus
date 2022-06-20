@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "cli": "nx",
+  "$id": "hacksc-nextjs-application",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Next.js application name",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "Enter your application name:"
+    },
+    "style": {
+      "type": "string",
+      "description": "Stylesheet formatter to use",
+      "x-prompt": {
+        "message": "What styling formatter do you want to use?",
+        "type": "list",
+        "items": [
+          {
+            "value": "scss",
+            "label": "SCSS"
+          },
+          {
+            "value": "css",
+            "label": "Pure CSS"
+          }
+        ]
+      }
+    }
+  },
+  "required": ["name"]
+}
