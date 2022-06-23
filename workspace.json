@@ -4,6 +4,8 @@
   "projects": {
     "api-interfaces": "libs/api-interfaces",
     "generator-scripts": "libs/generator-scripts",
+    "interim": "apps/interim",
+    "interim-e2e": "apps/interim-e2e",
     "www-2023": "apps/www-2023",
     "www-2023-e2e": "apps/www-2023-e2e"
   }

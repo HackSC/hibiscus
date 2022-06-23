@@ -1,3 +1,6 @@
 [submodule "apps/www-2023"]
 	path = apps/www-2023
 	url = git@github.com:HackSC/www-2023.git
+[submodule "apps/interim"]
+	path = apps/interim
+	url = git@github.com:HackSC/interim.git
