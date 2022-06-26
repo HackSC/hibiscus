@@ -3,3 +3,4 @@
 
 npx nx affected --target=test
 npm run format
+git add -A .
