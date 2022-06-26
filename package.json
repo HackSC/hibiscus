@@ -6,11 +6,11 @@
     "start": "nx run-many --target=serve --all",
     "build": "nx run-many --target=build --all",
     "test": "nx run-many --target=test --all",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "prepare": "husky install"
   },
   "private": true,
   "dependencies": {
-    "@nrwl/next": "14.3.6",
     "axios": "^0.27.2",
     "core-js": "^3.6.5",
     "dotenv": "^16.0.1",

@@ -1667,7 +1667,7 @@
     tmp "~0.2.1"
     tslib "^2.3.0"
 
-"@nrwl/next@14.3.6":
+"@nrwl/next@^14.2.4":
   version "14.3.6"
   resolved "https://registry.yarnpkg.com/@nrwl/next/-/next-14.3.6.tgz#b38dd7734794ca6713d009f606b6ee6cde37b5b9"
   integrity sha512-GSCS7f1ZMVlwRpdbDI4atax1lmIH37D2i48bfBP3hNpZC36nOSiddP/8yGhq4zkfJYrauIMHKoyb14HLaxPLtw==
@@ -6006,7 +6006,7 @@ human-signals@^2.1.0:
 
 husky@^8.0.1:
   version "8.0.1"
-  resolved "https://registry.yarnpkg.com/husky/-/husky-8.0.1.tgz"
+  resolved "https://registry.yarnpkg.com/husky/-/husky-8.0.1.tgz#511cb3e57de3e3190514ae49ed50f6bc3f50b3e9"
   integrity sha512-xs7/chUH/CKdOCs7Zy0Aev9e/dKOMZf3K1Az1nar3tzlv0jfqnYtu235bstsWTmXOR0EfINrPa97yy4Lz6RiKw==
 
 iconv-lite@0.4.24:
