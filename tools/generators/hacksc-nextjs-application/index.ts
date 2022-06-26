@@ -9,18 +9,16 @@ export default async function (tree: Tree, schema: GeneratorOptions) {
     style: schema.style,
   });
 
+  // setup husky for our project
   HackSCGeneratorScripts.configureHuskyHooksForProject(tree, schema.name);
 
   // read our platform tokens
-  const platformTokens = readJson(tree, './platform-credentials.json');
+  const platformTokens = readJson(tree, './tools/keys/platform-credentials.json');
 
-  const githubRepositoryName = schema.name;
-  await HackSCGeneratorScripts.createHackSCGithubRepository(
-    platformTokens.BOT_GITHUB_PAT,
-    githubRepositoryName
-  );
+  const githubRepositoryName = 'hacksc-platforms';
 
   const vercelProjectName = schema.name;
+  // create a Vercel project linked to the monorepo
   await HackSCGeneratorScripts.createHackSCVercelProject(
     platformTokens.BOT_VERCEL_API_TOKEN,
     vercelProjectName,
