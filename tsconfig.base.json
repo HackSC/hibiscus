@@ -16,19 +16,11 @@
     "baseUrl": ".",
     "paths": {
       "@hacksc-platforms/api-interfaces": ["libs/api-interfaces/src/index.ts"],
-      "@hacksc-platforms/frontend-components": [
-        "libs/frontend/components/src/index.ts"
-      ],
-      "@hacksc-platforms/frontend-shared": [
-        "libs/frontend/shared/src/index.ts"
-      ],
       "@hacksc-platforms/generator-scripts": [
         "libs/generator-scripts/src/index.ts"
       ],
-      "@hacksc-platforms/libs/components": [
-        "libs/libs/components/src/index.ts"
-      ],
-      "@hacksc-platforms/styles": ["libs/styles/src/index.ts"]
+      "@hacksc-platforms/styles": ["libs/styles/src/index.ts"],
+      "@hacksc-platforms/ui": ["libs/ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
