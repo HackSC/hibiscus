@@ -3,7 +3,7 @@ import { AccordionItem } from '@hacksc-platforms/ui';
 export function FAQSection() {
   return (
     <div>
-      <h1 style={{ marginBottom: 0 }}>FAQs</h1>
+      <h1 style={{ marginBottom: 0, fontSize: 50 }}>FAQs</h1>
       <div
         style={{
           display: 'flex',
