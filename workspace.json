@@ -6,8 +6,8 @@
     "generator-scripts": "libs/generator-scripts",
     "interim": "apps/interim",
     "interim-e2e": "apps/interim-e2e",
-    "components": "libs/components",
     "styles": "libs/styles",
+    "ui": "libs/ui",
     "www-2023": "apps/www-2023",
     "www-2023-e2e": "apps/www-2023-e2e"
   }

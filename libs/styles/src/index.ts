@@ -1,2 +1,2 @@
-export * from './fonts';
-export * from './lib';
+export * from './lib/colors';
+export * from './lib/fonts';
