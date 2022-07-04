@@ -1,5 +1,8 @@
 import { TrademarkColors } from '@hacksc-platforms/styles';
+import FAQSection from '../components/faqsection/faqsection';
+import TeamContactBlurbs from '../components/team-contact-blurbs/team-contact-blurbs';
 import ThankYouText from '../components/thank-you-text/thank-you-text';
+import styled from 'styled-components';
 
 export function Index() {
   const submitSubscribeNewsletterHandler = () => {
@@ -7,12 +10,7 @@ export function Index() {
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        width: '30rem',
-      }}
-    >
+    <MainPageContainer>
       <div>
         <h1
           style={{
@@ -41,6 +39,7 @@ export function Index() {
             display: 'flex',
             width: '100%',
             alignItems: 'center',
+            marginBottom: '2rem',
           }}
         >
           <input
@@ -56,16 +55,15 @@ export function Index() {
               maxWidth: '100%',
               width: '100%',
             }}
-            placeholder={'SAMPLE@EMAIL.EDU'}
+            placeholder={'Subscribe to our email newsletter!'}
           />
           <button
             style={{
               background: `linear-gradient(90deg, ${TrademarkColors.LIGHT_BLUE} 0%, ${TrademarkColors.LIGHT_PURPLE} 100%)`,
               border: 'none',
-              paddingTop: 12,
-              paddingBottom: 12,
+              padding: '12px 2px',
               color: 'white',
-              fontWeight: 900,
+              fontWeight: 700,
               borderRadius: 10,
               boxShadow: '0px 2px 10px -1px #a0a0a0',
               fontSize: 15,
@@ -78,9 +76,16 @@ export function Index() {
           </button>
         </div>
       </div>
-      <div></div>
-    </div>
+      <TeamContactBlurbs />
+      <div style={{ marginTop: '2rem' }}>
+        <FAQSection />
+      </div>
+    </MainPageContainer>
   );
 }
 
 export default Index;
+
+const MainPageContainer = styled.div`
+  width: 30rem;
+`;
