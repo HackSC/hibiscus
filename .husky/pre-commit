@@ -3,3 +3,6 @@
 
 npx nx affected --target=lint
 npx nx affected --target=test
+
+npm run format
+git add -A
