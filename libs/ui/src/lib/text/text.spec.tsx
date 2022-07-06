@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import AccordionItem from './accordion-item';
+import Text from './text';
 
-describe('ToggleListItem', () => {
+describe('Text', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<AccordionItem />);
+    const { baseElement } = render(<Text />);
     expect(baseElement).toBeTruthy();
   });
 });
