@@ -1,1 +1,3 @@
-export * from './lib/toggle-list-item/accordion-item';
+export * from './lib/heading/heading';
+export * from './lib/text/text';
+export * from './lib/accordion/accordion';

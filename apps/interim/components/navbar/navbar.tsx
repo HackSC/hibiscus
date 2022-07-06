@@ -1,5 +1,7 @@
 import { TrademarkColors } from '@hacksc-platforms/styles';
+import { Text } from '@hacksc-platforms/ui';
 import styled from 'styled-components';
+import GradientSpan from '../gradient-span/gradient-span';
 
 /* eslint-disable-next-line */
 export interface NavbarProps {}
@@ -7,16 +9,20 @@ export interface NavbarProps {}
 export function Navbar(props: NavbarProps) {
   return (
     <StyledNavbar>
-      <NavbarLeftLogoText>HackSC</NavbarLeftLogoText>
+      <NavbarLeftLogoText>
+        <GradientSpan>HackSC</GradientSpan>
+      </NavbarLeftLogoText>
       <RightMenuDiv>
         <RightMenuItemClickable>
-          <GradientBoldedText>Overview</GradientBoldedText>
+          <Text>
+            <GradientSpan>Overview</GradientSpan>
+          </Text>
         </RightMenuItemClickable>
         <RightMenuItemClickable>
-          <p>Sponsor us</p>
+          <Text>Sponsor us</Text>
         </RightMenuItemClickable>
         <RightMenuItemClickable>
-          <p>Previous hackathons</p>
+          <Text>Previous hackathons</Text>
         </RightMenuItemClickable>
       </RightMenuDiv>
     </StyledNavbar>
@@ -51,25 +57,5 @@ const RightMenuItemClickable = styled.button`
 `;
 
 const NavbarLeftLogoText = styled.h1`
-  background: linear-gradient(
-    to right,
-    ${TrademarkColors.LIGHT_BLUE} 0%,
-    ${TrademarkColors.LIGHT_PURPLE} 100%
-  );
   letter-spacing: -1.1px;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-`;
-
-const GradientBoldedText = styled.p`
-  font-weight: 700;
-  background: linear-gradient(
-    to right,
-    ${TrademarkColors.LIGHT_BLUE} 0%,
-    ${TrademarkColors.LIGHT_PURPLE} 100%
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
 `;
