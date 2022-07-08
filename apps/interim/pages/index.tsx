@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import EmailNewsletterInputSection from '../components/email-newsletter-input-section/email-newsletter-input-section';
 import FAQSection from '../components/faqsection/faqsection';
+import ImageSection from '../components/imagesection/imagesection';
 import { LogoAndSloganSection } from '../components/logo-and-slogan/logo-and-slogan';
 import Navbar from '../components/navbar/navbar';
 import TeamContactBlurbs from '../components/team-contact-blurbs/team-contact-blurbs';
@@ -9,6 +10,7 @@ import ThankYouText from '../components/thank-you-text/thank-you-text';
 export function Index() {
   return (
     <MainPageWrapper>
+      <ImageSection />
       <Navbar />
       <FirstSection>
         <LogoAndSloganSection />
