@@ -11,7 +11,9 @@ export function Index() {
   return (
     <MainPageWrapper>
       <ImageSection />
-      <Navbar />
+      <NavbarWrapper>
+        <Navbar />
+      </NavbarWrapper>
       <FirstSection>
         <LogoAndSloganSection />
         <ThankYouText nextYear={2023} />
@@ -30,11 +32,20 @@ export default Index;
 const MainPageWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+`;
+
+const NavbarWrapper = styled.div`
+  display: flex;
+  justify-content: center;
 `;
 
 const FirstSection = styled.section`
   max-width: 30rem;
+  margin-left: 6rem;
+  margin-top: 6rem;
 `;
 
-const SecondSection = styled.section``;
+const SecondSection = styled.section`
+  margin-left: 6rem;
+  max-width: 30rem;
+`;

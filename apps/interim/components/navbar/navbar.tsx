@@ -1,4 +1,3 @@
-import { TrademarkColors } from '@hacksc-platforms/styles';
 import { Text } from '@hacksc-platforms/ui';
 import styled from 'styled-components';
 import GradientSpan from '../gradient-span/gradient-span';
@@ -46,16 +45,18 @@ const RightMenuDiv = styled.div`
 const RightMenuItemClickable = styled.button`
   padding: 0.2rem 1rem;
   margin: 0.5rem;
+  font-size: medium;
   border: none;
   background: none;
   cursor: pointer;
   border-radius: 0.4rem;
 
   &:hover {
-    background: #f0f0f0;
+    background: #faf9f9;
   }
 `;
 
 const NavbarLeftLogoText = styled.h1`
   letter-spacing: -1.1px;
+  font-size: xx-large;
 `;
