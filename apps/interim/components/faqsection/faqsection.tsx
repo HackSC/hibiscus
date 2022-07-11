@@ -1,9 +1,10 @@
-import { AccordionItem } from '@hacksc-platforms/ui';
+import { AccordionItem, H2, H3 } from '@hacksc-platforms/ui';
+import styled from 'styled-components';
 
 export function FAQSection() {
   return (
     <div>
-      <h1 style={{ marginBottom: 0, fontSize: 50 }}>FAQs</h1>
+      <FAQHeaderH2>FAQs</FAQHeaderH2>
       <div
         style={{
           display: 'flex',
@@ -13,11 +14,7 @@ export function FAQSection() {
         {faqQuestionsAndAnswersData.map((item, idx) => (
           <AccordionItem
             key={idx}
-            titleButtonElement={
-              <h3 style={{ fontFamily: 'Inter', fontWeight: 400 }}>
-                {item.titleText}
-              </h3>
-            }
+            titleButtonElement={<H3>{item.titleText}</H3>}
           >
             <p>{item.disclosedText}</p>
           </AccordionItem>
@@ -28,6 +25,10 @@ export function FAQSection() {
 }
 
 export default FAQSection;
+
+const FAQHeaderH2 = styled(H2)`
+  font-size: 2rem;
+`;
 
 const faqQuestionsAndAnswersData: {
   titleText: string;

@@ -23,25 +23,38 @@ export function EmailNewsletterInputSection(
 
 export default EmailNewsletterInputSection;
 
-const Container = styled.div({
-  display: 'flex',
-  width: '100%',
-  alignItems: 'center',
-  marginBottom: '2rem',
-});
+const Container = styled.div`
+  display: flex;
+  width: 100%;
+  align-items: center;
+  margin-bottom: 2rem;
 
-const GradientButton = styled.button({
-  background: `linear-gradient(90deg, ${TrademarkColors.LIGHT_BLUE} 0%, ${TrademarkColors.LIGHT_PURPLE} 100%)`,
-  border: 'none',
-  padding: '12px 2px',
-  color: 'white',
-  fontWeight: 900,
-  borderRadius: 10,
-  boxShadow: '0px 2px 10px -1px #a0a0a0',
-  fontSize: 15,
-  cursor: 'pointer',
-  minWidth: '30%',
-});
+  @media (max-width: 600px) {
+    flex-direction: column;
+  }
+`;
+
+const GradientButton = styled.button`
+  background: linear-gradient(
+    90deg,
+    ${TrademarkColors.LIGHT_BLUE} 0%,
+    ${TrademarkColors.LIGHT_PURPLE} 100%
+  );
+  border: none;
+  padding: 12px 2px;
+  color: white;
+  font-weight: 900;
+  border-radius: 10px;
+  box-shadow: 0px 2px 10px -1px #a0a0a0;
+  font-size: 15;
+  cursor: pointer;
+  min-width: 30%;
+
+  @media (max-width: 600px) {
+    width: 100%;
+    margin-top: 5px;
+  }
+`;
 
 const EmailInput = styled.input({
   border: 'solid 0.1rem #BCBCBC',
