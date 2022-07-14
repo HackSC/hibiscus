@@ -1,5 +1,11 @@
 import { TrademarkColors } from '@hacksc-platforms/styles';
+import { Text } from '@hacksc-platforms/ui';
+import { useFormik } from 'formik';
+import toast from 'react-hot-toast';
+import { useMutation } from 'react-query';
 import styled from 'styled-components';
+import * as Yup from 'yup';
+import useSendgridClient from '../../hooks/use-sendgrid-client/use-sendgrid-client';
 
 /* eslint-disable-next-line */
 export interface EmailNewsletterInputSectionProps {}
@@ -7,17 +13,56 @@ export interface EmailNewsletterInputSectionProps {}
 export function EmailNewsletterInputSection(
   props: EmailNewsletterInputSectionProps
 ) {
-  const submitSubscribeNewsletterHandler = () => {
-    alert("Subscribed to HackSC newsletter; what's next?");
-  };
+  const { sendgridClient } = useSendgridClient();
+  const saveContactToSendgridMutation = useMutation(async (email: string) => {
+    if (process.env.NODE_ENV === 'production') {
+      await sendgridClient.saveContactsToLists([], [email]);
+    } else {
+      console.log('-> [non-production log] sent to Sendgrid');
+    }
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      email: '',
+    },
+    validateOnChange: false,
+    validateOnBlur: false,
+    validationSchema: Yup.object({
+      email: Yup.string()
+        .email(
+          'Oops, this seems like an invalid email. Make sure you typed a valid email'
+        )
+        .required('Please enter your email'),
+    }),
+    onSubmit: (values) => {
+      toast.promise(saveContactToSendgridMutation.mutateAsync(values.email), {
+        loading: 'Subscribing you to our newsletter...',
+        success: "You have subscribed to HackSC's newsletter. Stay tuned!",
+        error: 'Oops, something went wrong on our end. Please try again.',
+      });
+    },
+  });
 
   return (
-    <Container>
-      <EmailInput placeholder={'Subscribe to our email newsletter!'} />
-      <GradientButton onClick={submitSubscribeNewsletterHandler}>
-        STAY UP TO DATE
-      </GradientButton>
-    </Container>
+    <form onSubmit={formik.handleSubmit}>
+      <Container>
+        <EmailInput
+          placeholder={'Subscribe to our email newsletter!'}
+          onChange={formik.handleChange}
+          id="email"
+          name="email"
+          type="email"
+          value={formik.values.email}
+        />
+        {formik.errors.email && formik.touched.email ? (
+          <Text style={{ color: 'red' }}>{formik.errors.email}</Text>
+        ) : null}
+        <GradientButton type="submit">
+          {saveContactToSendgridMutation.isLoading ? '...' : 'STAY UP TO DATE'}
+        </GradientButton>
+      </Container>
+    </form>
   );
 }
 
