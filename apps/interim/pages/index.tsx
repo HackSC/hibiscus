@@ -6,12 +6,15 @@ import { LogoAndSloganSection } from '../components/logo-and-slogan/logo-and-slo
 import Navbar from '../components/navbar/navbar';
 import TeamContactBlurbs from '../components/team-contact-blurbs/team-contact-blurbs';
 import ThankYouText from '../components/thank-you-text/thank-you-text';
+import Footer from '../components/footer/footer';
 
 export function Index() {
   return (
     <MainPageWrapper>
       <ImageSection />
-      <Navbar />
+      <NavbarWrapper>
+        <Navbar />
+      </NavbarWrapper>
       <FirstSection>
         <LogoAndSloganSection />
         <ThankYouText nextYear={2023} />
@@ -21,6 +24,7 @@ export function Index() {
       <SecondSection>
         <FAQSection />
       </SecondSection>
+      <Footer />
     </MainPageWrapper>
   );
 }
@@ -30,11 +34,33 @@ export default Index;
 const MainPageWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+
+  @media (max-width: 600px) {
+    width: 85vw;
+  }
+`;
+
+const NavbarWrapper = styled.div`
+  display: flex;
+  justify-content: center;
 `;
 
 const FirstSection = styled.section`
-  max-width: 30rem;
+  max-width: 40rem;
+  margin: 6rem 4rem 0 6rem;
+
+  @media (max-width: 600px) {
+    margin-left: 3rem;
+    margin-right: 0;
+  }
 `;
 
-const SecondSection = styled.section``;
+const SecondSection = styled.section`
+  margin-top: 3rem;
+  margin-left: 6rem;
+  max-width: 30rem;
+
+  @media (max-width: 600px) {
+    margin-left: 3rem;
+  }
+`;
