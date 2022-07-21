@@ -6,6 +6,7 @@ import { LogoAndSloganSection } from '../components/logo-and-slogan/logo-and-slo
 import Navbar from '../components/navbar/navbar';
 import TeamContactBlurbs from '../components/team-contact-blurbs/team-contact-blurbs';
 import ThankYouText from '../components/thank-you-text/thank-you-text';
+import Footer from '../components/footer/footer';
 
 export function Index() {
   return (
@@ -23,6 +24,7 @@ export function Index() {
       <SecondSection>
         <FAQSection />
       </SecondSection>
+      <Footer />
     </MainPageWrapper>
   );
 }
