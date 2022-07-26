@@ -8,7 +8,7 @@ const LogoH1 = styled(H1)`
   letter-spacing: -3px;
   font-size: 6rem;
   font-weight: 700;
-
+  color: #2b2b2b;
   @media (max-width: 600px) {
     font-size: 4rem;
   }
@@ -16,10 +16,11 @@ const LogoH1 = styled(H1)`
 
 const SloganText = styled(H5)`
   margin-top: 1rem;
-  font-weight: 300;
+  font-weight: 400;
   color: #939393;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-style: italic;
+  padding-top: .5rem;
 
   @media (max-width: 600px) {
     font-size: 1rem;

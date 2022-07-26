@@ -41,6 +41,7 @@ const MainPageWrapper = styled.div`
 `;
 
 const NavbarWrapper = styled.div`
+  padding-top: 2rem;
   display: flex;
   justify-content: center;
 `;
@@ -48,7 +49,7 @@ const NavbarWrapper = styled.div`
 const FirstSection = styled.section`
   max-width: 40rem;
   margin: 6rem 4rem 0 6rem;
-
+  padding: 3.25rem 0 0 3.25rem;
   @media (max-width: 600px) {
     margin-left: 3rem;
     margin-right: 3rem;
@@ -59,8 +60,8 @@ const SecondSection = styled.section`
   margin-top: 3rem;
   margin-bottom: 3rem;
   margin-left: 6rem;
-  max-width: 30rem;
-
+  max-width: 100vw;
+  padding: 4.5rem 0 0 3.5rem;
   @media (max-width: 600px) {
     margin-left: 3rem;
     margin-right: 3rem;

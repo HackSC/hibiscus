@@ -1,7 +1,7 @@
 import { TrademarkColors } from '@hacksc-platforms/styles';
 import { Text } from '@hacksc-platforms/ui';
 import styled from 'styled-components';
-import GradientSpan from '../gradient-span/gradient-span';
+import GradientSpan from '../../../../libs/ui/src/lib/gradient-span/gradient-span';
 
 /* eslint-disable-next-line */
 export interface TeamContactBlurbsProps {}
@@ -35,11 +35,14 @@ const GrayParagraph = styled(Text)`
   font-style: italic;
   color: #939393;
   margin: 3px;
+  font-size: 1.5rem;
 `;
 
 const GrayBoldedItalicSpan = styled.span`
   color: #939393;
   font-weight: 600;
+  font-size: 1.5rem;
+  font-family: Inter, sans-serif;
 `;
 
 const TeamEmailGradientSpan = styled(GradientSpan)``;
