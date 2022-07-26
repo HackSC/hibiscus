@@ -72,7 +72,8 @@ const Container = styled.div`
   display: flex;
   width: 100%;
   align-items: center;
-  margin-bottom: 2rem;
+  padding-bottom: 3rem;
+  padding-top: 2rem;
   @media (max-width: 600px) {
     flex-direction: column;
   }
@@ -88,9 +89,10 @@ const GradientButton = styled.button`
   padding: 12px 2px;
   color: white;
   font-weight: 900;
-  border-radius: 10px;
+  border-radius: 0.3rem;
   box-shadow: 0px 2px 10px -1px #a0a0a0;
-  font-size: 15;
+  font-size: 1.1rem;
+  font-family: Inter, sans-serif;
   cursor: pointer;
   min-width: 30%;
 
@@ -103,11 +105,11 @@ const GradientButton = styled.button`
 const EmailInput = styled.input({
   border: 'solid 0.1rem #BCBCBC',
   backgroundColor: '#F8F8F8',
-  borderRadius: 10,
+  borderRadius: '0.3rem',
   padding: 10,
   paddingLeft: 15,
   fontFamily: 'Inter',
-  fontSize: 15,
+  fontSize: '1.1rem',
   color: '#676767',
   marginRight: 5,
   maxWidth: '100%',

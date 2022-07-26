@@ -9,14 +9,15 @@ export default function ImageSection() {
         width: '100vw',
         zIndex: -1,
         top: 0,
-        right: 0,
+        left: 0,
       }}
     >
       <Image
         alt="HackSC Logo Background"
-        src="/light-desktop-bg.svg"
+        src="/img/light-desktop-bg.svg"
         layout="fill"
         objectFit="cover"
+        quality={100}
       />
     </div>
   );

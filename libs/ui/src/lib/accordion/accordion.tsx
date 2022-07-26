@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import { GradientSpan } from '@hacksc-platforms/ui';
+
 
 /* eslint-disable-next-line */
 /**
@@ -35,7 +37,9 @@ export function AccordionItem(props: Props) {
               marginRight: 5,
             }}
           >
-            <h3>+</h3>
+            <Bullet>
+            <GradientSpan>+{'\u00a0'}</GradientSpan>
+            </Bullet>
           </div>
           <div>{props.titleButtonElement}</div>
         </div>
@@ -53,20 +57,33 @@ const ToggleItemButton = styled.button`
   border: none;
   background: none;
   text-align: left;
+  color: #2b2b2b;
+  font-family: Inter, sans-serif;
+  font-size: 1.6rem;
   cursor: pointer;
 
   &:hover {
     background-color: #f3f3f3;
+    border-radius: 0.4rem;
   }
 `;
 
 const AccordionContainer = styled.div`
   display: flex;
   flex-direction: column;
+  min-width: 25rem;
+  max-width: 33rem;
+`;
+
+const Bullet = styled.h3`
+  font-size: 2rem;
+  font-family: Inter, sans-serif;
+  font-weight: bolder;
 `;
 
 const DisclosedElementContainer = styled.div`
-  margin: 0.3rem 0 0 0.5rem;
-  padding-left: 1rem;
-  border-left: solid 2px black;
+  padding-left: 1.25rem;
+  border-left: solid 2px #2b2b2b;
+  font-size: 1.5rem;
+  color: #2b2b2b;
 `;

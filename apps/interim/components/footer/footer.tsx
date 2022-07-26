@@ -16,10 +16,10 @@ export function Footer(props: FooterProps) {
           >
             <Image
               style={{ margin: 20 }}
-              src="/linkedin.svg"
+              src="/img/linkedin.svg"
               alt="LinkedIn"
-              height="35"
-              width="35"
+              height="45"
+              width="45"
               layout="fixed"
             />
           </a>
@@ -32,10 +32,10 @@ export function Footer(props: FooterProps) {
           >
             <Image
               style={{ margin: 20 }}
-              src="/twitter.svg"
+              src="/img/twitter.svg"
               alt="Twitter"
-              height="35"
-              width="35"
+              height="45"
+              width="45"
               layout="fixed"
             />
           </a>
@@ -48,10 +48,10 @@ export function Footer(props: FooterProps) {
           >
             <Image
               style={{ margin: 20 }}
-              src="/facebook.svg"
+              src="/img/facebook.svg"
               alt="Facebook"
-              height="35"
-              width="35"
+              height="45"
+              width="45"
               layout="fixed"
             />
           </a>
@@ -64,10 +64,10 @@ export function Footer(props: FooterProps) {
           >
             <Image
               style={{ margin: 20 }}
-              src="/instagram.svg"
+              src="/img/instagram.svg"
               alt="Instagram"
-              height="35"
-              width="35"
+              height="45"
+              width="45"
               layout="fixed"
             />
           </a>
@@ -83,13 +83,14 @@ const FooterWrapper = styled.div`
   background-color: #f6f6f6;
   justify-content: space-around;
   align-items: center;
-  padding: 1rem;
+  padding: 2rem;
 `;
 
 const IconContainer = styled.div`
-  padding: 0 0.5rem 0;
+  padding: 1rem 1rem 0;
 `;
 
 const SocialMediaContainer = styled.div`
   display: flex;
+  padding-left: 2rem;
 `;
