@@ -6,20 +6,28 @@
     "start": "nx run-many --target=serve --all",
     "build": "nx run-many --target=build --all",
     "test": "nx run-many --target=test --all",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "prepare": "husky install"
   },
   "private": true,
   "dependencies": {
-    "@nrwl/next": "14.3.6",
+    "@fontsource/inter": "^4.5.11",
+    "@sendgrid/mail": "^7.7.0",
     "axios": "^0.27.2",
     "core-js": "^3.6.5",
     "dotenv": "^16.0.1",
     "express": "4.17.2",
+    "formik": "^2.2.9",
     "next": "12.1.5",
     "react": "18.1.0",
     "react-dom": "18.1.0",
+    "react-hot-toast": "^2.3.0",
+    "react-is": "18.2.0",
+    "react-query": "^3.39.1",
     "regenerator-runtime": "0.13.7",
-    "tslib": "^2.3.0"
+    "styled-components": "^5.3.5",
+    "tslib": "^2.3.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@cypress/webpack-preprocessor": "^5.12.0",
@@ -42,9 +50,12 @@
     "@types/node": "^18.0.0",
     "@types/react": "18.0.8",
     "@types/react-dom": "18.0.3",
+    "@types/react-is": "17.0.3",
+    "@types/styled-components": "^5.1.25",
     "@typescript-eslint/eslint-plugin": "~5.24.0",
     "@typescript-eslint/parser": "~5.24.0",
     "babel-jest": "27.5.1",
+    "babel-plugin-styled-components": "1.10.7",
     "cypress": "^9.1.0",
     "eslint": "~8.15.0",
     "eslint-config-next": "12.1.5",
@@ -65,5 +76,8 @@
     "ts-node": "~10.8.0",
     "typescript": "~4.7.2",
     "webpack": "^5.73.0"
+  },
+  "resolutions": {
+    "styled-components": "^5"
   }
 }

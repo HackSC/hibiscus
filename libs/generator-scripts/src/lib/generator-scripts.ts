@@ -3,6 +3,7 @@ import {
   Tree,
   updateProjectConfiguration,
   readProjectConfiguration,
+  addDependenciesToPackageJson,
 } from '@nrwl/devkit';
 
 export class HackSCGeneratorScripts {
@@ -48,34 +49,6 @@ export class HackSCGeneratorScripts {
     projectName: string,
     githubRepositoryName: string
   ): Promise<void> {
-    return;
-  }
-
-  /**
-   * Adds the project as a Git submodule to the main `hacksc-platforms` monorepo
-   * @param projectName the app/project name relative to our monorepo
-   * @param githubSSHRepositoryURL the SSH URL for the Github repository
-   */
-  static addNewProjectAsMonorepoGSM(
-    projectName: string,
-    githubSSHRepositoryURL: string
-  ): Promise<void> {
-    return;
-  }
-
-  static configureHuskyHooksForProject(tree: Tree, projectName: string): Promise<void> {
-    const newProjectConfigurations = readProjectConfiguration(
-      tree,
-      projectName
-    );
-
-    updateProjectConfiguration(tree, projectName, {
-      root: newProjectConfigurations.root,
-      generators: {
-        ...newProjectConfigurations.generators,
-      },
-    });
-
     return;
   }
 }

@@ -9,11 +9,11 @@ export default async function (tree: Tree, schema: GeneratorOptions) {
     style: schema.style,
   });
 
-  // setup husky for our project
-  HackSCGeneratorScripts.configureHuskyHooksForProject(tree, schema.name);
-
   // read our platform tokens
-  const platformTokens = readJson(tree, './tools/keys/platform-credentials.json');
+  const platformTokens = readJson(
+    tree,
+    './tools/keys/platform-credentials.json'
+  );
 
   const githubRepositoryName = 'hacksc-platforms';
 
