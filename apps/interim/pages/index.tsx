@@ -24,7 +24,9 @@ export function Index() {
       <SecondSection>
         <FAQSection />
       </SecondSection>
-      <Footer />
+      <FooterContainer>
+        <Footer />
+      </FooterContainer>
     </MainPageWrapper>
   );
 }
@@ -34,10 +36,8 @@ export default Index;
 const MainPageWrapper = styled.div`
   display: flex;
   flex-direction: column;
-
-  @media (max-width: 600px) {
-    width: 85vw;
-  }
+  justify-content: space-between;
+  min-height: 100vh;
 `;
 
 const NavbarWrapper = styled.div`
@@ -51,16 +51,23 @@ const FirstSection = styled.section`
 
   @media (max-width: 600px) {
     margin-left: 3rem;
-    margin-right: 0;
+    margin-right: 3rem;
   }
 `;
 
 const SecondSection = styled.section`
   margin-top: 3rem;
+  margin-bottom: 3rem;
   margin-left: 6rem;
   max-width: 30rem;
 
   @media (max-width: 600px) {
     margin-left: 3rem;
+    margin-right: 3rem;
   }
+`;
+
+const FooterContainer = styled.div`
+  padding: 0;
+  justify-self: flex-end;
 `;
