@@ -36,6 +36,9 @@ const GrayParagraph = styled(Text)`
   color: #939393;
   margin: 3px;
   font-size: 1.5rem;
+  @media (max-width: 600px) {
+    font-size: 1rem;
+  }
 `;
 
 const GrayBoldedItalicSpan = styled.span`
@@ -43,6 +46,9 @@ const GrayBoldedItalicSpan = styled.span`
   font-weight: 600;
   font-size: 1.5rem;
   font-family: Inter, sans-serif;
+  @media (max-width: 600px) {
+    font-size: 1rem;
+  }
 `;
 
 const TeamEmailGradientSpan = styled(GradientSpan)``;

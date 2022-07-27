@@ -74,7 +74,7 @@ const Container = styled.div`
   align-items: center;
   padding-bottom: 3rem;
   padding-top: 2rem;
-  @media (max-width: 600px) {
+  @media (max-width: 1080px) {
     flex-direction: column;
   }
 `;
@@ -96,7 +96,7 @@ const GradientButton = styled.button`
   cursor: pointer;
   min-width: 30%;
 
-  @media (max-width: 600px) {
+  @media (max-width: 1080px) {
     width: 100%;
     margin-top: 5px;
   }
