@@ -87,6 +87,7 @@ const DropdownContent = styled.div`
   min-width: 10rem;
   padding: 0.3rem;
   border-radius: 0.5rem;
+  margin-left: 7rem;
 `;
 
 const DropdownContentItem = styled.div`
