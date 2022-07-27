@@ -66,8 +66,12 @@ const FAQContainer = styled.div`
 `;
 
 const DisclosedText = styled(Text)`
-  font-size: 1rem;
+  font-size: 1.2rem;
   line-height: 1.5;
+
+  @media (max-width: 600px) {
+    font-size: 1rem;
+  }
 `;
 
 const faqQuestionsAndAnswersData: {
