@@ -23,51 +23,66 @@ const MobileNavbar: FC = () => {
 
 const TheBurger = () => {
   return (
-      <nav role="navigation">
-          <div className={`${ham.menuToggle}`}>
-              <input type="checkbox" aria-label='Toggle navigation'/>
-              <span></span>
-              <span></span>
-              <span></span>
+    <nav role="navigation">
+      <div className={`${ham.menuToggle}`}>
+        <input type="checkbox" aria-label="Toggle navigation" />
+        <span></span>
+        <span></span>
+        <span></span>
 
-              <ul className={`${ham.menu}`}>
-                  <StyledLink href={'/'}>
-                      <a href={``}><li>Overview</li></a>
-                  </StyledLink>
-                  <StyledLink href={'https://team.hacksc.com'}>
-                  <a href={``}><li>Join Us</li></a>
-
-                  </StyledLink>
-                  <DropdownMenu>
-                    <li>Previous Hackathons ▾</li>
-                    <DropdownContent>
-                      <DropdownContentItem>
-                        <a href='https://2022.hacksc.com' target='_blank' rel='noreferrer'>
-                          <DropdownLink>HackSC 2022</DropdownLink>
-                        </a>
-                      </DropdownContentItem>
-                      <DropdownContentItem>
-                        <a href='https://2021.hacksc.com' target='_blank' rel='noreferrer'>
-                          <DropdownLink>HackSC 2021</DropdownLink>
-                        </a>
-                      </DropdownContentItem>
-                      <DropdownContentItem>
-                        <a href='https://2020.hacksc.com' target='_blank' rel='noreferrer'>
-                          <DropdownLink>HackSC 2020</DropdownLink>
-                        </a>
-                      </DropdownContentItem>
-                    </DropdownContent>
-                  </DropdownMenu>
-              </ul>
-          </div>
-      </nav>
-  )
-}
+        <ul className={`${ham.menu}`}>
+          <StyledLink href={'/'}>
+            <a href={``}>
+              <li>Overview</li>
+            </a>
+          </StyledLink>
+          <StyledLink href={'https://team.hacksc.com'}>
+            <a href={``}>
+              <li>Join Us</li>
+            </a>
+          </StyledLink>
+          <DropdownMenu>
+            <li>Previous Hackathons ▾</li>
+            <DropdownContent>
+              <DropdownContentItem>
+                <a
+                  href="https://2022.hacksc.com"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <DropdownLink>HackSC 2022</DropdownLink>
+                </a>
+              </DropdownContentItem>
+              <DropdownContentItem>
+                <a
+                  href="https://2021.hacksc.com"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <DropdownLink>HackSC 2021</DropdownLink>
+                </a>
+              </DropdownContentItem>
+              <DropdownContentItem>
+                <a
+                  href="https://2020.hacksc.com"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <DropdownLink>HackSC 2020</DropdownLink>
+                </a>
+              </DropdownContentItem>
+            </DropdownContent>
+          </DropdownMenu>
+        </ul>
+      </div>
+    </nav>
+  );
+};
 
 export default MobileNavbar;
 
-const MobileNavbarContainer = styled.div `
-padding-top: 5vh;
+const MobileNavbarContainer = styled.div`
+  padding-top: 5vh;
   padding-left: 80vw;
   display: flex;
   flex-direction: column;
@@ -76,7 +91,7 @@ padding-top: 5vh;
 `;
 
 const StyledLink = styled(Link)`
-  font-family: Inter,sans-serif;
+  font-family: Inter, sans-serif;
 `;
 
 const DropdownContent = styled.div`

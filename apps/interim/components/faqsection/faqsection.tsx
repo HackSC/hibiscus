@@ -1,4 +1,4 @@
-import { AccordionItem, H2, H3, H4 } from '@hacksc-platforms/ui';
+import { AccordionItem, H2, H3, H4, Text } from '@hacksc-platforms/ui';
 import styled from 'styled-components';
 
 export function FAQSection() {
@@ -17,7 +17,7 @@ export function FAQSection() {
               key={idx}
               titleButtonElement={<H4>{item.titleText}</H4>}
             >
-              <p>{item.disclosedText}</p>
+              <DisclosedText>{item.disclosedText}</DisclosedText>
             </AccordionItem>
           ))}
         </div>
@@ -35,7 +35,7 @@ export function FAQSection() {
               key={idx}
               titleButtonElement={<H4>{item.titleText}</H4>}
             >
-              <p>{item.disclosedText}</p>
+              <DisclosedText>{item.disclosedText}</DisclosedText>
             </AccordionItem>
           ))}
         </div>
@@ -53,7 +53,6 @@ const FAQHeaderH2 = styled(H2)`
   padding-bottom: 1rem;
 
   @media (max-width: 600px) {
-    text-align: center;
     font-size: 3rem;
   }
 `;
@@ -64,6 +63,11 @@ const FAQContainer = styled.div`
   @media (max-width: 1080px) {
     flex-direction: column;
   }
+`;
+
+const DisclosedText = styled(Text)`
+  font-size: 1rem;
+  line-height: 1.5;
 `;
 
 const faqQuestionsAndAnswersData: {
