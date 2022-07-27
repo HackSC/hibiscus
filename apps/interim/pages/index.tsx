@@ -58,18 +58,14 @@ const FirstSection = styled.section`
 `;
 
 const SecondSection = styled.section`
-  margin-top: 3rem;
-  margin-bottom: 3rem;
-  margin-left: 6rem;
   max-width: 100vw;
-  padding: 4.5rem 0 0 3.5rem;
-  @media (max-width: 600px) {
-    margin-left: 3rem;
-    margin-right: 3rem;
+  padding: 3rem 0 3.5rem 10rem;
+  @media (max-width: 850px) {
+    padding-left: 0rem;
+    padding-right: 1rem;
   }
 `;
 
 const FooterContainer = styled.div`
   padding: 0;
-  justify-self: flex-end;
 `;

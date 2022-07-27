@@ -1,7 +1,6 @@
 import { TrademarkColors } from '@hacksc-platforms/styles';
-import { Text } from '@hacksc-platforms/ui';
+import { GradientSpan, Text } from '@hacksc-platforms/ui';
 import styled from 'styled-components';
-import GradientSpan from '../../../../libs/ui/src/lib/gradient-span/gradient-span';
 
 /* eslint-disable-next-line */
 export interface TeamContactBlurbsProps {}

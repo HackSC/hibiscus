@@ -1,25 +1,25 @@
-import React, {
-  FC,
-} from 'react';
+import React, { FC } from 'react';
 import ham from './mobile-navbar.module.css';
 import styled from 'styled-components';
 import Link from 'next/link';
 
-const MobileNavbar : FC = () => {
+const MobileNavbar: FC = () => {
   return (
-      <MobileNavbarContainer>
-          <div style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              width: '100%',
-              height: '100%'
-          }}>
-              <TheBurger />
-          </div>
-        </MobileNavbarContainer>
-  )
-}
+    <MobileNavbarContainer>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          width: '100%',
+          height: '100%',
+        }}
+      >
+        <TheBurger />
+      </div>
+    </MobileNavbarContainer>
+  );
+};
 
 const TheBurger = () => {
   return (
@@ -29,7 +29,7 @@ const TheBurger = () => {
               <span></span>
               <span></span>
               <span></span>
-              
+
               <ul className={`${ham.menu}`}>
                   <StyledLink href={'/'}>
                       <a href={``}><li>Overview</li></a>

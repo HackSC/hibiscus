@@ -4,23 +4,23 @@
     position: relative;
     /* top: 25px; */
     left: 25px;
-  
+
     z-index: 1;
-  
+
     user-select: none;
   }
-  
+
   .menuToggle a {
     text-decoration: none;
     color: #2b2b2b;
-  
+
     transition: color 0.3s ease;
   }
-  
+
   .menuToggle a:hover {
     background-color: #faf9f9;
   }
-  
+
   /* An invisible input over the hamburger */
   .menuToggle input {
     display: block;
@@ -29,14 +29,14 @@
     position: absolute;
     top: -7px;
     left: -5px;
-  
+
     cursor: pointer;
-  
+
     opacity: 0;
     z-index: 2;
     -webkit-touch-callout: none;
   }
-  
+
   /*
     * Just a quick hamburger
     */
@@ -46,29 +46,29 @@
     height: 4px;
     margin-bottom: 5px;
     position: relative;
-  
+
     /* background: #EE5549; */
     background: #fff;
-  
+
     border-radius: 3px;
-  
+
     z-index: 1;
-  
+
     transform-origin: 4px 0px;
-  
+
     transition: transform 0.3s cubic-bezier(0.77, 0.2, 0.05, 1),
       background 0.3s cubic-bezier(0.77, 0.2, 0.05, 1), opacity 0.35s ease;
   }
-  
+
   .menuToggle span:first-child {
     transform-origin: 0% 0%;
   }
-  
+
   .menuToggle span:nth-last-child(2) {
     transform-origin: 0% 100%;
   }
-  
-  /* 
+
+  /*
     * Transform all the slices of hamburger
     * into a crossmark.
     */
@@ -76,26 +76,26 @@
     opacity: 1;
     transform: rotate(45deg) translate(-2px, -1px);
     background: #fff;
-  
+
     /* background: #232323; */
   }
-  
+
   /*
     * But let's hide the middle one.
     */
-  .menuToggle input:checked ~ span:nth-last-child(3) {
-    opacity: 0;
-    transform: rotate(0deg) scale(0.2, 0.2);
-  }
-  
-  /*
+.menuToggle input:checked ~ span:nth-last-child(3) {
+  opacity: 0;
+  transform: rotate(0deg) scale(0.2, 0.2);
+}
+
+/*
     * Ohyeah and the last one should go the other direction
     */
-  .menuToggle input:checked ~ span:nth-last-child(2) {
-    transform: rotate(-45deg) translate(0, -1px);
-  }
-  
-  /*
+.menuToggle input:checked ~ span:nth-last-child(2) {
+  transform: rotate(-45deg) translate(0, -1px);
+}
+
+/*
     * Make this absolute positioned
     * at the top left of the screen
     */
@@ -108,11 +108,11 @@
     list-style: none;
     /* This is kinda jank but it works for now */
     height: 120vh;
-    
+
     /* background: #ededed; */
     display: none;
   }
-  
+
   .menu li {
     padding: 10px 0;
     background-color: white;
@@ -133,10 +133,10 @@
   .menu li:hover {
     background-color: #faf9f9;
   }
-  
+
   /*
     * Display the child ul element when the invisible hamburger is clicked
   */
-  .menuToggle input:checked ~ ul {
-    display: block;
-  }
+.menuToggle input:checked ~ ul {
+  display: block;
+}
