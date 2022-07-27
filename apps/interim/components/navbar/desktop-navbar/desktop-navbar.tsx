@@ -82,7 +82,8 @@ const DropdownContent = styled.div`
 
 const DropdownContentItem = styled.div`
   padding: 0;
-  margin: 0.3rem 0;
+  margin: 0.3rem;
+  margin-left: 6rem;
   background: #faf9f9;
   width: 100%;
   text-align: center;
