@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { GradientSpan } from '@hacksc-platforms/ui';
-
+import GradientSpan from '../gradient-span/gradient-span';
 
 /* eslint-disable-next-line */
 /**
@@ -38,7 +37,7 @@ export function AccordionItem(props: Props) {
             }}
           >
             <Bullet>
-            <GradientSpan>+{'\u00a0'}</GradientSpan>
+              <GradientSpan>+{'\u00a0'}</GradientSpan>
             </Bullet>
           </div>
           <div>{props.titleButtonElement}</div>
@@ -89,10 +88,8 @@ const Bullet = styled.h3`
 
 const DisclosedElementContainer = styled.div`
   padding-left: 1.25rem;
+  padding-right: 1rem;
   border-left: solid 2px #2b2b2b;
   font-size: 1.5rem;
   color: #2b2b2b;
-  @media (max-width: 600px) {
-    font-size: 0.75rem;
-  }
 `;

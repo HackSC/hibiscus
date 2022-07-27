@@ -20,7 +20,7 @@ const SloganText = styled(H5)`
   color: #939393;
   font-size: 1.75rem;
   font-style: italic;
-  padding-top: .5rem;
+  padding-top: 0.5rem;
 
   @media (max-width: 600px) {
     font-size: 1rem;

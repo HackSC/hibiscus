@@ -71,5 +71,4 @@ const SecondSection = styled.section`
 
 const FooterContainer = styled.div`
   padding: 0;
-  justify-self: flex-end;
 `;

@@ -1,6 +1,5 @@
-import { H3 } from '@hacksc-platforms/ui';
+import { GradientSpan, H3 } from '@hacksc-platforms/ui';
 import styled from 'styled-components';
-import { GradientSpan } from '../../../../libs/ui/src/lib/gradient-span/gradient-span';
 
 export interface ThankYouTextProps {
   nextYear: number;

@@ -14,22 +14,36 @@ export function DesktopNavbar(props: DesktopNavbarProps) {
       <RightMenuDiv>
         <MenuOption>Overview</MenuOption>
         {/* <MenuOption>Sponsor Us</MenuOption> */}
-        <a href="https://team.hacksc.com" target="_blank" rel="noreferrer"><MenuOption>Join Us</MenuOption></a>
+        <a href="https://team.hacksc.com" target="_blank" rel="noreferrer">
+          <MenuOption>Join Us</MenuOption>
+        </a>
         <DropdownMenu>
           <MenuOption>Previous Hackathons ▾</MenuOption>
           <DropdownContent>
             <DropdownContentItem>
-              <a href='https://2022.hacksc.com' target='_blank' rel='noreferrer'>
+              <a
+                href="https://2022.hacksc.com"
+                target="_blank"
+                rel="noreferrer"
+              >
                 <DropdownLink>HackSC 2022</DropdownLink>
               </a>
             </DropdownContentItem>
             <DropdownContentItem>
-              <a href='https://2021.hacksc.com' target='_blank' rel='noreferrer'>
+              <a
+                href="https://2021.hacksc.com"
+                target="_blank"
+                rel="noreferrer"
+              >
                 <DropdownLink>HackSC 2021</DropdownLink>
               </a>
             </DropdownContentItem>
             <DropdownContentItem>
-              <a href='https://2020.hacksc.com' target='_blank' rel='noreferrer'>
+              <a
+                href="https://2020.hacksc.com"
+                target="_blank"
+                rel="noreferrer"
+              >
                 <DropdownLink>HackSC 2020</DropdownLink>
               </a>
             </DropdownContentItem>
@@ -41,7 +55,6 @@ export function DesktopNavbar(props: DesktopNavbarProps) {
 }
 
 export default DesktopNavbar;
-
 
 const StyledDesktopNavbar = styled.nav`
   display: flex;
@@ -121,4 +134,3 @@ const NavbarLeftLogoText = styled.h1`
   font-size: 3rem;
   padding-left: 7rem;
 `;
-

@@ -92,5 +92,4 @@ const IconContainer = styled.div`
 
 const SocialMediaContainer = styled.div`
   display: flex;
-  padding-left: 2rem;
 `;
