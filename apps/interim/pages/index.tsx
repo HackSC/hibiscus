@@ -11,11 +11,11 @@ import Footer from '../components/footer/footer';
 export function Index() {
   return (
     <MainPageWrapper>
-      <ImageSection />
       <NavbarWrapper>
         <Navbar />
       </NavbarWrapper>
       <FirstSection>
+        <ImageSection />
         <LogoAndSloganSection />
         <ThankYouText nextYear={2023} />
         <EmailNewsletterInputSection />
@@ -50,7 +50,8 @@ const FirstSection = styled.section`
   max-width: 40rem;
   margin: 6rem 4rem 0 6rem;
   padding: 3.25rem 0 0 3.25rem;
-  @media (max-width: 600px) {
+  @media (max-width: 1080px) {
+    margin-top: 35vh;
     margin-left: 3rem;
     margin-right: 3rem;
   }
@@ -70,5 +71,4 @@ const SecondSection = styled.section`
 
 const FooterContainer = styled.div`
   padding: 0;
-  justify-self: flex-end;
 `;

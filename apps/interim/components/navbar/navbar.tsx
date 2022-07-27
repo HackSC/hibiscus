@@ -6,14 +6,13 @@ import MobileNavbar from './mobile-navbar/mobile-navbar';
 export interface NavbarProps {}
 
 export function Navbar(props: NavbarProps) {
-
   return (
     <FixedToTop>
       <DesktopNavbarWrapper>
-        <DesktopNavbar/>
+        <DesktopNavbar />
       </DesktopNavbarWrapper>
       <MobileNavbarWrapper>
-        <MobileNavbar/>
+        <MobileNavbar />
       </MobileNavbarWrapper>
     </FixedToTop>
   );
@@ -31,7 +30,7 @@ const FixedToTop = styled.div`
 const DesktopNavbarWrapper = styled.div`
   display: flex;
   touch-action: auto;
-  @media only screen and (max-width: 1080px){
+  @media only screen and (max-width: 1080px) {
     display: none !important;
     touch-action: none !important;
   }
@@ -40,9 +39,8 @@ const DesktopNavbarWrapper = styled.div`
 const MobileNavbarWrapper = styled.div`
   display: none;
   touch-action: none;
-  @media screen and (max-width: 1080px){
+  @media screen and (max-width: 1080px) {
     display: flex !important;
     touch-action: auto !important;
   }
-  
 `;
