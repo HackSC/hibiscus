@@ -93,7 +93,7 @@ const MobileNavbarContainer = styled.div`
 `;
 
 const Spacer = styled.div`
-  padding-left: 60vw;
+  padding-left: 50vw;
   @media (max-width: 600px) {
     padding-left: 44vw;
   }
@@ -102,10 +102,13 @@ const Spacer = styled.div`
 const StyledText = styled(H2)`
   color: white;
   font-family: Inter, sans-serif;
-  font-size: 2rem;
+  font-size: 4rem;
   font-weight: 700;
   letter-spacing: -1px;
   flex: 2;
+  @media (max-width: 600px) {
+    font-size: 2rem;
+  }
 `;
 
 const StyledLink = styled(H3)`
