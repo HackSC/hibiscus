@@ -71,7 +71,9 @@ export default EmailNewsletterInputSection;
 const Container = styled.div`
   display: flex;
   width: 100%;
+  padding-left: -1rem;
   align-items: center;
+  justify-content: center;
   padding-bottom: 3rem;
   padding-top: 2rem;
   @media (max-width: 1080px) {
@@ -98,20 +100,20 @@ const GradientButton = styled.button`
 
   @media (max-width: 1080px) {
     width: 100%;
-    margin-top: 5px;
+    margin-top: 20px;
   }
 `;
 
-const EmailInput = styled.input({
-  border: 'solid 0.1rem #BCBCBC',
-  backgroundColor: '#F8F8F8',
-  borderRadius: '0.3rem',
-  padding: 10,
-  paddingLeft: 15,
-  fontFamily: 'Inter',
-  fontSize: '1.1rem',
-  color: '#676767',
-  marginRight: 5,
-  maxWidth: '100%',
-  width: '100%',
-});
+const EmailInput = styled.input`
+  border: solid 0.1rem #bcbcbc;
+  background-color: #f8f8f8;
+  border-radius: 0.3rem;
+  padding: 10px;
+  padding-left: 25px;
+  font-family: Inter, sans-serif;
+  font-size: 1.1rem;
+  color: #676767;
+  margin-left: 5;
+  max-width: 100%;
+  width: 100%;
+`;

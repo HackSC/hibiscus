@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 import EmailNewsletterInputSection from '../components/email-newsletter-input-section/email-newsletter-input-section';
 import FAQSection from '../components/faqsection/faqsection';
-import ImageSection from '../components/imagesection/imagesection';
 import { LogoAndSloganSection } from '../components/logo-and-slogan/logo-and-slogan';
 import Navbar from '../components/navbar/navbar';
 import TeamContactBlurbs from '../components/team-contact-blurbs/team-contact-blurbs';
@@ -11,11 +10,11 @@ import Footer from '../components/footer/footer';
 export function Index() {
   return (
     <MainPageWrapper>
+      {/* <ImageSection /> */}
       <NavbarWrapper>
         <Navbar />
       </NavbarWrapper>
       <FirstSection>
-        <ImageSection />
         <LogoAndSloganSection />
         <ThankYouText nextYear={2023} />
         <EmailNewsletterInputSection />
@@ -38,6 +37,17 @@ const MainPageWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   min-height: 100vh;
+  background-image: url('/img/light-desktop-bg.svg');
+  background-position: fixed;
+  background-attachment: local;
+  background-repeat: no-repeat;
+  background-size: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  @media screen and (max-width: 1080px) {
+    background-image: url('img/light-mobile-bg.svg');
+  }
 `;
 
 const NavbarWrapper = styled.div`
@@ -51,8 +61,8 @@ const FirstSection = styled.section`
   margin: 6rem 4rem 0 6rem;
   padding: 3.25rem 0 0 3.25rem;
   @media (max-width: 1080px) {
-    margin-top: 35vh;
-    margin-left: 3rem;
+    margin-top: 50vw;
+    margin-left: 4vw;
     margin-right: 3rem;
   }
 `;
@@ -63,8 +73,8 @@ const SecondSection = styled.section`
   margin-left: 6rem;
   max-width: 100vw;
   padding: 4.5rem 0 0 3.5rem;
-  @media (max-width: 600px) {
-    margin-left: 3rem;
+  @media (max-width: 1080px) {
+    margin-left: 5vw;
     margin-right: 3rem;
   }
 `;

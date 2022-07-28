@@ -5,12 +5,13 @@ import styled from 'styled-components';
 export interface LogoAndSloganProps {}
 
 const LogoH1 = styled(H1)`
+  padding-top: 6rem;
   letter-spacing: -3px;
   font-size: 6rem;
   font-weight: 700;
   color: #2b2b2b;
   @media (max-width: 600px) {
-    font-size: 4rem;
+    padding-top: 2rem;
   }
 `;
 
@@ -21,10 +22,6 @@ const SloganText = styled(H5)`
   font-size: 1.75rem;
   font-style: italic;
   padding-top: 0.5rem;
-
-  @media (max-width: 600px) {
-    font-size: 1rem;
-  }
 `;
 
 export function LogoAndSloganSection(props: LogoAndSloganProps) {
