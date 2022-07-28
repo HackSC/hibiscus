@@ -22,11 +22,10 @@ export default function ImageSection() {
         height="100vh"
         width="100vw"
       /> */}
-      {/* was trying out something and it didn't work out
+        {/* was trying out something and it didn't work out
           either way this code is not being used at the moment
           just leaving it here for future use and reference
-      */
-      }
+      */}
       </MobileImage>
     </div>
   );
