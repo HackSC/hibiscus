@@ -17,6 +17,10 @@ export function EmailNewsletterInputSection(
   const INTERIM_UPDATES_SENDGRID_LIST_ID =
     '04bc362d-512d-4f15-9dc4-10ff5e82bd28';
   const saveContactToSendgridMutation = useMutation(async (email: string) => {
+    if (process.env.NODE_ENV !== 'production') {
+      console.info(`[non-production mode] made an "API call" to Sendgrid`);
+      return;
+    }
     try {
       await sendgridClient.saveContactsToLists(
         [INTERIM_UPDATES_SENDGRID_LIST_ID],
