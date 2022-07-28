@@ -14,11 +14,22 @@ export function EmailNewsletterInputSection(
   props: EmailNewsletterInputSectionProps
 ) {
   const { sendgridClient } = useSendgridClient();
+  const INTERIM_UPDATES_SENDGRID_LIST_ID =
+    '04bc362d-512d-4f15-9dc4-10ff5e82bd28';
   const saveContactToSendgridMutation = useMutation(async (email: string) => {
-    if (process.env.NODE_ENV === 'production') {
-      await sendgridClient.saveContactsToLists([], [email]);
-    } else {
-      console.log('-> [non-production log] sent to Sendgrid');
+    if (process.env.NODE_ENV !== 'production') {
+      console.info(`[non-production mode] made an "API call" to Sendgrid`);
+      return;
+    }
+    try {
+      await sendgridClient.saveContactsToLists(
+        [INTERIM_UPDATES_SENDGRID_LIST_ID],
+        [email]
+      );
+    } catch (e) {
+      throw new Error(
+        'Oops, something went wrong on our end. Please try again.'
+      );
     }
   });
 
@@ -39,7 +50,7 @@ export function EmailNewsletterInputSection(
       toast.promise(saveContactToSendgridMutation.mutateAsync(values.email), {
         loading: 'Subscribing you to our newsletter...',
         success: "You have subscribed to HackSC's newsletter. Stay tuned!",
-        error: 'Oops, something went wrong on our end. Please try again.',
+        error: (e) => e.toString(),
       });
     },
   });
