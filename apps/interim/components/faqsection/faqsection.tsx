@@ -1,4 +1,4 @@
-import { AccordionItem, H2, H3, H4, Text } from '@hacksc-platforms/ui';
+import { AccordionItem, H2, H4, Text } from '@hacksc-platforms/ui';
 import styled from 'styled-components';
 
 export function FAQSection() {
@@ -51,10 +51,6 @@ const FAQHeaderH2 = styled(H2)`
   font-weight: 700;
   color: #2b2b2b;
   padding-bottom: 1rem;
-
-  @media (max-width: 600px) {
-    font-size: 3rem;
-  }
 `;
 
 const FAQContainer = styled.div`
@@ -68,10 +64,6 @@ const FAQContainer = styled.div`
 const DisclosedText = styled(Text)`
   font-size: 1.2rem;
   line-height: 1.5;
-
-  @media (max-width: 600px) {
-    font-size: 1rem;
-  }
 `;
 
 const faqQuestionsAndAnswersData: {

@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
+import { H2, H3 } from '@hacksc-platforms/ui';
 import ham from './mobile-navbar.module.css';
 import styled from 'styled-components';
-import Link from 'next/link';
 
 const MobileNavbar: FC = () => {
   return (
@@ -15,7 +15,10 @@ const MobileNavbar: FC = () => {
           height: '100%',
         }}
       >
-        <TheBurger />
+        <StyledText>HackSC</StyledText>
+        <Spacer>
+          <TheBurger />
+        </Spacer>
       </div>
     </MobileNavbarContainer>
   );
@@ -31,13 +34,13 @@ const TheBurger = () => {
         <span></span>
 
         <ul className={`${ham.menu}`}>
-          <StyledLink href={'/'}>
-            <a href={``}>
+          <StyledLink>
+            <a href="https://hacksc.com/">
               <li>Overview</li>
             </a>
           </StyledLink>
-          <StyledLink href={'https://team.hacksc.com'}>
-            <a href={``}>
+          <StyledLink>
+            <a href="https://team.hacksc.com" target="_blank" rel="noreferrer">
               <li>Join Us</li>
             </a>
           </StyledLink>
@@ -83,14 +86,32 @@ export default MobileNavbar;
 
 const MobileNavbarContainer = styled.div`
   padding-top: 5vh;
-  padding-left: 80vw;
+  padding-left: 10%;
   display: flex;
-  flex-direction: column;
-  justify-content: end;
-  align-items: center;
+  flex-direction: row;
+  justify-content: center;
 `;
 
-const StyledLink = styled(Link)`
+const Spacer = styled.div`
+  padding-left: 50vw;
+  @media (max-width: 600px) {
+    padding-left: 44vw;
+  }
+`;
+
+const StyledText = styled(H2)`
+  color: white;
+  font-family: Inter, sans-serif;
+  font-size: 4rem;
+  font-weight: 700;
+  letter-spacing: -1px;
+  flex: 2;
+  @media (max-width: 600px) {
+    font-size: 2rem;
+  }
+`;
+
+const StyledLink = styled(H3)`
   font-family: Inter, sans-serif;
 `;
 
@@ -107,7 +128,7 @@ const DropdownContent = styled.div`
 
 const DropdownContentItem = styled.div`
   padding: 0;
-  margin: 0.3rem 0;
+  margin: 0.2rem 0;
   background: #fff;
   width: 100%;
   text-align: center;

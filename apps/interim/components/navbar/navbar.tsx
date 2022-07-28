@@ -22,9 +22,8 @@ export default Navbar;
 
 const FixedToTop = styled.div`
   width: 100%;
-  position: fixed;
+  position: absolute;
   top: 0;
-  z-index: 40;
 `;
 
 const DesktopNavbarWrapper = styled.div`

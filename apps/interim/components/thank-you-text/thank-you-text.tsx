@@ -27,7 +27,4 @@ const ThankYouTextH3 = styled(H3)`
   font-family: Inter, sans-serif;
   font-size: 1.75rem;
   color: #2b2b2b;
-  @media (max-width: 600px) {
-    font-size: 1rem;
-  }
 `;
