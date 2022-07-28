@@ -1,13 +1,14 @@
-import { Axios } from 'axios';
+import axios, { Axios } from 'axios';
 
 export class SendgridClient {
   private readonly axiosInstance: Axios;
 
   constructor(private apiKey: string) {
-    this.axiosInstance = new Axios({
+    this.axiosInstance = axios.create({
       baseURL: 'https://api.sendgrid.com',
       headers: {
         Authorization: `Bearer ${this.apiKey}`,
+        'Content-Type': 'application/json',
       },
     });
   }
@@ -24,8 +25,8 @@ export class SendgridClient {
       url: '/v3/marketing/contacts',
       method: 'PUT',
       data: {
-        contacts: emails.map((email) => ({ email })),
         list_ids: listIds,
+        contacts: emails.map((email) => ({ email })),
       },
     });
     return sendGridResponse;
