@@ -6,6 +6,7 @@
     "generator-scripts": "libs/generator-scripts",
     "interim": "apps/interim",
     "interim-e2e": "apps/interim-e2e",
+    "recruitment": "apps/recruitment",
     "styles": "libs/styles",
     "ui": "libs/ui",
     "www-2023": "apps/www-2023",
