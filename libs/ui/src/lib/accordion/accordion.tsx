@@ -40,7 +40,7 @@ export function AccordionItem(props: Props) {
               <GradientSpan>+{'\u00a0'}</GradientSpan>
             </Bullet>
           </div>
-          <div>{props.titleButtonElement}</div>
+          {props.titleButtonElement}
         </div>
       </ToggleItemButton>
       <DisclosedElementContainer>
@@ -52,12 +52,21 @@ export function AccordionItem(props: Props) {
 
 export default AccordionItem;
 
+const AccordionContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 1rem;
+  @media (max-width: 1080px) {
+    max-width: 80vw;
+  }
+`;
+
 const ToggleItemButton = styled.button`
   border: none;
   background: none;
   text-align: left;
   color: #2b2b2b;
-  font-family: Inter, sans-serif;
   font-size: 1.6rem;
   cursor: pointer;
 
@@ -67,26 +76,15 @@ const ToggleItemButton = styled.button`
   }
 `;
 
-const AccordionContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  min-width: 30vw;
-  max-width: 50vw;
-  @media (max-width: 1080px) {
-    max-width: 80vw;
-  }
-`;
-
 const Bullet = styled.h3`
   font-size: 2rem;
-  font-family: Inter, sans-serif;
   font-weight: bolder;
 `;
 
 const DisclosedElementContainer = styled.div`
+  margin-top: 0.5rem;
   padding-left: 1.25rem;
   padding-right: 1rem;
-  border-left: solid 2px #2b2b2b;
   font-size: 1.5rem;
   color: #2b2b2b;
   @media (max-width: 600px) {

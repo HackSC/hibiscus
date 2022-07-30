@@ -13,12 +13,11 @@ export function FAQSection() {
           }}
         >
           {faqQuestionsAndAnswersData.map((item, idx) => (
-            <AccordionItem
-              key={idx}
-              titleButtonElement={<H4>{item.titleText}</H4>}
-            >
-              <DisclosedText>{item.disclosedText}</DisclosedText>
-            </AccordionItem>
+            <FAQAccordionContainer key={idx}>
+              <AccordionItem titleButtonElement={<H4>{item.titleText}</H4>}>
+                <DisclosedText>{item.disclosedText}</DisclosedText>
+              </AccordionItem>
+            </FAQAccordionContainer>
           ))}
         </div>
         <div
@@ -31,12 +30,11 @@ export function FAQSection() {
           }}
         >
           {faqQuestionsAndAnswersData2.map((item, idx) => (
-            <AccordionItem
-              key={idx}
-              titleButtonElement={<H4>{item.titleText}</H4>}
-            >
-              <DisclosedText>{item.disclosedText}</DisclosedText>
-            </AccordionItem>
+            <FAQAccordionContainer key={idx}>
+              <AccordionItem titleButtonElement={<H4>{item.titleText}</H4>}>
+                <DisclosedText>{item.disclosedText}</DisclosedText>
+              </AccordionItem>
+            </FAQAccordionContainer>
           ))}
         </div>
       </FAQContainer>
@@ -51,19 +49,26 @@ const FAQHeaderH2 = styled(H2)`
   font-weight: 700;
   color: #2b2b2b;
   padding-bottom: 1rem;
+
+  @media (max-width: 768px) {
+    text-align: center;
+  }
 `;
 
 const FAQContainer = styled.div`
   display: flex;
   flex-direction: row;
-  @media (max-width: 1080px) {
+
+  @media (max-width: 768px) {
     flex-direction: column;
   }
 `;
 
-const DisclosedText = styled(Text)`
-  font-size: 1.2rem;
-  line-height: 1.5;
+const DisclosedText = styled(Text)``;
+
+const FAQAccordionContainer = styled.div`
+  min-width: 22rem;
+  max-width: 28rem;
 `;
 
 const faqQuestionsAndAnswersData: {

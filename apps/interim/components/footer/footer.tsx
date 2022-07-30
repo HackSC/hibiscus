@@ -1,77 +1,43 @@
-import styled from 'styled-components';
 import Image from 'next/image';
+import styled from 'styled-components';
 
 /* eslint-disable-next-line */
 export interface FooterProps {}
 
 export function Footer(props: FooterProps) {
+  const socialMedias: { href: string; src: string; alt: string }[] = [
+    {
+      src: '/img/linkedin.svg',
+      alt: 'LinkedIn',
+      href: 'https://www.linkedin.com/company/hacksc/',
+    },
+    {
+      src: '/img/twitter.svg',
+      alt: 'Twitter',
+      href: 'https://twitter.com/hackscofficial',
+    },
+    {
+      src: '/img/facebook.svg',
+      alt: 'Facebook',
+      href: 'https://www.facebook.com/hackscofficial/',
+    },
+    {
+      src: '/img/instagram.svg',
+      alt: 'Instagram',
+      href: 'https://www.instagram.com/hackscofficial/',
+    },
+  ];
+
   return (
     <FooterWrapper>
       <SocialMediaContainer>
-        <IconContainer>
-          <a
-            href="https://www.linkedin.com/company/hacksc/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <Image
-              style={{ margin: 20 }}
-              src="/img/linkedin.svg"
-              alt="LinkedIn"
-              height="45"
-              width="45"
-              layout="fixed"
-            />
-          </a>
-        </IconContainer>
-        <IconContainer>
-          <a
-            href="https://twitter.com/hackscofficial"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <Image
-              style={{ margin: 20 }}
-              src="/img/twitter.svg"
-              alt="Twitter"
-              height="45"
-              width="45"
-              layout="fixed"
-            />
-          </a>
-        </IconContainer>
-        <IconContainer>
-          <a
-            href="https://www.facebook.com/hackscofficial/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <Image
-              style={{ margin: 20 }}
-              src="/img/facebook.svg"
-              alt="Facebook"
-              height="45"
-              width="45"
-              layout="fixed"
-            />
-          </a>
-        </IconContainer>
-        <IconContainer>
-          <a
-            href="https://www.instagram.com/hackscofficial/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <Image
-              style={{ margin: 20 }}
-              src="/img/instagram.svg"
-              alt="Instagram"
-              height="45"
-              width="45"
-              layout="fixed"
-            />
-          </a>
-        </IconContainer>
+        {socialMedias.map(({ href, src, alt }) => (
+          <IconContainer key={alt}>
+            <a href={href} target="_blank" rel="noreferrer">
+              <Image style={{ margin: 20 }} src={src} alt={alt} layout="fill" />
+            </a>
+          </IconContainer>
+        ))}
       </SocialMediaContainer>
     </FooterWrapper>
   );
@@ -87,7 +53,15 @@ const FooterWrapper = styled.div`
 `;
 
 const IconContainer = styled.div`
+  position: relative;
+  width: 2rem;
+  height: 2rem;
   padding: 1rem 1rem 0;
+
+  @media (max-width: 425px) {
+    width: 1rem;
+    height: 1rem;
+  }
 `;
 
 const SocialMediaContainer = styled.div`

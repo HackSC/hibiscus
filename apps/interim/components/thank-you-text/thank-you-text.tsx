@@ -24,7 +24,10 @@ export default ThankYouText;
 const ThankYouTextH3 = styled(H3)`
   margin: 1.5rem 0;
   font-weight: 400;
-  font-family: Inter, sans-serif;
   font-size: 1.75rem;
   color: #2b2b2b;
+
+  @media (max-width: 500px) {
+    font-size: 1.25rem;
+  }
 `;

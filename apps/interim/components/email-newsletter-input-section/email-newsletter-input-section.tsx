@@ -105,7 +105,6 @@ const GradientButton = styled.button`
   border-radius: 0.3rem;
   box-shadow: 0px 2px 10px -1px #a0a0a0;
   font-size: 1.1rem;
-  font-family: Inter, sans-serif;
   cursor: pointer;
   min-width: 30%;
 
@@ -124,7 +123,11 @@ const EmailInput = styled.input`
   font-family: Inter, sans-serif;
   font-size: 1.1rem;
   color: #676767;
-  margin-left: 5;
+  margin-right: 1rem;
   max-width: 100%;
   width: 100%;
+
+  @media (max-width: 600px) {
+    margin-right: 0;
+  }
 `;

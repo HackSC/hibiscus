@@ -1,25 +1,13 @@
-import React, { FC } from 'react';
-import { H2, H3 } from '@hacksc-platforms/ui';
-import ham from './mobile-navbar.module.css';
+import { H1, H3 } from '@hacksc-platforms/ui';
+import { FC } from 'react';
 import styled from 'styled-components';
+import ham from './mobile-navbar.module.css';
 
 const MobileNavbar: FC = () => {
   return (
     <MobileNavbarContainer>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          width: '100%',
-          height: '100%',
-        }}
-      >
-        <StyledText>HackSC</StyledText>
-        <Spacer>
-          <TheBurger />
-        </Spacer>
-      </div>
+      <StyledText>HackSC</StyledText>
+      <TheBurger />
     </MobileNavbarContainer>
   );
 };
@@ -85,35 +73,27 @@ const TheBurger = () => {
 export default MobileNavbar;
 
 const MobileNavbarContainer = styled.div`
+  width: 100%;
   padding-top: 5vh;
   padding-left: 10%;
+  padding-right: 10%;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
 `;
 
-const Spacer = styled.div`
-  padding-left: 50vw;
-  @media (max-width: 600px) {
-    padding-left: 44vw;
-  }
-`;
-
-const StyledText = styled(H2)`
+const StyledText = styled(H1)`
   color: white;
-  font-family: Inter, sans-serif;
-  font-size: 4rem;
   font-weight: 700;
-  letter-spacing: -1px;
+  letter-spacing: -5%;
   flex: 2;
   @media (max-width: 600px) {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
 `;
 
-const StyledLink = styled(H3)`
-  font-family: Inter, sans-serif;
-`;
+const StyledLink = styled(H3)``;
 
 const DropdownContent = styled.div`
   display: none;

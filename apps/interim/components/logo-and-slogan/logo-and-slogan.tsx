@@ -12,13 +12,14 @@ const LogoH1 = styled(H1)`
   color: #2b2b2b;
   @media (max-width: 600px) {
     padding-top: 2rem;
+    font-size: 4rem;
   }
 `;
 
 const SloganText = styled(H5)`
   margin-top: 1rem;
-  font-weight: 400;
-  color: #939393;
+  font-weight: 300;
+  color: #868585;
   font-size: 1.75rem;
   font-style: italic;
   padding-top: 0.5rem;

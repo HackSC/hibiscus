@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import EmailNewsletterInputSection from '../components/email-newsletter-input-section/email-newsletter-input-section';
 import FAQSection from '../components/faqsection/faqsection';
+import Footer from '../components/footer/footer';
 import { LogoAndSloganSection } from '../components/logo-and-slogan/logo-and-slogan';
 import Navbar from '../components/navbar/navbar';
 import TeamContactBlurbs from '../components/team-contact-blurbs/team-contact-blurbs';
 import ThankYouText from '../components/thank-you-text/thank-you-text';
-import Footer from '../components/footer/footer';
 
 export function Index() {
   return (
@@ -58,7 +58,7 @@ const NavbarWrapper = styled.div`
 
 const FirstSection = styled.section`
   max-width: 40rem;
-  margin: 6rem 4rem 0 6rem;
+  margin: 6rem 4rem 0 4rem;
   padding: 3.25rem 0 0 3.25rem;
   @media (max-width: 1080px) {
     margin-top: 50vw;
@@ -73,9 +73,16 @@ const SecondSection = styled.section`
   margin-left: 6rem;
   max-width: 100vw;
   padding: 4.5rem 0 0 3.5rem;
+
   @media (max-width: 1080px) {
     margin-left: 5vw;
     margin-right: 3rem;
+    padding: 0;
+  }
+
+  @media (max-width: 425px) {
+    margin-right: 0;
+    padding: 0;
   }
 `;
 
