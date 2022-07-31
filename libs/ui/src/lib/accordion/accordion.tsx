@@ -57,9 +57,6 @@ const AccordionContainer = styled.div`
   flex-direction: column;
   width: 100%;
   margin-bottom: 1rem;
-  @media (max-width: 1080px) {
-    max-width: 80vw;
-  }
 `;
 
 const ToggleItemButton = styled.button`
@@ -87,7 +84,4 @@ const DisclosedElementContainer = styled.div`
   padding-right: 1rem;
   font-size: 1.5rem;
   color: #2b2b2b;
-  @media (max-width: 600px) {
-    font-size: 0.75rem;
-  }
 `;

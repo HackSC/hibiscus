@@ -104,11 +104,12 @@ const DropdownContent = styled.div`
   padding: 0.3rem;
   border-radius: 0.5rem;
   margin-left: 7rem;
+  margin-top: -0.3rem;
 `;
 
 const DropdownContentItem = styled.div`
-  padding: 0;
-  margin: 0.2rem 0;
+  padding: 0.3rem 0;
+  margin: 0.3rem 0 0;
   background: #fff;
   width: 100%;
   text-align: center;
@@ -118,8 +119,8 @@ const DropdownContentItem = styled.div`
   }
 `;
 
-const DropdownLink = styled.button`
-  font-family: Inter, sans-serif;
+const DropdownLink = styled.div`
+  font-family: InterVariable;
   font-size: 1.1rem;
   font-weight: 400;
   color: #2b2b2b;
@@ -128,6 +129,7 @@ const DropdownLink = styled.button`
   background: none;
   padding: 0.75rem;
   border-radius: 0.4rem;
+  box-shadow: 5px 5px 5px rgb(172, 172, 172);
 `;
 
 const DropdownMenu = styled.div`

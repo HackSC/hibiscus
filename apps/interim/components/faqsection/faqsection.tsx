@@ -15,7 +15,9 @@ export function FAQSection() {
           {faqQuestionsAndAnswersData.map((item, idx) => (
             <FAQAccordionContainer key={idx}>
               <AccordionItem titleButtonElement={<H4>{item.titleText}</H4>}>
-                <DisclosedText>{item.disclosedText}</DisclosedText>
+                <DisclosedTextContainer>
+                  <Text>{item.disclosedText}</Text>
+                </DisclosedTextContainer>
               </AccordionItem>
             </FAQAccordionContainer>
           ))}
@@ -32,7 +34,9 @@ export function FAQSection() {
           {faqQuestionsAndAnswersData2.map((item, idx) => (
             <FAQAccordionContainer key={idx}>
               <AccordionItem titleButtonElement={<H4>{item.titleText}</H4>}>
-                <DisclosedText>{item.disclosedText}</DisclosedText>
+                <DisclosedTextContainer>
+                  <Text>{item.disclosedText}</Text>
+                </DisclosedTextContainer>
               </AccordionItem>
             </FAQAccordionContainer>
           ))}
@@ -64,11 +68,15 @@ const FAQContainer = styled.div`
   }
 `;
 
-const DisclosedText = styled(Text)``;
+const DisclosedTextContainer = styled.div``;
 
 const FAQAccordionContainer = styled.div`
   min-width: 22rem;
   max-width: 28rem;
+
+  @media (max-width: 768px) {
+    min-width: 0;
+  }
 `;
 
 const faqQuestionsAndAnswersData: {

@@ -109,7 +109,9 @@
   height: 120vh;
 
   /* background: #ededed; */
-  display: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.2s linear;
 }
 
 .menu li {
@@ -127,6 +129,7 @@
   padding: 10px 20px 10px 20px;
   border-radius: 10px;
   margin-bottom: 5px;
+  box-shadow: 5px 5px 5px rgb(172, 172, 172);
 }
 
 .menu li:hover {
@@ -137,5 +140,6 @@
     * Display the child ul element when the invisible hamburger is clicked
   */
 .menuToggle input:checked ~ ul {
-  display: block;
+  visibility: visible;
+  opacity: 1;
 }
