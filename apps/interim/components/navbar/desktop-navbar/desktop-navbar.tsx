@@ -9,14 +9,15 @@ export function DesktopNavbar(props: DesktopNavbarProps) {
   return (
     <StyledDesktopNavbar>
       <NavbarLeftLogoText>
-        <GradientSpan>HackSC</GradientSpan>
+        <Link href={'/'} anchorTagPropsOverride={{ target: '_self' }}>
+          <GradientSpan>HackSC</GradientSpan>
+        </Link>
       </NavbarLeftLogoText>
       <RightMenuDiv>
-        <MenuOption>Overview</MenuOption>
-        {/* <MenuOption>Sponsor Us</MenuOption> */}
-        <Link href="https://team.hacksc.com" passHref>
+        {/* <MenuOption>Overview</MenuOption> */}
+        {/* <Link href="https://team.hacksc.com" passHref>
           <MenuOption>Join Us</MenuOption>
-        </Link>
+        </Link> */}
         <DropdownMenu>
           <MenuOption>Previous Hackathons ▾</MenuOption>
           <DropdownContent>

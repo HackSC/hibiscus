@@ -55,10 +55,15 @@ const FooterWrapper = styled.div`
 
 const IconContainer = styled.div`
   position: relative;
-  width: 2rem;
-  height: 2rem;
+  width: 1.5rem;
+  height: 1.5rem;
   padding: 1rem 1rem 0;
   margin: 0 1rem;
+  transition: ease-in-out 0.1s;
+
+  &:hover {
+    transform: scale(1.2);
+  }
 
   @media (max-width: 425px) {
     width: 1rem;

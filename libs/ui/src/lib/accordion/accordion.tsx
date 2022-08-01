@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import GradientSpan from '../gradient-span/gradient-span';
+import { H3 } from '../heading/heading';
 
 /* eslint-disable-next-line */
 /**
@@ -56,7 +57,7 @@ const AccordionContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: 0.1rem;
 `;
 
 const ToggleItemButton = styled.button`
@@ -65,7 +66,9 @@ const ToggleItemButton = styled.button`
   text-align: left;
   color: #2b2b2b;
   font-size: 1.6rem;
+  padding: 0.5rem;
   cursor: pointer;
+  transition: ease-in-out 0.2s;
 
   &:hover {
     background-color: #f3f3f3;
@@ -73,7 +76,7 @@ const ToggleItemButton = styled.button`
   }
 `;
 
-const Bullet = styled.h3`
+const Bullet = styled(H3)`
   font-size: 2rem;
   font-weight: bolder;
 `;

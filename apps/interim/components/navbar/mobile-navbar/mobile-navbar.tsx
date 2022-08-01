@@ -76,7 +76,7 @@ const MobileNavbarContainer = styled.div`
   width: 100%;
   padding-top: 5vh;
   padding-left: 10%;
-  padding-right: 10%;
+  padding-right: 12%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -111,6 +111,7 @@ const DropdownContentItem = styled.div`
   padding: 0.3rem 0;
   margin: 0.3rem 0 0;
   background: #fff;
+  box-shadow: 5px 5px 10px 3px rgb(172, 172, 172, 0.7);
   width: 100%;
   text-align: center;
   border-radius: 0.4rem;
@@ -129,7 +130,6 @@ const DropdownLink = styled.div`
   background: none;
   padding: 0.75rem;
   border-radius: 0.4rem;
-  box-shadow: 5px 5px 5px rgb(172, 172, 172);
 `;
 
 const DropdownMenu = styled.div`

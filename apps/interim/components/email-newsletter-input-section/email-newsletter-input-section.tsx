@@ -81,12 +81,8 @@ export default EmailNewsletterInputSection;
 
 const Container = styled.div`
   display: flex;
-  width: 100%;
-  padding-left: -1rem;
+  padding: 2rem 0 1rem;
   align-items: center;
-  justify-content: center;
-  padding-bottom: 3rem;
-  padding-top: 2rem;
   @media (max-width: 1080px) {
     flex-direction: column;
   }
@@ -101,7 +97,7 @@ const GradientButton = styled.button`
   border: none;
   padding: 12px 2px;
   color: white;
-  font-weight: 900;
+  font-weight: 700;
   border-radius: 0.3rem;
   box-shadow: 0px 2px 10px -1px #a0a0a0;
   font-size: 1.1rem;
@@ -123,11 +119,14 @@ const EmailInput = styled.input`
   font-family: Inter, sans-serif;
   font-size: 1.1rem;
   color: #676767;
-  margin-right: 1rem;
-  max-width: 100%;
-  width: 100%;
+  margin-right: 0.5rem;
+  width: 50%;
 
   @media (max-width: 600px) {
     margin-right: 0;
+  }
+
+  @media (max-width: 1080px) {
+    width: 90%;
   }
 `;

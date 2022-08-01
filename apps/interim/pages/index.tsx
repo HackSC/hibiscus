@@ -10,7 +10,6 @@ import ThankYouText from '../components/thank-you-text/thank-you-text';
 export function Index() {
   return (
     <MainPageWrapper>
-      {/* <ImageSection /> */}
       <NavbarWrapper>
         <Navbar />
       </NavbarWrapper>
@@ -61,9 +60,7 @@ const FirstSection = styled.section`
   margin: 6rem 4rem 0 4rem;
   padding: 3.25rem 0 0 3.25rem;
   @media (max-width: 1080px) {
-    margin-top: 50vw;
-    margin-left: 4vw;
-    margin-right: 3rem;
+    margin: 50vw 3rem 0 4vw;
   }
 `;
 

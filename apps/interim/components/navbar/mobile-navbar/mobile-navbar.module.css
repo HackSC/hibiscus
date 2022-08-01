@@ -129,6 +129,7 @@
   padding: 10px 20px 10px 20px;
   border-radius: 10px;
   margin-bottom: 5px;
+  box-shadow: 5px 5px 10px 3px rgba(172, 172, 172, 0.7);
 }
 
 .menu li:hover {

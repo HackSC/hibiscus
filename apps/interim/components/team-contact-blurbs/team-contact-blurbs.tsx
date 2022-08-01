@@ -33,7 +33,7 @@ const GrayParagraph = styled(Text)`
   font-weight: 300;
   color: #939393;
   margin: 10px 3px;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
 
   @media (max-width: 500px) {
     font-size: 1.2rem;
