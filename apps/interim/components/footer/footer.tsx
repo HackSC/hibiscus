@@ -1,3 +1,4 @@
+import { Link } from '@hacksc-platforms/ui';
 import Image from 'next/image';
 import styled from 'styled-components';
 
@@ -33,9 +34,9 @@ export function Footer(props: FooterProps) {
       <SocialMediaContainer>
         {socialMedias.map(({ href, src, alt }) => (
           <IconContainer key={alt}>
-            <a href={href} target="_blank" rel="noreferrer">
-              <Image style={{ margin: 20 }} src={src} alt={alt} layout="fill" />
-            </a>
+            <Link href={href}>
+              <Image src={src} alt={alt} layout="fill" />
+            </Link>
           </IconContainer>
         ))}
       </SocialMediaContainer>
