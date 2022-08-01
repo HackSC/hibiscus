@@ -89,9 +89,6 @@ const faqQuestionsAndAnswersData: {
       'A hackathon is a 36 hour competition in which teams of students collaborate to ideate and innovate solutions to real world problems! No knowledge of coding or hacking necessary.',
   },
   {
-    titleText: 'Why HackSC?',
-  },
-  {
     titleText: 'What if I don’t know how to code?',
     disclosedText:
       'Don’t worry! HackSC offers plenty of beginner friendly workshops to get you started and help you lift your projects off the ground. ',
