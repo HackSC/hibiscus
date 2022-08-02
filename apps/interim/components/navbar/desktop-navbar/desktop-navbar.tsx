@@ -1,5 +1,4 @@
-import { GradientSpan, H4, H5, H6, Text } from '@hacksc-platforms/ui';
-import { Link } from '@hacksc-platforms/ui';
+import { GradientSpan, H5, Link, Text } from '@hacksc-platforms/ui';
 import styled from 'styled-components';
 
 /* eslint-disable-next-line */

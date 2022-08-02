@@ -55,8 +55,8 @@ const FooterWrapper = styled.div`
 
 const IconContainer = styled.div`
   position: relative;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.2rem;
+  height: 1.2rem;
   padding: 1rem 1rem 0;
   margin: 0 1rem;
   transition: ease-in-out 0.1s;
