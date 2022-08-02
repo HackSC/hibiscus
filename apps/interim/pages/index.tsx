@@ -59,8 +59,14 @@ const FirstSection = styled.section`
   max-width: 40rem;
   margin: 6rem 4rem 0 4rem;
   padding: 3.25rem 0 0 3.25rem;
+
   @media (max-width: 1080px) {
     margin: 50vw 3rem 0 4vw;
+  }
+
+  @media (min-width: 768px) and (max-width: 1024px) {
+    padding-top: 5rem;
+    margin-inline: auto;
   }
 `;
 

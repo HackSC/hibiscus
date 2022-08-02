@@ -38,7 +38,10 @@ export function AccordionItem(props: Props) {
             }}
           >
             <Bullet>
-              <GradientSpan>+{'\u00a0'}</GradientSpan>
+              <GradientSpan>
+                {isOpen ? '-' : '+'}
+                {'\u00a0'}
+              </GradientSpan>
             </Bullet>
           </div>
           {props.titleButtonElement}

@@ -65,6 +65,7 @@ const FAQContainer = styled.div`
 
   @media (max-width: 768px) {
     flex-direction: column;
+    align-items: center;
   }
 `;
 
@@ -74,8 +75,12 @@ const FAQAccordionContainer = styled.div`
   width: 28rem;
   margin: 0 0 2rem;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     width: 22rem;
+  }
+
+  @media (max-width: 375px) {
+    width: 18rem;
   }
 `;
 

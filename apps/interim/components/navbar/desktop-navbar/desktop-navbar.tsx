@@ -1,4 +1,4 @@
-import { GradientSpan } from '@hacksc-platforms/ui';
+import { GradientSpan, H4, H5, H6, Text } from '@hacksc-platforms/ui';
 import { Link } from '@hacksc-platforms/ui';
 import styled from 'styled-components';
 
@@ -19,21 +19,23 @@ export function DesktopNavbar(props: DesktopNavbarProps) {
           <MenuOption>Join Us</MenuOption>
         </Link> */}
         <DropdownMenu>
-          <MenuOption>Previous Hackathons ▾</MenuOption>
+          <MenuOption>
+            <H5>Previous Hackathons ▾</H5>
+          </MenuOption>
           <DropdownContent>
             <DropdownContentItem>
               <Link href="https://2022.hacksc.com">
-                <DropdownLink>HackSC 2022</DropdownLink>
+                <DropdownText>HackSC 2022</DropdownText>
               </Link>
             </DropdownContentItem>
             <DropdownContentItem>
               <Link href="https://2021.hacksc.com">
-                <DropdownLink>HackSC 2021</DropdownLink>
+                <DropdownText>HackSC 2021</DropdownText>
               </Link>
             </DropdownContentItem>
             <DropdownContentItem>
               <Link href="https://2020.hacksc.com">
-                <DropdownLink>HackSC 2020</DropdownLink>
+                <DropdownText>HackSC 2020</DropdownText>
               </Link>
             </DropdownContentItem>
           </DropdownContent>
@@ -90,7 +92,7 @@ const DropdownContent = styled.div`
 const DropdownContentItem = styled.div`
   padding: 0;
   margin: 0.3rem;
-  margin-left: 6rem;
+  margin-left: 4rem;
   background: #faf9f9;
   width: 100%;
   text-align: center;
@@ -99,10 +101,11 @@ const DropdownContentItem = styled.div`
 
   &:hover {
     background-color: #e0e0e0;
+    margin-left: 2rem;
   }
 `;
 
-const DropdownLink = styled.div`
+const DropdownText = styled(Text)`
   font-size: 1.1rem;
   font-weight: 400;
   color: #2b2b2b;
