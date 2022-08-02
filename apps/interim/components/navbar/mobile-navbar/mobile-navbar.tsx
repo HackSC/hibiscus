@@ -22,7 +22,7 @@ const TheBurger = () => {
         <span></span>
 
         <ul className={`${ham.menu}`}>
-          <StyledLink>
+          {/* <StyledLink>
             <a href="https://hacksc.com/">
               <li>Overview</li>
             </a>
@@ -31,7 +31,7 @@ const TheBurger = () => {
             <a href="https://team.hacksc.com" target="_blank" rel="noreferrer">
               <li>Join Us</li>
             </a>
-          </StyledLink>
+          </StyledLink> */}
           <DropdownMenu>
             <li>Previous Hackathons ▾</li>
             <DropdownContent>
