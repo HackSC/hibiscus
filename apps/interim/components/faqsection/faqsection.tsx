@@ -1,4 +1,4 @@
-import { AccordionItem, H2, H4, H5, Text } from '@hacksc-platforms/ui';
+import { AccordionItem, H2, H4, Text } from '@hacksc-platforms/ui';
 import styled from 'styled-components';
 
 export function FAQSection() {

@@ -13,7 +13,7 @@ export function ThankYouText({ nextYear }: ThankYouTextProps) {
       <ThankYouTextH3>
         Thank you so much for joining us this year at{' '}
         <GradientSpan>HackSC {lastYear}!</GradientSpan> We hope you’ll join us
-        for our next event in April {nextYear}. Stay tuned for{' '}
+        for our next event in Spring {nextYear}. Stay tuned for{' '}
         <GradientSpan>HackSC {nextYear}</GradientSpan> applications coming out
         this winter!
       </ThankYouTextH3>

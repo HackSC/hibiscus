@@ -59,7 +59,7 @@ export function EmailNewsletterInputSection(
     <form onSubmit={formik.handleSubmit}>
       <Container>
         <EmailInput
-          placeholder={'Subscribe to our email newsletter!'}
+          placeholder={'Subscribe to email updates!'}
           onChange={formik.handleChange}
           id="email"
           name="email"
