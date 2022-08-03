@@ -14,8 +14,7 @@ jobs:
       - nx/set-shas
       - run:
           command: >-
-            yarn nx affected --target=build --base=$NX_BASE --parallel
-            --max-parallel=3
+            yarn nx affected --target=build --base=$NX_BASE
           name: Run Builds
   test:
     docker:
@@ -25,8 +24,7 @@ jobs:
       - nx/set-shas
       - run:
           command: >-
-            yarn nx affected --target=test --base=$NX_BASE --parallel
-            --max-parallel=2
+            yarn nx affected --target=test --base=$NX_BASE
           name: Run Tests
   lint:
     docker:
@@ -36,8 +34,7 @@ jobs:
       - nx/set-shas
       - run:
           command: >-
-            yarn nx affected --target=lint --base=$NX_BASE --parallel
-            --max-parallel=2
+            yarn nx affected --target=lint --base=$NX_BASE
           name: Run Tests
 
 workflows:
