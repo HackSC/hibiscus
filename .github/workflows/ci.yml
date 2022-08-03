@@ -1,0 +1,43 @@
+name: CI
+
+on: [push]
+
+jobs:
+  prepare:
+    name: Setup yarn
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: DerYeger/yarn-setup-action@master
+        with:
+          node-version: 16
+  build:
+    name: Build affected apps
+    runs-on: ubuntu-latest
+    needs: prepare
+    steps:
+      - uses: actions/checkout@v3
+      - uses: DerYeger/yarn-setup-action@master
+        with:
+          node-version: 16
+      - run: yarn nx affected --target=build --maxParallel=3 --parallel --base='${{ github.ref_name }}'
+  test:
+    name: Test affected apps
+    runs-on: ubuntu-latest
+    needs: prepare
+    steps:
+      - uses: actions/checkout@v3
+      - uses: DerYeger/yarn-setup-action@master
+        with:
+          node-version: 16
+      - run: yarn nx affected --target=test --maxParallel=3 --parallel --base='${{ github.ref_name }}'
+  lint:
+    name: Lint affected apps
+    runs-on: ubuntu-latest
+    needs: prepare
+    steps:
+      - uses: actions/checkout@v3
+      - uses: DerYeger/yarn-setup-action@master
+        with:
+          node-version: 16
+      - run: yarn nx affected --target=lint --maxParallel=3 --parallel --base='${{ github.ref_name }}'
