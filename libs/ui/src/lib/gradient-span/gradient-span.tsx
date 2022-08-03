@@ -9,7 +9,6 @@ export const GradientSpan = styled.span`
   );
   background-clip: text;
   -webkit-background-clip: text;
-  font-family: Inter, sans-serif;
   -webkit-text-fill-color: transparent;
   font-weight: bold;
 `;

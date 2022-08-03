@@ -13,12 +13,13 @@ export function FAQSection() {
           }}
         >
           {faqQuestionsAndAnswersData.map((item, idx) => (
-            <AccordionItem
-              key={idx}
-              titleButtonElement={<H4>{item.titleText}</H4>}
-            >
-              <DisclosedText>{item.disclosedText}</DisclosedText>
-            </AccordionItem>
+            <FAQAccordionContainer key={idx}>
+              <AccordionItem titleButtonElement={<H4>{item.titleText}</H4>}>
+                <DisclosedTextContainer>
+                  <Text>{item.disclosedText}</Text>
+                </DisclosedTextContainer>
+              </AccordionItem>
+            </FAQAccordionContainer>
           ))}
         </div>
         <div
@@ -31,12 +32,13 @@ export function FAQSection() {
           }}
         >
           {faqQuestionsAndAnswersData2.map((item, idx) => (
-            <AccordionItem
-              key={idx}
-              titleButtonElement={<H4>{item.titleText}</H4>}
-            >
-              <DisclosedText>{item.disclosedText}</DisclosedText>
-            </AccordionItem>
+            <FAQAccordionContainer key={idx}>
+              <AccordionItem titleButtonElement={<H4>{item.titleText}</H4>}>
+                <DisclosedTextContainer>
+                  <Text>{item.disclosedText}</Text>
+                </DisclosedTextContainer>
+              </AccordionItem>
+            </FAQAccordionContainer>
           ))}
         </div>
       </FAQContainer>
@@ -50,20 +52,36 @@ const FAQHeaderH2 = styled(H2)`
   font-size: 4.25rem;
   font-weight: 700;
   color: #2b2b2b;
-  padding-bottom: 1rem;
+
+  @media (max-width: 768px) {
+    text-align: center;
+  }
 `;
 
 const FAQContainer = styled.div`
   display: flex;
   flex-direction: row;
-  @media (max-width: 1080px) {
+  margin: 3rem 0 0;
+
+  @media (max-width: 768px) {
     flex-direction: column;
+    align-items: center;
   }
 `;
 
-const DisclosedText = styled(Text)`
-  font-size: 1.2rem;
-  line-height: 1.5;
+const DisclosedTextContainer = styled.div``;
+
+const FAQAccordionContainer = styled.div`
+  width: 28rem;
+  margin: 0 0 2rem;
+
+  @media (max-width: 1024px) {
+    width: 22rem;
+  }
+
+  @media (max-width: 375px) {
+    width: 18rem;
+  }
 `;
 
 const faqQuestionsAndAnswersData: {
@@ -74,9 +92,6 @@ const faqQuestionsAndAnswersData: {
     titleText: 'What is a hackathon?',
     disclosedText:
       'A hackathon is a 36 hour competition in which teams of students collaborate to ideate and innovate solutions to real world problems! No knowledge of coding or hacking necessary.',
-  },
-  {
-    titleText: 'Why HackSC?',
   },
   {
     titleText: 'What if I don’t know how to code?',

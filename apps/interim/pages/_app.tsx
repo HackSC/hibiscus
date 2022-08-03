@@ -24,6 +24,7 @@ function CustomApp({ Component, pageProps, envs }: CustomAppProps) {
         <>
           <Head>
             <title>HackSC | Join us next year!</title>
+            <link rel="shortcut icon" href="/img/favicon.ico" />
           </Head>
           <main className="app">
             <GlobalStyles />

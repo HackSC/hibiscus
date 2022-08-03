@@ -9,16 +9,14 @@ export function TeamContactBlurbs(props: TeamContactBlurbsProps) {
   return (
     <div>
       <GrayParagraph>
-        <GrayBoldedItalicSpan>Want to chat?</GrayBoldedItalicSpan> Reach out to
-        us at{' '}
+        <GrayBoldedSpan>Want to chat?</GrayBoldedSpan> Reach out to us at{' '}
         <TeamEmailGradientSpan>
           <EmailA href="mailto:team@hacksc.com">team@hacksc.com</EmailA>
         </TeamEmailGradientSpan>
         .
       </GrayParagraph>
       <GrayParagraph>
-        <GrayBoldedItalicSpan>Interested in sponsoring?</GrayBoldedItalicSpan>{' '}
-        Email{' '}
+        <GrayBoldedSpan>Interested in sponsoring?</GrayBoldedSpan> Email{' '}
         <TeamEmailGradientSpan>
           <EmailA href="mailto:sponsor@hacksc.com">sponsor@hacksc.com</EmailA>
         </TeamEmailGradientSpan>
@@ -32,16 +30,18 @@ export default TeamContactBlurbs;
 
 const GrayParagraph = styled(Text)`
   font-style: italic;
+  font-weight: 300;
   color: #939393;
-  margin: 3px;
-  font-size: 1.5rem;
+  margin: 10px 3px;
+  font-size: 1.2rem;
+
+  @media (max-width: 500px) {
+    font-size: 1.2rem;
+  }
 `;
 
-const GrayBoldedItalicSpan = styled.span`
-  color: #939393;
+const GrayBoldedSpan = styled.span`
   font-weight: 600;
-  font-size: 1.5rem;
-  font-family: Inter, sans-serif;
 `;
 
 const TeamEmailGradientSpan = styled(GradientSpan)``;

@@ -1,25 +1,13 @@
-import React, { FC } from 'react';
-import { H2, H3 } from '@hacksc-platforms/ui';
-import ham from './mobile-navbar.module.css';
+import { H1, H3 } from '@hacksc-platforms/ui';
+import { FC } from 'react';
 import styled from 'styled-components';
+import ham from './mobile-navbar.module.css';
 
 const MobileNavbar: FC = () => {
   return (
     <MobileNavbarContainer>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          width: '100%',
-          height: '100%',
-        }}
-      >
-        <StyledText>HackSC</StyledText>
-        <Spacer>
-          <TheBurger />
-        </Spacer>
-      </div>
+      <StyledText>HackSC</StyledText>
+      <TheBurger />
     </MobileNavbarContainer>
   );
 };
@@ -34,7 +22,7 @@ const TheBurger = () => {
         <span></span>
 
         <ul className={`${ham.menu}`}>
-          <StyledLink>
+          {/* <StyledLink>
             <a href="https://hacksc.com/">
               <li>Overview</li>
             </a>
@@ -43,7 +31,7 @@ const TheBurger = () => {
             <a href="https://team.hacksc.com" target="_blank" rel="noreferrer">
               <li>Join Us</li>
             </a>
-          </StyledLink>
+          </StyledLink> */}
           <DropdownMenu>
             <li>Previous Hackathons ▾</li>
             <DropdownContent>
@@ -85,35 +73,27 @@ const TheBurger = () => {
 export default MobileNavbar;
 
 const MobileNavbarContainer = styled.div`
+  width: 100%;
   padding-top: 5vh;
   padding-left: 10%;
+  padding-right: 12%;
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
 `;
 
-const Spacer = styled.div`
-  padding-left: 50vw;
-  @media (max-width: 600px) {
-    padding-left: 44vw;
-  }
-`;
-
-const StyledText = styled(H2)`
+const StyledText = styled(H1)`
   color: white;
-  font-family: Inter, sans-serif;
-  font-size: 4rem;
   font-weight: 700;
-  letter-spacing: -1px;
+  letter-spacing: -5%;
   flex: 2;
   @media (max-width: 600px) {
-    font-size: 2rem;
+    font-size: 1.5rem;
   }
 `;
 
-const StyledLink = styled(H3)`
-  font-family: Inter, sans-serif;
-`;
+const StyledLink = styled(H3)``;
 
 const DropdownContent = styled.div`
   display: none;
@@ -124,12 +104,14 @@ const DropdownContent = styled.div`
   padding: 0.3rem;
   border-radius: 0.5rem;
   margin-left: 7rem;
+  margin-top: -0.3rem;
 `;
 
 const DropdownContentItem = styled.div`
-  padding: 0;
-  margin: 0.2rem 0;
+  padding: 0.3rem 0;
+  margin: 0.3rem 0 0;
   background: #fff;
+  box-shadow: 5px 5px 10px 3px rgb(172, 172, 172, 0.7);
   width: 100%;
   text-align: center;
   border-radius: 0.4rem;
@@ -138,8 +120,8 @@ const DropdownContentItem = styled.div`
   }
 `;
 
-const DropdownLink = styled.button`
-  font-family: Inter, sans-serif;
+const DropdownLink = styled.div`
+  font-family: InterVariable;
   font-size: 1.1rem;
   font-weight: 400;
   color: #2b2b2b;

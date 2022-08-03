@@ -1,5 +1,4 @@
-import { TrademarkColors } from '@hacksc-platforms/styles';
-import { GradientSpan } from '@hacksc-platforms/ui';
+import { GradientSpan, H5, Link, Text } from '@hacksc-platforms/ui';
 import styled from 'styled-components';
 
 /* eslint-disable-next-line */
@@ -9,43 +8,34 @@ export function DesktopNavbar(props: DesktopNavbarProps) {
   return (
     <StyledDesktopNavbar>
       <NavbarLeftLogoText>
-        <GradientSpan>HackSC</GradientSpan>
+        <Link href={'/'} anchorTagPropsOverride={{ target: '_self' }}>
+          <GradientSpan>HackSC</GradientSpan>
+        </Link>
       </NavbarLeftLogoText>
       <RightMenuDiv>
-        <MenuOption>Overview</MenuOption>
-        {/* <MenuOption>Sponsor Us</MenuOption> */}
-        <a href="https://team.hacksc.com" target="_blank" rel="noreferrer">
+        {/* <MenuOption>Overview</MenuOption> */}
+        {/* <Link href="https://team.hacksc.com" passHref>
           <MenuOption>Join Us</MenuOption>
-        </a>
+        </Link> */}
         <DropdownMenu>
-          <MenuOption>Previous Hackathons ▾</MenuOption>
+          <MenuOption>
+            <H5>Previous Hackathons ▾</H5>
+          </MenuOption>
           <DropdownContent>
             <DropdownContentItem>
-              <a
-                href="https://2022.hacksc.com"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <DropdownLink>HackSC 2022</DropdownLink>
-              </a>
+              <Link href="https://2022.hacksc.com">
+                <DropdownText>HackSC 2022</DropdownText>
+              </Link>
             </DropdownContentItem>
             <DropdownContentItem>
-              <a
-                href="https://2021.hacksc.com"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <DropdownLink>HackSC 2021</DropdownLink>
-              </a>
+              <Link href="https://2021.hacksc.com">
+                <DropdownText>HackSC 2021</DropdownText>
+              </Link>
             </DropdownContentItem>
             <DropdownContentItem>
-              <a
-                href="https://2020.hacksc.com"
-                target="_blank"
-                rel="noreferrer"
-              >
-                <DropdownLink>HackSC 2020</DropdownLink>
-              </a>
+              <Link href="https://2020.hacksc.com">
+                <DropdownText>HackSC 2020</DropdownText>
+              </Link>
             </DropdownContentItem>
           </DropdownContent>
         </DropdownMenu>
@@ -69,7 +59,7 @@ const RightMenuDiv = styled.div`
   padding-right: 5rem;
 `;
 
-const MenuOption = styled.button`
+const MenuOption = styled.div`
   color: #2b2b2b;
   border: none;
   background: none;
@@ -77,6 +67,8 @@ const MenuOption = styled.button`
   font-weight: 400;
   font-family: 'Inter', sans-serif;
   padding: 1rem;
+  transition: 0.3s;
+
   &:hover {
     background: #f3f3f3;
     border-radius: 0.4rem;
@@ -84,30 +76,35 @@ const MenuOption = styled.button`
 `;
 
 const DropdownContent = styled.div`
-  display: none;
+  display: flex;
   position: absolute;
   flex-direction: column;
   align-items: center;
   min-width: 10rem;
   padding: 0.3rem;
   border-radius: 0.5rem;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.3s linear;
 `;
 
 const DropdownContentItem = styled.div`
   padding: 0;
   margin: 0.3rem;
-  margin-left: 6rem;
+  margin-left: 4rem;
   background: #faf9f9;
   width: 100%;
   text-align: center;
   border-radius: 0.4rem;
+  transition: 0.3s;
+
   &:hover {
-    background-color: ${TrademarkColors.LIGHT_BLUE};
+    background-color: #e0e0e0;
+    margin-left: 2rem;
   }
 `;
 
-const DropdownLink = styled.button`
-  font-family: Inter, sans-serif;
+const DropdownText = styled(Text)`
   font-size: 1.1rem;
   font-weight: 400;
   color: #2b2b2b;
@@ -124,7 +121,8 @@ const DropdownMenu = styled.div`
   position: relative;
 
   &:hover ${DropdownContent} {
-    display: flex;
+    visibility: visible;
+    opacity: 1;
   }
 `;
 

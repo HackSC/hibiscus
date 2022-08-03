@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const Text = styled.p`
-  font-family: Inter, sans-serif;
+  font-size: 1rem;
   font-weight: 400;
   margin: 0;
 `;
