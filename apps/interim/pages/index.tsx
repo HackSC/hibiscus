@@ -68,6 +68,10 @@ const FirstSection = styled.section`
     padding-top: 5rem;
     margin-inline: auto;
   }
+  @media (max-width: 320px) {
+    padding-left: 0.5rem;
+    margin-left: 0.25rem;
+  }
 `;
 
 const SecondSection = styled.section`
@@ -82,6 +86,10 @@ const SecondSection = styled.section`
   @media (min-width: 768px) and (max-width: 800px) {
     padding-top: 5rem;
     margin-inline: auto;
+  }
+  @media (max-width: 320px) {
+    padding-left: 0.5rem;
+    margin-left: 0.25rem;
   }
 `;
 
