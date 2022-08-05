@@ -71,21 +71,17 @@ const FirstSection = styled.section`
 `;
 
 const SecondSection = styled.section`
-  margin-top: 3rem;
-  margin-bottom: 3rem;
-  margin-left: 5rem;
-  max-width: 100vw;
-  padding: 4.5rem 0 0 2.5rem;
+  max-width: 40rem;
+  margin: 6rem 4rem 0 4rem;
+  padding: 3.25rem 0 3rem 3.25rem;
 
   @media (max-width: 1080px) {
-    margin-left: 6rem;
-    margin-right: 3rem;
-    padding: 0;
+    margin: 0 3rem 3rem 4vw;
   }
 
-  @media (max-width: 425px) {
-    margin-right: 0;
-    padding: 0;
+  @media (min-width: 768px) and (max-width: 800px) {
+    padding-top: 5rem;
+    margin-inline: auto;
   }
 `;
 

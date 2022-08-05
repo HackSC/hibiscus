@@ -80,10 +80,7 @@ const FAQAccordionContainer = styled.div`
     width: 35vw;
   }
   @media (max-width: 768px) {
-    width: 60vw;
-  }
-  @media (max-width: 375px) {
-    width: 18rem;
+    width: 70vw;
   }
 `;
 
