@@ -26,7 +26,29 @@
           },
           {
             "value": "css",
-            "label": "Pure CSS"
+            "label": "CSS"
+          },
+          {
+            "value": "styled-components",
+            "label": "Styled-Components (recommended)"
+          }
+        ]
+      }
+    },
+    "e2e": {
+      "type": "string",
+      "description": "",
+      "x-prompt": {
+        "message": "E2E test runner (this will create a APP_NAME-e2e folder for this app)",
+        "type": "list",
+        "items": [
+          {
+            "value": "cypress",
+            "label": "Cypress"
+          },
+          {
+            "value": "none",
+            "label": "None"
           }
         ]
       }
