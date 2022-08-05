@@ -39,7 +39,7 @@ export function AccordionItem(props: Props) {
           >
             <Bullet>
               <GradientSpan>
-                {isOpen ? '–' : '+'}
+                {isOpen ? '−' : '+'}
                 {'\u00a0'}
               </GradientSpan>
             </Bullet>

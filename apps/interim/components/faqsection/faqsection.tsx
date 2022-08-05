@@ -23,7 +23,7 @@ export function FAQSection() {
           ))}
         </div>
         <div
-          style={{ display: 'flex', flexDirection: 'column', width: '10rem' }}
+          style={{ display: 'flex', flexDirection: 'column', width: '10vw' }}
         ></div>
         <div
           style={{
@@ -54,7 +54,8 @@ const FAQHeaderH2 = styled(H2)`
   color: #2b2b2b;
 
   @media (max-width: 768px) {
-    text-align: center;
+    text-align: left;
+    font-size: 3.5rem;
   }
 `;
 
@@ -65,7 +66,7 @@ const FAQContainer = styled.div`
 
   @media (max-width: 768px) {
     flex-direction: column;
-    align-items: center;
+    align-items: left;
   }
 `;
 
@@ -75,10 +76,12 @@ const FAQAccordionContainer = styled.div`
   width: 28rem;
   margin: 0 0 2rem;
 
-  @media (max-width: 1024px) {
-    width: 22rem;
+  @media (max-width: 1080px) {
+    width: 35vw;
   }
-
+  @media (max-width: 768px) {
+    width: 60vw;
+  }
   @media (max-width: 375px) {
     width: 18rem;
   }

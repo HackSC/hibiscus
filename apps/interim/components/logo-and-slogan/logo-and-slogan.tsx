@@ -11,7 +11,7 @@ const LogoH1 = styled(H1)`
   font-weight: 700;
   color: #2b2b2b;
 
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
     padding-top: 2rem;
     font-size: 4rem;
   }

@@ -10,7 +10,7 @@ export const GradientSpan = styled.span`
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  font-weight: bold;
+  font-weight: 600;
 `;
 
 export default GradientSpan;

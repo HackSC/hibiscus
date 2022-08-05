@@ -64,7 +64,7 @@ const FirstSection = styled.section`
     margin: 50vw 3rem 0 4vw;
   }
 
-  @media (min-width: 768px) and (max-width: 1024px) {
+  @media (min-width: 768px) and (max-width: 800px) {
     padding-top: 5rem;
     margin-inline: auto;
   }
@@ -73,12 +73,12 @@ const FirstSection = styled.section`
 const SecondSection = styled.section`
   margin-top: 3rem;
   margin-bottom: 3rem;
-  margin-left: 6rem;
+  margin-left: 5rem;
   max-width: 100vw;
-  padding: 4.5rem 0 0 3.5rem;
+  padding: 4.5rem 0 0 2.5rem;
 
   @media (max-width: 1080px) {
-    margin-left: 5vw;
+    margin-left: 6rem;
     margin-right: 3rem;
     padding: 0;
   }
