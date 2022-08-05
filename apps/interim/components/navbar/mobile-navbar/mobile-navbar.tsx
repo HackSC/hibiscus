@@ -1,4 +1,4 @@
-import { H1, H3 } from '@hacksc-platforms/ui';
+import { H1 } from '@hacksc-platforms/ui';
 import { FC } from 'react';
 import styled from 'styled-components';
 import ham from './mobile-navbar.module.css';
@@ -86,14 +86,13 @@ const MobileNavbarContainer = styled.div`
 const StyledText = styled(H1)`
   color: white;
   font-weight: 700;
-  letter-spacing: -5%;
+  letter-spacing: -0.35vw;
   flex: 2;
+  font-size: 2.5rem;
   @media (max-width: 600px) {
-    font-size: 1.5rem;
+    font-size: 2rem;
   }
 `;
-
-const StyledLink = styled(H3)``;
 
 const DropdownContent = styled.div`
   display: none;

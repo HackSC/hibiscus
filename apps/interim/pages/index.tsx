@@ -64,28 +64,32 @@ const FirstSection = styled.section`
     margin: 50vw 3rem 0 4vw;
   }
 
-  @media (min-width: 768px) and (max-width: 1024px) {
+  @media (min-width: 768px) and (max-width: 800px) {
     padding-top: 5rem;
     margin-inline: auto;
+  }
+  @media (max-width: 320px) {
+    padding-left: 0.5rem;
+    margin-left: 0.25rem;
   }
 `;
 
 const SecondSection = styled.section`
-  margin-top: 3rem;
-  margin-bottom: 3rem;
-  margin-left: 6rem;
-  max-width: 100vw;
-  padding: 4.5rem 0 0 3.5rem;
+  max-width: 40rem;
+  margin: 6rem 4rem 0 4rem;
+  padding: 3.25rem 0 3rem 3.25rem;
 
   @media (max-width: 1080px) {
-    margin-left: 5vw;
-    margin-right: 3rem;
-    padding: 0;
+    margin: 0 3rem 3rem 4vw;
   }
 
-  @media (max-width: 425px) {
-    margin-right: 0;
-    padding: 0;
+  @media (min-width: 768px) and (max-width: 800px) {
+    padding-top: 5rem;
+    margin-inline: auto;
+  }
+  @media (max-width: 320px) {
+    padding-left: 0.5rem;
+    margin-left: 0.25rem;
   }
 `;
 

@@ -69,6 +69,10 @@ const IconContainer = styled.div`
     width: 1rem;
     height: 1rem;
   }
+  @media (max-width: 320px) {
+    padding-left: 0.5rem;
+    margin-left: 0.25rem;
+  }
 `;
 
 const SocialMediaContainer = styled.div`

@@ -1,4 +1,3 @@
-import { TrademarkColors } from '@hacksc-platforms/styles';
 import { GradientSpan, Text } from '@hacksc-platforms/ui';
 import styled from 'styled-components';
 
@@ -11,14 +10,20 @@ export function TeamContactBlurbs(props: TeamContactBlurbsProps) {
       <GrayParagraph>
         <GrayBoldedSpan>Want to chat?</GrayBoldedSpan> Reach out to us at{' '}
         <TeamEmailGradientSpan>
-          <EmailA href="mailto:team@hacksc.com">team@hacksc.com</EmailA>
+          <GradientSpan>
+            {' '}
+            <a href="mailto:team@hacksc.com">team@hacksc.com</a>
+          </GradientSpan>
         </TeamEmailGradientSpan>
         .
       </GrayParagraph>
       <GrayParagraph>
         <GrayBoldedSpan>Interested in sponsoring?</GrayBoldedSpan> Email{' '}
         <TeamEmailGradientSpan>
-          <EmailA href="mailto:sponsor@hacksc.com">sponsor@hacksc.com</EmailA>
+          <GradientSpan>
+            {' '}
+            <a href="mailto:sponsor@hacksc.com">sponsor@hacksc.com</a>
+          </GradientSpan>
         </TeamEmailGradientSpan>
         !
       </GrayParagraph>
@@ -45,13 +50,3 @@ const GrayBoldedSpan = styled.span`
 `;
 
 const TeamEmailGradientSpan = styled(GradientSpan)``;
-
-// https://stackoverflow.com/questions/44147872/linear-gradient-underline-for-hyperlink
-const EmailA = styled.a({
-  display: 'inline',
-  textDecoration: 'none',
-  backgroundImage: `linear-gradient(transparent, transparent),linear-gradient(transparent, transparent),linear-gradient(to right, ${TrademarkColors.LIGHT_BLUE}, ${TrademarkColors.LIGHT_PURPLE})`,
-  backgroundRepeat: 'no-repeat',
-  backgroundPosition: '0 190%',
-  backgroundSize: '100% 10px',
-});

@@ -9,7 +9,7 @@ export function DesktopNavbar(props: DesktopNavbarProps) {
     <StyledDesktopNavbar>
       <NavbarLeftLogoText>
         <Link href={'/'} anchorTagPropsOverride={{ target: '_self' }}>
-          <GradientSpan>HackSC</GradientSpan>
+          <StyledText>HackSC{'\u00a0'}</StyledText>
         </Link>
       </NavbarLeftLogoText>
       <RightMenuDiv>
@@ -51,6 +51,11 @@ const StyledDesktopNavbar = styled.nav`
   align-items: center;
   justify-content: space-between;
   width: 100%;
+`;
+
+const StyledText = styled(GradientSpan)`
+  letter-spacing: -0.35vw;
+  font-weight: 700;
 `;
 
 const RightMenuDiv = styled.div`
