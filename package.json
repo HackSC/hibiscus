@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@cypress/webpack-preprocessor": "^5.12.0",
-    "@nrwl/cli": "14.2.2",
+    "@nrwl/cli": "14.5.4",
     "@nrwl/cypress": "14.2.2",
     "@nrwl/devkit": "14.2.2",
     "@nrwl/eslint-plugin-nx": "14.2.2",
