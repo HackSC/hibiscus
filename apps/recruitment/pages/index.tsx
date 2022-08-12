@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import Hero from '../components/hero/hero';
 import Footer from '../components/footer/footer';
 import Navbar from '../components/navbar/navbar';
 
@@ -8,8 +9,12 @@ export function Index() {
       <NavbarWrapper>
         <Navbar />
       </NavbarWrapper>
-      <FirstSection></FirstSection>
-      <SecondSection></SecondSection>
+      <FirstSection>
+        <Hero />
+      </FirstSection>
+      {/* <SecondSection>
+        
+      </SecondSection> */}
       <FooterContainer>
         <Footer />
       </FooterContainer>
@@ -24,7 +29,7 @@ const MainPageWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   min-height: 100vh;
-  /* background-image: url('/img/light-desktop-bg.svg'); */
+  background-image: url('/img/light-desktop-bg.svg');
   background-position: fixed;
   background-attachment: local;
   background-repeat: no-repeat;
@@ -44,16 +49,15 @@ const NavbarWrapper = styled.div`
 `;
 
 const FirstSection = styled.section`
-  max-width: 40rem;
-  margin: 6rem 4rem 0 4rem;
-  padding: 3.25rem 0 0 3.25rem;
+  margin: 0 0 0 4rem;
+  padding: 0 0 0 3.25rem;
 
   @media (max-width: 1080px) {
-    margin: 50vw 3rem 0 4vw;
+    margin: 0 0 0 4vw;
   }
 
   @media (min-width: 768px) and (max-width: 800px) {
-    padding-top: 5rem;
+    padding-top: 0;
     margin-inline: auto;
   }
   @media (max-width: 320px) {

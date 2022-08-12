@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import GradientSpan from '../gradient-span/gradient-span';
+import { TrademarkColors } from '@hacksc-platforms/styles';
 import { H3 } from '../heading/heading';
 
 /* eslint-disable-next-line */
@@ -90,4 +90,16 @@ const DisclosedElementContainer = styled.div`
   padding-right: 1rem;
   font-size: 1.5rem;
   color: #2b2b2b;
+`;
+
+const GradientSpan = styled.span`
+  background: linear-gradient(
+    to right,
+    ${TrademarkColors.LIGHT_BLUE} 0%,
+    ${TrademarkColors.LIGHT_PURPLE} 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
 `;

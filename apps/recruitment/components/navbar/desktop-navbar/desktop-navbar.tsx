@@ -20,7 +20,9 @@ export function DesktopNavbar(props: DesktopNavbarProps) {
         </Link>
         <Link href="https://team.hacksc.com" passHref>
           <MenuOption>
-            <H5>Join Us</H5>
+            <H5>
+              <GradientSpan>Join Our Team</GradientSpan>
+            </H5>
           </MenuOption>
         </Link>
         <DropdownMenu>
