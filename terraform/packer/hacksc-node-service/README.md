@@ -1,0 +1,1 @@
+This folder contains the [base Packer image](https://learn.hashicorp.com/tutorials/packer/golden-image-with-hcp-packer) and various scripts that's involved in provisioning a typical backend service for HackSC on an AMI in our AWS VPC. We currently support Node 16.
