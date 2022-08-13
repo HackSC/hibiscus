@@ -4,7 +4,7 @@ import { GradientSpan, H1, H3 } from '@hacksc-platforms/ui';
 /* eslint-disable-next-line */
 export interface HeroProps {}
 
-export function Hero(props: HeroProps) {
+export function HeroSection(props: HeroProps) {
   return (
     <StyledHero>
       <LeftSection>
@@ -33,7 +33,7 @@ export function Hero(props: HeroProps) {
   );
 }
 
-export default Hero;
+export default HeroSection;
 
 const StyledHero = styled.div`
   display: flex;

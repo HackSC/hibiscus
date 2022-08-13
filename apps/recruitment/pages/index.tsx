@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Hero from '../components/hero/hero';
+import HeroSection from '../components/hero-section/hero-section';
 import Footer from '../components/footer/footer';
 import Navbar from '../components/navbar/navbar';
 
@@ -10,7 +10,7 @@ export function Index() {
         <Navbar />
       </NavbarWrapper>
       <FirstSection>
-        <Hero />
+        <HeroSection />
       </FirstSection>
       {/* <SecondSection>
         
