@@ -50,26 +50,32 @@ build {
 
   # Add SSH public key
   provisioner "file" {
-    source      = "../packer-ssh.pub"
+    source      = "../keys/packer-ssh.pub"
     destination = "/tmp/packer-ssh.pub"
   }
 
   # Execute setup script
   provisioner "shell" {
-    script = "setup.sh"
+    scripts = ["scripts/setup-docker.sh", "scripts/install-ssh-key.sh"]
     # Run script after cloud-init finishes, otherwise you run into race conditions
     execute_command = "/usr/bin/cloud-init status --wait && sudo -E -S sh '{{ .Path }}'"
   }
 
+  # Audit rules
+  provisioner "file" {
+    source      = "files/audit.rules"
+    destination = "/tmp/audit.rules"
+  }
+
   # Update Docker daemon with Loki logs
   provisioner "file" {
-    source      = "docker-daemon.json"
+    source      = "files/docker-daemon.json"
     destination = "/tmp/daemon.json"
   }
 
   # Add promtail configuration file
   provisioner "file" {
-    source      = "promtail.yaml"
+    source      = "files/promtail.yaml"
     destination = "/tmp/promtail.yaml"
   }
 
@@ -83,6 +89,7 @@ build {
   # Must use this method because their destinations are protected
   provisioner "shell" {
     inline = [
+      "sudo cp /tmp/audit.rules /etc/audit/rules.d/audit.rules",
       "sudo mkdir /opt/promtail/",
       "sudo cp /tmp/promtail.yaml /opt/promtail/promtail.yaml",
       "sudo cp /tmp/run-promtail.sh /var/lib/cloud/scripts/per-boot/run-promtail.sh",
@@ -90,9 +97,9 @@ build {
     ]
   }
 
-  # Execute setup script
+  # Execute Promtail setup script
   provisioner "shell" {
-    script = "setup-promtail.sh"
+    script = "scripts/setup-promtail.sh"
   }
 
   # HCP Packer settings
