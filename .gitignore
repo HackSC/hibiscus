@@ -45,3 +45,6 @@ Thumbs.db
 
 # Next.js
 .next
+
+# IACs
+/**/.terraform

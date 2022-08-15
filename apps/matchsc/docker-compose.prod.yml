@@ -1,0 +1,11 @@
+version: '3'
+services:
+  matchsc:
+    container_name: '${DOCKER_CONTAINER_NAME}'
+    image: public.ecr.aws/s2g6d3p1/matchsc:latest
+    env_file:
+      - .env.production
+    environment:
+      - NODE_ENV=production
+    ports:
+      - '${PORT}:${PORT}'

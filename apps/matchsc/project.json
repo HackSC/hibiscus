@@ -1,0 +1,84 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/matchsc/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/matchsc",
+        "main": "apps/matchsc/src/main.ts",
+        "tsConfig": "apps/matchsc/tsconfig.app.json",
+        "assets": ["apps/matchsc/src/assets"],
+        "generatePackageJson": true
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/node:node",
+      "options": {
+        "buildTarget": "matchsc:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/matchsc/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/matchsc"],
+      "options": {
+        "jestConfig": "apps/matchsc/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "containerize": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "nx build matchsc",
+          "docker build -f ./apps/matchsc/Dockerfile . -t matchsc"
+        ],
+        "parallel": false
+      }
+    },
+    "compose-up": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "docker-compose --env-file ./apps/matchsc/.env.production -f ./apps/matchsc/docker-compose.yml up"
+        ],
+        "parallel": false
+      }
+    },
+    "compose-down": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "docker-compose --env-file ./apps/matchsc/.env.production -f ./apps/matchsc/docker-compose.yml down"
+        ],
+        "parallel": false
+      }
+    },
+    "compose-restart": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "docker-compose --env-file ./apps/matchsc/.env.production -f ./apps/matchsc/docker-compose.yml restart"
+        ],
+        "parallel": false
+      }
+    }
+  },
+  "tags": []
+}

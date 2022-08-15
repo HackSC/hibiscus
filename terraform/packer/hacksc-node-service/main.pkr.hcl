@@ -9,7 +9,7 @@ packer {
 
 variable "ami_prefix" {
   type    = string
-  default = "learn-packer-hcp-golden-image"
+  default = "hacksc-node-service-packer-hcp-golden-image"
 }
 
 locals {
@@ -50,38 +50,38 @@ build {
 
   # Add SSH public key
   provisioner "file" {
-    source      = "../keys/packer-ssh.pub"
+    source      = "${path.root}/../keys/packer-ssh.pub"
     destination = "/tmp/packer-ssh.pub"
   }
 
   # Execute setup script
   provisioner "shell" {
-    scripts = ["scripts/setup-docker.sh", "scripts/install-ssh-key.sh"]
+    scripts = ["${path.root}/scripts/setup-docker.sh", "${path.root}/scripts/install-ssh-key.sh"]
     # Run script after cloud-init finishes, otherwise you run into race conditions
     execute_command = "/usr/bin/cloud-init status --wait && sudo -E -S sh '{{ .Path }}'"
   }
 
   # Audit rules
   provisioner "file" {
-    source      = "files/audit.rules"
+    source      = "${path.root}/files/audit.rules"
     destination = "/tmp/audit.rules"
   }
 
   # Update Docker daemon with Loki logs
   provisioner "file" {
-    source      = "files/docker-daemon.json"
+    source      = "${path.root}/files/docker-daemon.json"
     destination = "/tmp/daemon.json"
   }
 
   # Add promtail configuration file
   provisioner "file" {
-    source      = "files/promtail.yaml"
+    source      = "${path.root}/files/promtail.yml"
     destination = "/tmp/promtail.yaml"
   }
 
   # Add startup script that will run promtail on instance boot
   provisioner "file" {
-    source      = "scripts/run-promtail.sh"
+    source      = "${path.root}/scripts/run-promtail.sh"
     destination = "/tmp/run-promtail.sh"
   }
 
@@ -99,7 +99,7 @@ build {
 
   # Execute Promtail setup script
   provisioner "shell" {
-    script = "scripts/setup-promtail.sh"
+    script = "${path.root}/scripts/setup-promtail.sh"
   }
 
   # HCP Packer settings

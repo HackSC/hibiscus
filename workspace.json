@@ -4,6 +4,7 @@
   "projects": {
     "api-interfaces": "libs/api-interfaces",
     "interim": "apps/interim",
+    "matchsc": "apps/matchsc",
     "recruitment": "apps/recruitment",
     "styles": "libs/styles",
     "ui": "libs/ui",
