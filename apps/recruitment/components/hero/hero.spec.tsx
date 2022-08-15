@@ -1,6 +1,6 @@
 import { render } from '@testing-library/react';
 
-import Hero from './hero-section';
+import Hero from './hero';
 
 describe('Hero', () => {
   it('should render successfully', () => {

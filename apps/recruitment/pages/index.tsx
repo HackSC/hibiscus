@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import HeroSection from '../components/hero-section/hero-section';
+import Hero from '../components/hero/hero';
 import Footer from '../components/footer/footer';
 import Navbar from '../components/navbar/navbar';
 
@@ -9,9 +9,9 @@ export function Index() {
       <NavbarWrapper>
         <Navbar />
       </NavbarWrapper>
-      <FirstSection>
-        <HeroSection />
-      </FirstSection>
+      <HeroSection>
+        <Hero />
+      </HeroSection>
       {/* <SecondSection>
         
       </SecondSection> */}
@@ -48,7 +48,7 @@ const NavbarWrapper = styled.div`
   justify-content: center;
 `;
 
-const FirstSection = styled.section`
+const HeroSection = styled.section`
   margin: 0 0 0 4rem;
   padding: 0 0 0 3.25rem;
 
