@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import GradientSpan from '../gradient-span/gradient-span';
+import { GradientSpan } from '../gradient-span/gradient-span';
 import { H3 } from '../heading/heading';
 
 /* eslint-disable-next-line */
