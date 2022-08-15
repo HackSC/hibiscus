@@ -51,7 +51,7 @@ build {
 
   # Add SSH public key
   provisioner "file" {
-    source      = "${path.root}/../../terraform/packer/keys/packer-ssh.pub"
+    source      = "${path.root}/../../terraform/packer/shared/keys/packer-ssh.pub"
     destination = "/tmp/packer-ssh.pub"
   }
 

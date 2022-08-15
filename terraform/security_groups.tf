@@ -54,3 +54,16 @@ resource "aws_security_group" "matchsc_west" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 }
+
+resource "aws_security_group" "nomad_west" {
+  provider = aws.west
+  name     = "nomad_4646"
+  vpc_id   = aws_vpc.vpc_west.id
+
+  ingress {
+    from_port   = 4646
+    to_port     = 4646
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}

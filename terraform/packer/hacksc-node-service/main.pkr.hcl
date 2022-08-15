@@ -50,7 +50,7 @@ build {
 
   # Add SSH public key
   provisioner "file" {
-    source      = "${path.root}/../keys/packer-ssh.pub"
+    source      = "${path.root}/../shared/keys/packer-ssh.pub"
     destination = "/tmp/packer-ssh.pub"
   }
 
