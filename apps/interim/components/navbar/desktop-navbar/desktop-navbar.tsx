@@ -60,7 +60,10 @@ const StyledDesktopNavbar = styled.nav`
 `;
 
 const StyledText = styled(GradientSpan)`
-  letter-spacing: -0.35vw;
+  letter-spacing: -0.25vw;
+  @media (max-width: 1920px) {
+    letter-spacing: -0.35vw;
+  }
   font-weight: 700;
 `;
 
