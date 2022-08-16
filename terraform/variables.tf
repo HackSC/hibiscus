@@ -1,3 +1,11 @@
+variable "name" {
+  description = "Common name fragment of the server/client instances"
+}
+
+variable "key_name" {
+  description = "Name of key to be loaded onto EC2 instances"
+}
+
 variable "cidr_vpc_west" {
   description = "CIDR block for the VPC"
   default     = "10.2.0.0/16"
@@ -8,12 +16,18 @@ variable "cidr_subnet_west" {
   default     = "10.2.0.0/24"
 }
 
+variable "whitelist_ips" {
+  type        = list(string)
+  description = "IP ranges to whitelist to our security groups"
+  default     = ["0.0.0.0/0"] # world for now
+}
+
 variable "environment_tag" {
   description = "Environment tag"
   default     = "hacksc"
 }
 
-variable "region_west" {
+variable "region" {
   description = "The region where Terraform deploys our resources"
   default     = "us-west-1"
 }
@@ -66,4 +80,9 @@ variable "retry_join" {
 
 variable "nomad_binary_url" {
   description = "Public URL to download Nomad's binary file"
+}
+
+variable "root_block_device_size" {
+  description = "Size of root block device"
+  default     = 50
 }

@@ -52,6 +52,17 @@
         "parallel": false
       }
     },
+    "publish": {
+      "executor": "@nrwl/workspace:run-commands",
+      "options": {
+        "commands": [
+          "nx containerize matchsc",
+          "docker tag matchsc:latest public.ecr.aws/s2g6d3p1/matchsc:latest",
+          "docker push public.ecr.aws/s2g6d3p1/matchsc:latest"
+        ],
+        "parallel": false
+      }
+    },
     "compose-up": {
       "executor": "@nrwl/workspace:run-commands",
       "options": {
