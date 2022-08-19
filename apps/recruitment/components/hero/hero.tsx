@@ -45,6 +45,7 @@ const StyledHero = styled.div`
   margin-top: 17rem;
   @media (max-width: 1080px) {
     margin-top: 7rem;
+    margin-left: 0;
     flex-direction: column;
   }
 `;
@@ -71,7 +72,7 @@ const LogoH1 = styled(H1)`
 
   @media (max-width: 768px) {
     padding-top: 1rem;
-    font-size: 5rem;
+    font-size: 4rem;
   }
 `;
 
