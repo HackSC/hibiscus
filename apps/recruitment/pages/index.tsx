@@ -12,9 +12,7 @@ export function Index() {
       <HeroSection>
         <Hero />
       </HeroSection>
-      {/* <SecondSection>
-        
-      </SecondSection> */}
+      <TeamsSection></TeamsSection>
       <FooterContainer>
         <Footer />
       </FooterContainer>
@@ -38,7 +36,7 @@ const MainPageWrapper = styled.div`
   left: 0;
   z-index: -1;
   @media screen and (max-width: 1080px) {
-    /* background-image: url('img/light-mobile-bg.svg'); */
+    background-image: url('img/light-mobile-bg.svg');
   }
 `;
 
@@ -51,6 +49,10 @@ const NavbarWrapper = styled.div`
 const HeroSection = styled.section`
   margin: 0 0 0 4rem;
   padding: 0 0 0 3.25rem;
+
+  @media (max-width: 1280px) {
+    margin: 0 2rem 0 4vw;
+  }
 
   @media (max-width: 1080px) {
     margin: 0 0 0 4vw;
@@ -66,7 +68,7 @@ const HeroSection = styled.section`
   }
 `;
 
-const SecondSection = styled.section`
+const TeamsSection = styled.section`
   max-width: 40rem;
   margin: 6rem 4rem 0 4rem;
   padding: 3.25rem 0 3rem 3.25rem;

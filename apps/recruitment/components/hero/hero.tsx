@@ -23,10 +23,11 @@ export function Hero(props: HeroProps) {
       </LeftSection>
       <RightSection>
         <Image
-          src="/img/globe.png"
-          alt="Globe"
-          width={'350vw'}
-          height={'350vw'}
+          src="/img/lightbulb.png"
+          alt="Light Bulb"
+          width="300vw"
+          height="300vw"
+          objectFit="contain"
         />
       </RightSection>
     </StyledHero>
@@ -39,17 +40,22 @@ const StyledHero = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  @media (max-width: 768px) {
+  margin-right: 2rem;
+  margin-left: 2rem;
+  margin-top: 17rem;
+  @media (max-width: 1080px) {
+    margin-top: 7rem;
     flex-direction: column;
   }
 `;
 const LeftSection = styled.div`
-  justify-content: flex-start;
   flex-basis: 60%;
 `;
 const RightSection = styled.div`
-  justify-content: flex-end;
   flex-basis: 30%;
+  @media (max-width: 1080px) {
+    margin-top: 5rem;
+  }
 `;
 
 const LogoH1 = styled(H1)`
