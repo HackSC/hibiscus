@@ -84,7 +84,7 @@ const MobileNavbarContainer = styled.div`
 `;
 
 const StyledText = styled(H1)`
-  color: white;
+  color: #2b2b2b;
   font-weight: 700;
   letter-spacing: -0.35vw;
   flex: 2;

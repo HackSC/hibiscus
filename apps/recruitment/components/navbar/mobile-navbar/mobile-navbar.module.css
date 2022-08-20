@@ -18,7 +18,7 @@
 }
 
 .menuToggle a:hover {
-  background-color: #faf9f9;
+  background-color: #2b2b2b;
 }
 
 /* An invisible input over the hamburger */
@@ -48,7 +48,7 @@
   position: relative;
 
   /* background: #EE5549; */
-  background: #fff;
+  background: #2b2b2b;
 
   border-radius: 3px;
 
@@ -75,7 +75,7 @@
 .menuToggle input:checked ~ span {
   opacity: 1;
   transform: rotate(45deg) translate(-2px, -1px);
-  background: #fff;
+  background: #2b2b2b;
 
   /* background: #232323; */
 }
