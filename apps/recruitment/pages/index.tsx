@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Hero from '../components/hero/hero';
+import Teams from '../components/teams/teams';
 import Footer from '../components/footer/footer';
 import Navbar from '../components/navbar/navbar';
 
@@ -12,7 +13,9 @@ export function Index() {
       <HeroSection>
         <Hero />
       </HeroSection>
-      <TeamsSection></TeamsSection>
+      <TeamsSection>
+        <Teams />
+      </TeamsSection>
       <FooterContainer>
         <Footer />
       </FooterContainer>
@@ -69,22 +72,8 @@ const HeroSection = styled.section`
 `;
 
 const TeamsSection = styled.section`
-  max-width: 40rem;
-  margin: 6rem 4rem 0 4rem;
-  padding: 3.25rem 0 3rem 3.25rem;
-
-  @media (max-width: 1080px) {
-    margin: 0 3rem 3rem 4vw;
-  }
-
-  @media (min-width: 768px) and (max-width: 800px) {
-    padding-top: 5rem;
-    margin-inline: auto;
-  }
-  @media (max-width: 320px) {
-    padding-left: 0.5rem;
-    margin-left: 0.25rem;
-  }
+  margin: auto;
+  padding-top: 10rem;
 `;
 
 const FooterContainer = styled.div`
