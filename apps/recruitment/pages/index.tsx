@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Hero from '../components/hero/hero';
 import Teams from '../components/teams/teams';
+import StudentXP from '../components/studentxp/studentxp';
 import Footer from '../components/footer/footer';
 import Navbar from '../components/navbar/navbar';
 
@@ -19,6 +20,9 @@ export function Index() {
       <FooterContainer>
         <Footer />
       </FooterContainer>
+      <StudentXPSection>
+        <StudentXP />
+      </StudentXPSection>
     </MainPageWrapper>
   );
 }
@@ -72,6 +76,11 @@ const HeroSection = styled.section`
 `;
 
 const TeamsSection = styled.section`
+  margin: auto;
+  padding-top: 10rem;
+`;
+
+const StudentXPSection = styled.section`
   margin: auto;
   padding-top: 10rem;
 `;
