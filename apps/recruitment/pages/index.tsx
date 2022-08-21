@@ -19,9 +19,6 @@ export function Index() {
       <TeamsSection>
         <Teams />
       </TeamsSection>
-      <FooterContainer>
-        <Footer />
-      </FooterContainer>
       <StudentXPSection>
         <StudentXP />
       </StudentXPSection>
@@ -31,6 +28,9 @@ export function Index() {
       <HackSCMemoriesSection>
         <HackSCMemories />
       </HackSCMemoriesSection>
+      <FooterContainer>
+        <Footer />
+      </FooterContainer>
     </MainPageWrapper>
   );
 }
