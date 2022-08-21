@@ -1,7 +1,11 @@
 import styled from 'styled-components';
 import Hero from '../components/hero/hero';
+import Teams from '../components/teams/teams';
+import StudentXP from '../components/studentxp/studentxp';
 import Footer from '../components/footer/footer';
 import Navbar from '../components/navbar/navbar';
+import AlumDestinations from '../components/alum-destinations/alum-destinations';
+import HackSCMemories from '../components/hacksc-memories/hacksc-memories';
 
 export function Index() {
   return (
@@ -12,7 +16,18 @@ export function Index() {
       <HeroSection>
         <Hero />
       </HeroSection>
-      <TeamsSection></TeamsSection>
+      <TeamsSection>
+        <Teams />
+      </TeamsSection>
+      <StudentXPSection>
+        <StudentXP />
+      </StudentXPSection>
+      <AlumDestSection>
+        <AlumDestinations />
+      </AlumDestSection>
+      <HackSCMemoriesSection>
+        <HackSCMemories />
+      </HackSCMemoriesSection>
       <FooterContainer>
         <Footer />
       </FooterContainer>
@@ -69,22 +84,23 @@ const HeroSection = styled.section`
 `;
 
 const TeamsSection = styled.section`
-  max-width: 40rem;
-  margin: 6rem 4rem 0 4rem;
-  padding: 3.25rem 0 3rem 3.25rem;
+  margin: auto;
+  padding-top: 10rem;
+`;
 
-  @media (max-width: 1080px) {
-    margin: 0 3rem 3rem 4vw;
-  }
+const StudentXPSection = styled.section`
+  margin: auto;
+  padding-top: 10rem;
+`;
 
-  @media (min-width: 768px) and (max-width: 800px) {
-    padding-top: 5rem;
-    margin-inline: auto;
-  }
-  @media (max-width: 320px) {
-    padding-left: 0.5rem;
-    margin-left: 0.25rem;
-  }
+const AlumDestSection = styled.section`
+  margin: auto;
+  padding-top: 10rem;
+`;
+
+const HackSCMemoriesSection = styled.section`
+  margin: auto;
+  padding-top: 10rem;
 `;
 
 const FooterContainer = styled.div`
