@@ -5,6 +5,7 @@ import StudentXP from '../components/studentxp/studentxp';
 import Footer from '../components/footer/footer';
 import Navbar from '../components/navbar/navbar';
 import AlumDestinations from '../components/alum-destinations/alum-destinations';
+import HackSCMemories from '../components/hacksc-memories/hacksc-memories';
 
 export function Index() {
   return (
@@ -27,6 +28,9 @@ export function Index() {
       <AlumDestSection>
         <AlumDestinations />
       </AlumDestSection>
+      <HackSCMemoriesSection>
+        <HackSCMemories />
+      </HackSCMemoriesSection>
     </MainPageWrapper>
   );
 }
@@ -90,6 +94,11 @@ const StudentXPSection = styled.section`
 `;
 
 const AlumDestSection = styled.section`
+  margin: auto;
+  padding-top: 10rem;
+`;
+
+const HackSCMemoriesSection = styled.section`
   margin: auto;
   padding-top: 10rem;
 `;
