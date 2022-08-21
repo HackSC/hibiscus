@@ -4,6 +4,7 @@ import Teams from '../components/teams/teams';
 import StudentXP from '../components/studentxp/studentxp';
 import Footer from '../components/footer/footer';
 import Navbar from '../components/navbar/navbar';
+import AlumDestinations from '../components/alum-destinations/alum-destinations';
 
 export function Index() {
   return (
@@ -23,6 +24,9 @@ export function Index() {
       <StudentXPSection>
         <StudentXP />
       </StudentXPSection>
+      <AlumDestSection>
+        <AlumDestinations />
+      </AlumDestSection>
     </MainPageWrapper>
   );
 }
@@ -81,6 +85,11 @@ const TeamsSection = styled.section`
 `;
 
 const StudentXPSection = styled.section`
+  margin: auto;
+  padding-top: 10rem;
+`;
+
+const AlumDestSection = styled.section`
   margin: auto;
   padding-top: 10rem;
 `;
