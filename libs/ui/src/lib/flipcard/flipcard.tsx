@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { GradientSpan } from '../gradient-span/gradient-span';
-import { H3 } from '../heading/heading';
+import { Text } from '../text/text';
 
 /* eslint-disable-next-line */
 /**
@@ -9,79 +9,100 @@ import { H3 } from '../heading/heading';
  */
 type Props = React.PropsWithChildren<{
   title: React.ReactNode;
-  titleDescription: React.ReactNode; // element on the front
+  extendedTitle: React.ReactNode; // element on the front
 }>;
 
 /**
  * A general purpose flip component
  * @param props
  */
-export function FlipItem(props: Props) {
-  const [isFlipped, setFlip] = React.useState(false);
-
+export function FlipCard(props: Props) {
   return (
     <FlipContainer>
-      <FlipFront
-        onClick={() => {
-          setFlip((prev) => !prev);
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-          }}
-        >
+      <FlipInner>
+        <FlipFront>
           <div
             style={{
-              marginRight: 5,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
             }}
           >
-            <GradientSpan>
-              {isFlipped ? '−' : '+'}
-            </GradientSpan>
+            <StyledH1>{props.title}</StyledH1>
+            <SloganText>{props.children}</SloganText>
           </div>
-          {props.title}
-        </div>
-      </FlipFront>
-      <FlipBack>
-        {isFlipped && props.children}
-      </FlipBack>
+        </FlipFront>
+        <FlipBack>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            <StyledH2>{props.extendedTitle}</StyledH2>
+            <Description>{props.children}</Description>
+          </div>
+        </FlipBack>
+      </FlipInner>
     </FlipContainer>
   );
 }
 
-export default FlipItem;
+export default FlipCard;
 
 const FlipContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+  width: 600px;
+  height: 500px;
+  border: 1px solid #f6f6f6;
   margin-bottom: 0.1rem;
-`;
-
-const FlipFront = styled.button`
-  border: none;
-  background: none;
-  text-align: left;
-  color: #2b2b2b;
-  font-size: 1.6rem;
-  padding: 0.5rem;
-  cursor: pointer;
-  transition: ease-in-out 0.2s;
-
-  &:hover {
-    background-color: #f3f3f3;
-    border-radius: 0.4rem;
+  perspective: 2200px;
+  :hover {
+    transform: rotateY(180deg);
   }
 `;
 
+const FlipInner = styled.div`
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+  transform: rotateY(180deg);
+`;
+
+const StyledH1 = styled(GradientSpan)`
+  font-size: 5rem;
+  text-align: center;
+`;
+
+const SloganText = styled(Text)``;
+
+const StyledH2 = styled(GradientSpan)`
+  font-size: 4rem;
+  text-align: center;
+`;
+
+const Description = styled(Text)``;
+
+const FlipFront = styled.button`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  background-color: #bbb;
+  color: black;
+`;
 
 const FlipBack = styled.div`
-  margin-top: 0.5rem;
-  padding-left: 1.25rem;
-  padding-right: 1rem;
-  font-size: 1.5rem;
-  color: #2b2b2b;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  background-color: dodgerblue;
+  color: white;
+  transform: rotateY(180deg);
 `;

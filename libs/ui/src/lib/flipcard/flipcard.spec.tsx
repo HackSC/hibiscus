@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import Flipcard from './flipcard';
+import FlipCard from './flipcard';
 
-describe('Flipcard', () => {
+describe('FlipCard', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<Flipcard />);
+    const { baseElement } = render(<FlipCard title extendedTitle />);
     expect(baseElement).toBeTruthy();
   });
 });
