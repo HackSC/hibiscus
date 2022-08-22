@@ -16,7 +16,6 @@ export function StudentXP(props: StudentXPProps) {
   );
 }
 
-
 const XPHeaderH2 = styled(H2)`
   font-size: 4.25rem;
   font-weight: 600;
@@ -27,6 +26,5 @@ const XPHeaderH2 = styled(H2)`
     font-size: 3.5rem;
   }
 `;
-
 
 export default StudentXP;

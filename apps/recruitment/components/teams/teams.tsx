@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { H2, Text } from '@hacksc-platforms/ui';
+import { H2, Text, FlipCard } from '@hacksc-platforms/ui';
 /* eslint-disable-next-line */
 export interface TeamsProps {}
 
