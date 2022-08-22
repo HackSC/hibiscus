@@ -15,7 +15,6 @@ export function StudentXP(props: StudentXPProps) {
     </StyledStudentXP>
   );
 }
-
 const XPHeaderH2 = styled(H2)`
   font-size: 4.25rem;
   font-weight: 600;
