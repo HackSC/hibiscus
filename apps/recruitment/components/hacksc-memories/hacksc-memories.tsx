@@ -243,6 +243,9 @@ const PhotoGrid2_2_1 = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  @media (max-width: 1080px) {
+    flex-direction: column;
+  }
 `;
 const PhotoGrid2_2_1_1 = styled.div`
   flex-basis: 50%;
@@ -256,6 +259,9 @@ const PhotoGrid2_2_2 = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  @media (max-width: 1080px) {
+    flex-direction: column;
+  }
 `;
 const PhotoGrid2_2_2_1 = styled.div`
   flex-basis: 60%;
