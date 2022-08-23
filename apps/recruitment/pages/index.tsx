@@ -53,6 +53,9 @@ const MainPageWrapper = styled.div`
   @media screen and (max-width: 1080px) {
     background-image: url('img/light-mobile-bg.svg');
   }
+  @media screen and (max-width: 610px) {
+    background-image: url('img/light-narrow-mobile-bg.svg');
+  }
 `;
 
 const NavbarWrapper = styled.div`
