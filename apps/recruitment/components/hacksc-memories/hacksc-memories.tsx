@@ -47,7 +47,70 @@ export function HackSCMemories(props: HackSCMemoriesProps) {
           </video>
         </PhotoGrid1_2>
       </PhotoGrid1>
-      <PhotoGrid2></PhotoGrid2>
+      <PhotoGrid2>
+        <PhotoGrid2_1>
+          <PhotoGrid2_1_1>
+            <Image
+              src="/img/memories/photo2.1.1.png"
+              alt="Instagram Reel"
+              width="500vw"
+              height="800vw"
+              objectFit="contain"
+            />
+          </PhotoGrid2_1_1>
+          <PhotoGrid2_1_2>
+            <Image
+              src="/img/memories/photo2.1.2.png"
+              alt="Instagram Reel"
+              width="500vw"
+              height="500vw"
+              objectFit="contain"
+            />
+          </PhotoGrid2_1_2>
+        </PhotoGrid2_1>
+        <PhotoGrid2_2>
+          <PhotoGrid2_2_1>
+            <PhotoGrid2_2_1_1>
+              <Image
+                src="/img/memories/photo2.2.1.1.png"
+                alt="Instagram Reel"
+                width="500vw"
+                height="425vw"
+                objectFit="contain"
+              />
+            </PhotoGrid2_2_1_1>
+            <PhotoGrid2_2_1_2>
+              <Image
+                src="/img/memories/photo2.2.1.2.png"
+                alt="Instagram Reel"
+                width="450vw"
+                height="325vw"
+                objectFit="contain"
+              />
+            </PhotoGrid2_2_1_2>
+          </PhotoGrid2_2_1>
+          <PhotoGrid2_2_2>
+            <PhotoGrid2_2_2_1>
+              <Image
+                src="/img/memories/photo2.2.2.1.png"
+                alt="Instagram Reel"
+                width="550vw"
+                height="400vw"
+                objectFit="contain"
+              />
+            </PhotoGrid2_2_2_1>
+            <PhotoGrid2_2_2_2>
+              <Image
+                src="/img/memories/photo2.2.2.2.png"
+                alt="Instagram Reel"
+                width="330vw"
+                height="425vw"
+                objectFit="contain"
+              />
+            </PhotoGrid2_2_2_2>
+          </PhotoGrid2_2_2>
+        </PhotoGrid2_2>
+      </PhotoGrid2>
       <PhotoGrid3>
         <PhotoGrid3_1>
           <PhotoGrid3_1_1>
@@ -139,12 +202,67 @@ const PhotoGrid1_1_2 = styled.div`
 `;
 const PhotoGrid1_2 = styled.div`
   flex-basis: 40%;
+  padding: 1rem;
   @media (max-width: 1080px) {
     flex-basis: 45%;
   }
 `;
 
-const PhotoGrid2 = styled.div``;
+const PhotoGrid2 = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 0 5rem;
+  justify-content: space-between;
+  @media (max-width: 1080px) {
+    margin: 0 4rem;
+    flex-direction: column;
+  }
+`;
+const PhotoGrid2_1 = styled.div`
+  flex-basis: 22%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+`;
+const PhotoGrid2_1_1 = styled.div`
+  flex-basis: 55%;
+`;
+const PhotoGrid2_1_2 = styled.div`
+  flex-basis: 40%;
+`;
+const PhotoGrid2_2 = styled.div`
+  flex-basis: 75%;
+  display: flex;
+  flex-direction: column;
+`;
+const PhotoGrid2_2_1 = styled.div`
+  flex-basis: 45%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+const PhotoGrid2_2_1_1 = styled.div`
+  flex-basis: 50%;
+`;
+const PhotoGrid2_2_1_2 = styled.div`
+  flex-basis: 50%;
+`;
+const PhotoGrid2_2_2 = styled.div`
+  flex-basis: 55%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+const PhotoGrid2_2_2_1 = styled.div`
+  flex-basis: 60%;
+`;
+const PhotoGrid2_2_2_2 = styled.div`
+  flex-basis: 40%;
+`;
 
 const PhotoGrid3 = styled.div`
   display: flex;
