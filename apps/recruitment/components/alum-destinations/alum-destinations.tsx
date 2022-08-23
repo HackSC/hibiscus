@@ -1,19 +1,36 @@
 import styled from 'styled-components';
 import { H2 } from '@hacksc-platforms/ui';
+import Image from 'next/image';
 /* eslint-disable-next-line */
 export interface AlumDestinationsProps {}
-
-const StyledAlumDestinations = styled.div`
-  color: pink;
-`;
 
 export function AlumDestinations(props: AlumDestinationsProps) {
   return (
     <StyledAlumDestinations>
       <AlumHeaderH2>Alumni Destinations</AlumHeaderH2>
+      <DesktopDestinations>
+        <Image
+          src="/img/destinations/dest2.png"
+          alt="Alumni Destinations"
+          width="1000vw"
+          height="600vw"
+          objectFit="contain"
+        />
+      </DesktopDestinations>
+      <MobileDestinations>
+        <Image
+          src="/img/destinations/dest1.png"
+          alt="Alumni Destinations"
+          width="1000vw"
+          height="1200vw"
+          objectFit="contain"
+        />
+      </MobileDestinations>
     </StyledAlumDestinations>
   );
 }
+
+const StyledAlumDestinations = styled.div``;
 
 const AlumHeaderH2 = styled(H2)`
   font-size: 4.25rem;
@@ -26,6 +43,24 @@ const AlumHeaderH2 = styled(H2)`
   }
   @media (max-width: 768px) {
     font-size: 2.75rem;
+  }
+`;
+
+const DesktopDestinations = styled.div`
+  padding: 0 5rem;
+  @media only screen and (max-width: 1080px) {
+    display: none !important;
+    touch-action: none !important;
+  }
+`;
+
+const MobileDestinations = styled.div`
+  display: none;
+  touch-action: none;
+  padding: 0 5rem;
+  @media screen and (max-width: 1080px) {
+    display: flex !important;
+    touch-action: auto !important;
   }
 `;
 
