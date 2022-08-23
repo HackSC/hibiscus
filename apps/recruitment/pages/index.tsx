@@ -103,7 +103,6 @@ const AlumDestSection = styled.section`
 
 const HackSCMemoriesSection = styled.section`
   margin: auto;
-  padding-top: 10rem;
 `;
 
 const FooterContainer = styled.div`
