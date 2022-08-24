@@ -1001,6 +1001,13 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
+"@babel/runtime@^7.14.0":
+  version "7.18.9"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.18.9.tgz#b4fcfce55db3d2e5e080d2490f608a3b9f407f4a"
+  integrity sha512-lkqXDcvlFT5rvEjiu6+QYO+1GXrEHRo2LOtS7E4GtX5ESIZOgepqsZBVIj6Pv+a6zqsya9VCgiK1KAK4BvJDAw==
+  dependencies:
+    regenerator-runtime "^0.13.4"
+
 "@babel/template@^7.18.6", "@babel/template@^7.3.3":
   version "7.18.6"
   resolved "https://registry.npmjs.org/@babel/template/-/template-7.18.6.tgz"
@@ -8822,6 +8829,13 @@ react-fast-compare@^2.0.1:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-2.0.4.tgz#e84b4d455b0fec113e0402c329352715196f81f9"
   integrity sha512-suNP+J1VU1MWFKcyt7RtjiSWUjvidmQSlqu+eHslq+342xCbGTYmC0mEhPCOHxlW0CywylOC1u2DFAT+bv4dBw==
+
+react-flippy@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-flippy/-/react-flippy-1.1.0.tgz#338035d8adeadfa8f2b2e2858723107fa557543d"
+  integrity sha512-fMaHrGL2HeyYq4ohl65b4EZG5JAawL6NMSiSOhhI68l54nortHvJBqHi5DeR1sF44/4RN2jeNsBXSXuBnOj7Vg==
+  dependencies:
+    "@babel/runtime" "^7.14.0"
 
 react-hot-toast@^2.3.0:
   version "2.3.0"
