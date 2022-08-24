@@ -2,8 +2,16 @@ import { GlobalStyles } from '@hacksc-platforms/styles';
 import { GetServerSideProps } from 'next';
 import App, { AppContext, AppProps } from 'next/app';
 import Head from 'next/head';
+import TagManager from 'react-gtm-module';
 import { Toaster } from 'react-hot-toast';
 import { QueryClient, QueryClientProvider } from 'react-query';
+
+const TEAM_HACKSC_COM_GTM_ID = 'GTM-5KTQ3P6';
+
+TagManager.initialize({
+  gtmId: TEAM_HACKSC_COM_GTM_ID,
+});
+
 export interface CustomAppProps extends AppProps {
   envs: {
     sendgridApiKey: string;
