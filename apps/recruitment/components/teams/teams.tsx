@@ -1,6 +1,6 @@
-import styled from 'styled-components';
 import { GradientSpan, H2, H3, Text } from '@hacksc-platforms/ui';
-import Flippy, { FrontSide, BackSide } from 'react-flippy';
+import Flippy, { BackSide, FrontSide } from 'react-flippy';
+import styled from 'styled-components';
 /* eslint-disable-next-line */
 export interface TeamsProps {}
 
@@ -25,8 +25,19 @@ export function Teams(props: TeamsProps) {
           </FlipFront>
           <FlipBack style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}>
             <StyledH3>
-              <GradientSpan>Engineering</GradientSpan>
+              <GradientSpan>
+                The engineering team builds what our organization dreams️ up!
+              </GradientSpan>
             </StyledH3>
+            <TeamDescription>
+              At HackSC, we value the hacker culture—after all, we’re organizing
+              a hackathon, and even as an organizer, everyone is encouraged to
+              be an innovative tech nomad who’s passionate about using
+              technology to create something awesome 🔮 Our Engineering team has
+              been an essential piece in creating scalable web platforms that
+              help create a one-of-a-kind digital experience for hackers since
+              our induction.
+            </TeamDescription>
           </FlipBack>
         </StyledFlippy>
         <StyledFlippy
@@ -43,7 +54,7 @@ export function Teams(props: TeamsProps) {
           <FlipBack style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}>
             <StyledH3>
               <GradientSpan>
-                Design team lies at the heart of what makes HackSC
+                Design team lies at the heart of what makes HackSC{' '}
               </GradientSpan>
               ✨<GradientSpan>pop</GradientSpan>✨<GradientSpan>.</GradientSpan>
             </StyledH3>
@@ -218,7 +229,7 @@ const StyledFlippy = styled(Flippy)`
   border-radius: 20px;
   margin: 2rem 2rem 0 2rem;
   @media (max-width: 1080px) {
-    height: 30vw;
+    height: 40vw;
     width: 80vw;
   }
 `;
@@ -232,7 +243,7 @@ const StyledH2 = styled(H2)`
 `;
 
 const StyledH3 = styled(H3)`
-  font-size: 2.5rem;
+  font-size: 1.5rem;
   text-align: center;
   @media (max-width: 1240px) {
     font-size: 1.5rem;
@@ -245,6 +256,7 @@ const TeamSlogan = styled(Text)`
   margin: 10px 3px;
   font-size: 1.75rem;
   font-style: italic;
+  text-align: center;
   @media (max-width: 1240px) {
     font-size: 1.25rem;
   }
@@ -255,10 +267,11 @@ const TeamDescription = styled(Text)`
   color: #2b2b2b;
   margin: 10px 3px;
   font-size: 1.2rem;
+  line-height: 1.4;
   @media (max-width: 1240px) {
-    font-size: 0.75rem;
+    font-size: 1rem;
   }
-  @media (max-width: 768px) {
+  @media (max-width: 425px) {
     font-size: 0.5rem;
   }
 `;
