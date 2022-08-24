@@ -17,12 +17,12 @@ export function DesktopNavbar(props: DesktopNavbarProps) {
           <MenuOption>
             <H5>Overview</H5>
           </MenuOption>
-        </Link>
+        </Link> */}
         <Link href="https://team.hacksc.com" passHref>
           <MenuOption>
-            <H5>Join Us</H5>
+            <H5>Join our team!</H5>
           </MenuOption>
-        </Link> */}
+        </Link>
         <DropdownMenu>
           <MenuOption>
             <H5>Previous Hackathons ▾</H5>
