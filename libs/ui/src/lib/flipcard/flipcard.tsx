@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { GradientSpan } from '../gradient-span/gradient-span';
 import { Text } from '../text/text';
+import { H2, H3 } from '../heading/heading';
 
 /* eslint-disable-next-line */
 /**
@@ -28,7 +29,9 @@ export function FlipCard(props: Props) {
               alignItems: 'center',
             }}
           >
-            <StyledH1>{props.title}</StyledH1>
+            <GradientSpan>
+              <StyledH2>{props.title}</StyledH2>
+            </GradientSpan>
             <SloganText>{props.children}</SloganText>
           </div>
         </FlipFront>
@@ -40,7 +43,9 @@ export function FlipCard(props: Props) {
               alignItems: 'center',
             }}
           >
-            <StyledH2>{props.extendedTitle}</StyledH2>
+            <GradientSpan>
+              <StyledH3>{props.extendedTitle}</StyledH3>
+            </GradientSpan>
             <Description>{props.children}</Description>
           </div>
         </FlipBack>
@@ -72,14 +77,14 @@ const FlipInner = styled.div`
   transform: rotateY(180deg);
 `;
 
-const StyledH1 = styled(GradientSpan)`
+const SloganText = styled(Text)``;
+
+const StyledH2 = styled(H2)`
   font-size: 5rem;
   text-align: center;
 `;
 
-const SloganText = styled(Text)``;
-
-const StyledH2 = styled(GradientSpan)`
+const StyledH3 = styled(H3)`
   font-size: 4rem;
   text-align: center;
 `;
