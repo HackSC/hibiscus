@@ -140,17 +140,18 @@ export function Teams(props: TeamsProps) {
           <FlipBack style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}>
             <StyledH3>
               <GradientSpan>
-                Our Marketing team provides our hackers with an unforgettable
-                experience by putting on fun events throughout the hackathon.
+                We are Marketers. Designers. Writers. Engineers & all of the
+                above.
               </GradientSpan>
             </StyledH3>
             <TeamDescription>
-              Team members reach out to candidates for keynote speakers.
-              Additionally, they gain practical expertise in designing and
-              organizing events like the HackSC concert, the hacker-favorite
-              puppy pen, and others. The role allows members to try a little bit
-              of everything as they collaborate with various divisions of the
-              org!
+              HackSC’s Marketing Team is looking for individuals who are
+              passionate about social media creation & management, digital
+              marketing, and aesthetics, and those who are driven to strategize
+              and execute creative campaigns for an amazing hackathon! The
+              Marketing Team is at the core of the organization—working closely
+              with our Engineering and Design team. If you have a diverse
+              outreach skill set, this is the place for you.
             </TeamDescription>
           </FlipBack>
         </StyledFlippy>
