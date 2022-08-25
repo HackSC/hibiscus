@@ -16,7 +16,7 @@ export function Teams(props: TeamsProps) {
       teamSlogan: 'BUILD • EXECUTE • SHIP',
       backTitleElement: (
         <GradientSpan>
-          The engineering team builds what our organization dreams️ up!
+          The engineering team builds what our organization dreams up!
         </GradientSpan>
       ),
       teamDescriptionElement: `
@@ -152,7 +152,9 @@ export function Teams(props: TeamsProps) {
                   <FlipBack
                     style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}
                   >
-                    <StyledH3BackTitle>{backTitleElement}</StyledH3BackTitle>
+                    <StyledH3BackTitle>
+                      <GradientSpan>{backTitleElement}</GradientSpan>
+                    </StyledH3BackTitle>
                     <TeamDescription>{teamDescriptionElement}</TeamDescription>
                   </FlipBack>
                 </StyledFlippy>
