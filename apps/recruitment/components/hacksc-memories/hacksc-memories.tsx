@@ -14,51 +14,54 @@ export function HackSCMemories(props: HackSCMemoriesProps) {
           <img
             src="/img/memories/photo1.png"
             alt="Gloria, Alysha, Ashley, and Angel at the town squate in Lake Arrowhead"
+            loading="lazy"
           />
         </Memory>
         <Memory>
           <img
             src="/img/memories/photo2.png"
             alt="Alysha at the town squate in Lake Arrowhead"
+            loading="lazy"
           />
         </Memory>
         <Memory>
           <img
             src="/img/memories/photo3.png"
             alt="Gauri, Nabi, Ashley, Alysha, Katie, Ashley, Kelly and Claire at a hiking spot"
+            loading="lazy"
           />
         </Memory>
         <Memory>
-          <video controls controlsList="nodownload">
+          <video controls controlsList="nodownload" preload="none">
             <source src="/img/memories/photos4.mp4" type="video/mp4" />
           </video>
         </Memory>
         <Memory>
-          <img src="/img/memories/photo5.png" alt="" />
+          <img src="/img/memories/photo5.png" alt="" loading="lazy" />
         </Memory>
         <Memory>
-          <img src="/img/memories/photo6.png" alt="" />
+          <img src="/img/memories/photo6.png" alt="" loading="lazy" />
         </Memory>
         <Memory>
-          <img src="/img/memories/photo7.png" alt="" />
+          <img src="/img/memories/photo7.png" alt="" loading="lazy" />
         </Memory>
         <Memory>
-          <img src="/img/memories/photo8.png" alt="" />
+          <img src="/img/memories/photo8.png" alt="" loading="lazy" />
         </Memory>
         <Memory>
-          <img src="/img/memories/photo9.png" alt="" />
+          <img src="/img/memories/photo9.png" alt="" loading="lazy" />
         </Memory>
         <Memory>
-          <img src="/img/memories/photo10.png" alt="" />
+          <img src="/img/memories/photo10.png" alt="" loading="lazy" />
         </Memory>
         <Memory>
-          <img src="/img/memories/photo11.png" alt="" />
+          <img src="/img/memories/photo11.png" alt="" loading="lazy" />
         </Memory>
         <Memory>
-          <img src="/img/memories/photo12.png" alt="" />
+          <img src="/img/memories/photo12.png" alt="" loading="lazy" />
         </Memory>
         <Memory>
-          <img src="/img/memories/photo13.png" alt="" />
+          <img src="/img/memories/photo13.png" alt="" loading="lazy" />
         </Memory>
       </MemoriesContainer>
     </StyledHackSCMemories>
