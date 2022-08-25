@@ -5,143 +5,93 @@ import styled from 'styled-components';
 export interface TeamsProps {}
 
 export function Teams(props: TeamsProps) {
-  return (
-    <StyledTeams>
-      <TeamsHeaderH2>Our Teams</TeamsHeaderH2>
-      <GrayParagraph>
-        Click on any card to learn more about each team!
-      </GrayParagraph>
-      <TeamsContainer>
-        <StyledFlippy
-          flipOnHover={false}
-          flipOnClick={true}
-          flipDirection="horizontal"
-        >
-          <FlipFront style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}>
-            <StyledH2>
-              <GradientSpan>Engineering</GradientSpan>
-            </StyledH2>
-            <TeamSlogan>BUILD • EXECUTE • SHIP</TeamSlogan>
-          </FlipFront>
-          <FlipBack style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}>
-            <StyledH3>
-              <GradientSpan>
-                The engineering team builds what our organization dreams️ up!
-              </GradientSpan>
-            </StyledH3>
-            <TeamDescription>
-              At HackSC, everyone is encouraged to be an innovative tech nomad
-              who is passionate about using technology to create something
-              awesome 🔮. Engineering has been an essential piece in creating
-              scalable web platforms that help create a one-of-a-kind digital
-              experience for hackers since our induction.
-            </TeamDescription>
-          </FlipBack>
-        </StyledFlippy>
-        <StyledFlippy
-          flipOnHover={false}
-          flipOnClick={true}
-          flipDirection="horizontal"
-        >
-          <FlipFront style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}>
-            <StyledH2>
-              <GradientSpan>Design</GradientSpan>
-            </StyledH2>
-            <TeamSlogan>THINK • INNOVATE • CREATE</TeamSlogan>
-          </FlipFront>
-          <FlipBack style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}>
-            <StyledH3>
-              <GradientSpan>
-                Design team lies at the heart of what makes HackSC{' '}
-              </GradientSpan>
-              ✨<GradientSpan>pop</GradientSpan>✨<GradientSpan>.</GradientSpan>
-            </StyledH3>
-            <TeamDescription>
-              We collaborate across teams to deliver what they need to
-              flourish—whether that’s the Instagram page, the HackSC website,
-              the sponsorship packets, the merch, and more. Our designers give
-              hackers the opportunity to innovate, and we look good doing it.
-            </TeamDescription>
-          </FlipBack>
-        </StyledFlippy>
-      </TeamsContainer>
-      <TeamsContainer>
-        <StyledFlippy
-          flipOnHover={false}
-          flipOnClick={true}
-          flipDirection="horizontal"
-        >
-          <FlipFront style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}>
-            <StyledH2>
-              <GradientSpan>HackerXP</GradientSpan>
-            </StyledH2>
-            <TeamSlogan>ENGAGE • PLAN • COLLABORATE</TeamSlogan>
-          </FlipFront>
-          <FlipBack style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}>
-            <StyledH3>
-              <GradientSpan>
-                Unforgettable events, brought to you by our HackerXP team!
-              </GradientSpan>
-            </StyledH3>
-            <TeamDescription>
+  const data: {
+    teamName: string;
+    teamSlogan: string;
+    backTitleElement: React.ReactNode;
+    teamDescriptionElement: React.ReactNode;
+  }[] = [
+    {
+      teamName: 'Engineering',
+      teamSlogan: 'BUILD • EXECUTE • SHIP',
+      backTitleElement: (
+        <GradientSpan>
+          The engineering team builds what our organization dreams️ up!
+        </GradientSpan>
+      ),
+      teamDescriptionElement: `
+        At HackSC, everyone is encouraged to be an innovative tech nomad
+        who is passionate about using technology to create something
+        awesome 🔮. Engineering has been an essential piece in creating
+        scalable web platforms that help create a one-of-a-kind digital
+        experience for hackers since our induction.
+      `,
+    },
+    {
+      teamName: 'Design',
+      teamSlogan: 'THINK • INNOVATE • CREATE',
+      backTitleElement: (
+        <>
+          <GradientSpan>
+            Design team lies at the heart of what makes HackSC{' '}
+          </GradientSpan>
+          ✨<GradientSpan>pop</GradientSpan>✨<GradientSpan>.</GradientSpan>
+        </>
+      ),
+      teamDescriptionElement: `
+        We collaborate across teams to deliver what they need to
+        flourish—whether that’s the Instagram page, the HackSC website,
+        the sponsorship packets, the merch, and more. Our designers give
+        hackers the opportunity to innovate, and we look good doing it.
+      `,
+    },
+    {
+      teamName: 'HackerXP',
+      teamSlogan: 'ENGAGE • PLAN • COLLABORATE',
+      backTitleElement: (
+        <GradientSpan>
+          Unforgettable events, brought to you by our HackerXP team!
+        </GradientSpan>
+      ),
+      teamDescriptionElement: `
+        Team members reach out to candidates for keynote speakers.
+        Additionally, they gain practical expertise in designing and
+        organizing events like the HackSC concert, the hacker-favorite
+        puppy pen, and others. The role allows members to try a little bit
+        of everything as they collaborate with various divisions of the
+        org!
+      `,
+    },
+    {
+      teamName: 'Sponsorship',
+      teamSlogan: 'CONNECT • COMMUNICATE • COORDINATE',
+      backTitleElement: (
+        <GradientSpan>
+          The HackSC Sponsorship team is all about getting the sponsors and
+          funds that make HackSC possible.
+        </GradientSpan>
+      ),
+      teamDescriptionElement: `
               Team members reach out to candidates for keynote speakers.
               Additionally, they gain practical expertise in designing and
               organizing events like the HackSC concert, the hacker-favorite
               puppy pen, and others. The role allows members to try a little bit
               of everything as they collaborate with various divisions of the
               org!
-            </TeamDescription>
-          </FlipBack>
-        </StyledFlippy>
-        <StyledFlippy
-          flipOnHover={false}
-          flipOnClick={true}
-          flipDirection="horizontal"
-        >
-          <FlipFront style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}>
-            <StyledH2>
-              <GradientSpan>Sponsorship</GradientSpan>
-            </StyledH2>
-            <TeamSlogan>CONNECT • COMMUNICATE • COORDINATE</TeamSlogan>
-          </FlipFront>
-          <FlipBack style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}>
-            <StyledH3>
-              <GradientSpan>
-                The HackSC Sponsorship team is all about getting the sponsors
-                and funds that make HackSC possible.
-              </GradientSpan>
-            </StyledH3>
-            <TeamDescription>
-              Team members reach out to candidates for keynote speakers.
-              Additionally, they gain practical expertise in designing and
-              organizing events like the HackSC concert, the hacker-favorite
-              puppy pen, and others. The role allows members to try a little bit
-              of everything as they collaborate with various divisions of the
-              org!
-            </TeamDescription>
-          </FlipBack>
-        </StyledFlippy>
-      </TeamsContainer>
-      <TeamsContainer>
-        <StyledFlippy
-          flipOnHover={false}
-          flipOnClick={true}
-          flipDirection="horizontal"
-        >
-          <FlipFront style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}>
-            <StyledH2>
-              <GradientSpan>Marketing</GradientSpan>
-            </StyledH2>
-            <TeamSlogan>ATTRACT • PLAN • COLLABORATE</TeamSlogan>
-          </FlipFront>
-          <FlipBack style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}>
-            <StyledH3>
-              <GradientSpan>
-                We are Marketers. Designers. Writers. Engineers & all of the
-                above.
-              </GradientSpan>
-            </StyledH3>
-            <TeamDescription>
+             `,
+    },
+    {
+      teamName: 'Marketing',
+      teamSlogan: 'ATTRACT • PLAN • COLLABORATE',
+      backTitleElement: (
+        <>
+          <GradientSpan>
+            We are Marketers. Designers. Writers. Engineers {'&'} all of the
+            above.
+          </GradientSpan>
+        </>
+      ),
+      teamDescriptionElement: `
               HackSC’s Marketing Team is looking for individuals who are
               passionate about social media creation & management, digital
               marketing, and aesthetics, and those who are driven to strategize
@@ -149,37 +99,72 @@ export function Teams(props: TeamsProps) {
               Marketing Team is at the core of the organization—working closely
               with our Engineering and Design team. If you have a diverse
               outreach skill set, this is the place for you.
-            </TeamDescription>
-          </FlipBack>
-        </StyledFlippy>
-        <StyledFlippy
-          flipOnHover={false}
-          flipOnClick={true}
-          flipDirection="horizontal"
-        >
-          <FlipFront style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}>
-            <StyledH2>
-              <GradientSpan>Logistics</GradientSpan>
-            </StyledH2>
-            <TeamSlogan>CONNECT • COMMUNICATE • COORDINATE</TeamSlogan>
-          </FlipFront>
-          <FlipBack style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}>
-            <StyledH3>
-              <GradientSpan>
-                Behing-the-scenes of SoCal&apos;s most student loved events!
-              </GradientSpan>
-            </StyledH3>
-            <TeamDescription>
+      `,
+    },
+    {
+      teamName: 'Logistics',
+      teamSlogan: 'CONNECT • COMMUNICATE • COORDINATE',
+      backTitleElement: (
+        <GradientSpan>
+          Behind-the-scenes of SoCal&apos;s most student loved events!
+        </GradientSpan>
+      ),
+      teamDescriptionElement: `
               Our team manages HackSC’s generous budget and coordinates venue
               bookings, security, staffing, catering, communications, and any
               other logistical needs requested by our internal teams for all
               events. If you are passionate about leadership, business,
               outreach, and/or event management, we want you to join our
               fast-paced and mission-critical team!
-            </TeamDescription>
-          </FlipBack>
-        </StyledFlippy>
-      </TeamsContainer>
+      `,
+    },
+  ];
+
+  return (
+    <StyledTeams>
+      <TeamsHeaderH2>Our Teams</TeamsHeaderH2>
+      <GrayParagraph>
+        Click on any card to learn more about each team!
+      </GrayParagraph>
+      {[0, 2, 4].map((i) => (
+        <TeamsContainer key={i}>
+          {data
+            .slice(i, i + 2)
+            .map(
+              (
+                {
+                  teamName,
+                  teamSlogan,
+                  backTitleElement,
+                  teamDescriptionElement,
+                },
+                index
+              ) => (
+                <StyledFlippy
+                  flipOnHover={false}
+                  flipOnClick={true}
+                  flipDirection="horizontal"
+                  key={index}
+                >
+                  <FlipFront
+                    style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}
+                  >
+                    <StyledH2TeamName>
+                      <GradientSpan>{teamName}</GradientSpan>
+                    </StyledH2TeamName>
+                    <TeamSlogan>{teamSlogan}</TeamSlogan>
+                  </FlipFront>
+                  <FlipBack
+                    style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}
+                  >
+                    <StyledH3BackTitle>{backTitleElement}</StyledH3BackTitle>
+                    <TeamDescription>{teamDescriptionElement}</TeamDescription>
+                  </FlipBack>
+                </StyledFlippy>
+              )
+            )}
+        </TeamsContainer>
+      ))}
     </StyledTeams>
   );
 }
@@ -231,21 +216,27 @@ const StyledFlippy = styled(Flippy)`
     height: 40vw;
     width: 80vw;
   }
+  @media (max-width: 600px) {
+    min-height: 90vw;
+  }
 `;
 
-const StyledH2 = styled(H2)`
+const StyledH2TeamName = styled(H2)`
   font-size: 4.5rem;
   text-align: center;
   @media (max-width: 1240px) {
     font-size: 3rem;
   }
+  @media (max-width: 400px) {
+    font-size: 2rem;
+  }
 `;
 
-const StyledH3 = styled(H3)`
+const StyledH3BackTitle = styled(H3)`
   font-size: 1.5rem;
   text-align: center;
-  @media (max-width: 1240px) {
-    font-size: 1.5rem;
+  @media (max-width: 400px) {
+    font-size: 1rem;
   }
 `;
 
@@ -271,7 +262,7 @@ const TeamDescription = styled(Text)`
     font-size: 1rem;
   }
   @media (max-width: 425px) {
-    font-size: 0.5rem;
+    font-size: 0.7rem;
   }
 `;
 
