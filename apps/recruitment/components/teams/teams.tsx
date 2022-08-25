@@ -226,6 +226,7 @@ const StyledFlippy = styled(Flippy)`
   width: 40vw;
   border-radius: 20px;
   margin: 2rem 2rem 0 2rem;
+  cursor: pointer;
   @media (max-width: 1080px) {
     height: 40vw;
     width: 80vw;
