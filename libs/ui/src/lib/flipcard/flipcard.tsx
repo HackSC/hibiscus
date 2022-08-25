@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { GradientSpan } from '../gradient-span/gradient-span';
-import { Text } from '../text/text';
 import { H2, H3 } from '../heading/heading';
+import { Text } from '../text/text';
 
 /* eslint-disable-next-line */
 /**
