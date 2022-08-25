@@ -47,7 +47,7 @@ const AlumHeaderH2 = styled(H2)`
 `;
 
 const DesktopDestinations = styled.div`
-  padding: 0 5rem;
+  padding: 0 15vw;
   @media only screen and (max-width: 1080px) {
     display: none !important;
     touch-action: none !important;
@@ -57,7 +57,7 @@ const DesktopDestinations = styled.div`
 const MobileDestinations = styled.div`
   display: none;
   touch-action: none;
-  padding: 0 5rem;
+  padding: 0 20vw;
   @media screen and (max-width: 1080px) {
     display: flex !important;
     touch-action: auto !important;

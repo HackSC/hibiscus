@@ -64,7 +64,7 @@ export function Teams(props: TeamsProps) {
     },
     {
       teamName: 'Sponsorship',
-      teamSlogan: 'CONNECT • COMMUNICATE • COORDINATE',
+      teamSlogan: 'OUTREACH • CONNECT • INTERFACE',
       backTitleElement: (
         <GradientSpan>
           Sponsorship is all about raising the funds that make HackSC possible.
@@ -97,8 +97,8 @@ export function Teams(props: TeamsProps) {
       `,
     },
     {
-      teamName: 'Logistics',
-      teamSlogan: 'CONNECT • COMMUNICATE • COORDINATE',
+      teamName: 'Operations',
+      teamSlogan: 'COORDINATE • LEAD • EXECUTE',
       backTitleElement: (
         <GradientSpan>
           Behind-the-scenes of SoCal&apos;s most student loved events!
@@ -261,6 +261,9 @@ const TeamDescription = styled(Text)`
   padding: 0 1.25rem;
   @media (max-width: 1240px) {
     font-size: 0.8rem;
+  }
+  @media (max-width: 1080px) {
+    font-size: 1rem;
   }
   @media (max-width: 425px) {
     padding: 0 0.6rem;
