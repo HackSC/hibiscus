@@ -84,7 +84,7 @@ export function Teams(props: TeamsProps) {
       backTitleElement: (
         <>
           <GradientSpan>
-            Marketing is the brains behind our awesome social media presence!
+            Marketing wants to share with the world what HackSC is all about!
           </GradientSpan>
         </>
       ),
@@ -207,9 +207,17 @@ const StyledFlippy = styled(Flippy)`
   border-radius: 20px;
   margin: 2rem 2rem 0 2rem;
   cursor: pointer;
+  @media (max-width: 1440px) {
+    height: 20vw;
+    width: 37vw;
+  }
+  @media (max-width: 1240px) {
+    height: 25vw;
+    width: 37vw;
+  }
   @media (max-width: 1080px) {
     height: 40vw;
-    width: 80vw;
+    width: 70vw;
   }
   @media (max-width: 600px) {
     min-height: 90vw;
@@ -219,7 +227,7 @@ const StyledFlippy = styled(Flippy)`
 const StyledH2TeamName = styled(H2)`
   font-size: 4.5rem;
   text-align: center;
-  @media (max-width: 1320px) {
+  @media (max-width: 1440px) {
     font-size: 2.5rem;
   }
   @media (max-width: 400px) {
@@ -231,7 +239,7 @@ const StyledH3BackTitle = styled(H3)`
   font-size: 1.5rem;
   text-align: left;
   padding: 0 1rem;
-  @media (max-width: 1320px) {
+  @media (max-width: 1440px) {
     padding: 0 0.6rem;
     font-size: 1.25rem;
   }
@@ -247,7 +255,7 @@ const TeamSlogan = styled(Text)`
   font-size: 1.75rem;
   font-style: italic;
   text-align: center;
-  @media (max-width: 1320px) {
+  @media (max-width: 1440px) {
     font-size: 1.25rem;
   }
 `;
@@ -259,10 +267,10 @@ const TeamDescription = styled(Text)`
   font-size: 1.2rem;
   line-height: 1.4;
   padding: 0 1.25rem;
-  @media (max-width: 1320px) {
+  @media (max-width: 1440px) {
     font-size: 0.95rem;
   }
-  @media (max-width: 1320px) {
+  @media (max-width: 1440px) {
     font-size: 0.93rem;
   }
   @media (max-width: 1080px) {
@@ -280,7 +288,7 @@ const TeamsHeaderH2 = styled(H2)`
   color: #2b2b2b;
   text-align: center;
 
-  @media (max-width: 1320px) {
+  @media (max-width: 1440px) {
     font-size: 3rem;
   }
   @media (max-width: 768px) {
@@ -293,7 +301,7 @@ const GrayParagraph = styled(Text)`
   color: #939393;
   margin: 10px 3px;
   font-size: 1.2rem;
-  @media (max-width: 1320px) {
+  @media (max-width: 1440px) {
     font-size: 1rem;
   }
   @media (max-width: 768px) {
