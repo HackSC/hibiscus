@@ -14,8 +14,11 @@ export function Teams(props: TeamsProps) {
     {
       teamName: 'Engineering',
       teamSlogan: 'BUILD • EXECUTE • SHIP',
-      backTitleElement:
-        'The engineering team builds what our organization dreams️ up!',
+      backTitleElement: (
+        <GradientSpan>
+          The engineering team builds what our organization dreams️ up!
+        </GradientSpan>
+      ),
       teamDescriptionElement: `
         At HackSC, everyone is encouraged to be an innovative tech nomad
         who is passionate about using technology to create something
@@ -45,9 +48,11 @@ export function Teams(props: TeamsProps) {
     {
       teamName: 'HackerXP',
       teamSlogan: 'ENGAGE • PLAN • COLLABORATE',
-      backTitleElement: `
-        Unforgettable events, brought to you by our HackerXP team!
-      `,
+      backTitleElement: (
+        <GradientSpan>
+          Unforgettable events, brought to you by our HackerXP team!
+        </GradientSpan>
+      ),
       teamDescriptionElement: `
         Team members reach out to candidates for keynote speakers.
         Additionally, they gain practical expertise in designing and
@@ -60,10 +65,12 @@ export function Teams(props: TeamsProps) {
     {
       teamName: 'Sponsorship',
       teamSlogan: 'CONNECT • COMMUNICATE • COORDINATE',
-      backTitleElement: `
-                The HackSC Sponsorship team is all about getting the sponsors
-                and funds that make HackSC possible.
-      `,
+      backTitleElement: (
+        <GradientSpan>
+          The HackSC Sponsorship team is all about getting the sponsors and
+          funds that make HackSC possible.
+        </GradientSpan>
+      ),
       teamDescriptionElement: `
               Team members reach out to candidates for keynote speakers.
               Additionally, they gain practical expertise in designing and
@@ -78,9 +85,10 @@ export function Teams(props: TeamsProps) {
       teamSlogan: 'ATTRACT • PLAN • COLLABORATE',
       backTitleElement: (
         <>
-        <GradientSpan>
-          We are Marketers. Designers. Writers. Engineers {'&'} all of the above.
-        </GradientSpan>
+          <GradientSpan>
+            We are Marketers. Designers. Writers. Engineers {'&'} all of the
+            above.
+          </GradientSpan>
         </>
       ),
       teamDescriptionElement: `
@@ -97,7 +105,9 @@ export function Teams(props: TeamsProps) {
       teamName: 'Logistics',
       teamSlogan: 'CONNECT • COMMUNICATE • COORDINATE',
       backTitleElement: (
-        <>Behing-the-scenes of SoCal&apos;s most student loved events!</>
+        <GradientSpan>
+          Behind-the-scenes of SoCal&apos;s most student loved events!
+        </GradientSpan>
       ),
       teamDescriptionElement: `
               Our team manages HackSC’s generous budget and coordinates venue
@@ -139,15 +149,15 @@ export function Teams(props: TeamsProps) {
                   <FlipFront
                     style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}
                   >
-                    <StyledH2>
+                    <StyledH2TeamName>
                       <GradientSpan>{teamName}</GradientSpan>
-                    </StyledH2>
+                    </StyledH2TeamName>
                     <TeamSlogan>{teamSlogan}</TeamSlogan>
                   </FlipFront>
                   <FlipBack
                     style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}
                   >
-                    <StyledH3>{backTitleElement}</StyledH3>
+                    <StyledH3BackTitle>{backTitleElement}</StyledH3BackTitle>
                     <TeamDescription>{teamDescriptionElement}</TeamDescription>
                   </FlipBack>
                 </StyledFlippy>
@@ -205,21 +215,27 @@ const StyledFlippy = styled(Flippy)`
     height: 40vw;
     width: 80vw;
   }
+  @media (max-width: 600px) {
+    min-height: 90vw;
+  }
 `;
 
-const StyledH2 = styled(H2)`
+const StyledH2TeamName = styled(H2)`
   font-size: 4.5rem;
   text-align: center;
   @media (max-width: 1240px) {
     font-size: 3rem;
   }
+  @media (max-width: 400px) {
+    font-size: 2rem;
+  }
 `;
 
-const StyledH3 = styled(H3)`
+const StyledH3BackTitle = styled(H3)`
   font-size: 1.5rem;
   text-align: center;
-  @media (max-width: 1240px) {
-    font-size: 1.5rem;
+  @media (max-width: 400px) {
+    font-size: 1rem;
   }
 `;
 
@@ -245,7 +261,7 @@ const TeamDescription = styled(Text)`
     font-size: 1rem;
   }
   @media (max-width: 425px) {
-    font-size: 0.5rem;
+    font-size: 0.7rem;
   }
 `;
 
