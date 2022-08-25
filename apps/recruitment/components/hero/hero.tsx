@@ -19,7 +19,7 @@ export function Hero(props: HeroProps) {
             collaborate in a team of driven individuals, network with industry
             professionals, and work on projects that make a difference, all
             while organizing SoCal’s most student-loved events. If you’re
-            passionate and eager to learn,
+            passionate and eager to learn,&nbsp;
             <GradientSpan>we want you on our team</GradientSpan>!
           </HeroText>
         </Container>

@@ -219,7 +219,7 @@ const StyledFlippy = styled(Flippy)`
 const StyledH2TeamName = styled(H2)`
   font-size: 4.5rem;
   text-align: center;
-  @media (max-width: 1240px) {
+  @media (max-width: 1320px) {
     font-size: 2.5rem;
   }
   @media (max-width: 400px) {
@@ -231,7 +231,7 @@ const StyledH3BackTitle = styled(H3)`
   font-size: 1.5rem;
   text-align: left;
   padding: 0 1rem;
-  @media (max-width: 1240px) {
+  @media (max-width: 1320px) {
     padding: 0 0.6rem;
     font-size: 1.25rem;
   }
@@ -247,7 +247,7 @@ const TeamSlogan = styled(Text)`
   font-size: 1.75rem;
   font-style: italic;
   text-align: center;
-  @media (max-width: 1240px) {
+  @media (max-width: 1320px) {
     font-size: 1.25rem;
   }
 `;
@@ -259,7 +259,7 @@ const TeamDescription = styled(Text)`
   font-size: 1.2rem;
   line-height: 1.4;
   padding: 0 1.25rem;
-  @media (max-width: 1240px) {
+  @media (max-width: 1320px) {
     font-size: 0.8rem;
   }
   @media (max-width: 1080px) {
@@ -277,7 +277,7 @@ const TeamsHeaderH2 = styled(H2)`
   color: #2b2b2b;
   text-align: center;
 
-  @media (max-width: 1240px) {
+  @media (max-width: 1320px) {
     font-size: 3rem;
   }
   @media (max-width: 768px) {
@@ -290,7 +290,7 @@ const GrayParagraph = styled(Text)`
   color: #939393;
   margin: 10px 3px;
   font-size: 1.2rem;
-  @media (max-width: 1240px) {
+  @media (max-width: 1320px) {
     font-size: 1rem;
   }
   @media (max-width: 768px) {
