@@ -15,10 +15,12 @@ export function Hero(props: HeroProps) {
         </LogoH1>
         <Container>
           <HeroText>
-            At <GradientSpan>HackSC</GradientSpan>, we encourage team members to
-            work on other team projects that they feel strongly about and that
-            will help develop their skills. If you’re passionate and eager to
-            learn, <GradientSpan>we want you on our team</GradientSpan>!
+            At <GradientSpan>HackSC</GradientSpan>, you’ll get a chance to
+            collaborate in a team of driven individuals, network with industry
+            professionals, and work on projects that make a difference, all
+            while organizing SoCal’s most student-loved events. If you’re
+            passionate and eager to learn,&nbsp;
+            <GradientSpan>we want you on our team</GradientSpan>!
           </HeroText>
         </Container>
         <a
@@ -42,12 +44,12 @@ const StyledHero = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-right: 2rem;
-  margin-left: 2rem;
+  justify-content: flex-end;
+  margin-right: auto;
+  margin-left: auto;
   margin-top: 17rem;
   @media (max-width: 1080px) {
     margin-top: 7rem;
-    margin-left: 0;
     flex-direction: column;
   }
 `;
@@ -80,7 +82,7 @@ const GradientButton = styled.button`
     ${TrademarkColors.LIGHT_PURPLE} 100%
   );
   border: none;
-  padding: 12px 10px;
+  padding: 12px 20px;
   color: white;
   font-weight: 700;
   border-radius: 0.3rem;
@@ -95,7 +97,7 @@ const GradientButton = styled.button`
   }
 
   @media (max-width: 1080px) {
-    width: 100%;
+    width: 95%;
     margin-top: 20px;
   }
 `;
@@ -109,6 +111,7 @@ const LogoH1 = styled(H1)`
 
   @media (max-width: 1440px) {
     padding-top: 1rem;
+    font-size: 4.5rem;
   }
 
   @media (max-width: 768px) {
@@ -118,7 +121,7 @@ const LogoH1 = styled(H1)`
 `;
 
 const Container = styled.div`
-  margin: 3rem 0 4rem 0;
+  margin: 3rem 1rem 4rem 0.5rem;
 `;
 
 const HeroText = styled(H3)`
@@ -126,8 +129,16 @@ const HeroText = styled(H3)`
   font-weight: 400;
   font-size: 1.3rem;
   color: #2b2b2b;
-
-  @media (max-width: 500px) {
+  @media (max-width: 1240px) {
     font-size: 1.25rem;
+  }
+  @media (max-width: 1080px) {
+    font-size: 1.1rem;
+  }
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+  @media (max-width: 400px) {
+    font-size: 0.8rem;
   }
 `;

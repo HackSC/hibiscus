@@ -65,9 +65,6 @@ const NavbarWrapper = styled.div`
 `;
 
 const HeroSection = styled.section`
-  margin: 0 0 0 4rem;
-  padding: 0 0 0 3.25rem;
-
   @media (max-width: 1280px) {
     margin: 0 2rem 0 4vw;
   }

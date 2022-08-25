@@ -13,14 +13,16 @@ export function DesktopNavbar(props: DesktopNavbarProps) {
         </Link>
       </NavbarLeftLogoText>
       <RightMenuDiv>
-        {/* <Link href="https://hacksc.com" passHref>
+        <Link href="https://hacksc.com" passHref>
           <MenuOption>
-            <H5>Overview</H5>
+            <H5>
+              <GradientSpan>Overview</GradientSpan>
+            </H5>
           </MenuOption>
-        </Link> */}
+        </Link>
         <Link href="https://team.hacksc.com" passHref>
           <MenuOption>
-            <H5>Join our team!</H5>
+            <H5>Join our team</H5>
           </MenuOption>
         </Link>
         <DropdownMenu>

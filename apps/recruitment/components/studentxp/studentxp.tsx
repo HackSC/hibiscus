@@ -102,12 +102,10 @@ export function StudentXP(props: StudentXPProps) {
                 <GradientSpan>❝</GradientSpan>
               </Quotation>
               <StyledText>
-                My favorite memories of HackSC have to be from our engineering
-                team hack nights before and during our 2020 hackathon. I had a
-                lot of fun staying up late to work on last-minute features and
-                finishing touches to our hacker platform, Odyssey, and it was
-                fulfilling to see our website at the core of both hacker and
-                organizer experiences that year.
+                I had a lot of fun staying up late to work on last-minute
+                features and finishing touches to our hacker platform, Odyssey,
+                and it was fulfilling to see our website at the core of both
+                hacker and organizer experiences that year.
               </StyledText>
               <EndQuotation>
                 <GradientSpan>❞</GradientSpan>
@@ -135,11 +133,11 @@ const XPHeaderH2 = styled(H2)`
   color: #2b2b2b;
   text-align: center;
 
-  @media (max-width: 1080px) {
-    font-size: 3.5rem;
+  @media (max-width: 1240px) {
+    font-size: 3rem;
   }
   @media (max-width: 768px) {
-    font-size: 2.75rem;
+    font-size: 2rem;
   }
 `;
 
@@ -240,7 +238,7 @@ const Quotation = styled.div`
   flex-direction: row;
   justify-content: flex-start;
   font-size: 7vw;
-  @media (max-width: 1080px) {
+  @media (max-width: 1240px) {
     font-size: 5vw;
   }
 `;
@@ -250,7 +248,7 @@ const EndQuotation = styled.div`
   flex-direction: row;
   justify-content: flex-end;
   font-size: 7vw;
-  @media (max-width: 1080px) {
+  @media (max-width: 1240px) {
     font-size: 5vw;
   }
 `;
@@ -261,8 +259,14 @@ const Name = styled(Text)`
   justify-content: flex-end;
   font-weight: 600;
   font-size: 1.75rem;
-  @media (max-width: 1080px) {
+  @media (max-width: 1240px) {
     font-size: 1.25rem;
+  }
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+  @media (max-width: 400px) {
+    font-size: 0.6rem;
   }
 `;
 
@@ -273,8 +277,14 @@ const Title = styled(Text)`
   font-style: italic;
   font-size: 1rem;
   color: #939393;
-  @media (max-width: 1080px) {
+  @media (max-width: 1240px) {
     font-size: 0.8rem;
+  }
+  @media (max-width: 768px) {
+    font-size: 0.75rem;
+  }
+  @media (max-width: 400px) {
+    font-size: 0.4rem;
   }
 `;
 
@@ -282,8 +292,14 @@ const StyledText = styled(Text)`
   display: inline-block;
   text-align: left;
   font-size: 1.25rem;
-  @media (max-width: 1080px) {
+  @media (max-width: 1240px) {
     font-size: 1rem;
+  }
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
+  @media (max-width: 400px) {
+    font-size: 0.5rem;
   }
 `;
 
