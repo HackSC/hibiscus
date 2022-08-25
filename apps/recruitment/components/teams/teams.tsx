@@ -72,12 +72,13 @@ export function Teams(props: TeamsProps) {
         </GradientSpan>
       ),
       teamDescriptionElement: `
-              Team members reach out to candidates for keynote speakers.
-              Additionally, they gain practical expertise in designing and
-              organizing events like the HackSC concert, the hacker-favorite
-              puppy pen, and others. The role allows members to try a little bit
-              of everything as they collaborate with various divisions of the
-              org!
+      As a sponsorship team member, you will be reaching out to potential
+      sponsors, networking with professionals in the tech space, and helping 
+      put together the best experience possible for our sponsors at HackSC 23. 
+      If you’re interested in exploring the tech sector more and enjoy talking
+      to people, this is a great fit for you. We’re looking for people who are 
+      organized, committed, and on top of their inbox! Ideally, candidates 
+      with prior sales, fundraising, and/or sponsorship experience will do great.
              `,
     },
     {
