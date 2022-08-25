@@ -147,7 +147,8 @@ const Slider = styled.div`
   width: 85vw;
   text-align: center;
   overflow: hidden;
-  margin: 5rem 5rem 0 5rem;
+  margin-top: 5rem;
+  justify-content: center;
   @media (max-width: 800px) {
     width: 65vw;
   }
@@ -187,7 +188,6 @@ const Slide = styled.div`
   margin-right: 50px;
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.8);
-  border: 2px rgba(255, 255, 255, 0.11) solid;
   transform-origin: center center;
   transform: scale(1);
   transition: transform 0.5s;
