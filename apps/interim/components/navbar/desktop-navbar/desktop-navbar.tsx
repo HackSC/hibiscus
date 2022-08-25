@@ -13,14 +13,17 @@ export function DesktopNavbar(props: DesktopNavbarProps) {
         </Link>
       </NavbarLeftLogoText>
       <RightMenuDiv>
-        <Link href="https://hacksc.com" passHref>
+        <Link href={'/'} anchorTagPropsOverride={{ target: '_self' }}>
           <MenuOption>
             <H5>
               <GradientSpan>Overview</GradientSpan>
             </H5>
           </MenuOption>
         </Link>
-        <Link href="https://team.hacksc.com" passHref>
+        <Link
+          href={'https://team.hacksc.com'}
+          anchorTagPropsOverride={{ target: '_self' }}
+        >
           <MenuOption>
             <H5>Join our team</H5>
           </MenuOption>

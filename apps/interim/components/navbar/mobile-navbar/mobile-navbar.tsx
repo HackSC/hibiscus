@@ -25,7 +25,7 @@ const TheBurger = () => {
           <a href="https://hacksc.com/">
             <li>Overview</li>
           </a>
-          <a href="https://team.hacksc.com" target="_blank" rel="noreferrer">
+          <a href="https://team.hacksc.com">
             <li>Join our team</li>
           </a>
           <DropdownMenu>
