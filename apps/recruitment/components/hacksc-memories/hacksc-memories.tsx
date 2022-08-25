@@ -32,7 +32,7 @@ export function HackSCMemories(props: HackSCMemoriesProps) {
           />
         </Memory>
         <Memory>
-          <video controls controlsList="nodownload" preload="none">
+          <video controls controlsList="nodownload">
             <source src="/img/memories/photos4.mp4" type="video/mp4" />
           </video>
         </Memory>
