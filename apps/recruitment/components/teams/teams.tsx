@@ -30,13 +30,11 @@ export function Teams(props: TeamsProps) {
               </GradientSpan>
             </StyledH3>
             <TeamDescription>
-              At HackSC, we value the hacker culture—after all, we’re organizing
-              a hackathon, and even as an organizer, everyone is encouraged to
-              be an innovative tech nomad who’s passionate about using
-              technology to create something awesome 🔮 Our Engineering team has
-              been an essential piece in creating scalable web platforms that
-              help create a one-of-a-kind digital experience for hackers since
-              our induction.
+              At HackSC, everyone is encouraged to be an innovative tech nomad
+              who is passionate about using technology to create something
+              awesome 🔮. Engineering has been an essential piece in creating
+              scalable web platforms that help create a one-of-a-kind digital
+              experience for hackers since our induction.
             </TeamDescription>
           </FlipBack>
         </StyledFlippy>
@@ -82,8 +80,7 @@ export function Teams(props: TeamsProps) {
           <FlipBack style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}>
             <StyledH3>
               <GradientSpan>
-                Our HackerXP team provides our hackers with an unforgettable
-                experience by putting on fun events throughout the hackathon.
+                Unforgettable events, brought to you by our HackerXP team!
               </GradientSpan>
             </StyledH3>
             <TeamDescription>
@@ -169,8 +166,7 @@ export function Teams(props: TeamsProps) {
           <FlipBack style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}>
             <StyledH3>
               <GradientSpan>
-                HackSC’s operations team is responsible for coordinating
-                everything behind-the-scenes at our student-loved events.
+                Behing-the-scenes of SoCal&apos;s most student loved events!
               </GradientSpan>
             </StyledH3>
             <TeamDescription>
@@ -197,7 +193,8 @@ const StyledTeams = styled.div`
 `;
 
 const TeamsContainer = styled.div`
-  margin: 2rem;
+  margin-top: 2rem;
+  justify-content: center;
   display: flex;
   flex-direction: row;
   align-items: center;
