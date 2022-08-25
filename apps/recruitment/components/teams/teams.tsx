@@ -152,9 +152,7 @@ export function Teams(props: TeamsProps) {
                   <FlipBack
                     style={{ backgroundColor: 'rgba(255, 255, 255, 0.6)' }}
                   >
-                    <StyledH3BackTitle>
-                      <GradientSpan>{backTitleElement}</GradientSpan>
-                    </StyledH3BackTitle>
+                    <StyledH3BackTitle>{backTitleElement}</StyledH3BackTitle>
                     <TeamDescription>{teamDescriptionElement}</TeamDescription>
                   </FlipBack>
                 </StyledFlippy>
