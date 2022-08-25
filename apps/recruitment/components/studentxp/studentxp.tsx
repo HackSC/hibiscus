@@ -17,18 +17,12 @@ export function StudentXP(props: StudentXPProps) {
               <img src="/img/studentxp/katie.png" alt="Katie Wong" />
             </Photo>
             <Testimonial>
-              <Quotation>
-                <GradientSpan>❝</GradientSpan>
-              </Quotation>
               <StyledText>
                 My favorite memory of HackSC was working with my amazing team to
                 put together a covid safe hackathon against all odds! I am super
                 proud of the team for their hard work and loved learning and
                 becoming closer with HackSC my senior year.
               </StyledText>
-              <EndQuotation>
-                <GradientSpan>❞</GradientSpan>
-              </EndQuotation>
               <Name>Katherine Wong</Name>
               <Title>President &apos;21</Title>
             </Testimonial>
@@ -38,17 +32,11 @@ export function StudentXP(props: StudentXPProps) {
               <img src="/img/studentxp/kelly.png" alt="Kelly Dixon" />
             </Photo>
             <Testimonial>
-              <Quotation>
-                <GradientSpan>❝</GradientSpan>
-              </Quotation>
               <StyledText>
                 My favorite things about HackSC were spending time with some of
                 my best friends and getting to see all of our hard work pay off.
                 My favorite memory was getting to know everyone at the retreat!
               </StyledText>
-              <EndQuotation>
-                <GradientSpan>❞</GradientSpan>
-              </EndQuotation>
               <Name>Kelly Dixon</Name>
               <Title>Logistics Lead &apos;22</Title>
             </Testimonial>
@@ -58,16 +46,10 @@ export function StudentXP(props: StudentXPProps) {
               <img src="/img/studentxp/max.png" alt="Max Leiter" />
             </Photo>
             <Testimonial>
-              <Quotation>
-                <GradientSpan>❝</GradientSpan>
-              </Quotation>
               <StyledText>
                 My favorite thing about HackSC is students putting on an event
                 that most professional organizations would struggle to do.
               </StyledText>
-              <EndQuotation>
-                <GradientSpan>❞</GradientSpan>
-              </EndQuotation>
               <Name>Max Leiter</Name>
               <Title>Engineering Lead &apos;22</Title>
             </Testimonial>
@@ -77,18 +59,12 @@ export function StudentXP(props: StudentXPProps) {
               <img src="/img/studentxp/claire.png" alt="Claire Moody" />
             </Photo>
             <Testimonial>
-              <Quotation>
-                <GradientSpan>❝</GradientSpan>
-              </Quotation>
               <StyledText>
                 My favorite memory was the night of the final interview where we
                 welcomed all of the new members to HackSC! It was so rewarding
                 to watch the organization grow so much and meet the amazing new
                 organizers.
               </StyledText>
-              <EndQuotation>
-                <GradientSpan>❞</GradientSpan>
-              </EndQuotation>
               <Name>Claire Moody</Name>
               <Title>Sponsorship Lead &apos;22</Title>
             </Testimonial>
@@ -98,18 +74,12 @@ export function StudentXP(props: StudentXPProps) {
               <img src="/img/studentxp/chloe.png" alt="Chloe Tanlimco" />
             </Photo>
             <Testimonial>
-              <Quotation>
-                <GradientSpan>❝</GradientSpan>
-              </Quotation>
               <StyledText>
                 I had a lot of fun staying up late to work on last-minute
                 features and finishing touches to our hacker platform, Odyssey,
                 and it was fulfilling to see our website at the core of both
                 hacker and organizer experiences that year.
               </StyledText>
-              <EndQuotation>
-                <GradientSpan>❞</GradientSpan>
-              </EndQuotation>
               <Name>Chloe Tanlimco</Name>
               <Title>Engineering Member &apos;22</Title>
             </Testimonial>
@@ -142,7 +112,7 @@ const XPHeaderH2 = styled(H2)`
 `;
 
 const Slider = styled.div`
-  width: 85vw;
+  width: 80vw;
   text-align: center;
   overflow: hidden;
   margin-top: 5rem;
@@ -181,8 +151,8 @@ const Slides = styled.div`
 const Slide = styled.div`
   scroll-snap-align: start;
   flex-shrink: 0;
-  width: 85vw;
-  height: 47.5vw;
+  width: 80vw;
+  height: 40vw;
   margin-right: 50px;
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.8);
@@ -207,8 +177,8 @@ const Photo = styled.div`
   align-items: center;
   padding-top: 24px;
   > img {
-    width: 47.5vw;
-    height: 47.5vw;
+    width: 40vw;
+    height: 40vw;
     object-fit: contain;
     border-radius: 10px 0 0 10px;
     @media (max-width: 800px) {
@@ -224,46 +194,28 @@ const Photo = styled.div`
 
 const Testimonial = styled.div`
   flex-basis: 50%;
-  padding: 10px 30px 20px 30px;
+  padding: 7vw;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   @media (max-width: 800px) {
-    padding: 20px 30px 10px 30px;
-  }
-`;
-
-const Quotation = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  font-size: 7vw;
-  @media (max-width: 1240px) {
-    font-size: 5vw;
-  }
-`;
-
-const EndQuotation = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  font-size: 7vw;
-  @media (max-width: 1240px) {
-    font-size: 5vw;
+    padding: 7vw;
   }
 `;
 
 const Name = styled(Text)`
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: flex-start;
   font-weight: 600;
+  padding-left: 2vw;
   font-size: 1.75rem;
   @media (max-width: 1240px) {
     font-size: 1.25rem;
   }
   @media (max-width: 768px) {
     font-size: 1rem;
+    padding-left: 3vw;
   }
   @media (max-width: 400px) {
     font-size: 0.6rem;
@@ -273,14 +225,16 @@ const Name = styled(Text)`
 const Title = styled(Text)`
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: flex-start;
   font-style: italic;
-  font-size: 1rem;
+  font-size: 1.25rem;
   color: #939393;
+  padding-left: 2vw;
   @media (max-width: 1240px) {
     font-size: 0.8rem;
   }
   @media (max-width: 768px) {
+    padding-left: 3vw;
     font-size: 0.75rem;
   }
   @media (max-width: 400px) {
@@ -290,13 +244,25 @@ const Title = styled(Text)`
 
 const StyledText = styled(Text)`
   display: inline-block;
+  border-left: 5px solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(
+    to bottom,
+    ${TrademarkColors.YELLOW} 0%,
+    ${TrademarkColors.LIGHT_RED} 20%,
+    ${TrademarkColors.LIGHT_BLUE} 40%,
+    ${TrademarkColors.LIGHT_PURPLE} 100%
+  );
+  padding-left: 2vw;
+  margin-bottom: 2vw;
   text-align: left;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   @media (max-width: 1240px) {
     font-size: 1rem;
   }
   @media (max-width: 768px) {
     font-size: 0.8rem;
+    border-left: 4px solid;
   }
   @media (max-width: 400px) {
     font-size: 0.5rem;
