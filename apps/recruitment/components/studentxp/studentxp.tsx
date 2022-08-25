@@ -102,12 +102,10 @@ export function StudentXP(props: StudentXPProps) {
                 <GradientSpan>❝</GradientSpan>
               </Quotation>
               <StyledText>
-                My favorite memories of HackSC have to be from our engineering
-                team hack nights before and during our 2020 hackathon. I had a
-                lot of fun staying up late to work on last-minute features and
-                finishing touches to our hacker platform, Odyssey, and it was
-                fulfilling to see our website at the core of both hacker and
-                organizer experiences that year.
+                I had a lot of fun staying up late to work on last-minute
+                features and finishing touches to our hacker platform, Odyssey,
+                and it was fulfilling to see our website at the core of both
+                hacker and organizer experiences that year.
               </StyledText>
               <EndQuotation>
                 <GradientSpan>❞</GradientSpan>
