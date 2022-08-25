@@ -260,7 +260,10 @@ const TeamDescription = styled(Text)`
   line-height: 1.4;
   padding: 0 1.25rem;
   @media (max-width: 1320px) {
-    font-size: 0.8rem;
+    font-size: 0.95rem;
+  }
+  @media (max-width: 1320px) {
+    font-size: 0.93rem;
   }
   @media (max-width: 1080px) {
     font-size: 1rem;
