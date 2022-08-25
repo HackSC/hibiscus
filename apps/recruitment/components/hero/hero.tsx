@@ -109,6 +109,7 @@ const LogoH1 = styled(H1)`
 
   @media (max-width: 1440px) {
     padding-top: 1rem;
+    font-size: 4.5rem;
   }
 
   @media (max-width: 768px) {

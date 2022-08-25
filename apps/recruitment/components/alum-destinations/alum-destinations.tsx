@@ -38,11 +38,11 @@ const AlumHeaderH2 = styled(H2)`
   color: #2b2b2b;
   text-align: center;
 
-  @media (max-width: 1080px) {
-    font-size: 3.5rem;
+  @media (max-width: 1240px) {
+    font-size: 3rem;
   }
   @media (max-width: 768px) {
-    font-size: 2.75rem;
+    font-size: 2rem;
   }
 `;
 

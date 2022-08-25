@@ -67,19 +67,16 @@ export function Teams(props: TeamsProps) {
       teamSlogan: 'CONNECT • COMMUNICATE • COORDINATE',
       backTitleElement: (
         <GradientSpan>
-          The HackSC Sponsorship team is all about getting the sponsors and
-          funds that make HackSC possible.
+          Sponsorship is all about raising the funds that make HackSC possible.
         </GradientSpan>
       ),
       teamDescriptionElement: `
-      As a sponsorship team member, you will be reaching out to potential
-      sponsors, networking with professionals in the tech space, and helping 
-      put together the best experience possible for our sponsors at HackSC 23. 
-      If you’re interested in exploring the tech sector more and enjoy talking
-      to people, this is a great fit for you. We’re looking for people who are 
-      organized, committed, and on top of their inbox! Ideally, candidates 
-      with prior sales, fundraising, and/or sponsorship experience will do great.
-             `,
+        As a sponsorship team member, you will be reaching out to potential
+        sponsors, networking with professionals in the tech space, and helping 
+        put together the best experience possible for our sponsors at HackSC 23. 
+        If you’re interested in exploring the tech sector more and enjoy talking
+        to people, this is a great fit for you.
+      `,
     },
     {
       teamName: 'Marketing',
@@ -87,19 +84,16 @@ export function Teams(props: TeamsProps) {
       backTitleElement: (
         <>
           <GradientSpan>
-            We are Marketers. Designers. Writers. Engineers {'&'} all of the
-            above.
+            Marketing is the brains behind our awesome social media presence!
           </GradientSpan>
         </>
       ),
       teamDescriptionElement: `
-              HackSC’s Marketing Team is looking for individuals who are
-              passionate about social media creation & management, digital
-              marketing, and aesthetics, and those who are driven to strategize
-              and execute creative campaigns for an amazing hackathon! The
-              Marketing Team is at the core of the organization—working closely
-              with our Engineering and Design team. If you have a diverse
-              outreach skill set, this is the place for you.
+        HackSC’s Marketing Team is looking for individuals who are
+        passionate about social media creation & management, digital
+        marketing, and aesthetics, and those who are driven to strategize
+        and execute creative campaigns for an amazing hackathon! The
+        Marketing Team works closely with our Engineering and Design team.
       `,
     },
     {
@@ -111,12 +105,12 @@ export function Teams(props: TeamsProps) {
         </GradientSpan>
       ),
       teamDescriptionElement: `
-              Our team manages HackSC’s generous budget and coordinates venue
-              bookings, security, staffing, catering, communications, and any
-              other logistical needs requested by our internal teams for all
-              events. If you are passionate about leadership, business,
-              outreach, and/or event management, we want you to join our
-              fast-paced and mission-critical team!
+        Our team manages HackSC’s generous budget and coordinates venue
+        bookings, security, staffing, catering, communications, and any
+        other logistical needs requested by our internal teams for all
+        events. If you are passionate about leadership, business,
+        outreach, and/or event management, we want you to join our
+        fast-paced and mission-critical team!
       `,
     },
   ];
@@ -125,7 +119,7 @@ export function Teams(props: TeamsProps) {
     <StyledTeams>
       <TeamsHeaderH2>Our Teams</TeamsHeaderH2>
       <GrayParagraph>
-        Click on any card to learn more about each team!
+        Click on any card to learn more about each team
       </GrayParagraph>
       {[0, 2, 4].map((i) => (
         <TeamsContainer key={i}>
@@ -226,7 +220,7 @@ const StyledH2TeamName = styled(H2)`
   font-size: 4.5rem;
   text-align: center;
   @media (max-width: 1240px) {
-    font-size: 3rem;
+    font-size: 2.5rem;
   }
   @media (max-width: 400px) {
     font-size: 2rem;
@@ -235,7 +229,12 @@ const StyledH2TeamName = styled(H2)`
 
 const StyledH3BackTitle = styled(H3)`
   font-size: 1.5rem;
-  text-align: center;
+  text-align: left;
+  padding: 0 1rem;
+  @media (max-width: 1240px) {
+    padding: 0 0.6rem;
+    font-size: 1.25rem;
+  }
   @media (max-width: 400px) {
     font-size: 1rem;
   }
@@ -259,11 +258,13 @@ const TeamDescription = styled(Text)`
   margin: 10px 3px;
   font-size: 1.2rem;
   line-height: 1.4;
+  padding: 0 1.25rem;
   @media (max-width: 1240px) {
-    font-size: 1rem;
+    font-size: 0.8rem;
   }
   @media (max-width: 425px) {
-    font-size: 0.7rem;
+    padding: 0 0.6rem;
+    font-size: 0.6rem;
   }
 `;
 
@@ -273,11 +274,11 @@ const TeamsHeaderH2 = styled(H2)`
   color: #2b2b2b;
   text-align: center;
 
-  @media (max-width: 1080px) {
-    font-size: 3.5rem;
+  @media (max-width: 1240px) {
+    font-size: 3rem;
   }
   @media (max-width: 768px) {
-    font-size: 2.75rem;
+    font-size: 2rem;
   }
 `;
 
@@ -286,8 +287,13 @@ const GrayParagraph = styled(Text)`
   color: #939393;
   margin: 10px 3px;
   font-size: 1.2rem;
-
+  @media (max-width: 1240px) {
+    font-size: 1rem;
+  }
   @media (max-width: 768px) {
     font-size: 0.8rem;
+  }
+  @media (max-width: 400px) {
+    font-size: 0.6rem;
   }
 `;
