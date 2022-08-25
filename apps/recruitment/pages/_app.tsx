@@ -1,12 +1,14 @@
+import { GoogleAnalytics4Script } from '@hacksc-platforms/analytics';
 import { GlobalStyles } from '@hacksc-platforms/styles';
-import { GetServerSideProps } from 'next';
 import App, { AppContext, AppProps } from 'next/app';
 import Head from 'next/head';
 import { Toaster } from 'react-hot-toast';
 import { QueryClient, QueryClientProvider } from 'react-query';
+
 export interface CustomAppProps extends AppProps {
   envs: {
     sendgridApiKey: string;
+    googleAnalyticsStreamingId: string;
   };
 }
 
@@ -18,10 +20,13 @@ function CustomApp({ Component, pageProps, envs }: CustomAppProps) {
       <Toaster />
       <>
         <Head>
-          <title>HackSC | Join us next year!</title>
+          <title>HackSC | Join our team!</title>
           <link rel="shortcut icon" href="/img/favicon.ico" />
         </Head>
         <main className="app">
+          <GoogleAnalytics4Script
+            streamingId={envs.googleAnalyticsStreamingId}
+          />
           <GlobalStyles />
           <Component {...pageProps} />
         </main>
@@ -36,16 +41,11 @@ CustomApp.getInitialProps = async (
   const appProps = await App.getInitialProps(ctx);
   return {
     ...appProps,
-    envs: { sendgridApiKey: process.env.SENDGRID_API_KEY },
+    envs: {
+      sendgridApiKey: process.env.SENDGRID_API_KEY,
+      googleAnalyticsStreamingId: process.env.GA_STREAMING_ID,
+    },
   };
 };
 
 export default CustomApp;
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  return {
-    props: {
-      sendGridAPIKey: process.env.SENDGRID_API_KEY,
-    },
-  };
-};

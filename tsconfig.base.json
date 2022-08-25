@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@hacksc-platforms/analytics": ["libs/analytics/src/index.ts"],
       "@hacksc-platforms/api-interfaces": ["libs/api-interfaces/src/index.ts"],
       "@hacksc-platforms/styles": ["libs/styles/src/index.ts"],
       "@hacksc-platforms/ui": ["libs/ui/src/index.ts"]
