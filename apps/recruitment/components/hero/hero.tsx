@@ -1,5 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
-import Image from 'next/image';
+import { TrademarkColors } from '@hacksc-platforms/styles';
 import { GradientSpan, H1, H3 } from '@hacksc-platforms/ui';
 /* eslint-disable-next-line */
 export interface HeroProps {}
@@ -20,15 +21,16 @@ export function Hero(props: HeroProps) {
             learn, <GradientSpan>we want you on our team</GradientSpan>!
           </HeroText>
         </Container>
+        <a
+          href="https://forms.gle/43M1FgCydFhFJerCA"
+          rel="noreferrer"
+          target="_blank"
+        >
+          <GradientButton type="submit">APPLY NOW</GradientButton>
+        </a>
       </LeftSection>
       <RightSection>
-        <Image
-          src="/img/lightbulb.png"
-          alt="Light Bulb"
-          width="300vw"
-          height="300vw"
-          objectFit="contain"
-        />
+        <img src="/img/lightbulb.png" alt="Light Bulb" />
       </RightSection>
     </StyledHero>
   );
@@ -57,6 +59,45 @@ const RightSection = styled.div`
   @media (max-width: 1080px) {
     margin-top: 5rem;
   }
+  > img {
+    width: 27vw;
+    height: 27vw;
+    @media (max-width: 1240px) {
+      width: 30vw;
+      height: 30vw;
+    }
+    @media (max-width: 1080px) {
+      width: 60vw;
+      height: 60vw;
+    }
+  }
+`;
+
+const GradientButton = styled.button`
+  background: linear-gradient(
+    90deg,
+    ${TrademarkColors.LIGHT_BLUE} 0%,
+    ${TrademarkColors.LIGHT_PURPLE} 100%
+  );
+  border: none;
+  padding: 12px 10px;
+  color: white;
+  font-weight: 700;
+  border-radius: 0.3rem;
+  box-shadow: 0px 2px 10px -1px #a0a0a0;
+  font-size: 1.1rem;
+  cursor: pointer;
+  min-width: 20%;
+
+  :hover {
+    transform: scale(1.1);
+    transition: all 0.2s ease-in-out;
+  }
+
+  @media (max-width: 1080px) {
+    width: 100%;
+    margin-top: 20px;
+  }
 `;
 
 const LogoH1 = styled(H1)`
@@ -77,7 +118,7 @@ const LogoH1 = styled(H1)`
 `;
 
 const Container = styled.div`
-  margin: 4rem 0 0;
+  margin: 3rem 0 4rem 0;
 `;
 
 const HeroText = styled(H3)`
