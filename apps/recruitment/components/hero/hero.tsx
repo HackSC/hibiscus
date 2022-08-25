@@ -15,10 +15,12 @@ export function Hero(props: HeroProps) {
         </LogoH1>
         <Container>
           <HeroText>
-            At <GradientSpan>HackSC</GradientSpan>, we encourage team members to
-            work on other team projects that they feel strongly about and that
-            will help develop their skills. If you’re passionate and eager to
-            learn, <GradientSpan>we want you on our team</GradientSpan>!
+            At <GradientSpan>HackSC</GradientSpan>, you’ll get a chance to
+            collaborate in a team of driven individuals, network with industry
+            professionals, and work on projects that make a difference, all
+            while organizing SoCal’s most student-loved events. If you’re
+            passionate and eager to learn,
+            <GradientSpan>we want you on our team</GradientSpan>!
           </HeroText>
         </Container>
         <a
@@ -42,8 +44,9 @@ const StyledHero = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-right: 2rem;
-  margin-left: 2rem;
+  justify-content: flex-end;
+  margin-right: auto;
+  margin-left: auto;
   margin-top: 17rem;
   @media (max-width: 1080px) {
     margin-top: 7rem;
