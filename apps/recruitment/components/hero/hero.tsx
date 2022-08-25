@@ -50,7 +50,6 @@ const StyledHero = styled.div`
   margin-top: 17rem;
   @media (max-width: 1080px) {
     margin-top: 7rem;
-    margin-left: 0;
     flex-direction: column;
   }
 `;
@@ -83,7 +82,7 @@ const GradientButton = styled.button`
     ${TrademarkColors.LIGHT_PURPLE} 100%
   );
   border: none;
-  padding: 12px 10px;
+  padding: 12px 20px;
   color: white;
   font-weight: 700;
   border-radius: 0.3rem;
@@ -98,7 +97,7 @@ const GradientButton = styled.button`
   }
 
   @media (max-width: 1080px) {
-    width: 100%;
+    width: 95%;
     margin-top: 20px;
   }
 `;
@@ -122,7 +121,7 @@ const LogoH1 = styled(H1)`
 `;
 
 const Container = styled.div`
-  margin: 3rem 0 4rem 0;
+  margin: 3rem 1rem 4rem 0.5rem;
 `;
 
 const HeroText = styled(H3)`
@@ -130,8 +129,16 @@ const HeroText = styled(H3)`
   font-weight: 400;
   font-size: 1.3rem;
   color: #2b2b2b;
-
-  @media (max-width: 500px) {
+  @media (max-width: 1240px) {
     font-size: 1.25rem;
+  }
+  @media (max-width: 1080px) {
+    font-size: 1.1rem;
+  }
+  @media (max-width: 768px) {
+    font-size: 1rem;
+  }
+  @media (max-width: 400px) {
+    font-size: 0.8rem;
   }
 `;

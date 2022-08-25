@@ -89,7 +89,7 @@ const StyledHackSCMemories = styled.div`
 `;
 
 const MemoriesContainer = styled.div`
-  margin: 5vw 10vw;
+  margin: 5vw 15vw;
   column-count: 4;
   column-gap: 10px;
   @media (max-width: 1920px) {
