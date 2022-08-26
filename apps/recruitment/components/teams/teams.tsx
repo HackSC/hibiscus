@@ -15,16 +15,19 @@ export function Teams(props: TeamsProps) {
       teamName: 'Engineering',
       teamSlogan: 'BUILD • EXECUTE • SHIP',
       backTitleElement: (
-        <GradientSpan>
-          The engineering team builds what our organization dreams up!
-        </GradientSpan>
+        <>
+          <GradientSpan>
+            The engineering team builds what our organization dreams up{' '}
+          </GradientSpan>
+          💭<GradientSpan>!</GradientSpan>
+        </>
       ),
       teamDescriptionElement: `
-        At HackSC, everyone is encouraged to be an innovative tech nomad
-        who is passionate about using technology to create something
-        awesome 🔮. Engineering has been an essential piece in creating
-        scalable web platforms that help create a one-of-a-kind digital
-        experience for hackers since our induction.
+        The Engineering Team is a group of innovative tech nomads passionate
+        about using technology to create something awesome 🔮, 
+        after all, we’re organizing a hackathon. Our team is an essential 
+        piece in creating scalable web platforms that help create a one-of-a-kind 
+        digital experience for hackers!
       `,
     },
     {
@@ -33,49 +36,53 @@ export function Teams(props: TeamsProps) {
       backTitleElement: (
         <>
           <GradientSpan>
-            Design team lies at the heart of what makes HackSC{' '}
+            Design team lies at the heart of what makes HackSC pop
           </GradientSpan>
-          ✨<GradientSpan>pop</GradientSpan>✨<GradientSpan>.</GradientSpan>
+          ✨<GradientSpan>.</GradientSpan>
         </>
       ),
       teamDescriptionElement: `
-        We collaborate across teams to deliver what they need to
-        flourish—whether that’s the Instagram page, the HackSC website,
-        the sponsorship packets, the merch, and more. Our designers give
-        hackers the opportunity to innovate, and we look good doing it.
+        The Design Team collaborates and delivers the tools that other teams need 
+        to flourish. Our designers combine brand standards, color theory 🎨, 
+        graphic elements, and typography to make a measurable impact on our global 
+        audience. They give hackers the opportunity to innovate and look good doing it!
       `,
     },
     {
       teamName: 'HackerXP',
       teamSlogan: 'ENGAGE • PLAN • COLLABORATE',
       backTitleElement: (
-        <GradientSpan>
-          Unforgettable events, brought to you by our HackerXP team!
-        </GradientSpan>
+        <>
+          <GradientSpan>
+            Unforgettable events, brought to you by our HackerXP team
+          </GradientSpan>
+          🎊<GradientSpan>.</GradientSpan>
+        </>
       ),
       teamDescriptionElement: `
-        Team members reach out to candidates for keynote speakers.
-        Additionally, they gain practical expertise in designing and
-        organizing events like the HackSC concert, the hacker-favorite
-        puppy pen, and others. The role allows members to try a little bit
-        of everything as they collaborate with various divisions of the
-        org!
+        The HackerXP Team provides our hackers with a fun and unforgettable experience. 
+        Members of our team select the speakers, prizes, and plan fun events like the 
+        hacker-favorite puppy pen 🐶, and more. Our team gets to try a little bit 
+        of everything as they collaborate with various divisions of the org!
       `,
     },
     {
       teamName: 'Sponsorship',
       teamSlogan: 'OUTREACH • CONNECT • INTERFACE',
       backTitleElement: (
-        <GradientSpan>
-          Sponsorship is all about raising the funds that make HackSC possible.
-        </GradientSpan>
+        <>
+          <GradientSpan>
+            Sponsorship is all about raising the funds that make HackSC possible
+          </GradientSpan>
+          💸<GradientSpan>.</GradientSpan>
+        </>
       ),
       teamDescriptionElement: `
-        As a sponsorship team member, you will be reaching out to potential
-        sponsors, networking with professionals in the tech space, and helping 
-        put together the best experience possible for our sponsors at HackSC 23. 
-        If you’re interested in exploring the tech sector more and enjoy talking
-        to people, this is a great fit for you.
+        The HackSC Sponsorship provides funding for our hackathon, reaching out to 
+        potential sponsors, networking 💼 with professionals in the tech 
+        space, and put together the best experience for our sponsors. If you’re 
+        interested in exploring the tech sector more and enjoy talking to people, 
+        this is a great fit for you!
       `,
     },
     {
@@ -84,33 +91,36 @@ export function Teams(props: TeamsProps) {
       backTitleElement: (
         <>
           <GradientSpan>
-            Marketing wants to share with the world what HackSC is all about!
+            Marketing wants to share with the world what HackSC is all about
           </GradientSpan>
+          📢<GradientSpan>!</GradientSpan>
         </>
       ),
       teamDescriptionElement: `
-        HackSC’s Marketing Team is looking for individuals who are
-        passionate about social media creation & management, digital
-        marketing, and aesthetics, and those who are driven to strategize
-        and execute creative campaigns for an amazing hackathon! The
-        Marketing Team works closely with our Engineering and Design team.
+        The Marketing Team is at the core of HackSC, working with other teams on 
+        social media creation & management, digital marketing, aesthetics, writing, 
+        photography 📸, and even executing creative campaigns for 
+        an amazing hackathon! If you have a diverse outreach skill set, this is the 
+        place for you!
       `,
     },
     {
       teamName: 'Operations',
       teamSlogan: 'COORDINATE • LEAD • EXECUTE',
       backTitleElement: (
-        <GradientSpan>
-          Behind-the-scenes of SoCal&apos;s most student loved events!
-        </GradientSpan>
+        <>
+          <GradientSpan>
+            Behind-the-scenes of SoCal&apos;s most student loved events
+          </GradientSpan>
+          🗃️<GradientSpan>!</GradientSpan>
+        </>
       ),
       teamDescriptionElement: `
-        Our team manages HackSC’s generous budget and coordinates venue
-        bookings, security, staffing, catering, communications, and any
-        other logistical needs requested by our internal teams for all
-        events. If you are passionate about leadership, business,
-        outreach, and/or event management, we want you to join our
-        fast-paced and mission-critical team!
+        The Operations Team is responsible for the day-of logistics of the event. We 
+        coordinate venues, budget, and other operations. If you’re interested in 
+        learning more about operations management 📋 or the business side of events - 
+        then our team is for you. Join us and become a part of why HackSC runs without 
+        a hitch!
       `,
     },
   ];
