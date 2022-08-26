@@ -116,7 +116,7 @@ const EmailInput = styled.input`
   border-radius: 0.3rem;
   padding: 10px;
   padding-left: 25px;
-  font-family: Inter, sans-serif;
+  font-family: InterVariable, sans-serif;
   font-size: 1.1rem;
   color: #676767;
   margin-right: 0.5rem;

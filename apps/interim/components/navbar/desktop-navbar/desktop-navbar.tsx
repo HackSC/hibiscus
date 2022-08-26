@@ -84,7 +84,7 @@ const MenuOption = styled.div`
   background: none;
   font-size: 1.5rem;
   font-weight: 400;
-  font-family: 'Inter', sans-serif;
+  font-family: Inter, sans-serif;
   padding: 1rem;
   transition: 0.3s;
 

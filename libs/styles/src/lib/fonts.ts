@@ -4,14 +4,14 @@ import { createGlobalStyle } from 'styled-components';
 
 export const GlobalStyles = createGlobalStyle`
 body {
-  font-family: Inter, sans-serif;
+  font-family: Inter,-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif;
   margin: 0;
   padding: 0;
 }
 
 @supports (font-variation-settings: normal) {
   body {
-    font-family: InterVariable;
+    font-family: InterVariable,-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif;
   }
 }
 `;
