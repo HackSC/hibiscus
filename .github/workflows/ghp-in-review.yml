@@ -1,0 +1,17 @@
+name: Move cards to In Review column when associated PR is created
+
+on:
+  pull_request:
+    types:
+      - 'ready_for_review'
+      - 'review_requested'
+
+jobs:
+  automate-project-columns:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: alex-page/github-project-automation-plus@v0.8.1
+        with:
+          project: Hibiscus
+          column: In review
+          repo-token: ${{ secrets.BOT_GITHUB_PAT }}
