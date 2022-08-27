@@ -7,8 +7,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 
 export interface CustomAppProps extends AppProps {
   envs: {
-    sendgridApiKey: string;
-    googleAnalyticsStreamingId: string;
+    googleAnalyticsMeasuringId: string;
   };
 }
 
@@ -25,7 +24,7 @@ function CustomApp({ Component, pageProps, envs }: CustomAppProps) {
         </Head>
         <main className="app">
           <GoogleAnalytics4Script
-            streamingId={envs.googleAnalyticsStreamingId}
+            measuringId={envs.googleAnalyticsMeasuringId}
           />
           <GlobalStyles />
           <Component {...pageProps} />
@@ -42,8 +41,7 @@ CustomApp.getInitialProps = async (
   return {
     ...appProps,
     envs: {
-      sendgridApiKey: process.env.SENDGRID_API_KEY,
-      googleAnalyticsStreamingId: process.env.GA_STREAMING_ID,
+      googleAnalyticsMeasuringId: process.env.GA_MEASURING_ID,
     },
   };
 };
