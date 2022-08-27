@@ -1,4 +1,4 @@
-name: Move cards to Approved column when associated PR is reviewed and approved
+name: Move cards to Approved column when associated PR is approved
 
 on:
   pull_request_review:

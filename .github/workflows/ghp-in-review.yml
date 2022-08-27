@@ -1,4 +1,4 @@
-name: Move cards to In Review column when associated PR is created
+name: Move cards to In Review column when associated PR is ready for review or review is requested
 
 on:
   pull_request:
