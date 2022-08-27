@@ -1,6 +1,7 @@
 name: Move cards into In Progress when associated PR is opened
 
 on:
+  push:
   pull_request:
     types:
       - 'opened'
