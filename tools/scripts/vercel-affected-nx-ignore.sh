@@ -5,7 +5,6 @@ NX_VER=$(node -e "console.log(require('./package.json').devDependencies['@nrwl/w
 TS_VER=$(node -e "console.log(require('./package.json').devDependencies['typescript'])")
 
 # Install @nrwl/workspace in order to run the affected command
-yarn add --dev @nrwl/workspace@$NX_VER --prefer-offline
-yarn add --dev typescript@$TS_VER --prefer-offline
+yarn add --dev @nrwl/workspace@$NX_VER typescript@$TS_VER --prefer-offline
 
 npx nx-ignore $APP --verbose
