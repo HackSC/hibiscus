@@ -1,4 +1,4 @@
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 
 /* eslint-disable-next-line */
 export interface InfoSessionRedirectProps {}
@@ -9,7 +9,7 @@ function InfoSessionRedirect(props: InfoSessionRedirectProps) {
 
 export default InfoSessionRedirect;
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const zoomInfoSessionURL = process.env.ZOOM_INFO_SESSION_URL;
   return {
     redirect: {
