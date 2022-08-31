@@ -1,3 +1,7 @@
+#!/bin/bash
+
+set -e
+
 APP=$1
 
 # these can often be not pre-installed on the Vercel build server so we install them here
