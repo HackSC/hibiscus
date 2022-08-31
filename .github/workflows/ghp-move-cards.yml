@@ -27,7 +27,7 @@ env:
 
 jobs:
   issue_opened_or_reopened:
-    name: Move associated card to "${{ env.todo }}" if the issue is (re)opened
+    name: Move associated card if the issue is (re)opened
     runs-on: ubuntu-latest
     if: github.event_name == 'issues' && (github.event.action == 'opened' || github.event.action == 'reopened')
     steps:
@@ -40,7 +40,7 @@ jobs:
           resource_node_id: ${{ github.event.issue.node_id }}
           status_value: ${{ env.todo }} # Target status
   pr_opened_or_reopened:
-    name: Move associated card to "${{ env.in_progress }}" if PR is (re)opened
+    name: Move associated card if PR is (re)opened
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request' && (github.event.action == 'opened' || github.event.action == 'reopened')
     steps:
@@ -53,7 +53,7 @@ jobs:
           resource_node_id: ${{ github.event.pull_request.node_id }}
           status_value: ${{ env.in_progress }} # Target status
   pr_reviewrequested:
-    name: Move associated card to "${{ env.in_review }}" if review is requested on PR
+    name: Move associated card if review is requested on PR
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request' && github.event.action == 'review_requested'
     steps:
@@ -66,7 +66,7 @@ jobs:
           resource_node_id: ${{ github.event.pull_request.node_id }}
           status_value: ${{ env.in_review }} # Target status
   pr_changesrequested:
-    name: Move associated card to "${{ env.changes_requested }}" if changes are requested on PR
+    name: Move associated card if changes are requested on PR
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request_review' && github.event.action == 'submitted' && github.event.review.state == 'changes_requested'
     steps:
