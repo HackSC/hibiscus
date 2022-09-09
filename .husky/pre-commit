@@ -1,8 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-npx nx affected --target=lint
-npx nx affected --target=test
-
 npm run format
 git add -A
