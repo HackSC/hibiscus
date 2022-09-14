@@ -5,11 +5,10 @@ WORKDIR /app
 COPY . .
 
 RUN yarn install --frozen-lockfile
-RUN yarn build
+RUN yarn nx run <%= name %>:build:production
 
 FROM node:16-alpine
 
 COPY --from=BUILD_IMAGE /app/dist/ ./dist/
-COPY package.json .
 
-CMD [ "yarn", "serve:production" ]
+CMD [ "node", "dist/apps/<%= name %>/main.js" ]

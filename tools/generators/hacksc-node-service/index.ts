@@ -9,7 +9,6 @@ import {
 import { applicationGenerator } from '@nrwl/express';
 import { Linter } from '@nrwl/linter';
 import { createDirectory } from 'nx/src/utils/fileutils';
-import { fileExists } from 'nx/src/utils/workspace-root';
 import { GeneratorOptions } from './schema';
 
 export default async function (tree: Tree, schema: GeneratorOptions) {
@@ -27,21 +26,22 @@ export default async function (tree: Tree, schema: GeneratorOptions) {
 
   const projectSourcesLocation = readProjectConfiguration(tree, schema.name)
     .sourceRoot!;
-  console.log(projectSourcesLocation);
 
   // creating standard folders for our architecture
-  const requiredFolders = [
+  const requiredSubfolders = [
     'controllers',
     'services',
     'routers',
     'repositories',
     'mappers',
   ];
-  requiredFolders.forEach((folderName) => {
-    createDirectory(
-      joinPathFragments(projectSourcesLocation, `./${folderName}`)
+  requiredSubfolders.forEach((folderName) => {
+    const subfolderDirectoryPath = joinPathFragments(
+      projectSourcesLocation,
+      `./${folderName}`
     );
-    fileExists;
+    createDirectory(subfolderDirectoryPath);
+    tree.write(joinPathFragments(subfolderDirectoryPath, '.gitkeep'), '');
   });
 
   // any template files
