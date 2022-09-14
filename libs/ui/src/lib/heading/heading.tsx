@@ -2,8 +2,8 @@ import styled from 'styled-components';
 
 export const H1 = styled.h1`
   font-weight: 600;
-  margin-top: -30px;
-  margin-bottom: -20px;
+  margin-top: 0;
+  margin-bottom: 0;
 `;
 export const H2 = styled.h2`
   font-weight: 600;
