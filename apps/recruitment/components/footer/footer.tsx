@@ -28,6 +28,13 @@ export function Footer(props: FooterProps) {
       href: 'https://www.instagram.com/hackscofficial/',
     },
   ];
+  const Vercel: { href: string; src: string; alt: string }[] = [
+    {
+      src: '/img/vercel.svg',
+      alt: 'Vercel',
+      href: 'https://www.vercel.com/hacksc/',
+    },
+  ];
 
   return (
     <FooterWrapper>
@@ -40,6 +47,13 @@ export function Footer(props: FooterProps) {
           </IconContainer>
         ))}
       </SocialMediaContainer>
+      {Vercel.map(({ href, src, alt }) => (
+        <IconContainerV key={alt}>
+          <Link href={href}>
+            <Image src={src} alt={alt} layout="fill" />
+          </Link>
+        </IconContainerV>
+      ))}
     </FooterWrapper>
   );
 }
@@ -71,6 +85,28 @@ const IconContainer = styled.div`
   }
   @media (max-width: 320px) {
     padding-left: 0.5rem;
+    margin-left: 0.25rem;
+  }
+`;
+
+const IconContainerV = styled.div`
+  position: relative;
+  width: 4rem;
+  height: 2rem;
+  padding: 5rem 4rem 0;
+  margin: 0 1rem;
+  transition: ease-in-out 0.1s;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+
+  @media (max-width: 425px) {
+    width: 2rem;
+    height: 2rem;
+  }
+  @media (max-width: 320px) {
+    padding-left: 1rem;
     margin-left: 0.25rem;
   }
 `;
