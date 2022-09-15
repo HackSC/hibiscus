@@ -55,18 +55,24 @@ const StyledHero = styled.div`
 `;
 const LeftSection = styled.div`
   flex-basis: 60%;
+  @media (min-width: 1440px) {
+    width: 30vw;
+    height: 30vw;
+    margin-right: -10rem;
+  }
 `;
 const RightSection = styled.div`
   flex-basis: 30%;
   @media (max-width: 1080px) {
-    margin-top: 5rem;
+    margin-top: 15rem;
   }
   > img {
     width: 27vw;
     height: 27vw;
-    @media (max-width: 1240px) {
+    @media (min-width: 1440px) {
       width: 30vw;
       height: 30vw;
+      margin-right: 5rem;
     }
     @media (max-width: 1080px) {
       width: 60vw;
