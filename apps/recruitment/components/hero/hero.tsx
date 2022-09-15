@@ -59,12 +59,16 @@ const LeftSection = styled.div`
   @media (min-width: 1440px) {
     width: 30vw;
     height: 30vw;
+<<<<<<< HEAD
+=======
+    margin-right: -10rem;
+>>>>>>> ab7d2c2 (Moved lightbulb a little to the left for screens >1440 SIT-7)
   }
 `;
 const RightSection = styled.div`
   flex-basis: 40%;
   @media (max-width: 1080px) {
-    margin-top: 5rem;
+    margin-top: 15rem;
   }
   > img {
     width: 27vw;
@@ -72,6 +76,7 @@ const RightSection = styled.div`
     @media (min-width: 1440px) {
       width: 30vw;
       height: 30vw;
+      margin-right: 5rem;
     }
     @media (max-width: 1080px) {
       width: 60vw;
