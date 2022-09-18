@@ -58,7 +58,6 @@ const LeftSection = styled.div`
   @media (min-width: 1440px) {
     width: 30vw;
     height: 30vw;
-    margin-right: -10rem;
   }
 `;
 const RightSection = styled.div`
@@ -72,7 +71,7 @@ const RightSection = styled.div`
     @media (min-width: 1440px) {
       width: 30vw;
       height: 30vw;
-      margin-right: 5rem;
+      margin-left: -5rem;
     }
     @media (max-width: 1080px) {
       width: 60vw;
