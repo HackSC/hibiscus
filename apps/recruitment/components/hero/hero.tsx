@@ -23,13 +23,13 @@ export function Hero(props: HeroProps) {
             <GradientSpan>we want you on our team</GradientSpan>!
           </HeroText>
         </Container>
-        <a
+        {/* <a
           href="https://forms.gle/43M1FgCydFhFJerCA"
           rel="noreferrer"
           target="_blank"
         >
           <GradientButton type="submit">APPLY NOW</GradientButton>
-        </a>
+        </a> */}
       </LeftSection>
       <RightSection>
         <img src="/img/lightbulb.png" alt="Light Bulb" />
@@ -44,11 +44,12 @@ const StyledHero = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-evenly;
   margin-right: auto;
-  margin-left: auto;
+  margin-left: 10vw;
   margin-top: 17rem;
   @media (max-width: 1080px) {
+    margin-left: auto;
     margin-top: 7rem;
     flex-direction: column;
   }
@@ -61,9 +62,9 @@ const LeftSection = styled.div`
   }
 `;
 const RightSection = styled.div`
-  flex-basis: 30%;
+  flex-basis: 40%;
   @media (max-width: 1080px) {
-    margin-top: 15rem;
+    margin-top: 5rem;
   }
   > img {
     width: 27vw;
@@ -71,7 +72,6 @@ const RightSection = styled.div`
     @media (min-width: 1440px) {
       width: 30vw;
       height: 30vw;
-      margin-left: -5rem;
     }
     @media (max-width: 1080px) {
       width: 60vw;
