@@ -1,18 +1,14 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
 import { EmployeeInsertInterface } from '@hacksc-platforms/types';
+import { injectable } from 'tsyringe';
 
-const supabaseUrl = 'http://localhost:54321';
-const anonKey =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6ImFub24ifQ.625_WdcF3KHqz5amU0x2X5WWHP-OEs_4qj0ssLNHzTs';
-
+@injectable()
 export class UserRepository {
-  private readonly supabaseClient: SupabaseClient = createClient(
-    supabaseUrl,
-    anonKey
-  );
+  constructor(private readonly hibiscusSupabase: HibiscusSupabaseClient) {}
 
-  async createEmployee(data: EmployeeInsertInterface[]) {
-    const response = await this.supabaseClient
+  async createEmployees(data: EmployeeInsertInterface[]) {
+    const response = await this.hibiscusSupabase
+      .getClient()
       .from<EmployeeInsertInterface>('employees')
       .throwOnError()
       .insert(data);
