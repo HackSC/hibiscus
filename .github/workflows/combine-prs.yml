@@ -1,2 +1,0 @@
-- name: Github Action Merge Dependabot
-  uses: fastify/github-action-merge-dependabot@v3.0.2
