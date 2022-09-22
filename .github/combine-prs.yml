@@ -2,9 +2,6 @@ name: Github Action Merge Dependabot
 on: [push, pull_request]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
   automerge:
     needs: build
     runs-on: ubuntu-latest
