@@ -17,8 +17,13 @@
     "paths": {
       "@hacksc-platforms/analytics": ["libs/analytics/src/index.ts"],
       "@hacksc-platforms/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@hacksc-platforms/hibiscus-supabase-client": [
+        "libs/hibiscus-supabase-client/src/index.ts"
+      ],
       "@hacksc-platforms/styles": ["libs/styles/src/index.ts"],
-      "@hacksc-platforms/ui": ["libs/ui/src/index.ts"]
+      "@hacksc-platforms/types": ["libs/types/src/index.ts"],
+      "@hacksc-platforms/ui": ["libs/ui/src/index.ts"],
+      "@hacksc-platforms/user-repository": ["libs/user-repository/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

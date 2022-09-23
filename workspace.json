@@ -4,10 +4,13 @@
   "projects": {
     "analytics": "libs/analytics",
     "api-interfaces": "libs/api-interfaces",
+    "hibiscus-supabase-client": "libs/hibiscus-supabase-client",
     "interim": "apps/interim",
     "recruitment": "apps/recruitment",
     "styles": "libs/styles",
+    "types": "libs/types",
     "ui": "libs/ui",
+    "user-repository": "libs/user-repository",
     "www-2023": "apps/www-2023"
   }
 }
