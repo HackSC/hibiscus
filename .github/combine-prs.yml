@@ -3,7 +3,6 @@ on: [push, pull_request]
 
 jobs:
   automerge:
-    needs: build
     runs-on: ubuntu-latest
 
     permissions:
