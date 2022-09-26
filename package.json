@@ -45,7 +45,7 @@
     "@nrwl/jest": "14.2.2",
     "@nrwl/linter": "14.2.2",
     "@nrwl/next": "^14.2.4",
-    "@nrwl/node": "14.2.2",
+    "@nrwl/node": "14.7.13",
     "@nrwl/nx-cloud": "latest",
     "@nrwl/react": "14.2.2",
     "@nrwl/web": "14.2.2",
