@@ -1,5 +1,7 @@
 import axios, { Axios } from 'axios';
 
+const HIBISCUS_GIT_REPO_URL = 'HackSC/hibiscus';
+
 // a class to host our clients
 export class VercelAPIClient {
   private vercelToken: string;
@@ -28,6 +30,10 @@ export class VercelAPIClient {
         name: appName,
         framework: 'nextjs',
         buildCommand: `npx nx run ${appName}:build --prod --no-cache && npx nx run ${appName}:export`,
+        gitRepository: {
+          repo: HIBISCUS_GIT_REPO_URL,
+          type: 'github',
+        },
         outputDirectory: `dist/apps/${appName}/.next`,
       },
     });
