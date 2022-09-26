@@ -16,6 +16,7 @@
     "style": {
       "type": "string",
       "description": "Stylesheet formatter to use",
+      "default": "styled-components",
       "x-prompt": {
         "message": "What styling formatter do you want to use?",
         "type": "list",
@@ -37,7 +38,8 @@
     },
     "e2e": {
       "type": "string",
-      "description": "",
+      "description": "E2E or not to E2E",
+      "default": "none",
       "x-prompt": {
         "message": "E2E test runner (this will create a APP_NAME-e2e folder for this app)",
         "type": "list",
