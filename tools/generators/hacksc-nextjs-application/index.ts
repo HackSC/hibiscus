@@ -37,7 +37,7 @@ export default async function (tree: Tree, schema: GeneratorOptions) {
     } else {
       console.log(
         '\x1b[35m',
-        `Dry run detected; no Vercel project was created`
+        `Dry run mode detected; no Vercel project was created`
       );
     }
 

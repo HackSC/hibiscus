@@ -35,6 +35,7 @@ export class VercelAPIClient {
           type: 'github',
         },
         outputDirectory: `dist/apps/${appName}/.next`,
+        commandForIgnoringBuildStep: `bash ./tools/scripts/vercel-affected-nx-ignore.sh ${appName}`,
       },
     });
   }
