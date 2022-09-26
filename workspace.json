@@ -8,7 +8,6 @@
     "interim": "apps/interim",
     "recruitment": "apps/recruitment",
     "styles": "libs/styles",
-    "test": "apps/test",
     "types": "libs/types",
     "ui": "libs/ui",
     "user-repository": "libs/user-repository",
