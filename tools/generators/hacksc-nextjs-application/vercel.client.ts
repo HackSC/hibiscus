@@ -29,7 +29,7 @@ export class VercelAPIClient {
       data: {
         name: appName,
         framework: 'nextjs',
-        buildCommand: `npx nx run ${appName}:build --prod --no-cache && npx nx run ${appName}:export`,
+        buildCommand: `npx nx run ${appName}:build --prod --no-cache`,
         gitRepository: {
           repo: HIBISCUS_GIT_REPO_URL,
           type: 'github',
