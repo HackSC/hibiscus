@@ -7,6 +7,7 @@
     "build": "nx run-many --target=build --all",
     "test": "nx run-many --target=test --all",
     "format": "prettier --write --cache --cache-strategy metadata .",
+    "supabase:gen-types": "supabase gen types typescript --local > ./libs/types/src/lib/supabase.gen.d.ts",
     "prepare": "husky install"
   },
   "private": true,

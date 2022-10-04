@@ -2,12 +2,7 @@
 import 'reflect-metadata';
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
-import { config } from 'dotenv';
 import { injectable } from 'tsyringe';
-
-config({
-  path: '.supabase.env',
-});
 
 @injectable()
 export class HibiscusSupabaseClient {

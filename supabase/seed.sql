@@ -1,6 +1,8 @@
--- in supabase/seed.sql
-insert into public.employees (name)
-values
-  ('Erlich Backman'),
-  ('Richard Hendricks'),
-  ('Monica Hall');
+-- inserting roles
+INSERT INTO public.roles(name) VALUES
+  ('SUPERADMIN'),
+  ('TEAM_MEMBER'),
+  ('SPONSOR'),
+  ('VOLUNTEER'),
+  ('HACKER'),
+  ('APPLICANT')
