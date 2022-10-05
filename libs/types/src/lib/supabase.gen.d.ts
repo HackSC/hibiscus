@@ -9,18 +9,44 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      employees: {
+      roles: {
         Row: {
           id: number;
-          name: string | null;
+          name: string;
+          created_at: string | null;
         };
         Insert: {
-          id?: never;
-          name?: string | null;
+          id?: number;
+          name: string;
+          created_at?: string | null;
         };
         Update: {
-          id?: never;
-          name?: string | null;
+          id?: number;
+          name?: string;
+          created_at?: string | null;
+        };
+      };
+      user_profiles: {
+        Row: {
+          first_name: string;
+          last_name: string;
+          user_id: string;
+          role: number | null;
+          created_at: string | null;
+        };
+        Insert: {
+          first_name: string;
+          last_name: string;
+          user_id: string;
+          role?: number | null;
+          created_at?: string | null;
+        };
+        Update: {
+          first_name?: string;
+          last_name?: string;
+          user_id?: string;
+          role?: number | null;
+          created_at?: string | null;
         };
       };
     };

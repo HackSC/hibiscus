@@ -10,7 +10,6 @@
     "styles": "libs/styles",
     "types": "libs/types",
     "ui": "libs/ui",
-    "user-repository": "libs/user-repository",
     "www-2023": "apps/www-2023"
   }
 }
