@@ -4,29 +4,27 @@ import { GradientSpan, Link, Text } from '@hacksc-platforms/ui';
 import { TrademarkColors } from '@hacksc-platforms/styles';
 
 /* eslint-disable-next-line */
-export interface LoginCardProps {}
+export interface SignUpProps {}
 
-export function LoginCard(props: LoginCardProps) {
+export function SignUpCard(props: SignUpProps) {
   return (
     <StyledLoginCard>
       <img src="/images/Logo.svg" alt="HackSC Logo" width="100px" />
       <StyledText>
-        Login to your <GradientSpan>HackSC Account</GradientSpan>
+        Create a <GradientSpan>HackSC Account</GradientSpan>
       </StyledText>
-      <Input placeholder="enter your email" type="email" />
-      <Input placeholder="enter your password" type="password" />
+      <Input placeholder="sample@email.edu" type="email" />
+      <Input placeholder="password" type="password" />
+      <Input placeholder="re-enter password" type="password" />
       <GradientButton>SUBMIT</GradientButton>
       <u>
-        <StyledLink href="/reset"> Forgot password?</StyledLink>
-      </u>
-      <u>
-        <StyledLink href="/signup"> Create a HackSC account</StyledLink>
+        <StyledLink href="/login"> Have an account? Login</StyledLink>
       </u>
     </StyledLoginCard>
   );
 }
 
-export default LoginCard;
+export default SignUpCard;
 
 const StyledLoginCard = styled.div`
   color: #2b2b2b;
