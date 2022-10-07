@@ -5,7 +5,7 @@ import { TrademarkColors } from '@hacksc-platforms/styles';
 export function Index() {
   return (
     <MainPageWrapper>
-        <LoginCard/>
+      <LoginCard />
     </MainPageWrapper>
   );
 }
