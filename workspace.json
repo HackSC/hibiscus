@@ -6,7 +6,6 @@
     "api-interfaces": "libs/api-interfaces",
     "hibiscus-supabase-client": "libs/hibiscus-supabase-client",
     "interim": "apps/interim",
-    "matchsc": "apps/matchsc",
     "recruitment": "apps/recruitment",
     "styles": "libs/styles",
     "types": "libs/types",
