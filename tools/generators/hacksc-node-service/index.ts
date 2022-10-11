@@ -56,7 +56,7 @@ export default async function (tree: Tree, schema: GeneratorOptions) {
   generateFiles(
     tree,
     joinPathFragments(__dirname, './files'),
-    projectSourcesLocation,
+    joinPathFragments(projectSourcesLocation, '../'),
     {
       tmpl: '',
       name: schema.name,
