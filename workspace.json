@@ -8,6 +8,7 @@
     "hackform-client": "libs/hackform-client",
     "hibiscus-supabase-client": "libs/hibiscus-supabase-client",
     "interim": "apps/interim",
+    "log-server": "apps/log-server",
     "recruitment": "apps/recruitment",
     "styles": "libs/styles",
     "types": "libs/types",
