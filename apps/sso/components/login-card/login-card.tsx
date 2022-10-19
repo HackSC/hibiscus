@@ -1,6 +1,7 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
-import { GradientSpan, Link, Text } from '@hacksc-platforms/ui';
+import { GradientSpan, Text } from '@hacksc-platforms/ui';
 import { TrademarkColors } from '@hacksc-platforms/styles';
 
 /* eslint-disable-next-line */
@@ -15,13 +16,13 @@ export function LoginCard(props: LoginCardProps) {
       </StyledText>
       <Input placeholder="enter your email" type="email" />
       <Input placeholder="enter your password" type="password" />
-      <GradientButton>SUBMIT</GradientButton>
-      <u>
-        <StyledLink href="/reset"> Forgot password?</StyledLink>
-      </u>
-      <u>
-        <StyledLink href="/signup"> Create a HackSC account</StyledLink>
-      </u>
+      <GradientButton>SIGN IN</GradientButton>
+      <a href='/reset' rel='noreferrer'>
+        <StyledLink> Forgot Password?</StyledLink>
+      </a>
+      <a href='/signup' rel='noreferrer'>
+        <StyledLink> Create a HackSC account</StyledLink>
+      </a>
     </StyledLoginCard>
   );
 }
@@ -51,12 +52,19 @@ const Input = styled.input`
   background-color: #f8f8f8;
   border-radius: 0.3rem;
   padding: 10px;
-  padding-left: 25px;
+  padding-left: 15px;
   font-family: InterVariable, sans-serif;
   font-size: 1.1rem;
   color: #676767;
   width: 120%;
   margin-top: 1rem;
+  ::placeholder {
+    color: #bcbcbc;
+  }
+  ::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: #bcbcbc;
+  }
 `;
 
 const GradientButton = styled.button`
@@ -71,13 +79,13 @@ const GradientButton = styled.button`
   padding: 10px 15px;
   margin-top: 1rem;
   margin-bottom: 1rem;
-  width: 30%;
+  width: 50%;
   font-size: 1.1rem;
   font-weight: bold;
 `;
 
-const StyledLink = styled(Link)`
-  font-size:0.7rem
-  text-color: #939393;
+const StyledLink = styled(Text)`
+  font-size: 1rem;
+  color: #939393;
   text-decoration: underline;
 `;

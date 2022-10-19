@@ -1,33 +1,28 @@
-/* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
 import { GradientSpan, Text } from '@hacksc-platforms/ui';
 import { TrademarkColors } from '@hacksc-platforms/styles';
 
 /* eslint-disable-next-line */
-export interface SignUpProps {}
+export interface ResetCardProps {}
 
-export function SignUpCard(props: SignUpProps) {
+export function ResetCard(props: ResetCardProps) {
   return (
-    <StyledLoginCard>
+    <StyledResetCard>
       <img src="/images/Logo.svg" alt="HackSC Logo" width="100px" />
       <StyledText>
-        Create a <GradientSpan>HackSC Account</GradientSpan>
+        Reset your <GradientSpan>HackSC Account</GradientSpan>
       </StyledText>
-      <Input placeholder="sample@email.edu" type="email" />
-      <Input placeholder="password" type="password" />
-      <Input placeholder="re-enter password" type="password" />
-      <GradientButton>SIGN UP</GradientButton>
-      <a href='/login' rel='noreferrer'>
-        <StyledLink> Have an account? Login</StyledLink>
-      </a>
-    </StyledLoginCard>
+      <Input placeholder="new password" type="password" />
+      <Input placeholder="re-enter your new password" type="password" />
+      <GradientButton>SUBMIT</GradientButton>
+    </StyledResetCard>
   );
 }
 
-export default SignUpCard;
+export default ResetCard;
 
-const StyledLoginCard = styled.div`
+const StyledResetCard = styled.div`
   color: #2b2b2b;
   background-color: rgba(255, 255, 255, 0.6);
   padding: 5rem;
@@ -82,8 +77,3 @@ const GradientButton = styled.button`
   font-weight: bold;
 `;
 
-const StyledLink = styled(Text)`
-  font-size: 1rem;
-  color: #939393;
-  text-decoration: underline;
-`;
