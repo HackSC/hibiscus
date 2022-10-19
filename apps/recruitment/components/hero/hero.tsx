@@ -64,7 +64,7 @@ const LeftSection = styled.div`
 const RightSection = styled.div`
   flex-basis: 40%;
   @media (max-width: 1080px) {
-    margin-top: 15rem;
+    margin-top: 5rem;
   }
   > img {
     width: 27vw;
