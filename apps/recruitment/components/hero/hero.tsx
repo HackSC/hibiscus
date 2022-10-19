@@ -59,13 +59,6 @@ const LeftSection = styled.div`
   @media (min-width: 1440px) {
     width: 30vw;
     height: 30vw;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-    margin-right: -10rem;
->>>>>>> ab7d2c2 (Moved lightbulb a little to the left for screens >1440 SIT-7)
-=======
->>>>>>> 30b99ac (SIT-7 updated lightbulb margin)
   }
 `;
 const RightSection = styled.div`
