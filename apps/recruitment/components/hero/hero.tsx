@@ -72,7 +72,6 @@ const RightSection = styled.div`
     @media (min-width: 1440px) {
       width: 30vw;
       height: 30vw;
-      margin-left: -5rem;
     }
     @media (max-width: 1080px) {
       width: 60vw;
