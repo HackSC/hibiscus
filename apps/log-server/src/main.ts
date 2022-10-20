@@ -4,12 +4,13 @@
  */
 
 import * as express from 'express';
+import LogController from './controllers/log.controller';
 
 const app = express();
+const router = express.Router();
 
-app.get('/api', (req, res) => {
-  res.send({ message: 'Welcome to log-server!' });
-});
+router.post('/', LogController.createLog);
+router.get('/', LogController.getLog);
 
 const port = process.env.port || 3333;
 const server = app.listen(port, () => {

@@ -4,7 +4,7 @@ import { LogRepository } from '../repositories/log.repository';
 import { status_code } from '../status-code';
 
 @injectable()
-export class LogController {
+class LogController {
   async createLog(req: express.Request, res: express.Response) {
     const userRepo = container.resolve(LogRepository);
 
@@ -21,11 +21,11 @@ export class LogController {
     }
   }
 
-  // async getLog(req: express.Request, res: express.Response) {
-  //   const userRepo = container.resolve(LogRepository)
+  async getLog(req: express.Request, res: express.Response) {
+    const userRepo = container.resolve(LogRepository);
 
-  //   res.send()
-  // }
+    res.send();
+  }
 
   // async getHello(req: express.Request, res: express.Response) {
   //   const userRepo = container.resolve(UserRepository);
@@ -33,3 +33,5 @@ export class LogController {
   //   res.send('hello, ' + userid);
   // }
 }
+
+export default new LogController();
