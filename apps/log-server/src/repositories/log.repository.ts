@@ -6,6 +6,8 @@ import {
   UnknownRepositoryError,
 } from './repository.error';
 
+import { randomUUID } from 'crypto';
+
 const INDEX_LOG = 'log';
 const INDEX_SCHEMA = 'schema';
 const LIMIT = 20;
@@ -26,22 +28,8 @@ export class LogRepository {
    * To be run once at server startup
    */
   async initDb() {
-    // Set up indices
-    const indexLog = await this.client.index(INDEX_LOG).getRawInfo();
-    if (indexLog.primaryKey === undefined) {
-      await this.client.updateIndex(INDEX_LOG, { primaryKey: '_id' });
-    }
-
-    const indexSchema = await this.client.index(INDEX_SCHEMA).getRawInfo();
-    if (indexSchema.primaryKey === undefined) {
-      await this.client.updateIndex(INDEX_SCHEMA, { primaryKey: 'type' });
-    }
-
-    // Make type filterable
-    await this.client.index(INDEX_LOG).updateFilterableAttributes(['_type']);
-
-    // Make time sortable
-    await this.client.index(INDEX_LOG).updateSortableAttributes(['_time']);
+    await this.initLogIndex();
+    await this.initSchemaIndex();
   }
 
   /**
@@ -55,7 +43,7 @@ export class LogRepository {
    */
   async insertLog(log: Log, type: string, time: number) {
     // Generate primary key
-    const id = crypto.randomUUID();
+    const id = randomUUID();
 
     try {
       await this.client
@@ -88,7 +76,7 @@ export class LogRepository {
     page?: number;
   }): Promise<any[]> {
     // Set up filters
-    const filter = type !== undefined ? `type = ${type}` : '';
+    const filter = type !== undefined ? `_type = '${type}'` : '';
 
     // Set up sorting
     const sort = sortMethod !== undefined ? [sortMethod] : [];
@@ -147,6 +135,20 @@ export class LogRepository {
       // else
       return new UnknownRepositoryError(e);
     }
+  }
+
+  private async initLogIndex() {
+    await this.client.createIndex(INDEX_LOG, { primaryKey: '_id' });
+
+    // Make type filterable
+    await this.client.index(INDEX_LOG).updateFilterableAttributes(['_type']);
+
+    // Make time sortable
+    await this.client.index(INDEX_LOG).updateSortableAttributes(['_time']);
+  }
+
+  private async initSchemaIndex() {
+    await this.client.createIndex(INDEX_SCHEMA, { primaryKey: 'type' });
   }
 }
 
