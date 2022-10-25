@@ -129,11 +129,11 @@ export class LogRepository {
     } catch (e) {
       if (e instanceof MeiliSearchApiError) {
         if (e.code === 'document_not_found') {
-          return new SchemaNotFoundError(type);
+          throw new SchemaNotFoundError(type);
         }
       }
       // else
-      return new UnknownRepositoryError(e);
+      throw new UnknownRepositoryError(e);
     }
   }
 
