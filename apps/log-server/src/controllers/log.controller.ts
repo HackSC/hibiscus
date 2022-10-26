@@ -5,19 +5,30 @@ import { status_code } from '../status-code';
 
 @injectable()
 class LogController {
+  /**
+   * Setup constructor
+   */
+  async initialize() {
+    const userRepo = container.resolve(LogRepository);
+    await userRepo.initDB();
+  }
+
+  /**
+   * create new log into database
+   * @param req - incoming request
+   * @param res - outgoing response
+   */
   async createLog(req: express.Request, res: express.Response) {
     const userRepo = container.resolve(LogRepository);
-
     // schema validation step
 
-    // call repo function
+    // call repo method
     const timeOfLogCreation = Date.now();
-    const response = await userRepo.createLog(req.body.log, timeOfLogCreation);
-
-    if (response == status_code.SUCCESS) {
-      res.status(404).send('Database Error');
-    } else if (response == status_code.FAILURE) {
-      res.status(201).send('New Log Created');
+    try {
+      await userRepo.insertLog(req.body.log, req.body.type, timeOfLogCreation);
+      res.status(200).json({ message: 'New log added successfully' });
+    } catch (err) {
+      res.status(500).json({ message: err.message });
     }
   }
 
