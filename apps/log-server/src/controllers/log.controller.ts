@@ -1,7 +1,7 @@
+import { installPackagesTask } from '@nrwl/devkit';
 import * as express from 'express';
 import { container, injectable } from 'tsyringe';
 import { LogRepository } from '../repositories/log.repository';
-import { status_code } from '../status-code';
 
 @injectable()
 class LogController {
@@ -14,7 +14,7 @@ class LogController {
   }
 
   /**
-   * create new log into database
+   * Create new log into database
    * @param req - incoming request
    * @param res - outgoing response
    */
@@ -25,24 +25,36 @@ class LogController {
     // call repo method
     const timeOfLogCreation = Date.now();
     try {
-      await userRepo.insertLog(req.body.log, req.body.type, timeOfLogCreation);
+      const log = req.body.log;
+      const type = req.body.type;
+      await userRepo.insertLog(log, type, timeOfLogCreation);
       res.status(200).json({ message: 'New log added successfully' });
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
   }
 
+  /**
+   * Retrieve logs based on input parameter
+   * @param req incoming request
+   * @param res outgoing response (list of logs)
+   */
   async getLog(req: express.Request, res: express.Response) {
     const userRepo = container.resolve(LogRepository);
+    // schema validation step
 
-    res.send();
+    // call repo method
+    try {
+      const type = req.body.log;
+      const query = req.body.query;
+      const sortMethod = req.body.sortMethod;
+      const page = req.body.page;
+      const log = await userRepo.getLogs(type, query, sortMethod, page);
+      res.status(200).json(log);
+    } catch (err) {
+      res.status(500).json({ message: err.message });
+    }
   }
-
-  // async getHello(req: express.Request, res: express.Response) {
-  //   const userRepo = container.resolve(UserRepository);
-  //   const userid = await userRepo.getUsers('1');
-  //   res.send('hello, ' + userid);
-  // }
 }
 
 export default new LogController();
