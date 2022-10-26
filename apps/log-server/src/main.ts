@@ -8,6 +8,8 @@ import LogController from './controllers/log.controller';
 
 const app = express();
 const router = express.Router();
+app.use(express.json());
+LogController.initialize();
 
 router.post('/', LogController.createLog);
 router.get('/', LogController.getLog);
