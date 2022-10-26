@@ -4,6 +4,7 @@
   "projects": {
     "analytics": "libs/analytics",
     "api-interfaces": "libs/api-interfaces",
+    "dashboard": "apps/dashboard",
     "hibiscus-supabase-client": "libs/hibiscus-supabase-client",
     "interim": "apps/interim",
     "recruitment": "apps/recruitment",
