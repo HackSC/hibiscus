@@ -45,12 +45,15 @@ export class LogRepository {
     // Generate primary key
     const id = randomUUID();
 
-    try {
-      await this.client
-        .index(INDEX_LOG)
-        .addDocuments([{ _id: id, _type: type, _time: time, ...log }]);
-    } catch (e) {
-      throw new UnknownRepositoryError(e);
+    const { taskUid } = await this.client
+      .index(INDEX_LOG)
+      .addDocuments([{ _id: id, _type: type, _time: time, ...log }]);
+
+    const task = await this.client.waitForTask(taskUid);
+
+    // Check for failure
+    if (task.status === 'failed') {
+      throw new UnknownRepositoryError(task.error?.message ?? '');
     }
   }
 
@@ -101,16 +104,19 @@ export class LogRepository {
    * @throws {UnknownRepositoryError} unknown error occured
    */
   async insertSchema(type: string, schema: Schema) {
-    try {
-      await this.client.index(INDEX_SCHEMA).addDocuments([{ type, schema }]);
-    } catch (e) {
-      if (e instanceof MeiliSearchApiError) {
-        if (e.code === 'invalid_document_id') {
-          throw new InvalidSchemaTypeError(type);
-        }
+    const { taskUid } = await this.client
+      .index(INDEX_SCHEMA)
+      .addDocuments([{ type, schema }]);
+
+    const task = await this.client.waitForTask(taskUid);
+
+    // Check for task failure
+    if (task.status === 'failed') {
+      if (task.error?.code === 'invalid_document_id') {
+        throw new InvalidSchemaTypeError(type);
+      } else {
+        throw new UnknownRepositoryError(task.error?.message);
       }
-      // else
-      throw new UnknownRepositoryError(e);
     }
   }
 

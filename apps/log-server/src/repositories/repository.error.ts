@@ -19,12 +19,19 @@ export class InvalidSchemaTypeError extends Error {
 }
 
 export class UnknownRepositoryError extends Error {
-  baseError: Error;
+  baseError: unknown;
+  constructor(error: unknown) {
+    let message = '';
+    if (error instanceof Error) {
+      message = error.message;
+    } else if (typeof error === 'string') {
+      message = error;
+    }
 
-  constructor(error: Error) {
     super(
-      `Unknown error occured while accessing/modifying the repository: ${error.message}`
+      `Unknown error occured while accessing/modifying the repository: ${message}`
     );
+
     this.baseError = error;
   }
 }
