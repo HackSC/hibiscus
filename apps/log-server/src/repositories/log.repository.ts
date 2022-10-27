@@ -29,6 +29,7 @@ export class LogRepository {
    * To be run once at server startup
    *
    * @throws {ConnectionError} connection to database failed
+   * @throws {AuthorizationError} missing or invalid API key
    * @throws {UnknownRepositoryError} unknown error occured
    */
   async initDb() {
@@ -44,6 +45,7 @@ export class LogRepository {
    * @param time - UNIX timestamp
    *
    * @throws {ConnectionError} connection to database failed
+   * @throws {AuthorizationError} missing or invalid API key
    * @throws {UnknownRepositoryError} unknown error occured
    */
   async insertLog(log: Log, type: string, time: number) {
@@ -77,6 +79,7 @@ export class LogRepository {
    * @returns Promise object which resolves to a list of matching logs
    *
    * @throws {ConnectionError} connection to database failed
+   * @throws {AuthorizationError} missing or invalid API key
    * @throws {UnknownRepositoryError} unknown error occured
    */
   async getLogs({
@@ -118,6 +121,7 @@ export class LogRepository {
    *
    * @throws {InvalidSchemaTypeError} schema type provided is invalid
    * @throws {ConnectionError} connection to database failed
+   * @throws {AuthorizationError} missing or invalid API key
    * @throws {UnknownRepositoryError} unknown error occured
    */
   async insertSchema(type: string, schema: Schema) {
@@ -148,6 +152,7 @@ export class LogRepository {
    *
    * @throws {SchemaNotFoundError} no schema is found for the requested type
    * @throws {ConnectionError} connection to database failed
+   * @throws {AuthorizationError} missing or invalid API key
    * @throws {UnknownRepositoryError} unknown error occured
    */
   async getSchema(type: string): Promise<Schema> {
