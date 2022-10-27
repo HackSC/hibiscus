@@ -44,24 +44,23 @@ a {
   text-decoration: inherit;
 }
 #mainDiv {
-  display: grid;
-  grid-template-columns: (5, 1fr);
-  grid-column-gap: 7%;
+  display: flex;
+  /* grid-template-columns: (8, 1fr);
+  grid-column-gap: 7%; */
   width: 90vw;
   height: 80vh;
   margin: 0 auto;
+  justify-content: space-between;
 }
 #nav {
   background-color: #d9d9d9;
-  grid-column-start: 1;
-  grid-column-end: 1;
-  border: 1px black solid;
+  width: 25%;
 }
 #welcomeDiv {
   background-color: #d9d9d9;
-  grid-column-start: 2;
-  grid-column-end: 5;
-  border: 1px black solid;
+  /* grid-column-start: 2;
+  grid-column-end: 7; */
+  width: 70%;
 }
 #welcomeDiv h1 {
   margin: 10px;
@@ -72,7 +71,6 @@ a {
   margin-left: 30px;
 }
 ul {
-  border: 1px black solid;
   height: 75%;
   width: 80%;
   text-align: left;
@@ -86,4 +84,35 @@ li {
   font-weight: 400;
   font-size: 20px;
   margin-top: 10px;
+}
+
+/* CODE FOR POINTR PAGE */
+
+input {
+  width: 100%;
+  height: 40px;
+  border-radius: 10%;
+  outline: none;
+}
+
+input[type='submit'] {
+  width: 60%;
+  height: 40px;
+  margin-top: 10px;
+  background: rgba(188, 188, 188, 0.68);
+  /* border-radius: 10px; */
+  color: #ffffffad;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 27px;
+  text-align: center;
+}
+
+.urltext {
+  margin: 15px;
+}
+#currentPage {
+  color: #4799e4;
 }
