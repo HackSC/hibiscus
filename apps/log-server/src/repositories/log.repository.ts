@@ -1,6 +1,7 @@
 import { injectable } from 'tsyringe';
 import { MeiliSearch, MeiliSearchApiError } from 'meilisearch';
 import {
+  handleRepositoryErrors,
   InvalidSchemaTypeError,
   SchemaNotFoundError,
   UnknownRepositoryError,
@@ -26,6 +27,9 @@ export class LogRepository {
   /**
    * Sets MeiliSearch settings
    * To be run once at server startup
+   *
+   * @throws {ConnectionError} connection to database failed
+   * @throws {UnknownRepositoryError} unknown error occured
    */
   async initDb() {
     await this.initLogIndex();
@@ -39,21 +43,26 @@ export class LogRepository {
    * @param type - the type of log that is inserted
    * @param time - UNIX timestamp
    *
+   * @throws {ConnectionError} connection to database failed
    * @throws {UnknownRepositoryError} unknown error occured
    */
   async insertLog(log: Log, type: string, time: number) {
     // Generate primary key
     const id = randomUUID();
 
-    const { taskUid } = await this.client
-      .index(INDEX_LOG)
-      .addDocuments([{ _id: id, _type: type, _time: time, ...log }]);
+    try {
+      const { taskUid } = await this.client
+        .index(INDEX_LOG)
+        .addDocuments([{ _id: id, _type: type, _time: time, ...log }]);
 
-    const task = await this.client.waitForTask(taskUid);
+      const task = await this.client.waitForTask(taskUid);
 
-    // Check for failure
-    if (task.status === 'failed') {
-      throw new UnknownRepositoryError(task.error?.message ?? '');
+      // Check for failure
+      if (task.status === 'failed') {
+        throw new UnknownRepositoryError(task.error?.message ?? '');
+      }
+    } catch (e) {
+      handleRepositoryErrors(e);
     }
   }
 
@@ -66,6 +75,9 @@ export class LogRepository {
    * @param options.page - the page number of returned results. Default 1
    *
    * @returns Promise object which resolves to a list of matching logs
+   *
+   * @throws {ConnectionError} connection to database failed
+   * @throws {UnknownRepositoryError} unknown error occured
    */
   async getLogs({
     type,
@@ -84,14 +96,18 @@ export class LogRepository {
     // Set up sorting
     const sort = sortMethod !== undefined ? [sortMethod] : [];
 
-    // Returns documents that match query, or placeholder search if query is not given
-    const res = await this.client.index(INDEX_LOG).search(query, {
-      filter,
-      sort,
-      offset: LIMIT * (page - 1),
-      limit: LIMIT,
-    });
-    return res.hits;
+    try {
+      // Returns documents that match query, or placeholder search if query is not given
+      const res = await this.client.index(INDEX_LOG).search(query, {
+        filter,
+        sort,
+        offset: LIMIT * (page - 1),
+        limit: LIMIT,
+      });
+      return res.hits;
+    } catch (e) {
+      handleRepositoryErrors(e);
+    }
   }
 
   /**
@@ -101,22 +117,27 @@ export class LogRepository {
    * @param schema - the schema object
    *
    * @throws {InvalidSchemaTypeError} schema type provided is invalid
+   * @throws {ConnectionError} connection to database failed
    * @throws {UnknownRepositoryError} unknown error occured
    */
   async insertSchema(type: string, schema: Schema) {
-    const { taskUid } = await this.client
-      .index(INDEX_SCHEMA)
-      .addDocuments([{ type, schema }]);
+    try {
+      const { taskUid } = await this.client
+        .index(INDEX_SCHEMA)
+        .addDocuments([{ type, schema }]);
 
-    const task = await this.client.waitForTask(taskUid);
+      const task = await this.client.waitForTask(taskUid);
 
-    // Check for task failure
-    if (task.status === 'failed') {
-      if (task.error?.code === 'invalid_document_id') {
-        throw new InvalidSchemaTypeError(type);
-      } else {
-        throw new UnknownRepositoryError(task.error?.message);
+      // Check for task failure
+      if (task.status === 'failed') {
+        if (task.error?.code === 'invalid_document_id') {
+          throw new InvalidSchemaTypeError(type);
+        } else {
+          throw new UnknownRepositoryError(task.error?.message);
+        }
       }
+    } catch (e) {
+      handleRepositoryErrors(e);
     }
   }
 
@@ -126,6 +147,7 @@ export class LogRepository {
    * @param type - the unique identifier of the schema
    *
    * @throws {SchemaNotFoundError} no schema is found for the requested type
+   * @throws {ConnectionError} connection to database failed
    * @throws {UnknownRepositoryError} unknown error occured
    */
   async getSchema(type: string): Promise<Schema> {
@@ -137,24 +159,37 @@ export class LogRepository {
         if (e.code === 'document_not_found') {
           throw new SchemaNotFoundError(type);
         }
-      }
-      // else
-      throw new UnknownRepositoryError(e);
+      } // else
+      handleRepositoryErrors(e);
     }
   }
 
+  /**
+   * Creates and initializes settings for the log index
+   */
   private async initLogIndex() {
-    await this.client.createIndex(INDEX_LOG, { primaryKey: '_id' });
+    try {
+      await this.client.createIndex(INDEX_LOG, { primaryKey: '_id' });
 
-    // Make type filterable
-    await this.client.index(INDEX_LOG).updateFilterableAttributes(['_type']);
+      // Make type filterable
+      await this.client.index(INDEX_LOG).updateFilterableAttributes(['_type']);
 
-    // Make time sortable
-    await this.client.index(INDEX_LOG).updateSortableAttributes(['_time']);
+      // Make time sortable
+      await this.client.index(INDEX_LOG).updateSortableAttributes(['_time']);
+    } catch (e) {
+      handleRepositoryErrors(e);
+    }
   }
 
+  /**
+   * Creates and initializes settings for the schema index
+   */
   private async initSchemaIndex() {
-    await this.client.createIndex(INDEX_SCHEMA, { primaryKey: 'type' });
+    try {
+      await this.client.createIndex(INDEX_SCHEMA, { primaryKey: 'type' });
+    } catch (e) {
+      handleRepositoryErrors(e);
+    }
   }
 }
 
