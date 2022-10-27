@@ -1,11 +1,10 @@
-import React from 'react';
 import { render } from '@testing-library/react';
 
-import Index from '../pages/index';
+import Pointr from './pointr';
 
-describe('Index', () => {
+describe('Pointr', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<Index />);
+    const { baseElement } = render(<Pointr />);
     expect(baseElement).toBeTruthy();
   });
 });

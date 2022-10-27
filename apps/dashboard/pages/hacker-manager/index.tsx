@@ -1,36 +1,14 @@
 import styled from 'styled-components';
-
-// const StyledPage = styled.div`
-//   .page {
-//   }
-// `;
+import Navbar from '../../components/navbar/navbar';
+import HackerManager from '../../components/hacker-manager/hacker-manager';
 
 export function Index() {
   return (
     <MainPageWrapper>
       <h1 id="titleText">HackSC</h1>
       <div id="mainDiv">
-        <div id="nav">
-          <ul>
-            <li>
-              <a>Pointr</a>
-            </li>
-            <li>
-              <a>Hackerform</a>
-            </li>
-            <li>
-              <a>Check-in</a>
-            </li>
-            <li id="currentPage">
-              <a>Hacker Manager</a>
-            </li>
-          </ul>
-        </div>
-        <div id="welcomeDiv">
-          <Spreadsheet>
-            <p>(Hacker tabular view)</p>
-          </Spreadsheet>
-        </div>
+        <Navbar />
+        <HackerManager />
       </div>
     </MainPageWrapper>
   );
@@ -52,11 +30,4 @@ const MainPageWrapper = styled.div`
   top: 0;
   left: 0;
   z-index: -1;
-`;
-const Spreadsheet = styled.div`
-  background-color: black;
-  width: 98%;
-  height: 75%;
-  margin: 100px auto;
-  color: white;
 `;

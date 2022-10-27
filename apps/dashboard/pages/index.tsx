@@ -1,4 +1,6 @@
+import Link from 'next/link';
 import styled from 'styled-components';
+import Navbar from '../components/navbar/navbar';
 
 // const StyledPage = styled.div`
 //   .page {
@@ -10,22 +12,7 @@ export function Index() {
     <MainPageWrapper>
       <h1 id="titleText">HackSC</h1>
       <div id="mainDiv">
-        <div id="nav">
-          <ul>
-            <li>
-              <a>Pointr</a>
-            </li>
-            <li>
-              <a>Hackerform</a>
-            </li>
-            <li>
-              <a>Check-in</a>
-            </li>
-            <li>
-              <a>Hacker Manager</a>
-            </li>
-          </ul>
-        </div>
+        <Navbar />
         <div id="welcomeDiv">
           <h1>Welcome $(name)</h1>
         </div>
