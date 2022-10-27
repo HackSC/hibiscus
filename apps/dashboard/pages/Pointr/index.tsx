@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import styled from 'styled-components';
 import Navbar from '../../components/navbar/navbar';
 import Pointr from '../../components/pointr/pointr';
@@ -5,9 +6,13 @@ import Pointr from '../../components/pointr/pointr';
 export function Index() {
   return (
     <MainPageWrapper>
-      <h1 id="titleText">HackSC</h1>
+      <h1 id="titleText">
+        <Link passHref href="../">
+          HackSC
+        </Link>
+      </h1>
       <div id="mainDiv">
-        <Navbar />
+        <Navbar highlighter="pointr" />
         <Pointr />
       </div>
     </MainPageWrapper>

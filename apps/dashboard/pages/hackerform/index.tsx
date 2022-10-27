@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Navbar from '../../components/navbar/navbar';
-import HackerManager from '../../components/hacker-manager/hacker-manager';
 import Link from 'next/link';
+import Hackerform from '../../components/hackerform/hackerform';
 
 export function Index() {
   return (
@@ -12,8 +12,8 @@ export function Index() {
         </Link>
       </h1>
       <div id="mainDiv">
-        <Navbar highlighter="hacker-manager" />
-        <HackerManager />
+        <Navbar highlighter="hackerform" />
+        <Hackerform />
       </div>
     </MainPageWrapper>
   );
@@ -24,7 +24,6 @@ export default Index;
 const MainPageWrapper = styled.div`
   display: flex;
   flex-direction: column;
-
   justify-content: center;
   min-height: 100vh;
   background: white;
