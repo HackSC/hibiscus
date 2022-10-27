@@ -1,12 +1,25 @@
-import { MeiliSearchCommunicationError } from 'meilisearch';
+import {
+  MeiliSearchApiError,
+  MeiliSearchCommunicationError,
+} from 'meilisearch';
 
 /**
  * Error class for when the client fails to connect to the database
  */
 export class ConnectionError extends Error {
   constructor() {
-    super(`Connection to database was refused`);
+    super('Connection to database was refused');
     this.name = 'ConnectionError';
+  }
+}
+
+/**
+ * Error class for client authorization errors
+ */
+export class AuthorizationError extends Error {
+  constructor() {
+    super('Missing or invalid API key');
+    this.name = 'AuthorizationError';
   }
 }
 
@@ -69,6 +82,13 @@ export class UnknownRepositoryError extends Error {
 export function handleRepositoryErrors(e: unknown) {
   if (e instanceof MeiliSearchCommunicationError) {
     throw new ConnectionError();
+  } else if (e instanceof MeiliSearchApiError) {
+    if (
+      e.code === 'missing_authorization_header' ||
+      e.code === 'invalid_api_key'
+    ) {
+      throw new AuthorizationError();
+    }
   }
 
   // else
