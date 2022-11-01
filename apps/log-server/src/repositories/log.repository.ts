@@ -157,7 +157,9 @@ export class LogRepository {
    */
   async getSchema(type: string): Promise<Schema> {
     try {
-      const schema = await this.client.index(INDEX_SCHEMA).getDocument(type);
+      const { schema } = await this.client
+        .index(INDEX_SCHEMA)
+        .getDocument(type);
       return schema;
     } catch (e) {
       if (e instanceof MeiliSearchApiError) {
