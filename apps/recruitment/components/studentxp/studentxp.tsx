@@ -37,7 +37,7 @@ export function StudentXP(props: StudentXPProps) {
                 my best friends and getting to see all of our hard work pay off.
                 My favorite memory was getting to know everyone at the retreat!
               </StyledText>
-              <Name>Kelly Dixon</Name>
+              <Name>Kelly Dickson</Name>
               <Title>Logistics Lead &apos;22</Title>
             </Testimonial>
           </Slide>

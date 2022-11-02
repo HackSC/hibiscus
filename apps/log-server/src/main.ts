@@ -4,14 +4,17 @@
  */
 
 import * as express from 'express';
+import LogController from './controllers/log.controller';
 
 const app = express();
+const router = express.Router();
+app.use(express.json());
+LogController.initialize();
 
 app.use(express.json());
 
-app.get('/api', (req, res) => {
-  res.send({ message: 'Welcome to log-server!' });
-});
+router.post('/', LogController.createLog);
+router.get('/', LogController.getLog);
 
 app.get('/api/yup_demo', async (req, res) => {
   const schema = {
