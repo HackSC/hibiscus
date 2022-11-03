@@ -3,19 +3,31 @@
  * This is only a minimal backend to get started.
  */
 
+import 'reflect-metadata';
+
 import * as express from 'express';
-import LogController from './controllers/log.controller';
+import { LogController } from './controllers/log.controller';
+import { container } from 'tsyringe';
 
-const app = express();
-const router = express.Router();
-app.use(express.json());
-LogController.initialize();
+(async () => {
+  const app = express();
+  const router = express.Router();
+  app.use(express.json());
+  const logController = container.resolve(LogController);
+  await logController.initialize();
 
-router.post('/', LogController.createLog);
-router.get('/', LogController.getLog);
+  router.post('/', async (req, res) => {
+    await logController.createLog(req, res);
+  });
+  router.get('/', async (req, res) => {
+    await logController.getLog(req, res);
+  });
 
-const port = process.env.port || 3333;
-const server = app.listen(port, () => {
-  console.log(`Listening at http://localhost:${port}/api`);
-});
-server.on('error', console.error);
+  app.use(router);
+
+  const port = process.env.port || 3333;
+  const server = app.listen(port, () => {
+    console.log(`Listening at http://localhost:${port}/api`);
+  });
+  server.on('error', console.error);
+})();
