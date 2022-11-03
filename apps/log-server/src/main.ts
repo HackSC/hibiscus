@@ -17,7 +17,7 @@ import { LogRouter } from './routers/log.router';
   // Initialize controller and repository layer
   await container.resolve(LogController).initialize();
 
-  app.use('/', LogRouter);
+  app.use('/type/', LogRouter);
 
   const port = process.env.port || 3333;
   const server = app.listen(port, () => {

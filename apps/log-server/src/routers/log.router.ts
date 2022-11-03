@@ -4,11 +4,11 @@ import { LogController } from '../controllers/log.controller';
 
 const router = express.Router();
 
-router.post('/', async (req, res) => {
+router.post('/:type/log', async (req, res) => {
   await container.resolve(LogController).createLog(req, res);
 });
 
-router.get('/', async (req, res) => {
+router.get('/:type/log', async (req, res) => {
   await container.resolve(LogController).getLog(req, res);
 });
 

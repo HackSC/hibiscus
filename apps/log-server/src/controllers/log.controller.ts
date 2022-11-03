@@ -27,7 +27,7 @@ export class LogController {
     const timeOfLogCreation = Date.now();
     try {
       const log = req.body.log;
-      const type = req.body.type;
+      const type = req.params.type;
       await this.userRepo.insertLog(log, type, timeOfLogCreation);
       res.status(200).json({ message: 'New log added successfully' });
     } catch (err) {
@@ -45,7 +45,7 @@ export class LogController {
 
     // call repo method
     try {
-      const type = req.body.type;
+      const type = req.params.type;
       const query = req.body.query;
       const sortMethod = req.body.sortMethod;
       const page = req.body.page;
