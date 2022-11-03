@@ -70,8 +70,8 @@ export class LogController {
     try {
       const type = req.body.type;
       const schema = req.body.schema;
-      const log = await this.userRepo.insertSchema(type, schema);
-      res.status(200).json(log);
+      await this.userRepo.insertSchema(type, schema);
+      res.status(200).json({ message: 'New schema added successfully' });
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
