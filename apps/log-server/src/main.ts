@@ -8,22 +8,16 @@ import 'reflect-metadata';
 import * as express from 'express';
 import { LogController } from './controllers/log.controller';
 import { container } from 'tsyringe';
+import { LogRouter } from './routers/log.router';
 
 (async () => {
   const app = express();
-  const router = express.Router();
   app.use(express.json());
-  const logController = container.resolve(LogController);
-  await logController.initialize();
 
-  router.post('/', async (req, res) => {
-    await logController.createLog(req, res);
-  });
-  router.get('/', async (req, res) => {
-    await logController.getLog(req, res);
-  });
+  // Initialize controller and repository layer
+  await container.resolve(LogController).initialize();
 
-  app.use(router);
+  app.use('/', LogRouter);
 
   const port = process.env.port || 3333;
   const server = app.listen(port, () => {
