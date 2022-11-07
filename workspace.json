@@ -7,6 +7,8 @@
     "hibiscus-supabase-client": "libs/hibiscus-supabase-client",
     "interim": "apps/interim",
     "recruitment": "apps/recruitment",
+    "sso": "apps/sso",
+    "sso-e2e": "apps/sso-e2e",
     "styles": "libs/styles",
     "types": "libs/types",
     "ui": "libs/ui",
