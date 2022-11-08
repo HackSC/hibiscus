@@ -3,24 +3,47 @@
 import styled from 'styled-components';
 import { GradientSpan, Text } from '@hacksc-platforms/ui';
 import { TrademarkColors } from '@hacksc-platforms/styles';
+import supabase from 'apps/supabase/specs/supabase';
 
 /* eslint-disable-next-line */
 export interface LoginCardProps {}
 
 export function LoginCard(props: LoginCardProps) {
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    const email = event.target.email.value;
+    const password = event.target.password.value;
+
+    console.log(email);
+    console.log(password);
+
+    await supabase.auth.signInWithPassword({
+      email: email,
+      password: password,
+    });
+    console.log(supabase.auth.getUser());
+  }
+
   return (
     <StyledLoginCard>
       <img src="/images/Logo.svg" alt="HackSC Logo" width="100px" />
       <StyledText>
         Login to your <GradientSpan>HackSC Account</GradientSpan>
       </StyledText>
-      <Input placeholder="enter your email" type="email" />
-      <Input placeholder="enter your password" type="password" />
-      <GradientButton>SIGN IN</GradientButton>
-      <a href='/reset' rel='noreferrer'>
+      <form onSubmit={handleSubmit}>
+        <Input placeholder="enter your email" type="email" name="email" />
+        <Input
+          placeholder="enter your password"
+          type="password"
+          name="password"
+        />
+        <GradientButton type="submit">SIGN IN</GradientButton>
+      </form>
+      <a href="/reset" rel="noreferrer">
         <StyledLink> Forgot Password?</StyledLink>
       </a>
-      <a href='/signup' rel='noreferrer'>
+      <a href="/signup" rel="noreferrer">
         <StyledLink> Create a HackSC account</StyledLink>
       </a>
     </StyledLoginCard>
