@@ -3,18 +3,19 @@
  * This is only a minimal backend to get started.
  */
 
+import 'reflect-metadata';
 import * as express from 'express';
 import LogController from './controllers/log.controller';
 
 const app = express();
-const router = express.Router();
+//const router = express.Router();
 app.use(express.json());
 LogController.initialize();
 
 app.use(express.json());
 
-router.post('/', LogController.createLog);
-router.get('/', LogController.getLog);
+app.post('/', LogController.createLog);
+app.get('/', LogController.getLog);
 
 app.get('/api/yup_demo', async (req, res) => {
   const schema = {

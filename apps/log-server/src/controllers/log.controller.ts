@@ -10,7 +10,7 @@ class LogController {
    */
   async initialize() {
     const userRepo = container.resolve(LogRepository);
-    await userRepo.initDB();
+    await userRepo.initDb();
   }
 
   /**
@@ -27,6 +27,12 @@ class LogController {
     try {
       const log = req.body.log;
       const type = req.body.type;
+      // Check if log is in format of corresponding schema
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { buildYup } = require('schema-to-yup');
+      const schema = await userRepo.getSchema(type);
+      const yupSchema = buildYup(schema);
+      await yupSchema.validate(log);
       await userRepo.insertLog(log, type, timeOfLogCreation);
       res.status(200).json({ message: 'New log added successfully' });
     } catch (err) {
@@ -49,8 +55,8 @@ class LogController {
       const query = req.query.query;
       const sortMethod = req.query.sortMethod;
       const page = req.query.page;
-      const log = await userRepo.getLogs(type, query, sortMethod, page);
-      res.status(200).json(log);
+      //const log = await userRepo.getLogs(type, query, sortMethod, page);
+      //res.status(200).json(log);
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
@@ -66,6 +72,10 @@ class LogController {
     try {
       const type = req.body.type;
       const schema = req.body.schema;
+      //Check if schema is valid
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { buildYup } = require('schema-to-yup');
+      buildYup(schema);
       const log = await userRepo.insertSchema(type, schema);
       res.status(200).json(log);
     } catch (err) {
