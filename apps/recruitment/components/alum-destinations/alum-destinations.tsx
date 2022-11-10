@@ -12,18 +12,16 @@ export function AlumDestinations(props: AlumDestinationsProps) {
         <Image
           src="/img/destinations/dest2.png"
           alt="Alumni Destinations"
-          width="1000vw"
-          height="600vw"
-          objectFit="contain"
+          width={1000}
+          height={600}
         />
       </DesktopDestinations>
       <MobileDestinations>
         <Image
           src="/img/destinations/dest1.png"
           alt="Alumni Destinations"
-          width="1000vw"
-          height="1200vw"
-          objectFit="contain"
+          width={1000}
+          height={1200}
         />
       </MobileDestinations>
     </StyledAlumDestinations>

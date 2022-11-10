@@ -3,7 +3,7 @@ import NextLink, { LinkProps as NextLinkProps } from 'next/link';
 
 /* eslint-disable-next-line */
 export type LinkProps = React.PropsWithChildren<NextLinkProps> & {
-  anchorTagPropsOverride?: React.AnchorHTMLAttributes<HTMLAnchorElement>;
+  anchortagpropsoverride?: React.AnchorHTMLAttributes<HTMLAnchorElement>;
 };
 
 const AnchorTag = styled.a`
@@ -21,7 +21,7 @@ export function Link(props: LinkProps) {
       <AnchorTag
         target={'_blank'}
         rel="noreferrer"
-        {...props.anchorTagPropsOverride}
+        {...props.anchortagpropsoverride}
       >
         {props.children}
       </AnchorTag>
