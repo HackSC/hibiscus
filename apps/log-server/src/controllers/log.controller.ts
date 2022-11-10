@@ -33,11 +33,11 @@ export class LogController {
       const { buildYup } = require('schema-to-yup');
       const schema = await this.userRepo.getSchema(type);
       const yupSchema = buildYup(schema);
-      await yupSchema.validate(log);
+      await yupSchema.validate(log, { strict: true });
       await this.userRepo.insertLog(log, type, timeOfLogCreation);
       res.status(200).json({ message: 'New log added successfully' });
     } catch (err) {
-      res.status(500).json({ message: err.message });
+      res.status(400).json({ message: err.message });
     }
   }
 
@@ -63,7 +63,7 @@ export class LogController {
       });
       res.status(200).json(log);
     } catch (err) {
-      res.status(500).json({ message: err.message });
+      res.status(400).json({ message: err.message });
     }
   }
 
@@ -83,7 +83,7 @@ export class LogController {
       await this.userRepo.insertSchema(type, schema);
       res.status(200).json({ message: 'New schema added successfully' });
     } catch (err) {
-      res.status(500).json({ message: err.message });
+      res.status(400).json({ message: err.message });
     }
   }
 }
