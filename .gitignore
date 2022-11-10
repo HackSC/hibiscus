@@ -41,6 +41,7 @@ Thumbs.db
 
 # Environment files
 .env
+.supabase.env
 .vercel
 
 # Next.js
