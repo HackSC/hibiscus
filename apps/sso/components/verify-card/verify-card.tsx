@@ -4,11 +4,34 @@ import { Link, Text } from '@hacksc-platforms/ui';
 import { TrademarkColors } from '@hacksc-platforms/styles';
 import OTPInput from '../otp-input/otp-input';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
+import supabase from 'apps/supabase/specs/supabase';
 
 export function VerifyCard() {
+  const router = useRouter();
   const [code, setCode] = useState('');
   const [pinReady, setPinReady] = useState(false);
   const MAX_CODE_LENGTH = 6;
+
+  async function handleOTP() {
+    const email = String(router.query.email);
+
+    try {
+      const { data, error } = await supabase.auth.verifyOtp({
+        email: email,
+        token: String(code),
+        type: 'signup',
+      });
+      if (error) {
+        console.log(error);
+      }
+      if (data.user) {
+        router.push('http://hacksc.com');
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   return (
     <StyledLoginCard>
@@ -27,6 +50,7 @@ export function VerifyCard() {
         maxLength={MAX_CODE_LENGTH}
       />
       <GradientButton
+        onClick={handleOTP}
         disabled={!pinReady}
         style={{ opacity: !pinReady ? 0.5 : 1 }}
       >

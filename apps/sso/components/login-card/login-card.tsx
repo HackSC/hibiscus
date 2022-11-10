@@ -4,25 +4,33 @@ import styled from 'styled-components';
 import { GradientSpan, Text } from '@hacksc-platforms/ui';
 import { TrademarkColors } from '@hacksc-platforms/styles';
 import supabase from 'apps/supabase/specs/supabase';
+import { useRouter } from 'next/router';
 
 /* eslint-disable-next-line */
 export interface LoginCardProps {}
 
 export function LoginCard(props: LoginCardProps) {
+  const router = useRouter();
   async function handleSubmit(event) {
     event.preventDefault();
 
     const email = event.target.email.value;
     const password = event.target.password.value;
 
-    console.log(email);
-    console.log(password);
-
-    await supabase.auth.signInWithPassword({
-      email: email,
-      password: password,
-    });
-    console.log(supabase.auth.getUser());
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email,
+        password: password,
+      });
+      if (error) {
+        console.log(error);
+      }
+      if (data.user) {
+        router.push('http://localhost:4200');
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   return (

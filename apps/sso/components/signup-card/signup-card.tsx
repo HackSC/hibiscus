@@ -3,12 +3,15 @@
 import styled from 'styled-components';
 import { GradientSpan, Text } from '@hacksc-platforms/ui';
 import { TrademarkColors } from '@hacksc-platforms/styles';
+import { useRouter } from 'next/router';
 import supabase from '../../../supabase/specs/supabase';
 
 /* eslint-disable-next-line */
 export interface SignUpProps {}
 
 export function SignUpCard(props: SignUpProps) {
+  const router = useRouter();
+
   async function handleSubmit(event) {
     event.preventDefault();
 
@@ -24,7 +27,13 @@ export function SignUpCard(props: SignUpProps) {
 
     if (error) console.log(error);
 
-    if (data) console.log(data.user);
+    if (data.user) {
+      console.log(data.user);
+      router.push({
+        pathname: '/verify',
+        query: { email: email },
+      });
+    }
   }
 
   return (
