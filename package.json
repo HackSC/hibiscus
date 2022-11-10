@@ -36,6 +36,7 @@
     "react-spinners": "^0.13.4",
     "reflect-metadata": "^0.1.13",
     "regenerator-runtime": "0.13.7",
+    "schema-to-yup": "^1.11.16",
     "styled-components": "^5.3.5",
     "tslib": "^2.3.0",
     "tsyringe": "^4.7.0",
