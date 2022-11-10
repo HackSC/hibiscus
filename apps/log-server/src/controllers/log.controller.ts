@@ -28,10 +28,18 @@ export class LogController {
     try {
       const log = req.body.log;
       const type = req.params.type;
+
+      // Check if log is in format of corresponding schema
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { buildYup } = require('schema-to-yup');
+      const schema = await this.userRepo.getSchema(type);
+      const yupSchema = buildYup(schema);
+      await yupSchema.validate(log, { strict: true });
+
       await this.userRepo.insertLog(log, type, timeOfLogCreation);
       res.status(200).json({ message: 'New log added successfully' });
     } catch (err) {
-      res.status(500).json({ message: err.message });
+      res.status(400).json({ message: err.message });
     }
   }
 
@@ -57,7 +65,7 @@ export class LogController {
       });
       res.status(200).json(log);
     } catch (err) {
-      res.status(500).json({ message: err.message });
+      res.status(400).json({ message: err.message });
     }
   }
 
@@ -70,10 +78,16 @@ export class LogController {
     try {
       const type = req.body.type;
       const schema = req.body.schema;
+
+      //Check if schema is valid
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { buildYup } = require('schema-to-yup');
+      buildYup(schema);
+
       await this.userRepo.insertSchema(type, schema);
       res.status(200).json({ message: 'New schema added successfully' });
     } catch (err) {
-      res.status(500).json({ message: err.message });
+      res.status(400).json({ message: err.message });
     }
   }
 }
