@@ -4,6 +4,7 @@
  */
 
 import 'reflect-metadata';
+
 import * as express from 'express';
 import { LogController } from './controllers/log.controller';
 import { container } from 'tsyringe';
@@ -21,6 +22,7 @@ import { LogRouter } from './routers/log.router';
   const port = process.env.port || 3333;
   const server = app.listen(port, () => {
     console.log(`Listening at http://localhost:${port}/type/`);
+
   });
   server.on('error', console.error);
 })();
