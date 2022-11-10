@@ -17,12 +17,11 @@ import { LogRouter } from './routers/log.router';
   // Initialize controller and repository layer
   await container.resolve(LogController).initialize();
 
-  app.use('/type/', LogRouter);
+  app.use('/', LogRouter);
 
   const port = process.env.port || 3333;
   const server = app.listen(port, () => {
     console.log(`Listening at http://localhost:${port}/type/`);
-
   });
   server.on('error', console.error);
 })();
