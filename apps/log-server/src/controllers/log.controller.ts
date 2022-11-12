@@ -27,7 +27,7 @@ export class LogController {
     const timeOfLogCreation = Date.now();
     try {
       const log = req.body.log;
-      const type = req.params.type;
+      const type = req.body.type;
 
       // Check if log is in format of corresponding schema
       // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -53,7 +53,7 @@ export class LogController {
 
     // call repo method
     try {
-      const type = req.params.type;
+      const type = req.body.type;
       const query = req.body.query;
       const sortMethod = req.body.sortMethod;
       const page = req.body.page;
