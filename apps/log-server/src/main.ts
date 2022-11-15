@@ -9,6 +9,7 @@ import * as express from 'express';
 import { LogController } from './controllers/log.controller';
 import { container } from 'tsyringe';
 import { LogRouter } from './routers/log.router';
+import { KeyRouter } from './routers/key.router';
 
 (async () => {
   const app = express();
@@ -18,6 +19,7 @@ import { LogRouter } from './routers/log.router';
   await container.resolve(LogController).initialize();
 
   app.use('/', LogRouter);
+  app.use('/keys', KeyRouter);
 
   const port = process.env.port || 3333;
   const server = app.listen(port, () => {
