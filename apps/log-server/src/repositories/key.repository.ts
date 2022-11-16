@@ -1,11 +1,11 @@
-import { injectable } from 'tsyringe';
+import { Disposable, singleton } from 'tsyringe';
 import { MongoClient, WithId } from 'mongodb';
 
-const DB_NAME = 'logserver';
-const KEY_COLLECTION = 'key';
+const DB_NAME = process.env.KEY_REPO_DB_NAME;
+const COLLECTION_KEY = process.env.KEY_REPO_COLLECTION_KEY;
 
-@injectable()
-export class KeyRepository {
+@singleton()
+export class KeyRepository implements Disposable {
   private client: MongoClient;
 
   constructor() {
@@ -23,9 +23,17 @@ export class KeyRepository {
   async getKeys(): Promise<WithId<Key>[]> {
     return this.client
       .db(DB_NAME)
-      .collection<Key>(KEY_COLLECTION)
+      .collection<Key>(COLLECTION_KEY)
       .find()
       .toArray();
+  }
+
+  /**
+   * Called when container.dispose is called
+   * Closes the client connection
+   */
+  async dispose() {
+    await this.client.close();
   }
 }
 

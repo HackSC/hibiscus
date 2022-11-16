@@ -27,3 +27,26 @@ import { KeyRouter } from './routers/key.router';
   });
   server.on('error', console.error);
 })();
+
+// Handle cleanup on forced exit
+[
+  'SIGHUP',
+  'SIGINT',
+  'SIGQUIT',
+  'SIGILL',
+  'SIGTRAP',
+  'SIGABRT',
+  'SIGBUS',
+  'SIGFPE',
+  'SIGUSR1',
+  'SIGSEGV',
+  'SIGUSR2',
+  'SIGTERM',
+  'uncaughtException',
+].forEach((e) => {
+  process.on(e, async () => {
+    await container.dispose();
+    console.log('Gracefully shut down');
+    process.exit();
+  });
+});
