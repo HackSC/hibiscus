@@ -27,6 +27,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "meilisearch": "^0.28.0",
+    "mongodb": "^4.11.0",
     "react-flippy": "^1.1.0",
     "react-gtm-module": "^2.0.11",
     "react-hot-toast": "^2.3.0",
