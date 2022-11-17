@@ -1,11 +1,13 @@
+/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 /* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
 import { Link, Text } from '@hacksc-platforms/ui';
 import { TrademarkColors } from '@hacksc-platforms/styles';
 import OTPInput from '../otp-input/otp-input';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import supabase from 'apps/supabase/specs/supabase';
+import { hasCookie, setCookie } from 'cookies-next';
 
 export function VerifyCard() {
   const router = useRouter();
@@ -13,6 +15,12 @@ export function VerifyCard() {
   const [code, setCode] = useState('');
   const [pinReady, setPinReady] = useState(false);
   const MAX_CODE_LENGTH = 6;
+
+  useEffect(() => {
+    if (hasCookie('user')) {
+      router.push('http://hacksc.com');
+    }
+  }, []);
 
   async function handleOTP() {
     const email = String(router.query.email);
@@ -29,6 +37,7 @@ export function VerifyCard() {
       }
       if (data.user) {
         router.push('http://hacksc.com');
+        setCookie('user', email);
       }
     } catch (e) {
       console.log(e);
