@@ -9,8 +9,8 @@ import {
 
 import { randomUUID } from 'crypto';
 
-const INDEX_LOG = 'log';
-const INDEX_SCHEMA = 'schema';
+const INDEX_LOG = process.env.LOG_REPO_INDEX_LOG;
+const INDEX_SCHEMA = process.env.LOG_REPO_INDEX_SCHEMA;
 const LIMIT = 20;
 
 @injectable()
