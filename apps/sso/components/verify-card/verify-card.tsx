@@ -9,6 +9,7 @@ import supabase from 'apps/supabase/specs/supabase';
 
 export function VerifyCard() {
   const router = useRouter();
+  const [hideErrorMessage, setHideErrorMessage] = useState(false);
   const [code, setCode] = useState('');
   const [pinReady, setPinReady] = useState(false);
   const MAX_CODE_LENGTH = 6;
@@ -24,6 +25,7 @@ export function VerifyCard() {
       });
       if (error) {
         console.log(error);
+        setHideErrorMessage(true);
       }
       if (data.user) {
         router.push('http://hacksc.com');
@@ -49,6 +51,9 @@ export function VerifyCard() {
         setCode={setCode}
         maxLength={MAX_CODE_LENGTH}
       />
+      <StyledErrorText style={{ display: hideErrorMessage ? 'block' : 'none' }}>
+        Token is expired or incorrect.
+      </StyledErrorText>
       <GradientButton
         onClick={handleOTP}
         disabled={!pinReady}
@@ -88,6 +93,12 @@ const StyledText = styled(Text)`
   font-size: 24px;
   padding-top: 3rem;
   color: #2b2b2b;
+`;
+
+const StyledErrorText = styled(Text)`
+  font-size: 20px;
+  padding-top: 1rem;
+  color: red;
 `;
 
 const StyledSmallText = styled(Text)`
