@@ -26,7 +26,7 @@ export function LoginCard(props: LoginCardProps) {
         console.log(error);
       }
       if (data.user) {
-        router.push('http://localhost:4200');
+        router.push('http://hacksc.com');
       }
     } catch (e) {
       console.log(e);
@@ -39,7 +39,7 @@ export function LoginCard(props: LoginCardProps) {
       <StyledText>
         Login to your <GradientSpan>HackSC Account</GradientSpan>
       </StyledText>
-      <form onSubmit={handleSubmit}>
+      <StyledForm onSubmit={handleSubmit}>
         <Input placeholder="enter your email" type="email" name="email" />
         <Input
           placeholder="enter your password"
@@ -47,7 +47,7 @@ export function LoginCard(props: LoginCardProps) {
           name="password"
         />
         <GradientButton type="submit">SIGN IN</GradientButton>
-      </form>
+      </StyledForm>
       <a href="/reset" rel="noreferrer">
         <StyledLink> Forgot Password?</StyledLink>
       </a>
@@ -73,6 +73,15 @@ const StyledLoginCard = styled.div`
   border: 4px solid rgba(255, 255, 255, 0.5);
 `;
 
+const StyledForm = styled.form`
+  width: 140%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+`;
+
 const StyledText = styled(Text)`
   font-size: 24px;
   padding-top: 1rem;
@@ -87,7 +96,7 @@ const Input = styled.input`
   font-family: InterVariable, sans-serif;
   font-size: 1.1rem;
   color: #676767;
-  width: 120%;
+  width: 100%;
   margin-top: 1rem;
   ::placeholder {
     color: #bcbcbc;
