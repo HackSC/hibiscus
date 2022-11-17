@@ -17,8 +17,6 @@ export function SignUpCard(props: SignUpProps) {
 
     const email = event.target.email.value;
     const password = event.target.password.value;
-    console.log(email);
-    console.log(password);
 
     const { data, error } = await supabase.auth.signUp({
       email: email,
