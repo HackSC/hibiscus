@@ -1,4 +1,5 @@
 import { AppProps } from 'next/app';
+import { RouteGuard } from '../components/RouteGuard';
 import Head from 'next/head';
 import './styles.css';
 
@@ -9,7 +10,9 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <title>Welcome to sso!</title>
       </Head>
       <main className="app">
-        <Component {...pageProps} />
+        <RouteGuard>
+          <Component {...pageProps} />
+        </RouteGuard>
       </main>
     </>
   );

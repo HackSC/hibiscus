@@ -5,6 +5,7 @@ import { GradientSpan, Text } from '@hacksc-platforms/ui';
 import { TrademarkColors } from '@hacksc-platforms/styles';
 import supabase from 'apps/supabase/specs/supabase';
 import { useRouter } from 'next/router';
+import { setCookie } from 'cookies-next';
 
 /* eslint-disable-next-line */
 export interface LoginCardProps {}
@@ -26,7 +27,8 @@ export function LoginCard(props: LoginCardProps) {
         console.log(error);
       }
       if (data.user) {
-        router.push('http://hacksc.com');
+        router.push('/');
+        setCookie('user', email);
       }
     } catch (e) {
       console.log(e);

@@ -7,7 +7,7 @@ import OTPInput from '../otp-input/otp-input';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import supabase from 'apps/supabase/specs/supabase';
-import { hasCookie, setCookie } from 'cookies-next';
+import { setCookie } from 'cookies-next';
 
 export function VerifyCard() {
   const router = useRouter();
@@ -15,12 +15,6 @@ export function VerifyCard() {
   const [code, setCode] = useState('');
   const [pinReady, setPinReady] = useState(false);
   const MAX_CODE_LENGTH = 6;
-
-  useEffect(() => {
-    if (hasCookie('user')) {
-      router.push('http://hacksc.com');
-    }
-  }, []);
 
   async function handleOTP() {
     const email = String(router.query.email);
@@ -36,7 +30,7 @@ export function VerifyCard() {
         setHideErrorMessage(true);
       }
       if (data.user) {
-        router.push('http://hacksc.com');
+        router.push('/');
         setCookie('user', email);
       }
     } catch (e) {
@@ -45,7 +39,7 @@ export function VerifyCard() {
   }
 
   return (
-    <StyledLoginCard>
+    <StyledVerifyCard>
       <img src="/images/Logo.svg" alt="HackSC Logo" width="100px" />
       <StyledText>
         We’ve sent you an email containing a unique 6-digit PIN code.
@@ -73,13 +67,13 @@ export function VerifyCard() {
       <Link href="/verify">
         <StyledLinkText>Resend confirmation email</StyledLinkText>
       </Link>
-    </StyledLoginCard>
+    </StyledVerifyCard>
   );
 }
 
 export default VerifyCard;
 
-const StyledLoginCard = styled.div`
+const StyledVerifyCard = styled.div`
   color: #2b2b2b;
   background-color: rgba(255, 255, 255, 0.6);
   padding: 5rem;
