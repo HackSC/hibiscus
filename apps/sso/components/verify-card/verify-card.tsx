@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Link, Text } from '@hacksc-platforms/ui';
 import { TrademarkColors } from '@hacksc-platforms/styles';
 import OTPInput from '../otp-input/otp-input';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import supabase from 'apps/supabase/specs/supabase';
 import { setCookie } from 'cookies-next';

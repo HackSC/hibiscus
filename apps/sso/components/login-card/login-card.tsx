@@ -2,6 +2,7 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
+import { useState } from 'react';
 import { GradientSpan, Text } from '@hacksc-platforms/ui';
 import { TrademarkColors } from '@hacksc-platforms/styles';
 import supabase from 'apps/supabase/specs/supabase';
@@ -13,6 +14,9 @@ export interface LoginCardProps {}
 
 export function LoginCard(props: LoginCardProps) {
   const router = useRouter();
+  const [hideErrorMessage, setHideErrorMessage] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
   async function handleSubmit(event) {
     event.preventDefault();
 
@@ -25,14 +29,18 @@ export function LoginCard(props: LoginCardProps) {
         password: password,
       });
       if (error) {
-        console.log(error);
+        if (typeof error === 'object' && error !== null && 'message' in error) {
+          const message = error.message;
+          setErrorMessage(message);
+          setHideErrorMessage(true);
+        }
       }
       if (data.user) {
         router.push('/');
         setCookie('user', email);
       }
     } catch (e) {
-      console.log(e);
+      // console.log(e);
     }
   }
 
@@ -43,15 +51,26 @@ export function LoginCard(props: LoginCardProps) {
         Login to your <GradientSpan>HackSC Account</GradientSpan>
       </StyledText>
       <StyledForm onSubmit={handleSubmit}>
-        <Input placeholder="enter your email" type="email" name="email" />
+        <Input
+          placeholder="enter your email"
+          type="email"
+          name="email"
+          required
+        />
         <Input
           placeholder="enter your password"
           type="password"
           name="password"
+          required
         />
+        <StyledErrorText
+          style={{ display: hideErrorMessage ? 'block' : 'none' }}
+        >
+          {errorMessage}
+        </StyledErrorText>
         <GradientButton type="submit">SIGN IN</GradientButton>
       </StyledForm>
-      <a href="/reset" rel="noreferrer">
+      <a href="/reset-email" rel="noreferrer">
         <StyledLink> Forgot Password?</StyledLink>
       </a>
       <a href="/signup" rel="noreferrer">
@@ -88,6 +107,12 @@ const StyledForm = styled.form`
 const StyledText = styled(Text)`
   font-size: 24px;
   padding-top: 1rem;
+`;
+
+const StyledErrorText = styled(Text)`
+  font-size: 20px;
+  padding-top: 1rem;
+  color: red;
 `;
 
 const Input = styled.input`

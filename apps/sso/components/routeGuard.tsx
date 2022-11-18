@@ -26,12 +26,20 @@ function RouteGuard({ children }) {
 
   function authCheck(url) {
     // redirect to login page if accessing a private page and not logged in
-    const publicPaths = ['/login', '/signup', '/verify'];
+    const publicPaths = [
+      '/login',
+      '/signup',
+      '/verify',
+      '/reset',
+      '/reset#',
+      '/reset-email',
+    ];
     const path = url.split('?')[0];
+    console.log(path);
     if (hasCookie('user') && publicPaths.includes(path)) {
       console.log('include path');
       setAuthorized(false);
-      router.back();
+      router.push('/');
     } else {
       setAuthorized(true);
     }

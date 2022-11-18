@@ -1,47 +1,31 @@
+/* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 /* eslint-disable @next/next/no-img-element */
-import { useState } from 'react';
 import styled from 'styled-components';
+import { useState } from 'react';
 import { GradientSpan, Text } from '@hacksc-platforms/ui';
 import { TrademarkColors } from '@hacksc-platforms/styles';
-import { useRouter } from 'next/router';
 import supabase from 'apps/supabase/specs/supabase';
 
 /* eslint-disable-next-line */
 export interface ResetCardProps {}
 
-export function ResetCard(props: ResetCardProps) {
-  const router = useRouter();
-  const [hideErrorMessage, setHideErrorMessage] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+export function ResetEmailCard(props: ResetCardProps) {
+  const [hideSuccessMessage, setHideSuccessMessage] = useState(false);
 
   async function handleSubmit(event) {
     event.preventDefault();
 
-    const newPassword = event.target.password.value;
-    const confirmPassword = event.target.confirmPassword.value;
+    const email = event.target.email.value;
 
-    if (!(newPassword === confirmPassword)) {
-      setHideErrorMessage(true);
-      setErrorMessage('Confirm password does not match!');
-      return;
-    }
-
-    const { data, error } = await supabase.auth.updateUser({
-      password: newPassword,
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'http://localhost:4200/reset',
     });
 
     if (error) {
-      if (typeof error === 'object' && error !== null && 'message' in error) {
-        const message = error.message;
-        setErrorMessage(message);
-        setHideErrorMessage(true);
-      }
-    }
-
-    if (data.user) {
-      console.log(data.user);
-      router.push('/login');
+      alert(error);
+    } else {
+      setHideSuccessMessage(true);
     }
   }
 
@@ -52,30 +36,22 @@ export function ResetCard(props: ResetCardProps) {
         Reset your <GradientSpan>HackSC Account</GradientSpan>
       </StyledText>
       <StyledForm onSubmit={handleSubmit}>
-        <Input
-          placeholder="new password"
-          type="password"
-          name="password"
-          required
-        />
-        <Input
-          placeholder="re-enter password"
-          type="password"
-          name="confirmPassword"
-          required
-        />
-        <StyledErrorText
-          style={{ display: hideErrorMessage ? 'block' : 'none' }}
+        <Input placeholder="Email" type="email" name="email" required />
+        <StyledSuccessText
+          style={{ display: hideSuccessMessage ? 'block' : 'none' }}
         >
-          {errorMessage}
-        </StyledErrorText>
+          Successfully sent reset password email!
+        </StyledSuccessText>
         <GradientButton type="submit">SUBMIT</GradientButton>
+        <a href="/login" rel="noreferrer">
+          <StyledLink> or Login</StyledLink>
+        </a>
       </StyledForm>
     </StyledResetCard>
   );
 }
 
-export default ResetCard;
+export default ResetEmailCard;
 
 const StyledResetCard = styled.div`
   color: #2b2b2b;
@@ -99,15 +75,22 @@ const StyledForm = styled.form`
   padding: 10px 20px;
 `;
 
+const StyledSuccessText = styled(Text)`
+  display: none;
+  font-size: 20px;
+  padding-top: 1rem;
+  color: green;
+`;
+
 const StyledText = styled(Text)`
   font-size: 24px;
   padding-top: 1rem;
 `;
 
-const StyledErrorText = styled(Text)`
-  font-size: 20px;
-  padding-top: 1rem;
-  color: red;
+const StyledLink = styled(Text)`
+  font-size: 1rem;
+  color: #939393;
+  text-decoration: underline;
 `;
 
 const Input = styled.input`
