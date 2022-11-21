@@ -1,4 +1,5 @@
 import { Link } from '@hacksc-platforms/ui';
+import { BlueButton } from '@hacksc-platforms/ui-kit-2023';
 import Image from 'next/image';
 import styled from 'styled-components';
 
@@ -42,7 +43,7 @@ export function Footer(props: FooterProps) {
         {socialMedias.map(({ href, src, alt }) => (
           <IconContainer key={alt}>
             <Link href={href}>
-              <Image src={src} alt={alt} fill />
+              <Image src={src} alt={alt} layout="fill" />
             </Link>
           </IconContainer>
         ))}
@@ -50,7 +51,7 @@ export function Footer(props: FooterProps) {
       {Vercel.map(({ href, src, alt }) => (
         <IconContainerV key={alt}>
           <Link href={href}>
-            <Image src={src} alt={alt} fill />
+            <Image src={src} alt={alt} layout="fill" />
           </Link>
         </IconContainerV>
       ))}

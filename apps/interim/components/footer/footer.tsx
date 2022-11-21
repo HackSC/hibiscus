@@ -1,4 +1,5 @@
 import { Link } from '@hacksc-platforms/ui';
+import { BlackButton, BlueButton,PurpleButton, OneLineText,ParagraphText,InformationEnter } from '@hacksc-platforms/ui-kit-2023';
 import Image from 'next/image';
 import styled from 'styled-components';
 
@@ -35,11 +36,12 @@ export function Footer(props: FooterProps) {
         {socialMedias.map(({ href, src, alt }) => (
           <IconContainer key={alt}>
             <Link href={href}>
-              <Image src={src} alt={alt} fill />
+              <Image src={src} alt={alt} layout="fill" />
             </Link>
           </IconContainer>
         ))}
       </SocialMediaContainer>
+      <BlueButton label={'UNCLICKED'}></BlueButton>
     </FooterWrapper>
   );
 }
