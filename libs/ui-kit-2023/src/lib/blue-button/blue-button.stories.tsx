@@ -13,5 +13,5 @@ const Template: ComponentStory<typeof BlueButton> = (args) => (
 
 export const Primary = Template.bind({});
 Primary.args = {
-  label: '',
+  label: 'UNCLICKED',
 };

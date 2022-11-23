@@ -7,24 +7,33 @@ export interface SwitchProps {
 
 export function Switch(props: SwitchProps) {
   return (
-    <StyledSwitch>
-      <input type="checkbox" />
-      <span className="slider round"></span>
-      <label
+    <Div>
+      <StyledSwitch>
+        <input type="checkbox" />
+        <span className="slider round"></span>
+      </StyledSwitch>
+      <p
         style={{
           color: 'white',
-          position: 'relative',
-          bottom: 15.5,
-          left: 70,
+          // position: 'relative',
+          // bottom: 15.5,
+          // left: 10,
           fontSize: '22px',
+          fontFamily: 'Inter',
         }}
       >
         {props.label}
-      </label>
-    </StyledSwitch>
+      </p>
+    </Div>
   );
 }
 
+const Div = styled.div`
+  display: inline-flex;
+  align-items: center;
+  height: 34px;
+  gap: 10px;
+`;
 const StyledSwitch = styled.label`
   color: white;
   position: relative;

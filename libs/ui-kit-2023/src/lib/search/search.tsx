@@ -29,7 +29,6 @@ const Input = styled.input`
 `;
 
 const OuterDiv = styled.div`
-  all: unset;
   background: #313131;
   /* gray/light */
   width: 250px;
@@ -38,7 +37,6 @@ const OuterDiv = styled.div`
   border-radius: 11px;
   padding-left: 20px;
 
-  //font
   font-family: 'Inter';
   font-style: normal;
   font-weight: 500;

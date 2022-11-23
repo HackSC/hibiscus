@@ -96,6 +96,7 @@ const StyledConfirmation = styled.div`
 
   width: 555px;
   height: 170px;
+  font-family: 'Inter';
 
   /* gray/standard */
 

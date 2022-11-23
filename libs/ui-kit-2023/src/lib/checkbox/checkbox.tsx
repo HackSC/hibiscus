@@ -22,6 +22,7 @@ const StyledCheckbox = styled.label`
   margin-bottom: 12px;
   cursor: pointer;
   font-size: 22px;
+  font-family: 'Inter';
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
