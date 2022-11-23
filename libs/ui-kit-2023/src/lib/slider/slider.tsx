@@ -1,30 +1,48 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useId, useRef } from 'react';
 import styled from 'styled-components';
 
-export function Slider() {
-  const ref = useRef<any>(null);
+export interface SliderProps {
+  min: number;
+  max: number;
+  step: number;
+  onInput: (value: number) => void;
+}
+
+/**
+ * A slider component for collecting data
+ *
+ * @param min minimum value on slider
+ * @param max max value on slider
+ * @param step how many steps should there be on slider
+ * @param onInput callback function called when user drags the slider; `value` is the value of the slider at the moment. This callback is called at the last thing in the `oninput`
+ */
+export function Slider({ min, max, step, onInput }: SliderProps) {
+  // TODO: handle spurious cases like max<0, min<0, min>=max
+  const ref = useRef<HTMLInputElement>(null);
+  const id = useId();
 
   useEffect(() => {
-    if (ref.current != null) {
-      const slider = ref.current;
-      console.log(slider);
-      const min = slider.min;
-      const max = slider.max;
-      const value = slider.value;
-      slider.style.background = `linear-gradient(to right, #307C93 0%, #307C93 ${
-        ((value - min) / (max - min)) * 100
-      }%, #565656 ${((value - min) / (max - min)) * 100}%, #565656 100%)`;
+    const slider = ref.current;
+    if (!slider) return;
+    // change the background of the left to be colored and right to be gray
+    slider.oninput = function () {
+      const valueNumber = Number.parseFloat(slider.value);
+      const leftGradientPercentBg = ((valueNumber - min) / (max - min)) * 100;
+      slider.style.background = `linear-gradient(to right, #307C93 0%, #307C93 ${leftGradientPercentBg}%, #565656 ${leftGradientPercentBg}%, #565656 100%)`;
+      onInput(valueNumber);
+    };
+  }, [max, min, ref]);
 
-      slider.oninput = function () {
-        this.style.background = `linear-gradient(to right, #307C93 0%, #307C93 ${
-          ((this.value - this.min) / (this.max - this.min)) * 100
-        }%, #565656 ${
-          ((this.value - this.min) / (this.max - this.min)) * 100
-        }%, #565656 100%)`;
-      };
-    }
-  }, []);
-  return <StyledSlider min="0" max="60" ref={ref} id="myinput" type="range" />;
+  return (
+    <StyledSlider
+      min={min}
+      max={max}
+      step={step}
+      ref={ref}
+      id={id}
+      type="range"
+    />
+  );
 }
 
 const StyledSlider = styled.input`
