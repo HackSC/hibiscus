@@ -6,22 +6,20 @@ export interface PurpleButtonProps {
 }
 
 export function PurpleButton(props: PurpleButtonProps) {
-  return (
-      <Button>{props.label}</Button>
-  );
+  return <Button>{props.label}</Button>;
 }
 
 export default PurpleButton;
 
 const Button = styled.button`
-    height: 45px;
+  height: 45px;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   padding: 10px 30px;
   gap: 10px;
-  background: #7A65FD;
+  background: #7a65fd;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
   //fonts
@@ -35,10 +33,10 @@ const Button = styled.button`
   border: none;
   color: #313131;
   :hover {
-    background: #4130A7;
+    background: #4130a7;
   }
   :active {
-    background: #7A65FD;
+    background: #7a65fd;
     box-shadow: inset 1.5px 4px 0px rgba(0, 0, 0, 0.25);
   }
-`
+`;

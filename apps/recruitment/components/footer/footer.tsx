@@ -43,7 +43,7 @@ export function Footer(props: FooterProps) {
         {socialMedias.map(({ href, src, alt }) => (
           <IconContainer key={alt}>
             <Link href={href}>
-              <Image src={src} alt={alt} layout="fill" />
+              <Image src={src} alt={alt} fill />
             </Link>
           </IconContainer>
         ))}
@@ -51,7 +51,7 @@ export function Footer(props: FooterProps) {
       {Vercel.map(({ href, src, alt }) => (
         <IconContainerV key={alt}>
           <Link href={href}>
-            <Image src={src} alt={alt} layout="fill" />
+            <Image src={src} alt={alt} fill />
           </Link>
         </IconContainerV>
       ))}

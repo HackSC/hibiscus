@@ -5,18 +5,15 @@ export interface BlackButtonProps {
   label: string;
 }
 
-
 export function BlackButton(props: BlackButtonProps) {
-  return (
-      <Button>{props.label}</Button>
-  );
+  return <Button>{props.label}</Button>;
 }
 
 export default BlackButton;
 
 const Button = styled.button`
-height: 45px;
-  border: 1.5px solid #76D3EF;
+  height: 45px;
+  border: 1.5px solid #76d3ef;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -34,15 +31,15 @@ height: 45px;
   line-height: 36px;
   text-align: center;
   letter-spacing: 0.2em;
-  color: #76D3EF;
+  color: #76d3ef;
   :hover {
-    color: #307C93;
-    border: 1.5px solid #307C93;
+    color: #307c93;
+    border: 1.5px solid #307c93;
   }
   :active {
-    border: 1.5px solid #76D3EF;
-    color: #76D3EF;
-    box-shadow: inset 1px 2px 0px #76D3EF;
+    border: 1.5px solid #76d3ef;
+    color: #76d3ef;
+    box-shadow: inset 1px 2px 0px #76d3ef;
     border-radius: 10px;
   }
-`
+`;

@@ -2,115 +2,112 @@ import styled from 'styled-components';
 import BlueButton from '../blue-button/blue-button';
 
 export function Confirmation() {
-    return (
-        <StyledConfirmation>
-            <InnerDivTop>
-                <Div>
-                    <HeadText>Are you sure?</HeadText>
-                    <Close>&times;</Close>
-                </Div>
-                <SubText>This action can‘t be undone.</SubText>
-            </InnerDivTop>
-            <InnerDivBottom>
-                <CancelText>CANCEL</CancelText>
-                <BlueButton label="CONFIRM"></BlueButton>
-            </InnerDivBottom>
-            
-        </StyledConfirmation>
-        
-    );
-  }
-  export default Confirmation;
-  const Close = styled.button`
-      all: unset;
+  return (
+    <StyledConfirmation>
+      <InnerDivTop>
+        <Div>
+          <HeadText>Are you sure?</HeadText>
+          <Close>&times;</Close>
+        </Div>
+        <SubText>This action can‘t be undone.</SubText>
+      </InnerDivTop>
+      <InnerDivBottom>
+        <CancelText>CANCEL</CancelText>
+        <BlueButton label="CONFIRM"></BlueButton>
+      </InnerDivBottom>
+    </StyledConfirmation>
+  );
+}
+export default Confirmation;
+const Close = styled.button`
+  all: unset;
   cursor: pointer;
-    font-weight: bold;
-    color: #565656;
-    font-size: 25px;
-  `
-  const CancelText=styled.button`
-    all: unset;
+  font-weight: bold;
+  color: #565656;
+  font-size: 25px;
+`;
+const CancelText = styled.button`
+  all: unset;
   cursor: pointer;
-      font-style: normal;
-    font-weight: 700;
-    font-size: 13px;
-    line-height: 36px;
-    text-align: center;
-    letter-spacing: 0.2em;
-    border: none;
-    color: #F4F4F4;
-    position: relative;
-  `
+  font-style: normal;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 36px;
+  text-align: center;
+  letter-spacing: 0.2em;
+  border: none;
+  color: #f4f4f4;
+  position: relative;
+`;
 
-  const InnerDivTop=styled.div`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    /* border: 1px solid red; */
-  `
-  
-  
-  const InnerDivBottom = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    gap: 50px;
-  `
-  const Div = styled.div`
-    width: 100%;
-    /* border: solid 1px red; */
-    display:flex;
-    justify-content: space-between;
-  `
+const InnerDivTop = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  /* border: 1px solid red; */
+`;
 
-  const HeadText=styled.p`
-    font-style: normal;
-    font-weight: 400;
-    font-size: 26.5462px;
-    line-height: 37px;
-    /* identical to box height, or 141% */
+const InnerDivBottom = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 50px;
+`;
+const Div = styled.div`
+  width: 100%;
+  /* border: solid 1px red; */
+  display: flex;
+  justify-content: space-between;
+`;
 
-    display: flex;
-    align-items: center;
+const HeadText = styled.p`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 26.5462px;
+  line-height: 37px;
+  /* identical to box height, or 141% */
 
-    color: #F4F4F4;
+  display: flex;
+  align-items: center;
 
-    margin: 0;
-  ` 
-  const SubText =styled.p`
-    width: 100%;
-    text-align: left;
-    font-style: normal;
-    font-weight: 400;
-    font-size: 20.3px;
-    line-height: 31px;
-    /* identical to box height, or 154% */
+  color: #f4f4f4;
 
-    display: flex;
-    align-items: center;
-    color: #F4F4F4;
-  `
+  margin: 0;
+`;
+const SubText = styled.p`
+  width: 100%;
+  text-align: left;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 20.3px;
+  line-height: 31px;
+  /* identical to box height, or 154% */
 
-  const StyledConfirmation = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 24.9846px;
+  display: flex;
+  align-items: center;
+  color: #f4f4f4;
+`;
 
-    width: 555px;
-    height: 170px;
+const StyledConfirmation = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24.9846px;
 
-    /* gray/standard */
+  width: 555px;
+  height: 170px;
 
-    background: #313131;
-    /* gray/light */
+  /* gray/standard */
 
-    border: 3.12308px solid #F4F4F4;
-    border-radius: 17px;
+  background: #313131;
+  /* gray/light */
 
-    /* Inside auto layout */
+  border: 3.12308px solid #f4f4f4;
+  border-radius: 17px;
 
-    /* flex: none;
+  /* Inside auto layout */
+
+  /* flex: none;
     order: 0;
     flex-grow: 0; */
-  `
+`;

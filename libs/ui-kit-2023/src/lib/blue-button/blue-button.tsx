@@ -5,12 +5,8 @@ export interface BlueButtonProps {
   label: string;
 }
 
-
-
 export function BlueButton(props: BlueButtonProps) {
-  return (
-      <Button>{props.label}</Button>
-  );
+  return <Button>{props.label}</Button>;
 }
 
 export default BlueButton;
@@ -23,7 +19,7 @@ const Button = styled.button`
   align-items: center;
   padding: 10px 30px;
   gap: 0px;
-  background: #76D3EF;
+  background: #76d3ef;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
   //fonts
@@ -37,10 +33,10 @@ const Button = styled.button`
   border: none;
   color: #313131;
   :hover {
-    background: #307C93;
+    background: #307c93;
   }
   :active {
-    background: #76D3EF;
+    background: #76d3ef;
     box-shadow: inset 1.5px 4px 0px rgba(0, 0, 0, 0.25);
   }
-`
+`;
