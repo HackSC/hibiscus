@@ -1,19 +1,40 @@
+import React from 'react';
 import styled from 'styled-components';
 import BlueButton from '../blue-button/blue-button';
 
-export function Confirmation() {
+export interface ConfirmationProps {
+  title: React.ReactNode | string;
+  description: React.ReactNode | string;
+  onClose?: () => void;
+  onCancel?: () => void;
+  onConfirm?: () => void;
+}
+
+export function Confirmation({
+  title,
+  description,
+  onClose,
+  onCancel,
+  onConfirm,
+}: ConfirmationProps) {
   return (
     <StyledConfirmation>
       <InnerDivTop>
         <Div>
-          <HeadText>Are you sure?</HeadText>
-          <Close>&times;</Close>
+          <div>
+            {typeof title === 'string' ? <HeadText>{title}</HeadText> : title}
+          </div>
+          <Close onClick={onClose}>&times;</Close>
         </Div>
-        <SubText>This action can‘t be undone.</SubText>
+        {typeof description === 'string' ? (
+          <SubText>{description}</SubText>
+        ) : (
+          description
+        )}
       </InnerDivTop>
       <InnerDivBottom>
-        <CancelText>CANCEL</CancelText>
-        <BlueButton label="CONFIRM"></BlueButton>
+        <CancelText onClick={onCancel}>CANCEL</CancelText>
+        <BlueButton label="CONFIRM" onClick={onConfirm}></BlueButton>
       </InnerDivBottom>
     </StyledConfirmation>
   );
@@ -44,6 +65,7 @@ const InnerDivTop = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  height: 100%;
   /* border: 1px solid red; */
 `;
 
@@ -95,8 +117,7 @@ const StyledConfirmation = styled.div`
   padding: 24.9846px;
 
   width: 555px;
-  height: 170px;
-  font-family: 'Inter';
+  min-height: 170px;
 
   /* gray/standard */
 

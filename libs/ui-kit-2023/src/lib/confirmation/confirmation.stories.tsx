@@ -4,6 +4,10 @@ import { Confirmation } from './confirmation';
 const Story: ComponentMeta<typeof Confirmation> = {
   component: Confirmation,
   title: 'Confirmation',
+  argTypes: {
+    title: { control: 'text' },
+    description: { control: 'text' },
+  },
 };
 export default Story;
 

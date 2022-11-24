@@ -3,10 +3,11 @@ import styled from 'styled-components';
 /* eslint-disable-next-line */
 export interface BlueButtonProps {
   label: string;
+  onClick?: () => void;
 }
 
 export function BlueButton(props: BlueButtonProps) {
-  return <Button>{props.label}</Button>;
+  return <Button onClick={props.onClick}>{props.label}</Button>;
 }
 
 export default BlueButton;
