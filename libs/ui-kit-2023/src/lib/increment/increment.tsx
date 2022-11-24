@@ -54,19 +54,12 @@ export function Increment({ onInput, min, max }: IncrementProps) {
 
   return (
     <StyledIncrement>
-      <Minus>
-        <p
-          onClick={handleMinus}
-          style={{ position: 'relative', bottom: '2px' }}
-        >
-          -
-        </p>
+      <Minus onClick={handleMinus}>
+        <p style={{ position: 'relative', bottom: '2px' }}>-</p>
       </Minus>
       <Count>{number}</Count>
-      <Plus>
-        <p onClick={handlePlus} style={{ position: 'relative', bottom: '2px' }}>
-          +
-        </p>
+      <Plus onClick={handlePlus}>
+        <p style={{ position: 'relative', bottom: '2px' }}>+</p>
       </Plus>
     </StyledIncrement>
   );
