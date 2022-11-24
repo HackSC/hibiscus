@@ -4,6 +4,9 @@ import { Increment } from './increment';
 const Story: ComponentMeta<typeof Increment> = {
   component: Increment,
   title: 'Increment',
+  argTypes: {
+    onInput: { action: 'onInput' },
+  },
 };
 export default Story;
 

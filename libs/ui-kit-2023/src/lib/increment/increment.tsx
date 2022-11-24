@@ -1,4 +1,3 @@
-import { relative } from 'path';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -10,9 +9,10 @@ export function Increment({ onInput }: IncrementProps) {
   const [count, setCount] = useState(0);
   const [number, setNumber] = useState('00');
 
+  // send input on count change
   useEffect(() => {
-    onInput(5);
-  }, [count]);
+    onInput(count);
+  }, [count, onInput]);
 
   function handleMinus() {
     if (count > 0) {
@@ -28,6 +28,7 @@ export function Increment({ onInput }: IncrementProps) {
       }
     }
   }
+
   function handlePlus() {
     if (count < 99) {
       setCount(count + 1);
@@ -41,6 +42,7 @@ export function Increment({ onInput }: IncrementProps) {
       setNumber(formattedNumber);
     }
   }
+
   return (
     <StyledIncrement>
       <Minus>
