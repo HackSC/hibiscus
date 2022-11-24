@@ -2,12 +2,20 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 export interface IncrementProps {
+  min: number;
+  max: number;
   onInput: (value: number) => void;
 }
 
-export function Increment({ onInput }: IncrementProps) {
-  const [count, setCount] = useState(0);
-  const [number, setNumber] = useState('00');
+export function Increment({ onInput, min, max }: IncrementProps) {
+  const [count, setCount] = useState(min);
+  let initialString = '';
+  if (min < 99) {
+    initialString = ('0' + min).slice(-2);
+  } else {
+    initialString = String(min);
+  }
+  const [number, setNumber] = useState(initialString);
 
   // send input on count change
   useEffect(() => {
@@ -15,9 +23,8 @@ export function Increment({ onInput }: IncrementProps) {
   }, [count, onInput]);
 
   function handleMinus() {
-    if (count > 0) {
+    if (count > min) {
       setCount(count - 1);
-
       const myNumber = count - 1;
       if (count < 99) {
         const formattedNumber = ('0' + myNumber).slice(-2);
@@ -30,16 +37,18 @@ export function Increment({ onInput }: IncrementProps) {
   }
 
   function handlePlus() {
-    if (count < 99) {
-      setCount(count + 1);
-      const myNumber = count + 1;
-      const formattedNumber = ('0' + myNumber).slice(-2);
-      setNumber(formattedNumber);
-    } else {
-      setCount(count + 1);
-      const myNumber = count + 1;
-      const formattedNumber = String(myNumber);
-      setNumber(formattedNumber);
+    if (count < max) {
+      if (count < 99) {
+        setCount(count + 1);
+        const myNumber = count + 1;
+        const formattedNumber = ('0' + myNumber).slice(-2);
+        setNumber(formattedNumber);
+      } else {
+        setCount(count + 1);
+        const myNumber = count + 1;
+        const formattedNumber = String(myNumber);
+        setNumber(formattedNumber);
+      }
     }
   }
 
