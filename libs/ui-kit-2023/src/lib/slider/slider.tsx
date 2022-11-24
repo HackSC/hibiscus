@@ -23,6 +23,7 @@ export function Slider({ min, max, step, onInput }: SliderProps) {
 
   useEffect(() => {
     const slider = ref.current;
+
     if (!slider) return;
     // change the background of the left to be colored and right to be gray
     slider.oninput = function () {
@@ -31,7 +32,7 @@ export function Slider({ min, max, step, onInput }: SliderProps) {
       slider.style.background = `linear-gradient(to right, #307C93 0%, #307C93 ${leftGradientPercentBg}%, #565656 ${leftGradientPercentBg}%, #565656 100%)`;
       onInput(valueNumber);
     };
-  }, [max, min, ref]);
+  }, [max, min, onInput, ref]);
 
   return (
     <StyledSlider

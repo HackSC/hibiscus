@@ -1,14 +1,23 @@
 import { relative } from 'path';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-export function Increment() {
+export interface IncrementProps {
+  onInput: (value: number) => void;
+}
+
+export function Increment({ onInput }: IncrementProps) {
   const [count, setCount] = useState(0);
   const [number, setNumber] = useState('00');
+
+  useEffect(() => {
+    onInput(5);
+  }, [count]);
 
   function handleMinus() {
     if (count > 0) {
       setCount(count - 1);
+
       const myNumber = count - 1;
       if (count < 99) {
         const formattedNumber = ('0' + myNumber).slice(-2);

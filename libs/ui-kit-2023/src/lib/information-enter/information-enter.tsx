@@ -3,14 +3,19 @@ import BlueButton from '../blue-button/blue-button';
 import OneLineText from '../one-line-text/one-line-text';
 
 export interface InformationEnterProps {
-  label: string;
+  textLabel: string;
+  buttonLabel: string;
+  onInput: (value: string) => void;
 }
 
 export function InformationEnter(props: InformationEnterProps) {
   return (
     <StyledInformationEnter>
-      <OneLineText label="One Line Text"></OneLineText>
-      <BlueButton label="UNCLICKED"></BlueButton>
+      <OneLineText
+        onInput={props.onInput}
+        label={props.textLabel}
+      ></OneLineText>
+      <BlueButton label={props.buttonLabel}></BlueButton>
     </StyledInformationEnter>
   );
 }

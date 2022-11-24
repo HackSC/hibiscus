@@ -1,14 +1,24 @@
+import { useRef } from 'react';
 import styled from 'styled-components';
 
 export interface RadioProps {
   label: string;
+  onInput: (value: boolean) => void;
 }
 
-export function Radio(props: RadioProps) {
+export function Radio({ onInput, label }: RadioProps) {
+  const ref = useRef<HTMLInputElement>(null);
+  function handleChange() {
+    if (!ref.current) {
+      return;
+    }
+    onInput(ref.current.checked);
+  }
+
   return (
     <StyledRadio>
-      {props.label}
-      <input type="radio" name="radio" />
+      {label}
+      <input type="radio" name="radio" onChange={handleChange} />
       <span className="checkmark"></span>
     </StyledRadio>
   );

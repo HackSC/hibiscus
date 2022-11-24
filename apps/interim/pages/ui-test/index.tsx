@@ -36,7 +36,7 @@ export default function UITest() {
         <Radio label="option 4"></Radio>
       </form>
       <Switch label="hellasdfasdfasdfdsao"></Switch>
-      <Slider></Slider>
+      {/* <Slider></Slider> */}
       <Increment></Increment>
     </MainWrapper>
   );

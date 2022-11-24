@@ -1,12 +1,24 @@
+import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 /* eslint-disable-next-line */
 export interface OneLineTextProps {
   label: string;
+  onInput: (value: string) => void;
 }
 
-export function OneLineText(props: OneLineTextProps) {
-  return <Input placeholder={props.label} type="text" />;
+export function OneLineText({ onInput, label }: OneLineTextProps) {
+  const ref = useRef<HTMLInputElement>(null);
+  function handleChange() {
+    if (!ref.current) {
+      return;
+    }
+    onInput(ref.current.value);
+  }
+
+  return (
+    <Input onChange={handleChange} ref={ref} placeholder={label} type="text" />
+  );
 }
 
 export default OneLineText;

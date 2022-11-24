@@ -1,10 +1,18 @@
 import styled from 'styled-components';
 import { BiSearch } from 'react-icons/bi';
+import { useRef } from 'react';
 
 /* eslint-disable-next-line */
-export interface searchProps {}
+export interface searchProps {
+  onInput: (value: string) => void;
+}
 
-export function Search(props: searchProps) {
+export function Search({ onInput }: searchProps) {
+  const ref = useRef<HTMLInputElement>(null);
+  function handleSubmit() {
+    if (!ref.current) return;
+    onInput(ref.current.value);
+  }
   return (
     <OuterDiv>
       <BiSearch
@@ -16,7 +24,7 @@ export function Search(props: searchProps) {
           fontSize: '1.5em',
         }}
       />
-      <Input placeholder="Search..." />
+      <Input ref={ref} onSubmit={handleSubmit} placeholder="Search..." />
     </OuterDiv>
   );
 }

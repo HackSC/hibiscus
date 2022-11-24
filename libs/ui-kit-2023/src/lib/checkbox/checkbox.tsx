@@ -1,14 +1,24 @@
+import { useRef } from 'react';
 import styled from 'styled-components';
 
 export interface CheckboxProps {
   label: string;
+  onInput: (value: boolean) => void;
 }
 
-export function Checkbox(props: CheckboxProps) {
+export function Checkbox({ onInput, label }: CheckboxProps) {
+  const ref = useRef<HTMLInputElement>(null);
+  function handleChange() {
+    if (!ref.current) {
+      return;
+    }
+    onInput(ref.current.checked);
+  }
+
   return (
     <StyledCheckbox>
-      {props.label}
-      <input type="checkbox" />
+      {label}
+      <input ref={ref} onChange={handleChange} type="checkbox" />
       <span className="checkmark"></span>
     </StyledCheckbox>
   );

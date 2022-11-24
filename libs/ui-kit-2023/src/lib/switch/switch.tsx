@@ -3,13 +3,22 @@ import styled from 'styled-components';
 
 export interface SwitchProps {
   label: string;
+  onInput: (value: boolean) => void;
 }
 
-export function Switch(props: SwitchProps) {
+export function Switch({ onInput, label }: SwitchProps) {
+  const ref = useRef<HTMLInputElement>(null);
+  function handleChange() {
+    if (!ref.current) {
+      return;
+    }
+    onInput(ref.current.checked);
+  }
+
   return (
     <Div>
       <StyledSwitch>
-        <input type="checkbox" />
+        <input ref={ref} type="checkbox" onChange={handleChange} />
         <span className="slider round"></span>
       </StyledSwitch>
       <p
@@ -22,7 +31,7 @@ export function Switch(props: SwitchProps) {
           fontFamily: 'Inter',
         }}
       >
-        {props.label}
+        {label}
       </p>
     </Div>
   );
