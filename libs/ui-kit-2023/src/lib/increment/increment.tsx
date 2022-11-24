@@ -55,7 +55,7 @@ export function Increment({ onInput, min, max }: IncrementProps) {
   return (
     <StyledIncrement>
       <Minus onClick={handleMinus}>
-        <p style={{ position: 'relative', bottom: '2px' }}>-</p>
+        <p style={{ position: 'relative', bottom: '3px' }}>-</p>
       </Minus>
       <Count>{number}</Count>
       <Plus onClick={handlePlus}>
@@ -108,14 +108,13 @@ const Plus = styled.button`
   }
 `;
 const Count = styled.p`
-  width: 42px;
   font-family: 'Inter';
   font-style: normal;
   font-weight: 400;
   font-size: 25px;
   text-align: center;
   /* identical to box height */
-  margin: 0 10px;
+  margin: 0 5px;
   font-feature-settings: 'zero' on, 'ss01' on, 'cv08' on, 'cv04' on, 'cv05' on;
   font-feature-settings: 'zero' 1;
   color: white;
