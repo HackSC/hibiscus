@@ -13,5 +13,5 @@ const Template: ComponentStory<typeof ParagraphText> = (args) => (
 
 export const Primary = Template.bind({});
 Primary.args = {
-  label: '',
+  placeholder: '',
 };

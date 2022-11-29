@@ -1,18 +1,20 @@
-import { useEffect, useRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 /* eslint-disable-next-line */
 export interface ParagraphTextProps {
-  label: string;
+  placeholder: string;
   onInput: (value: string) => void;
 }
 
-export function ParagraphText({ onInput, label }: ParagraphTextProps) {
-  const handleMessageChange = (event: { target: { value: string } }) => {
+export function ParagraphText({ onInput, placeholder }: ParagraphTextProps) {
+  const handleMessageChange: React.ChangeEventHandler<HTMLTextAreaElement> = (
+    event
+  ) => {
     // 👇️ access textarea value
     onInput(event.target.value);
   };
-  return <Input onChange={handleMessageChange} placeholder={label} />;
+  return <Input onChange={handleMessageChange} placeholder={placeholder} />;
 }
 
 export default ParagraphText;

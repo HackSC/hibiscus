@@ -4,10 +4,11 @@ import { useRef } from 'react';
 
 /* eslint-disable-next-line */
 export interface searchProps {
+  placeholder: string;
   onInput: (value: string) => void;
 }
 
-export function Search({ onInput }: searchProps) {
+export function Search({ placeholder, onInput }: searchProps) {
   const ref = useRef<HTMLInputElement>(null);
   function handleSubmit() {
     if (!ref.current) return;
@@ -24,7 +25,7 @@ export function Search({ onInput }: searchProps) {
           fontSize: '1.5em',
         }}
       />
-      <Input ref={ref} onSubmit={handleSubmit} placeholder="Search..." />
+      <Input ref={ref} onSubmit={handleSubmit} placeholder={placeholder} />
     </OuterDiv>
   );
 }

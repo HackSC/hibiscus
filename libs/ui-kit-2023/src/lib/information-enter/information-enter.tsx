@@ -3,9 +3,10 @@ import BlueButton from '../blue-button/blue-button';
 import OneLineText from '../one-line-text/one-line-text';
 
 export interface InformationEnterProps {
-  textLabel: string;
+  textPlaceholder: string;
   buttonLabel: string;
   onInput: (value: string) => void;
+  onSubmit: (value: string) => void;
 }
 
 export function InformationEnter(props: InformationEnterProps) {
@@ -13,7 +14,7 @@ export function InformationEnter(props: InformationEnterProps) {
     <StyledInformationEnter>
       <OneLineText
         onInput={props.onInput}
-        label={props.textLabel}
+        placeholder={props.textPlaceholder}
       ></OneLineText>
       <BlueButton label={props.buttonLabel}></BlueButton>
     </StyledInformationEnter>

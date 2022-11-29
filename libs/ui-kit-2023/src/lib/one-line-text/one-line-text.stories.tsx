@@ -12,6 +12,4 @@ const Template: ComponentStory<typeof OneLineText> = (args) => (
 );
 
 export const Primary = Template.bind({});
-Primary.args = {
-  label: '',
-};
+Primary.args = {};

@@ -3,11 +3,11 @@ import styled from 'styled-components';
 
 /* eslint-disable-next-line */
 export interface OneLineTextProps {
-  label: string;
+  placeholder: string;
   onInput: (value: string) => void;
 }
 
-export function OneLineText({ onInput, label }: OneLineTextProps) {
+export function OneLineText({ onInput, placeholder }: OneLineTextProps) {
   const ref = useRef<HTMLInputElement>(null);
   function handleChange() {
     if (!ref.current) {
@@ -17,7 +17,12 @@ export function OneLineText({ onInput, label }: OneLineTextProps) {
   }
 
   return (
-    <Input onChange={handleChange} ref={ref} placeholder={label} type="text" />
+    <Input
+      onChange={handleChange}
+      ref={ref}
+      placeholder={placeholder}
+      type="text"
+    />
   );
 }
 
