@@ -11,3 +11,4 @@ export * from './lib/radio/radio';
 export * from './lib/switch/switch';
 export * from './lib/slider/slider';
 export * from './lib/increment/increment';
+export * from './lib/button/button';

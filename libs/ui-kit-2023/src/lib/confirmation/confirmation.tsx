@@ -93,7 +93,7 @@ const HeadText = styled.p`
   align-items: center;
 
   color: #f4f4f4;
-
+  overflow-wrap: normal;
   margin: 0;
 `;
 const SubText = styled.p`
@@ -108,6 +108,7 @@ const SubText = styled.p`
   display: flex;
   align-items: center;
   color: #f4f4f4;
+  overflow-wrap: normal;
 `;
 
 const StyledConfirmation = styled.div`
