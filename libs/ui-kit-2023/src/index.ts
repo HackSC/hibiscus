@@ -1,6 +1,3 @@
-export * from './lib/blue-button/blue-button';
-export * from './lib/purple-button/purple-button';
-export * from './lib/black-button/black-button';
 export * from './lib/one-line-text/one-line-text';
 export * from './lib/paragraph-text/paragraph-text';
 export * from './lib/information-enter/information-enter';

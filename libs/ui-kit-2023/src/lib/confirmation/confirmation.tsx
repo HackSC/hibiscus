@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import BlueButton from '../blue-button/blue-button';
+import Button from '../button/button';
 
 export interface ConfirmationProps {
   title: React.ReactNode | string;
@@ -34,7 +34,9 @@ export function Confirmation({
       </InnerDivTop>
       <InnerDivBottom>
         <CancelText onClick={onCancel}>CANCEL</CancelText>
-        <BlueButton label="CONFIRM" onClick={onConfirm}></BlueButton>
+        <Button color="blue" onClick={onConfirm}>
+          CONFIRM
+        </Button>
       </InnerDivBottom>
     </StyledConfirmation>
   );

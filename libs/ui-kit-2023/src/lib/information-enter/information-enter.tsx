@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import BlueButton from '../blue-button/blue-button';
+import Button from '../button/button';
 import OneLineText from '../one-line-text/one-line-text';
 
 export interface InformationEnterProps {
@@ -15,11 +15,12 @@ export function InformationEnter(props: InformationEnterProps) {
       <OneLineText
         onInput={props.onInput}
         placeholder={props.textPlaceholder}
-      ></OneLineText>
-      <BlueButton label={props.buttonLabel}></BlueButton>
+      />
+      <Button color="blue">{props.buttonLabel}</Button>
     </StyledInformationEnter>
   );
 }
+
 export default InformationEnter;
 const StyledInformationEnter = styled.div`
   display: inline-flex;

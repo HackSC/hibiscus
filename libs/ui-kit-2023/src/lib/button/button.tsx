@@ -1,19 +1,20 @@
 import styled from 'styled-components';
 
 /* eslint-disable-next-line */
-export interface ButtonProps {
-  label: string;
-  color: string;
+export interface ButtonProps extends React.PropsWithChildren {
+  color: 'blue' | 'black' | 'purple';
   onClick?: () => void;
 }
 
 export function Button(props: ButtonProps) {
   if (props.color === 'blue') {
-    return <BlueButton onClick={props.onClick}>{props.label}</BlueButton>;
+    return <BlueButton onClick={props.onClick}>{props.children}</BlueButton>;
   } else if (props.color === 'black') {
-    return <BlackButton onClick={props.onClick}>{props.label}</BlackButton>;
-  } else if (props.color === 'purple') {
-    return <PurpleButton onClick={props.onClick}>{props.label}</PurpleButton>;
+    return <BlackButton onClick={props.onClick}>{props.children}</BlackButton>;
+  } else {
+    return (
+      <PurpleButton onClick={props.onClick}>{props.children}</PurpleButton>
+    );
   }
 }
 
