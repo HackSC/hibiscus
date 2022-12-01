@@ -11,6 +11,7 @@
     "styles": "libs/styles",
     "types": "libs/types",
     "ui": "libs/ui",
+    "ui-kit-2023": "libs/ui-kit-2023",
     "www-2023": "apps/www-2023"
   }
 }

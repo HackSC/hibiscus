@@ -20,7 +20,7 @@ export class KeyController {
       res.status(400).json({ message: err.message });
     }
   }
-
+  
   /**
    * Deletes a key stored in database
    *
@@ -35,4 +35,5 @@ export class KeyController {
       res.status(400).json({ message: err.message });
     }
   }
+
 }

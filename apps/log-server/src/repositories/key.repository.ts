@@ -1,4 +1,5 @@
 import { Disposable, singleton } from 'tsyringe';
+
 import { MongoClient, ObjectId, WithId } from 'mongodb';
 import { handleRepositoryErrors } from './repository.error';
 
@@ -44,8 +45,9 @@ export class KeyRepository implements Disposable {
       handleRepositoryErrors(e);
     }
   }
-
+  
   /**
+
    * Called when container.dispose is called
    * Closes the client connection
    */
