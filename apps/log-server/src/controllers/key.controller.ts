@@ -20,4 +20,20 @@ export class KeyController {
       res.status(400).json({ message: err.message });
     }
   }
+  
+  /**
+   * Deletes a key stored in database
+   *
+   * @param _req - incoming request { key }
+   * @param res - outgoing response
+   */
+  async deleteKey(_req: express.Request, res: express.Response) {
+    try {
+      await this.repository.deleteKeys(_req.body.key);
+      res.status(200);
+    } catch (err) {
+      res.status(400).json({ message: err.message });
+    }
+  }
+
 }

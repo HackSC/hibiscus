@@ -1,5 +1,7 @@
 import { Disposable, singleton } from 'tsyringe';
-import { MongoClient, WithId } from 'mongodb';
+
+import { MongoClient, ObjectId, WithId } from 'mongodb';
+import { handleRepositoryErrors } from './repository.error';
 
 const DB_NAME = process.env.KEY_REPO_DB_NAME;
 const COLLECTION_KEY = process.env.KEY_REPO_COLLECTION_KEY;
@@ -29,6 +31,23 @@ export class KeyRepository implements Disposable {
   }
 
   /**
+   * Deletes a specific key stored in the database
+   *
+   * @param key - the id of the key to be deleted
+   */
+  async deleteKeys(key: string) {
+    try {
+      this.client
+        .db(DB_NAME)
+        .collection<Key>(COLLECTION_KEY)
+        .deleteOne({ _id: new ObjectId(key) });
+    } catch (e) {
+      handleRepositoryErrors(e);
+    }
+  }
+  
+  /**
+
    * Called when container.dispose is called
    * Closes the client connection
    */
