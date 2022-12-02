@@ -1,4 +1,5 @@
 import type { ComponentStory, ComponentMeta } from '@storybook/react';
+import React from 'react';
 import { Button } from './button';
 
 const Story: ComponentMeta<typeof Button> = {
