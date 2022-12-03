@@ -1,5 +1,4 @@
 import { Link } from '@hacksc-platforms/ui';
-import { BlueButton } from '@hacksc-platforms/ui-kit-2023';
 import Image from 'next/image';
 import styled from 'styled-components';
 
