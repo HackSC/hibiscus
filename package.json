@@ -26,6 +26,7 @@
     "react-flippy": "^1.1.0",
     "react-gtm-module": "^2.0.11",
     "react-hot-toast": "^2.3.0",
+    "react-icons": "^4.6.0",
     "react-is": "18.2.0",
     "react-query": "^3.39.1",
     "react-spinners": "^0.13.4",
@@ -38,6 +39,8 @@
     "yup": "^0.32.11"
   },
   "devDependencies": {
+    "@babel/core": "7.12.13",
+    "@babel/preset-typescript": "7.12.13",
     "@cypress/webpack-preprocessor": "^5.12.0",
     "@nrwl/cli": "15.0.13",
     "@nrwl/cypress": "15.0.13",
@@ -50,8 +53,15 @@
     "@nrwl/node": "15.0.13",
     "@nrwl/nx-cloud": "15.0.2",
     "@nrwl/react": "15.0.13",
+    "@nrwl/storybook": "^15.2.1",
     "@nrwl/web": "15.0.13",
     "@nrwl/workspace": "15.0.13",
+    "@storybook/addon-essentials": "~6.5.9",
+    "@storybook/builder-webpack5": "~6.5.9",
+    "@storybook/core-server": "~6.5.9",
+    "@storybook/manager-webpack5": "~6.5.9",
+    "@storybook/react": "~6.5.9",
+    "@svgr/webpack": "^5.4.0",
     "@swc/core": "^1.2.173",
     "@swc/jest": "0.2.20",
     "@testing-library/react": "13.4.0",
@@ -65,6 +75,7 @@
     "@typescript-eslint/eslint-plugin": "5.42.1",
     "@typescript-eslint/parser": "5.42.1",
     "babel-jest": "28.1.1",
+    "babel-loader": "8.1.0",
     "babel-plugin-styled-components": "^2.0.7",
     "babel-plugin-transform-typescript-metadata": "^0.3.2",
     "cypress": "^10.7.0",
@@ -87,6 +98,7 @@
     "ts-loader": "^9.3.0",
     "ts-node": "10.9.1",
     "typescript": "4.8.4",
+    "url-loader": "^3.0.0",
     "webpack": "^5.73.0"
   },
   "resolutions": {
