@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import styled from 'styled-components';
-import Navbar from '../../components/navbar/navbar';
+import SidebarNav from '../../components/navbar/navbar';
 import Pointr from '../../components/pointr/pointr';
 
 export function Index() {
@@ -12,7 +12,7 @@ export function Index() {
         </Link>
       </h1>
       <div id="mainDiv">
-        <Navbar highlighter="pointr" />
+        <SidebarNav />
         <Pointr />
       </div>
     </MainPageWrapper>
@@ -26,7 +26,6 @@ const MainPageWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   min-height: 100vh;
-  background: white;
   background-position: fixed;
   background-attachment: local;
   background-repeat: no-repeat;

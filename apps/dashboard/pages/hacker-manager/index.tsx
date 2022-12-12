@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Navbar from '../../components/navbar/navbar';
+import SidebarNav from '../../components/navbar/navbar';
 import HackerManager from '../../components/hacker-manager/hacker-manager';
 import Link from 'next/link';
 
@@ -12,7 +12,7 @@ export function Index() {
         </Link>
       </h1>
       <div id="mainDiv">
-        <Navbar highlighter="hacker-manager" />
+        <SidebarNav highlighter="hacker-manager" />
         <HackerManager />
       </div>
     </MainPageWrapper>

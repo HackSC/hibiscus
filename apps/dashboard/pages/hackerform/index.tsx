@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Navbar from '../../components/navbar/navbar';
+import SidebarNav from '../../components/navbar/navbar';
 import Link from 'next/link';
 import Hackerform from '../../components/hackerform/hackerform';
 
@@ -12,7 +12,7 @@ export function Index() {
         </Link>
       </h1>
       <div id="mainDiv">
-        <Navbar highlighter="hackerform" />
+        <SidebarNav highlighter="hackerform" />
         <Hackerform />
       </div>
     </MainPageWrapper>

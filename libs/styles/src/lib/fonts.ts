@@ -15,3 +15,19 @@ body {
   }
 }
 `;
+
+export const GlobalStyles2023 = createGlobalStyle`
+body {
+  font-family: Inter,-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif;
+  background: black;
+  color: white;
+  margin: 0;
+  padding: 0;
+}
+
+@supports (font-variation-settings: normal) {
+  body {
+    font-family: InterVariable,-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif;
+  }
+}
+`;

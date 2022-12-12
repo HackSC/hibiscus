@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import SidebarNav from './navbar';
+import GrayContentBox from './gray-content-box';
 
-describe('Navbar', () => {
+describe('GrayContentBox', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<SidebarNav />);
+    const { baseElement } = render(<GrayContentBox />);
     expect(baseElement).toBeTruthy();
   });
 });
