@@ -13,7 +13,7 @@ const StyledNavbar = styled.div`
 
 export function SidebarNav(props: NavbarProps) {
   const sidebarItems: { name: string; url: string }[] = [
-    { name: 'Pointr', url: '/Pointr' },
+    { name: 'Hacker application', url: '/apply-2023' },
   ];
 
   return (

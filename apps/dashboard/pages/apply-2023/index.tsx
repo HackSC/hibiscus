@@ -1,7 +1,7 @@
-import Link from 'next/link';
 import styled from 'styled-components';
 import SidebarNav from '../../components/navbar/navbar';
-import Pointr from '../../components/pointr/pointr';
+import Link from 'next/link';
+import Hackerform from '../../components/hackerform/hackerform';
 
 export function Index() {
   return (
@@ -13,7 +13,7 @@ export function Index() {
       </h1>
       <div id="mainDiv">
         <SidebarNav />
-        <Pointr />
+        <Hackerform />
       </div>
     </MainPageWrapper>
   );
