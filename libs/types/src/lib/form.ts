@@ -1,3 +1,5 @@
+import React from 'react';
+
 export interface FormMetadata {
   entry: {
     title: React.ReactNode;
