@@ -1,4 +1,7 @@
-import { FormMetadata, FormQuestionType } from '../../common/form';
+import {
+  FormMetadata,
+  FormQuestionType,
+} from '../../../../libs/types/src/lib/form';
 import styled from 'styled-components';
 import Introduction from './introduction';
 import { useState } from 'react';

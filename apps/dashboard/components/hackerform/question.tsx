@@ -1,4 +1,4 @@
-import { FormQuestion, FormQuestionType } from '../../common/form';
+import { FormQuestion, FormQuestionType } from '@hacksc-platforms/types';
 import React from 'react';
 import styled from 'styled-components';
 import { H1, H3 } from '@hacksc-platforms/ui';

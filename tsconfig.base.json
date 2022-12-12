@@ -17,6 +17,9 @@
     "paths": {
       "@hacksc-platforms/analytics": ["libs/analytics/src/index.ts"],
       "@hacksc-platforms/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@hacksc-platforms/hackform-client": [
+        "libs/hackform-client/src/index.ts"
+      ],
       "@hacksc-platforms/hibiscus-supabase-client": [
         "libs/hibiscus-supabase-client/src/index.ts"
       ],

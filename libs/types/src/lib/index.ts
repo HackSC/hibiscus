@@ -1,1 +1,1 @@
-export * from './supabase.entities';
+export * from './form';

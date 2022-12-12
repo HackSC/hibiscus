@@ -1,5 +1,5 @@
 import { H1, H4, Text } from '@hacksc-platforms/ui';
-import { FormMetadata } from '../../common/form';
+import { FormMetadata } from '@hacksc-platforms/types';
 import styled from 'styled-components';
 import { Button } from '@hacksc-platforms/ui-kit-2023';
 
