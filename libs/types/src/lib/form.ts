@@ -9,7 +9,7 @@ export interface FormMetadata {
   questions: FormQuestion[];
   end: {
     title: React.ReactNode;
-    subtitle: React.ReactNode;
+    subtitle?: React.ReactNode;
   };
 }
 
@@ -25,4 +25,13 @@ export enum FormQuestionType {
   Number = 'number',
   Date = 'date',
   SingleOptionDropdown = 'single-option-dropdown',
+}
+
+export interface HackformResponse {
+  responses: {
+    question: FormQuestion;
+    textInput?: string; // for text-based questions
+    multipleChoicesInput?: number[]; // indexes of the choices; if it's a single choice, size=1
+    booleanInput?: boolean;
+  }[];
 }

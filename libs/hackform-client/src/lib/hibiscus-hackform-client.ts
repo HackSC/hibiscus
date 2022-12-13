@@ -1,24 +1,32 @@
-import { FormMetadata, FormQuestion } from '@hacksc-platforms/types';
-import * as AWS from 'aws-sdk';
+import { FormMetadata, HackformResponse } from '@hacksc-platforms/types';
+import {
+  AttributeValue,
+  DynamoDBClient,
+  PutItemCommand,
+  PutItemCommandInput,
+} from '@aws-sdk/client-dynamodb';
 import { injectable } from 'tsyringe';
-
-export interface HackformResponse {
-  responses: {
-    question: FormQuestion;
-    textInput?: string; // for text-based questions
-    multipleChoicesInput?: number[]; // indexes of the choices; if it's a single choice, size=1
-    booleanInput?: boolean;
-  }[];
-}
 
 @injectable()
 export class HibiscusHackformClient {
-  private readonly client: AWS.DynamoDB;
+  private readonly ddb: DynamoDBClient;
+  private readonly tableName: string = 'hacker-app-responses'; // table name in the database
+
   constructor() {
-    this.client = new AWS.DynamoDB({
+    this.ddb = new DynamoDBClient({
       region: 'us-west-1', // by default N.Cal
     });
     // other variables will be set in environment
+  }
+
+  private buildDDBItemFromResponse(
+    data: HackformResponse
+  ): PutItemCommandInput['Item'] {
+    return {
+      data: {
+        L: {},
+      },
+    };
   }
 
   /**
@@ -27,6 +35,11 @@ export class HibiscusHackformClient {
    * @param formMetadata the original form metadata
    */
   async submitForm(data: HackformResponse, formMetadata: FormMetadata) {
-    throw new Error('Not implemented');
+    const cmd = new PutItemCommand({
+      TableName: this.tableName,
+      Item: {
+        data: {},
+      },
+    });
   }
 }
