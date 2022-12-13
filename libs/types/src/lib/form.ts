@@ -31,6 +31,7 @@ export interface HackformResponse {
   responses: {
     question: FormQuestion;
     textInput?: string; // for text-based questions
+    numberInput?: number; // for number-based questions e.g age
     multipleChoicesInput?: number[]; // indexes of the choices; if it's a single choice, size=1
     booleanInput?: boolean;
   }[];
