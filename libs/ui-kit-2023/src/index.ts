@@ -1,3 +1,4 @@
+export * from './lib/arrow-button/arrow-button';
 export * from './lib/one-line-text/one-line-text';
 export * from './lib/paragraph-text/paragraph-text';
 export * from './lib/information-enter/information-enter';
