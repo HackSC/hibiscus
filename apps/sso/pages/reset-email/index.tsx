@@ -7,7 +7,7 @@ export function Index() {
   return (
     <MainPageWrapper>
       <Head>
-        <title>Reset your </title>
+        <title>Reset your email | Hibiscus by HackSC</title>
       </Head>
       <ResetEmailCard />
     </MainPageWrapper>

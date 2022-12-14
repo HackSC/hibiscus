@@ -1,7 +1,7 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 /* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
-import { Link, Text } from '@hacksc-platforms/ui';
+import { Text } from '@hacksc-platforms/ui';
 import { TrademarkColors } from '@hacksc-platforms/styles';
 import OTPInput from '../otp-input/otp-input';
 import { useState } from 'react';
@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import { setCookie } from 'cookies-next';
 import { container } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
+import GrayLink from '../gray-link/gray-link';
 
 export function VerifyCard() {
   const supabase = container.resolve(HibiscusSupabaseClient).getClient();
@@ -18,13 +19,13 @@ export function VerifyCard() {
   const [pinReady, setPinReady] = useState(false);
   const MAX_CODE_LENGTH = 6;
 
-  async function handleOTP() {
+  const handleOTP = async () => {
     const email = String(router.query.email);
 
     try {
       const { data, error } = await supabase.auth.verifyOtp({
-        email: email,
-        token: String(code),
+        email,
+        token: code,
         type: 'signup',
       });
       if (error) {
@@ -38,7 +39,7 @@ export function VerifyCard() {
     } catch (e) {
       console.log(e);
     }
-  }
+  };
 
   return (
     <StyledVerifyCard>
@@ -66,9 +67,7 @@ export function VerifyCard() {
       >
         SUBMIT
       </GradientButton>
-      <Link href="/verify">
-        <StyledLinkText>Resend confirmation email</StyledLinkText>
-      </Link>
+      <GrayLink href="/verify">Resend confirmation email</GrayLink>
     </StyledVerifyCard>
   );
 }
@@ -112,13 +111,6 @@ const StyledSmallText = styled(Text)`
   color: #939393;
 `;
 
-const StyledLinkText = styled(Text)`
-  font-size: 16px;
-  padding-top: 1rem;
-  line-height: 19.36px;
-  color: #939393;
-  text-decoration: underline;
-`;
 const GradientButton = styled.button`
   background: linear-gradient(
     90deg,

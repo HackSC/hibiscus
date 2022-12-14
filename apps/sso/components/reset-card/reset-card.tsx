@@ -5,7 +5,8 @@ import styled from 'styled-components';
 import { GradientSpan, Text } from '@hacksc-platforms/ui';
 import { TrademarkColors } from '@hacksc-platforms/styles';
 import { useRouter } from 'next/router';
-import supabase from 'apps/supabase/specs/supabase';
+import { container } from 'tsyringe';
+import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
 
 /* eslint-disable-next-line */
 export interface ResetCardProps {}
@@ -14,6 +15,7 @@ export function ResetCard(props: ResetCardProps) {
   const router = useRouter();
   const [hideErrorMessage, setHideErrorMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const supabase = container.resolve(HibiscusSupabaseClient).getClient();
 
   async function handleSubmit(event) {
     event.preventDefault();

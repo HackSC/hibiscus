@@ -7,6 +7,7 @@ import { setCookie } from 'cookies-next';
 import Image from 'next/image';
 import { container } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
+import GrayLink from '../gray-link/gray-link';
 
 /* eslint-disable-next-line */
 export interface LoginCardProps {}
@@ -28,6 +29,7 @@ export function LoginCard(props: LoginCardProps) {
         email,
         password,
       });
+
       if (error) {
         if (typeof error === 'object' && error !== null && 'message' in error) {
           const message = error.message;
@@ -35,6 +37,7 @@ export function LoginCard(props: LoginCardProps) {
           setHideErrorMessage(true);
         }
       }
+
       if (data.user) {
         router.push('/');
         setCookie('user', email);
@@ -75,12 +78,8 @@ export function LoginCard(props: LoginCardProps) {
         </StyledErrorText>
         <GradientButton type="submit">SIGN IN</GradientButton>
       </StyledForm>
-      <Link href="/reset-email">
-        <StyledLink>Forgot Password?</StyledLink>
-      </Link>
-      <Link href="/signup">
-        <StyledLink>Create a HackSC account</StyledLink>
-      </Link>
+      <GrayLink href="/reset-email">Forgot Password?</GrayLink>
+      <GrayLink href="/signup">Create a HackSC account</GrayLink>
     </StyledLoginCard>
   );
 }

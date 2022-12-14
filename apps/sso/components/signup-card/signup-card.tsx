@@ -1,13 +1,14 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
-import { useState } from 'react';
+import { FormEventHandler, FormHTMLAttributes, useState } from 'react';
 import { GradientSpan, Text } from '@hacksc-platforms/ui';
 import { TrademarkColors } from '@hacksc-platforms/styles';
 import { useRouter } from 'next/router';
 import { container } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
 import Image from 'next/image';
+import GrayLink from '../gray-link/gray-link';
 
 /* eslint-disable-next-line */
 export interface SignUpProps {}
@@ -18,7 +19,7 @@ export function SignUpCard(props: SignUpProps) {
   const [hideErrorMessage, setHideErrorMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  async function handleSubmit(event) {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const email = event.target.email.value;
@@ -50,7 +51,7 @@ export function SignUpCard(props: SignUpProps) {
         query: { email: email },
       });
     }
-  }
+  };
 
   return (
     <StyledLoginCard>
@@ -89,9 +90,7 @@ export function SignUpCard(props: SignUpProps) {
         </StyledErrorText>
         <GradientButton type="submit">SIGN UP</GradientButton>
       </StyledForm>
-      <a href="/login" rel="noreferrer">
-        <StyledLink> Have an account? Login</StyledLink>
-      </a>
+      <GrayLink href="/login">Have an account? Login</GrayLink>
     </StyledLoginCard>
   );
 }

@@ -5,13 +5,16 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { GradientSpan, Text } from '@hacksc-platforms/ui';
 import { TrademarkColors } from '@hacksc-platforms/styles';
-import supabase from 'apps/supabase/specs/supabase';
+import { container } from 'tsyringe';
+import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
+import GrayLink from '../gray-link/gray-link';
 
 /* eslint-disable-next-line */
 export interface ResetCardProps {}
 
 export function ResetEmailCard(props: ResetCardProps) {
   const [hideSuccessMessage, setHideSuccessMessage] = useState(false);
+  const supabase = container.resolve(HibiscusSupabaseClient).getClient();
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -43,9 +46,7 @@ export function ResetEmailCard(props: ResetCardProps) {
           Successfully sent reset password email!
         </StyledSuccessText>
         <GradientButton type="submit">SUBMIT</GradientButton>
-        <a href="/login" rel="noreferrer">
-          <StyledLink> or Login</StyledLink>
-        </a>
+        <GrayLink href="/login">Login with your email</GrayLink>
       </StyledForm>
     </StyledResetCard>
   );
@@ -85,12 +86,6 @@ const StyledSuccessText = styled(Text)`
 const StyledText = styled(Text)`
   font-size: 24px;
   padding-top: 1rem;
-`;
-
-const StyledLink = styled(Text)`
-  font-size: 1rem;
-  color: #939393;
-  text-decoration: underline;
 `;
 
 const Input = styled.input`

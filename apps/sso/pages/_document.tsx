@@ -1,34 +1,36 @@
-/* eslint-disable react/display-name */
-import { ReactElement } from 'react';
-import Document, { Html, Head, Main, NextScript } from 'next/document';
-import { ServerStyleSheet } from 'styled-components';
 import { GlobalStyles } from '@hacksc-platforms/styles';
+import Document from 'next/document';
+import { ServerStyleSheet } from 'styled-components';
 
-export default class CustomDocument extends Document<{
-  styleTags: ReactElement[];
-}> {
-  static getInitialProps({ renderPage }) {
+/**
+ *  This is mandatory to get styled-components to run on SSR;
+ *  without this you will see styled components default to no styles
+ **/
+export default class MyDocument extends Document {
+  static async getInitialProps(ctx) {
     const sheet = new ServerStyleSheet();
+    const originalRenderPage = ctx.renderPage;
 
-    const page = renderPage(
-      (App) => (props) => sheet.collectStyles(<App {...props} />)
-    );
+    try {
+      ctx.renderPage = () =>
+        originalRenderPage({
+          enhanceApp: (App) => (props) =>
+            sheet.collectStyles(<App {...props} />),
+        });
 
-    const styleTags = sheet.getStyleElement();
-
-    return { ...page, styleTags };
-  }
-
-  render() {
-    return (
-      <Html>
-        <Head>{this.props.styleTags}</Head>
-        <body>
-          <Main />
-          <GlobalStyles />
-          <NextScript />
-        </body>
-      </Html>
-    );
+      const initialProps = await Document.getInitialProps(ctx);
+      return {
+        ...initialProps,
+        styles: (
+          <>
+            {initialProps.styles}
+            <GlobalStyles />
+            {sheet.getStyleElement()}
+          </>
+        ),
+      };
+    } finally {
+      sheet.seal();
+    }
   }
 }

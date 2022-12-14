@@ -2,9 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { hasCookie } from 'cookies-next';
 
-export { RouteGuard };
-
-function RouteGuard({ children }) {
+export function RouteGuard({ children }) {
   const router = useRouter();
   const [authorized, setAuthorized] = useState(true);
 
@@ -24,7 +22,7 @@ function RouteGuard({ children }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  function authCheck(url) {
+  const authCheck = (url: string) => {
     // redirect to login page if accessing a private page and not logged in
     const publicPaths = [
       '/login',
@@ -34,16 +32,16 @@ function RouteGuard({ children }) {
       '/reset#',
       '/reset-email',
     ];
+
     const path = url.split('?')[0];
-    console.log(path);
+
     if (hasCookie('user') && publicPaths.includes(path)) {
-      console.log('include path');
       setAuthorized(false);
       router.push('/');
     } else {
       setAuthorized(true);
     }
-  }
+  };
 
   return authorized && children;
 }
