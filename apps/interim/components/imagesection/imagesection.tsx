@@ -8,8 +8,7 @@ export default function ImageSection() {
         <Image
           alt="HackSC Logo Background"
           src="/img/light-desktop-bg.svg"
-          layout="fill"
-          objectFit="fill"
+          fill
           quality={100}
         />
       </DesktopImage>

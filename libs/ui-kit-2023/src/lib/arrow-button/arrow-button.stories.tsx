@@ -1,0 +1,16 @@
+import type { ComponentStory, ComponentMeta } from '@storybook/react';
+import React from 'react';
+import { ArrowButton } from './arrow-button';
+
+const Story: ComponentMeta<typeof ArrowButton> = {
+  component: ArrowButton,
+  title: 'ArrowButton',
+};
+export default Story;
+
+const Template: ComponentStory<typeof ArrowButton> = (args) => (
+  <ArrowButton {...args} />
+);
+
+export const Primary = Template.bind({});
+Primary.args = {};

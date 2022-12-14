@@ -4,6 +4,8 @@
   "projects": {
     "analytics": "libs/analytics",
     "api-interfaces": "libs/api-interfaces",
+    "dashboard": "apps/dashboard",
+    "hackform-client": "libs/hackform-client",
     "hibiscus-supabase-client": "libs/hibiscus-supabase-client",
     "interim": "apps/interim",
     "recruitment": "apps/recruitment",
@@ -12,6 +14,8 @@
     "styles": "libs/styles",
     "types": "libs/types",
     "ui": "libs/ui",
+    "ui-kit-2023": "libs/ui-kit-2023",
+    "ui-kit-2023-e2e": "apps/ui-kit-2023-e2e",
     "www-2023": "apps/www-2023"
   }
 }

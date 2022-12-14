@@ -35,7 +35,7 @@ export function Footer(props: FooterProps) {
         {socialMedias.map(({ href, src, alt }) => (
           <IconContainer key={alt}>
             <Link href={href}>
-              <Image src={src} alt={alt} layout="fill" />
+              <Image src={src} alt={alt} fill />
             </Link>
           </IconContainer>
         ))}
@@ -76,5 +76,6 @@ const IconContainer = styled.div`
 `;
 
 const SocialMediaContainer = styled.div`
+  position: relative;
   display: flex;
 `;
