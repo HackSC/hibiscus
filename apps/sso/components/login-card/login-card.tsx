@@ -1,18 +1,18 @@
-/* eslint-disable @nrwl/nx/enforce-module-boundaries */
-/* eslint-disable @next/next/no-html-link-for-pages */
-/* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
 import { useState } from 'react';
-import { GradientSpan, Text } from '@hacksc-platforms/ui';
+import { GradientSpan, Link, Text } from '@hacksc-platforms/ui';
 import { TrademarkColors } from '@hacksc-platforms/styles';
-import supabase from 'apps/supabase/specs/supabase';
 import { useRouter } from 'next/router';
 import { setCookie } from 'cookies-next';
+import Image from 'next/image';
+import { container } from 'tsyringe';
+import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
 
 /* eslint-disable-next-line */
 export interface LoginCardProps {}
 
 export function LoginCard(props: LoginCardProps) {
+  const supabase = container.resolve(HibiscusSupabaseClient).getClient();
   const router = useRouter();
   const [hideErrorMessage, setHideErrorMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -25,8 +25,8 @@ export function LoginCard(props: LoginCardProps) {
 
     try {
       const { data, error } = await supabase.auth.signInWithPassword({
-        email: email,
-        password: password,
+        email,
+        password,
       });
       if (error) {
         if (typeof error === 'object' && error !== null && 'message' in error) {
@@ -46,7 +46,12 @@ export function LoginCard(props: LoginCardProps) {
 
   return (
     <StyledLoginCard>
-      <img src="/images/Logo.svg" alt="HackSC Logo" width="100px" />
+      <Image
+        src="/images/Logo.svg"
+        alt="HackSC Logo"
+        width={100}
+        height={100}
+      />
       <StyledText>
         Login to your <GradientSpan>HackSC Account</GradientSpan>
       </StyledText>
@@ -70,12 +75,12 @@ export function LoginCard(props: LoginCardProps) {
         </StyledErrorText>
         <GradientButton type="submit">SIGN IN</GradientButton>
       </StyledForm>
-      <a href="/reset-email" rel="noreferrer">
-        <StyledLink> Forgot Password?</StyledLink>
-      </a>
-      <a href="/signup" rel="noreferrer">
-        <StyledLink> Create a HackSC account</StyledLink>
-      </a>
+      <Link href="/reset-email">
+        <StyledLink>Forgot Password?</StyledLink>
+      </Link>
+      <Link href="/signup">
+        <StyledLink>Create a HackSC account</StyledLink>
+      </Link>
     </StyledLoginCard>
   );
 }
@@ -143,8 +148,8 @@ const GradientButton = styled.button`
   );
   color: white;
   border-radius: 0.3rem;
-  font-family: Intervariable, sans-serif;
   padding: 10px 15px;
+  cursor: pointer;
   margin-top: 1rem;
   margin-bottom: 1rem;
   width: 50%;

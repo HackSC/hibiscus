@@ -1,10 +1,14 @@
 import styled from 'styled-components';
 import ResetEmailCard from '../../components/reset-card/reset-email-card';
 import { TrademarkColors } from '@hacksc-platforms/styles';
+import Head from 'next/head';
 
 export function Index() {
   return (
     <MainPageWrapper>
+      <Head>
+        <title>Reset your </title>
+      </Head>
       <ResetEmailCard />
     </MainPageWrapper>
   );

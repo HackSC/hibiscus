@@ -2,6 +2,7 @@
 import { ReactElement } from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
+import { GlobalStyles } from '@hacksc-platforms/styles';
 
 export default class CustomDocument extends Document<{
   styleTags: ReactElement[];
@@ -24,6 +25,7 @@ export default class CustomDocument extends Document<{
         <Head>{this.props.styleTags}</Head>
         <body>
           <Main />
+          <GlobalStyles />
           <NextScript />
         </body>
       </Html>

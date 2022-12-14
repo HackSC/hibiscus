@@ -6,10 +6,12 @@ import { TrademarkColors } from '@hacksc-platforms/styles';
 import OTPInput from '../otp-input/otp-input';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import supabase from 'apps/supabase/specs/supabase';
 import { setCookie } from 'cookies-next';
+import { container } from 'tsyringe';
+import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
 
 export function VerifyCard() {
+  const supabase = container.resolve(HibiscusSupabaseClient).getClient();
   const router = useRouter();
   const [hideErrorMessage, setHideErrorMessage] = useState(false);
   const [code, setCode] = useState('');

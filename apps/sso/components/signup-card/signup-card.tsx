@@ -5,12 +5,15 @@ import { useState } from 'react';
 import { GradientSpan, Text } from '@hacksc-platforms/ui';
 import { TrademarkColors } from '@hacksc-platforms/styles';
 import { useRouter } from 'next/router';
-import supabase from '../../../supabase/specs/supabase';
+import { container } from 'tsyringe';
+import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
+import Image from 'next/image';
 
 /* eslint-disable-next-line */
 export interface SignUpProps {}
 
 export function SignUpCard(props: SignUpProps) {
+  const supabase = container.resolve(HibiscusSupabaseClient).getClient();
   const router = useRouter();
   const [hideErrorMessage, setHideErrorMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -51,7 +54,12 @@ export function SignUpCard(props: SignUpProps) {
 
   return (
     <StyledLoginCard>
-      <img src="/images/Logo.svg" alt="HackSC Logo" width="100px" />
+      <Image
+        src="/images/Logo.svg"
+        alt="HackSC Logo"
+        width={100}
+        height={100}
+      />
       <StyledText>
         Create a <GradientSpan>HackSC Account</GradientSpan>
       </StyledText>

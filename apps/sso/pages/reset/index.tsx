@@ -1,10 +1,14 @@
 import styled from 'styled-components';
 import ResetCard from '../../components/reset-card/reset-card';
 import { TrademarkColors } from '@hacksc-platforms/styles';
+import Head from 'next/head';
 
 export function Index() {
   return (
     <MainPageWrapper>
+      <Head>
+        <title>Reset your password | Hibiscus by HackSC</title>
+      </Head>
       <ResetCard />
     </MainPageWrapper>
   );

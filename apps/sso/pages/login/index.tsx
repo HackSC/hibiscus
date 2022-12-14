@@ -1,10 +1,14 @@
 import styled from 'styled-components';
 import LoginCard from '../../components/login-card/login-card';
 import { TrademarkColors } from '@hacksc-platforms/styles';
+import Head from 'next/head';
 
 export function Index() {
   return (
     <MainPageWrapper>
+      <Head>
+        <title>Login | Hibiscus by HackSC</title>
+      </Head>
       <LoginCard />
     </MainPageWrapper>
   );
