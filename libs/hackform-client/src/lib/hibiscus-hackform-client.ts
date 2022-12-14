@@ -1,24 +1,49 @@
-import { FormMetadata, FormQuestion } from '@hacksc-platforms/types';
+import {
+  FormMetadata,
+  FormQuestionType,
+  HackformResponse,
+} from '@hacksc-platforms/types';
+import {
+  AttributeValue,
+  DynamoDBClient,
+  PutItemCommand,
+  PutItemCommandInput,
+} from '@aws-sdk/client-dynamodb';
 import * as AWS from 'aws-sdk';
 import { injectable } from 'tsyringe';
 
-export interface HackformResponse {
-  responses: {
-    question: FormQuestion;
-    textInput?: string; // for text-based questions
-    multipleChoicesInput?: number[]; // indexes of the choices; if it's a single choice, size=1
-    booleanInput?: boolean;
-  }[];
-}
-
 @injectable()
 export class HibiscusHackformClient {
-  private readonly client: AWS.DynamoDB;
+  private readonly ddb: DynamoDBClient;
+  private readonly tableName: string = 'hacker-app-responses'; // table name in the database
+  private readonly awsRegion: string = 'us-west-1';
+
   constructor() {
-    this.client = new AWS.DynamoDB({
-      region: 'us-west-1', // by default N.Cal
-    });
+    this.ddb = new DynamoDBClient({ region: this.awsRegion });
     // other variables will be set in environment
+  }
+
+  private buildDDBItemFromResponse(
+    data: HackformResponse
+  ): PutItemCommandInput['Item'] {
+    return {
+      id: { S: '1' },
+      data: {
+        L: <AttributeValue[]>data.responses.map((item) => {
+          if (
+            item.question.type === FormQuestionType.ShortText ||
+            item.question.type === FormQuestionType.LongText ||
+            item.question.type === FormQuestionType.Email
+          ) {
+            return { S: item.textInput };
+          } else if (item.question.type === FormQuestionType.Number) {
+            return { N: item.numberInput };
+          } else {
+            return { N: null };
+          }
+        }),
+      },
+    };
   }
 
   /**
@@ -27,6 +52,11 @@ export class HibiscusHackformClient {
    * @param formMetadata the original form metadata
    */
   async submitForm(data: HackformResponse, formMetadata: FormMetadata) {
-    throw new Error('Not implemented');
+    return this.ddb.send(
+      new PutItemCommand({
+        TableName: this.tableName,
+        Item: this.buildDDBItemFromResponse(data),
+      })
+    );
   }
 }
