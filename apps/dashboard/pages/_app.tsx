@@ -1,4 +1,4 @@
-import { GlobalStyles, GlobalStyles2023 } from '@hacksc-platforms/styles';
+import { GlobalStyles2023 } from '@hacksc-platforms/styles';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import './styles.css';

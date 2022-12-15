@@ -21,9 +21,9 @@ export function ResetEmailCard(props: ResetCardProps) {
 
     const email = event.target.email.value;
 
-    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: 'http://localhost:4200/reset',
-    });
+    const { data, error } = await HibiscusSupabaseClient.resetPasswordViaEmail(
+      email
+    );
 
     if (error) {
       alert(error);

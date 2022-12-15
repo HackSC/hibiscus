@@ -1,11 +1,10 @@
 import styled from 'styled-components';
 import { useState } from 'react';
-import { GradientSpan, Link, Text } from '@hacksc-platforms/ui';
+import { GradientSpan, Text } from '@hacksc-platforms/ui';
 import { TrademarkColors } from '@hacksc-platforms/styles';
 import { useRouter } from 'next/router';
 import { setCookie } from 'cookies-next';
 import Image from 'next/image';
-import { container } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
 import GrayLink from '../gray-link/gray-link';
 
@@ -13,7 +12,6 @@ import GrayLink from '../gray-link/gray-link';
 export interface LoginCardProps {}
 
 export function LoginCard(props: LoginCardProps) {
-  const supabase = container.resolve(HibiscusSupabaseClient).getClient();
   const router = useRouter();
   const [hideErrorMessage, setHideErrorMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -25,10 +23,10 @@ export function LoginCard(props: LoginCardProps) {
     const password = event.target.password.value;
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
+      const { data, error } = await HibiscusSupabaseClient.signInWithPassword(
         email,
-        password,
-      });
+        password
+      );
 
       if (error) {
         if (typeof error === 'object' && error !== null && 'message' in error) {
