@@ -8,12 +8,19 @@ import { Search } from '@hacksc-platforms/ui-kit-2023';
 import TopBar from '../components/top-bar/top-bar';
 
 export function Index() {
-  const [userFirstName] = useState('Vincent');
+  const [user, setUser] = useState<{
+    tag: string;
+    role: string;
+    firstName: string;
+  }>({
+    tag: '@vincentvu',
+    role: 'ADMIN',
+    firstName: 'Vincent',
+  });
 
   return (
     <MainPageWrapper>
-      {/* <h1 id="titleText">HackSC</h1> */}
-      <TopBar />
+      <TopBar userTag={user.tag} role={user.role} />
       <LayoutContainer>
         <div
           style={{
@@ -31,7 +38,7 @@ export function Index() {
                 textShadow: '0px 0px 10px rgba(254, 81, 57, 0.5)',
               }}
             >
-              Welcome, {userFirstName}
+              Welcome, {user.firstName}
             </H1>
             <H4 style={{ color: '#989898' }}>
               What would you like to do today?

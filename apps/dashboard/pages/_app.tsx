@@ -1,4 +1,4 @@
-import { GlobalStyles, GlobalStyles2023 } from '@hacksc-platforms/styles';
+import { GlobalStyles2023 } from '@hacksc-platforms/styles';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import './styles.css';
@@ -7,7 +7,8 @@ function CustomApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Welcome to dashboard!</title>
+        <link rel="shortcut icon" href="/img/favicon.ico" />
+        <title>Home | Hibiscus</title>
       </Head>
       <main className="app">
         <GlobalStyles2023 />

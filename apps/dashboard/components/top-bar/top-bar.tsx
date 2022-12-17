@@ -1,8 +1,12 @@
 import styled from 'styled-components';
 import Image from 'next/image';
+import { Link } from '@hacksc-platforms/ui';
 
 /* eslint-disable-next-line */
-export interface TopBarProps {}
+export interface TopBarProps {
+  userTag: string;
+  role: string; // TODO: replace this with role type/enum
+}
 
 const StyledTopBar = styled.div`
   height: 150px;
@@ -15,21 +19,24 @@ export function TopBar(props: TopBarProps) {
   return (
     <StyledTopBar>
       <Image
-        style={{ margin: '10px 0 0 30px' }}
+        style={{ margin: '5px 0 0 30px' }}
         width="200"
         height="100"
         src="/hacksc-logo.svg"
         alt=""
       />
       <UserText>
-        @filgraniczny&nbsp;&nbsp;&nbsp;<Emphasis>ADMIN</Emphasis>&nbsp;&nbsp;
-        <Image
-          style={{ position: 'relative', top: 3 }}
-          width="18"
-          height="18"
-          src="/log-out.svg"
-          alt=""
-        />
+        {props.userTag}&nbsp;&nbsp;&nbsp;<Emphasis>{props.role}</Emphasis>
+        &nbsp;&nbsp;
+        <LogoutButton>
+          <Image
+            style={{ position: 'relative', top: 3 }}
+            width="18"
+            height="18"
+            src="/log-out.svg"
+            alt="Log out of Hibiscus"
+          />
+        </LogoutButton>
       </UserText>
     </StyledTopBar>
   );
@@ -43,4 +50,10 @@ const UserText = styled.p`
 const Emphasis = styled.span`
   color: #ffa295;
   text-shadow: 0px 0px 15px #fe5139;
+`;
+
+const LogoutButton = styled.button`
+  cursor: pointer;
+  background: none;
+  padding: 0;
 `;
