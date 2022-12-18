@@ -41,6 +41,7 @@ Thumbs.db
 
 # Environment files
 .env
+.env.local
 .vercel
 
 # Next.js
