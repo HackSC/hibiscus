@@ -2,17 +2,16 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { GradientSpan, Text } from '@hacksc-platforms/ui';
 import { TrademarkColors } from '@hacksc-platforms/styles';
-import { useRouter } from 'next/router';
 import { setCookie } from 'cookies-next';
 import Image from 'next/image';
 import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
 import GrayLink from '../gray-link/gray-link';
 
-/* eslint-disable-next-line */
-export interface LoginCardProps {}
+export interface LoginCardProps {
+  backlink: string;
+}
 
 export function LoginCard(props: LoginCardProps) {
-  const router = useRouter();
   const [hideErrorMessage, setHideErrorMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -37,8 +36,11 @@ export function LoginCard(props: LoginCardProps) {
       }
 
       if (data.user) {
-        router.push('/');
-        setCookie('user', email);
+        setCookie(
+          process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME,
+          data.session.access_token
+        );
+        window.location.replace(props.backlink);
       }
     } catch (e) {
       // console.log(e);

@@ -11,9 +11,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <title>Hibiscus by HackSC</title>
       </Head>
       <main className="app">
-        <RouteGuard>
-          <Component {...pageProps} />
-        </RouteGuard>
+        <Component {...pageProps} />
       </main>
     </>
   );

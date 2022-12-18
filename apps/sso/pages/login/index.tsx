@@ -2,14 +2,24 @@ import styled from 'styled-components';
 import LoginCard from '../../components/login-card/login-card';
 import { TrademarkColors } from '@hacksc-platforms/styles';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 
 export function Index() {
+  const router = useRouter();
+  const [backlink, setBacklink] = useState('/');
+  useEffect(() => {
+    if (!router.isReady) return;
+
+    setBacklink(router.query.backlink?.toString() ?? '/');
+  }, [router.isReady, router.query]);
+
   return (
     <MainPageWrapper>
       <Head>
         <title>Login | Hibiscus by HackSC</title>
       </Head>
-      <LoginCard />
+      <LoginCard backlink={backlink} />
     </MainPageWrapper>
   );
 }

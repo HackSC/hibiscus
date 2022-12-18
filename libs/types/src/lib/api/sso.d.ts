@@ -6,3 +6,4 @@ export type SSOApiResetResponseType = ReturnType<
 export type SSOApiSignInWithPassword = ReturnType<
   GoTrueClient['signInWithPassword']
 >;
+export type SSOApiSignUp = ReturnType<GoTrueClient['signUp']>;

@@ -23,7 +23,8 @@
       "defaultConfiguration": "development",
       "options": {
         "buildTarget": "sso-mock-app:build",
-        "dev": true
+        "dev": true,
+        "port": 7777
       },
       "configurations": {
         "development": {
