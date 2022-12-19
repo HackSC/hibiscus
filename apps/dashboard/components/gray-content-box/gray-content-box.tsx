@@ -26,11 +26,6 @@ export function GrayContentBox(props: GrayContentBoxProps) {
 
 export default GrayContentBox;
 
-const TitleHeading = styled(H3)`
-  letter-spacing: 2px;
-  font-weight: 500;
-`;
-
 const StyledGrayContentBox = styled.div`
   background-color: #5a5a5a;
   padding: 1rem 1.5rem;

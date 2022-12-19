@@ -53,7 +53,7 @@ export function Hackerform({ formMetadata }: HackerformProps) {
   } else if (currentQuestionIndex === formMetadata.questions.length) {
     if (Object.entries(errors).length > 0) {
       // get the first one with an error and go back to it
-      const [firstErrorQI, errorString] = Object.entries(errors)[0];
+      const [firstErrorQI] = Object.entries(errors)[0];
       setCQI(Number.parseInt(firstErrorQI));
       children = (
         <HackformQuestionComponent

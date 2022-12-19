@@ -1,20 +1,19 @@
 import { useState } from 'react';
 import { H1, H4 } from '@hacksc-platforms/ui';
-import { Colors2023 } from '@hacksc-platforms/styles';
 import styled from 'styled-components';
-import SidebarNav from '../components/navbar/navbar';
 import GrayContentBox from '../components/gray-content-box/gray-content-box';
 import { Search } from '@hacksc-platforms/ui-kit-2023';
 import TopBar from '../components/top-bar/top-bar';
+import { HibiscusRole } from '@hacksc-platforms/types';
 
 export function Index() {
-  const [user, setUser] = useState<{
+  const [user] = useState<{
     tag: string;
-    role: string;
+    role: HibiscusRole;
     firstName: string;
   }>({
     tag: '@vincentvu',
-    role: 'ADMIN',
+    role: HibiscusRole.ADMIN,
     firstName: 'Vincent',
   });
 

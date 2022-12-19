@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, useRef } from 'react';
+import { InputHTMLAttributes } from 'react';
 import styled from 'styled-components';
 
 /* eslint-disable-next-line */
