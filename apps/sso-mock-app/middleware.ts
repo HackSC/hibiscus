@@ -21,7 +21,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  const redirectUrl = new URL('http://localhost:4200/login');
+  const redirectUrl = new URL(`${process.env.SSO_URL}/login`);
   redirectUrl.search = `backlink=${request.url}`;
   return NextResponse.redirect(redirectUrl);
 }
