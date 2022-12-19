@@ -4,11 +4,14 @@ import {
   ArrowButton,
   Button,
   OneLineText,
+  ParagraphText,
 } from '@hacksc-platforms/ui-kit-2023';
 import { QuestionFormProps } from './hackform-question';
 import { H1, H3 } from '@hacksc-platforms/ui';
+import GlowSpan from '../glow-span';
+import { Colors2023 } from '@hacksc-platforms/styles';
 
-const ShortTextInput = ({
+const LongTextQuestion = ({
   question,
   onClickSubmit,
   onClickBack,
@@ -44,16 +47,22 @@ const ShortTextInput = ({
     <QuestionWrapper>
       <Wrapper>
         <H1>
-          {(qi + 1).toLocaleString('en-US', {
-            minimumIntegerDigits: 2,
-          })}
+          <GlowSpan
+            color={Colors2023.BLUE.LIGHT}
+            shadowColor={Colors2023.BLUE.DARK}
+          >
+            {(qi + 1).toLocaleString('en-US', {
+              minimumIntegerDigits: 2,
+            })}
+          </GlowSpan>
         </H1>
         <H3>
           {question.title}
           {question.required && <SpanRed>*</SpanRed>}
         </H3>
         <InputAndButtonWrapper>
-          <OneLineText
+          <ParagraphText
+            style={{ width: '50%' }}
             value={textInput}
             placeholder={placeholder}
             onChange={(e) => {
@@ -81,7 +90,7 @@ const ShortTextInput = ({
   );
 };
 
-export default ShortTextInput;
+export default LongTextQuestion;
 
 const Wrapper = styled.div`
   height: 100%;
@@ -93,7 +102,8 @@ const Wrapper = styled.div`
 
 const InputAndButtonWrapper = styled.div`
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
   gap: 10px;
 `;
 

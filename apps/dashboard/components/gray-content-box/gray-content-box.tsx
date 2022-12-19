@@ -35,7 +35,7 @@ const StyledGrayContentBox = styled.div`
   background-color: #5a5a5a;
   padding: 1rem 1.5rem;
   color: white;
-  border: 1px solid ${Colors2023.BLUE_STANDARD};
+  border: 1px solid ${Colors2023.BLUE.STANDARD};
   border-radius: 1rem;
   box-sizing: border-box;
   width: 150px;

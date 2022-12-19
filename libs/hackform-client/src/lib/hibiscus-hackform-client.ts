@@ -1,7 +1,7 @@
 import {
   FormMetadata,
   FormQuestionType,
-  HackformResponse,
+  HackformSubmission,
 } from '@hacksc-platforms/types';
 import {
   AttributeValue,
@@ -24,7 +24,7 @@ export class HibiscusHackformClient {
   }
 
   private buildDDBItemFromResponse(
-    data: HackformResponse
+    data: HackformSubmission
   ): PutItemCommandInput['Item'] {
     return {
       id: { S: '1' },
@@ -51,7 +51,7 @@ export class HibiscusHackformClient {
    * @param data a response object storing their submissions
    * @param formMetadata the original form metadata
    */
-  async submitForm(data: HackformResponse, formMetadata: FormMetadata) {
+  async submitForm(data: HackformSubmission, formMetadata: FormMetadata) {
     return this.ddb.send(
       new PutItemCommand({
         TableName: this.tableName,

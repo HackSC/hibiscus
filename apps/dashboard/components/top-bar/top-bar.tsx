@@ -1,33 +1,36 @@
 import styled from 'styled-components';
 import Image from 'next/image';
-import { Link } from '@hacksc-platforms/ui';
+import { Link, Text } from '@hacksc-platforms/ui';
+import GlowSpan from '../glow-span';
+import { HibiscusRole } from '@hacksc-platforms/types';
+import { Colors2023 } from '@hacksc-platforms/styles';
 
 /* eslint-disable-next-line */
 export interface TopBarProps {
   userTag: string;
-  role: string; // TODO: replace this with role type/enum
+  role: HibiscusRole; // TODO: replace this with role type/enum
 }
 
-const StyledTopBar = styled.div`
-  height: 150px;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-`;
-
 export function TopBar(props: TopBarProps) {
+  const userColors = Colors2023.roleColors[props.role].color;
   return (
     <StyledTopBar>
-      <Image
-        style={{ margin: '5px 0 0 30px' }}
-        width="200"
-        height="100"
-        src="/hacksc-logo.svg"
-        alt=""
-      />
-      <UserText>
-        {props.userTag}&nbsp;&nbsp;&nbsp;<Emphasis>{props.role}</Emphasis>
-        &nbsp;&nbsp;
+      <Link href="/" anchortagpropsoverride={{ target: '_self' }}>
+        <Image
+          style={{ margin: '5px 0 0 20px' }}
+          width="200"
+          height="100"
+          src="/hacksc-logo.svg"
+          alt="HackSC logo"
+        />
+      </Link>
+      <RightUtilityContainer>
+        <UserText>{props.userTag}</UserText>
+        <RoleText>
+          <GlowSpan color={userColors.LIGHT} shadowColor={userColors.STANDARD}>
+            {props.role}
+          </GlowSpan>
+        </RoleText>
         <LogoutButton>
           <Image
             style={{ position: 'relative', top: 3 }}
@@ -37,23 +40,35 @@ export function TopBar(props: TopBarProps) {
             alt="Log out of Hibiscus"
           />
         </LogoutButton>
-      </UserText>
+      </RightUtilityContainer>
     </StyledTopBar>
   );
 }
 
 export default TopBar;
 
-const UserText = styled.p`
-  margin: 30px;
+const StyledTopBar = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding-right: 3rem;
 `;
-const Emphasis = styled.span`
-  color: #ffa295;
-  text-shadow: 0px 0px 15px #fe5139;
-`;
+
+const UserText = styled(Text)``;
 
 const LogoutButton = styled.button`
   cursor: pointer;
   background: none;
   padding: 0;
+`;
+
+const RoleText = styled(Text)`
+  font-weight: bold;
+  letter-spacing: 3px;
+`;
+
+const RightUtilityContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 20px;
 `;
