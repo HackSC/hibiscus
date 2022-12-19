@@ -38,7 +38,8 @@ export function LoginCard(props: LoginCardProps) {
       if (data.user) {
         setCookie(
           process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME,
-          data.session.access_token
+          data.session.access_token,
+          { domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN }
         );
         window.location.replace(props.backlink);
       }
