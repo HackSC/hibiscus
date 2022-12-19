@@ -1,6 +1,6 @@
 import { FormMetadata, FormQuestionType } from '@hacksc-platforms/types';
 
-export const formMetadata: FormMetadata = {
+export const formMetadata2023HackerApps: FormMetadata = {
   entry: {
     title: 'HackSC 2023 Application',
     subtitle:
@@ -12,7 +12,16 @@ export const formMetadata: FormMetadata = {
       title: 'Please confirm your full name',
       type: FormQuestionType.ShortText,
       placeholder: 'Enter your full name here',
-      required: true,
+      required: true, // TODO: add option to put error message if required condition violated
+      validationFunction: (input) => {
+        if (input.text === '') {
+          return {
+            valid: false,
+            errorDescription: 'This field is required!',
+          };
+        }
+        return { valid: true };
+      },
     },
     // {
     //   title: 'Please enter your date of birth:',
@@ -32,6 +41,16 @@ export const formMetadata: FormMetadata = {
       title: 'What technologies and skills do you have?',
       type: FormQuestionType.LongText,
       placeholder: 'Type your answer here...',
+      required: true,
+      validationFunction: (input) => {
+        if (input.text === '') {
+          return {
+            valid: false,
+            errorDescription: 'This field is required!',
+          };
+        }
+        return { valid: true };
+      },
     },
   ],
   end: {

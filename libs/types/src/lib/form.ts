@@ -18,7 +18,10 @@ export interface FormQuestion {
   type: FormQuestionType;
   placeholder?: string;
   required?: boolean;
-  validationFunction?: (input: HackformQuestionResponse['input']) => boolean;
+  validationFunction?: (input: HackformQuestionResponse['input']) => {
+    valid: boolean;
+    errorDescription?: string;
+  };
   options?: string[];
 }
 

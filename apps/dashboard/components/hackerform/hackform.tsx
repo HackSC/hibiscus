@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 import HackformIntroduction from './hackform-introduction';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import HackformQuestionComponent from './hackform-question';
-import { formMetadata } from '../../common/hackform-questions';
 import { FormMetadata, HackformSubmission } from '@hacksc-platforms/types';
 import HackformEnding from './hackform-end';
 
@@ -11,11 +10,12 @@ export interface HackerformProps {
   formMetadata: FormMetadata;
 }
 
-export function Hackerform(props: HackerformProps) {
+export function Hackerform({ formMetadata }: HackerformProps) {
   const [currentQuestionIndex, setCQI] = useState(-1);
   const [responses, setResponses] = useState<HackformSubmission>({
     responses: [],
   });
+  const [errors, setErrors] = useState<Record<number, string>>({}); // qi -> error
 
   const onClickNextQuestion = () => {
     if (currentQuestionIndex < formMetadata.questions.length)
@@ -26,16 +26,36 @@ export function Hackerform(props: HackerformProps) {
     if (currentQuestionIndex > -1) setCQI(currentQuestionIndex - 1);
   };
 
-  return (
-    <HackformWrapper>
-      {currentQuestionIndex === -1 ? (
-        <HackformIntroduction
-          formMetadata={formMetadata}
-          onClick={onClickNextQuestion}
-        />
-      ) : currentQuestionIndex === formMetadata.questions.length ? (
-        <HackformEnding formMetadata={formMetadata} />
-      ) : (
+  const onErrorResolved = (qi: number) => {
+    setErrors((prev) => {
+      const newPrev = { ...prev };
+      delete newPrev[qi];
+      return newPrev;
+    });
+  };
+
+  const onErrorQuestion = (qi: number, error: string) => {
+    setErrors((prev) => {
+      const newPrev = { ...prev };
+      newPrev[qi] = error;
+      return newPrev;
+    });
+  };
+
+  let children = null;
+  if (currentQuestionIndex === -1) {
+    children = (
+      <HackformIntroduction
+        formMetadata={formMetadata}
+        onClick={onClickNextQuestion}
+      />
+    );
+  } else if (currentQuestionIndex === formMetadata.questions.length) {
+    if (Object.entries(errors).length > 0) {
+      // get the first one with an error and go back to it
+      const [firstErrorQI, errorString] = Object.entries(errors)[0];
+      setCQI(Number.parseInt(firstErrorQI));
+      children = (
         <HackformQuestionComponent
           currentResponses={responses}
           setCurrentResponses={setResponses}
@@ -44,10 +64,30 @@ export function Hackerform(props: HackerformProps) {
           onClickBack={onClickBackQuestion}
           onClickNext={onClickNextQuestion}
           onClickSubmit={onClickNextQuestion} // naive for now
+          onErrorQuestion={onErrorQuestion}
+          onErrorResolved={onErrorResolved}
         />
-      )}
-    </HackformWrapper>
-  );
+      );
+    } else {
+      children = <HackformEnding formMetadata={formMetadata} />;
+    }
+  } else {
+    children = (
+      <HackformQuestionComponent
+        currentResponses={responses}
+        setCurrentResponses={setResponses}
+        question={formMetadata.questions[currentQuestionIndex]}
+        qi={currentQuestionIndex}
+        onClickBack={onClickBackQuestion}
+        onClickNext={onClickNextQuestion}
+        onClickSubmit={onClickNextQuestion} // naive for now
+        onErrorQuestion={onErrorQuestion}
+        onErrorResolved={onErrorResolved}
+      />
+    );
+  }
+
+  return <HackformWrapper>{children}</HackformWrapper>;
 }
 
 export default Hackerform;
