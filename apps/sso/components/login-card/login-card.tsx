@@ -44,6 +44,11 @@ export function LoginCard(props: LoginCardProps) {
           },
           withCredentials: true,
         });
+        setCookie(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME, token, {
+          path: '/',
+          maxAge: 86400,
+          secure: process.env.NODE_ENV === 'production',
+        });
         window.location.replace(res.data?.redirect ?? '/');
       }
     } catch (e) {
