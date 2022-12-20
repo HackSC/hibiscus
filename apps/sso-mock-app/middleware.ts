@@ -21,6 +21,9 @@ export async function middleware(request: NextRequest) {
       res.cookies.set(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME, token, {
         path: '/',
         maxAge: 86400,
+        sameSite: 'none',
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
       });
       return res;
     }
