@@ -22,6 +22,18 @@ export async function middleware(request: NextRequest) {
   }
 
   const redirectUrl = new URL(`${process.env.SSO_URL}/login`);
-  redirectUrl.search = `backlink=${request.url}`;
+  redirectUrl.search = `callback=${process.env.SSO_MOCK_APP_URL}/api/callback`;
   return NextResponse.redirect(redirectUrl);
 }
+
+export const config = {
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - favicon.ico (favicon file)
+     */
+    '/((?!api|_next/static|favicon.ico).*)',
+  ],
+};

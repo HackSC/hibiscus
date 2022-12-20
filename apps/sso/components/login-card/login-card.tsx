@@ -6,9 +6,10 @@ import { setCookie } from 'cookies-next';
 import Image from 'next/image';
 import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
 import GrayLink from '../gray-link/gray-link';
+import axios from 'axios';
 
 export interface LoginCardProps {
-  backlink: string;
+  callback: string;
 }
 
 export function LoginCard(props: LoginCardProps) {
@@ -36,12 +37,20 @@ export function LoginCard(props: LoginCardProps) {
       }
 
       if (data.user) {
+        const token = data.session.access_token;
+        const res = await axios.get(props.callback, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setCookie(
           process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME,
-          data.session.access_token,
-          { domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN }
+          res.headers['set-cookie'] ?? '',
+          {
+            domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
+          }
         );
-        window.location.replace(props.backlink);
+        window.location.replace(res.data?.redirect ?? '/');
       }
     } catch (e) {
       // console.log(e);

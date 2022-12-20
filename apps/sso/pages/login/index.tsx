@@ -7,11 +7,11 @@ import { useEffect, useState } from 'react';
 
 export function Index() {
   const router = useRouter();
-  const [backlink, setBacklink] = useState('/');
+  const [callback, setCallback] = useState('/');
   useEffect(() => {
     if (!router.isReady) return;
 
-    setBacklink(router.query.backlink?.toString() ?? '/');
+    setCallback(router.query.callback?.toString() ?? '/');
   }, [router.isReady, router.query]);
 
   return (
@@ -19,7 +19,7 @@ export function Index() {
       <Head>
         <title>Login | Hibiscus by HackSC</title>
       </Head>
-      <LoginCard backlink={backlink} />
+      <LoginCard callback={callback} />
     </MainPageWrapper>
   );
 }
