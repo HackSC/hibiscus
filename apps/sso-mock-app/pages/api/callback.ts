@@ -5,7 +5,8 @@ const handler: NextApiHandler = async (req, res) => {
   if (req.method === 'OPTIONS') {
     if (req.headers.origin === process.env.SSO_URL) {
       res.setHeader('Access-Control-Allow-Origin', process.env.SSO_URL);
-      res.setHeader('Access-Control-Allow-Headers', 'authorization');
+      res.setHeader('Access-Control-Allow-Headers', 'Authorization');
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
       res.status(200).json({ message: 'Success' });
     } else {
       res.status(400).json({ message: 'Invalid request origin' });
@@ -16,10 +17,12 @@ const handler: NextApiHandler = async (req, res) => {
       const token = auth_header.substring('Bearer '.length);
 
       res.setHeader('Access-Control-Allow-Origin', process.env.SSO_URL);
-      res.setHeader('Access-Control-Allow-Headers', 'authorization');
+      res.setHeader('Access-Control-Allow-Headers', 'Authorization');
+      res.setHeader('Access-Control-Allow-Credentials', 'true');
+      res.setHeader('Access-Control-Expose-Headers', 'Set-Cookie');
       res.setHeader(
         'Set-Cookie',
-        `${process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME}=${token}`
+        `${process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME}=${token}; Path=/; Max-Age=86400`
       );
       res.status(200).json({
         message: 'Authorization success',

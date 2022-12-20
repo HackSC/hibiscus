@@ -17,7 +17,12 @@ export async function middleware(request: NextRequest) {
     const { data } = await res.json();
 
     if (data.user != null) {
-      return NextResponse.next();
+      const res = NextResponse.next();
+      res.cookies.set(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME, token, {
+        path: '/',
+        maxAge: 86400,
+      });
+      return res;
     }
   }
 

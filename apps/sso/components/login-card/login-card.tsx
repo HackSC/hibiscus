@@ -42,14 +42,8 @@ export function LoginCard(props: LoginCardProps) {
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          withCredentials: true,
         });
-        setCookie(
-          process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME,
-          res.headers['set-cookie'] ?? '',
-          {
-            domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
-          }
-        );
         window.location.replace(res.data?.redirect ?? '/');
       }
     } catch (e) {
