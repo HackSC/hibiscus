@@ -15,15 +15,20 @@ export async function middleware(request: NextRequest) {
     const { data } = await res.json();
 
     if (data.user != null) {
-      const res = await fetch(request.nextUrl.searchParams.get('callback'), {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        credentials: 'include',
-      });
-      return NextResponse.redirect(
-        (await res.json()).redirect ?? process.env.SSO_URL
-      );
+      if (request.nextUrl.searchParams.has('callback')) {
+        const res = await fetch(request.nextUrl.searchParams.get('callback'), {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          method: 'POST',
+          credentials: 'include',
+        });
+        return NextResponse.redirect(
+          (await res.json()).redirect ?? process.env.SSO_URL
+        );
+      } else {
+        return NextResponse.redirect(process.env.SSO_URL);
+      }
     }
   }
 
