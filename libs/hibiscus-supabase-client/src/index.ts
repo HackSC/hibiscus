@@ -59,7 +59,7 @@ export class HibiscusSupabaseClient {
    * @returns
    */
   static async updatePassword(password: string): SSOApiUpdatePassword {
-    const res = await axios.put(`/api/updatePassword`, {
+    const res = await axios.post(`/api/updatePassword`, {
       password,
     });
     return res.data;
@@ -72,7 +72,7 @@ export class HibiscusSupabaseClient {
    * @returns
    */
   static async signUp(email: string, password: string): SSOApiSignUp {
-    const res = await axios.post(`/api/signUpTemp`, {
+    const res = await axios.post(`/api/signUp`, {
       email,
       password,
     });
@@ -90,12 +90,10 @@ export class HibiscusSupabaseClient {
     token: string,
     type: string
   ): SSOApiVerifyOtp {
-    const res = await axios.get(`/api/verifyToken`, {
-      params: {
-        email,
-        token,
-        type,
-      },
+    const res = await axios.post(`/api/verifyToken`, {
+      email,
+      token,
+      type,
     });
     return res.data;
   }

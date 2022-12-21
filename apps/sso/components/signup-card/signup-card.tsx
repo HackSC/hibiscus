@@ -31,7 +31,7 @@ export function SignUpCard(props: SignUpProps) {
       return;
     }
 
-    const { user, error } = await HibiscusSupabaseClient.signUp(
+    const { data, error } = await HibiscusSupabaseClient.signUp(
       email,
       password
     );
@@ -44,7 +44,7 @@ export function SignUpCard(props: SignUpProps) {
       }
     }
 
-    if (user) {
+    if (data.user) {
       router.push({
         pathname: '/verify',
         query: { email: email },
