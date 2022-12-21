@@ -16,6 +16,13 @@ export interface FormMetadata {
 export interface FormQuestion {
   title: string;
   type: FormQuestionType;
+  placeholder?: string;
+  required?: boolean;
+  validationFunction?: (input: HackformQuestionResponse['input']) => {
+    valid: boolean;
+    errorDescription?: string;
+  };
+  options?: string[];
 }
 
 export enum FormQuestionType {
@@ -27,12 +34,16 @@ export enum FormQuestionType {
   SingleOptionDropdown = 'single-option-dropdown',
 }
 
-export interface HackformResponse {
-  responses: {
-    question: FormQuestion;
-    textInput?: string; // for text-based questions
-    numberInput?: number; // for number-based questions e.g age
-    multipleChoicesInput?: number[]; // indexes of the choices; if it's a single choice, size=1
-    booleanInput?: boolean;
-  }[];
+export interface HackformSubmission {
+  responses: HackformQuestionResponse[];
+}
+
+export interface HackformQuestionResponse {
+  question: FormQuestion;
+  input?: {
+    text?: string; // for text-based questions
+    number?: number; // for number-based questions e.g age
+    choices?: number[]; // indexes of the choices; if it's a single choice, size=1
+    boolean?: boolean;
+  };
 }

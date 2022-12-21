@@ -1,29 +1,14 @@
-import { useRef } from 'react';
+import { InputHTMLAttributes } from 'react';
 import styled from 'styled-components';
 
 /* eslint-disable-next-line */
-export interface OneLineTextProps {
+export interface OneLineTextProps
+  extends InputHTMLAttributes<HTMLInputElement> {
   placeholder: string;
-  onInput: (value: string) => void;
 }
 
-export function OneLineText({ onInput, placeholder }: OneLineTextProps) {
-  const ref = useRef<HTMLInputElement>(null);
-  function handleChange() {
-    if (!ref.current) {
-      return;
-    }
-    onInput(ref.current.value);
-  }
-
-  return (
-    <Input
-      onChange={handleChange}
-      ref={ref}
-      placeholder={placeholder}
-      type="text"
-    />
-  );
+export function OneLineText(props: OneLineTextProps) {
+  return <Input {...props} type="text" />;
 }
 
 export default OneLineText;
