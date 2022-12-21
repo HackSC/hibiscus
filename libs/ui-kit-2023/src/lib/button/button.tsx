@@ -1,9 +1,9 @@
+import { ButtonHTMLAttributes } from 'react';
 import styled from 'styled-components';
 
 /* eslint-disable-next-line */
-export interface ButtonProps extends React.PropsWithChildren {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   color: 'blue' | 'black' | 'purple';
-  onClick?: () => void;
 }
 
 export function Button(props: ButtonProps) {

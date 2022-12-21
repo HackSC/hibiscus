@@ -10,8 +10,8 @@ const ShortTextInput = ({
   onClickSubmit,
   onClickNext,
   currentResponses,
-  onErrorQuestion,
-  onErrorResolved,
+  addErrorForQuestion: onErrorQuestion,
+  resolveError: onErrorResolved,
   qi,
   placeholder,
 }: QuestionFormProps & { placeholder: string }) => {

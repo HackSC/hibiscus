@@ -10,6 +10,7 @@ import { H1, H3 } from '@hacksc-platforms/ui';
 import ShortTextInput from './short-text-input';
 import { ArrowButton } from '@hacksc-platforms/ui-kit-2023';
 import LongTextQuestion from './long-text-input';
+import SearchableOptionsInput from './searchable-options-input';
 
 export interface QuestionFormProps {
   question: FormQuestion;
@@ -19,8 +20,8 @@ export interface QuestionFormProps {
   onClickSubmit?: (response: HackformQuestionResponse) => void;
   onClickNext?: () => void;
   onClickBack?: () => void;
-  onErrorQuestion?: (qi: number, error: string) => void;
-  onErrorResolved?: (qi: number) => void;
+  addErrorForQuestion?: (qi: number, error: string) => void;
+  resolveError?: (qi: number) => void;
 }
 
 function HackformQuestionComponent(props: QuestionFormProps) {
@@ -50,14 +51,19 @@ function HackformQuestionComponent(props: QuestionFormProps) {
         }
         break;
       case FormQuestionType.LongText:
+        // TODO: implement
         break;
       case FormQuestionType.Date:
+        // TODO: implement
         break;
       case FormQuestionType.Email:
+        // TODO: implement
         break;
       case FormQuestionType.Number:
+        // TODO: implement
         break;
       case FormQuestionType.SingleOptionDropdown:
+        // TODO: implement
         break;
     }
   };
@@ -86,6 +92,8 @@ function HackformQuestionComponent(props: QuestionFormProps) {
             placeholder={question.placeholder}
             onClickSubmit={handleSubmitQuestion}
           />
+        ) : question.type === FormQuestionType.SingleOptionDropdown ? (
+          <SearchableOptionsInput {...props} options={question.options} />
         ) : null}
       </QuestionWrapper>
       <BottomWidgetsContainer>

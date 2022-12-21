@@ -64,8 +64,8 @@ export function Hackerform({ formMetadata }: HackerformProps) {
           onClickBack={onClickBackQuestion}
           onClickNext={onClickNextQuestion}
           onClickSubmit={onClickNextQuestion} // naive for now
-          onErrorQuestion={onErrorQuestion}
-          onErrorResolved={onErrorResolved}
+          addErrorForQuestion={onErrorQuestion}
+          resolveError={onErrorResolved}
         />
       );
     } else {
@@ -81,8 +81,8 @@ export function Hackerform({ formMetadata }: HackerformProps) {
         onClickBack={onClickBackQuestion}
         onClickNext={onClickNextQuestion}
         onClickSubmit={onClickNextQuestion} // naive for now
-        onErrorQuestion={onErrorQuestion}
-        onErrorResolved={onErrorResolved}
+        addErrorForQuestion={onErrorQuestion}
+        resolveError={onErrorResolved}
       />
     );
   }

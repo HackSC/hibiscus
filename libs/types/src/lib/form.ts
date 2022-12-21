@@ -1,5 +1,11 @@
 import React from 'react';
 
+// a generic option interface for multiple/single choice questions
+export interface Option {
+  value?: string;
+  displayName: string;
+}
+
 export interface FormMetadata {
   entry: {
     title: React.ReactNode;
@@ -22,7 +28,7 @@ export interface FormQuestion {
     valid: boolean;
     errorDescription?: string;
   };
-  options?: string[];
+  options?: Option[];
 }
 
 export enum FormQuestionType {
@@ -45,5 +51,6 @@ export interface HackformQuestionResponse {
     number?: number; // for number-based questions e.g age
     choices?: number[]; // indexes of the choices; if it's a single choice, size=1
     boolean?: boolean;
+    singleChoiceValue?: string; // value associated with the choice
   };
 }
