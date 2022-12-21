@@ -24,7 +24,9 @@ const handler: NextApiHandler = async (req, res) => {
         'Set-Cookie',
         `${
           process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME
-        }=${token}; Path=/; Max-Age=86400; SameSite=None; HttpOnly${
+        }=${token}; Path=/; Max-Age=${
+          process.env.HIBISCUS_COOKIE_MAX_AGE
+        }; SameSite=None; HttpOnly${
           process.env.NODE_ENV === 'production' ? '; Secure' : ''
         }`
       );

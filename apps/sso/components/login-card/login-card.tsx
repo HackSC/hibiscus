@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { GradientSpan, Text } from '@hacksc-platforms/ui';
 import { TrademarkColors } from '@hacksc-platforms/styles';
-import { setCookie } from 'cookies-next';
 import Image from 'next/image';
 import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
 import GrayLink from '../gray-link/gray-link';
@@ -43,11 +42,6 @@ export function LoginCard(props: LoginCardProps) {
             Authorization: `Bearer ${token}`,
           },
           withCredentials: true,
-        });
-        setCookie(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME, token, {
-          path: '/',
-          maxAge: 86400,
-          secure: process.env.NODE_ENV === 'production',
         });
         window.location.replace(res.data?.redirect ?? '/');
       }
