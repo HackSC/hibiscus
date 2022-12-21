@@ -14,6 +14,7 @@ import GrayLink from '../gray-link/gray-link';
 export interface SignUpProps {}
 
 export function SignUpCard(props: SignUpProps) {
+  const supabase = container.resolve(HibiscusSupabaseClient).getClient();
   const router = useRouter();
   const [hideErrorMessage, setHideErrorMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -31,10 +32,10 @@ export function SignUpCard(props: SignUpProps) {
       return;
     }
 
-    const { data, error } = await HibiscusSupabaseClient.signUp(
-      email,
-      password
-    );
+    const { data, error } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+    });
 
     if (error) {
       if (typeof error === 'object' && error !== null && 'message' in error) {

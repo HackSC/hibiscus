@@ -12,6 +12,7 @@ import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-clie
 import GrayLink from '../gray-link/gray-link';
 
 export function VerifyCard() {
+  const supabase = container.resolve(HibiscusSupabaseClient).getClient();
   const router = useRouter();
   const [hideErrorMessage, setHideErrorMessage] = useState(false);
   const [code, setCode] = useState('');
@@ -22,10 +23,11 @@ export function VerifyCard() {
     const email = String(router.query.email);
 
     try {
-      const { data, error } = await HibiscusSupabaseClient.verifyEmail(
+      const { data, error } = await supabase.auth.verifyOtp({
         email,
-        code
-      );
+        token: code,
+        type: 'signup',
+      });
       if (error) {
         console.log(error);
         setHideErrorMessage(true);
