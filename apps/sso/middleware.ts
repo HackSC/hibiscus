@@ -23,9 +23,18 @@ export async function middleware(request: NextRequest) {
           method: 'POST',
           credentials: 'include',
         });
-        return NextResponse.redirect(
+        const nextResponse = NextResponse.redirect(
           (await res.json()).redirect ?? process.env.SSO_URL
         );
+        nextResponse.headers.set(
+          'Set-Cookie',
+          `${process.env.HIBISCUS_COOKIE_NAME}=${token}; Path=/; Max-Age=${
+            process.env.HIBISCUS_COOKIE_MAX_AGE
+          }; SameSite=None; HttpOnly${
+            process.env.NODE_ENV === 'production' ? '; Secure' : ''
+          }`
+        );
+        return nextResponse;
       } else {
         return NextResponse.redirect(process.env.SSO_URL);
       }
