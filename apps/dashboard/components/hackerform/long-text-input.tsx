@@ -5,8 +5,8 @@ import { QuestionFormProps } from './hackform-question';
 
 const LongTextQuestion = ({
   question,
-  onErrorQuestion,
-  onErrorResolved,
+  addErrorForQuestion: onErrorQuestion,
+  resolveError: onErrorResolved,
   onClickSubmit,
   onClickNext,
   currentResponses,

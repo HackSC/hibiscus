@@ -33,10 +33,22 @@ export const formMetadata2023HackerApps: FormMetadata = {
     //   type: FormQuestionType.SingleOptionDropdown,
     //   required: true,
     // },
-    // {
-    //   title: 'Select your program:',
-    //   type: FormQuestionType.SingleOptionDropdown,
-    // },
+    {
+      title: 'Select your program:',
+      type: FormQuestionType.SingleOptionDropdown,
+      placeholder: 'e.g University of Southern California',
+      required: true,
+      validationFunction: (input) => {
+        if (input.text === '')
+          return { valid: false, errorDescription: 'This field is required' };
+        return { valid: true };
+      },
+      options: [
+        { value: '1', displayName: 'Undergraduate' },
+        { value: '2', displayName: 'Masters' },
+        { value: '3', displayName: 'PhD' },
+      ],
+    },
     {
       title: 'What technologies and skills do you have?',
       type: FormQuestionType.LongText,

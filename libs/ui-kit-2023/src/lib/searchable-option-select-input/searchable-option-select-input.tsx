@@ -10,16 +10,12 @@ import styled from 'styled-components';
 import OneLineText from '../one-line-text/one-line-text';
 import { Text } from '@hacksc-platforms/ui';
 import Fuse from 'fuse.js';
-
-export interface Option {
-  value?: string;
-  displayName: string;
-}
+import { Option } from '@hacksc-platforms/types';
 
 /* eslint-disable-next-line */
 export interface OptionSelectProps
   extends InputHTMLAttributes<HTMLInputElement> {
-  options?: Option[];
+  options: Option[];
   onClickChooseOption?: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     option: Option
