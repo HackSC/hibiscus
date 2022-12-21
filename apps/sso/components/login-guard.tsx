@@ -13,17 +13,19 @@ export function LoginGuard({ callback, children }: LoginGuardProps) {
       if (callback != null) {
         try {
           const resToken = await axios.post('/api/validateSession', {});
-          const res = await axios.post(
-            callback,
-            {},
-            {
-              headers: {
-                Authorization: `Bearer ${resToken.data.token}`,
-              },
-              withCredentials: true,
-            }
-          );
-          window.location.replace(res.data?.redirect ?? '/');
+          if (resToken.status == 200) {
+            const res = await axios.post(
+              callback,
+              {},
+              {
+                headers: {
+                  Authorization: `Bearer ${resToken.data.token}`,
+                },
+                withCredentials: true,
+              }
+            );
+            window.location.replace(res.data?.redirect ?? '/');
+          }
         } catch {
           setAuthorized(true);
         }
