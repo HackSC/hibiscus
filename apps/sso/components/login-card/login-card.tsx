@@ -37,12 +37,16 @@ export function LoginCard(props: LoginCardProps) {
 
       if (data.user) {
         const token = data.session.access_token;
-        const res = await axios.get(props.callback, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          withCredentials: true,
-        });
+        const res = await axios.post(
+          props.callback,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            withCredentials: true,
+          }
+        );
         window.location.replace(res.data?.redirect ?? '/');
       }
     } catch (e) {

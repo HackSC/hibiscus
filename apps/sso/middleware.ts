@@ -21,7 +21,9 @@ export async function middleware(request: NextRequest) {
         },
         credentials: 'include',
       });
-      return NextResponse.redirect((await res.json()).redirect ?? '/');
+      return NextResponse.redirect(
+        (await res.json()).redirect ?? process.env.SSO_URL
+      );
     }
   }
 
