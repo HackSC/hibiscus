@@ -68,11 +68,6 @@ function HackformQuestionComponent(props: QuestionFormProps) {
     }
   };
 
-  const handleClickNext = () => {
-    // silently validate here then go next
-    question.validationFunction();
-  };
-
   return (
     <Wrapper>
       <QuestionWrapper>
