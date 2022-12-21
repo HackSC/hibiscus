@@ -28,11 +28,7 @@ const handler: NextApiHandler = async (req, res) => {
       res.setHeader('Access-Control-Expose-Headers', 'Set-Cookie');
       res.setHeader(
         'Set-Cookie',
-        `${process.env.HIBISCUS_COOKIE_NAME}=${token}; Path=/; Max-Age=${
-          process.env.HIBISCUS_COOKIE_MAX_AGE
-        }; SameSite=None; HttpOnly${
-          process.env.NODE_ENV === 'production' ? '; Secure' : ''
-        }`
+        `${process.env.HIBISCUS_COOKIE_NAME}=${token}; Path=/; Max-Age=${process.env.HIBISCUS_COOKIE_MAX_AGE}; SameSite=None; HttpOnly; Secure`
       );
       res.status(200).json({
         message: 'Authorization success',

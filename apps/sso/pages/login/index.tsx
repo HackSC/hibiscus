@@ -4,10 +4,11 @@ import { TrademarkColors } from '@hacksc-platforms/styles';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import { LoginGuard } from '../../components/login-guard';
 
 export function Index() {
   const router = useRouter();
-  const [callback, setCallback] = useState('/');
+  const [callback, setCallback] = useState(null);
   useEffect(() => {
     if (!router.isReady) return;
 
@@ -19,7 +20,9 @@ export function Index() {
       <Head>
         <title>Login | Hibiscus by HackSC</title>
       </Head>
-      <LoginCard callback={callback} />
+      <LoginGuard callback={callback}>
+        <LoginCard callback={callback} />
+      </LoginGuard>
     </MainPageWrapper>
   );
 }
