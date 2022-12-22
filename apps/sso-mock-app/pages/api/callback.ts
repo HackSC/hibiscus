@@ -35,10 +35,12 @@ const handler: NextApiHandler = async (req, res) => {
         redirect: process.env.SSO_MOCK_APP_URL,
       });
     } else {
-      res.status(400).json({ error: 'Invalid authorization token' });
+      res.status(400).json({ error: 'Bearer token must be provided' });
     }
   } else {
-    res.status(400).json({ error: 'Authorization token not found' });
+    res
+      .status(404)
+      .json({ error: `HTTP method ${req.method} not supported on this route` });
   }
 };
 
