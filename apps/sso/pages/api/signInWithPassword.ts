@@ -10,6 +10,12 @@ const handler: NextApiHandler = async (req, res) => {
       email,
       password,
     });
+    if (data.user) {
+      res.setHeader('Set-Cookie', [
+        `${process.env.HIBISCUS_COOKIE_NAME}=${data.session.access_token}; Path=/; Domain=${process.env.HIBISCUS_DOMAIN}; Max-Age=${process.env.HIBISCUS_COOKIE_MAX_AGE}; HttpOnly; Secure; SameSite=None`,
+        `${process.env.HIBISCUS_COOKIE_NAME}=${data.session.access_token}; Path=/; HttpOnly; Secure; SameSite=None`,
+      ]);
+    }
     res.status(200).json({ data, error });
   }
 };

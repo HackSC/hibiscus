@@ -11,6 +11,7 @@
     "recruitment": "apps/recruitment",
     "sso": "apps/sso",
     "sso-e2e": "apps/sso-e2e",
+    "sso-mock-app": "apps/sso-mock-app",
     "styles": "libs/styles",
     "types": "libs/types",
     "ui": "libs/ui",
