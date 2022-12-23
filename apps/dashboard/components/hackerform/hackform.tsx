@@ -2,7 +2,12 @@ import styled from 'styled-components';
 import HackformIntroduction from './hackform-introduction';
 import React, { useState } from 'react';
 import HackformQuestionComponent from './hackform-question';
-import { FormMetadata, HackformSubmission } from '@hacksc-platforms/types';
+import {
+  FormMetadata,
+  FormQuestionType,
+  HackformQuestionResponse,
+  HackformSubmission,
+} from '@hacksc-platforms/types';
 import HackformEnding from './hackform-end';
 
 /* eslint-disable-next-line */
@@ -42,6 +47,31 @@ export function Hackerform({ formMetadata }: HackerformProps) {
     });
   };
 
+  // handle when person submits
+  const saveResponse = (response: HackformQuestionResponse) => {
+    setResponses(({ responses }) => {
+      let input: HackformQuestionResponse['input'] = {};
+      const question = formMetadata.questions[currentQuestionIndex];
+      switch (question.type) {
+        case FormQuestionType.Email:
+        case FormQuestionType.ShortText:
+        case FormQuestionType.LongText: // they will all fill the text field in the input.
+          input = { text: response.input.text };
+          break;
+        case FormQuestionType.SingleOptionDropdown:
+          input = {
+            text: response.input.text,
+            singleChoiceValue: response.input.singleChoiceValue,
+          };
+          break;
+        default:
+          break;
+      }
+      const newResponses = { ...responses, [currentQuestionIndex]: { input } };
+      return { responses: newResponses };
+    });
+  };
+
   // get page to show based on question index etc...
   const getHackformPage = () => {
     if (currentQuestionIndex === -1) {
@@ -59,12 +89,11 @@ export function Hackerform({ formMetadata }: HackerformProps) {
         return (
           <HackformQuestionComponent
             currentResponses={responses}
-            setCurrentResponses={setResponses}
-            question={formMetadata.questions[currentQuestionIndex]}
+            question={formMetadata.questions[firstErrorQI]}
             qi={currentQuestionIndex}
             goPreviousQuestion={goToPreviousQuestion}
             goNextQuestion={goToNextQuestion}
-            saveResponse={goToNextQuestion} // naive for now
+            saveResponse={saveResponse}
             addErrorForQuestion={addQuestionErrors}
             resolveError={resolveError}
           />
@@ -72,21 +101,19 @@ export function Hackerform({ formMetadata }: HackerformProps) {
       } else {
         return <HackformEnding formMetadata={formMetadata} />;
       }
-    } else {
-      return (
-        <HackformQuestionComponent
-          currentResponses={responses}
-          setCurrentResponses={setResponses}
-          question={formMetadata.questions[currentQuestionIndex]}
-          qi={currentQuestionIndex}
-          goPreviousQuestion={goToPreviousQuestion}
-          goNextQuestion={goToNextQuestion}
-          saveResponse={goToNextQuestion} // naive for now
-          addErrorForQuestion={addQuestionErrors}
-          resolveError={resolveError}
-        />
-      );
     }
+    return (
+      <HackformQuestionComponent
+        currentResponses={responses}
+        question={formMetadata.questions[currentQuestionIndex]}
+        qi={currentQuestionIndex}
+        goPreviousQuestion={goToPreviousQuestion}
+        goNextQuestion={goToNextQuestion}
+        saveResponse={saveResponse}
+        addErrorForQuestion={addQuestionErrors}
+        resolveError={resolveError}
+      />
+    );
   };
 
   return <HackformWrapper>{getHackformPage()}</HackformWrapper>;

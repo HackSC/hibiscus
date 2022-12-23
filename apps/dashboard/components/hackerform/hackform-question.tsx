@@ -6,7 +6,7 @@ import {
 } from '@hacksc-platforms/types';
 import { H1, H3 } from '@hacksc-platforms/ui';
 import { ArrowButton } from '@hacksc-platforms/ui-kit-2023';
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import LongTextQuestion from './long-text-input';
 import SearchableOptionsInput from './searchable-options-input';
@@ -14,8 +14,7 @@ import ShortTextInput from './short-text-input';
 
 export interface QuestionFormProps {
   question: FormQuestion;
-  currentResponses: HackformSubmission; // passed by refernce
-  setCurrentResponses: Dispatch<SetStateAction<HackformSubmission>>;
+  currentResponses: HackformSubmission; // passed by reference
   qi: number;
   saveResponse?: (response: HackformQuestionResponse) => void;
   goNextQuestion?: () => void;
@@ -25,58 +24,18 @@ export interface QuestionFormProps {
 }
 
 function HackformQuestionComponent(props: QuestionFormProps) {
-  const { question, qi, setCurrentResponses } = props;
-
-  // handle when person submits
-  const handleSubmitQuestion = (response: HackformQuestionResponse) => {
-    setCurrentResponses(({ responses }) => {
-      let input: HackformQuestionResponse['input'] = {};
-      switch (question.type) {
-        case FormQuestionType.Email:
-        case FormQuestionType.ShortText:
-        case FormQuestionType.LongText: // they will all fill the text field in the input.
-          input = { text: response.input.text };
-          break;
-        case FormQuestionType.SingleOptionDropdown:
-          input = {
-            text: response.input.text,
-            singleChoiceValue: response.input.singleChoiceValue,
-          };
-          break;
-        default:
-          break;
-      }
-      const newResponses = { ...responses, [qi]: { input } };
-      return { responses: newResponses };
-    });
-  };
+  const { question, qi } = props;
 
   const getInputSubcomponent = () => {
     switch (question.type) {
       case FormQuestionType.ShortText:
-        return (
-          <ShortTextInput
-            {...props}
-            placeholder={question.placeholder}
-            saveResponse={handleSubmitQuestion}
-          />
-        );
+        return <ShortTextInput {...props} placeholder={question.placeholder} />;
       case FormQuestionType.LongText:
         return (
-          <LongTextQuestion
-            {...props}
-            placeholder={question.placeholder}
-            saveResponse={handleSubmitQuestion}
-          />
+          <LongTextQuestion {...props} placeholder={question.placeholder} />
         );
       case FormQuestionType.SingleOptionDropdown:
-        return (
-          <SearchableOptionsInput
-            {...props}
-            options={question.options}
-            saveResponse={handleSubmitQuestion}
-          />
-        );
+        return <SearchableOptionsInput {...props} options={question.options} />;
       default:
         return null;
     }
