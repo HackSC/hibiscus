@@ -23,6 +23,7 @@ const ShortTextInput = ({
   const handleSubmitWithValidation = () => {
     const input = { text: textInput };
     const { valid, errorDescription } = question.validationFunction(input);
+    console.log(errorDescription);
     saveResponse({ input });
     if (valid) {
       resolveError(qi);

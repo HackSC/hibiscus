@@ -51,7 +51,7 @@ function HackformQuestionComponent(props: QuestionFormProps) {
     });
   };
 
-  let InputSubcomponent = () => {
+  const getInputSubcomponent = () => {
     switch (question.type) {
       case FormQuestionType.ShortText:
         return (
@@ -94,7 +94,7 @@ function HackformQuestionComponent(props: QuestionFormProps) {
           {question.title}
           {question.required && <SpanRed>*</SpanRed>}
         </H3>
-        <InputSubcomponent />
+        {getInputSubcomponent()}
       </QuestionWrapper>
       <BottomWidgetsContainer>
         <BackNextContainer>
