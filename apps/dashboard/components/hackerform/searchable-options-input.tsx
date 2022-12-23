@@ -1,30 +1,30 @@
 import { Colors2023 } from '@hacksc-platforms/styles';
 import { HackformQuestionResponse, Option } from '@hacksc-platforms/types';
 import { Text } from '@hacksc-platforms/ui';
-import {
-  Button,
-  SearchableOptionSelectInput,
-} from '@hacksc-platforms/ui-kit-2023';
+import { SearchableOptionSelectInput } from '@hacksc-platforms/ui-kit-2023';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { QuestionFormProps } from './hackform-question';
+import QuestionCreator from './QuestionCreator';
 
 type SearchableOptionsInputProps = QuestionFormProps & {
   options: Option[];
   initialError?: string; // for passing in default error
 };
 
-const SearchableOptionsInput = ({
-  currentResponses: { responses },
-  question,
-  initialError,
-  options,
-  qi,
-  resolveError,
-  addErrorForQuestion,
-  saveResponse,
-  goNextQuestion,
-}: SearchableOptionsInputProps) => {
+const SearchableOptionsInput = (props: SearchableOptionsInputProps) => {
+  const {
+    currentResponses: { responses },
+    question,
+    initialError,
+    options,
+    qi,
+    resolveError,
+    addErrorForQuestion,
+    saveResponse,
+    goNextQuestion,
+    goPreviousQuestion,
+  } = props;
   const currentInput = responses[qi]?.input;
 
   const [textInput, setTextInput] = useState(currentInput?.text ?? '');
@@ -38,14 +38,20 @@ const SearchableOptionsInput = ({
   );
   const [error, setError] = useState(initialError ?? '');
 
-  const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault();
-    const input: HackformQuestionResponse['input'] = {
+  const getResponse = (): HackformQuestionResponse => ({
+    input: {
       singleChoiceValue: chosenOption?.value,
       text: textInput,
-    };
-    const { valid, errorDescription } = question.validationFunction(input);
-    saveResponse({ input });
+    },
+  });
+
+  const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    const response = getResponse();
+    const { valid, errorDescription } = question.validationFunction(
+      response.input
+    );
+    saveResponse(response);
     if (!valid) {
       setError(errorDescription);
       addErrorForQuestion(qi, errorDescription);
@@ -68,22 +74,48 @@ const SearchableOptionsInput = ({
     setTextInput(e.target.value);
   };
 
+  const goNextQuestionValidateSilently = () => {
+    const response = getResponse();
+    const { valid, errorDescription } = question.validationFunction(
+      response.input
+    );
+    if (!valid) addErrorForQuestion(qi, errorDescription);
+    else resolveError(qi);
+    // go next regardless
+    saveResponse(response);
+    goNextQuestion();
+  };
+
+  const goPrevQuestionValidateSilently = () => {
+    const response = getResponse();
+    const { valid, errorDescription } = question.validationFunction(
+      response.input
+    );
+    if (!valid) addErrorForQuestion(qi, errorDescription);
+    else resolveError(qi);
+    // go previous regardless
+    saveResponse(response);
+    goPreviousQuestion();
+  };
+
+  const InputComponent = (
+    <SearchableOptionSelectInput
+      onChange={handleInputChange}
+      onClickChooseOption={handleChooseOptionFromDropdown}
+      options={options}
+      value={textInput}
+    />
+  );
+
   return (
-    <Wrapper>
-      <InputAndButtonWrapper>
-        <SearchableOptionSelectInput
-          onChange={handleInputChange}
-          onClickChooseOption={handleChooseOptionFromDropdown}
-          options={options}
-          value={textInput}
-        />
-        <Button color="black" onClick={handleSubmit}>
-          OK
-        </Button>
-        <SmallText>press Enter</SmallText>
-      </InputAndButtonWrapper>
-      <ErrorText>{error}</ErrorText>
-    </Wrapper>
+    <QuestionCreator
+      {...props}
+      goPreviousQuestion={goPrevQuestionValidateSilently}
+      goNextQuestion={goNextQuestionValidateSilently}
+      inputComponentChildren={InputComponent}
+      handleSubmitWithValidation={handleSubmit}
+      error={error}
+    />
   );
 };
 

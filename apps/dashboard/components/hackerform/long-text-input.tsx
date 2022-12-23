@@ -1,9 +1,19 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { Button, ParagraphText } from '@hacksc-platforms/ui-kit-2023';
 import { QuestionFormProps } from './hackform-question';
-import { Text } from '@hacksc-platforms/ui';
-import { Colors2023 } from '@hacksc-platforms/styles';
+import {
+  ErrorText,
+  InputAndButtonWrapper,
+  PageWrapper,
+  QuestionWrapper,
+  SmallText,
+  ButtonHintTextContainer,
+} from './common-styled-components';
+import HackformQuestionHeader from './hackform-question-header';
+import HackformBackNextWidget from './hackform-backnext-widget';
+import styled from 'styled-components';
+
+type Props = QuestionFormProps & { placeholder: string; initialError?: string };
 
 const LongTextQuestion = ({
   question,
@@ -11,22 +21,14 @@ const LongTextQuestion = ({
   resolveError,
   saveResponse,
   goNextQuestion,
+  goPreviousQuestion,
   currentResponses: { responses },
   qi,
   placeholder,
-}: QuestionFormProps & { placeholder: string }) => {
-  const [error, setError] = useState('');
+  initialError,
+}: Props) => {
+  const [error, setError] = useState(initialError ?? '');
   const [textInput, setInput] = useState(responses[qi]?.input.text ?? '');
-
-  const _handleValidationOnError = (errorDescription: string) => {
-    setError(errorDescription);
-    addErrorForQuestion(qi, errorDescription);
-  };
-
-  const _handleValidatedInput = () => {
-    resolveError(qi);
-    goNextQuestion();
-  };
 
   const handleSubmitWithValidation = () => {
     const input = { text: textInput };
@@ -35,44 +37,82 @@ const LongTextQuestion = ({
     // still have the previous response).
     saveResponse({ input });
     if (!valid) {
-      _handleValidationOnError(errorDescription);
+      setError(errorDescription);
+      addErrorForQuestion(qi, errorDescription);
     } else {
-      _handleValidatedInput();
+      resolveError(qi);
+      goNextQuestion();
     }
   };
 
+  const getResponse = () => ({ input: { text: textInput } });
+
+  const goNextQuestionValidateSilently = () => {
+    const response = getResponse();
+    const { valid, errorDescription } = question.validationFunction(
+      response.input
+    );
+    if (!valid) addErrorForQuestion(qi, errorDescription);
+    else resolveError(qi);
+    // go next regardless
+    saveResponse(response);
+    goNextQuestion();
+  };
+
+  const goPrevQuestionValidateSilently = () => {
+    const response = getResponse();
+    const { valid, errorDescription } = question.validationFunction(
+      response.input
+    );
+    if (!valid) addErrorForQuestion(qi, errorDescription);
+    else resolveError(qi);
+    // go previous regardless
+    saveResponse(response);
+    goPreviousQuestion();
+  };
+
+  const inputComponent = (
+    <ParagraphText
+      style={{ width: '50rem' }}
+      value={textInput}
+      placeholder={placeholder}
+      onChange={(e) => {
+        setInput(e.target.value);
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          handleSubmitWithValidation();
+        }
+      }}
+    />
+  );
+
   return (
-    <InputAndButtonWrapper>
-      <ParagraphText
-        style={{ width: '50rem' }}
-        value={textInput}
-        placeholder={placeholder}
-        onChange={(e) => {
-          setInput(e.target.value);
-        }}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            handleSubmitWithValidation();
-          }
-        }}
+    <PageWrapper>
+      <QuestionWrapper>
+        <HackformQuestionHeader question={question} qi={qi} />
+        <InputAndButtonWrapperOverride>
+          {inputComponent}
+          <ButtonHintTextContainer>
+            <Button color="black" onClick={handleSubmitWithValidation}>
+              OK
+            </Button>
+            <SmallText>press Enter.</SmallText>
+          </ButtonHintTextContainer>
+        </InputAndButtonWrapperOverride>
+        <ErrorText>{error}</ErrorText>
+      </QuestionWrapper>
+      <HackformBackNextWidget
+        goNextQuestion={goNextQuestionValidateSilently}
+        goPreviousQuestion={goPrevQuestionValidateSilently}
       />
-      <Button color="black" onClick={handleSubmitWithValidation}>
-        OK
-      </Button>
-      <ErrorText>{error}</ErrorText>
-    </InputAndButtonWrapper>
+    </PageWrapper>
   );
 };
 
 export default LongTextQuestion;
 
-const InputAndButtonWrapper = styled.div`
-  display: flex;
+const InputAndButtonWrapperOverride = styled(InputAndButtonWrapper)`
   flex-direction: column;
   align-items: flex-start;
-  gap: 10px;
-`;
-
-const ErrorText = styled(Text)`
-  color: ${Colors2023.RED.STANDARD};
 `;
