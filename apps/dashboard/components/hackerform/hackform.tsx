@@ -13,20 +13,20 @@ export interface HackerformProps {
 export function Hackerform({ formMetadata }: HackerformProps) {
   const [currentQuestionIndex, setCQI] = useState(-1);
   const [responses, setResponses] = useState<HackformSubmission>({
-    responses: [],
+    responses: {},
   });
   const [errors, setErrors] = useState<Record<number, string>>({}); // qi -> error
 
-  const onClickNextQuestion = () => {
+  const goToNextQuestion = () => {
     if (currentQuestionIndex < formMetadata.questions.length)
       setCQI(currentQuestionIndex + 1);
   };
 
-  const onClickBackQuestion = () => {
+  const goToPreviousQuestion = () => {
     if (currentQuestionIndex > -1) setCQI(currentQuestionIndex - 1);
   };
 
-  const onErrorResolved = (qi: number) => {
+  const resolveError = (qi: number) => {
     setErrors((prev) => {
       const newPrev = { ...prev };
       delete newPrev[qi];
@@ -34,7 +34,7 @@ export function Hackerform({ formMetadata }: HackerformProps) {
     });
   };
 
-  const onErrorQuestion = (qi: number, error: string) => {
+  const addQuestionErrors = (qi: number, error: string) => {
     setErrors((prev) => {
       const newPrev = { ...prev };
       newPrev[qi] = error;
@@ -42,52 +42,54 @@ export function Hackerform({ formMetadata }: HackerformProps) {
     });
   };
 
-  let children = null;
-  if (currentQuestionIndex === -1) {
-    children = (
-      <HackformIntroduction
-        formMetadata={formMetadata}
-        onClick={onClickNextQuestion}
-      />
-    );
-  } else if (currentQuestionIndex === formMetadata.questions.length) {
-    if (Object.entries(errors).length > 0) {
-      // get the first one with an error and go back to it
-      const [firstErrorQI] = Object.entries(errors)[0];
-      setCQI(Number.parseInt(firstErrorQI));
-      children = (
+  // get page to show based on question index etc...
+  const getHackformPage = () => {
+    if (currentQuestionIndex === -1) {
+      return (
+        <HackformIntroduction
+          formMetadata={formMetadata}
+          onClick={goToNextQuestion}
+        />
+      );
+    } else if (currentQuestionIndex === formMetadata.questions.length) {
+      if (Object.entries(errors).length > 0) {
+        // get the first one with an error and go back to it
+        const [firstErrorQI] = Object.entries(errors)[0];
+        setCQI(Number.parseInt(firstErrorQI));
+        return (
+          <HackformQuestionComponent
+            currentResponses={responses}
+            setCurrentResponses={setResponses}
+            question={formMetadata.questions[currentQuestionIndex]}
+            qi={currentQuestionIndex}
+            goPreviousQuestion={goToPreviousQuestion}
+            goNextQuestion={goToNextQuestion}
+            saveResponse={goToNextQuestion} // naive for now
+            addErrorForQuestion={addQuestionErrors}
+            resolveError={resolveError}
+          />
+        );
+      } else {
+        return <HackformEnding formMetadata={formMetadata} />;
+      }
+    } else {
+      return (
         <HackformQuestionComponent
           currentResponses={responses}
           setCurrentResponses={setResponses}
           question={formMetadata.questions[currentQuestionIndex]}
           qi={currentQuestionIndex}
-          onClickBack={onClickBackQuestion}
-          onClickNext={onClickNextQuestion}
-          onClickSubmit={onClickNextQuestion} // naive for now
-          addErrorForQuestion={onErrorQuestion}
-          resolveError={onErrorResolved}
+          goPreviousQuestion={goToPreviousQuestion}
+          goNextQuestion={goToNextQuestion}
+          saveResponse={goToNextQuestion} // naive for now
+          addErrorForQuestion={addQuestionErrors}
+          resolveError={resolveError}
         />
       );
-    } else {
-      children = <HackformEnding formMetadata={formMetadata} />;
     }
-  } else {
-    children = (
-      <HackformQuestionComponent
-        currentResponses={responses}
-        setCurrentResponses={setResponses}
-        question={formMetadata.questions[currentQuestionIndex]}
-        qi={currentQuestionIndex}
-        onClickBack={onClickBackQuestion}
-        onClickNext={onClickNextQuestion}
-        onClickSubmit={onClickNextQuestion} // naive for now
-        addErrorForQuestion={onErrorQuestion}
-        resolveError={onErrorResolved}
-      />
-    );
-  }
+  };
 
-  return <HackformWrapper>{children}</HackformWrapper>;
+  return <HackformWrapper>{getHackformPage()}</HackformWrapper>;
 }
 
 export default Hackerform;

@@ -41,11 +41,10 @@ export enum FormQuestionType {
 }
 
 export interface HackformSubmission {
-  responses: HackformQuestionResponse[];
+  responses: Record<number, HackformQuestionResponse>; // question id -> response
 }
 
 export interface HackformQuestionResponse {
-  question: FormQuestion;
   input?: {
     text?: string; // for text-based questions
     number?: number; // for number-based questions e.g age

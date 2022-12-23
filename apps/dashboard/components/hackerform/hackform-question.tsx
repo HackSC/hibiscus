@@ -4,67 +4,81 @@ import {
   HackformQuestionResponse,
   HackformSubmission,
 } from '@hacksc-platforms/types';
+import { H1, H3 } from '@hacksc-platforms/ui';
+import { ArrowButton } from '@hacksc-platforms/ui-kit-2023';
 import React, { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
-import { H1, H3 } from '@hacksc-platforms/ui';
-import ShortTextInput from './short-text-input';
-import { ArrowButton } from '@hacksc-platforms/ui-kit-2023';
 import LongTextQuestion from './long-text-input';
 import SearchableOptionsInput from './searchable-options-input';
+import ShortTextInput from './short-text-input';
 
 export interface QuestionFormProps {
   question: FormQuestion;
   currentResponses: HackformSubmission; // passed by refernce
   setCurrentResponses: Dispatch<SetStateAction<HackformSubmission>>;
   qi: number;
-  onClickSubmit?: (response: HackformQuestionResponse) => void;
-  onClickNext?: () => void;
-  onClickBack?: () => void;
+  saveResponse?: (response: HackformQuestionResponse) => void;
+  goNextQuestion?: () => void;
+  goPreviousQuestion?: () => void;
   addErrorForQuestion?: (qi: number, error: string) => void;
   resolveError?: (qi: number) => void;
 }
 
 function HackformQuestionComponent(props: QuestionFormProps) {
-  const { question, qi, currentResponses, setCurrentResponses } = props;
+  const { question, qi, setCurrentResponses } = props;
 
   // handle when person submits
   const handleSubmitQuestion = (response: HackformQuestionResponse) => {
+    setCurrentResponses(({ responses }) => {
+      let input: HackformQuestionResponse['input'] = {};
+      switch (question.type) {
+        case FormQuestionType.Email:
+        case FormQuestionType.ShortText:
+        case FormQuestionType.LongText: // they will all fill the text field in the input.
+          input = { text: response.input.text };
+          break;
+        case FormQuestionType.SingleOptionDropdown:
+          input = {
+            text: response.input.text,
+            singleChoiceValue: response.input.singleChoiceValue,
+          };
+          break;
+        default:
+          break;
+      }
+      const newResponses = { ...responses, [qi]: { input } };
+      return { responses: newResponses };
+    });
+  };
+
+  const getInputSubcomponent = () => {
     switch (question.type) {
       case FormQuestionType.ShortText:
-        if (qi >= currentResponses.responses.length) {
-          // there's no response for this question yet
-          setCurrentResponses(({ responses }) => {
-            const newResponses: typeof responses = [
-              ...responses,
-              { question, input: { text: response.input.text } },
-            ];
-            return { responses: newResponses };
-          });
-        } else {
-          // there is a response for this so we modify that response
-          // with the current one
-          setCurrentResponses(({ responses }) => {
-            const newResponses = [...responses];
-            newResponses[qi].input.text = response.input.text;
-            return { responses: newResponses };
-          });
-        }
-        break;
+        return (
+          <ShortTextInput
+            {...props}
+            placeholder={question.placeholder}
+            saveResponse={handleSubmitQuestion}
+          />
+        );
       case FormQuestionType.LongText:
-        // TODO: implement
-        break;
-      case FormQuestionType.Date:
-        // TODO: implement
-        break;
-      case FormQuestionType.Email:
-        // TODO: implement
-        break;
-      case FormQuestionType.Number:
-        // TODO: implement
-        break;
+        return (
+          <LongTextQuestion
+            {...props}
+            placeholder={question.placeholder}
+            saveResponse={handleSubmitQuestion}
+          />
+        );
       case FormQuestionType.SingleOptionDropdown:
-        // TODO: implement
-        break;
+        return (
+          <SearchableOptionsInput
+            {...props}
+            options={question.options}
+            saveResponse={handleSubmitQuestion}
+          />
+        );
+      default:
+        return null;
     }
   };
 
@@ -80,26 +94,12 @@ function HackformQuestionComponent(props: QuestionFormProps) {
           {question.title}
           {question.required && <SpanRed>*</SpanRed>}
         </H3>
-        {question.type === FormQuestionType.ShortText ? (
-          <ShortTextInput
-            {...props}
-            placeholder={question.placeholder}
-            onClickSubmit={handleSubmitQuestion}
-          />
-        ) : question.type === FormQuestionType.LongText ? (
-          <LongTextQuestion
-            {...props}
-            placeholder={question.placeholder}
-            onClickSubmit={handleSubmitQuestion}
-          />
-        ) : question.type === FormQuestionType.SingleOptionDropdown ? (
-          <SearchableOptionsInput {...props} options={question.options} />
-        ) : null}
+        {getInputSubcomponent()}
       </QuestionWrapper>
       <BottomWidgetsContainer>
         <BackNextContainer>
-          <ArrowButton orientation="left" onClick={props.onClickBack} />
-          <ArrowButton onClick={props.onClickNext} />
+          <ArrowButton orientation="left" onClick={props.goPreviousQuestion} />
+          <ArrowButton onClick={props.goNextQuestion} />
         </BackNextContainer>
       </BottomWidgetsContainer>
     </Wrapper>
