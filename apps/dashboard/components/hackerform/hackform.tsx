@@ -98,9 +98,8 @@ export function Hackerform({ formMetadata }: HackerformProps) {
             resolveError={resolveError}
           />
         );
-      } else {
-        return <HackformEnding formMetadata={formMetadata} />;
       }
+      return <HackformEnding formMetadata={formMetadata} />;
     }
     return (
       <HackformQuestionComponent
