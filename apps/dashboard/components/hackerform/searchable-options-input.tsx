@@ -11,33 +11,48 @@ import { QuestionFormProps } from './hackform-question';
 
 type SearchableOptionsInputProps = QuestionFormProps & {
   options: Option[];
-  error?: string; // for passing in default error
+  initialError?: string; // for passing in default error
 };
 
-const SearchableOptionsInput = (props: SearchableOptionsInputProps) => {
-  const [textInput, setTextInput] = useState('');
-  const [chosenOption, setChosenOption] = useState<Option | null>(null);
-  const [error, setError] = useState(props.error ?? '');
+const SearchableOptionsInput = ({
+  currentResponses: { responses },
+  question,
+  initialError,
+  options,
+  qi,
+  resolveError,
+  addErrorForQuestion,
+  saveResponse,
+  goNextQuestion,
+}: SearchableOptionsInputProps) => {
+  const currentInput = responses[qi]?.input;
+
+  const [textInput, setTextInput] = useState(currentInput?.text ?? '');
+  const [chosenOption, setChosenOption] = useState<Option | null>(
+    currentInput?.singleChoiceValue
+      ? {
+          value: currentInput.singleChoiceValue,
+          displayName: currentInput?.text,
+        }
+      : null
+  );
+  const [error, setError] = useState(initialError ?? '');
 
   const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
     const input: HackformQuestionResponse['input'] = {
       singleChoiceValue: chosenOption?.value,
-      text: chosenOption?.displayName ?? textInput,
+      text: textInput,
     };
-    const { valid, errorDescription } =
-      props.question.validationFunction(input);
+    const { valid, errorDescription } = question.validationFunction(input);
+    saveResponse({ input });
     if (!valid) {
       setError(errorDescription);
-      props.addErrorForQuestion(props.qi, errorDescription);
+      addErrorForQuestion(qi, errorDescription);
       return;
     }
-    props.onClickSubmit({
-      question: props.question,
-      input,
-    });
-    props.onClickNext();
-    props.resolveError(props.qi);
+    resolveError(qi);
+    goNextQuestion();
   };
 
   const handleChooseOptionFromDropdown = (
@@ -46,6 +61,7 @@ const SearchableOptionsInput = (props: SearchableOptionsInputProps) => {
   ) => {
     e.preventDefault();
     setChosenOption(option);
+    setTextInput(option.displayName);
   };
 
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -58,14 +74,15 @@ const SearchableOptionsInput = (props: SearchableOptionsInputProps) => {
         <SearchableOptionSelectInput
           onChange={handleInputChange}
           onClickChooseOption={handleChooseOptionFromDropdown}
-          options={props.options}
+          options={options}
+          value={textInput}
         />
         <Button color="black" onClick={handleSubmit}>
           OK
         </Button>
         <SmallText>press Enter</SmallText>
       </InputAndButtonWrapper>
-      {error !== '' && <ErrorText>{error}</ErrorText>}
+      <ErrorText>{error}</ErrorText>
     </Wrapper>
   );
 };

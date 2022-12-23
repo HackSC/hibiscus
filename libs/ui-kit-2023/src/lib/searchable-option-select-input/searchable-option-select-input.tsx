@@ -15,6 +15,7 @@ import { Option } from '@hacksc-platforms/types';
 /* eslint-disable-next-line */
 export interface OptionSelectProps
   extends InputHTMLAttributes<HTMLInputElement> {
+  value: string;
   options: Option[];
   onClickChooseOption?: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -29,7 +30,7 @@ export function SearchableOptionSelectInput(props: OptionSelectProps) {
     props.options ?? null
   );
   const [showOptions, setShowOptions] = useState(false);
-  const [textInput, setTextInput] = useState('');
+  const [textInput, setTextInput] = useState(props.value ?? '');
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   const handleShowOptionsOnClick = useCallback((e: MouseEvent) => {

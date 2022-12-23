@@ -13,7 +13,7 @@ export interface HackerformProps {
 export function Hackerform({ formMetadata }: HackerformProps) {
   const [currentQuestionIndex, setCQI] = useState(-1);
   const [responses, setResponses] = useState<HackformSubmission>({
-    responses: [],
+    responses: {},
   });
   const [errors, setErrors] = useState<Record<number, string>>({}); // qi -> error
 
@@ -61,9 +61,9 @@ export function Hackerform({ formMetadata }: HackerformProps) {
           setCurrentResponses={setResponses}
           question={formMetadata.questions[currentQuestionIndex]}
           qi={currentQuestionIndex}
-          onClickBack={onClickBackQuestion}
-          onClickNext={onClickNextQuestion}
-          onClickSubmit={onClickNextQuestion} // naive for now
+          goPreviousQuestion={onClickBackQuestion}
+          goNextQuestion={onClickNextQuestion}
+          saveResponse={onClickNextQuestion} // naive for now
           addErrorForQuestion={onErrorQuestion}
           resolveError={onErrorResolved}
         />
@@ -78,9 +78,9 @@ export function Hackerform({ formMetadata }: HackerformProps) {
         setCurrentResponses={setResponses}
         question={formMetadata.questions[currentQuestionIndex]}
         qi={currentQuestionIndex}
-        onClickBack={onClickBackQuestion}
-        onClickNext={onClickNextQuestion}
-        onClickSubmit={onClickNextQuestion} // naive for now
+        goPreviousQuestion={onClickBackQuestion}
+        goNextQuestion={onClickNextQuestion}
+        saveResponse={onClickNextQuestion} // naive for now
         addErrorForQuestion={onErrorQuestion}
         resolveError={onErrorResolved}
       />

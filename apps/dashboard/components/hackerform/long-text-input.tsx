@@ -2,33 +2,42 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Button, ParagraphText } from '@hacksc-platforms/ui-kit-2023';
 import { QuestionFormProps } from './hackform-question';
+import { Text } from '@hacksc-platforms/ui';
+import { Colors2023 } from '@hacksc-platforms/styles';
 
 const LongTextQuestion = ({
   question,
-  addErrorForQuestion: onErrorQuestion,
-  resolveError: onErrorResolved,
-  onClickSubmit,
-  onClickNext,
-  currentResponses,
+  addErrorForQuestion,
+  resolveError,
+  saveResponse,
+  goNextQuestion,
+  currentResponses: { responses },
   qi,
   placeholder,
 }: QuestionFormProps & { placeholder: string }) => {
   const [error, setError] = useState('');
-  const [textInput, setInput] = useState(
-    currentResponses.responses[qi]?.input.text ?? ''
-  );
+  const [textInput, setInput] = useState(responses[qi]?.input.text ?? '');
+
+  const _handleValidationOnError = (errorDescription: string) => {
+    setError(errorDescription);
+    addErrorForQuestion(qi, errorDescription);
+  };
+
+  const _handleValidatedInput = () => {
+    resolveError(qi);
+    goNextQuestion();
+  };
 
   const handleSubmitWithValidation = () => {
-    const { valid, errorDescription } = question.validationFunction({
-      text: textInput,
-    });
-    if (valid) {
-      onClickSubmit({ question, input: { text: textInput } });
-      onErrorResolved(qi);
-      onClickNext();
+    const input = { text: textInput };
+    const { valid, errorDescription } = question.validationFunction(input);
+    // save responses regardless (so that when user revisit question they will
+    // still have the previous response).
+    saveResponse({ input });
+    if (!valid) {
+      _handleValidationOnError(errorDescription);
     } else {
-      setError(errorDescription);
-      onErrorQuestion(qi, errorDescription);
+      _handleValidatedInput();
     }
   };
 
@@ -50,7 +59,7 @@ const LongTextQuestion = ({
       <Button color="black" onClick={handleSubmitWithValidation}>
         OK
       </Button>
-      {error}
+      <ErrorText>{error}</ErrorText>
     </InputAndButtonWrapper>
   );
 };
@@ -62,4 +71,8 @@ const InputAndButtonWrapper = styled.div`
   flex-direction: column;
   align-items: flex-start;
   gap: 10px;
+`;
+
+const ErrorText = styled(Text)`
+  color: ${Colors2023.RED.STANDARD};
 `;

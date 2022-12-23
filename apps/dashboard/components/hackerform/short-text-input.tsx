@@ -7,11 +7,11 @@ import { Colors2023 } from '@hacksc-platforms/styles';
 
 const ShortTextInput = ({
   question,
-  onClickSubmit,
-  onClickNext,
+  saveResponse,
+  goNextQuestion,
   currentResponses,
-  addErrorForQuestion: onErrorQuestion,
-  resolveError: onErrorResolved,
+  addErrorForQuestion,
+  resolveError,
   qi,
   placeholder,
 }: QuestionFormProps & { placeholder: string }) => {
@@ -21,16 +21,15 @@ const ShortTextInput = ({
   );
 
   const handleSubmitWithValidation = () => {
-    const { valid, errorDescription } = question.validationFunction({
-      text: textInput,
-    });
+    const input = { text: textInput };
+    const { valid, errorDescription } = question.validationFunction(input);
+    saveResponse({ input });
     if (valid) {
-      onClickSubmit({ question, input: { text: textInput } });
-      onErrorResolved(qi);
-      onClickNext();
+      resolveError(qi);
+      goNextQuestion();
     } else {
       setError(errorDescription);
-      onErrorQuestion(qi, errorDescription);
+      addErrorForQuestion(qi, errorDescription);
     }
   };
 
