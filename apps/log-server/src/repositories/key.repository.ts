@@ -45,7 +45,7 @@ export class KeyRepository implements Disposable {
       handleRepositoryErrors(e);
     }
   }
-  
+
   /**
 
    * Called when container.dispose is called
