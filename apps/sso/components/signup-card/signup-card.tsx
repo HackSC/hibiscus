@@ -56,7 +56,7 @@ export function SignUpCard(props: SignUpProps) {
   return (
     <StyledLoginCard>
       <Image
-        src="/images/Logo.svg"
+        src="/static/images/Logo.svg"
         alt="HackSC Logo"
         width={100}
         height={100}
