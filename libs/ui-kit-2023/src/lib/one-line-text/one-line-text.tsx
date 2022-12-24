@@ -1,44 +1,29 @@
-import { useRef } from 'react';
+import { Colors2023 } from '@hacksc-platforms/styles';
+import { InputHTMLAttributes } from 'react';
 import styled from 'styled-components';
 
 /* eslint-disable-next-line */
-export interface OneLineTextProps {
-  placeholder: string;
-  onInput: (value: string) => void;
+export interface OneLineTextProps
+  extends InputHTMLAttributes<HTMLInputElement> {
+  placeholder?: string;
 }
 
-export function OneLineText({ onInput, placeholder }: OneLineTextProps) {
-  const ref = useRef<HTMLInputElement>(null);
-  function handleChange() {
-    if (!ref.current) {
-      return;
-    }
-    onInput(ref.current.value);
-  }
-
-  return (
-    <Input
-      onChange={handleChange}
-      ref={ref}
-      placeholder={placeholder}
-      type="text"
-    />
-  );
+export function OneLineText(props: OneLineTextProps) {
+  return <Input {...props} type="text" />;
 }
 
 export default OneLineText;
 
 const Input = styled.input`
   all: unset;
-  background: #565656;
-  /* gray/light */
-  width: 250px;
-  height: 42px;
-  border: 1.5px solid #f4f4f4;
+  background: ${Colors2023.GRAY.MEDIUM};
+  min-width: 250px;
+  min-height: 42px;
+  border: 1.5px solid ${Colors2023.GRAY.LIGHT};
   border-radius: 11px;
-  padding-left: 20px;
+  padding: 0 20px;
 
-  //font
+  // font
   font-family: 'Inter';
   font-style: normal;
   font-weight: 500;
@@ -46,19 +31,13 @@ const Input = styled.input`
   line-height: 42px;
   font-feature-settings: 'cv05' on;
 
-  /* gray/light */
-
-  color: #f4f4f4;
+  color: ${Colors2023.GRAY.LIGHT};
   :hover {
     filter: drop-shadow(0px 0px 15px #c2c2c2);
   }
   :focus {
-    /* gray/medium */
-
-    background: #565656;
-    /* purple/standard */
-
-    border: 1.5px solid #7a65fd;
+    background: ${Colors2023.GRAY.MEDIUM};
+    border: 1.5px solid ${Colors2023.PURPLE.STANDARD};
     border-radius: 11px;
   }
 `;

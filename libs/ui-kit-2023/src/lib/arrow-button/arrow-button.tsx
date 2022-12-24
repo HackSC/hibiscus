@@ -40,8 +40,8 @@ const StyledArrowButton = styled.button<{
       ? 'rotate(-90deg)'
       : 'rotate(0)'};
   background: transparent;
-  color: ${Colors2023.BLUE_STANDARD};
-  border: 1.5px solid ${Colors2023.BLUE_STANDARD};
+  color: ${Colors2023.BLUE.STANDARD};
+  border: 1.5px solid ${Colors2023.BLUE.STANDARD};
   border-radius: 8px;
   padding: 8px
     ${({ orientation }) =>
@@ -49,4 +49,5 @@ const StyledArrowButton = styled.button<{
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 `;

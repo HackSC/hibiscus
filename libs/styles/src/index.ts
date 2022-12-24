@@ -1,2 +1,2 @@
 export * from './lib/colors';
-export * from './lib/fonts';
+export * from './lib/global-styles';

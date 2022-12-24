@@ -4,4 +4,4 @@ INSERT INTO public.roles(name) VALUES
   ('SPONSOR'),
   ('VOLUNTEER'),
   ('HACKER'),
-  ('APPLICANT')
+  ('APPLICANT');
