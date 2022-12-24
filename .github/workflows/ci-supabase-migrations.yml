@@ -14,7 +14,6 @@ jobs:
       - uses: supabase/setup-cli@v1
         with:
           version: 1.0.0
-      - run: supabase init
       - run: supabase start
       - name: Verify generated types are up-to-date with production types generated from schema
         run: |
