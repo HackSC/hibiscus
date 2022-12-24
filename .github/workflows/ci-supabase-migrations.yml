@@ -5,14 +5,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  supabase-migration-test:
     runs-on: ubuntu-22.04
+    name: Verify migration works fine
     steps:
       - uses: actions/checkout@v3
-
       - uses: supabase/setup-cli@v1
         with:
           version: 1.0.0
-
-      - name: Verify migration works fine
       - run: supabase start
