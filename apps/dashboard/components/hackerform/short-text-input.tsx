@@ -1,29 +1,37 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
-import { Button, OneLineText } from '@hacksc-platforms/ui-kit-2023';
+import { OneLineText } from '@hacksc-platforms/ui-kit-2023';
 import { QuestionFormProps } from './hackform-question';
-import { Text } from '@hacksc-platforms/ui';
-import { Colors2023 } from '@hacksc-platforms/styles';
+import QuestionCreator from './QuestionCreator';
+import { HackformQuestionResponse } from '@hacksc-platforms/types';
 
-const ShortTextInput = ({
-  question,
-  saveResponse,
-  goNextQuestion,
-  currentResponses,
-  addErrorForQuestion,
-  resolveError,
-  qi,
-  placeholder,
-}: QuestionFormProps & { placeholder: string }) => {
-  const [error, setError] = useState('');
+type Props = QuestionFormProps & { placeholder: string; initialError?: string };
+
+const ShortTextInput = (props: Props) => {
+  const {
+    question,
+    saveResponse,
+    goNextQuestion,
+    goPreviousQuestion,
+    currentResponses,
+    addErrorForQuestion,
+    resolveError,
+    qi,
+    placeholder,
+    initialError,
+  } = props;
+  const [error, setError] = useState(initialError ?? '');
   const [textInput, setInput] = useState(
     currentResponses.responses[qi]?.input.text ?? ''
   );
 
+  const getInputResponse = (): HackformQuestionResponse['input'] => ({
+    text: textInput,
+  });
+
   const handleSubmitWithValidation = () => {
-    const input = { text: textInput };
+    const input = getInputResponse();
     const { valid, errorDescription } = question.validationFunction(input);
-    console.log(errorDescription);
+
     saveResponse({ input });
     if (valid) {
       resolveError(qi);
@@ -34,49 +42,52 @@ const ShortTextInput = ({
     }
   };
 
+  const goNextQuestionValidateSilently = () => {
+    const input = getInputResponse();
+    const { valid, errorDescription } = question.validationFunction(input);
+    if (!valid) addErrorForQuestion(qi, errorDescription);
+    else resolveError(qi);
+    // go next regardless
+    saveResponse({ input });
+    goNextQuestion();
+  };
+
+  const goPrevQuestionValidateSilently = () => {
+    const input = getInputResponse();
+    const { valid, errorDescription } = question.validationFunction(input);
+    if (!valid) addErrorForQuestion(qi, errorDescription);
+    else resolveError(qi);
+    // go previous regardless
+    saveResponse({ input });
+    goPreviousQuestion();
+  };
+
+  const InputComponent = (
+    <OneLineText
+      value={textInput}
+      placeholder={placeholder}
+      onChange={(e) => {
+        setInput(e.target.value);
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          handleSubmitWithValidation();
+        }
+      }}
+    />
+  );
+
   return (
-    <Wrapper>
-      <InputAndButtonWrapper>
-        <OneLineText
-          value={textInput}
-          placeholder={placeholder}
-          onChange={(e) => {
-            setInput(e.target.value);
-          }}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              handleSubmitWithValidation();
-            }
-          }}
-        />
-        <Button color="black" onClick={handleSubmitWithValidation}>
-          OK
-        </Button>
-        <SmallText>press Enter.</SmallText>
-      </InputAndButtonWrapper>
-      <ErrorText>{error}</ErrorText>
-    </Wrapper>
+    <QuestionCreator
+      goNextQuestion={goNextQuestionValidateSilently}
+      goPreviousQuestion={goPrevQuestionValidateSilently}
+      qi={qi}
+      question={question}
+      handleSubmitWithValidation={handleSubmitWithValidation}
+      inputComponentChildren={InputComponent}
+      error={error}
+    />
   );
 };
 
 export default ShortTextInput;
-
-const InputAndButtonWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-`;
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-const ErrorText = styled(Text)`
-  color: ${Colors2023.RED.STANDARD};
-`;
-
-const SmallText = styled(Text)`
-  font-size: small;
-`;
