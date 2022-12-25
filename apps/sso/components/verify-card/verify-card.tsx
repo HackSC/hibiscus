@@ -43,7 +43,7 @@ export function VerifyCard() {
 
   return (
     <StyledVerifyCard>
-      <img src="/images/Logo.svg" alt="HackSC Logo" width="100px" />
+      <img src="/static/images/Logo.svg" alt="HackSC Logo" width="100px" />
       <StyledText>
         We’ve sent you an email containing a unique 6-digit PIN code.
       </StyledText>
