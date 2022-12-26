@@ -6,10 +6,10 @@ export interface GlowSpanProps {
   shadowColor?: string;
 }
 
-// defaults to red color
+// defaults to white color
 export const GlowSpan = styled.span<GlowSpanProps>`
-  color: ${({ color }) => color ?? '#ffa295'};
-  text-shadow: 0px 0px 10px ${({ shadowColor }) => shadowColor ?? '#fe5139'};
+  color: ${({ color }) => color ?? '#ffffff'};
+  text-shadow: 0px 0px 10px ${({ shadowColor }) => shadowColor ?? '#ffffff'};
 `;
 
 export default GlowSpan;

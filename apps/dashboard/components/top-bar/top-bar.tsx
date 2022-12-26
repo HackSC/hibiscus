@@ -12,7 +12,7 @@ export interface TopBarProps {
 }
 
 export function TopBar(props: TopBarProps) {
-  const userColors = Colors2023.roleColors[props.role].color;
+  const userColors = Colors2023.roleColors[props.role];
   return (
     <StyledTopBar>
       <Link href="/" anchortagpropsoverride={{ target: '_self' }}>
@@ -27,7 +27,7 @@ export function TopBar(props: TopBarProps) {
       <RightUtilityContainer>
         <UserText>{props.userTag}</UserText>
         <RoleText>
-          <GlowSpan color={userColors.LIGHT} shadowColor={userColors.STANDARD}>
+          <GlowSpan color={userColors.light} shadowColor={userColors.standard}>
             {props.role}
           </GlowSpan>
         </RoleText>
