@@ -1,8 +1,7 @@
 import { Colors2023 } from '@hacksc-platforms/styles';
 import styled from 'styled-components';
-import Image from 'next/image';
-import arrow from '../../assets/chevron-down.svg';
 import React from 'react';
+import Arrow from '../../assets/chevron-down.svg';
 
 /* eslint-disable-next-line */
 export interface ArrowButtonProps extends React.ButtonHTMLAttributes<any> {
@@ -12,15 +11,13 @@ export interface ArrowButtonProps extends React.ButtonHTMLAttributes<any> {
 export function ArrowButton(props: ArrowButtonProps) {
   return (
     <StyledArrowButton {...props} orientation={props.orientation}>
-      <Image
-        src={arrow}
+      <img
+        src={Arrow}
         alt={`Arrow if pressed will go to the ${
           props.orientation === 'right' || props.orientation === 'down'
             ? 'next'
             : 'previous'
         } question`}
-        width={20}
-        height={20}
       />
     </StyledArrowButton>
   );

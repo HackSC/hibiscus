@@ -4,9 +4,7 @@ import {
   HackformQuestionResponse,
   HackformSubmission,
 } from '@hacksc-platforms/types';
-import { H1, H3 } from '@hacksc-platforms/ui';
-import { ArrowButton } from '@hacksc-platforms/ui-kit-2023';
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import LongTextQuestion from './long-text-input';
 import SearchableOptionsInput from './searchable-options-input';
@@ -14,42 +12,18 @@ import ShortTextInput from './short-text-input';
 
 export interface QuestionFormProps {
   question: FormQuestion;
-  currentResponses: HackformSubmission; // passed by refernce
-  setCurrentResponses: Dispatch<SetStateAction<HackformSubmission>>;
+  currentResponses: HackformSubmission; // passed by reference
   qi: number;
-  saveResponse?: (response: HackformQuestionResponse) => void;
-  goNextQuestion?: () => void;
-  goPreviousQuestion?: () => void;
-  addErrorForQuestion?: (qi: number, error: string) => void;
-  resolveError?: (qi: number) => void;
+  saveResponse: (response: HackformQuestionResponse) => void;
+  goNextQuestion: () => void;
+  goPreviousQuestion: () => void;
+  addErrorForQuestion: (qi: number, error: string) => void;
+  resolveError: (qi: number) => void;
+  initialError: string;
 }
 
 function HackformQuestionComponent(props: QuestionFormProps) {
-  const { question, qi, setCurrentResponses } = props;
-
-  // handle when person submits
-  const handleSubmitQuestion = (response: HackformQuestionResponse) => {
-    setCurrentResponses(({ responses }) => {
-      let input: HackformQuestionResponse['input'] = {};
-      switch (question.type) {
-        case FormQuestionType.Email:
-        case FormQuestionType.ShortText:
-        case FormQuestionType.LongText: // they will all fill the text field in the input.
-          input = { text: response.input.text };
-          break;
-        case FormQuestionType.SingleOptionDropdown:
-          input = {
-            text: response.input.text,
-            singleChoiceValue: response.input.singleChoiceValue,
-          };
-          break;
-        default:
-          break;
-      }
-      const newResponses = { ...responses, [qi]: { input } };
-      return { responses: newResponses };
-    });
-  };
+  const { question, initialError, qi } = props;
 
   const getInputSubcomponent = () => {
     switch (question.type) {
@@ -58,7 +32,7 @@ function HackformQuestionComponent(props: QuestionFormProps) {
           <ShortTextInput
             {...props}
             placeholder={question.placeholder}
-            saveResponse={handleSubmitQuestion}
+            initialError={initialError}
           />
         );
       case FormQuestionType.LongText:
@@ -66,7 +40,7 @@ function HackformQuestionComponent(props: QuestionFormProps) {
           <LongTextQuestion
             {...props}
             placeholder={question.placeholder}
-            saveResponse={handleSubmitQuestion}
+            initialError={initialError}
           />
         );
       case FormQuestionType.SingleOptionDropdown:
@@ -74,7 +48,7 @@ function HackformQuestionComponent(props: QuestionFormProps) {
           <SearchableOptionsInput
             {...props}
             options={question.options}
-            saveResponse={handleSubmitQuestion}
+            initialError={initialError}
           />
         );
       default:
@@ -84,40 +58,12 @@ function HackformQuestionComponent(props: QuestionFormProps) {
 
   return (
     <Wrapper>
-      <QuestionWrapper>
-        <H1>
-          {(qi + 1).toLocaleString('en-US', {
-            minimumIntegerDigits: 2,
-          })}
-        </H1>
-        <H3>
-          {question.title}
-          {question.required && <SpanRed>*</SpanRed>}
-        </H3>
-        {getInputSubcomponent()}
-      </QuestionWrapper>
-      <BottomWidgetsContainer>
-        <BackNextContainer>
-          <ArrowButton orientation="left" onClick={props.goPreviousQuestion} />
-          <ArrowButton onClick={props.goNextQuestion} />
-        </BackNextContainer>
-      </BottomWidgetsContainer>
+      <QuestionWrapper>{getInputSubcomponent()}</QuestionWrapper>
     </Wrapper>
   );
 }
 
 export default HackformQuestionComponent;
-
-const BottomWidgetsContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  margin: 1rem;
-`;
-
-const BackNextContainer = styled.div`
-  display: flex;
-  gap: 10px;
-`;
 
 const Wrapper = styled.div`
   display: flex;
@@ -125,10 +71,6 @@ const Wrapper = styled.div`
   width: 100%;
   height: 100%;
   justify-content: space-between;
-`;
-
-const SpanRed = styled.span`
-  color: #fc5d5d;
 `;
 
 const QuestionWrapper = styled.div`
