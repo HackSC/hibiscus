@@ -1,18 +1,21 @@
 name: CI on Supabase migration scripts
 
 on:
-  push:
-    paths:
-      - 'supabase/migrations/**'
   pull_request:
     paths:
       - 'supabase/migrations/**'
+    types:
+      - labeled
+      - synchronize
   workflow_dispatch:
 
 jobs:
   supabase-migration-test:
+    env:
+      MIGRATION_TRIGGER_LABEl: db-migration
     runs-on: ubuntu-22.04
     name: Verify migration works fine
+    if: contains(github.event.pull_request.labels.*.name, env.MIGRATION_TRIGGER_LABEL)
     steps:
       - uses: actions/checkout@v3
       - uses: supabase/setup-cli@v1
