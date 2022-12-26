@@ -1,7 +1,12 @@
 name: CI on Supabase migration scripts
 
 on:
+  push:
+    paths:
+      - 'supabase/migrations/**'
   pull_request:
+    paths:
+      - 'supabase/migrations/**'
   workflow_dispatch:
 
 jobs:
