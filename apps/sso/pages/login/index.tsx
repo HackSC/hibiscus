@@ -2,14 +2,27 @@ import styled from 'styled-components';
 import LoginCard from '../../components/login-card/login-card';
 import { TrademarkColors } from '@hacksc-platforms/styles';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { LoginGuard } from '../../components/login-guard';
 
 export function Index() {
+  const router = useRouter();
+  const [callback, setCallback] = useState(null);
+  useEffect(() => {
+    if (!router.isReady) return;
+
+    setCallback(router.query.callback?.toString() ?? '/');
+  }, [router.isReady, router.query]);
+
   return (
     <MainPageWrapper>
       <Head>
         <title>Login | Hibiscus by HackSC</title>
       </Head>
-      <LoginCard />
+      <LoginGuard callback={callback}>
+        <LoginCard callback={callback} />
+      </LoginGuard>
     </MainPageWrapper>
   );
 }

@@ -2,17 +2,16 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { GradientSpan, Text } from '@hacksc-platforms/ui';
 import { TrademarkColors } from '@hacksc-platforms/styles';
-import { useRouter } from 'next/router';
-import { setCookie } from 'cookies-next';
 import Image from 'next/image';
 import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
 import GrayLink from '../gray-link/gray-link';
+import axios from 'axios';
 
-/* eslint-disable-next-line */
-export interface LoginCardProps {}
+export interface LoginCardProps {
+  callback: string;
+}
 
 export function LoginCard(props: LoginCardProps) {
-  const router = useRouter();
   const [hideErrorMessage, setHideErrorMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -37,8 +36,18 @@ export function LoginCard(props: LoginCardProps) {
       }
 
       if (data.user) {
-        router.push('/');
-        setCookie('user', email);
+        const token = data.session.access_token;
+        const res = await axios.post(
+          props.callback,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            withCredentials: true,
+          }
+        );
+        window.location.replace(res.data?.redirect ?? '/');
       }
     } catch (e) {
       // console.log(e);
@@ -48,7 +57,7 @@ export function LoginCard(props: LoginCardProps) {
   return (
     <StyledLoginCard>
       <Image
-        src="/images/Logo.svg"
+        src="/static/images/Logo.svg"
         alt="HackSC Logo"
         width={100}
         height={100}

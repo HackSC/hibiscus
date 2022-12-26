@@ -46,10 +46,14 @@ export class HibiscusSupabaseClient {
     email: string,
     password: string
   ): SSOApiSignInWithPassword {
-    const res = await axios.post(`/api/signInWithPassword`, {
-      email,
-      password,
-    });
+    const res = await axios.post(
+      `/api/signInWithPassword`,
+      {
+        email,
+        password,
+      },
+      { withCredentials: true }
+    );
     return res.data;
   }
 

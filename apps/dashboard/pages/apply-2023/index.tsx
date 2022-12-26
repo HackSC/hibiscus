@@ -1,20 +1,14 @@
+import TopBar from '../../components/top-bar/top-bar';
 import styled from 'styled-components';
-import SidebarNav from '../../components/navbar/navbar';
-import Link from 'next/link';
-import Hackerform from '../../components/hackerform/hackerform';
+import Hackerform from '../../components/hackerform/hackform';
+import { HibiscusRole } from '@hacksc-platforms/types';
+import { formMetadata2023HackerApps } from '../../common/hackform.metadata';
 
 export function Index() {
   return (
     <MainPageWrapper>
-      <h1 id="titleText">
-        <Link passHref href="../">
-          HackSC
-        </Link>
-      </h1>
-      <div id="mainDiv">
-        <SidebarNav />
-        <Hackerform />
-      </div>
+      <TopBar userTag={'@vincentvu'} role={HibiscusRole.HACKER} />
+      <Hackerform formMetadata={formMetadata2023HackerApps} />
     </MainPageWrapper>
   );
 }
@@ -25,7 +19,7 @@ const MainPageWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: 100vh;
+  height: 100vh;
   background-position: fixed;
   background-attachment: local;
   background-repeat: no-repeat;

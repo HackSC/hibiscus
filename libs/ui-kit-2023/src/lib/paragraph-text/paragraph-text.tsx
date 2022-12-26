@@ -1,20 +1,12 @@
-import React from 'react';
+import React, { TextareaHTMLAttributes } from 'react';
 import styled from 'styled-components';
 
 /* eslint-disable-next-line */
-export interface ParagraphTextProps {
-  placeholder: string;
-  onInput: (value: string) => void;
-}
+export interface ParagraphTextProps
+  extends TextareaHTMLAttributes<HTMLTextAreaElement> {}
 
-export function ParagraphText({ onInput, placeholder }: ParagraphTextProps) {
-  const handleMessageChange: React.ChangeEventHandler<HTMLTextAreaElement> = (
-    event
-  ) => {
-    // 👇️ access textarea value
-    onInput(event.target.value);
-  };
-  return <Input onChange={handleMessageChange} placeholder={placeholder} />;
+export function ParagraphText(props: ParagraphTextProps) {
+  return <Input {...props} />;
 }
 
 export default ParagraphText;

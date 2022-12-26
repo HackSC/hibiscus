@@ -5,25 +5,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  test:
+  supabase-migration-test:
     runs-on: ubuntu-22.04
-    env:
-      GENERATED_TYPES_DTS: libs/types/src/lib/supabase.gen.d.ts
+    name: Verify migration works fine
     steps:
       - uses: actions/checkout@v3
-
       - uses: supabase/setup-cli@v1
         with:
           version: 1.0.0
-
-      - name: Start Supabase local development setup
-        run: supabase start
-
-      - name: Verify generated types are up-to-date with production types generated from schema
-        run: |
-          supabase gen types typescript --local > $GENERATED_TYPES_DTS
-          if [ "$(git diff --ignore-space-at-eol $GENERATED_TYPES_DTS | wc -l)" -gt "0" ]; then
-            echo "Detected uncommitted changes after build. See status below:"
-            git diff
-            exit 1
-          fi
+      - run: supabase start

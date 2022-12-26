@@ -1,10 +1,11 @@
+import React from 'react';
 import { render } from '@testing-library/react';
 
-import Hackerform from './hackerform';
+import Index from '../pages/index';
 
-describe('Hackerform', () => {
+describe('Index', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<Hackerform />);
+    const { baseElement } = render(<Index />);
     expect(baseElement).toBeTruthy();
   });
 });

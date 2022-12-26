@@ -48,7 +48,7 @@ export function ResetCard(props: ResetCardProps) {
 
   return (
     <StyledResetCard>
-      <img src="/images/Logo.svg" alt="HackSC Logo" width="100px" />
+      <img src="/static/images/Logo.svg" alt="HackSC Logo" width="100px" />
       <StyledText>
         Reset your <GradientSpan>HackSC Account</GradientSpan>
       </StyledText>
