@@ -31,4 +31,4 @@ async function inviteeRequest(req, res) {
   //send email to organizer
 }
 
-export default { inviteeAccept, inviteeDeny };
+export default { inviteeAccept, inviteeDeny, inviteeRequest };
