@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Image from 'next/image';
 import { Link, Text } from '@hacksc-platforms/ui';
-import GlowSpan from '../glow-span';
+import { GlowSpan } from '@hacksc-platforms/ui-kit-2023';
 import { HibiscusRole } from '@hacksc-platforms/types';
 import { Colors2023 } from '@hacksc-platforms/styles';
 
