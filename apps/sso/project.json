@@ -10,12 +10,6 @@
       "options": {
         "root": "apps/sso",
         "outputPath": "dist/apps/sso"
-      },
-      "configurations": {
-        "development": {
-          "outputPath": "apps/sso"
-        },
-        "production": {}
       }
     },
     "serve": {

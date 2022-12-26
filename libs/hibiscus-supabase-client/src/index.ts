@@ -7,6 +7,9 @@ import axios from 'axios';
 import {
   SSOApiResetResponseType,
   SSOApiSignInWithPassword,
+  SSOApiSignUp,
+  SSOApiUpdateUser,
+  SSOApiVerifyOtp,
 } from '@hacksc-platforms/types';
 
 @injectable()
@@ -51,6 +54,51 @@ export class HibiscusSupabaseClient {
       },
       { withCredentials: true }
     );
+    return res.data;
+  }
+
+  /**
+   * Update user password
+   * @param password
+   * @returns
+   */
+  static async updatePassword(password: string): SSOApiUpdateUser {
+    const res = await axios.post(`/api/updateUser`, {
+      password,
+    });
+    return res.data;
+  }
+
+  /**
+   * Sign up user with email and password
+   * @param email
+   * @param password
+   * @returns
+   */
+  static async signUp(email: string, password: string): SSOApiSignUp {
+    const res = await axios.post(`/api/signUp`, {
+      email,
+      password,
+    });
+    return res.data;
+  }
+
+  /**
+   * Verifies a token given an email and type
+   * @param email
+   * @param token
+   * @returns
+   */
+  static async verifyOtp(
+    email: string,
+    token: string,
+    type: string
+  ): SSOApiVerifyOtp {
+    const res = await axios.post(`/api/verifyOtp`, {
+      email,
+      token,
+      type,
+    });
     return res.data;
   }
 }
