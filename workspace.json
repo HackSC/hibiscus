@@ -7,6 +7,7 @@
     "dashboard": "apps/dashboard",
     "hackform-client": "libs/hackform-client",
     "hibiscus-supabase-client": "libs/hibiscus-supabase-client",
+    "icons": "libs/icons",
     "interim": "apps/interim",
     "log-server": "apps/log-server",
     "recruitment": "apps/recruitment",

@@ -46,7 +46,8 @@
       },
       "library": {
         "style": "scss",
-        "linter": "eslint"
+        "linter": "eslint",
+        "unitTestRunner": "jest"
       }
     },
     "@nrwl/next": {
@@ -56,5 +57,10 @@
       }
     }
   },
-  "defaultProject": "www-2023"
+  "defaultProject": "www-2023",
+  "targetDefaults": {
+    "test": {
+      "inputs": ["default", "^default"]
+    }
+  }
 }

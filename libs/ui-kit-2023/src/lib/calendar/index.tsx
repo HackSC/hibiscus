@@ -1,20 +1,20 @@
 import { useState } from 'react';
-import { Calendar } from 'react-calendar';
+import { Calendar as ReactCalendar } from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import styled from 'styled-components';
-import './date-picker.less';
+import './calendar.less';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface DatePickerProps {}
+export interface CalendarProps {}
 
-export function DatePicker(props: DatePickerProps) {
+export function Calendar(props: CalendarProps) {
   const [date, setDate] = useState(new Date());
   return (
     <Wrapper>
-      <Calendar
+      <ReactCalendar
         onChange={setDate}
         value={date}
-        maxDetail="month"
+        minDetail="year"
         next2Label={null}
         prev2Label={null}
       />
@@ -22,4 +22,8 @@ export function DatePicker(props: DatePickerProps) {
   );
 }
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+`;

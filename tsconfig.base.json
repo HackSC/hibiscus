@@ -26,7 +26,8 @@
       "@hacksc-platforms/styles": ["libs/styles/src/index.ts"],
       "@hacksc-platforms/types": ["libs/types/src/index.ts"],
       "@hacksc-platforms/ui": ["libs/ui/src/index.ts"],
-      "@hacksc-platforms/ui-kit-2023": ["libs/ui-kit-2023/src/index.ts"]
+      "@hacksc-platforms/ui-kit-2023": ["libs/ui-kit-2023/src/index.ts"],
+      "@hibiscus/icons": ["libs/icons/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

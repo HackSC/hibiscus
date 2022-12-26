@@ -23,6 +23,7 @@
     "../src/**/*.stories.tsx",
     "../src/**/*.stories.mdx",
     "*.ts",
-    "*.js"
+    "*.js",
+    "../src/lib/calendar/calendar.stories.tsx"
   ]
 }

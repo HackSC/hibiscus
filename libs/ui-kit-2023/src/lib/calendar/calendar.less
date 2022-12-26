@@ -10,7 +10,9 @@
   border-radius: 10px;
   padding: 1rem;
   border: 2px solid rgb(160, 160, 150);
-  font-family: Inter, sans-serif;
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
   line-height: 1.125em;
 
   &--doubleView {
@@ -50,6 +52,7 @@
     display: flex;
     height: 44px;
     margin-bottom: 1em;
+    font-family: 'Inter';
 
     button {
       min-width: 44px;
@@ -57,7 +60,7 @@
       color: white;
 
       &:disabled {
-        background-color: rgb(240, 240, 240);
+        background-color: @card_bg;
       }
 
       &:enabled {
@@ -108,41 +111,46 @@
     .react-calendar__tile {
       padding: 2em 0.5em;
     }
+
+    &__months {
+      &__month {
+        color: white;
+      }
+    }
   }
 
   &__tile {
     max-width: 100%;
-    padding: 2px;
+    padding: 10px;
     background: none;
     text-align: center;
     border-radius: 5px;
+    font-family: 'Inter';
 
     &:disabled {
       background-color: rgb(240, 240, 240);
+      color: darken(@gray_medium, 10%);
     }
 
     &:enabled {
       &:hover,
       &:focus {
-        color: white;
         background-color: @gray_schedium;
-        border-style: solid;
-        border-color: @blue_standard;
-        border-width: 2px;
+        font-weight: bold;
       }
     }
 
-    &--now {
-      @bgcolor: @blue_standard;
-      background: @bgcolor;
+    // &--now {
+    //   @bgcolor: @blue_standard;
+    //   background: @bgcolor;
 
-      &:enabled {
-        &:hover,
-        &:focus {
-          background: lighten(@bgcolor, 10%);
-        }
-      }
-    }
+    //   &:enabled {
+    //     &:hover,
+    //     &:focus {
+    //       background: lighten(@bgcolor, 10%);
+    //     }
+    //   }
+    // }
 
     &--hasActive {
       background: @gray_medium;
@@ -157,12 +165,13 @@
 
     &--active {
       background: @gray_medium;
-      color: white;
+      border: 2px solid @blue_standard;
 
       &:enabled {
         &:hover,
         &:focus {
           background: lighten(@gray_medium, 10%);
+          border: 2px solid @blue_standard;
         }
       }
     }
