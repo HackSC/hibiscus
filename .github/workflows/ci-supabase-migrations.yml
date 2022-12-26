@@ -2,12 +2,18 @@ name: CI on Supabase migration scripts
 
 on:
   pull_request:
+    paths:
+      - 'supabase/migrations/**'
+    types:
+      - labeled
+      - synchronize
   workflow_dispatch:
 
 jobs:
   supabase-migration-test:
     runs-on: ubuntu-22.04
     name: Verify migration works fine
+    if: ${{ contains(github.event.pull_request.labels.*.name, 'db-migration') }}
     steps:
       - uses: actions/checkout@v3
       - uses: supabase/setup-cli@v1
