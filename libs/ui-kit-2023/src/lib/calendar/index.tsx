@@ -1,13 +1,16 @@
 import { ChevronRightIcon } from '@hibiscus/icons';
 import { useState } from 'react';
-import { Calendar as ReactCalendar } from 'react-calendar';
+import {
+  Calendar as ReactCalendar,
+  CalendarProps as ReactCalendarProps,
+} from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import styled from 'styled-components';
 import { GlowSpan } from '@hacksc-platforms/ui-kit-2023';
 import './calendar.less';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface CalendarProps {
+export interface CalendarProps extends ReactCalendarProps {
   navigationColor?: string;
   navigationShadowColor?: string;
 }
@@ -48,6 +51,7 @@ export function Calendar(props: CalendarProps) {
         }
         next2Label={null}
         prev2Label={null}
+        {...props}
       />
     </Wrapper>
   );

@@ -1,3 +1,4 @@
+export * from './lib/date-picker/date-picker';
 export * from './lib/glow-span/glow-span';
 export * from './lib/searchable-option-select-input/searchable-option-select-input';
 export * from './lib/arrow-button/arrow-button';

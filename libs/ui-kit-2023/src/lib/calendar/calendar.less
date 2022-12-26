@@ -138,11 +138,12 @@
       &:focus {
         background-color: @gray_schedium;
         font-weight: bold;
+        border: 2px solid @blue_standard;
       }
     }
 
     // &--now {
-    //   @bgcolor: @blue_standard;
+    //   @bgcolor: darken(@blue_standard, 30%);
     //   background: @bgcolor;
 
     //   &:enabled {
@@ -154,6 +155,7 @@
     // }
 
     &--hasActive {
+      border: 2px solid @blue_standard;
       background: @gray_medium;
 
       &:enabled {
@@ -165,7 +167,7 @@
     }
 
     &--active {
-      background: @gray_medium;
+      background-color: @gray_medium;
       border: 2px solid @blue_standard;
 
       &:enabled {
