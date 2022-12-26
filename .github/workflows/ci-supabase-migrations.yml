@@ -9,10 +9,11 @@ on:
       - synchronize
   workflow_dispatch:
 
+env:
+  MIGRATION_TRIGGER_LABEl: db-migration
+
 jobs:
   supabase-migration-test:
-    env:
-      MIGRATION_TRIGGER_LABEl: db-migration
     runs-on: ubuntu-22.04
     name: Verify migration works fine
     if: contains(github.event.pull_request.labels.*.name, env.MIGRATION_TRIGGER_LABEL)
