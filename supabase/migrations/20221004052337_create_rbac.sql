@@ -40,7 +40,7 @@ alter table "public"."user_profiles" add constraint "user_profiles_role_fkey" FO
 
 alter table "public"."user_profiles" validate constraint "user_profiles_role_fkey";
 
-create policy "only hacksc team members can see roles"
+create policy "only hacksc team members can see roles lol"
 on "public"."roles"
 as permissive
 for select
