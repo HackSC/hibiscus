@@ -8,36 +8,48 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: DerYeger/yarn-setup-action@master
+      - uses: actions/cache@v3
         with:
-          node-version: 16
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - run: npm install -g yarn
+      - run: yarn install --frozen-lockfile
   build:
     name: Build affected apps
     runs-on: ubuntu-latest
     needs: prepare
     steps:
       - uses: actions/checkout@v3
-      - uses: DerYeger/yarn-setup-action@master
+      - uses: actions/cache@v3
         with:
-          node-version: 16
-      - run: yarn nx affected --target=build --maxParallel=3 --parallel --base='${{ github.ref_name }}'
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - run: npm install -g yarn
+      - run: yarn install --frozen-lockfile
+      - run: yarn nx affected --target=build --parallel
   test:
     name: Test affected apps
     runs-on: ubuntu-latest
     needs: prepare
     steps:
       - uses: actions/checkout@v3
-      - uses: DerYeger/yarn-setup-action@master
+      - uses: actions/cache@v3
         with:
-          node-version: 16
-      - run: yarn nx affected --target=test --maxParallel=3 --parallel --base='${{ github.ref_name }}'
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - run: npm install -g yarn
+      - run: yarn install --frozen-lockfile
+      - run: yarn nx affected --target=test --parallel
   lint:
     name: Lint affected apps
     runs-on: ubuntu-latest
     needs: prepare
     steps:
       - uses: actions/checkout@v3
-      - uses: DerYeger/yarn-setup-action@master
+      - uses: actions/cache@v3
         with:
-          node-version: 16
-      - run: yarn nx affected --target=lint --maxParallel=3 --parallel --base='${{ github.ref_name }}'
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - run: npm install -g yarn
+      - run: yarn install --frozen-lockfile
+      - run: yarn nx affected --target=lint --parallel
