@@ -11,6 +11,7 @@
     "log-server": "apps/log-server",
     "recruitment": "apps/recruitment",
     "sso": "apps/sso",
+    "sso-client": "libs/sso-client",
     "sso-e2e": "apps/sso-e2e",
     "sso-mock-app": "apps/sso-mock-app",
     "styles": "libs/styles",

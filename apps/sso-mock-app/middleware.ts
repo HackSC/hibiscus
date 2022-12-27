@@ -1,43 +1,9 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
-import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
+import { middlewareHandler } from '@hacksc-platforms/sso-client';
 
-export async function middleware(request: NextRequest) {
-  // Guard API route
-  const path = request.nextUrl.pathname.split('/');
-  if (path.length >= 2 && path[1] === 'api') {
-    if (
-      request.method !== 'GET' &&
-      request.headers.get('origin') === process.env.SSO_URL
-    ) {
-      return NextResponse.next();
-    } else {
-      return NextResponse.redirect(new URL('/', request.url));
-    }
-  }
-
-  if (request.cookies.has(process.env.HIBISCUS_COOKIE_NAME)) {
-    const token = request.cookies.get(process.env.HIBISCUS_COOKIE_NAME);
-    const { data } = await HibiscusSupabaseClient.verifyToken(token);
-
-    if (data != null && data.user != null) {
-      return NextResponse.next();
-    }
-  }
-
-  const redirectUrl = new URL(`${process.env.SSO_URL}/login`);
-  redirectUrl.search = `callback=${process.env.SSO_MOCK_APP_URL}/api/callback`;
-  return NextResponse.redirect(redirectUrl);
-}
+export const middleware = middlewareHandler(
+  `${process.env.SSO_MOCK_APP_URL}/api/callback`
+);
 
 export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - favicon.ico (favicon file)
-     */
-    '/((?!_next/static|favicon.ico).*)',
-  ],
+  matcher: ['/((?!_next/static|static|favicon.ico).*)'],
 };
