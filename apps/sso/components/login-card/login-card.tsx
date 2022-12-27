@@ -7,11 +7,7 @@ import * as SSOClient from '@hacksc-platforms/sso-client';
 import GrayLink from '../gray-link/gray-link';
 import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
 
-export interface LoginCardProps {
-  callback: string;
-}
-
-export function LoginCard(props: LoginCardProps) {
+export function LoginCard() {
   const [hideErrorMessage, setHideErrorMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -37,7 +33,10 @@ export function LoginCard(props: LoginCardProps) {
 
       if (data.user) {
         const token = data.session.access_token;
-        const res = await SSOClient.ssoCallback(props.callback, token);
+        const res = await SSOClient.ssoCallback(
+          sessionStorage.getItem('callback'),
+          token
+        );
         window.location.replace(res?.redirect ?? '/');
       }
     } catch (e) {

@@ -8,11 +8,13 @@ import { LoginGuard } from '../../components/login-guard';
 
 export function Index() {
   const router = useRouter();
-  const [callback, setCallback] = useState(null);
   useEffect(() => {
     if (!router.isReady) return;
 
-    setCallback(router.query.callback?.toString() ?? '/');
+    sessionStorage.setItem(
+      'callback',
+      router.query.callback?.toString() ?? '/'
+    );
   }, [router.isReady, router.query]);
 
   return (
@@ -20,8 +22,8 @@ export function Index() {
       <Head>
         <title>Login | Hibiscus by HackSC</title>
       </Head>
-      <LoginGuard callback={callback}>
-        <LoginCard callback={callback} />
+      <LoginGuard>
+        <LoginCard />
       </LoginGuard>
     </MainPageWrapper>
   );
