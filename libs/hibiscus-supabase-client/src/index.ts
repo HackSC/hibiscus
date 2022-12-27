@@ -124,26 +124,4 @@ export class HibiscusSupabaseClient {
   static async validateSession() {
     return await axios.post('/api/validateSession', {});
   }
-
-  /**
-   * Calls the app's callback API route which sets the token as a cookie on the app
-   *
-   * @param callback Callback URL for the app
-   * @param token Access token obtained from login
-   * @returns object containing `data` property
-   */
-  static async ssoCallback(callback: string, token: string) {
-    const res = await axios.post(
-      callback,
-      {},
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        withCredentials: true,
-      }
-    );
-
-    return res.data;
-  }
 }

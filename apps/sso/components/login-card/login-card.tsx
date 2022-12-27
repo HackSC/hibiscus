@@ -3,8 +3,9 @@ import { useState } from 'react';
 import { GradientSpan, Text } from '@hacksc-platforms/ui';
 import { TrademarkColors } from '@hacksc-platforms/styles';
 import Image from 'next/image';
-import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
+import * as SSOClient from '@hacksc-platforms/sso-client';
 import GrayLink from '../gray-link/gray-link';
+import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
 
 export interface LoginCardProps {
   callback: string;
@@ -36,10 +37,7 @@ export function LoginCard(props: LoginCardProps) {
 
       if (data.user) {
         const token = data.session.access_token;
-        const res = await HibiscusSupabaseClient.ssoCallback(
-          props.callback,
-          token
-        );
+        const res = await SSOClient.ssoCallback(props.callback, token);
         window.location.replace(res?.redirect ?? '/');
       }
     } catch (e) {
