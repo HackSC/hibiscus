@@ -111,11 +111,7 @@ export class HibiscusSupabaseClient {
    */
   static async verifyToken(token: string): SSOApiVerifyToken {
     const res = await axios.post(`${process.env.SSO_URL}/api/verifyToken`, {
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ token }),
+      token,
     });
     return res.data;
   }

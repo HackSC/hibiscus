@@ -7,7 +7,7 @@ const handler: NextApiHandler = async (req, res) => {
     if (token != null) {
       const { data } = await HibiscusSupabaseClient.verifyToken(token);
 
-      if (data != null && data.user != null) {
+      if (data.user != null) {
         res.status(200).json({ token });
         return;
       }
