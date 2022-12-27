@@ -2,12 +2,15 @@ import { useState, useEffect, PropsWithChildren } from 'react';
 import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
 import * as SSOClient from '@hacksc-platforms/sso-client';
 
-export function LoginGuard({ children }: PropsWithChildren) {
+interface LoginGuardProps extends PropsWithChildren {
+  callback: string;
+}
+
+export function LoginGuard({ callback, children }: LoginGuardProps) {
   const [authorized, setAuthorized] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
-      const callback = sessionStorage.getItem('callback');
       if (callback != null) {
         try {
           const resToken = await HibiscusSupabaseClient.validateSession();
@@ -16,7 +19,11 @@ export function LoginGuard({ children }: PropsWithChildren) {
               callback,
               resToken.data.token
             );
-            window.location.replace(res?.redirect ?? '/');
+            if (res != null && res.redirect != null) {
+              window.location.replace(res.redirect);
+            } else {
+              setAuthorized(true);
+            }
           }
         } catch {
           setAuthorized(true);
@@ -24,7 +31,7 @@ export function LoginGuard({ children }: PropsWithChildren) {
       }
     }
     fetchData();
-  }, []);
+  }, [callback]);
 
   return authorized && <>{children}</>;
 }
