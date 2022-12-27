@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { DateCallback } from 'react-calendar';
 import styled from 'styled-components';
-import { Calendar, CalendarProps } from '../calendar';
+import { Calendar, CalendarProps } from '../calendar/calendar';
 import OneLineText, { OneLineTextProps } from '../one-line-text/one-line-text';
 
 /* eslint-disable-next-line */

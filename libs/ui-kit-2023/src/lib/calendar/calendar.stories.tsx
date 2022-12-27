@@ -1,5 +1,5 @@
 import type { ComponentStory, ComponentMeta } from '@storybook/react';
-import { Calendar } from './index';
+import { Calendar } from './calendar';
 
 const Story: ComponentMeta<typeof Calendar> = {
   component: Calendar,

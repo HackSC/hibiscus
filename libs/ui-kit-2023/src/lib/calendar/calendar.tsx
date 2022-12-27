@@ -6,7 +6,7 @@ import {
 } from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import styled from 'styled-components';
-import { GlowSpan } from '@hacksc-platforms/ui-kit-2023';
+import { GlowSpan } from '../glow-span/glow-span';
 import './calendar.less';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
