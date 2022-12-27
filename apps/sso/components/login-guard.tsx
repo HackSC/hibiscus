@@ -1,5 +1,5 @@
 import { useState, useEffect, PropsWithChildren } from 'react';
-import axios from 'axios';
+import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
 
 export interface LoginGuardProps extends PropsWithChildren {
   callback: string;
@@ -12,19 +12,13 @@ export function LoginGuard({ callback, children }: LoginGuardProps) {
     async function fetchData() {
       if (callback != null) {
         try {
-          const resToken = await axios.post('/api/validateSession', {});
+          const resToken = await HibiscusSupabaseClient.validateSession();
           if (resToken.status == 200) {
-            const res = await axios.post(
+            const res = await HibiscusSupabaseClient.ssoCallback(
               callback,
-              {},
-              {
-                headers: {
-                  Authorization: `Bearer ${resToken.data.token}`,
-                },
-                withCredentials: true,
-              }
+              resToken.data.token
             );
-            window.location.replace(res.data?.redirect ?? '/');
+            window.location.replace(res?.redirect ?? '/');
           }
         } catch {
           setAuthorized(true);

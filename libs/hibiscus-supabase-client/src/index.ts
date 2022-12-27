@@ -10,6 +10,7 @@ import {
   SSOApiSignUp,
   SSOApiUpdateUser,
   SSOApiVerifyOtp,
+  SSOApiVerifyToken,
 } from '@hacksc-platforms/types';
 
 @injectable()
@@ -108,7 +109,7 @@ export class HibiscusSupabaseClient {
    * @param token JWT access token associated with a user
    * @returns object containing `data` and `error` properties, either of which may be undefined
    */
-  static async verifyToken(token: string) {
+  static async verifyToken(token: string): SSOApiVerifyToken {
     const res = await axios.post(`${process.env.SSO_URL}/api/verifyToken`, {
       headers: {
         Accept: 'application/json',
@@ -116,6 +117,37 @@ export class HibiscusSupabaseClient {
       },
       body: JSON.stringify({ token }),
     });
+    return res.data;
+  }
+
+  /**
+   * Validates the current session (stored in the cookies)
+   *
+   * @returns API reponse containing `data` object `{ token }`
+   */
+  static async validateSession() {
+    return await axios.post('/api/validateSession', {});
+  }
+
+  /**
+   * Calls the app's callback API route which sets the token as a cookie on the app
+   *
+   * @param callback Callback URL for the app
+   * @param token Access token obtained from login
+   * @returns object containing `data` property
+   */
+  static async ssoCallback(callback: string, token: string) {
+    const res = await axios.post(
+      callback,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      }
+    );
+
     return res.data;
   }
 }

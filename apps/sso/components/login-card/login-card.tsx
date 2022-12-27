@@ -5,7 +5,6 @@ import { TrademarkColors } from '@hacksc-platforms/styles';
 import Image from 'next/image';
 import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
 import GrayLink from '../gray-link/gray-link';
-import axios from 'axios';
 
 export interface LoginCardProps {
   callback: string;
@@ -37,17 +36,11 @@ export function LoginCard(props: LoginCardProps) {
 
       if (data.user) {
         const token = data.session.access_token;
-        const res = await axios.post(
+        const res = await HibiscusSupabaseClient.ssoCallback(
           props.callback,
-          {},
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            withCredentials: true,
-          }
+          token
         );
-        window.location.replace(res.data?.redirect ?? '/');
+        window.location.replace(res?.redirect ?? '/');
       }
     } catch (e) {
       // console.log(e);
