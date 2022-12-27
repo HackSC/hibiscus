@@ -19,6 +19,7 @@ export function ArrowButton(props: ArrowButtonProps) {
             : 'previous'
         } question`}
       />
+      <div>asdasda</div>
     </StyledArrowButton>
   );
 }
