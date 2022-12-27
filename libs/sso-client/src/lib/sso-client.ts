@@ -1,6 +1,5 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
 import { NextApiRequest, NextApiResponse } from 'next/types';
 
 /**
@@ -27,7 +26,7 @@ export const middlewareHandler =
 
     if (request.cookies.has(process.env.HIBISCUS_COOKIE_NAME)) {
       const token = request.cookies.get(process.env.HIBISCUS_COOKIE_NAME);
-      const { data } = await HibiscusSupabaseClient.verifyToken(token);
+      const { data } = await verifyToken(token);
 
       if (data != null && data.user != null) {
         return NextResponse.next();
@@ -90,3 +89,26 @@ export const callbackApiHandler =
       });
     }
   };
+
+/**
+ * Verifies whether the provided access token is valid or has expired
+ * Exact copy of the one in hibiscus-supabase-client
+ * We cannot use the one there because it imports reflect-metadata which cannot run on NextJS middleware
+ *
+ * @param token JWT access token associated with a user
+ * @returns object containing `data` and `error` properties, either of which may be undefined
+ */
+async function verifyToken(token: string) {
+  // The Fetch API is used instead of axios because this function needs to be used in
+  // NextJS middleware and their edge functions do not support axios
+  const res = await fetch(`${process.env.SSO_URL}/api/verifyToken`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ token }),
+  });
+  const data = await res.json();
+  return data;
+}
