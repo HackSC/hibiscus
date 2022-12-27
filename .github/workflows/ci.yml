@@ -26,7 +26,7 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - run: npm install -g yarn
       - run: yarn install --frozen-lockfile
-      - run: yarn nx affected --target=build --parallel
+      - run: yarn nx affected --target=build --parallel --base=origin/main --head='origin/${{ github.ref_name }}'
   test:
     name: Test affected apps
     runs-on: ubuntu-latest
@@ -39,7 +39,7 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - run: npm install -g yarn
       - run: yarn install --frozen-lockfile
-      - run: yarn nx affected --target=test --parallel
+      - run: yarn nx affected --target=test --parallel --base=origin/main --head='origin/${{ github.ref_name }}'
   lint:
     name: Lint affected apps
     runs-on: ubuntu-latest
@@ -52,4 +52,4 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - run: npm install -g yarn
       - run: yarn install --frozen-lockfile
-      - run: yarn nx affected --target=lint --parallel
+      - run: yarn nx affected --target=lint --parallel --base=origin/main --head='origin/${{ github.ref_name }}'
