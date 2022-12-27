@@ -102,6 +102,12 @@ export class HibiscusSupabaseClient {
     return res.data;
   }
 
+  /**
+   * Verifies whether the provided access token is valid or has expired
+   *
+   * @param token JWT access token associated with a user
+   * @returns object containing `data` and `error` properties, either of which may be undefined
+   */
   static async verifyToken(token: string) {
     // The Fetch API is used instead of axios because this function needs to be used in
     // NextJS middleware and their edge functions do not support axios
