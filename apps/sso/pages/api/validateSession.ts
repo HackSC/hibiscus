@@ -1,20 +1,13 @@
+import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
 import { NextApiHandler } from 'next';
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method === 'POST') {
     const token = req.cookies[process.env.HIBISCUS_COOKIE_NAME];
     if (token != null) {
-      const verifyRes = await fetch(`${process.env.SSO_URL}/api/verifyToken`, {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ token }),
-      });
-      const { data } = await verifyRes.json();
+      const { data } = await HibiscusSupabaseClient.verifyToken(token);
 
-      if (data.user != null) {
+      if (data != null && data.user != null) {
         res.status(200).json({ token });
         return;
       }

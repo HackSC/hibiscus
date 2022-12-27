@@ -101,4 +101,19 @@ export class HibiscusSupabaseClient {
     });
     return res.data;
   }
+
+  static async verifyToken(token: string) {
+    // The Fetch API is used instead of axios because this function needs to be used in
+    // NextJS middleware and their edge functions do not support axios
+    const res = await fetch(`${process.env.SSO_URL}/api/verifyToken`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token }),
+    });
+    const data = await res.json();
+    return data;
+  }
 }
