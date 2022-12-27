@@ -1,5 +1,6 @@
 import { useState, useEffect, PropsWithChildren } from 'react';
 import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
+import * as SSOClient from '@hacksc-platforms/sso-client';
 
 export interface LoginGuardProps extends PropsWithChildren {
   callback: string;
@@ -14,7 +15,7 @@ export function LoginGuard({ callback, children }: LoginGuardProps) {
         try {
           const resToken = await HibiscusSupabaseClient.validateSession();
           if (resToken.status == 200) {
-            const res = await HibiscusSupabaseClient.ssoCallback(
+            const res = await SSOClient.ssoCallback(
               callback,
               resToken.data.token
             );
