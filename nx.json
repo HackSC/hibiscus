@@ -57,5 +57,15 @@
       }
     }
   },
-  "defaultProject": "www-2023"
+  "defaultProject": "www-2023",
+  "targetDefaults": {
+    "test": {
+      "inputs": ["default", "^default"]
+    }
+  },
+  "pluginsConfig": {
+    "@nrwl/js": {
+      "analyzeSourceFiles": true
+    }
+  }
 }
