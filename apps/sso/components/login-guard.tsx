@@ -2,7 +2,7 @@ import { useState, useEffect, PropsWithChildren } from 'react';
 import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
 import * as SSOClient from '@hacksc-platforms/sso-client';
 
-export interface LoginGuardProps extends PropsWithChildren {
+interface LoginGuardProps extends PropsWithChildren {
   callback: string;
 }
 
@@ -19,7 +19,11 @@ export function LoginGuard({ callback, children }: LoginGuardProps) {
               callback,
               resToken.data.token
             );
-            window.location.replace(res?.redirect ?? '/');
+            if (res != null && res.redirect != null) {
+              window.location.replace(res.redirect);
+            } else {
+              setAuthorized(true);
+            }
           }
         } catch {
           setAuthorized(true);
