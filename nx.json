@@ -62,5 +62,10 @@
     "test": {
       "inputs": ["default", "^default"]
     }
+  },
+  "pluginsConfig": {
+    "@nrwl/js": {
+      "analyzeSourceFiles": true
+    }
   }
 }
