@@ -3,51 +3,46 @@ import { Colors2023 } from '@hibiscus/styles';
 import { Link, Text } from '@hibiscus/ui';
 import { GlowSpan } from '@hibiscus/ui-kit-2023';
 import { getColorsForRole } from 'apps/dashboard/common/role.utils';
+import {
+  useAppDispatch,
+  useAppSelector,
+} from 'apps/dashboard/hooks/redux/hooks';
 import useHibiscusUser from 'apps/dashboard/hooks/use-hibiscus-user/use-hibiscus-user';
+import { changeTab, toggleMenuOpen } from 'apps/dashboard/store/menu-slice';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 /* eslint-disable-next-line */
-export interface PortalMenuProps {
-  chosenTabIndex?: number; // starts at 0
-}
-
-interface TabRoute {
-  displayName: string;
-  url: string;
-}
-
-const tabRoutes: TabRoute[] = [
-  { displayName: 'Home', url: '/' },
-  { displayName: 'Apply as a hacker', url: '/apply-2023' },
-  { displayName: 'Team', url: '/team' },
-];
+export interface PortalMenuProps {}
 
 export function PortalMenu(props: PortalMenuProps) {
   const router = useRouter();
+  const { tabRoutes, cti, isOpen } = useAppSelector((state) => ({
+    tabRoutes: state.menu.tabRoutes,
+    cti: state.menu.currentTabIndex,
+    isOpen: state.menu.isOpen,
+  }));
+  const dispatch = useAppDispatch();
+  const { user } = useHibiscusUser();
+  const colors = getColorsForRole(user.role);
   const getTabIndexFromPageRoute = () => {
     const fti = tabRoutes.findIndex((item) => item.url === router.pathname);
     return fti;
   };
-  const [isOpen, setOpen] = useState(false);
-  const [activeTabIndex, setActiveTabIndex] = useState(
-    props.chosenTabIndex ?? getTabIndexFromPageRoute()
-  );
-  const { user } = useHibiscusUser();
-  const colors = getColorsForRole(user.role);
 
   const handleMaximize = () => {
-    setOpen(true);
+    dispatch(toggleMenuOpen());
   };
 
   const handleMinimize = () => {
-    setOpen(false);
+    dispatch(toggleMenuOpen());
   };
 
-  const handleClickTab = (ti: number) => {
-    setActiveTabIndex(ti);
-  };
+  useEffect(() => {
+    const fti = getTabIndexFromPageRoute();
+    dispatch(changeTab(fti));
+  }, []);
 
   const LeftBarWhenActive = () => (
     <div
@@ -71,16 +66,13 @@ export function PortalMenu(props: PortalMenuProps) {
       </ZoomBackContainer>
       <ItemsWrapper>
         {tabRoutes.map((item, i) => {
-          const active = activeTabIndex === i;
+          const active = cti === i;
           return (
             <TabItemContainer key={i} active={active} color={colors.standard}>
               {active && <LeftBarWhenActive />}
               <LinkText>
                 <Link
                   href={item.url}
-                  onClick={() => {
-                    handleClickTab(i);
-                  }}
                   anchortagpropsoverride={{ target: '_self' }}
                 >
                   {active ? (
