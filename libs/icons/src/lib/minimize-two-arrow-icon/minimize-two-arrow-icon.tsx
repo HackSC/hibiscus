@@ -6,7 +6,7 @@ export interface MinimizeTwoArrowIconProps
   extends ImgHTMLAttributes<HTMLImageElement> {}
 
 export function MinimizeTwoArrowIcon(props: MinimizeTwoArrowIconProps) {
-  return <img src={Min2} {...props} alt={props.alt ?? 'Maximize item'} />;
+  return <img src={Min2} {...props} alt={props.alt ?? 'Minimize item'} />;
 }
 
 export default MinimizeTwoArrowIcon;

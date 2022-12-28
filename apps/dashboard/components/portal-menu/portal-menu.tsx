@@ -1,11 +1,12 @@
+import { MaximizeTwoArrowIcon, MinimizeTwoArrowIcon } from '@hibiscus/icons';
 import { Colors2023 } from '@hibiscus/styles';
 import { Link } from '@hibiscus/ui';
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 /* eslint-disable-next-line */
 export interface PortalMenuProps {
-  chosenTabIndex: number; // starts at 0
+  chosenTabIndex?: number; // starts at 0
 }
 
 interface TabRoute {
@@ -20,13 +21,48 @@ const tabRoutes: TabRoute[] = [
 ];
 
 export function PortalMenu(props: PortalMenuProps) {
+  const [isOpen, setOpen] = useState(false);
+  const [activeTabIndex, setActiveTabIndex] = useState(props.chosenTabIndex);
+
+  const handleMaximize = () => {
+    setOpen(true);
+  };
+
+  const handleMinimize = () => {
+    setOpen(false);
+  };
+
+  const handleClickTab = (ti: number) => {
+    setActiveTabIndex(ti);
+  };
+
+  if (!isOpen) {
+    return (
+      <Wrapper>
+        <IconButton onClick={handleMaximize}>
+          <MaximizeTwoArrowIcon />
+        </IconButton>
+      </Wrapper>
+    );
+  }
+
   return (
     <Wrapper>
-      <ZoomBackContainer>sad</ZoomBackContainer>
+      <ZoomBackContainer>
+        <IconButton onClick={handleMinimize}>
+          <MinimizeTwoArrowIcon />
+        </IconButton>
+      </ZoomBackContainer>
       <ItemsWrapper>
         {tabRoutes.map((item, i) => (
-          <TabItemContainer key={i} active={props.chosenTabIndex === i}>
-            <Link href={item.url} anchortagpropsoverride={{ target: '_self' }}>
+          <TabItemContainer key={i} active={activeTabIndex === i}>
+            <Link
+              href={item.url}
+              onClick={() => {
+                handleClickTab(i);
+              }}
+              anchortagpropsoverride={{ target: '_self' }}
+            >
               {item.displayName}
             </Link>
           </TabItemContainer>
@@ -38,20 +74,16 @@ export function PortalMenu(props: PortalMenuProps) {
 
 export default PortalMenu;
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<{ isOpen?: boolean }>`
   font-family: 'Inter';
   color: white;
-  max-width: max-content;
-  min-height: max-content;
-  max-height: 10rem;
-  overflow-y: auto;
+  max-height: 30rem;
   display: flex;
   flex-direction: column;
   background-color: ${Colors2023.GRAY.DARK};
-  border: 1.5px solid ${Colors2023.GRAY.SCHEMDIUM};
-  box-shadow: 1px 2px 13px 1px ${Colors2023.GRAY.DARK};
-  gap: 10px;
-  padding: 25px;
+  border: 2px solid ${Colors2023.GRAY.MEDIUM};
+  box-shadow: 1px 2px 10px 2px ${Colors2023.GRAY.MEDIUM};
+  padding: ${(props) => (props.isOpen ? '1rem' : '13px')};
   border-radius: 10px;
 `;
 
@@ -62,10 +94,20 @@ const ZoomBackContainer = styled.div`
 
 const ItemsWrapper = styled.div`
   display: flex;
+  overflow-y: auto;
   flex-direction: column;
+  gap: 10px;
+  max-width: max-content;
+  margin-right: 40px;
 `;
 
 const TabItemContainer = styled.div<{ active?: boolean }>`
   padding-left: 0.5rem;
   border-left: ${(props) => (props.active ? '2px solid white' : '')};
+`;
+
+const IconButton = styled.button`
+  appearance: none;
+  background-color: transparent;
+  cursor: pointer;
 `;

@@ -5,6 +5,7 @@ import GrayContentBox from '../components/gray-content-box/gray-content-box';
 import { Search } from '@hibiscus/ui-kit-2023';
 import TopBar from '../components/top-bar/top-bar';
 import { HibiscusRole } from '@hibiscus/types';
+import PortalMenu from '../components/portal-menu/portal-menu';
 
 export function Index() {
   const [user] = useState<{
@@ -20,62 +21,72 @@ export function Index() {
   return (
     <MainPageWrapper>
       <TopBar userTag={user.tag} role={user.role} />
-      <LayoutContainer>
-        <div
-          style={{
-            display: 'inline-flex',
-            width: '100%',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <div>
-            <H1
+      <MenuLayoutWrapper>
+        <MenuWrapper>
+          <PortalMenu />
+        </MenuWrapper>
+        <LayoutWrapper>
+          <LayoutContainer>
+            <div
               style={{
-                color: '#FFA295',
-                fontSize: '30px',
-                textShadow: '0px 0px 10px rgba(254, 81, 57, 0.5)',
+                display: 'inline-flex',
+                width: '100%',
+                justifyContent: 'space-between',
+                alignItems: 'center',
               }}
             >
-              Welcome, {user.firstName}
-            </H1>
-            <H4 style={{ color: '#989898' }}>
-              What would you like to do today?
-            </H4>
-          </div>
-          <Search
-            placeholder={'Search...'}
-            onInput={function (value: string): void {
-              throw new Error('Function not implemented.');
-            }}
-          ></Search>
-        </div>
-        <div>
-          <p style={{ margin: '13px 0' }}>Quick Actions</p>
-          <QuickActionContainer>
-            <GrayContentBox location="/redstar.svg"></GrayContentBox>
-            <GrayContentBox location="/pinkstar.svg"></GrayContentBox>
-            <GrayContentBox location="/greenstar.svg"></GrayContentBox>
-            <GrayContentBox location="/purplepin.svg"></GrayContentBox>
-            <GrayContentBox location="/yellowpin.svg"></GrayContentBox>
-          </QuickActionContainer>
-        </div>
-
-        <AddOnAndStats>
-          <AddOnOuter>
-            <p style={{ textAlign: 'left', width: '90%', margin: '10px 0' }}>
-              Add-Ons
-            </p>
-            <AddOn></AddOn>
-          </AddOnOuter>
-          <StatsOuter>
-            <p style={{ textAlign: 'left', width: '90%', margin: '10px 0' }}>
-              Stats
-            </p>
-            <Stats></Stats>
-          </StatsOuter>
-        </AddOnAndStats>
-      </LayoutContainer>
+              <div>
+                <H1
+                  style={{
+                    color: '#FFA295',
+                    fontSize: '30px',
+                    textShadow: '0px 0px 10px rgba(254, 81, 57, 0.5)',
+                  }}
+                >
+                  Welcome, {user.firstName}
+                </H1>
+                <H4 style={{ color: '#989898' }}>
+                  What would you like to do today?
+                </H4>
+              </div>
+              <Search
+                placeholder={'Search...'}
+                onInput={function (value: string): void {
+                  throw new Error('Function not implemented.');
+                }}
+              ></Search>
+            </div>
+            <div>
+              <p style={{ margin: '13px 0' }}>Quick Actions</p>
+              <QuickActionContainer>
+                <GrayContentBox location="/redstar.svg"></GrayContentBox>
+                <GrayContentBox location="/pinkstar.svg"></GrayContentBox>
+                <GrayContentBox location="/greenstar.svg"></GrayContentBox>
+                <GrayContentBox location="/purplepin.svg"></GrayContentBox>
+                <GrayContentBox location="/yellowpin.svg"></GrayContentBox>
+              </QuickActionContainer>
+            </div>
+            <AddOnAndStats>
+              <AddOnOuter>
+                <p
+                  style={{ textAlign: 'left', width: '90%', margin: '10px 0' }}
+                >
+                  Add-Ons
+                </p>
+                <AddOn></AddOn>
+              </AddOnOuter>
+              <StatsOuter>
+                <p
+                  style={{ textAlign: 'left', width: '90%', margin: '10px 0' }}
+                >
+                  Stats
+                </p>
+                <Stats></Stats>
+              </StatsOuter>
+            </AddOnAndStats>
+          </LayoutContainer>
+        </LayoutWrapper>
+      </MenuLayoutWrapper>
     </MainPageWrapper>
   );
 }
@@ -146,9 +157,27 @@ const MainPageWrapper = styled.div`
 `;
 
 const LayoutContainer = styled.div`
-  width: 72%;
+  width: 80%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 20px;
+`;
+
+const MenuLayoutWrapper = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 20px;
+`;
+
+const MenuWrapper = styled.div`
+  position: absolute;
+`;
+
+const LayoutWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
 `;
