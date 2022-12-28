@@ -1,10 +1,9 @@
 import { Colors2023 } from '@hibiscus/styles';
 import { FormMetadata } from '@hibiscus/types';
 import { H1, H3, Link } from '@hibiscus/ui';
-import { Button } from '@hibiscus/ui-kit-2023';
+import { Button, GlowSpan } from '@hibiscus/ui-kit-2023';
 import Image from 'next/image';
 import styled from 'styled-components';
-import GlowSpan from '../glow-span';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface HackformEndingProps {

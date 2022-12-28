@@ -21,6 +21,7 @@
       "@hibiscus/hibiscus-supabase-client": [
         "libs/hibiscus-supabase-client/src/index.ts"
       ],
+      "@hibiscus/icons": ["libs/icons/src/index.ts"],
       "@hibiscus/styles": ["libs/styles/src/index.ts"],
       "@hibiscus/types": ["libs/types/src/index.ts"],
       "@hibiscus/ui": ["libs/ui/src/index.ts"],

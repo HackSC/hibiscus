@@ -1,7 +1,7 @@
 import { Colors2023 } from '@hibiscus/styles';
 import styled from 'styled-components';
 import React from 'react';
-import Arrow from '../../assets/chevron-down.svg';
+import { ChevronRightIcon } from '@hibiscus/icons';
 
 /* eslint-disable-next-line */
 export interface ArrowButtonProps extends React.ButtonHTMLAttributes<any> {
@@ -11,8 +11,7 @@ export interface ArrowButtonProps extends React.ButtonHTMLAttributes<any> {
 export function ArrowButton(props: ArrowButtonProps) {
   return (
     <StyledArrowButton {...props} orientation={props.orientation}>
-      <img
-        src={Arrow}
+      <ChevronRightIcon
         alt={`Arrow if pressed will go to the ${
           props.orientation === 'right' || props.orientation === 'down'
             ? 'next'

@@ -38,10 +38,12 @@ export namespace Colors2023 {
   };
   export const roleColors = {
     [HibiscusRole.HACKER]: {
-      color: BLUE,
+      light: BLUE.LIGHT,
+      standard: BLUE.STANDARD,
     },
     [HibiscusRole.ADMIN]: {
-      color: RED,
+      light: RED.LIGHT,
+      standard: RED.STANDARD,
     },
   };
 }
