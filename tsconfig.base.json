@@ -23,6 +23,7 @@
       "@hacksc-platforms/hibiscus-supabase-client": [
         "libs/hibiscus-supabase-client/src/index.ts"
       ],
+      "@hacksc-platforms/sso-client": ["libs/sso-client/src/index.ts"],
       "@hacksc-platforms/styles": ["libs/styles/src/index.ts"],
       "@hacksc-platforms/types": ["libs/types/src/index.ts"],
       "@hacksc-platforms/ui": ["libs/ui/src/index.ts"],

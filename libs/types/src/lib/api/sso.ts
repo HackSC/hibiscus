@@ -9,3 +9,4 @@ export type SSOApiSignInWithPassword = ReturnType<
 export type SSOApiUpdateUser = ReturnType<GoTrueClient['updateUser']>;
 export type SSOApiSignUp = ReturnType<GoTrueClient['signUp']>;
 export type SSOApiVerifyOtp = ReturnType<GoTrueClient['verifyOtp']>;
+export type SSOApiVerifyToken = ReturnType<GoTrueClient['getUser']>;
