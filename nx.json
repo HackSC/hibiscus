@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "npmScope": "hacksc-platforms",
+  "npmScope": "hibiscus",
   "affected": {
     "defaultBase": "main"
   },
@@ -46,7 +46,8 @@
       },
       "library": {
         "style": "scss",
-        "linter": "eslint"
+        "linter": "eslint",
+        "unitTestRunner": "jest"
       }
     },
     "@nrwl/next": {

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { H2 } from '@hacksc-platforms/ui';
+import { H2 } from '@hibiscus/ui';
 import Image from 'next/image';
 /* eslint-disable-next-line */
 export interface AlumDestinationsProps {}

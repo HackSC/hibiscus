@@ -1,4 +1,4 @@
-import { Colors2023 } from '@hacksc-platforms/styles';
+import { Colors2023 } from '@hibiscus/styles';
 import { InputHTMLAttributes } from 'react';
 import styled from 'styled-components';
 

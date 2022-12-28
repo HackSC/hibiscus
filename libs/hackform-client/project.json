@@ -11,6 +11,26 @@
         "lintFilePatterns": ["libs/hackform-client/**/*.ts"]
       }
     },
+    "build": {
+      "executor": "@nrwl/rollup:rollup",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/hackform-client",
+        "tsConfig": "libs/hackform-client/tsconfig.lib.json",
+        "project": "libs/hackform-client/package.json",
+        "entryFile": "libs/hackform-client/src/index.ts",
+        "external": ["react/jsx-runtime"],
+        "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+        "compiler": "babel",
+        "assets": [
+          {
+            "glob": "libs/hackform-client/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ]
+      }
+    },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],

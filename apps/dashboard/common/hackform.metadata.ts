@@ -1,4 +1,4 @@
-import { FormMetadata, FormQuestionType } from '@hacksc-platforms/types';
+import { FormMetadata, FormQuestionType } from '@hibiscus/types';
 
 export const formMetadata2023HackerApps: FormMetadata = {
   entry: {

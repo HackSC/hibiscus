@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
-import { H2 } from '@hacksc-platforms/ui';
+import { H2 } from '@hibiscus/ui';
 
 /* eslint-disable-next-line */
 export interface HackSCMemoriesProps {}

@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
-import { TrademarkColors } from '@hacksc-platforms/styles';
-import { GradientSpan, H1, H3 } from '@hacksc-platforms/ui';
+import { TrademarkColors } from '@hibiscus/styles';
+import { GradientSpan, H1, H3 } from '@hibiscus/ui';
 /* eslint-disable-next-line */
 export interface HeroProps {}
 

@@ -1,4 +1,4 @@
-import { Colors2023 } from '@hacksc-platforms/styles';
+import { Colors2023 } from '@hibiscus/styles';
 import styled from 'styled-components';
 import React from 'react';
 import Arrow from '../../assets/chevron-down.svg';

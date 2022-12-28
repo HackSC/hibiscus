@@ -7,7 +7,7 @@ import {
   FormQuestionType,
   HackformQuestionResponse,
   HackformSubmission,
-} from '@hacksc-platforms/types';
+} from '@hibiscus/types';
 import HackformEnding from './hackform-end';
 
 /* eslint-disable-next-line */

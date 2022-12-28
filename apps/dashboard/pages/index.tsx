@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { H1, H4 } from '@hacksc-platforms/ui';
+import { H1, H4 } from '@hibiscus/ui';
 import styled from 'styled-components';
 import GrayContentBox from '../components/gray-content-box/gray-content-box';
-import { Search } from '@hacksc-platforms/ui-kit-2023';
+import { Search } from '@hibiscus/ui-kit-2023';
 import TopBar from '../components/top-bar/top-bar';
-import { HibiscusRole } from '@hacksc-platforms/types';
+import { HibiscusRole } from '@hibiscus/types';
 
 export function Index() {
   const [user] = useState<{

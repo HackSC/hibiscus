@@ -2,7 +2,7 @@ import {
   FormMetadata,
   FormQuestionType,
   HackformSubmission,
-} from '@hacksc-platforms/types';
+} from '@hibiscus/types';
 import {
   AttributeValue,
   DynamoDBClient,
