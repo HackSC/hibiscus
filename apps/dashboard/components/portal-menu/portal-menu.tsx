@@ -2,13 +2,10 @@ import { MaximizeTwoArrowIcon, MinimizeTwoArrowIcon } from '@hibiscus/icons';
 import { Colors2023 } from '@hibiscus/styles';
 import { Link, Text } from '@hibiscus/ui';
 import { GlowSpan } from '@hibiscus/ui-kit-2023';
-import { getColorsForRole } from 'apps/dashboard/common/role.utils';
-import {
-  useAppDispatch,
-  useAppSelector,
-} from 'apps/dashboard/hooks/redux/hooks';
-import useHibiscusUser from 'apps/dashboard/hooks/use-hibiscus-user/use-hibiscus-user';
-import { changeTab, toggleMenuOpen } from 'apps/dashboard/store/menu-slice';
+import { getColorsForRole } from '../../common/role.utils';
+import { useAppDispatch, useAppSelector } from '../../hooks/redux/hooks';
+import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
+import { changeTab, toggleMenuOpen } from '../../store/menu-slice';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
