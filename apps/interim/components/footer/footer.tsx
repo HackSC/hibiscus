@@ -1,4 +1,4 @@
-import { Link } from '@hacksc-platforms/ui';
+import { Link } from '@hibiscus/ui';
 import Image from 'next/image';
 import styled from 'styled-components';
 

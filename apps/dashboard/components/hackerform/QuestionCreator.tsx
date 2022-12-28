@@ -1,4 +1,4 @@
-import { Button } from '@hacksc-platforms/ui-kit-2023';
+import { Button } from '@hibiscus/ui-kit-2023';
 import {
   ButtonHintTextContainer,
   ErrorText,
@@ -9,7 +9,7 @@ import {
 } from './common-styled-components';
 import HackformQuestionHeader from './hackform-question-header';
 import HackformBackNextWidget from './hackform-backnext-widget';
-import { FormQuestion } from '@hacksc-platforms/types';
+import { FormQuestion } from '@hibiscus/types';
 
 interface QuestionCreatorProps {
   inputComponentChildren: React.ReactNode;

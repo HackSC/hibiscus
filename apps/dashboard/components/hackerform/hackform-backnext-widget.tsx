@@ -1,4 +1,4 @@
-import { ArrowButton } from '@hacksc-platforms/ui-kit-2023';
+import { ArrowButton } from '@hibiscus/ui-kit-2023';
 import styled from 'styled-components';
 
 interface HackformBackNextWidgetProps {

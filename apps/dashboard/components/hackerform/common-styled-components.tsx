@@ -1,5 +1,5 @@
-import { Colors2023 } from '@hacksc-platforms/styles';
-import { Text } from '@hacksc-platforms/ui';
+import { Colors2023 } from '@hibiscus/styles';
+import { Text } from '@hibiscus/ui';
 import styled from 'styled-components';
 
 export const InputAndButtonWrapper = styled.div`

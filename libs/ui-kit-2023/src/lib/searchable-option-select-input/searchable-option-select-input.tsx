@@ -1,4 +1,4 @@
-import { Colors2023 } from '@hacksc-platforms/styles';
+import { Colors2023 } from '@hibiscus/styles';
 import React, {
   InputHTMLAttributes,
   useCallback,
@@ -8,9 +8,9 @@ import React, {
 } from 'react';
 import styled from 'styled-components';
 import OneLineText from '../one-line-text/one-line-text';
-import { Text } from '@hacksc-platforms/ui';
+import { Text } from '@hibiscus/ui';
 import Fuse from 'fuse.js';
-import { Option } from '@hacksc-platforms/types';
+import { Option } from '@hibiscus/types';
 
 /* eslint-disable-next-line */
 export interface OptionSelectProps

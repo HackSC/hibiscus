@@ -2,15 +2,15 @@ import {
   FormMetadata,
   FormQuestionType,
   HackformSubmission,
-} from '@hacksc-platforms/types';
+} from '@hibiscus/types';
 import {
   AttributeValue,
   DynamoDBClient,
   PutItemCommand,
   PutItemCommandInput,
 } from '@aws-sdk/client-dynamodb';
-import * as AWS from 'aws-sdk';
 import { injectable } from 'tsyringe';
+import { v4 } from 'uuid';
 
 @injectable()
 export class HibiscusHackformClient {
@@ -24,22 +24,35 @@ export class HibiscusHackformClient {
   }
 
   private buildDDBItemFromResponse(
-    data: HackformSubmission
+    data: HackformSubmission,
+    hackformMetadata: FormMetadata
   ): PutItemCommandInput['Item'] {
+    const responseId = v4();
     return {
-      id: { S: '1' },
+      id: { S: responseId },
       data: {
-        L: <AttributeValue[]>data.responses.map((item) => {
-          if (
-            item.question.type === FormQuestionType.ShortText ||
-            item.question.type === FormQuestionType.LongText ||
-            item.question.type === FormQuestionType.Email
-          ) {
-            return { S: item.textInput };
-          } else if (item.question.type === FormQuestionType.Number) {
-            return { N: item.numberInput };
-          } else {
-            return { N: null };
+        L: <AttributeValue[]>hackformMetadata.questions.map((question, qi) => {
+          const { input } = data.responses[qi];
+          switch (question.type) {
+            case FormQuestionType.ShortText:
+            case FormQuestionType.Email:
+            case FormQuestionType.LongText:
+              return { S: input.text };
+            case FormQuestionType.Boolean:
+              return { BOOL: input.boolean };
+            case FormQuestionType.Number:
+              return { N: input.number };
+            case FormQuestionType.SingleOptionDropdown:
+              return {
+                M: {
+                  DisplayName: { S: input.text },
+                  Value: { S: input.singleChoiceValue },
+                },
+              };
+            case FormQuestionType.Date:
+              return { D: input.date };
+            default:
+              return { N: null };
           }
         }),
       },
@@ -55,7 +68,7 @@ export class HibiscusHackformClient {
     return this.ddb.send(
       new PutItemCommand({
         TableName: this.tableName,
-        Item: this.buildDDBItemFromResponse(data),
+        Item: this.buildDDBItemFromResponse(data, formMetadata),
       })
     );
   }

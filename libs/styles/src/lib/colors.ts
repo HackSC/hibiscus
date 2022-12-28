@@ -1,4 +1,4 @@
-import { HibiscusRole } from '@hacksc-platforms/types';
+import { HibiscusRole } from '@hibiscus/types';
 
 export namespace TrademarkColors {
   export const LIGHT_PURPLE = 'rgba(215, 112, 199, 61%)';

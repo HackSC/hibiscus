@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import Image from 'next/image';
-import { Link, Text } from '@hacksc-platforms/ui';
+import { Link, Text } from '@hibiscus/ui';
 import GlowSpan from '../glow-span';
-import { HibiscusRole } from '@hacksc-platforms/types';
-import { Colors2023 } from '@hacksc-platforms/styles';
+import { HibiscusRole } from '@hibiscus/types';
+import { Colors2023 } from '@hibiscus/styles';
 
 /* eslint-disable-next-line */
 export interface TopBarProps {

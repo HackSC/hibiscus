@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { OneLineText } from '@hacksc-platforms/ui-kit-2023';
+import { OneLineText } from '@hibiscus/ui-kit-2023';
 import { QuestionFormProps } from './hackform-question';
 import QuestionCreator from './QuestionCreator';
-import { HackformQuestionResponse } from '@hacksc-platforms/types';
+import { HackformQuestionResponse } from '@hibiscus/types';
 
 type Props = QuestionFormProps & { placeholder: string; initialError?: string };
 

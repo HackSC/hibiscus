@@ -1,7 +1,7 @@
-import { Colors2023 } from '@hacksc-platforms/styles';
-import { HackformQuestionResponse, Option } from '@hacksc-platforms/types';
-import { Text } from '@hacksc-platforms/ui';
-import { SearchableOptionSelectInput } from '@hacksc-platforms/ui-kit-2023';
+import { Colors2023 } from '@hibiscus/styles';
+import { HackformQuestionResponse, Option } from '@hibiscus/types';
+import { Text } from '@hibiscus/ui';
+import { SearchableOptionSelectInput } from '@hibiscus/ui-kit-2023';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { QuestionFormProps } from './hackform-question';

@@ -1,4 +1,4 @@
-import { TrademarkColors } from '@hacksc-platforms/styles';
+import { TrademarkColors } from '@hibiscus/styles';
 import styled from 'styled-components';
 
 export const GradientSpan = styled.span`

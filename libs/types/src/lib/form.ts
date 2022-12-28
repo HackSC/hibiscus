@@ -38,6 +38,7 @@ export enum FormQuestionType {
   Number = 'number',
   Date = 'date',
   SingleOptionDropdown = 'single-option-dropdown',
+  Boolean = 'boolean',
 }
 
 export interface HackformSubmission {
@@ -51,5 +52,6 @@ export interface HackformQuestionResponse {
     choices?: number[]; // indexes of the choices; if it's a single choice, size=1
     boolean?: boolean;
     singleChoiceValue?: string; // value associated with the choice
+    date?: Date; // value for a date
   };
 }

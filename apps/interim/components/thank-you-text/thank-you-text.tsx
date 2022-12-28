@@ -1,4 +1,4 @@
-import { GradientSpan, H3 } from '@hacksc-platforms/ui';
+import { GradientSpan, H3 } from '@hibiscus/ui';
 import styled from 'styled-components';
 
 export interface ThankYouTextProps {
