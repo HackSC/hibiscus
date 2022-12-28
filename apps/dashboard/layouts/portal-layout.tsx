@@ -36,6 +36,7 @@ const MenuLayoutWrapper = styled.div`
 
 const MenuWrapper = styled.div`
   position: absolute;
+  z-index: 999; // always on top
 `;
 
 const LayoutWrapper = styled.div`

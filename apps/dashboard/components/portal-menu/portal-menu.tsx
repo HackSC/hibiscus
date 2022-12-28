@@ -1,6 +1,10 @@
 import { MaximizeTwoArrowIcon, MinimizeTwoArrowIcon } from '@hibiscus/icons';
 import { Colors2023 } from '@hibiscus/styles';
-import { Link } from '@hibiscus/ui';
+import { Link, Text } from '@hibiscus/ui';
+import { GlowSpan } from '@hibiscus/ui-kit-2023';
+import { getColorsForRole } from 'apps/dashboard/common/role.utils';
+import useHibiscusUser from 'apps/dashboard/hooks/use-hibiscus-user/use-hibiscus-user';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
@@ -21,8 +25,17 @@ const tabRoutes: TabRoute[] = [
 ];
 
 export function PortalMenu(props: PortalMenuProps) {
+  const router = useRouter();
+  const getTabIndexFromPageRoute = () => {
+    const fti = tabRoutes.findIndex((item) => item.url === router.pathname);
+    return fti;
+  };
   const [isOpen, setOpen] = useState(false);
-  const [activeTabIndex, setActiveTabIndex] = useState(props.chosenTabIndex);
+  const [activeTabIndex, setActiveTabIndex] = useState(
+    props.chosenTabIndex ?? getTabIndexFromPageRoute()
+  );
+  const { user } = useHibiscusUser();
+  const colors = getColorsForRole(user.role);
 
   const handleMaximize = () => {
     setOpen(true);
@@ -36,9 +49,63 @@ export function PortalMenu(props: PortalMenuProps) {
     setActiveTabIndex(ti);
   };
 
+  const LeftBarWhenActive = () => (
+    <div
+      style={{
+        backgroundColor: colors.standard,
+        filter: 'brightness(140%)',
+        boxShadow: `-1px 0px 15px ${colors.standard}`,
+        height: 'max-height',
+        width: '4px',
+        borderRadius: '5px',
+      }}
+    />
+  );
+
+  const Menu = () => (
+    <>
+      <ZoomBackContainer>
+        <IconButton onClick={handleMinimize}>
+          <MinimizeTwoArrowIcon />
+        </IconButton>
+      </ZoomBackContainer>
+      <ItemsWrapper>
+        {tabRoutes.map((item, i) => {
+          const active = activeTabIndex === i;
+          return (
+            <TabItemContainer key={i} active={active} color={colors.standard}>
+              {active && <LeftBarWhenActive />}
+              <LinkText>
+                <Link
+                  href={item.url}
+                  onClick={() => {
+                    handleClickTab(i);
+                  }}
+                  anchortagpropsoverride={{ target: '_self' }}
+                >
+                  {active ? (
+                    <GlowSpan
+                      color={colors.light}
+                      shadowColor={colors.standard}
+                      style={{ fontWeight: 600 }}
+                    >
+                      {item.displayName}
+                    </GlowSpan>
+                  ) : (
+                    <>{item.displayName}</>
+                  )}
+                </Link>
+              </LinkText>
+            </TabItemContainer>
+          );
+        })}
+      </ItemsWrapper>
+    </>
+  );
+
   if (!isOpen) {
     return (
-      <Wrapper>
+      <Wrapper isOpen={isOpen}>
         <IconButton onClick={handleMaximize}>
           <MaximizeTwoArrowIcon />
         </IconButton>
@@ -47,43 +114,24 @@ export function PortalMenu(props: PortalMenuProps) {
   }
 
   return (
-    <Wrapper>
-      <ZoomBackContainer>
-        <IconButton onClick={handleMinimize}>
-          <MinimizeTwoArrowIcon />
-        </IconButton>
-      </ZoomBackContainer>
-      <ItemsWrapper>
-        {tabRoutes.map((item, i) => (
-          <TabItemContainer key={i} active={activeTabIndex === i}>
-            <Link
-              href={item.url}
-              onClick={() => {
-                handleClickTab(i);
-              }}
-              anchortagpropsoverride={{ target: '_self' }}
-            >
-              {item.displayName}
-            </Link>
-          </TabItemContainer>
-        ))}
-      </ItemsWrapper>
+    <Wrapper isOpen={isOpen}>
+      <Menu />
     </Wrapper>
   );
 }
 
 export default PortalMenu;
 
-const Wrapper = styled.div<{ isOpen?: boolean }>`
+const Wrapper = styled.nav<{ isOpen?: boolean }>`
   font-family: 'Inter';
   color: white;
   max-height: 30rem;
   display: flex;
   flex-direction: column;
-  background-color: ${Colors2023.GRAY.DARK};
-  border: 2px solid ${Colors2023.GRAY.MEDIUM};
-  box-shadow: 1px 2px 10px 2px ${Colors2023.GRAY.MEDIUM};
-  padding: ${(props) => (props.isOpen ? '1rem' : '13px')};
+  background-color: ${Colors2023.GRAY.STANDARD};
+  border: 4px solid ${Colors2023.GRAY.MEDIUM};
+  box-shadow: 1px 2px 15px ${Colors2023.GRAY.MEDIUM};
+  padding: ${(props) => (props.isOpen ? '7px 5px 25px' : '10px 7px')};
   border-radius: 10px;
 `;
 
@@ -98,16 +146,24 @@ const ItemsWrapper = styled.div`
   flex-direction: column;
   gap: 10px;
   max-width: max-content;
-  margin-right: 40px;
+  margin: 5px 40px 0 20px;
 `;
 
-const TabItemContainer = styled.div<{ active?: boolean }>`
-  padding-left: 0.5rem;
-  border-left: ${(props) => (props.active ? '2px solid white' : '')};
+const TabItemContainer = styled.div<{ active?: boolean; color: string }>`
+  height: 100%;
+  display: flex;
+  gap: 10px;
+  padding-left: 10px;
 `;
 
 const IconButton = styled.button`
   appearance: none;
   background-color: transparent;
   cursor: pointer;
+`;
+
+const LinkText = styled(Text)`
+  :hover {
+    text-decoration: underline;
+  }
 `;
