@@ -1,5 +1,4 @@
 import { Colors2023 } from '@hibiscus/styles';
-import { H3 } from '@hibiscus/ui';
 import styled from 'styled-components';
 import Image from 'next/image';
 
