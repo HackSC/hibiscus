@@ -1,4 +1,4 @@
-import { H1 } from '@hacksc-platforms/ui';
+import { H1 } from '@hibiscus/ui';
 import { FC } from 'react';
 import styled from 'styled-components';
 import ham from './mobile-navbar.module.css';

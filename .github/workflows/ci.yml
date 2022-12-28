@@ -1,6 +1,11 @@
 name: CI on affected monorepo apps code
 
-on: [push, workflow_dispatch]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   prepare:
@@ -8,36 +13,60 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: DerYeger/yarn-setup-action@master
+      - uses: actions/cache@v3
         with:
-          node-version: 16
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - run: npm install -g yarn
+      - run: yarn install --frozen-lockfile
   build:
     name: Build affected apps
     runs-on: ubuntu-latest
     needs: prepare
     steps:
       - uses: actions/checkout@v3
-      - uses: DerYeger/yarn-setup-action@master
         with:
-          node-version: 16
-      - run: yarn nx affected --target=build --maxParallel=3 --parallel --base='${{ github.ref_name }}'
+          fetch-depth: 0
+      - uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - run: npm install -g yarn
+      - run: yarn install --frozen-lockfile
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v3
+      - run: yarn nx affected:build --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
   test:
     name: Test affected apps
     runs-on: ubuntu-latest
     needs: prepare
     steps:
       - uses: actions/checkout@v3
-      - uses: DerYeger/yarn-setup-action@master
         with:
-          node-version: 16
-      - run: yarn nx affected --target=test --maxParallel=3 --parallel --base='${{ github.ref_name }}'
+          fetch-depth: 0
+      - uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - run: npm install -g yarn
+      - run: yarn install --frozen-lockfile
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v3
+      - run: yarn nx affected:test --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
   lint:
     name: Lint affected apps
     runs-on: ubuntu-latest
     needs: prepare
     steps:
       - uses: actions/checkout@v3
-      - uses: DerYeger/yarn-setup-action@master
         with:
-          node-version: 16
-      - run: yarn nx affected --target=lint --maxParallel=3 --parallel --base='${{ github.ref_name }}'
+          fetch-depth: 0
+      - uses: actions/cache@v3
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+      - run: npm install -g yarn
+      - run: yarn install --frozen-lockfile
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v3
+      - run: yarn nx affected:lint --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}

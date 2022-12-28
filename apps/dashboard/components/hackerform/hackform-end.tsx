@@ -1,8 +1,7 @@
-import { Colors2023 } from '@hacksc-platforms/styles';
-import { FormMetadata } from '@hacksc-platforms/types';
-import { H1, H3, Link } from '@hacksc-platforms/ui';
-import { Button } from '@hacksc-platforms/ui-kit-2023';
-import { GlowSpan } from '@hacksc-platforms/ui-kit-2023';
+import { Colors2023 } from '@hibiscus/styles';
+import { FormMetadata } from '@hibiscus/types';
+import { H1, H3, Link } from '@hibiscus/ui';
+import { Button, GlowSpan } from '@hibiscus/ui-kit-2023';
 import Image from 'next/image';
 import styled from 'styled-components';
 

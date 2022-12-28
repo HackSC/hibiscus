@@ -1,4 +1,4 @@
-import { H1, Link, Text } from '@hacksc-platforms/ui';
+import { H1, Link, Text } from '@hibiscus/ui';
 import { GetServerSideProps } from 'next';
 import { BeatLoader } from 'react-spinners';
 

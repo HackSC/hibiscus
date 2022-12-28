@@ -1,7 +1,7 @@
 import TopBar from '../../components/top-bar/top-bar';
 import styled from 'styled-components';
 import Hackerform from '../../components/hackerform/hackform';
-import { HibiscusRole } from '@hacksc-platforms/types';
+import { HibiscusRole } from '@hibiscus/types';
 import { formMetadata2023HackerApps } from '../../common/hackform.metadata';
 
 export function Index() {

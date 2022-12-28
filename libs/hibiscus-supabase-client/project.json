@@ -10,6 +10,26 @@
         "lintFilePatterns": ["libs/hibiscus-supabase-client/**/*.ts"]
       }
     },
+    "build": {
+      "executor": "@nrwl/rollup:rollup",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/hibiscus-supabase-client",
+        "tsConfig": "libs/hibiscus-supabase-client/tsconfig.lib.json",
+        "project": "libs/hibiscus-supabase-client/package.json",
+        "entryFile": "libs/hibiscus-supabase-client/src/index.ts",
+        "external": ["react/jsx-runtime"],
+        "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+        "compiler": "babel",
+        "assets": [
+          {
+            "glob": "libs/hibiscus-supabase-client/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ]
+      }
+    },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/hibiscus-supabase-client"],

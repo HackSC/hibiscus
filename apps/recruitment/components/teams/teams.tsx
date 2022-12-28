@@ -1,4 +1,4 @@
-import { GradientSpan, H2, H3, Text } from '@hacksc-platforms/ui';
+import { GradientSpan, H2, H3, Text } from '@hibiscus/ui';
 import Flippy, { BackSide, FrontSide } from 'react-flippy';
 import styled from 'styled-components';
 /* eslint-disable-next-line */

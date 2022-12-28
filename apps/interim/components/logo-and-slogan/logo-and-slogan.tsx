@@ -1,4 +1,4 @@
-import { H1, H2 } from '@hacksc-platforms/ui';
+import { H1, H2 } from '@hibiscus/ui';
 import styled from 'styled-components';
 
 /* eslint-disable-next-line */

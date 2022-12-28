@@ -3,7 +3,7 @@ import {
   FormQuestionType,
   HackformQuestionResponse,
   HackformSubmission,
-} from '@hacksc-platforms/types';
+} from '@hibiscus/types';
 import React from 'react';
 import styled from 'styled-components';
 import LongTextQuestion from './long-text-input';
