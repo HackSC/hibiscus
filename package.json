@@ -18,7 +18,7 @@
     "@supabase/supabase-js": "^1.35.6",
     "aws-sdk": "^2.1272.0",
     "axios": "^0.27.2",
-    "core-js": "^3.6.5",
+    "core-js": "^3.27.0",
     "dotenv": "^16.0.1",
     "express": "4.18.2",
     "formik": "^2.2.9",
