@@ -31,6 +31,7 @@ const PurpleButton = styled.button`
   background: #7a65fd;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
+  cursor: pointer;
   //fonts
   font-family: 'Inter';
 
@@ -43,6 +44,7 @@ const PurpleButton = styled.button`
   color: #313131;
   :hover {
     background: #4130a7;
+    cursor: pointer;
   }
   :active {
     background: #7a65fd;
@@ -74,6 +76,7 @@ const BlackButton = styled.button`
   :hover {
     color: #307c93;
     border: 1.5px solid #307c93;
+    cursor: pointer;
   }
   :active {
     border: 1.5px solid #76d3ef;
@@ -106,6 +109,7 @@ const BlueButton = styled.button`
   color: #313131;
   :hover {
     background: #307c93;
+    cursor: pointer;
   }
   :active {
     background: #76d3ef;
