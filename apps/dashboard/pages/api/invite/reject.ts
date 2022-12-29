@@ -1,8 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { memberCount } from '../misc-methods';
-const supabaseUrl = 'https://anzqbrsbjgqaphrfiaqv.supabase.co';
-const supabaseKey = process.env.SUPABASE_KEY;
+const supabaseUrl = 'http://localhost:54321';
+const supabaseKey = process.env.SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 //TODO: consider whether a rejected user is not allowed to request anymore
