@@ -1,3 +1,3 @@
-export const getWebTitle = (pre: string, suf: string = 'Hibiscus') => {
+export const getWebTitle = (pre: string, suf = 'Hibiscus') => {
   return `${pre} | ${suf}`;
 };
