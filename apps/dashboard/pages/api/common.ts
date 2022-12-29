@@ -7,7 +7,8 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 export default async function handle(req, res) {
   //query for all team information
   const { data, error } = await supabase.from('user_profiles').select();
-
+  console.log(supabaseUrl);
+  console.log(supabaseKey);
   if (error !== null) {
     res.status(500).json({ message: error.message });
   } else {

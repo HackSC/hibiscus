@@ -3,7 +3,7 @@ const supabaseUrl = 'http://localhost:54321';
 const supabaseKey = process.env.SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
-async function inviteeAccept(req, res) {
+export default async function handle(req, res) {
   //add the team id to the user prfiles
   const { error } = await supabase
     .from('user_profiles')
