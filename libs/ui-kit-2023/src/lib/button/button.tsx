@@ -62,7 +62,6 @@ const BlackButton = styled.button`
   padding: 10px 30px;
   gap: 10px;
   background: #222222;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
   //fonts
   font-family: 'Inter';
@@ -74,14 +73,17 @@ const BlackButton = styled.button`
   letter-spacing: 0.2em;
   color: #76d3ef;
   :hover {
-    color: #307c93;
-    border: 1.5px solid #307c93;
+    border: 1.5px solid #76d3ef;
+    background: #307c93b2;
+    box-shadow: 0px 2px 15px #77d2ee;
     cursor: pointer;
+    transition: 0.1s;
   }
   :active {
     border: 1.5px solid #76d3ef;
-    color: #76d3ef;
-    box-shadow: inset 1px 2px 0px #76d3ef;
+    background: #76d3ef;
+    color: #307c93;
+    box-shadow: 0px 2px 15px #77d2ee;
     border-radius: 10px;
   }
 `;
