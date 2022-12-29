@@ -2,6 +2,7 @@ import { GlobalStyles2023 } from '@hibiscus/styles';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import './styles.css';
+import { wrapper } from '../store/store';
 
 function CustomApp({ Component, pageProps }: AppProps) {
   return (
@@ -18,4 +19,4 @@ function CustomApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default CustomApp;
+export default wrapper.withRedux(CustomApp);
