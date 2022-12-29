@@ -33,7 +33,8 @@ const Input = styled.textarea`
 
   color: #f4f4f4;
   :hover {
-    filter: drop-shadow(0px 0px 15px #c2c2c2);
+    filter: drop-shadow(0px 0px 3px #c2c2c2);
+    transition: 0.1s;
   }
   :focus {
     /* gray/medium */
