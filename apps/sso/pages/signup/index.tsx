@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 import SignUpCard from '../../components/signup-card/signup-card';
 import { TrademarkColors } from '@hacksc-platforms/styles';
+import Head from 'next/head';
 
 export function Index() {
   return (
     <MainPageWrapper>
+      <Head>Sign up | Hibiscus</Head>
       <SignUpCard />
     </MainPageWrapper>
   );

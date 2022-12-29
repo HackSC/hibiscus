@@ -1,10 +1,14 @@
 import styled from 'styled-components';
 import { TrademarkColors } from '@hacksc-platforms/styles';
 import VerifyCard from '../../components/verify-card/verify-card';
+import Head from 'next/head';
 
 export function Index() {
   return (
     <MainPageWrapper>
+      <Head>
+        <title>Verify your email | Hibiscus</title>
+      </Head>
       <VerifyCard />
     </MainPageWrapper>
   );

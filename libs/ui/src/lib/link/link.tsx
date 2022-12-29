@@ -14,7 +14,7 @@ export function Link(props: LinkProps) {
   return (
     <NextLink
       {...props}
-      style={{ ...props.anchortagpropsoverride?.style }}
+      style={{ textDecoration: 'none', ...props.anchortagpropsoverride?.style }}
       passHref
       target={'_blank'}
       rel="noreferrer"

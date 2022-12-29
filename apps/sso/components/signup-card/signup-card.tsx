@@ -1,11 +1,10 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
-import { FormEventHandler, FormHTMLAttributes, useState } from 'react';
+import { useState } from 'react';
 import { GradientSpan, Text } from '@hacksc-platforms/ui';
 import { TrademarkColors } from '@hacksc-platforms/styles';
 import { useRouter } from 'next/router';
-import { container } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
 import Image from 'next/image';
 import GrayLink from '../gray-link/gray-link';
@@ -15,7 +14,7 @@ export interface SignUpProps {}
 
 export function SignUpCard(props: SignUpProps) {
   const router = useRouter();
-  const [hideErrorMessage, setHideErrorMessage] = useState(false);
+  const [hideErrorMessage, setHideErrorMessage] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (event) => {
@@ -26,8 +25,8 @@ export function SignUpCard(props: SignUpProps) {
     const confirmPassword = event.target.confirmPassword.value;
 
     if (password !== confirmPassword) {
-      setHideErrorMessage(true);
       setErrorMessage("Confirm password doesn't match");
+      setHideErrorMessage(false);
       return;
     }
 
@@ -40,8 +39,16 @@ export function SignUpCard(props: SignUpProps) {
       if (typeof error === 'object' && error !== null && 'message' in error) {
         const message = error.message;
         setErrorMessage(message);
-        setHideErrorMessage(true);
+        setHideErrorMessage(false);
       }
+    }
+
+    if (data.user.aud === 'authenticated') {
+      setErrorMessage(
+        'This email has already been registered. Please login instead.'
+      );
+      setHideErrorMessage(false);
+      return;
     }
 
     if (data.user) {
@@ -53,7 +60,7 @@ export function SignUpCard(props: SignUpProps) {
   };
 
   return (
-    <StyledLoginCard>
+    <Wrapper>
       <Image
         src="/static/images/Logo.svg"
         alt="HackSC Logo"
@@ -83,23 +90,25 @@ export function SignUpCard(props: SignUpProps) {
           required
         />
         <StyledErrorText
-          style={{ display: hideErrorMessage ? 'block' : 'none' }}
+          style={{ display: !hideErrorMessage ? 'block' : 'none' }}
         >
           {errorMessage}
         </StyledErrorText>
         <GradientButton type="submit">SIGN UP</GradientButton>
       </StyledForm>
       <GrayLink href="/login">Have an account? Login</GrayLink>
-    </StyledLoginCard>
+    </Wrapper>
   );
 }
 
 export default SignUpCard;
 
-const StyledLoginCard = styled.div`
+const Wrapper = styled.div`
+  min-width: 35rem;
+  max-width: 50rem;
   color: #2b2b2b;
   background-color: rgba(255, 255, 255, 0.6);
-  padding: 5rem;
+  padding: 5rem 2rem;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -110,7 +119,7 @@ const StyledLoginCard = styled.div`
 `;
 
 const StyledForm = styled.form`
-  width: 140%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -164,10 +173,5 @@ const GradientButton = styled.button`
   width: 50%;
   font-size: 1.1rem;
   font-weight: bold;
-`;
-
-const StyledLink = styled(Text)`
-  font-size: 1rem;
-  color: #939393;
-  text-decoration: underline;
+  cursor: pointer;
 `;

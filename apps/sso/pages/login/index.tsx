@@ -25,7 +25,7 @@ export function Index() {
   return (
     <MainPageWrapper>
       <Head>
-        <title>Login | Hibiscus by HackSC</title>
+        <title>Login | Hibiscus</title>
       </Head>
       <LoginGuard callback={callback}>
         <LoginCard />

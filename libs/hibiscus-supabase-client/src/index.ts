@@ -19,8 +19,8 @@ export class HibiscusSupabaseClient {
 
   constructor() {
     this.client = createClient(
-      process.env.HIBISCUS_SUPABASE_API_URL,
-      process.env.HIBISCUS_SUPABASE_ANON_KEY
+      process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_API_URL,
+      process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_ANON_KEY
     );
   }
 

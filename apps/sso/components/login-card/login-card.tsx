@@ -8,7 +8,7 @@ import GrayLink from '../gray-link/gray-link';
 import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
 
 export function LoginCard() {
-  const [hideErrorMessage, setHideErrorMessage] = useState(false);
+  const [hideErrorMessage, setHideErrorMessage] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
   async function handleSubmit(event) {
@@ -17,30 +17,26 @@ export function LoginCard() {
     const email = event.target.email.value;
     const password = event.target.password.value;
 
-    try {
-      const { data, error } = await HibiscusSupabaseClient.signInWithPassword(
-        email,
-        password
+    const { data, error } = await HibiscusSupabaseClient.signInWithPassword(
+      email,
+      password
+    );
+
+    if (error) {
+      if (typeof error === 'object' && error !== null && 'message' in error) {
+        const message = error.message;
+        setErrorMessage(message);
+        setHideErrorMessage(false);
+      }
+    }
+
+    if (data.user) {
+      const token = data.session.access_token;
+      const res = await SSOClient.ssoCallback(
+        sessionStorage.getItem('callback'),
+        token
       );
-
-      if (error) {
-        if (typeof error === 'object' && error !== null && 'message' in error) {
-          const message = error.message;
-          setErrorMessage(message);
-          setHideErrorMessage(true);
-        }
-      }
-
-      if (data.user) {
-        const token = data.session.access_token;
-        const res = await SSOClient.ssoCallback(
-          sessionStorage.getItem('callback'),
-          token
-        );
-        window.location.replace(res?.redirect ?? '/');
-      }
-    } catch (e) {
-      // console.log(e);
+      window.location.replace(res?.redirect ?? '/');
     }
   }
 
@@ -69,7 +65,7 @@ export function LoginCard() {
           required
         />
         <StyledErrorText
-          style={{ display: hideErrorMessage ? 'block' : 'none' }}
+          style={{ display: !hideErrorMessage ? 'block' : 'none' }}
         >
           {errorMessage}
         </StyledErrorText>
@@ -84,9 +80,11 @@ export function LoginCard() {
 export default LoginCard;
 
 const StyledLoginCard = styled.div`
+  min-width: 35rem;
+  max-width: 50rem;
   color: #2b2b2b;
   background-color: rgba(255, 255, 255, 0.6);
-  padding: 5rem;
+  padding: 5rem 2rem;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -97,7 +95,7 @@ const StyledLoginCard = styled.div`
 `;
 
 const StyledForm = styled.form`
-  width: 140%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;

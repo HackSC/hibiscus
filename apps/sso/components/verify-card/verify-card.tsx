@@ -7,7 +7,6 @@ import OTPInput from '../otp-input/otp-input';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { setCookie } from 'cookies-next';
-import { container } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
 import GrayLink from '../gray-link/gray-link';
 
@@ -21,22 +20,18 @@ export function VerifyCard() {
   const handleOTP = async () => {
     const email = String(router.query.email);
 
-    try {
-      const { data, error } = await HibiscusSupabaseClient.verifyOtp(
-        email,
-        code,
-        'signup'
-      );
-      if (error) {
-        console.log(error);
-        setHideErrorMessage(true);
-      }
-      if (data.user) {
-        router.push('/');
-        setCookie('user', email);
-      }
-    } catch (e) {
-      console.log(e);
+    const { data, error } = await HibiscusSupabaseClient.verifyOtp(
+      email,
+      code,
+      'signup'
+    );
+    if (error) {
+      console.log(error);
+      setHideErrorMessage(true);
+    }
+    if (data.user) {
+      router.push('/');
+      setCookie('user', email);
     }
   };
 
