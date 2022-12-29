@@ -82,9 +82,7 @@ const LongTextQuestion = ({
       onKeyDown={(e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
           handleSubmitWithValidation();
-          return;
         }
-        e.preventDefault();
       }}
     />
   );
