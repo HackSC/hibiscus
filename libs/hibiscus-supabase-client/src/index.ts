@@ -32,8 +32,13 @@ export class HibiscusSupabaseClient {
    * Reset the password for this user (abstracts over supabase).
    * @param email email of the user
    */
-  static async resetPasswordViaEmail(email: string): SSOApiResetResponseType {
-    const res = await axios.post(`/api/resetPasswordForEmail?email=${email}`);
+  static async resetPasswordViaEmail(
+    email: string,
+    resetCallbackUrl: string
+  ): SSOApiResetResponseType {
+    const res = await axios.post(
+      `/api/resetPasswordForEmail?email=${email}&resetCallbackUrl=${resetCallbackUrl}`
+    );
     return res.data;
   }
 

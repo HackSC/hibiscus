@@ -1,11 +1,8 @@
-/* eslint-disable @nrwl/nx/enforce-module-boundaries */
-/* eslint-disable @next/next/no-img-element */
 import { useState } from 'react';
 import styled from 'styled-components';
 import { GradientSpan, Text } from '@hibiscus/ui';
 import { TrademarkColors } from '@hibiscus/styles';
 import { useRouter } from 'next/router';
-import { container } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 
 /* eslint-disable-next-line */
@@ -13,7 +10,7 @@ export interface ResetCardProps {}
 
 export function ResetCard(props: ResetCardProps) {
   const router = useRouter();
-  const [hideErrorMessage, setHideErrorMessage] = useState(false);
+  const [hideErrorMessage, setHideErrorMessage] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
   async function handleSubmit(event) {
@@ -23,8 +20,8 @@ export function ResetCard(props: ResetCardProps) {
     const confirmPassword = event.target.confirmPassword.value;
 
     if (!(newPassword === confirmPassword)) {
-      setHideErrorMessage(true);
       setErrorMessage('Confirm password does not match!');
+      setHideErrorMessage(false);
       return;
     }
 
@@ -36,7 +33,7 @@ export function ResetCard(props: ResetCardProps) {
       if (typeof error === 'object' && error !== null && 'message' in error) {
         const message = error.message;
         setErrorMessage(message);
-        setHideErrorMessage(true);
+        setHideErrorMessage(false);
       }
     }
 
@@ -66,7 +63,7 @@ export function ResetCard(props: ResetCardProps) {
           required
         />
         <StyledErrorText
-          style={{ display: hideErrorMessage ? 'block' : 'none' }}
+          style={{ display: !hideErrorMessage ? 'block' : 'none' }}
         >
           {errorMessage}
         </StyledErrorText>

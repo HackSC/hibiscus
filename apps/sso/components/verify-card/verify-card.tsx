@@ -1,5 +1,3 @@
-/* eslint-disable @nrwl/nx/enforce-module-boundaries */
-/* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
 import { Text } from '@hibiscus/ui';
 import { TrademarkColors } from '@hibiscus/styles';

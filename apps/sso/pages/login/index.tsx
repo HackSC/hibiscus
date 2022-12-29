@@ -5,6 +5,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { LoginGuard } from '../../components/login-guard';
+import { getWebTitle } from '@hibiscus/metadata';
 
 export function Index() {
   const [callback, setCallback] = useState(null);
@@ -25,7 +26,7 @@ export function Index() {
   return (
     <MainPageWrapper>
       <Head>
-        <title>Login | Hibiscus</title>
+        <title>{getWebTitle('Login')}</title>
       </Head>
       <LoginGuard callback={callback}>
         <LoginCard />

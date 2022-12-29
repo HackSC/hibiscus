@@ -2,12 +2,13 @@ import styled from 'styled-components';
 import { TrademarkColors } from '@hibiscus/styles';
 import VerifyCard from '../../components/verify-card/verify-card';
 import Head from 'next/head';
+import { getWebTitle } from '@hibiscus/metadata';
 
 export function Index() {
   return (
     <MainPageWrapper>
       <Head>
-        <title>Verify your email | Hibiscus</title>
+        <title>{getWebTitle('Verify your email')}</title>
       </Head>
       <VerifyCard />
     </MainPageWrapper>

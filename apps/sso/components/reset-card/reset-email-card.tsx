@@ -5,7 +5,6 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import { GradientSpan, Text } from '@hibiscus/ui';
 import { TrademarkColors } from '@hibiscus/styles';
-import { container } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import GrayLink from '../gray-link/gray-link';
 
@@ -14,15 +13,16 @@ export interface ResetCardProps {}
 
 export function ResetEmailCard(props: ResetCardProps) {
   const [hideSuccessMessage, setHideSuccessMessage] = useState(false);
-  const supabase = container.resolve(HibiscusSupabaseClient).getClient();
 
   async function handleSubmit(event) {
     event.preventDefault();
 
     const email = event.target.email.value;
+    const callbackUrl = `${window.location.protocol}//${window.location.host}/reset`;
 
     const { data, error } = await HibiscusSupabaseClient.resetPasswordViaEmail(
-      email
+      email,
+      callbackUrl
     );
 
     if (error) {
