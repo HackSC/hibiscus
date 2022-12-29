@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, ParagraphText } from '@hacksc-platforms/ui-kit-2023';
+import { Button, ParagraphText } from '@hibiscus/ui-kit-2023';
 import { QuestionFormProps } from './hackform-question';
 import {
   ErrorText,
@@ -80,7 +80,7 @@ const LongTextQuestion = ({
         setInput(e.target.value);
       }}
       onKeyDown={(e) => {
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' && !e.shiftKey) {
           handleSubmitWithValidation();
         }
       }}

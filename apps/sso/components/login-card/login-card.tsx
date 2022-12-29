@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import { useState } from 'react';
-import { GradientSpan, Text } from '@hacksc-platforms/ui';
-import { TrademarkColors } from '@hacksc-platforms/styles';
+import { GradientSpan, Text } from '@hibiscus/ui';
+import { TrademarkColors } from '@hibiscus/styles';
 import Image from 'next/image';
-import * as SSOClient from '@hacksc-platforms/sso-client';
+import * as SSOClient from '@hibiscus/sso-client';
 import GrayLink from '../gray-link/gray-link';
-import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 
 export function LoginCard() {
   const [hideErrorMessage, setHideErrorMessage] = useState(true);

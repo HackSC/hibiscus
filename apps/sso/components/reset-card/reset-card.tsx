@@ -2,11 +2,11 @@
 /* eslint-disable @next/next/no-img-element */
 import { useState } from 'react';
 import styled from 'styled-components';
-import { GradientSpan, Text } from '@hacksc-platforms/ui';
-import { TrademarkColors } from '@hacksc-platforms/styles';
+import { GradientSpan, Text } from '@hibiscus/ui';
+import { TrademarkColors } from '@hibiscus/styles';
 import { useRouter } from 'next/router';
 import { container } from 'tsyringe';
-import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 
 /* eslint-disable-next-line */
 export interface ResetCardProps {}

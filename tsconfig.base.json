@@ -15,19 +15,19 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@hacksc-platforms/analytics": ["libs/analytics/src/index.ts"],
-      "@hacksc-platforms/api-interfaces": ["libs/api-interfaces/src/index.ts"],
-      "@hacksc-platforms/hackform-client": [
-        "libs/hackform-client/src/index.ts"
-      ],
-      "@hacksc-platforms/hibiscus-supabase-client": [
+      "@hibiscus/analytics": ["libs/analytics/src/index.ts"],
+      "@hibiscus/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@hibiscus/hackform-client": ["libs/hackform-client/src/index.ts"],
+      "@hibiscus/hibiscus-supabase-client": [
         "libs/hibiscus-supabase-client/src/index.ts"
       ],
-      "@hacksc-platforms/sso-client": ["libs/sso-client/src/index.ts"],
-      "@hacksc-platforms/styles": ["libs/styles/src/index.ts"],
-      "@hacksc-platforms/types": ["libs/types/src/index.ts"],
-      "@hacksc-platforms/ui": ["libs/ui/src/index.ts"],
-      "@hacksc-platforms/ui-kit-2023": ["libs/ui-kit-2023/src/index.ts"]
+      "@hibiscus/icons": ["libs/icons/src/index.ts"],
+      "@hibiscus/metadata": ["libs/metadata/src/index.ts"],
+      "@hibiscus/styles": ["libs/styles/src/index.ts"],
+      "@hibiscus/types": ["libs/types/src/index.ts"],
+      "@hibiscus/ui": ["libs/ui/src/index.ts"],
+      "@hibiscus/ui-kit-2023": ["libs/ui-kit-2023/src/index.ts"],
+      "@hibiscus/sso-client": ["libs/sso-client/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

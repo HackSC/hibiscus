@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
-import { TrademarkColors } from '@hacksc-platforms/styles';
-import { H2, Text } from '@hacksc-platforms/ui';
+import { TrademarkColors } from '@hibiscus/styles';
+import { H2, Text } from '@hibiscus/ui';
 
 /* eslint-disable-next-line */
 export interface StudentXPProps {}

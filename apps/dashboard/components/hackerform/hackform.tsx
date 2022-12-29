@@ -7,7 +7,7 @@ import {
   FormQuestionType,
   HackformQuestionResponse,
   HackformSubmission,
-} from '@hacksc-platforms/types';
+} from '@hibiscus/types';
 import HackformEnding from './hackform-end';
 
 /* eslint-disable-next-line */
@@ -123,6 +123,7 @@ export function Hackerform({ formMetadata }: HackerformProps) {
 export default Hackerform;
 
 const HackformWrapper = styled.div`
+  width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;

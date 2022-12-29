@@ -3,10 +3,10 @@
 /* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
 import { useState } from 'react';
-import { GradientSpan, Text } from '@hacksc-platforms/ui';
-import { TrademarkColors } from '@hacksc-platforms/styles';
+import { GradientSpan, Text } from '@hibiscus/ui';
+import { TrademarkColors } from '@hibiscus/styles';
 import { container } from 'tsyringe';
-import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import GrayLink from '../gray-link/gray-link';
 
 /* eslint-disable-next-line */

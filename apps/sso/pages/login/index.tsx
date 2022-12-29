@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import LoginCard from '../../components/login-card/login-card';
-import { TrademarkColors } from '@hacksc-platforms/styles';
+import { TrademarkColors } from '@hibiscus/styles';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';

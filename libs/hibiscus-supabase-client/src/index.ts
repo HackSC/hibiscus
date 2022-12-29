@@ -11,7 +11,7 @@ import {
   SSOApiUpdateUser,
   SSOApiVerifyOtp,
   SSOApiVerifyToken,
-} from '@hacksc-platforms/types';
+} from '@hibiscus/types';
 
 @injectable()
 export class HibiscusSupabaseClient {

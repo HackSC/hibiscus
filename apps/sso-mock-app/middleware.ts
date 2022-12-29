@@ -1,4 +1,4 @@
-import { middlewareHandler } from '@hacksc-platforms/sso-client';
+import { middlewareHandler } from '@hibiscus/sso-client';
 
 export const middleware = middlewareHandler(
   `${process.env.SSO_MOCK_APP_URL}/api/callback`

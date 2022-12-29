@@ -1,4 +1,4 @@
-import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { NextApiHandler } from 'next';
 import { container } from 'tsyringe';
 

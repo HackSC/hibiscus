@@ -1,5 +1,5 @@
-import { TrademarkColors } from '@hacksc-platforms/styles';
-import { Text } from '@hacksc-platforms/ui';
+import { TrademarkColors } from '@hibiscus/styles';
+import { Text } from '@hibiscus/ui';
 import { useFormik } from 'formik';
 import toast from 'react-hot-toast';
 import { useMutation } from 'react-query';

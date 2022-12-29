@@ -1,6 +1,6 @@
 import { useState, useEffect, PropsWithChildren } from 'react';
-import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
-import * as SSOClient from '@hacksc-platforms/sso-client';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import * as SSOClient from '@hibiscus/sso-client';
 
 interface LoginGuardProps extends PropsWithChildren {
   callback: string;

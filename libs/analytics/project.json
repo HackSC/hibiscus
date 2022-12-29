@@ -11,6 +11,26 @@
         "lintFilePatterns": ["libs/analytics/**/*.{ts,tsx,js,jsx}"]
       }
     },
+    "build": {
+      "executor": "@nrwl/rollup:rollup",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/analytics",
+        "tsConfig": "libs/analytics/tsconfig.lib.json",
+        "project": "libs/analytics/package.json",
+        "entryFile": "libs/analytics/src/index.ts",
+        "external": ["react/jsx-runtime"],
+        "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+        "compiler": "babel",
+        "assets": [
+          {
+            "glob": "libs/analytics/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ]
+      }
+    },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["coverage/libs/analytics"],

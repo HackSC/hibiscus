@@ -1,5 +1,4 @@
-import { Colors2023 } from '@hacksc-platforms/styles';
-import { H3 } from '@hacksc-platforms/ui';
+import { Colors2023 } from '@hibiscus/styles';
 import styled from 'styled-components';
 import Image from 'next/image';
 

@@ -1,7 +1,7 @@
-import { Colors2023 } from '@hacksc-platforms/styles';
-import { HackformQuestionResponse, Option } from '@hacksc-platforms/types';
-import { Text } from '@hacksc-platforms/ui';
-import { SearchableOptionSelectInput } from '@hacksc-platforms/ui-kit-2023';
+import { Colors2023 } from '@hibiscus/styles';
+import { HackformQuestionResponse, Option } from '@hibiscus/types';
+import { Text } from '@hibiscus/ui';
+import { SearchableOptionSelectInput } from '@hibiscus/ui-kit-2023';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { QuestionFormProps } from './hackform-question';
@@ -45,8 +45,7 @@ const SearchableOptionsInput = (props: SearchableOptionsInputProps) => {
     },
   });
 
-  const handleSubmit: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault();
+  const handleSubmitValidate = () => {
     const response = getResponse();
     const { valid, errorDescription } = question.validationFunction(
       response.input
@@ -102,6 +101,11 @@ const SearchableOptionsInput = (props: SearchableOptionsInputProps) => {
     <SearchableOptionSelectInput
       onChange={handleInputChange}
       onClickChooseOption={handleChooseOptionFromDropdown}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          handleSubmitValidate();
+        }
+      }}
       options={options}
       value={textInput}
     />
@@ -113,30 +117,10 @@ const SearchableOptionsInput = (props: SearchableOptionsInputProps) => {
       goPreviousQuestion={goPrevQuestionValidateSilently}
       goNextQuestion={goNextQuestionValidateSilently}
       inputComponentChildren={InputComponent}
-      handleSubmitWithValidation={handleSubmit}
+      handleSubmitWithValidation={handleSubmitValidate}
       error={error}
     />
   );
 };
 
 export default SearchableOptionsInput;
-
-const InputAndButtonWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 10px;
-`;
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-const ErrorText = styled(Text)`
-  color: ${Colors2023.RED.STANDARD};
-`;
-
-const SmallText = styled(Text)`
-  font-size: small;
-`;

@@ -1,9 +1,8 @@
-import { H1, H3, Text } from '@hacksc-platforms/ui';
-import { FormMetadata } from '@hacksc-platforms/types';
+import { H1, H3, Text } from '@hibiscus/ui';
+import { FormMetadata } from '@hibiscus/types';
 import styled from 'styled-components';
-import { Button } from '@hacksc-platforms/ui-kit-2023';
-import GlowSpan from '../glow-span';
-import { Colors2023 } from '@hacksc-platforms/styles';
+import { Button, GlowSpan } from '@hibiscus/ui-kit-2023';
+import { Colors2023 } from '@hibiscus/styles';
 
 interface Props {
   formMetadata: FormMetadata;

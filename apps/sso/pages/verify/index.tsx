@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { TrademarkColors } from '@hacksc-platforms/styles';
+import { TrademarkColors } from '@hibiscus/styles';
 import VerifyCard from '../../components/verify-card/verify-card';
 import Head from 'next/head';
 

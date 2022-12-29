@@ -1,6 +1,6 @@
-import { Colors2023 } from '@hacksc-platforms/styles';
-import { FormQuestion } from '@hacksc-platforms/types';
-import { H1, H3 } from '@hacksc-platforms/ui';
+import { Colors2023 } from '@hibiscus/styles';
+import { FormQuestion } from '@hibiscus/types';
+import { H1, H3 } from '@hibiscus/ui';
 import styled from 'styled-components';
 
 interface HackformQuestionHeaderProps {

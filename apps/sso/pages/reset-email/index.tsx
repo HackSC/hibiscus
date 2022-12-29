@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import ResetEmailCard from '../../components/reset-card/reset-email-card';
-import { TrademarkColors } from '@hacksc-platforms/styles';
+import { TrademarkColors } from '@hibiscus/styles';
 import Head from 'next/head';
 
 export function Index() {

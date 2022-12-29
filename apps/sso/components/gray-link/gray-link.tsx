@@ -1,4 +1,4 @@
-import { Text, Link, LinkProps } from '@hacksc-platforms/ui';
+import { Text, Link, LinkProps } from '@hibiscus/ui';
 import styled from 'styled-components';
 
 /* eslint-disable-next-line */

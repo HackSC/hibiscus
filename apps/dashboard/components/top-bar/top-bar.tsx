@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import Image from 'next/image';
-import { Link, Text } from '@hacksc-platforms/ui';
-import GlowSpan from '../glow-span';
-import { HibiscusRole } from '@hacksc-platforms/types';
-import { Colors2023 } from '@hacksc-platforms/styles';
+import { Link, Text } from '@hibiscus/ui';
+import { GlowSpan } from '@hibiscus/ui-kit-2023';
+import { HibiscusRole } from '@hibiscus/types';
+import { Colors2023 } from '@hibiscus/styles';
 
 /* eslint-disable-next-line */
 export interface TopBarProps {
@@ -12,7 +12,7 @@ export interface TopBarProps {
 }
 
 export function TopBar(props: TopBarProps) {
-  const userColors = Colors2023.roleColors[props.role].color;
+  const userColors = Colors2023.roleColors[props.role];
   return (
     <StyledTopBar>
       <Link href="/" anchortagpropsoverride={{ target: '_self' }}>
@@ -27,7 +27,7 @@ export function TopBar(props: TopBarProps) {
       <RightUtilityContainer>
         <UserText>{props.userTag}</UserText>
         <RoleText>
-          <GlowSpan color={userColors.LIGHT} shadowColor={userColors.STANDARD}>
+          <GlowSpan color={userColors.light} shadowColor={userColors.standard}>
             {props.role}
           </GlowSpan>
         </RoleText>
