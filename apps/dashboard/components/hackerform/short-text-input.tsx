@@ -1,66 +1,22 @@
 import React, { useState } from 'react';
 import { OneLineText } from '@hibiscus/ui-kit-2023';
 import { QuestionFormProps } from './hackform-question';
-import QuestionCreator from './QuestionCreator';
-import { HackformQuestionResponse } from '@hibiscus/types';
+import QuestionCreator from './question-creator';
+import { GetInputResponseCb } from '../../common/types';
+import { useHackform } from '../../hooks/use-hackform/use-hackform';
 
 type Props = QuestionFormProps & { placeholder: string; initialError?: string };
 
-const ShortTextInput = (props: Props) => {
-  const {
-    question,
-    saveResponse,
-    goNextQuestion,
-    goPreviousQuestion,
-    currentResponses,
-    addErrorForQuestion,
-    resolveError,
-    qi,
-    placeholder,
-    initialError,
-  } = props;
-  const [error, setError] = useState(initialError ?? '');
+export const ShortTextInput = (props: Props) => {
+  const { currentQuestionIndex, responses, ...hackformUtils } = useHackform();
+  const { placeholder } = props;
   const [textInput, setInput] = useState(
-    currentResponses.responses[qi]?.input.text ?? ''
+    hackformUtils.getCurrentResponse()?.input.text ?? ''
   );
 
-  const getInputResponse = (): HackformQuestionResponse['input'] => ({
+  const getInputResponse: GetInputResponseCb = () => ({
     text: textInput,
   });
-
-  const handleSubmitWithValidation = () => {
-    const input = getInputResponse();
-    const { valid, errorDescription } = question.validationFunction(input);
-
-    saveResponse({ input });
-    if (valid) {
-      resolveError(qi);
-      goNextQuestion();
-    } else {
-      setError(errorDescription);
-      addErrorForQuestion(qi, errorDescription);
-    }
-  };
-
-  const goNextQuestionValidateSilently = () => {
-    const input = getInputResponse();
-    const { valid, errorDescription } = question.validationFunction(input);
-    if (!valid) addErrorForQuestion(qi, errorDescription);
-    else resolveError(qi);
-    // go next regardless
-    saveResponse({ input });
-    goNextQuestion();
-  };
-
-  const goPrevQuestionValidateSilently = () => {
-    const input = getInputResponse();
-    const { valid, errorDescription } = question.validationFunction(input);
-    if (!valid) addErrorForQuestion(qi, errorDescription);
-    else resolveError(qi);
-    // go previous regardless
-    saveResponse({ input });
-    goPreviousQuestion();
-  };
 
   const InputComponent = (
     <OneLineText
@@ -71,7 +27,8 @@ const ShortTextInput = (props: Props) => {
       }}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
-          handleSubmitWithValidation();
+          const cb = hackformUtils.createCbSubmitValidate(getInputResponse);
+          cb();
         }
       }}
     />
@@ -79,13 +36,19 @@ const ShortTextInput = (props: Props) => {
 
   return (
     <QuestionCreator
-      goNextQuestion={goNextQuestionValidateSilently}
-      goPreviousQuestion={goPrevQuestionValidateSilently}
-      qi={qi}
-      question={question}
-      handleSubmitWithValidation={handleSubmitWithValidation}
+      goNextQuestion={hackformUtils.createCbGoNextQuestionValidateSilently(
+        getInputResponse
+      )}
+      goPreviousQuestion={hackformUtils.createCbGoPrevQuestionValidateSilently(
+        getInputResponse
+      )}
+      qi={currentQuestionIndex}
+      question={hackformUtils.getCurrentQuestion()}
+      handleSubmitWithValidation={hackformUtils.createCbSubmitValidate(
+        getInputResponse
+      )}
       inputComponentChildren={InputComponent}
-      error={error}
+      error={hackformUtils.getCurrentError()}
     />
   );
 };

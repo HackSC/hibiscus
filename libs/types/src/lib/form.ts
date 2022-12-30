@@ -55,3 +55,5 @@ export interface HackformQuestionResponse {
     date?: Date; // value for a date
   };
 }
+
+export type HackformError = string;

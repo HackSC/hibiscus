@@ -12,64 +12,17 @@ import {
 import HackformQuestionHeader from './hackform-question-header';
 import HackformBackNextWidget from './hackform-backnext-widget';
 import styled from 'styled-components';
+import { useHackform } from '../../hooks/use-hackform/use-hackform';
 
 type Props = QuestionFormProps & { placeholder: string; initialError?: string };
 
-const LongTextQuestion = ({
-  question,
-  addErrorForQuestion,
-  resolveError,
-  saveResponse,
-  goNextQuestion,
-  goPreviousQuestion,
-  currentResponses: { responses },
-  qi,
-  placeholder,
-  initialError,
-}: Props) => {
-  const [error, setError] = useState(initialError ?? '');
-  const [textInput, setInput] = useState(responses[qi]?.input.text ?? '');
+const LongTextQuestion = ({ placeholder }: Props) => {
+  const { currentQuestionIndex, ...hackformUtils } = useHackform();
+  const [textInput, setInput] = useState(
+    hackformUtils.getCurrentResponse()?.input.text ?? ''
+  );
 
-  const handleSubmitWithValidation = () => {
-    const input = { text: textInput };
-    const { valid, errorDescription } = question.validationFunction(input);
-    // save responses regardless (so that when user revisit question they will
-    // still have the previous response).
-    saveResponse({ input });
-    if (!valid) {
-      setError(errorDescription);
-      addErrorForQuestion(qi, errorDescription);
-    } else {
-      resolveError(qi);
-      goNextQuestion();
-    }
-  };
-
-  const getResponse = () => ({ input: { text: textInput } });
-
-  const goNextQuestionValidateSilently = () => {
-    const response = getResponse();
-    const { valid, errorDescription } = question.validationFunction(
-      response.input
-    );
-    if (!valid) addErrorForQuestion(qi, errorDescription);
-    else resolveError(qi);
-    // go next regardless
-    saveResponse(response);
-    goNextQuestion();
-  };
-
-  const goPrevQuestionValidateSilently = () => {
-    const response = getResponse();
-    const { valid, errorDescription } = question.validationFunction(
-      response.input
-    );
-    if (!valid) addErrorForQuestion(qi, errorDescription);
-    else resolveError(qi);
-    // go previous regardless
-    saveResponse(response);
-    goPreviousQuestion();
-  };
+  const getInputResponse = () => ({ text: textInput });
 
   const inputComponent = (
     <ParagraphText
@@ -81,7 +34,8 @@ const LongTextQuestion = ({
       }}
       onKeyDown={(e) => {
         if (e.key === 'Enter' && !e.shiftKey) {
-          handleSubmitWithValidation();
+          const cb = hackformUtils.createCbSubmitValidate(getInputResponse);
+          cb();
         }
       }}
     />
@@ -90,21 +44,31 @@ const LongTextQuestion = ({
   return (
     <PageWrapper>
       <QuestionWrapper>
-        <HackformQuestionHeader question={question} qi={qi} />
+        <HackformQuestionHeader
+          question={hackformUtils.getCurrentQuestion()}
+          qi={currentQuestionIndex}
+        />
         <InputAndButtonWrapperOverride>
           {inputComponent}
           <ButtonHintTextContainer>
-            <Button color="black" onClick={handleSubmitWithValidation}>
+            <Button
+              color="black"
+              onClick={hackformUtils.createCbSubmitValidate(getInputResponse)}
+            >
               OK
             </Button>
             <SmallText>press Enter.</SmallText>
           </ButtonHintTextContainer>
         </InputAndButtonWrapperOverride>
-        <ErrorText>{error}</ErrorText>
+        <ErrorText>{hackformUtils.getCurrentError()}</ErrorText>
       </QuestionWrapper>
       <HackformBackNextWidget
-        goNextQuestion={goNextQuestionValidateSilently}
-        goPreviousQuestion={goPrevQuestionValidateSilently}
+        goNextQuestion={hackformUtils.createCbGoNextQuestionValidateSilently(
+          getInputResponse
+        )}
+        goPreviousQuestion={hackformUtils.createCbGoPrevQuestionValidateSilently(
+          getInputResponse
+        )}
       />
     </PageWrapper>
   );
