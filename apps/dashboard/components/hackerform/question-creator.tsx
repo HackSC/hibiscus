@@ -10,6 +10,7 @@ import {
 import HackformQuestionHeader from './hackform-question-header';
 import HackformBackNextWidget from './hackform-backnext-widget';
 import { FormQuestion } from '@hibiscus/types';
+import { IoReturnDownBackOutline } from 'react-icons/io5';
 
 interface QuestionCreatorProps {
   inputComponentChildren: React.ReactNode;
@@ -40,7 +41,8 @@ export const QuestionCreator = ({
             <Button color="black" onClick={handleSubmitWithValidation}>
               OK
             </Button>
-            <SmallText>press Enter.</SmallText>
+            <SmallText>press Enter</SmallText>
+            <IoReturnDownBackOutline />
           </ButtonHintTextContainer>
         </InputAndButtonWrapper>
         <ErrorText>{error}</ErrorText>
