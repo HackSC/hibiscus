@@ -1,9 +1,5 @@
-import {
-  FormQuestion,
-  FormQuestionType,
-  HackformQuestionResponse,
-  HackformSubmission,
-} from '@hibiscus/types';
+import { FormQuestionType } from '@hibiscus/types';
+import { useHackform } from '../../hooks/use-hackform/use-hackform';
 import React from 'react';
 import styled from 'styled-components';
 import LongTextQuestion from './long-text-input';
@@ -11,26 +7,18 @@ import SearchableOptionsInput from './searchable-options-input';
 import ShortTextInput from './short-text-input';
 
 export interface QuestionFormProps {
-  question: FormQuestion;
-  currentResponses: HackformSubmission; // passed by reference
-  qi: number;
-  saveResponse: (response: HackformQuestionResponse) => void;
-  goNextQuestion: () => void;
-  goPreviousQuestion: () => void;
-  addErrorForQuestion: (qi: number, error: string) => void;
-  resolveError: (qi: number) => void;
   initialError: string;
 }
 
-function HackformQuestionComponent(props: QuestionFormProps) {
-  const { question, initialError, qi } = props;
+function HackformQuestionComponent({ initialError }: QuestionFormProps) {
+  const { ...hackformUtils } = useHackform();
 
   const getInputSubcomponent = () => {
+    const question = hackformUtils.getCurrentQuestion();
     switch (question.type) {
       case FormQuestionType.ShortText:
         return (
           <ShortTextInput
-            {...props}
             placeholder={question.placeholder}
             initialError={initialError}
           />
@@ -38,7 +26,6 @@ function HackformQuestionComponent(props: QuestionFormProps) {
       case FormQuestionType.LongText:
         return (
           <LongTextQuestion
-            {...props}
             placeholder={question.placeholder}
             initialError={initialError}
           />
@@ -46,7 +33,6 @@ function HackformQuestionComponent(props: QuestionFormProps) {
       case FormQuestionType.SingleOptionDropdown:
         return (
           <SearchableOptionsInput
-            {...props}
             options={question.options}
             initialError={initialError}
           />

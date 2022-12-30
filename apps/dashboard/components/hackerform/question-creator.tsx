@@ -21,7 +21,7 @@ interface QuestionCreatorProps {
   error?: string;
 }
 
-const QuestionCreator = ({
+export const QuestionCreator = ({
   inputComponentChildren,
   question,
   qi,
