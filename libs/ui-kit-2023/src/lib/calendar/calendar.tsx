@@ -7,7 +7,7 @@ import {
 import 'react-calendar/dist/Calendar.css';
 import styled from 'styled-components';
 import { GlowSpan } from '../glow-span/glow-span';
-import './calendar.module.css';
+import './calendar.css';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface CalendarProps extends ReactCalendarProps {
