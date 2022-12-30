@@ -76,7 +76,7 @@ const BlackButton = styled.button`
   :hover {
     border: 1.5px solid ${Colors2023.BLUE.STANDARD};
     background: #307c93b2;
-    box-shadow: 0px 2px 15px rgba(118, 211, 239, 0.7);
+    box-shadow: 0px 0px 5px rgba(118, 211, 239, 0.5);
     cursor: pointer;
     transition: 0.1s;
   }
@@ -84,7 +84,7 @@ const BlackButton = styled.button`
     border: 1.5px solid ${Colors2023.BLUE.STANDARD};
     background: ${Colors2023.BLUE.STANDARD};
     color: ${Colors2023.BLUE.DARK};
-    box-shadow: 0px 2px 15px rgba(118, 211, 239, 0.7);
+    box-shadow: 0px 0px 5px rgba(118, 211, 239, 0.5);
     border-radius: 10px;
   }
 `;
