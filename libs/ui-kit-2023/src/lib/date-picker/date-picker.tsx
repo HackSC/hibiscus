@@ -10,7 +10,15 @@ export type DatePickerProps = OneLineTextProps & CalendarProps;
 export function DatePicker(props: DatePickerProps) {
   const [showCalendar, setShowCalendar] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const [chosenDate, setChosenDate] = useState(new Date());
+  const [text, setText] = useState('');
+  const [chosenDate, setChosenDate] = useState<Date | null>(null);
+
+  // if input is a valid date text then set it to chosen
+  useEffect(() => {
+    const parsed = Date.parse(text);
+    if (isNaN(parsed)) return;
+    setChosenDate(new Date(parsed));
+  }, [text]);
 
   const handleShowCalendarOnClick = useCallback((e: MouseEvent) => {
     if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
@@ -26,6 +34,11 @@ export function DatePicker(props: DatePickerProps) {
     setShowCalendar(false);
   };
 
+  const handleChangeText: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    if (props.onChange) props.onChange(e);
+    setText(e.target.value);
+  };
+
   // binding show options on click
   useEffect(() => {
     document.addEventListener('mousedown', handleShowCalendarOnClick);
@@ -36,7 +49,7 @@ export function DatePicker(props: DatePickerProps) {
 
   return (
     <Wrapper ref={wrapperRef}>
-      <OneLineText {...props} value={chosenDate.toLocaleDateString('en-US')} />
+      <OneLineText {...props} value={text} onChange={handleChangeText} />
       {showCalendar && (
         <Calendar onClickDay={handleClickDayCalendar} value={chosenDate} />
       )}
