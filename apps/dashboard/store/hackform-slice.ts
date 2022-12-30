@@ -65,6 +65,7 @@ export const hackformSlice = createSlice({
           input = { text: response.input.text };
           break;
         case FormQuestionType.SingleOptionDropdown:
+        case FormQuestionType.SingleChoice:
           input = {
             text: response.input.text,
             singleChoiceValue: response.input.singleChoiceValue,

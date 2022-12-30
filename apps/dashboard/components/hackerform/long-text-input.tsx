@@ -1,18 +1,8 @@
 import React, { useState } from 'react';
-import { Button, ParagraphText } from '@hibiscus/ui-kit-2023';
+import { ParagraphText } from '@hibiscus/ui-kit-2023';
 import { QuestionFormProps } from './hackform-question';
-import {
-  ErrorText,
-  InputAndButtonWrapper,
-  PageWrapper,
-  QuestionWrapper,
-  SmallText,
-  ButtonHintTextContainer,
-} from './common-styled-components';
-import HackformQuestionHeader from './hackform-question-header';
-import HackformBackNextWidget from './hackform-backnext-widget';
-import styled from 'styled-components';
 import { useHackform } from '../../hooks/use-hackform/use-hackform';
+import QuestionCreator from './question-creator';
 
 type Props = QuestionFormProps & { placeholder: string; initialError?: string };
 
@@ -24,7 +14,7 @@ const LongTextQuestion = ({ placeholder }: Props) => {
 
   const getInputResponse = () => ({ text: textInput });
 
-  const inputComponent = (
+  const InputComponent = (
     <ParagraphText
       style={{ width: '50rem' }}
       value={textInput}
@@ -42,41 +32,23 @@ const LongTextQuestion = ({ placeholder }: Props) => {
   );
 
   return (
-    <PageWrapper>
-      <QuestionWrapper>
-        <HackformQuestionHeader
-          question={hackformUtils.getCurrentQuestion()}
-          qi={currentQuestionIndex}
-        />
-        <InputAndButtonWrapperOverride>
-          {inputComponent}
-          <ButtonHintTextContainer>
-            <Button
-              color="black"
-              onClick={hackformUtils.createCbSubmitValidate(getInputResponse)}
-            >
-              OK
-            </Button>
-            <SmallText>press Enter.</SmallText>
-          </ButtonHintTextContainer>
-        </InputAndButtonWrapperOverride>
-        <ErrorText>{hackformUtils.getCurrentError()}</ErrorText>
-      </QuestionWrapper>
-      <HackformBackNextWidget
-        goNextQuestion={hackformUtils.createCbGoNextQuestionValidateSilently(
-          getInputResponse
-        )}
-        goPreviousQuestion={hackformUtils.createCbGoPrevQuestionValidateSilently(
-          getInputResponse
-        )}
-      />
-    </PageWrapper>
+    <QuestionCreator
+      inputComponentChildren={InputComponent}
+      question={hackformUtils.getCurrentQuestion()}
+      qi={currentQuestionIndex}
+      handleSubmitWithValidation={hackformUtils.createCbSubmitValidate(
+        getInputResponse
+      )}
+      error={hackformUtils.getCurrentError()}
+      goNextQuestion={hackformUtils.createCbGoNextQuestionValidateSilently(
+        getInputResponse
+      )}
+      goPreviousQuestion={hackformUtils.createCbGoPrevQuestionValidateSilently(
+        getInputResponse
+      )}
+      submitButtonUnder
+    />
   );
 };
 
 export default LongTextQuestion;
-
-const InputAndButtonWrapperOverride = styled(InputAndButtonWrapper)`
-  flex-direction: column;
-  align-items: flex-start;
-`;
