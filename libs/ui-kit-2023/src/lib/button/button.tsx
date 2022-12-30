@@ -1,5 +1,6 @@
 import { ButtonHTMLAttributes } from 'react';
 import styled from 'styled-components';
+import { Colors2023 } from '@hibiscus/styles';
 
 /* eslint-disable-next-line */
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -31,6 +32,7 @@ const PurpleButton = styled.button`
   background: #7a65fd;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 10px;
+  cursor: pointer;
   //fonts
   font-family: 'Inter';
 
@@ -43,6 +45,7 @@ const PurpleButton = styled.button`
   color: #313131;
   :hover {
     background: #4130a7;
+    cursor: pointer;
   }
   :active {
     background: #7a65fd;
@@ -52,15 +55,14 @@ const PurpleButton = styled.button`
 
 const BlackButton = styled.button`
   height: 45px;
-  border: 1.5px solid #76d3ef;
+  border: 1.5px solid ${Colors2023.BLUE.STANDARD};
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
   padding: 10px 30px;
   gap: 10px;
-  background: #222222;
-  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  background: ${Colors2023.GRAY.DARK};
   border-radius: 10px;
   //fonts
   font-family: 'Inter';
@@ -70,15 +72,19 @@ const BlackButton = styled.button`
   line-height: 36px;
   text-align: center;
   letter-spacing: 0.2em;
-  color: #76d3ef;
+  color: ${Colors2023.BLUE.STANDARD};
   :hover {
-    color: #307c93;
-    border: 1.5px solid #307c93;
+    border: 1.5px solid ${Colors2023.BLUE.STANDARD};
+    background: #307c93b2;
+    box-shadow: 0px 2px 15px ${Colors2023.BLUE.STANDARD};
+    cursor: pointer;
+    transition: 0.1s;
   }
   :active {
-    border: 1.5px solid #76d3ef;
-    color: #76d3ef;
-    box-shadow: inset 1px 2px 0px #76d3ef;
+    border: 1.5px solid ${Colors2023.BLUE.STANDARD};
+    background: ${Colors2023.BLUE.STANDARD};
+    color: ${Colors2023.BLUE.DARK};
+    box-shadow: 0px 2px 15px ${Colors2023.BLUE.STANDARD};
     border-radius: 10px;
   }
 `;
@@ -106,6 +112,7 @@ const BlueButton = styled.button`
   color: #313131;
   :hover {
     background: #307c93;
+    cursor: pointer;
   }
   :active {
     background: #76d3ef;
