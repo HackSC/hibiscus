@@ -33,7 +33,7 @@ const Input = styled.input`
 
   color: ${Colors2023.GRAY.LIGHT};
   :hover {
-    filter: drop-shadow(0px 0px 3px #c2c2c2);
+    filter: drop-shadow(0px 0px 3px rgba(194, 194, 194, 0.5));
     transition: 0.1s;
   }
   :focus {

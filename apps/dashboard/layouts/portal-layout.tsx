@@ -25,7 +25,7 @@ function PortalLayout({ children }: PortalLayoutProps) {
 export default PortalLayout;
 
 const MainPageWrapper = styled.div`
-  height: 90vh;
+  height: 88vh;
 `;
 
 const MenuLayoutWrapper = styled.div`
