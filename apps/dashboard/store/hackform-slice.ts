@@ -59,6 +59,7 @@ export const hackformSlice = createSlice({
       const question = state.formMetadata.questions[state.cqi];
       let input: HackformQuestionResponse['input'] = {};
       switch (question.type) {
+        case FormQuestionType.Date:
         case FormQuestionType.Email:
         case FormQuestionType.ShortText:
         case FormQuestionType.LongText: // they will all fill the text field in the input.
