@@ -1,6 +1,6 @@
 import { Option } from '@hibiscus/types';
 import { Radio } from '@hibiscus/ui-kit-2023';
-import { GetInputResponseCb } from 'apps/dashboard/common/types';
+import { GetInputResponseCb } from '../../../common/types';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useHackform } from '../../../hooks/use-hackform/use-hackform';

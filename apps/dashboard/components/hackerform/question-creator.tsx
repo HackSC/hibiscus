@@ -60,7 +60,7 @@ export const QuestionCreator = ({
 
 export default QuestionCreator;
 
-const IBWrapperOverride = styled(ButtonHintTextContainer)<{
+const IBWrapperOverride = styled(InputAndButtonWrapper)<{
   submitButtonUnder?: boolean;
 }>`
   flex-direction: ${(props) => (props.submitButtonUnder ? 'column' : 'row')};
