@@ -13,7 +13,7 @@ import { FormQuestion, HackformError } from '@hibiscus/types';
 import { IoReturnDownBackOutline } from 'react-icons/io5';
 import styled from 'styled-components';
 import { GetInputResponseCb } from '../../common/types';
-import { useHackform } from 'apps/dashboard/hooks/use-hackform/use-hackform';
+import { useHackform } from '../../hooks/use-hackform/use-hackform';
 
 interface QuestionCreatorProps {
   inputComponentChildren: React.ReactNode;
@@ -40,20 +40,24 @@ export const QuestionCreator = ({
 }: QuestionCreatorProps) => {
   const { currentQuestionIndex, ...hackformUtils } = useHackform();
 
-  let ErrorChildren = () => {
-    let currentError: HackformError = error ?? hackformUtils.getCurrentError();
+  const ErrorChildren = () => {
+    const currentError: HackformError =
+      error ?? hackformUtils.getCurrentError();
     if (typeof currentError === 'string') {
       return <ErrorText>{currentError}</ErrorText>;
     } else if (Array.isArray(currentError)) {
       return (
         <ul>
-          {currentError.map((err) => (
-            <ErrorText>
+          {currentError.map((err, i) => (
+            <ErrorText key={i}>
               <li>{err}</li>
             </ErrorText>
           ))}
         </ul>
       );
+    } else {
+      // don't know what to do here but just renders it
+      return <ErrorText>{currentError}</ErrorText>;
     }
   };
 

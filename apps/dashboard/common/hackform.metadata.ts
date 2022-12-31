@@ -29,7 +29,7 @@ export const formMetadata2023HackerApps: FormMetadata = {
       type: FormQuestionType.Date,
       required: true,
       validationFunction: (input) => {
-        let errors: string[] = [];
+        const errors: string[] = [];
         if (input.text === '') errors.push('This field is required');
         // try to parse date
         const parsed = Date.parse(input.text);

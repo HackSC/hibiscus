@@ -4,9 +4,7 @@ import { useState } from 'react';
 import { useHackform } from '../../../hooks/use-hackform/use-hackform';
 import QuestionCreator from '../question-creator';
 
-interface DateQuestionInputProps {}
-
-export const DateQuestionInput = (props: DateQuestionInputProps) => {
+export const DateQuestionInput = () => {
   const { ...hackformUtils } = useHackform();
   const initialInput = hackformUtils.getCurrentResponse()?.input;
   const [text, setText] = useState<string>(initialInput?.text ?? '');
