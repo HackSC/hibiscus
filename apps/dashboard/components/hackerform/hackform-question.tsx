@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import LongTextQuestion from './long-text-input';
 import SearchableOptionsInput from './searchable-options-input';
 import ShortTextInput from './short-text-input';
+import { SingleChoiceInput } from './single-choice-input/single-choice-input';
 
 export interface QuestionFormProps {
   initialError: string;
@@ -37,6 +38,8 @@ function HackformQuestionComponent({ initialError }: QuestionFormProps) {
             initialError={initialError}
           />
         );
+      case FormQuestionType.SingleChoice:
+        return <SingleChoiceInput options={question.options} />;
       default:
         return null;
     }

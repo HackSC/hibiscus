@@ -11,6 +11,7 @@ import HackformQuestionHeader from './hackform-question-header';
 import HackformBackNextWidget from './hackform-backnext-widget';
 import { FormQuestion } from '@hibiscus/types';
 import { IoReturnDownBackOutline } from 'react-icons/io5';
+import styled from 'styled-components';
 
 interface QuestionCreatorProps {
   inputComponentChildren: React.ReactNode;
@@ -20,9 +21,11 @@ interface QuestionCreatorProps {
   goNextQuestion: () => void;
   goPreviousQuestion: () => void;
   error?: string;
+  submitButtonUnder?: boolean;
 }
 
 export const QuestionCreator = ({
+  submitButtonUnder,
   inputComponentChildren,
   question,
   qi,
@@ -35,7 +38,7 @@ export const QuestionCreator = ({
     <PageWrapper>
       <QuestionWrapper>
         <HackformQuestionHeader question={question} qi={qi} />
-        <InputAndButtonWrapper>
+        <IBWrapperOverride submitButtonUnder={submitButtonUnder}>
           {inputComponentChildren}
           <ButtonHintTextContainer>
             <Button color="black" onClick={handleSubmitWithValidation}>
@@ -44,7 +47,7 @@ export const QuestionCreator = ({
             <SmallText>press Enter</SmallText>
             <IoReturnDownBackOutline />
           </ButtonHintTextContainer>
-        </InputAndButtonWrapper>
+        </IBWrapperOverride>
         <ErrorText>{error}</ErrorText>
       </QuestionWrapper>
       <HackformBackNextWidget
@@ -56,3 +59,11 @@ export const QuestionCreator = ({
 };
 
 export default QuestionCreator;
+
+const IBWrapperOverride = styled(InputAndButtonWrapper)<{
+  submitButtonUnder?: boolean;
+}>`
+  flex-direction: ${(props) => (props.submitButtonUnder ? 'column' : 'row')};
+  align-items: ${(props) =>
+    props.submitButtonUnder ? 'flex-start' : 'center'};
+`;

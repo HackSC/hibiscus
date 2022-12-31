@@ -39,6 +39,7 @@ export enum FormQuestionType {
   Date = 'date',
   SingleOptionDropdown = 'single-option-dropdown',
   Boolean = 'boolean',
+  SingleChoice = 'single-choice',
 }
 
 export interface HackformSubmission {

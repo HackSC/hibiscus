@@ -1,24 +1,16 @@
-import { useRef } from 'react';
+import { Text } from '@hibiscus/ui';
 import styled from 'styled-components';
 
-export interface RadioProps {
+export interface RadioProps
+  extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
-  onInput: (value: boolean) => void;
 }
 
-export function Radio({ onInput, label }: RadioProps) {
-  const ref = useRef<HTMLInputElement>(null);
-  function handleChange() {
-    if (!ref.current) {
-      return;
-    }
-    onInput(ref.current.checked);
-  }
-
+export function Radio(props: RadioProps) {
   return (
     <StyledRadio>
-      {label}
-      <input type="radio" name="radio" onChange={handleChange} />
+      <Text>{props.label}</Text>
+      <input {...props} type="radio" />
       <span className="checkmark"></span>
     </StyledRadio>
   );

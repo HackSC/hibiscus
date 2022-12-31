@@ -35,11 +35,11 @@ export const formMetadata2023HackerApps: FormMetadata = {
     // },
     {
       title: 'Select your program:',
-      type: FormQuestionType.SingleOptionDropdown,
+      type: FormQuestionType.SingleChoice,
       placeholder: 'e.g University of Southern California',
       required: true,
       validationFunction: (input) => {
-        if (input.text === '')
+        if (!input.singleChoiceValue)
           return { valid: false, errorDescription: 'This field is required' };
         return { valid: true };
       },
