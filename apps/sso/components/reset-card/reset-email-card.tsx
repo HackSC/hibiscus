@@ -22,10 +22,7 @@ export function ResetEmailCard(props: ResetCardProps) {
     const callbackUrl = `${window.location.protocol}//${window.location.host}/reset`;
 
     const supabase = container.resolve(HibiscusSupabaseClient);
-    const { /* data, */ error } = await supabase.resetPasswordViaEmail(
-      email,
-      callbackUrl
-    );
+    const { error } = await supabase.resetPasswordViaEmail(email, callbackUrl);
 
     if (error) {
       alert(error);
