@@ -50,7 +50,7 @@ export class HibiscusHackformClient {
                 },
               };
             case FormQuestionType.Date:
-              return { D: input.date };
+              return { D: input.text };
             default:
               return { N: null };
           }

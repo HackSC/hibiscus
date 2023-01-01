@@ -30,7 +30,7 @@ export function useHackform(formMetadata = formMetadata2023HackerApps) {
     useAppSelector(getCurrentQuestion);
   const currentError: HackformError | null = useAppSelector(getCurrentError);
 
-  const getFirstError = (): [number, string] => {
+  const getFirstError = (): [number, HackformError] => {
     const entries = Object.entries(errors);
     if (entries.length === 0) return null;
     const qi = entries[0][0];

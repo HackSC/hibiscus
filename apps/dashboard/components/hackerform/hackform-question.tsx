@@ -6,6 +6,7 @@ import LongTextQuestion from './long-text-input';
 import SearchableOptionsInput from './searchable-options-input';
 import ShortTextInput from './short-text-input';
 import { SingleChoiceInput } from './single-choice-input/single-choice-input';
+import { DateQuestionInput } from './date-question/date-question';
 
 export interface QuestionFormProps {
   initialError: string;
@@ -40,6 +41,8 @@ function HackformQuestionComponent({ initialError }: QuestionFormProps) {
         );
       case FormQuestionType.SingleChoice:
         return <SingleChoiceInput options={question.options} />;
+      case FormQuestionType.Date:
+        return <DateQuestionInput />;
       default:
         return null;
     }

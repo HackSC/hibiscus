@@ -15,13 +15,13 @@ export const SingleChoiceInput = (props: SingleChoiceInputProps) => {
   const initInput = hackformUtils.getCurrentResponse()?.input;
   const [chosenOption, setChosenOption] = useState<Option | null>(
     initInput
-      ? { displayName: initInput.text, value: initInput.singleChoiceValue }
+      ? { displayName: initInput?.text, value: initInput?.singleChoiceValue }
       : null
   );
 
   const getInputResponse: GetInputResponseCb = () => ({
-    text: chosenOption.displayName,
-    singleChoiceValue: chosenOption.value,
+    text: chosenOption?.displayName,
+    singleChoiceValue: chosenOption?.value,
   });
 
   const handleChangeValue: React.ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -48,18 +48,7 @@ export const SingleChoiceInput = (props: SingleChoiceInputProps) => {
   return (
     <QuestionCreator
       inputComponentChildren={InputComponent}
-      question={hackformUtils.getCurrentQuestion()}
-      qi={currentQuestionIndex}
-      error={hackformUtils.getCurrentError()}
-      handleSubmitWithValidation={hackformUtils.createCbSubmitValidate(
-        getInputResponse
-      )}
-      goNextQuestion={hackformUtils.createCbGoNextQuestionValidateSilently(
-        getInputResponse
-      )}
-      goPreviousQuestion={hackformUtils.createCbGoPrevQuestionValidateSilently(
-        getInputResponse
-      )}
+      getInputResponse={getInputResponse}
       submitButtonUnder
     />
   );

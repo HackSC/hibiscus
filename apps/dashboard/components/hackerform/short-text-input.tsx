@@ -36,19 +36,20 @@ export const ShortTextInput = (props: Props) => {
 
   return (
     <QuestionCreator
-      goNextQuestion={hackformUtils.createCbGoNextQuestionValidateSilently(
-        getInputResponse
-      )}
-      goPreviousQuestion={hackformUtils.createCbGoPrevQuestionValidateSilently(
-        getInputResponse
-      )}
-      qi={currentQuestionIndex}
-      question={hackformUtils.getCurrentQuestion()}
-      handleSubmitWithValidation={hackformUtils.createCbSubmitValidate(
-        getInputResponse
-      )}
       inputComponentChildren={InputComponent}
-      error={hackformUtils.getCurrentError()}
+      getInputResponse={getInputResponse}
+      // goNextQuestion={hackformUtils.createCbGoNextQuestionValidateSilently(
+      //   getInputResponse
+      // )}
+      // goPreviousQuestion={hackformUtils.createCbGoPrevQuestionValidateSilently(
+      //   getInputResponse
+      // )}
+      // qi={currentQuestionIndex}
+      // question={hackformUtils.getCurrentQuestion()}
+      // handleSubmitWithValidation={hackformUtils.createCbSubmitValidate(
+      //   getInputResponse
+      // )}
+      // error={hackformUtils.getCurrentError()}
     />
   );
 };

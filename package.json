@@ -25,6 +25,7 @@
     "formik": "^2.2.9",
     "fuse.js": "^6.6.2",
     "meilisearch": "^0.28.0",
+    "moment": "^2.29.4",
     "mongodb": "^4.11.0",
     "next": "13.0.0",
     "next-redux-wrapper": "^8.1.0",
