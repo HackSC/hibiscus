@@ -73,10 +73,12 @@ export const formMetadata2023HackerApps: FormMetadata = {
       type: FormQuestionType.SingleChoice,
       required: true,
       validationFunction: (input) => {
-        if (!input.singleChoiceValue)
+        if (!input.singleChoiceValue && input.text === '')
           return { valid: false, errorDescription: 'This field is required' };
         return { valid: true };
       },
+      hasOtherField: true,
+      placeholder: 'e.g a SWE bootcamp',
       options: [
         { value: 'undergrad', displayName: 'Undergraduate' },
         { value: 'master', displayName: 'Masters' },

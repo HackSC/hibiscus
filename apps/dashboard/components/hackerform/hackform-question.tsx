@@ -8,39 +8,27 @@ import ShortTextInput from './short-text-input';
 import { SingleChoiceInput } from './single-choice-input/single-choice-input';
 import { DateQuestionInput } from './date-question/date-question';
 
-export interface QuestionFormProps {
-  initialError: string;
-}
+export interface QuestionFormProps {}
 
-function HackformQuestionComponent({ initialError }: QuestionFormProps) {
+function HackformQuestionComponent() {
   const { ...hackformUtils } = useHackform();
 
   const getInputSubcomponent = () => {
     const question = hackformUtils.getCurrentQuestion();
     switch (question.type) {
       case FormQuestionType.ShortText:
-        return (
-          <ShortTextInput
-            placeholder={question.placeholder}
-            initialError={initialError}
-          />
-        );
+        return <ShortTextInput placeholder={question.placeholder} />;
       case FormQuestionType.LongText:
-        return (
-          <LongTextQuestion
-            placeholder={question.placeholder}
-            initialError={initialError}
-          />
-        );
+        return <LongTextQuestion placeholder={question.placeholder} />;
       case FormQuestionType.SingleOptionDropdown:
+        return <SearchableOptionsInput options={question.options} />;
+      case FormQuestionType.SingleChoice:
         return (
-          <SearchableOptionsInput
+          <SingleChoiceInput
             options={question.options}
-            initialError={initialError}
+            hasOtherField={question.hasOtherField}
           />
         );
-      case FormQuestionType.SingleChoice:
-        return <SingleChoiceInput options={question.options} />;
       case FormQuestionType.Date:
         return <DateQuestionInput />;
       default:

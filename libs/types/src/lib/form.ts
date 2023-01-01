@@ -24,6 +24,7 @@ export interface FormQuestion {
   type: FormQuestionType;
   placeholder?: string;
   required?: boolean;
+  hasOtherField?: boolean;
   validationFunction?: (input: HackformQuestionResponse['input']) => {
     valid: boolean;
     errorDescription?: HackformError;

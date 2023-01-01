@@ -1,5 +1,5 @@
 import { Option } from '@hibiscus/types';
-import { Radio } from '@hibiscus/ui-kit-2023';
+import { OneLineText, Radio } from '@hibiscus/ui-kit-2023';
 import { GetInputResponseCb } from '../../../common/types';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -8,6 +8,7 @@ import QuestionCreator from '../question-creator';
 
 interface SingleChoiceInputProps {
   options: Option[];
+  hasOtherField?: boolean;
 }
 
 export const SingleChoiceInput = (props: SingleChoiceInputProps) => {
@@ -25,7 +26,16 @@ export const SingleChoiceInput = (props: SingleChoiceInputProps) => {
   });
 
   const handleChangeValue: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    if (e.target.value === '') {
+      // other field
+      setChosenOption({ displayName: '', value: e.target.value });
+      return;
+    }
     setChosenOption({ displayName: e.target.name, value: e.target.value });
+  };
+
+  const handleInputOther: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    setChosenOption((prev) => ({ ...prev, displayName: e.target.value }));
   };
 
   const InputComponent = (
@@ -42,6 +52,23 @@ export const SingleChoiceInput = (props: SingleChoiceInputProps) => {
           />
         );
       })}
+      {props.hasOtherField && (
+        <OtherWrapper>
+          <Radio
+            value={''} // special for other field
+            name="Others"
+            label="Others"
+            onChange={handleChangeValue}
+            checked={chosenOption?.value === ''}
+          />
+          <OneLineText
+            onInput={handleInputOther}
+            disabled={chosenOption?.value !== ''}
+            value={chosenOption?.value === '' ? chosenOption?.displayName : ''}
+            placeholder={hackformUtils.getCurrentQuestion().placeholder}
+          />
+        </OtherWrapper>
+      )}
     </Wrapper>
   );
 
@@ -55,3 +82,8 @@ export const SingleChoiceInput = (props: SingleChoiceInputProps) => {
 };
 
 const Wrapper = styled.div``;
+
+const OtherWrapper = styled.div`
+  display: flex;
+  gap: 10px;
+`;

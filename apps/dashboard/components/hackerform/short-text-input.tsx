@@ -5,7 +5,7 @@ import QuestionCreator from './question-creator';
 import { GetInputResponseCb } from '../../common/types';
 import { useHackform } from '../../hooks/use-hackform/use-hackform';
 
-type Props = QuestionFormProps & { placeholder: string; initialError?: string };
+type Props = QuestionFormProps & { placeholder: string };
 
 export const ShortTextInput = (props: Props) => {
   const { currentQuestionIndex, responses, ...hackformUtils } = useHackform();
@@ -38,18 +38,6 @@ export const ShortTextInput = (props: Props) => {
     <QuestionCreator
       inputComponentChildren={InputComponent}
       getInputResponse={getInputResponse}
-      // goNextQuestion={hackformUtils.createCbGoNextQuestionValidateSilently(
-      //   getInputResponse
-      // )}
-      // goPreviousQuestion={hackformUtils.createCbGoPrevQuestionValidateSilently(
-      //   getInputResponse
-      // )}
-      // qi={currentQuestionIndex}
-      // question={hackformUtils.getCurrentQuestion()}
-      // handleSubmitWithValidation={hackformUtils.createCbSubmitValidate(
-      //   getInputResponse
-      // )}
-      // error={hackformUtils.getCurrentError()}
     />
   );
 };

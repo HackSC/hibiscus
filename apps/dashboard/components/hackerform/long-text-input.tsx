@@ -4,7 +4,7 @@ import { QuestionFormProps } from './hackform-question';
 import { useHackform } from '../../hooks/use-hackform/use-hackform';
 import QuestionCreator from './question-creator';
 
-type Props = QuestionFormProps & { placeholder: string; initialError?: string };
+type Props = QuestionFormProps & { placeholder: string };
 
 const LongTextQuestion = ({ placeholder }: Props) => {
   const { currentQuestionIndex, ...hackformUtils } = useHackform();
@@ -34,18 +34,7 @@ const LongTextQuestion = ({ placeholder }: Props) => {
   return (
     <QuestionCreator
       inputComponentChildren={InputComponent}
-      question={hackformUtils.getCurrentQuestion()}
-      qi={currentQuestionIndex}
-      handleSubmitWithValidation={hackformUtils.createCbSubmitValidate(
-        getInputResponse
-      )}
-      error={hackformUtils.getCurrentError()}
-      goNextQuestion={hackformUtils.createCbGoNextQuestionValidateSilently(
-        getInputResponse
-      )}
-      goPreviousQuestion={hackformUtils.createCbGoPrevQuestionValidateSilently(
-        getInputResponse
-      )}
+      getInputResponse={getInputResponse}
       submitButtonUnder
     />
   );

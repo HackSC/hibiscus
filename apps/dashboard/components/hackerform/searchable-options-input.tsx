@@ -58,20 +58,8 @@ const SearchableOptionsInput = (props: SearchableOptionsInputProps) => {
 
   return (
     <QuestionCreator
-      {...props}
-      question={hackformUtils.getCurrentQuestion()}
-      qi={currentQuestionIndex}
-      goPreviousQuestion={hackformUtils.createCbGoPrevQuestionValidateSilently(
-        getInputResponse
-      )}
-      goNextQuestion={hackformUtils.createCbGoNextQuestionValidateSilently(
-        getInputResponse
-      )}
+      getInputResponse={getInputResponse}
       inputComponentChildren={InputComponent}
-      handleSubmitWithValidation={hackformUtils.createCbSubmitValidate(
-        getInputResponse
-      )}
-      error={hackformUtils.getCurrentError()}
     />
   );
 };

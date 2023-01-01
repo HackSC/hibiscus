@@ -41,4 +41,9 @@ const Input = styled.input`
     border: 1.5px solid ${Colors2023.PURPLE.STANDARD};
     border-radius: 11px;
   }
+  :disabled {
+    background-color: ${Colors2023.GRAY.DARK};
+    border-color: ${Colors2023.GRAY.SCHEMDIUM};
+    color: ${Colors2023.GRAY.MEDIUM};
+  }
 `;
