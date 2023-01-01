@@ -1,4 +1,4 @@
-import { H1, H4 } from '@hibiscus/ui';
+import { H1, H3 } from '@hibiscus/ui';
 import styled from 'styled-components';
 import GrayContentBox from '../components/gray-content-box/gray-content-box';
 import { Search } from '@hibiscus/ui-kit-2023';
@@ -32,9 +32,9 @@ export function Index() {
               >
                 Welcome, {user.firstName}
               </H1>
-              <H4 style={{ color: '#989898' }}>
+              <H3 style={{ color: '#989898' }}>
                 What would you like to do today?
-              </H4>
+              </H3>
             </div>
             <Search
               placeholder={'Search...'}
