@@ -7,6 +7,7 @@ import { GradientSpan, Text } from '@hibiscus/ui';
 import { TrademarkColors } from '@hibiscus/styles';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import GrayLink from '../gray-link/gray-link';
+import { container } from 'tsyringe';
 
 /* eslint-disable-next-line */
 export interface ResetCardProps {}
@@ -20,10 +21,8 @@ export function ResetEmailCard(props: ResetCardProps) {
     const email = event.target.email.value;
     const callbackUrl = `${window.location.protocol}//${window.location.host}/reset`;
 
-    const { data, error } = await HibiscusSupabaseClient.resetPasswordViaEmail(
-      email,
-      callbackUrl
-    );
+    const supabase = container.resolve(HibiscusSupabaseClient);
+    const { error } = await supabase.resetPasswordViaEmail(email, callbackUrl);
 
     if (error) {
       alert(error);

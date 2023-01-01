@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import { setCookie } from 'cookies-next';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import GrayLink from '../gray-link/gray-link';
+import { container } from 'tsyringe';
 
 export function VerifyCard() {
   const router = useRouter();
@@ -18,11 +19,8 @@ export function VerifyCard() {
   const handleOTP = async () => {
     const email = String(router.query.email);
 
-    const { data, error } = await HibiscusSupabaseClient.verifyOtp(
-      email,
-      code,
-      'signup'
-    );
+    const supabase = container.resolve(HibiscusSupabaseClient);
+    const { data, error } = await supabase.verifyOtp(email, code, 'signup');
     if (error) {
       console.log(error);
       setHideErrorMessage(true);

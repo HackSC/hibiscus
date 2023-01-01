@@ -4,6 +4,7 @@ import { GradientSpan, Text } from '@hibiscus/ui';
 import { TrademarkColors } from '@hibiscus/styles';
 import { useRouter } from 'next/router';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { container } from 'tsyringe';
 
 /* eslint-disable-next-line */
 export interface ResetCardProps {}
@@ -25,9 +26,8 @@ export function ResetCard(props: ResetCardProps) {
       return;
     }
 
-    const { data, error } = await HibiscusSupabaseClient.updatePassword(
-      newPassword
-    );
+    const supabase = container.resolve(HibiscusSupabaseClient);
+    const { data, error } = await supabase.updatePassword(newPassword);
 
     if (error) {
       if (typeof error === 'object' && error !== null && 'message' in error) {

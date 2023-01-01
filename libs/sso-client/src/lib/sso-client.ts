@@ -25,8 +25,10 @@ export const middlewareHandler =
       }
     }
 
-    if (request.cookies.has(process.env.HIBISCUS_COOKIE_NAME)) {
-      const token = request.cookies.get(process.env.HIBISCUS_COOKIE_NAME);
+    if (request.cookies.has(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME)) {
+      const token = request.cookies.get(
+        process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME
+      );
       const { data } = await verifyToken(token);
 
       if (data != null && data.user != null) {
@@ -75,7 +77,7 @@ export const callbackApiHandler =
         res.setHeader('Access-Control-Expose-Headers', 'Set-Cookie');
         res.setHeader(
           'Set-Cookie',
-          `${process.env.HIBISCUS_COOKIE_NAME}=${token}; Path=/; Max-Age=${process.env.HIBISCUS_COOKIE_MAX_AGE}; SameSite=None; HttpOnly; Secure`
+          `${process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME}=${token}; Path=/; Max-Age=${process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE}; HttpOnly; Secure; SameSite=None`
         );
         res.status(200).json({
           message: 'Authorization success',

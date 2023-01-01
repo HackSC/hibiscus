@@ -1,9 +1,12 @@
 // polyfill
 import 'reflect-metadata';
 
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import {
+  createClient,
+  EmailOtpType,
+  SupabaseClient,
+} from '@supabase/supabase-js';
 import { injectable } from 'tsyringe';
-import axios from 'axios';
 import {
   SSOApiResetResponseType,
   SSOApiSignInWithPassword,
@@ -12,6 +15,7 @@ import {
   SSOApiVerifyOtp,
   SSOApiVerifyToken,
 } from '@hibiscus/types';
+import { setCookie } from 'cookies-next';
 
 @injectable()
 export class HibiscusSupabaseClient {
@@ -32,14 +36,14 @@ export class HibiscusSupabaseClient {
    * Reset the password for this user (abstracts over supabase).
    * @param email email of the user
    */
-  static async resetPasswordViaEmail(
+  async resetPasswordViaEmail(
     email: string,
     resetCallbackUrl: string
   ): SSOApiResetResponseType {
-    const res = await axios.post(
-      `/api/resetPasswordForEmail?email=${email}&resetCallbackUrl=${resetCallbackUrl}`
-    );
-    return res.data;
+    const res = await this.client.auth.resetPasswordForEmail(email, {
+      redirectTo: resetCallbackUrl,
+    });
+    return res;
   }
 
   /**
@@ -48,19 +52,21 @@ export class HibiscusSupabaseClient {
    * @param password
    * @returns
    */
-  static async signInWithPassword(
+  async signInWithPassword(
     email: string,
     password: string
   ): SSOApiSignInWithPassword {
-    const res = await axios.post(
-      `/api/signInWithPassword`,
-      {
-        email,
-        password,
-      },
-      { withCredentials: true }
-    );
-    return res.data;
+    const res = await this.client.auth.signInWithPassword({
+      email,
+      password,
+    });
+    const data = res.data;
+    if (data.user) {
+      HibiscusSupabaseClient.setTokenCookieClientSide(
+        data.session.access_token
+      );
+    }
+    return res;
   }
 
   /**
@@ -68,11 +74,11 @@ export class HibiscusSupabaseClient {
    * @param password
    * @returns
    */
-  static async updatePassword(password: string): SSOApiUpdateUser {
-    const res = await axios.post(`/api/updateUser`, {
+  async updatePassword(password: string): SSOApiUpdateUser {
+    const res = await this.client.auth.updateUser({
       password,
     });
-    return res.data;
+    return res;
   }
 
   /**
@@ -81,12 +87,12 @@ export class HibiscusSupabaseClient {
    * @param password
    * @returns
    */
-  static async signUp(email: string, password: string): SSOApiSignUp {
-    const res = await axios.post(`/api/signUp`, {
+  async signUp(email: string, password: string): SSOApiSignUp {
+    const res = await this.client.auth.signUp({
       email,
       password,
     });
-    return res.data;
+    return res;
   }
 
   /**
@@ -95,17 +101,17 @@ export class HibiscusSupabaseClient {
    * @param token
    * @returns
    */
-  static async verifyOtp(
+  async verifyOtp(
     email: string,
     token: string,
-    type: string
+    type: EmailOtpType
   ): SSOApiVerifyOtp {
-    const res = await axios.post(`/api/verifyOtp`, {
+    const res = await this.client.auth.verifyOtp({
       email,
       token,
       type,
     });
-    return res.data;
+    return res;
   }
 
   /**
@@ -114,19 +120,39 @@ export class HibiscusSupabaseClient {
    * @param token JWT access token associated with a user
    * @returns object containing `data` and `error` properties, either of which may be undefined
    */
-  static async verifyToken(token: string): SSOApiVerifyToken {
-    const res = await axios.post(`${process.env.SSO_URL}/api/verifyToken`, {
-      token,
-    });
-    return res.data;
+  async verifyToken(token: string): SSOApiVerifyToken {
+    const res = await this.client.auth.getUser(token);
+    return res;
   }
 
   /**
-   * Validates the current session (stored in the cookies)
+   * Validates the current session (stored in localStorage)
    *
-   * @returns API reponse containing `data` object `{ token }`
+   * @returns `data` object `{ token }`
    */
-  static async validateSession() {
-    return await axios.post('/api/validateSession', {});
+  async validateSession(): Promise<{ token: string }> {
+    const { data } = await this.client.auth.getSession();
+
+    if (data.session != null) {
+      return { token: data.session.access_token };
+    }
+
+    return null;
+  }
+
+  static setTokenCookieClientSide(token: string) {
+    setCookie(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME, token, {
+      path: '/',
+      maxAge: Number.parseInt(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE),
+      sameSite: 'none',
+      secure: true,
+    });
+    setCookie(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME, token, {
+      path: '/',
+      domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
+      maxAge: Number.parseInt(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE),
+      sameSite: 'none',
+      secure: true,
+    });
   }
 }
