@@ -26,7 +26,7 @@ export interface FormQuestion {
   required?: boolean;
   validationFunction?: (input: HackformQuestionResponse['input']) => {
     valid: boolean;
-    errorDescription?: string;
+    errorDescription?: HackformError;
   };
   options?: Option[];
 }
@@ -39,6 +39,7 @@ export enum FormQuestionType {
   Date = 'date',
   SingleOptionDropdown = 'single-option-dropdown',
   Boolean = 'boolean',
+  SingleChoice = 'single-choice',
 }
 
 export interface HackformSubmission {
@@ -47,11 +48,12 @@ export interface HackformSubmission {
 
 export interface HackformQuestionResponse {
   input?: {
-    text?: string; // for text-based questions
+    text?: string; // for text-based questions + date
     number?: number; // for number-based questions e.g age
     choices?: number[]; // indexes of the choices; if it's a single choice, size=1
     boolean?: boolean;
     singleChoiceValue?: string; // value associated with the choice
-    date?: Date; // value for a date
   };
 }
+
+export type HackformError = string | string[];

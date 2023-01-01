@@ -1,4 +1,5 @@
 import { FormMetadata, FormQuestionType } from '@hibiscus/types';
+import moment from 'moment';
 
 export const formMetadata2023HackerApps: FormMetadata = {
   entry: {
@@ -23,11 +24,45 @@ export const formMetadata2023HackerApps: FormMetadata = {
         return { valid: true };
       },
     },
-    // {
-    //   title: 'Please enter your date of birth:',
-    //   type: FormQuestionType.Date,
-    //   required: true,
-    // },
+    {
+      title: 'Please enter your date of birth:',
+      type: FormQuestionType.Date,
+      required: true,
+      validationFunction: (input) => {
+        const errors: string[] = [];
+        if (input.text === '') errors.push('This field is required');
+        // try to parse date
+        const parsed = Date.parse(input.text);
+        if (isNaN(parsed))
+          errors.push(
+            "Invalid date; make sure you're using the correct format (MM/DD/YYYY)"
+          );
+
+        // can't attend if you're <18
+        const today = new Date();
+        const birthday = new Date(parsed);
+        const todayMoment = moment([
+          today.getFullYear(),
+          today.getMonth(),
+          today.getDate(),
+        ]);
+        const bdayMoment = moment([
+          birthday.getFullYear(),
+          birthday.getMonth(),
+          birthday.getDate(),
+        ]);
+        const age = todayMoment.diff(bdayMoment, 'years'); // rounded down by default
+        if (age < 18) {
+          errors.push(
+            "Sorry! Unfortunately we don't allow hackers under 18 to attend our event. "
+          );
+        }
+
+        if (errors.length > 0)
+          return { valid: false, errorDescription: errors };
+        return { valid: true };
+      },
+    },
     // {
     //   title: 'What school do you go to?',
     //   type: FormQuestionType.SingleOptionDropdown,
@@ -35,18 +70,18 @@ export const formMetadata2023HackerApps: FormMetadata = {
     // },
     {
       title: 'Select your program:',
-      type: FormQuestionType.SingleOptionDropdown,
-      placeholder: 'e.g University of Southern California',
+      type: FormQuestionType.SingleChoice,
       required: true,
       validationFunction: (input) => {
-        if (input.text === '')
+        if (!input.singleChoiceValue)
           return { valid: false, errorDescription: 'This field is required' };
         return { valid: true };
       },
       options: [
-        { value: '1', displayName: 'Undergraduate' },
-        { value: '2', displayName: 'Masters' },
-        { value: '3', displayName: 'PhD' },
+        { value: 'undergrad', displayName: 'Undergraduate' },
+        { value: 'master', displayName: 'Masters' },
+        { value: 'phd', displayName: 'PhD' },
+        { value: 'high-school', displayName: 'High school' },
       ],
     },
     {

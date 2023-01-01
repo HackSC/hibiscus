@@ -1,5 +1,5 @@
 import type { ComponentStory, ComponentMeta } from '@storybook/react';
-import { QuestionCreator } from './QuestionCreator';
+import { QuestionCreator } from './question-creator';
 
 const Story: ComponentMeta<typeof QuestionCreator> = {
   component: QuestionCreator,

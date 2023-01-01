@@ -2,6 +2,7 @@ import { Colors2023 } from '@hibiscus/styles';
 import { FormMetadata } from '@hibiscus/types';
 import { H1, H3, Link } from '@hibiscus/ui';
 import { Button, GlowSpan } from '@hibiscus/ui-kit-2023';
+import { useHackform } from '../../hooks/use-hackform/use-hackform';
 import Image from 'next/image';
 import styled from 'styled-components';
 
@@ -10,7 +11,10 @@ export interface HackformEndingProps {
   formMetadata: FormMetadata;
 }
 
-const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
+export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
+  const hackformUtils = useHackform();
+  const TIME_BEFORE_FORMSTATE_RESET = 2000; // wait this much ms before we do reset
+
   return (
     <Wrapper>
       <H1>
@@ -28,7 +32,16 @@ const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
         height={200}
         alt="Earth-like character wearing shades pulling baggage and a moon"
       />
-      <Link href="/" anchortagpropsoverride={{ target: '_self' }}>
+      <Link
+        href="/"
+        anchortagpropsoverride={{ target: '_self' }}
+        onClick={() => {
+          // rate limit
+          setTimeout(() => {
+            hackformUtils.reset();
+          }, TIME_BEFORE_FORMSTATE_RESET);
+        }}
+      >
         <Button color="blue">Go to Home</Button>
       </Link>
     </Wrapper>
