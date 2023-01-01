@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { NextApiRequest, NextApiResponse } from 'next/types';
 import axios from 'axios';
-import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 
 /**
  * Generates the NextJS middleware needed to integrate with the Hibiscus SSO system
@@ -127,7 +126,14 @@ export async function ssoCallback(callback: string, token: string) {
 async function verifyToken(token: string) {
   // The Fetch API is used instead of axios because this function needs to be used in
   // NextJS middleware and their edge functions do not support axios
-  const supabase = new HibiscusSupabaseClient();
-  const res = await supabase.verifyToken(token);
-  return res;
+  const res = await fetch(`${process.env.SSO_URL}/api/verifyToken`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ token }),
+  });
+  const data = await res.json();
+  return data;
 }
