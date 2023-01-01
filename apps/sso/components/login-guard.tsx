@@ -1,6 +1,7 @@
 import { useState, useEffect, PropsWithChildren } from 'react';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import * as SSOClient from '@hibiscus/sso-client';
+import { container } from 'tsyringe';
 
 interface LoginGuardProps extends PropsWithChildren {
   callback: string;
@@ -12,20 +13,17 @@ export function LoginGuard({ callback, children }: LoginGuardProps) {
   useEffect(() => {
     async function fetchData() {
       if (callback != null) {
-        try {
-          const resToken = await HibiscusSupabaseClient.validateSession();
-          if (resToken.status == 200) {
-            const res = await SSOClient.ssoCallback(
-              callback,
-              resToken.data.token
-            );
-            if (res != null && res.redirect != null) {
-              window.location.replace(res.redirect);
-            } else {
-              setAuthorized(true);
-            }
+        const supabase = container.resolve(HibiscusSupabaseClient);
+        const data = await supabase.validateSession();
+        if (data != null) {
+          HibiscusSupabaseClient.setTokenCookieClientSide(data.token);
+          const res = await SSOClient.ssoCallback(callback, data.token);
+          if (res != null && res.redirect != null) {
+            window.location.replace(res.redirect);
+          } else {
+            setAuthorized(true);
           }
-        } catch {
+        } else {
           setAuthorized(true);
         }
       }

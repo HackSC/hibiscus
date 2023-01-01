@@ -8,6 +8,7 @@ import { useRouter } from 'next/router';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import Image from 'next/image';
 import GrayLink from '../gray-link/gray-link';
+import { container } from 'tsyringe';
 
 /* eslint-disable-next-line */
 export interface SignUpProps {}
@@ -30,10 +31,8 @@ export function SignUpCard(props: SignUpProps) {
       return;
     }
 
-    const { data, error } = await HibiscusSupabaseClient.signUp(
-      email,
-      password
-    );
+    const supabase = container.resolve(HibiscusSupabaseClient);
+    const { data, error } = await supabase.signUp(email, password);
 
     if (error) {
       if (typeof error === 'object' && error !== null && 'message' in error) {

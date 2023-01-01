@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { NextApiRequest, NextApiResponse } from 'next/types';
 import axios from 'axios';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 
 /**
  * Generates the NextJS middleware needed to integrate with the Hibiscus SSO system
@@ -25,8 +26,10 @@ export const middlewareHandler =
       }
     }
 
-    if (request.cookies.has(process.env.HIBISCUS_COOKIE_NAME)) {
-      const token = request.cookies.get(process.env.HIBISCUS_COOKIE_NAME);
+    if (request.cookies.has(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME)) {
+      const token = request.cookies.get(
+        process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME
+      );
       const { data } = await verifyToken(token);
 
       if (data != null && data.user != null) {
@@ -75,7 +78,7 @@ export const callbackApiHandler =
         res.setHeader('Access-Control-Expose-Headers', 'Set-Cookie');
         res.setHeader(
           'Set-Cookie',
-          `${process.env.HIBISCUS_COOKIE_NAME}=${token}; Path=/; Max-Age=${process.env.HIBISCUS_COOKIE_MAX_AGE}; SameSite=None; HttpOnly; Secure`
+          `${process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME}=${token}; Path=/; Max-Age=${process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE}; HttpOnly; Secure; SameSite=None`
         );
         res.status(200).json({
           message: 'Authorization success',
@@ -124,14 +127,7 @@ export async function ssoCallback(callback: string, token: string) {
 async function verifyToken(token: string) {
   // The Fetch API is used instead of axios because this function needs to be used in
   // NextJS middleware and their edge functions do not support axios
-  const res = await fetch(`${process.env.SSO_URL}/api/verifyToken`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ token }),
-  });
-  const data = await res.json();
-  return data;
+  const supabase = new HibiscusSupabaseClient();
+  const res = await supabase.verifyToken(token);
+  return res;
 }

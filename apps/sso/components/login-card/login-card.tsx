@@ -6,6 +6,7 @@ import Image from 'next/image';
 import * as SSOClient from '@hibiscus/sso-client';
 import GrayLink from '../gray-link/gray-link';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { container } from 'tsyringe';
 
 export function LoginCard() {
   const [hideErrorMessage, setHideErrorMessage] = useState(true);
@@ -17,10 +18,8 @@ export function LoginCard() {
     const email = event.target.email.value;
     const password = event.target.password.value;
 
-    const { data, error } = await HibiscusSupabaseClient.signInWithPassword(
-      email,
-      password
-    );
+    const supabase = container.resolve(HibiscusSupabaseClient);
+    const { data, error } = await supabase.signInWithPassword(email, password);
 
     if (error) {
       if (typeof error === 'object' && error !== null && 'message' in error) {
