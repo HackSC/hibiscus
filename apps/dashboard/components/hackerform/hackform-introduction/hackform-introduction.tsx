@@ -9,7 +9,7 @@ interface Props {
   onClick: () => void;
 }
 
-const HackformIntroduction = ({ formMetadata, onClick }: Props) => {
+export const HackformIntroduction = ({ formMetadata, onClick }: Props) => {
   return (
     <IntroductionWrapper>
       <Heading>

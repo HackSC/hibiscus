@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import HackformIntroduction from './hackform-introduction';
-import HackformQuestionComponent from './hackform-question';
+import HackformIntroduction from '../hackform-introduction/hackform-introduction';
+import HackformQuestionComponent from '../hackform-question/hackform-question';
 import { FormMetadata } from '@hibiscus/types';
-import HackformEnding from './hackform-end';
-import { useHackform } from '../../hooks/use-hackform/use-hackform';
+import HackformEnding from '../hackform-end/hackform-end';
+import { useHackform } from '../../../hooks/use-hackform/use-hackform';
 
 /* eslint-disable-next-line */
 export interface HackerformProps {

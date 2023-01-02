@@ -1,14 +1,14 @@
 import { FormQuestionType } from '@hibiscus/types';
-import { useHackform } from '../../hooks/use-hackform/use-hackform';
+import { useHackform } from '../../../hooks/use-hackform/use-hackform';
 import React from 'react';
 import styled from 'styled-components';
-import LongTextQuestion from './long-text-input';
-import SearchableOptionsInput from './searchable-options-input';
-import ShortTextInput from './short-text-input';
-import { SingleChoiceInput } from './single-choice-input/single-choice-input';
-import { DateQuestionInput } from './date-question/date-question';
+import LongTextQuestion from '../long-text-input/long-text-input';
+import SearchableOptionsInput from '../searchable-options-input/searchable-options-input';
+import { SingleChoiceInput } from '../single-choice-input/single-choice-input';
+import { DateQuestionInput } from '../date-question/date-question';
+import ShortTextInput from '../short-text-input/short-text-input';
 
-function HackformQuestionComponent() {
+export function HackformQuestionComponent() {
   const { ...hackformUtils } = useHackform();
 
   const getInputSubcomponent = () => {

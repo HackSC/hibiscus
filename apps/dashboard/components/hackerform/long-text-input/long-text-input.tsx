@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { ParagraphText } from '@hibiscus/ui-kit-2023';
-import { QuestionFormProps } from './hackform-question';
-import { useHackform } from '../../hooks/use-hackform/use-hackform';
-import QuestionCreator from './question-creator';
+import { useHackform } from '../../../hooks/use-hackform/use-hackform';
+import QuestionCreator from '../question-creator/question-creator';
 
-type Props = QuestionFormProps & { placeholder: string };
+type Props = { placeholder: string };
 
-const LongTextQuestion = ({ placeholder }: Props) => {
+export const LongTextQuestion = ({ placeholder }: Props) => {
   const { currentQuestionIndex, ...hackformUtils } = useHackform();
   const [textInput, setInput] = useState(
     hackformUtils.getCurrentResponse()?.input.text ?? ''

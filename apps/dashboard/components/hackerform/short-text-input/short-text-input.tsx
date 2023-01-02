@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { OneLineText } from '@hibiscus/ui-kit-2023';
-import { QuestionFormProps } from './hackform-question';
-import QuestionCreator from './question-creator';
-import { GetInputResponseCb } from '../../common/types';
-import { useHackform } from '../../hooks/use-hackform/use-hackform';
+import QuestionCreator from '../question-creator/question-creator';
+import { GetInputResponseCb } from '../../../common/types';
+import { useHackform } from '../../../hooks/use-hackform/use-hackform';
 
-type Props = QuestionFormProps & { placeholder: string };
+type Props = { placeholder: string };
 
 export const ShortTextInput = (props: Props) => {
   const { currentQuestionIndex, responses, ...hackformUtils } = useHackform();

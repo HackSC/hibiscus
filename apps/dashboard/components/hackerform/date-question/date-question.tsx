@@ -2,7 +2,7 @@ import { DatePicker } from '@hibiscus/ui-kit-2023';
 import { GetInputResponseCb } from '../../../common/types';
 import { useState } from 'react';
 import { useHackform } from '../../../hooks/use-hackform/use-hackform';
-import QuestionCreator from '../question-creator';
+import QuestionCreator from '../question-creator/question-creator';
 
 export const DateQuestionInput = () => {
   const { ...hackformUtils } = useHackform();

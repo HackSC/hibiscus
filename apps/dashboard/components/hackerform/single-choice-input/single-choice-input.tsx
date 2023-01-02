@@ -4,7 +4,7 @@ import { GetInputResponseCb } from '../../../common/types';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { useHackform } from '../../../hooks/use-hackform/use-hackform';
-import QuestionCreator from '../question-creator';
+import QuestionCreator from '../question-creator/question-creator';
 
 interface SingleChoiceInputProps {
   options: Option[];

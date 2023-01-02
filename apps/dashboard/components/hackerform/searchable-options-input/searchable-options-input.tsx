@@ -1,16 +1,15 @@
 import { Option } from '@hibiscus/types';
 import { SearchableOptionSelectInput } from '@hibiscus/ui-kit-2023';
-import { useHackform } from '../../hooks/use-hackform/use-hackform';
+import { useHackform } from '../../../hooks/use-hackform/use-hackform';
 import { useState } from 'react';
-import { QuestionFormProps } from './hackform-question';
-import QuestionCreator from './question-creator';
+import QuestionCreator from '../question-creator/question-creator';
 
-type SearchableOptionsInputProps = QuestionFormProps & {
+type SearchableOptionsInputProps = {
   options: Option[];
   initialError?: string; // for passing in default error
 };
 
-const SearchableOptionsInput = (props: SearchableOptionsInputProps) => {
+export const SearchableOptionsInput = (props: SearchableOptionsInputProps) => {
   const { currentQuestionIndex, ...hackformUtils } = useHackform();
   const currentInput = hackformUtils.getCurrentResponse()?.input;
   const [textInput, setTextInput] = useState(currentInput?.text ?? '');

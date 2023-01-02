@@ -6,7 +6,7 @@ interface HackformBackNextWidgetProps {
   goNextQuestion: () => void;
 }
 
-const HackformBackNextWidget = ({
+export const HackformBackNextWidget = ({
   goNextQuestion,
   goPreviousQuestion,
 }: HackformBackNextWidgetProps) => {
