@@ -8,7 +8,7 @@ interface HackformQuestionHeaderProps {
   qi: number;
 }
 
-const HackformQuestionHeader = ({
+export const HackformQuestionHeader = ({
   question,
   qi,
 }: HackformQuestionHeaderProps) => {

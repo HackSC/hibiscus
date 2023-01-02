@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Hackerform from '../../components/hackerform/hackform';
+import Hackerform from '../../components/hackerform/hackform/hackform';
 import { formMetadata2023HackerApps } from '../../common/hackform.metadata';
 import PortalLayout from '../../layouts/portal-layout';
 
