@@ -8,8 +8,6 @@ import ShortTextInput from './short-text-input';
 import { SingleChoiceInput } from './single-choice-input/single-choice-input';
 import { DateQuestionInput } from './date-question/date-question';
 
-export interface QuestionFormProps {}
-
 function HackformQuestionComponent() {
   const { ...hackformUtils } = useHackform();
 
