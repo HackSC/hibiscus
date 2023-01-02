@@ -93,14 +93,24 @@ export const callbackApiHandler =
     }
   };
 
+const validCallbacks = [process.env.NEXT_PUBLIC_SSO_MOCK_APP_URL];
+
 /**
  * Calls the app's callback API route which sets the token as a cookie on the app
  *
  * @param callback Callback URL for the app
  * @param token Access token obtained from login
- * @returns object containing `data` property
+ * @returns object containing `redirect` property or `null` if callback URL is not allowed
  */
 export async function ssoCallback(callback: string, token: string) {
+  if (
+    !validCallbacks
+      .map((it) => it.split('/', 1)[0])
+      .includes(callback.split('/', 1)[0])
+  ) {
+    return null;
+  }
+
   const res = await axios.post(
     callback,
     {},
