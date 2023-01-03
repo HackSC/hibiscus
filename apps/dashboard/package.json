@@ -18,8 +18,5 @@
   },
   "peerDependencies": {
     "require-from-string": "2.0.2"
-  },
-  "scripts": {
-    "start": "next start"
   }
 }
