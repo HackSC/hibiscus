@@ -11,7 +11,7 @@ export function Index() {
     async function logout() {
       const supabase = container.resolve(HibiscusSupabaseClient);
       await supabase.logout();
-      window.location.replace(`${process.env.SSO_URL}/login`);
+      window.location.replace(`${process.env.NEXT_PUBLIC_SSO_URL}/login`);
     }
 
     logout();

@@ -7,6 +7,7 @@ const REGISTERED_PATHS = new Set([
   'reset-email',
   'signup',
   'verify',
+  'logout',
 ]);
 
 export function middleware(request: NextRequest) {

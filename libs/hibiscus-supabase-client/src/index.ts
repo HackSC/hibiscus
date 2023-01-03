@@ -144,12 +144,13 @@ export class HibiscusSupabaseClient {
    * Logs out of the current session
    */
   async logout() {
-    deleteCookie(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME);
+    deleteCookie(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME, { path: '/' });
     deleteCookie(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME, {
+      path: '/',
       domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
     });
 
-    this.client.auth.signOut();
+    await this.client.auth.signOut();
   }
 
   static setTokenCookieClientSide(token: string) {
