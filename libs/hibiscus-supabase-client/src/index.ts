@@ -15,7 +15,7 @@ import {
   SSOApiVerifyOtp,
   SSOApiVerifyToken,
 } from '@hibiscus/types';
-import { setCookie } from 'cookies-next';
+import { deleteCookie, setCookie } from 'cookies-next';
 
 @injectable()
 export class HibiscusSupabaseClient {
@@ -138,6 +138,18 @@ export class HibiscusSupabaseClient {
     }
 
     return null;
+  }
+
+  /**
+   * Logs out of the current session
+   */
+  async logout() {
+    deleteCookie(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME);
+    deleteCookie(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME, {
+      domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
+    });
+
+    this.client.auth.signOut();
   }
 
   static setTokenCookieClientSide(token: string) {

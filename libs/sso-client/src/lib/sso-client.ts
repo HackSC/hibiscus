@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { NextApiRequest, NextApiResponse } from 'next/types';
 import axios from 'axios';
+import { deleteCookie } from 'cookies-next';
 
 /**
  * Generates the NextJS middleware needed to integrate with the Hibiscus SSO system
@@ -77,7 +78,7 @@ export const callbackApiHandler =
         res.setHeader('Access-Control-Expose-Headers', 'Set-Cookie');
         res.setHeader(
           'Set-Cookie',
-          `${process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME}=${token}; Path=/; Max-Age=${process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE}; HttpOnly; Secure; SameSite=None`
+          `${process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME}=${token}; Path=/; Max-Age=${process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE}; Secure; SameSite=None`
         );
         res.status(200).json({
           message: 'Authorization success',
@@ -136,4 +137,13 @@ async function verifyToken(token: string) {
   });
   const data = await res.json();
   return data;
+}
+
+export async function signOut() {
+  deleteCookie(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME);
+  deleteCookie(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME, {
+    domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
+  });
+
+  window.location.replace(`${process.env.SSO_URL}/logout`);
 }
