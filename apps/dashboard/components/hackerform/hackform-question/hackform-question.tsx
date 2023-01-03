@@ -7,28 +7,52 @@ import SearchableOptionsInput from '../searchable-options-input/searchable-optio
 import { SingleChoiceInput } from '../single-choice-input/single-choice-input';
 import { DateQuestionInput } from '../date-question/date-question';
 import ShortTextInput from '../short-text-input/short-text-input';
+import MultiSelectQuestion from '../multi-select-question/multi-select-question';
 
 export function HackformQuestionComponent() {
-  const { ...hackformUtils } = useHackform();
+  const { currentQuestionIndex, ...hackformUtils } = useHackform();
+  const question = hackformUtils.getCurrentQuestion();
 
   const getInputSubcomponent = () => {
-    const question = hackformUtils.getCurrentQuestion();
     switch (question.type) {
       case FormQuestionType.ShortText:
-        return <ShortTextInput placeholder={question.placeholder} />;
+        return (
+          <ShortTextInput
+            placeholder={question.placeholder}
+            key={currentQuestionIndex}
+          />
+        );
       case FormQuestionType.LongText:
-        return <LongTextQuestion placeholder={question.placeholder} />;
+        return (
+          <LongTextQuestion
+            placeholder={question.placeholder}
+            key={currentQuestionIndex}
+          />
+        );
       case FormQuestionType.SingleOptionDropdown:
-        return <SearchableOptionsInput options={question.options} />;
+        return (
+          <SearchableOptionsInput
+            options={question.options}
+            key={currentQuestionIndex}
+          />
+        );
       case FormQuestionType.SingleChoice:
         return (
           <SingleChoiceInput
             options={question.options}
             hasOtherField={question.hasOtherField}
+            key={currentQuestionIndex}
           />
         );
       case FormQuestionType.Date:
-        return <DateQuestionInput />;
+        return <DateQuestionInput key={currentQuestionIndex} />;
+      case FormQuestionType.MultipleSelect:
+        return (
+          <MultiSelectQuestion
+            key={currentQuestionIndex}
+            options={question.options}
+          />
+        );
       default:
         return null;
     }

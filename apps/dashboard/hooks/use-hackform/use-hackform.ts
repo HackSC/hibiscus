@@ -42,7 +42,13 @@ export function useHackform(formMetadata = formMetadata2023HackerApps) {
     (getInputResponse: GetInputResponseCb) => () => {
       const input = getInputResponse();
       const question = formMetadata.questions[cqi];
-      const { valid, errorDescription } = question.validationFunction(input);
+      let valid = true;
+      let errorDescription: HackformError;
+      if (question.validationFunction) {
+        const res = question.validationFunction(input);
+        valid = res.valid;
+        errorDescription = res.errorDescription;
+      }
       dispatch(putResponse({ input }));
       if (valid) {
         dispatch(resolveError(cqi));
@@ -56,7 +62,13 @@ export function useHackform(formMetadata = formMetadata2023HackerApps) {
     (getInputResponse: GetInputResponseCb) => () => {
       const input = getInputResponse();
       const question = formMetadata.questions[cqi];
-      const { valid, errorDescription } = question.validationFunction(input);
+      let valid = true;
+      let errorDescription: HackformError;
+      if (question.validationFunction) {
+        const res = question.validationFunction(input);
+        valid = res.valid;
+        errorDescription = res.errorDescription;
+      }
       if (!valid)
         dispatch(putErrorForQuestion({ qi: cqi, error: errorDescription }));
       else dispatch(resolveError(cqi));
@@ -69,7 +81,13 @@ export function useHackform(formMetadata = formMetadata2023HackerApps) {
     (getInputResponse: GetInputResponseCb) => () => {
       const input = getInputResponse();
       const question = formMetadata.questions[cqi];
-      const { valid, errorDescription } = question.validationFunction(input);
+      let valid = true;
+      let errorDescription: HackformError;
+      if (question.validationFunction) {
+        const res = question.validationFunction(input);
+        valid = res.valid;
+        errorDescription = res.errorDescription;
+      }
       if (!valid)
         dispatch(putErrorForQuestion({ qi: cqi, error: errorDescription }));
       else dispatch(resolveError(cqi));

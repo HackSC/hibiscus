@@ -93,21 +93,6 @@ export const formMetadata2023HackerApps: FormMetadata = {
       ],
     },
     {
-      title: 'What technologies and skills do you have?',
-      type: FormQuestionType.LongText,
-      placeholder: 'Type your answer here...',
-      required: true,
-      validationFunction: (input) => {
-        if (input.text === '') {
-          return {
-            valid: false,
-            errorDescription: 'This field is required!',
-          };
-        }
-        return { valid: true };
-      },
-    },
-    {
       title: 'Expected graduation date:',
       placeholder: 'e.g Spring 2024, Fall 2023',
       type: FormQuestionType.ShortText,
@@ -157,7 +142,7 @@ export const formMetadata2023HackerApps: FormMetadata = {
     },
     {
       title: 'Ethnicity:',
-      type: FormQuestionType.SingleChoice,
+      type: FormQuestionType.MultipleSelect,
       hasOtherField: true,
       required: true,
       options: [
@@ -174,10 +159,19 @@ export const formMetadata2023HackerApps: FormMetadata = {
         { value: 'me/na', displayName: 'Middle Eastern/North African' },
         { value: 'ltx', displayName: 'Latinx' },
       ],
+      validationFunction: (input) => {
+        if (input.choices.length === 0) {
+          return {
+            valid: false,
+            errorDescription: 'Please select more than one option',
+          };
+        }
+        return { valid: true };
+      },
     },
     {
       title: 'Do you have any allergies/dietary restrictions?',
-      type: FormQuestionType.ShortText,
+      type: FormQuestionType.LongText,
     },
     {
       title:
@@ -185,7 +179,7 @@ export const formMetadata2023HackerApps: FormMetadata = {
       type: FormQuestionType.ShortText,
     },
     {
-      title: 'Your mailing address:',
+      title: 'Your shipping address:',
       required: true,
       type: FormQuestionType.ShortText,
       validationFunction: (input) => {
@@ -213,11 +207,17 @@ export const formMetadata2023HackerApps: FormMetadata = {
         { value: 'xl', displayName: 'XL' },
         { value: 'xxl', displayName: 'XXL' },
       ],
+      validationFunction: (input) => {
+        if (!input.singleChoiceValue) {
+          return { valid: false, errorDescription: 'This field is required' };
+        }
+        return { valid: true };
+      },
     },
     {
       title: 'How many hackathons have you done before?',
       required: true,
-      type: FormQuestionType.Number,
+      type: FormQuestionType.ShortText,
     },
     {
       title: 'Have you attended HackSC before?',
@@ -238,10 +238,10 @@ export const formMetadata2023HackerApps: FormMetadata = {
         { value: 'a', displayName: 'Advanced' },
       ],
     },
-    {
-      title: 'Upload your resume',
-      type: FormQuestionType.File,
-    },
+    // {
+    //   title: 'Upload your resume',
+    //   type: FormQuestionType.File,
+    // },
     {
       title: 'Link to personal website:',
       type: FormQuestionType.ShortText,
@@ -251,12 +251,24 @@ export const formMetadata2023HackerApps: FormMetadata = {
         'Tell us about a project you’re most proud of. What did you learn from it? (100-150 words)',
       type: FormQuestionType.LongText,
       required: true,
+      validationFunction: (input) => {
+        if (!input.text) {
+          return { valid: false, errorDescription: 'This field is required' };
+        }
+        return { valid: true };
+      },
     },
     {
       title:
         'What are you passionate about outside of technology? (max 100 words)',
       type: FormQuestionType.LongText,
       required: true,
+      validationFunction: (input) => {
+        if (!input.text) {
+          return { valid: false, errorDescription: 'This field is required' };
+        }
+        return { valid: true };
+      },
     },
     {
       title: 'How did you hear about HackSC?',
@@ -271,17 +283,49 @@ export const formMetadata2023HackerApps: FormMetadata = {
     },
     {
       title: `I have read and agree to the HackSC Code of Conduct, HackSC Terms and Conditions, as well as the MLH Code of Conduct."(https://static.mlh.io/docs/mlh-code-of-conduct.pdf)"`,
-      type: FormQuestionType.Checkbox,
+      type: FormQuestionType.SingleChoice,
+      required: true,
+      options: [
+        { value: 'y', displayName: 'Yes' },
+        { value: 'n', displayName: 'No' },
+      ],
+      validationFunction: (input) => {
+        if (!input.singleChoiceValue) {
+          return { valid: false, errorDescription: 'This field is required' };
+        }
+        return { valid: true };
+      },
     },
     {
       title: `I authorize you to share my application/registration information with Major League Hacking for event administration, ranking, and MLH administration in-line with the MLH Privacy Policy (https://mlh.io/privacy).
       I further agree to the terms of both the MLH Contest Terms and Conditions (https://github.com/MLH/mlh-policies/blob/main/contest-terms.md)and the MLH Privacy Policy (https://mlh.io/privacy)`,
-      type: FormQuestionType.Checkbox,
+      type: FormQuestionType.SingleChoice,
+      required: true,
+      options: [
+        { value: 'y', displayName: 'Yes' },
+        { value: 'n', displayName: 'No' },
+      ],
+      validationFunction: (input) => {
+        if (!input.singleChoiceValue) {
+          return { valid: false, errorDescription: 'This field is required' };
+        }
+        return { valid: true };
+      },
     },
     {
       title: `I authorize MLH to send me an email where I can further opt into the MLH Hacker, Events, or Organizer Newsletters and other communications from MLH.`,
-      type: FormQuestionType.Checkbox,
+      type: FormQuestionType.SingleChoice,
       required: true,
+      options: [
+        { value: 'y', displayName: 'Yes' },
+        { value: 'n', displayName: 'No' },
+      ],
+      validationFunction: (input) => {
+        if (!input.singleChoiceValue) {
+          return { valid: false, errorDescription: 'This field is required' };
+        }
+        return { valid: true };
+      },
     },
   ],
   end: {

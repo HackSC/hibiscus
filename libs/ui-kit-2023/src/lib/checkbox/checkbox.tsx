@@ -1,12 +1,14 @@
+import { Text } from '@hibiscus/ui';
 import { useRef } from 'react';
 import styled from 'styled-components';
 
 export interface CheckboxProps {
   label: string;
+  checked: boolean;
   onInput: (value: boolean) => void;
 }
 
-export function Checkbox({ onInput, label }: CheckboxProps) {
+export function Checkbox({ onInput, label, checked }: CheckboxProps) {
   const ref = useRef<HTMLInputElement>(null);
   function handleChange() {
     if (!ref.current) {
@@ -17,8 +19,13 @@ export function Checkbox({ onInput, label }: CheckboxProps) {
 
   return (
     <StyledCheckbox>
-      {label}
-      <input ref={ref} onChange={handleChange} type="checkbox" />
+      <Text>{label}</Text>
+      <input
+        ref={ref}
+        onChange={handleChange}
+        type="checkbox"
+        checked={checked}
+      />
       <span className="checkmark"></span>
     </StyledCheckbox>
   );
