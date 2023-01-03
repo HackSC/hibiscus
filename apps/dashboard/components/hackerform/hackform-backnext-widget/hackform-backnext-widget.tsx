@@ -26,6 +26,7 @@ const BottomWidgetsContainer = styled.div`
   display: flex;
   justify-content: flex-end;
   margin: 1rem;
+  padding-bottom: 1rem;
 `;
 
 const BackNextContainer = styled.div`

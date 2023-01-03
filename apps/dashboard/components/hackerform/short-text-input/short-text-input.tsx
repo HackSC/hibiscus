@@ -6,12 +6,10 @@ import { useHackform } from '../../../hooks/use-hackform/use-hackform';
 
 type Props = { placeholder: string };
 
-export const ShortTextInput = (props: Props) => {
+export const ShortTextInput = ({ placeholder }: Props) => {
   const { currentQuestionIndex, responses, ...hackformUtils } = useHackform();
-  const { placeholder } = props;
-  const [textInput, setInput] = useState(
-    hackformUtils.getCurrentResponse()?.input.text ?? ''
-  );
+  const currentInput = hackformUtils.getCurrentResponse()?.input;
+  const [textInput, setInput] = useState(currentInput?.text ?? '');
 
   const getInputResponse: GetInputResponseCb = () => ({
     text: textInput,
