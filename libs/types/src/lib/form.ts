@@ -41,6 +41,8 @@ export enum FormQuestionType {
   SingleOptionDropdown = 'single-option-dropdown',
   Boolean = 'boolean',
   SingleChoice = 'single-choice',
+  File = 'file',
+  Checkbox = 'checkbox',
 }
 
 export interface HackformSubmission {
