@@ -1,5 +1,4 @@
 /* eslint-disable @next/next/no-img-element */
-import { H1 } from '@hibiscus/ui';
 import { FC } from 'react';
 import styled from 'styled-components';
 import ham from './mobile-navbar.module.css';
@@ -83,9 +82,8 @@ const MobileNavbarContainer = styled.div`
 `;
 
 const LogoContainer = styled.div`
-  width: 27vw;
   > img {
-    width: 27vw;
+    width: 12rem;
   }
 `;
 
