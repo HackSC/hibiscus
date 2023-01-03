@@ -21,7 +21,9 @@ export function LoginGuard({ callback, children }: LoginGuardProps) {
           if (res != null && res.redirect != null) {
             window.location.replace(res.redirect);
           } else {
-            setAuthorized(true);
+            window.location.replace(
+              process.env.NEXT_PUBLIC_SSO_DEFAULT_REDIRECT_URL
+            );
           }
         } else {
           setAuthorized(true);
