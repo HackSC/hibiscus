@@ -93,7 +93,7 @@ export const callbackApiHandler =
     }
   };
 
-const validCallbacks = [process.env.NEXT_PUBLIC_SSO_MOCK_APP_URL];
+const validCallbacks = [process.env.NEXT_PUBLIC_SSO_MOCK_APP_URL].map(getHost);
 
 /**
  * Calls the app's callback API route which sets the token as a cookie on the app
@@ -103,11 +103,7 @@ const validCallbacks = [process.env.NEXT_PUBLIC_SSO_MOCK_APP_URL];
  * @returns object containing `redirect` property or `null` if callback URL is not allowed
  */
 export async function ssoCallback(callback: string, token: string) {
-  if (
-    !validCallbacks
-      .map((it) => it.split('/', 1)[0])
-      .includes(callback.split('/', 1)[0])
-  ) {
+  if (!validCallbacks.includes(getHost(callback))) {
     return null;
   }
 
@@ -123,6 +119,10 @@ export async function ssoCallback(callback: string, token: string) {
   );
 
   return res.data;
+}
+
+function getHost(url: string): string {
+  return new URL(url).host;
 }
 
 /**
