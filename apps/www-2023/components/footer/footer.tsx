@@ -1,6 +1,7 @@
 import { Link } from '@hibiscus/ui';
 import Image from 'next/image';
 import styled from 'styled-components';
+import { Colors2023 } from '@hibiscus/styles';
 
 /* eslint-disable-next-line */
 export interface FooterProps {}
@@ -26,6 +27,11 @@ export function Footer(props: FooterProps) {
       src: '/img/instagram.svg',
       alt: 'Instagram',
       href: 'https://www.instagram.com/hackscofficial/',
+    },
+    {
+      src: '/img/mail.svg',
+      alt: 'Email',
+      href: 'mailto:team@hacksc.com',
     },
   ];
   const Vercel: { href: string; src: string; alt: string }[] = [
@@ -61,7 +67,7 @@ export function Footer(props: FooterProps) {
 export default Footer;
 
 const FooterWrapper = styled.div`
-  background-color: #f6f6f6;
+  background-color: ${Colors2023.GRAY.MEDIUM};
   justify-content: space-around;
   align-items: center;
   padding: 2rem;
