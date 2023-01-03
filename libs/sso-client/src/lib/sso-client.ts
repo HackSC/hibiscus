@@ -139,7 +139,7 @@ async function verifyToken(token: string) {
   return data;
 }
 
-export async function signOut() {
+export async function logout() {
   deleteCookie(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME);
   deleteCookie(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME, {
     domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
