@@ -18,13 +18,9 @@ export function LoginGuard({ callback, children }: LoginGuardProps) {
         if (data != null) {
           HibiscusSupabaseClient.setTokenCookieClientSide(data.token);
           const res = await SSOClient.ssoCallback(callback, data.token);
-          if (res != null && res.redirect != null) {
-            window.location.replace(res.redirect);
-          } else {
-            window.location.replace(
-              process.env.NEXT_PUBLIC_SSO_DEFAULT_REDIRECT_URL
-            );
-          }
+          window.location.replace(
+            res?.redirect ?? process.env.NEXT_PUBLIC_SSO_DEFAULT_REDIRECT_URL
+          );
         } else {
           setAuthorized(true);
         }
