@@ -20,3 +20,5 @@ export const ColorSpanBold = styled.span<ColorSpanProps>`
     color: ${({ color }) => color ?? '#ffffff'};
   }
 `;
+
+export default ColorSpan;

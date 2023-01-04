@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { H3 } from '../heading/heading';
 import { ColorSpan } from '../../../../ui-kit-2023/src/lib/color-span/color-span';
-import { Colors2023 } from '../../../../styles/src/lib/colors';
+import { Colors2023 } from '@hibiscus/styles';
 /* eslint-disable-next-line */
 /**
  * @property titleElement the element on the front where it will open the accordion on click event
