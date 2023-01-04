@@ -156,12 +156,6 @@ export class HibiscusSupabaseClient {
   static setTokenCookieClientSide(token: string) {
     setCookie(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME, token, {
       path: '/',
-      maxAge: Number.parseInt(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE),
-      sameSite: 'none',
-      secure: true,
-    });
-    setCookie(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME, token, {
-      path: '/',
       domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
       maxAge: Number.parseInt(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE),
       sameSite: 'none',

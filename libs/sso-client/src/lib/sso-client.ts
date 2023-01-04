@@ -59,7 +59,6 @@ export const callbackApiHandler =
           'Access-Control-Allow-Headers',
           'Authorization, Content-Type'
         );
-        res.setHeader('Access-Control-Allow-Credentials', 'true');
         res.status(200).json({ message: 'Success' });
       } else {
         res.status(400).json({ message: 'Invalid request origin' });
@@ -67,18 +66,10 @@ export const callbackApiHandler =
     } else if (req.method === 'POST') {
       const auth_header = req.headers.authorization;
       if (auth_header != null && auth_header.startsWith('Bearer ')) {
-        const token = auth_header.substring('Bearer '.length);
-
         res.setHeader('Access-Control-Allow-Origin', process.env.SSO_URL);
         res.setHeader(
           'Access-Control-Allow-Headers',
           'Authorization, Content-Type'
-        );
-        res.setHeader('Access-Control-Allow-Credentials', 'true');
-        res.setHeader('Access-Control-Expose-Headers', 'Set-Cookie');
-        res.setHeader(
-          'Set-Cookie',
-          `${process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME}=${token}; Path=/; Max-Age=${process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE}; SameSite=None; Secure`
         );
         res.status(200).json({
           message: 'Authorization success',
