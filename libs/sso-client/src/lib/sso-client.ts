@@ -133,7 +133,6 @@ export async function ssoCallback(callback: string, token: string) {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      withCredentials: true,
     }
   );
 
