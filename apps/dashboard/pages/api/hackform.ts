@@ -13,6 +13,8 @@ const handler: NextApiHandler = async (req, res) => {
     const id = req.query.id as string;
     const data = await client.getHackformSubmission(id);
     return res.status(200).json(data);
+  } else {
+    return res.status(405).send('Method not allowed');
   }
 };
 
