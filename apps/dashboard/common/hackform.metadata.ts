@@ -238,10 +238,10 @@ export const formMetadata2023HackerApps: FormMetadata = {
         { value: 'a', displayName: 'Advanced' },
       ],
     },
-    // {
-    //   title: 'Upload your resume',
-    //   type: FormQuestionType.File,
-    // },
+    {
+      title: 'Upload your resume',
+      type: FormQuestionType.File,
+    },
     {
       title: 'Link to personal website:',
       type: FormQuestionType.ShortText,

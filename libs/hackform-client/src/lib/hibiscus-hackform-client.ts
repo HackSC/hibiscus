@@ -43,10 +43,18 @@ export class HibiscusHackformClient {
             case FormQuestionType.Number:
               return { N: input.number };
             case FormQuestionType.SingleOptionDropdown:
+            case FormQuestionType.SingleChoice:
               return {
                 M: {
                   DisplayName: { S: input.text },
                   Value: { S: input.singleChoiceValue },
+                },
+              };
+            case FormQuestionType.File:
+              return {
+                M: {
+                  DisplayName: { S: input.file.displayName },
+                  FileKey: { S: input.file.fileKey },
                 },
               };
             case FormQuestionType.Date:
