@@ -4,6 +4,7 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 import { injectable } from 'tsyringe';
+import { credentials } from './credentials';
 
 @injectable()
 export class HackformResumeUploadClient {
@@ -14,6 +15,7 @@ export class HackformResumeUploadClient {
   constructor() {
     this.s3 = new S3Client({
       region: this.region,
+      credentials,
     });
   }
 

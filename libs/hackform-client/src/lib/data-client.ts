@@ -8,6 +8,7 @@ import {
 import { injectable } from 'tsyringe';
 import { v4 } from 'uuid';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
+import { credentials } from './credentials';
 
 @injectable()
 export class HackformSubmissionDataClient {
@@ -16,7 +17,10 @@ export class HackformSubmissionDataClient {
   private readonly awsRegion: string = 'us-west-1';
 
   constructor() {
-    this.ddb = new DynamoDBClient({ region: this.awsRegion });
+    this.ddb = new DynamoDBClient({
+      region: this.awsRegion,
+      credentials,
+    });
     // other variables will be set in environment
   }
 
