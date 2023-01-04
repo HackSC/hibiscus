@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { H3 } from '../heading/heading';
-import { ColorSpan } from '../../../../ui-kit-2023/src/lib/color-span/color-span';
 import { Colors2023 } from '@hibiscus/styles';
 /* eslint-disable-next-line */
 /**
@@ -90,4 +89,13 @@ const DisclosedElementContainer = styled.div`
   padding-left: 1.25rem;
   padding-right: 1rem;
   color: ${Colors2023.GRAY.LIGHT};
+`;
+
+interface ColorSpanProps {
+  color?: string;
+  weight?: number;
+}
+
+const ColorSpan = styled.span<ColorSpanProps>`
+  color: ${({ color }) => color ?? '#ffffff'};
 `;
