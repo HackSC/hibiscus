@@ -4,12 +4,12 @@ import {
   S3Client,
 } from '@aws-sdk/client-s3';
 import { injectable } from 'tsyringe';
-import { credentials } from './credentials';
+import { credentials, region } from './aws';
 
 @injectable()
 export class HackformResumeUploadClient {
   private readonly s3: S3Client;
-  private readonly region = 'us-west-1';
+  private readonly region = region;
   private readonly bucket = '2023-hacker-resumes';
 
   constructor() {

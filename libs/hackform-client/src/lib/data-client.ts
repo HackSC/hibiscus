@@ -8,13 +8,13 @@ import {
 import { injectable } from 'tsyringe';
 import { v4 } from 'uuid';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
-import { credentials } from './credentials';
+import { credentials, region } from './aws';
 
 @injectable()
 export class HackformSubmissionDataClient {
   private readonly ddb: DynamoDBClient;
   private readonly tableName: string = 'hacker-app-responses'; // table name in the database
-  private readonly awsRegion: string = 'us-west-1';
+  private readonly awsRegion: string = region;
 
   constructor() {
     this.ddb = new DynamoDBClient({
