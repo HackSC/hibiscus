@@ -78,7 +78,7 @@ export const callbackApiHandler =
         res.setHeader('Access-Control-Expose-Headers', 'Set-Cookie');
         res.setHeader(
           'Set-Cookie',
-          `${process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME}=${token}; Path=/; Max-Age=${process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE}`
+          `${process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME}=${token}; Path=/; Max-Age=${process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE}; SameSite=None; Secure`
         );
         res.status(200).json({
           message: 'Authorization success',
@@ -140,7 +140,7 @@ async function verifyToken(token: string) {
 }
 
 export async function logout() {
-  deleteCookie(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME);
+  deleteCookie(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME, { path: '/' });
 
   window.location.replace(`${process.env.NEXT_PUBLIC_SSO_URL}/logout`);
 }
