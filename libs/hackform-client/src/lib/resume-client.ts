@@ -19,20 +19,20 @@ export class HackformResumeUploadClient {
 
   /**
    * Upload hacker resume file with given key
-   * @param file File object representing the hacker resume's upload
+   * @param buf bytes Buffer object data representing the hacker resume's upload
    * @param key identifier for this resume file (must be unique)
    * @returns status code from the operation, attempts taken, and request ID
    * to the ext service
    */
   async uploadResume(
-    file: File,
+    buf: Buffer,
     key: string
   ): Promise<{ httpStatusCode: number; attempts: number; requestId: string }> {
     const { $metadata } = await this.s3.send(
       new PutObjectCommand({
         Bucket: this.bucket,
         Key: key,
-        Body: file,
+        Body: buf,
       })
     );
     return {
@@ -50,5 +50,9 @@ export class HackformResumeUploadClient {
       })
     );
     return result.$metadata;
+  }
+
+  async getResumePresignedUrl(key: string): Promise<string | null> {
+    return '';
   }
 }
