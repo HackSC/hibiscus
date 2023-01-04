@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { NextApiRequest, NextApiResponse } from 'next/types';
 import axios from 'axios';
-import { deleteCookie } from 'cookies-next';
 
 /**
  * Generates the NextJS middleware needed to integrate with the Hibiscus SSO system
@@ -26,14 +25,48 @@ export const middlewareHandler =
       }
     }
 
-    if (request.cookies.has(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME)) {
-      const token = request.cookies.get(
-        process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME
+    if (
+      request.cookies.has(process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME)
+    ) {
+      const access_token = request.cookies.get(
+        process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME
       );
-      const { data } = await verifyToken(token);
+      const refresh_token = request.cookies.get(
+        process.env.NEXT_PUBLIC_HIBISCUS_REFRESH_COOKIE_NAME
+      );
+      const { data } = await verifyToken(access_token, refresh_token);
 
-      if (data != null && data.user != null) {
-        return NextResponse.next();
+      if (data != null) {
+        if (data.session != null) {
+          const res = NextResponse.next();
+          res.cookies.set(
+            process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME,
+            data.session.access_token,
+            {
+              path: '/',
+              domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
+              maxAge: Number.parseInt(
+                process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE
+              ),
+              sameSite: 'lax',
+            }
+          );
+          res.cookies.set(
+            process.env.NEXT_PUBLIC_HIBISCUS_REFRESH_COOKIE_NAME,
+            data.session.refresh_token,
+            {
+              path: '/',
+              domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
+              maxAge: Number.parseInt(
+                process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE
+              ),
+              sameSite: 'lax',
+            }
+          );
+          return res;
+        } else if (data.user != null) {
+          return NextResponse.next();
+        }
       }
     }
 
@@ -112,10 +145,11 @@ export async function ssoCallback(callback: string, token: string) {
  * Exact copy of the one in hibiscus-supabase-client
  * We cannot use the one there because it imports reflect-metadata which cannot run on NextJS middleware
  *
- * @param token JWT access token associated with a user
+ * @param access_token JWT access token associated with a user
+ * @param refresh_token Supabase refresh token
  * @returns object containing `data` and `error` properties, either of which may be undefined
  */
-async function verifyToken(token: string) {
+async function verifyToken(access_token: string, refresh_token: string) {
   // The Fetch API is used instead of axios because this function needs to be used in
   // NextJS middleware and their edge functions do not support axios
   const res = await fetch(`${process.env.SSO_URL}/api/verifyToken`, {
@@ -124,14 +158,12 @@ async function verifyToken(token: string) {
       Accept: 'application/json',
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ token }),
+    body: JSON.stringify({ access_token, refresh_token }),
   });
   const data = await res.json();
   return data;
 }
 
 export async function logout() {
-  deleteCookie(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME, { path: '/' });
-
   window.location.replace(`${process.env.NEXT_PUBLIC_SSO_URL}/logout`);
 }

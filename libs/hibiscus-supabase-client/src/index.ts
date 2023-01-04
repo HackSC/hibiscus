@@ -63,7 +63,8 @@ export class HibiscusSupabaseClient {
     const data = res.data;
     if (data.user) {
       HibiscusSupabaseClient.setTokenCookieClientSide(
-        data.session.access_token
+        data.session.access_token,
+        data.session.refresh_token
       );
     }
     return res;
@@ -117,12 +118,25 @@ export class HibiscusSupabaseClient {
   /**
    * Verifies whether the provided access token is valid or has expired
    *
-   * @param token JWT access token associated with a user
+   * @param access_token JWT access token associated with a user
+   * @param refresh_token Supabase refresh token
    * @returns object containing `data` and `error` properties, either of which may be undefined
    */
-  async verifyToken(token: string): SSOApiVerifyToken {
-    const res = await this.client.auth.getUser(token);
-    return res;
+  async verifyToken(
+    access_token: string,
+    refresh_token: string
+  ): SSOApiVerifyToken {
+    const res = await this.client.auth.getUser(access_token);
+    if (res.data.user != null) {
+      return res;
+    } else {
+      // Try to refresh the access token
+      const data = await this.client.auth.setSession({
+        access_token,
+        refresh_token,
+      });
+      return data;
+    }
   }
 
   /**
@@ -144,8 +158,11 @@ export class HibiscusSupabaseClient {
    * Logs out of the current session
    */
   async logout() {
-    deleteCookie(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME, { path: '/' });
-    deleteCookie(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME, {
+    deleteCookie(process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME, {
+      path: '/',
+      domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
+    });
+    deleteCookie(process.env.NEXT_PUBLIC_HIBISCUS_REFRESH_COOKIE_NAME, {
       path: '/',
       domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
     });
@@ -153,13 +170,30 @@ export class HibiscusSupabaseClient {
     await this.client.auth.signOut();
   }
 
-  static setTokenCookieClientSide(token: string) {
-    setCookie(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME, token, {
-      path: '/',
-      domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
-      maxAge: Number.parseInt(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE),
-      sameSite: 'none',
-      secure: true,
-    });
+  static setTokenCookieClientSide(access_token: string, refresh_token: string) {
+    setCookie(
+      process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME,
+      access_token,
+      {
+        path: '/',
+        domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
+        maxAge: Number.parseInt(
+          process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE
+        ),
+        sameSite: 'lax',
+      }
+    );
+    setCookie(
+      process.env.NEXT_PUBLIC_HIBISCUS_REFRESH_COOKIE_NAME,
+      refresh_token,
+      {
+        path: '/',
+        domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
+        maxAge: Number.parseInt(
+          process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE
+        ),
+        sameSite: 'lax',
+      }
+    );
   }
 }
