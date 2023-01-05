@@ -47,11 +47,11 @@ const handler: NextApiHandler = async (req, res) => {
     const data = fs.readFileSync(file.filepath);
     const uploadClient = container.resolve(HackformResumeUploadClient);
     try {
-      const r = await uploadClient.uploadResume(data, key);
+      const meta = await uploadClient.uploadResume(data, key);
       return res.status(200).json({
         key,
         filepath: file.filepath,
-        meta: r,
+        meta,
       } as LocalAPIResponses['/resume']);
     } catch (e) {
       console.error(e);
