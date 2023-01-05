@@ -5,7 +5,7 @@
 <h3 align="center" style="font-style: italic;">An all-in-one, plug-and-play hackathon platform</h3>
 <hr/>
 
-As a part of our 2023's effort to revamp the entire organization, Engineering moved forward with a robust multiplatforms approach to enhance the event and experience for Hackers. This repository is the main monorepo / source of truth for all platforms created for HackSC by the Engineering organizer team.
+As a part of our 2023's effort to revamp the entire organization, Engineering moved forward with a robust multiplatforms approach to enhance the event and experience for Hackers. This repository is the main monorepo / source of truth for all platforms created for HackSC by the Engineering organizer team. Our hope is that by open-sourcing our work, other organizations can easily adopt our platforms as basic infrastructure to hold their own hackathons.
 
 This monorepo is powered by [Nx](https://nx.dev), a smart, fast and extensible build system.
 

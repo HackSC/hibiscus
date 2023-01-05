@@ -36,6 +36,16 @@ export namespace Colors2023 {
     STANDARD: '#FE5139',
     LIGHT: '#FFA295',
   };
+  export const YELLOW = {
+    DARK: '#AE8C1D',
+    STANDARD: '#FFD23C',
+    LIGHT: '#FFE89C',
+  };
+  export const GREEN = {
+    DARK: '#6F9A28',
+    STANDARD: '#C2FA67',
+    LIGHT: '#E9FFC5',
+  };
   export const roleColors = {
     [HibiscusRole.HACKER]: {
       light: BLUE.LIGHT,

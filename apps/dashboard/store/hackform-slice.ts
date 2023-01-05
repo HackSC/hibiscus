@@ -72,6 +72,11 @@ export const hackformSlice = createSlice({
             singleChoiceValue: response.input.singleChoiceValue,
           };
           break;
+        case FormQuestionType.MultipleSelect:
+          input = {
+            choices: response.input.choices,
+          };
+          break;
         default:
           break;
       }

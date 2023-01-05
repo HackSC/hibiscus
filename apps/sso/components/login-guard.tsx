@@ -21,11 +21,9 @@ export function LoginGuard({ callback, children }: LoginGuardProps) {
             data.refresh_token
           );
           const res = await SSOClient.ssoCallback(callback, data.access_token);
-          if (res != null && res.redirect != null) {
-            window.location.replace(res.redirect);
-          } else {
-            setAuthorized(true);
-          }
+          window.location.replace(
+            res?.redirect ?? process.env.NEXT_PUBLIC_SSO_DEFAULT_REDIRECT_URL
+          );
         } else {
           setAuthorized(true);
         }

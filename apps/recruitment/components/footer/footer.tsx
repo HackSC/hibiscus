@@ -32,7 +32,7 @@ export function Footer(props: FooterProps) {
     {
       src: '/img/vercel.svg',
       alt: 'Vercel',
-      href: 'https://www.vercel.com/hacksc/',
+      href: 'https://www.vercel.com/',
     },
   ];
 
