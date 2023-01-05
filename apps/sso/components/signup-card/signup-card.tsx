@@ -39,15 +39,8 @@ export function SignUpCard(props: SignUpProps) {
         const message = error.message;
         setErrorMessage(message);
         setHideErrorMessage(false);
+        return;
       }
-    }
-
-    if (data.user.aud === 'authenticated') {
-      setErrorMessage(
-        'This email has already been registered. Please login instead.'
-      );
-      setHideErrorMessage(false);
-      return;
     }
 
     if (data.user) {
