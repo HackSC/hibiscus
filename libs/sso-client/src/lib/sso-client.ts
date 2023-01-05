@@ -101,6 +101,10 @@ export const callbackApiHandler =
  * @returns object containing `data` property
  */
 export async function ssoCallback(callback: string, token: string) {
+  if (callback == null) {
+    return null;
+  }
+
   const res = await axios.post(
     callback,
     {},
