@@ -17,7 +17,7 @@ export default class API {
     form.append('key', key);
     const res = await axios.post('/api/resume', form);
     const data = res.data as LocalAPIResponses['/resume'];
-    return data;
+    return { key, filepath: data.filepath, meta: data.meta };
   }
 
   /**
