@@ -9,12 +9,11 @@ import { credentials, region } from './aws';
 @injectable()
 export class HackformResumeUploadClient {
   private readonly s3: S3Client;
-  private readonly region = region;
   private readonly bucket = '2023-hacker-resumes';
 
   constructor() {
     this.s3 = new S3Client({
-      region: this.region,
+      region,
       credentials,
     });
   }

@@ -14,11 +14,10 @@ import { credentials, region } from './aws';
 export class HackformSubmissionDataClient {
   private readonly ddb: DynamoDBClient;
   private readonly tableName: string = 'hacker-app-responses'; // table name in the database
-  private readonly awsRegion: string = region;
 
   constructor() {
     this.ddb = new DynamoDBClient({
-      region: this.awsRegion,
+      region,
       credentials,
     });
     // other variables will be set in environment
