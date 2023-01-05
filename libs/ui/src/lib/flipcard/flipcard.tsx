@@ -1,113 +1,60 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { GradientSpan } from '../gradient-span/gradient-span';
-import { H2, H3 } from '../heading/heading';
-import { Text } from '../text/text';
 
-/* eslint-disable-next-line */
-/**
- * @property titleElement the element on the front where it will open the flip on click event
- */
-type Props = React.PropsWithChildren<{
-  title: React.ReactNode;
-  extendedTitle: React.ReactNode; // element on the front
-}>;
+type Props = {
+  front: string;
+  back: string;
+};
 
-/**
- * A general purpose flip component
- * @param props
- */
-export function FlipCard(props: Props) {
+const FlipCard: React.FC<Props> = ({ front, back }) => {
+  const [isFlipped, setIsFlipped] = useState(false);
+
   return (
-    <FlipContainer>
-      <FlipInner>
-        <FlipFront>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <GradientSpan>
-              <StyledH2>{props.title}</StyledH2>
-            </GradientSpan>
-            <SloganText>{props.children}</SloganText>
-          </div>
-        </FlipFront>
-        <FlipBack>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            <GradientSpan>
-              <StyledH3>{props.extendedTitle}</StyledH3>
-            </GradientSpan>
-            <Description>{props.children}</Description>
-          </div>
-        </FlipBack>
-      </FlipInner>
-    </FlipContainer>
+    <Card onClick={() => setIsFlipped(!isFlipped)} isFlipped={isFlipped}>
+      <CardInner>
+        <CardFront>{front}</CardFront>
+        <CardBack>{back}</CardBack>
+      </CardInner>
+    </Card>
   );
-}
+};
+
+const Card = styled.div<{ isFlipped: boolean }>`
+  perspective: 1000px;
+  height: 200px;
+  width: 300px;
+  margin: 0 auto;
+  transform: ${(props) => `rotateY(${props.isFlipped ? 180 : 0}deg)`};
+`;
+
+const CardInner = styled.div`
+  position: relative;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+`;
+
+const CardFront = styled.div`
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  backface-visibility: hidden;
+  background-color: #f1f1f1;
+  color: #333;
+  padding: 20px;
+`;
+
+const CardBack = styled.div`
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  backface-visibility: hidden;
+  background-color: #333;
+  color: #fff;
+  transform: rotateY(180deg);
+  padding: 20px;
+`;
 
 export default FlipCard;
-
-const FlipContainer = styled.div`
-  width: 600px;
-  height: 500px;
-  border: 1px solid #f6f6f6;
-  margin-bottom: 0.1rem;
-  perspective: 2200px;
-  :hover {
-    transform: rotateY(180deg);
-  }
-`;
-
-const FlipInner = styled.div`
-  position: relative;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  transition: transform 0.8s;
-  transform-style: preserve-3d;
-  transform: rotateY(180deg);
-`;
-
-const SloganText = styled(Text)``;
-
-const StyledH2 = styled(H2)`
-  font-size: 5rem;
-  text-align: center;
-`;
-
-const StyledH3 = styled(H3)`
-  font-size: 4rem;
-  text-align: center;
-`;
-
-const Description = styled(Text)``;
-
-const FlipFront = styled.button`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  background-color: #bbb;
-  color: black;
-`;
-
-const FlipBack = styled.div`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-  background-color: dodgerblue;
-  color: white;
-  transform: rotateY(180deg);
-`;
