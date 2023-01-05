@@ -103,6 +103,7 @@ export function useHackform(formMetadata = formMetadata2023HackerApps) {
     getCurrentResponse: () => currentResponse,
     getCurrentError: () => currentError,
     getCurrentQuestion: () => currentQuestion,
+    getSubmission: () => submission,
     getFirstError,
     goNextQuestion: () => dispatch(goNextQuestion()),
     goPreviousQuestion: () => dispatch(goPreviousQuestion()),

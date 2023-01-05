@@ -77,7 +77,11 @@ export const hackformSlice = createSlice({
             choices: response.input.choices,
           };
           break;
+        case FormQuestionType.File:
+          input = { file: response.input.file };
+          break;
         default:
+          input = response.input;
           break;
       }
       state.submission.responses[state.cqi] = { input };

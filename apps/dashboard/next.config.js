@@ -2,7 +2,7 @@
 const withNx = require('@nrwl/next/plugins/with-nx');
 
 /**
- * @type {import('@nrwl/next/plugins/with-nx').WithNxOptions}
+ * @type {import('@nrwl/next/plugins/with-nx.js').WithNxOptions}
  **/
 const nextConfig = {
   nx: {

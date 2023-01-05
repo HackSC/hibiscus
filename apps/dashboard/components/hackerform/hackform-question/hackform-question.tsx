@@ -8,6 +8,9 @@ import { SingleChoiceInput } from '../single-choice-input/single-choice-input';
 import { DateQuestionInput } from '../date-question/date-question';
 import ShortTextInput from '../short-text-input/short-text-input';
 import MultiSelectQuestion from '../multi-select-question/multi-select-question';
+import FileQuestion from '../file-question/file-question';
+import '@uppy/core/dist/style.css';
+import '@uppy/dashboard/dist/style.css';
 
 export function HackformQuestionComponent() {
   const { currentQuestionIndex, ...hackformUtils } = useHackform();
@@ -53,6 +56,8 @@ export function HackformQuestionComponent() {
             options={question.options}
           />
         );
+      case FormQuestionType.File:
+        return <FileQuestion key={currentQuestionIndex} />;
       default:
         return null;
     }

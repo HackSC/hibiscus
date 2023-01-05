@@ -56,6 +56,10 @@ export interface HackformQuestionResponse {
     choices?: string[]; // indexes of the choices; if it's a single choice, size=1
     boolean?: boolean;
     singleChoiceValue?: string; // value associated with the choice
+    file?: {
+      displayName: string; // display name to the user
+      fileKey: string; // actual filename in file storage
+    };
   };
 }
 

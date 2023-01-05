@@ -10,6 +10,10 @@ export const formMetadata2023HackerApps: FormMetadata = {
   },
   questions: [
     {
+      title: 'Upload your resume',
+      type: FormQuestionType.File,
+    },
+    {
       title: 'Please confirm your full name',
       type: FormQuestionType.ShortText,
       placeholder: 'Enter your full name here',
@@ -238,10 +242,6 @@ export const formMetadata2023HackerApps: FormMetadata = {
         { value: 'a', displayName: 'Advanced' },
       ],
     },
-    // {
-    //   title: 'Upload your resume',
-    //   type: FormQuestionType.File,
-    // },
     {
       title: 'Link to personal website:',
       type: FormQuestionType.ShortText,
