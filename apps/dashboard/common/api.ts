@@ -1,17 +1,22 @@
 import { HackformSubmission } from '@hibiscus/types';
 import axios from 'axios';
-import { v4 } from 'uuid';
 import { LocalAPIResponses } from './types';
 
 export default class API {
+  static createFileKey(file: File): string {
+    const sfn = file.name.split('.');
+    const ext = sfn[sfn.length - 1];
+    const name = sfn[0];
+    return `${name}-${new Date().valueOf()}.${ext}`;
+  }
+
   /**
    * Submits resume to file storage. Uses a `UUID` for name by default
    *
    * @param file File object
    * @returns data from API response
    */
-  static async submitResume(file: File) {
-    const key = v4();
+  static async submitResume(file: File, key: string) {
     const form = new FormData();
     form.append('file', file);
     form.append('key', key);
