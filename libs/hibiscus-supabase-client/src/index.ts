@@ -4,6 +4,7 @@ import 'reflect-metadata';
 import {
   createClient,
   EmailOtpType,
+  Session,
   SupabaseClient,
 } from '@supabase/supabase-js';
 import { injectable } from 'tsyringe';
@@ -142,13 +143,13 @@ export class HibiscusSupabaseClient {
   /**
    * Validates the current session (stored in localStorage)
    *
-   * @returns `data` object `{ token }`
+   * @returns `Session` object
    */
-  async validateSession(): Promise<{ token: string }> {
+  async validateSession(): Promise<Session> {
     const { data } = await this.client.auth.getSession();
 
     if (data.session != null) {
-      return { token: data.session.access_token };
+      return data.session;
     }
 
     return null;
