@@ -1,13 +1,14 @@
 import { HackformSubmission } from '@hibiscus/types';
 import axios from 'axios';
 import { LocalAPIResponses } from './types';
+import mime from 'mime-types';
 
 export default class API {
   static createFileKey(file: File): string {
     const sfn = file.name.split('.');
-    const ext = sfn[sfn.length - 1];
+    const defext = mime.extension(file.type);
     const name = sfn[0];
-    return `${name}-${new Date().valueOf()}.${ext}`;
+    return `${name}-${new Date().valueOf()}.${defext}`;
   }
 
   /**
