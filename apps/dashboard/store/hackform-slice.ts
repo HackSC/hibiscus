@@ -2,9 +2,9 @@ import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from './store';
 import {
-  FormMetadata,
-  FormQuestion,
-  FormQuestionType,
+  HackformMetadata,
+  HackformQuestion,
+  HackformQuestionType,
   HackformError,
   HackformQuestionResponse,
   HackformSubmission,
@@ -12,7 +12,7 @@ import {
 import { formMetadata2023HackerApps } from '../common/hackform.metadata';
 
 export interface HackformState {
-  formMetadata: FormMetadata;
+  formMetadata: HackformMetadata;
   cqi: number;
   submission: HackformSubmission;
   errors: Record<number, HackformError>;
@@ -25,6 +25,7 @@ const initialState: HackformState = {
     questions: formMetadata2023HackerApps.questions.map((q) => ({
       ...q,
       validationFunction: undefined,
+      options: undefined,
     })),
   },
   cqi: -1,
@@ -59,25 +60,27 @@ export const hackformSlice = createSlice({
       const question = state.formMetadata.questions[state.cqi];
       let input: HackformQuestionResponse['input'] = {};
       switch (question.type) {
-        case FormQuestionType.Date:
-        case FormQuestionType.Email:
-        case FormQuestionType.ShortText:
-        case FormQuestionType.LongText: // they will all fill the text field in the input.
+        case HackformQuestionType.Date:
+        case HackformQuestionType.Email:
+        case HackformQuestionType.ShortText:
+        case HackformQuestionType.LongText: // they will all fill the text field in the input.
           input = { text: response.input.text };
           break;
-        case FormQuestionType.SingleOptionDropdown:
-        case FormQuestionType.SingleChoice:
+        case HackformQuestionType.SingleOptionDropdown:
+        case HackformQuestionType.SingleChoice:
           input = {
             text: response.input.text,
             singleChoiceValue: response.input.singleChoiceValue,
           };
           break;
-        case FormQuestionType.MultipleSelect:
+        case HackformQuestionType.MultipleSelect:
           input = {
             choices: response.input.choices,
+            text: response.input.text,
+            singleChoiceValue: response.input.singleChoiceValue,
           };
           break;
-        case FormQuestionType.File:
+        case HackformQuestionType.File:
           input = { file: response.input.file };
           break;
         default:
@@ -108,13 +111,13 @@ const hackformReducer = hackformSlice.reducer;
 export default hackformReducer;
 
 // selectors
-const isQuestion = (cqi: number, formMetadata: FormMetadata) =>
+const isQuestion = (cqi: number, formMetadata: HackformMetadata) =>
   cqi >= 0 && cqi < formMetadata.questions.length;
 
 export const getCQI = ({ hackform }: RootState) => hackform.cqi;
 export const getCurrentQuestion = ({
   hackform,
-}: RootState): FormQuestion | null =>
+}: RootState): HackformQuestion | null =>
   isQuestion(hackform.cqi, hackform.formMetadata)
     ? hackform.formMetadata.questions[hackform.cqi]
     : null;

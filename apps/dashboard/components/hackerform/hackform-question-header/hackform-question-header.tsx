@@ -1,10 +1,10 @@
 import { Colors2023 } from '@hibiscus/styles';
-import { FormQuestion } from '@hibiscus/types';
+import { HackformQuestion } from '@hibiscus/types';
 import { H1, H3 } from '@hibiscus/ui';
 import styled from 'styled-components';
 
 interface HackformQuestionHeaderProps {
-  question: FormQuestion;
+  question: HackformQuestion;
   qi: number;
 }
 

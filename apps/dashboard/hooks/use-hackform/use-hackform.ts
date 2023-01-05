@@ -1,5 +1,5 @@
 import {
-  FormQuestion,
+  HackformQuestion,
   HackformError,
   HackformQuestionResponse,
 } from '@hibiscus/types';
@@ -26,8 +26,7 @@ export function useHackform(formMetadata = formMetadata2023HackerApps) {
   );
   const currentResponse: HackformQuestionResponse | null =
     useAppSelector(getCurrentResponse);
-  const currentQuestion: FormQuestion | null =
-    useAppSelector(getCurrentQuestion);
+  const currentQuestion: HackformQuestion | null = formMetadata.questions[cqi];
   const currentError: HackformError | null = useAppSelector(getCurrentError);
 
   const getFirstError = (): [number, HackformError] => {

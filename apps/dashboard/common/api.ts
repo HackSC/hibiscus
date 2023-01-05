@@ -40,4 +40,9 @@ export default class API {
     const res = await axios.get(`/api/hackform?id=${id}`);
     return res.data;
   }
+
+  static async getSchools(): Promise<string[]> {
+    const res = await axios.get('/api/schools');
+    return res.data as string[];
+  }
 }

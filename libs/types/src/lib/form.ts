@@ -6,22 +6,22 @@ export interface Option {
   displayName: string;
 }
 
-export interface FormMetadata {
+export interface HackformMetadata {
   entry: {
     title: React.ReactNode;
     subtitle?: React.ReactNode;
     estTimeInMinutes?: number;
   };
-  questions: FormQuestion[];
+  questions: HackformQuestion[];
   end: {
     title: React.ReactNode;
     subtitle?: React.ReactNode;
   };
 }
 
-export interface FormQuestion {
+export interface HackformQuestion {
   title: string;
-  type: FormQuestionType;
+  type: HackformQuestionType;
   placeholder?: string;
   required?: boolean;
   hasOtherField?: boolean;
@@ -29,10 +29,11 @@ export interface FormQuestion {
     valid: boolean;
     errorDescription?: HackformError;
   };
-  options?: Option[];
+  options?: Option[] | (() => Promise<Option[]>);
+  limitOptions?: number;
 }
 
-export enum FormQuestionType {
+export enum HackformQuestionType {
   ShortText = 'short-text',
   LongText = 'long-text',
   Email = 'email',

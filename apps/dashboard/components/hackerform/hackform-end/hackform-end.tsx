@@ -1,5 +1,5 @@
 import { Colors2023 } from '@hibiscus/styles';
-import { FormMetadata } from '@hibiscus/types';
+import { HackformMetadata } from '@hibiscus/types';
 import { H1, H3, Link } from '@hibiscus/ui';
 import { Button, GlowSpan } from '@hibiscus/ui-kit-2023';
 import { useHackform } from '../../../hooks/use-hackform/use-hackform';
@@ -9,7 +9,7 @@ import API from '../../../common/api';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface HackformEndingProps {
-  formMetadata: FormMetadata;
+  formMetadata: HackformMetadata;
 }
 
 export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
