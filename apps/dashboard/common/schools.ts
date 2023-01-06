@@ -1,4 +1,4 @@
-21st Century Cyber Charter School
+export const SCHOOL_LINES = `21st Century Cyber Charter School
 Aalto University
 Aarhus University
 Abbey Park High School
@@ -2174,4 +2174,4 @@ Zespół Szkół im. Jana Pawła II w Niepołomicach
 Zespół Szkół Łączności, Monte Cassino 31
 Zespół Szkół nr 1 im. Jana Pawła II w Przysusze
 Zespół szkół nr 1 im. Stanisława Staszica w Bochni
-Zespół Szkół Nr.2 im. Jana Pawła II w Miechowie
+Zespół Szkół Nr.2 im. Jana Pawła II w Miechowie`;
