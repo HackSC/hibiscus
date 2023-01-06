@@ -1,6 +1,6 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import './styles.css';
+import { GlobalStyles2023 } from '@hibiscus/styles';
 
 function CustomApp({ Component, pageProps }: AppProps) {
   return (
@@ -9,6 +9,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <title>Welcome to landing-page!</title>
       </Head>
       <main className="app">
+        <GlobalStyles2023 />
         <Component {...pageProps} />
       </main>
     </>

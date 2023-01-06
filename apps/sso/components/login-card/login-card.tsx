@@ -35,7 +35,9 @@ export function LoginCard() {
         sessionStorage.getItem('callback'),
         token
       );
-      window.location.replace(res?.redirect ?? '/');
+      window.location.replace(
+        res?.redirect ?? process.env.NEXT_PUBLIC_SSO_DEFAULT_REDIRECT_URL
+      );
     }
   }
 
