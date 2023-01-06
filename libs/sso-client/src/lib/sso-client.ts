@@ -101,22 +101,27 @@ export const callbackApiHandler =
  * @returns object containing `data` property
  */
 export async function ssoCallback(callback: string, token: string) {
-  if (callback == null) {
+  // callback can === '' (empty string) when no callback is specified
+  if (callback == null || callback === '') {
     return null;
   }
 
-  const res = await axios.post(
-    callback,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      withCredentials: true,
-    }
-  );
+  try {
+    const res = await axios.post(
+      callback,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      }
+    );
 
-  return res.data;
+    return res.data;
+  } catch {
+    return null;
+  }
 }
 
 /**
