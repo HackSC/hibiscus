@@ -1,10 +1,6 @@
-import { DashboardRepository } from 'apps/dashboard/repository/DashboardRepository';
+import { DashboardRepository } from '../../../repository/dashboard.repository';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { container } from 'tsyringe';
-// import entire SDK
-import AWS from 'aws-sdk';
-// import individual service
-import S3 from 'aws-sdk/clients/s3';
 
 export default async function invite(
   req: NextApiRequest,
@@ -30,7 +26,7 @@ export default async function invite(
   }
 
   //add check that invited user email even exists
-  let checkEmailExists = async () => {
+  const checkEmailExists = async () => {
     const { data, error } = await supabase
       .from('user_profiles')
       .select()

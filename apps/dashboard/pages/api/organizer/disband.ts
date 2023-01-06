@@ -1,4 +1,4 @@
-import { DashboardRepository } from 'apps/dashboard/repository/DashboardRepository';
+import { DashboardRepository } from '../../../repository/dashboard.repository';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { container } from 'tsyringe';
 
@@ -8,10 +8,10 @@ export default async function disbandTeam(
 ) {
   const repo = container.resolve(DashboardRepository);
   const supabase = repo.getClient();
-  let teamId: string = req.body.team_id;
-  let organizerId: string = req.body.organizer_id;
-  //verify user is organizer of team
-  let isOrganizer = await repo.verifyUserIsOrganizer(organizerId, teamId);
+  const teamId: string = req.body.team_id;
+  const organizerId: string = req.body.organizer_id;
+  // verify user is organizer of team
+  const isOrganizer = await repo.verifyUserIsOrganizer(organizerId, teamId);
 
   if (!isOrganizer) {
     res.status(500).json({
@@ -19,8 +19,8 @@ export default async function disbandTeam(
     });
   }
 
-  //find all users related to team_id. update all their team_id to null
-  let updateAllTeamMembers = async () => {
+  // find all users related to team_id. update all their team_id to null
+  const updateAllTeamMembers = async () => {
     const { data, error } = await supabase
       .from('user_profiles')
       .update({ team_id: null })
@@ -30,13 +30,13 @@ export default async function disbandTeam(
     return { data, error };
   };
 
-  let returnData = await updateAllTeamMembers();
+  const returnData = await updateAllTeamMembers();
   if (returnData.error) {
     return res.status(500).json({ message: returnData.error.message });
   }
 
   //delete all records of invites involving that team
-  let deleteInvites = async () => {
+  const deleteInvites = async () => {
     const { data, error } = await supabase
       .from('invitations')
       .delete()
@@ -49,7 +49,7 @@ export default async function disbandTeam(
   }
 
   //delete record for corresponding team
-  let deleteTeam = async () => {
+  const deleteTeam = async () => {
     const { data, error } = await supabase
       .from('teams')
       .delete()

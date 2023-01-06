@@ -1,14 +1,14 @@
 import 'reflect-metadata';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { container } from 'tsyringe';
-import { DashboardRepository } from 'apps/dashboard/repository/DashboardRepository';
+import { DashboardRepository } from '../../../repository/dashboard.repository';
 
 /**
- * [createTeam Creates a team in the teams table.]
- * @param  {[NextApiRequest]} req - (name, key, description, photo_key, user_id) : (string, string, string,
+ * Creates a team in the teams table
+ * @param req - (name, key, description, photo_key, user_id) : (string, string, string,
  *      string-link to photo, string-user_id of person creating team)
- * @param {[NextApiResponse]} res - Only used for returning Json messages
- * @return {[NextApiResponse]} 500 if error in creation. 200 if team created successfully
+ * @param res - Only used for returning Json messages
+ * @return 500 if error in creation. 200 if team created successfully
  */
 export default async function createTeam(
   req: NextApiRequest,
@@ -16,10 +16,10 @@ export default async function createTeam(
 ) {
   const repo = container.resolve(DashboardRepository);
   const supabase = repo.getClient();
-  let name: string = req.body.name;
-  let description: string | null = req.body.description;
-  let photoKey: string | null = req.body.photo_key;
-  let organizerId: string = req.body.organizer_id;
+  const name: string = req.body.name;
+  const description: string | null = req.body.description;
+  const photoKey: string | null = req.body.photo_key;
+  const organizerId: string = req.body.organizer_id;
 
   //test name isnt "". Null and "" should be caught by frontend anyway but just in case
   if (!name) {
@@ -58,7 +58,7 @@ export default async function createTeam(
   }
 
   //insert team_id into user_profiles table
-  let updateOrganizerTeam = async (team_id) => {
+  const updateOrganizerTeam = async (team_id: string) => {
     const { data, error } = await supabase
       .from('user_profiles')
       .update({ team_id: team_id })

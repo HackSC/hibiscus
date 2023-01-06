@@ -1,5 +1,5 @@
 import { injectable } from 'tsyringe';
-import { HibiscusSupabaseClient } from '@hacksc-platforms/hibiscus-supabase-client';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 
 @injectable()
 export class DashboardRepository {
@@ -7,7 +7,10 @@ export class DashboardRepository {
   constructor(private readonly hbc: HibiscusSupabaseClient) {}
 
   private readonly client = this.hbc.getClient();
-  public readonly MAX_TEAM_MEMBERS = this.hbc.MAX_TEAM_MEMBERS;
+  public readonly MAX_TEAM_MEMBERS: number = parseInt(
+    process.env.NEXT_PUBLIC_MAX_TEAM_MEMBERS
+  );
+
   getClient() {
     return this.client;
   }
@@ -23,7 +26,7 @@ export class DashboardRepository {
   }
 
   //checks if the user has no team, if it does, then length > 0
-  async checkHasNoTeam(userId) {
+  async checkHasNoTeam(userId: string) {
     const { data, error } = await this.client
       .from('user_profiles')
       .select()
@@ -33,7 +36,7 @@ export class DashboardRepository {
   }
 
   async verifyUserIsOrganizer(userId: string, teamId: string) {
-    const { data, error } = await this.client
+    const { data } = await this.client
       .from('teams')
       .select()
       .eq('organizer_id', userId)

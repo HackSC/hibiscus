@@ -1,4 +1,4 @@
-import { DashboardRepository } from 'apps/dashboard/repository/DashboardRepository';
+import { DashboardRepository } from '../../../repository/dashboard.repository';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { container } from 'tsyringe';
 

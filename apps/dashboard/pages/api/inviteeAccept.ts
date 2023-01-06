@@ -1,14 +1,17 @@
-import { createClient } from '@supabase/supabase-js';
-const supabaseUrl = 'http://localhost:54321';
-const supabaseKey = process.env.SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey);
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { NextApiHandler } from 'next';
+import { container } from 'tsyringe';
 
-export default async function handle(req, res) {
+const handler: NextApiHandler = async (req, res) => {
+  const supabase = container.resolve(HibiscusSupabaseClient).getClient();
   //add the team id to the user prfiles
+  const teamId = req.body.team_id as string;
+  const userId = req.body.user_id as string;
+  const inviteId = req.body.invitation_id as string;
   const { error } = await supabase
     .from('user_profiles')
-    .update({ team_id: req.team_id })
-    .eq('user_id', req.user_id);
+    .update({ team_id: teamId })
+    .eq('user_id', userId);
 
   if (error !== null) {
     console.log(error.message);
@@ -19,7 +22,7 @@ export default async function handle(req, res) {
     const { error } = await supabase
       .from('invitations')
       .update({ status: 1 })
-      .eq('id', req.invitation_id);
+      .eq('id', inviteId);
     if (error != null) {
       console.log(error.message);
     } else {
@@ -29,4 +32,6 @@ export default async function handle(req, res) {
       //code for email notification
     }
   }
-}
+};
+
+export default handler;

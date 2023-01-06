@@ -20,9 +20,7 @@ import { setCookie } from 'cookies-next';
 @injectable()
 export class HibiscusSupabaseClient {
   private readonly client: SupabaseClient;
-  public readonly MAX_TEAM_MEMBERS: number = parseInt(
-    process.env.MAX_TEAM_MEMBERS
-  );
+
   constructor() {
     this.client = createClient(
       process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_API_URL,
