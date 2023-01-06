@@ -15,3 +15,5 @@ export default async function handle(req, res) {
     res.status(200).json(data);
   }
 }
+
+//TODO: fix to add team info with user info
