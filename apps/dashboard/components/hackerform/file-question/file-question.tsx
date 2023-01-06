@@ -26,7 +26,7 @@ export const FileQuestion = () => {
 
   const handleSubmit = async () => {
     // send into the store
-    await API.submitResume(uploaded, fileKey);
+    if (uploaded !== null) API.submitResume(uploaded, fileKey);
     // call the function with those
     const cb = hackformUtils.createCbSubmitValidate(getInputResponse);
     cb();
@@ -34,7 +34,7 @@ export const FileQuestion = () => {
 
   const handleNext = async () => {
     // send into the store
-    await API.submitResume(uploaded, fileKey);
+    if (uploaded !== null) API.submitResume(uploaded, fileKey);
     const cb =
       hackformUtils.createCbGoNextQuestionValidateSilently(getInputResponse);
     cb();

@@ -1,5 +1,5 @@
 import { Option } from '@hibiscus/types';
-import { OneLineText, Radio } from '@hibiscus/ui-kit-2023';
+import { Radio } from '@hibiscus/ui-kit-2023';
 import { GetInputResponseCb } from '../../../common/types';
 import { useState } from 'react';
 import styled from 'styled-components';

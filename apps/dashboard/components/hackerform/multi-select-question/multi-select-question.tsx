@@ -5,6 +5,7 @@ import QuestionCreator from '../question-creator/question-creator';
 import { useHackform } from '../../../hooks/use-hackform/use-hackform';
 import styled from 'styled-components';
 import { Option } from '@hibiscus/types';
+import { DEFAULT_OTHERS_FIELD_LABEL } from '../../../common/constants';
 
 export interface MultiSelectQuestionProps {
   options: Option[];
@@ -39,6 +40,25 @@ export const MultiSelectQuestion = (props: MultiSelectQuestionProps) => {
     }
   };
 
+  const handleClickOthers = (newVal: boolean) => {
+    if (!newVal) {
+      // uncheck
+      setOther(null);
+      return;
+    }
+    setOther({
+      value: '',
+      displayName: other?.displayName,
+    });
+  };
+
+  const handleChangeOthersText: React.ChangeEventHandler<HTMLInputElement> = (
+    e
+  ) => {
+    const input = e.target.value;
+    setOther((prev) => ({ ...prev, displayName: input }));
+  };
+
   const question = hackformUtils.getCurrentQuestion();
 
   const InputComponent = (
@@ -50,32 +70,20 @@ export const MultiSelectQuestion = (props: MultiSelectQuestionProps) => {
             key={i}
             onInput={createCbHandleOnCheck(item)}
             checked={values.includes(item.value)}
-            disabled={other !== null}
+            disabled={other !== null} // disable if picked Others
           />
         ))}
       {question.hasOtherField && (
         <OtherWrapper>
           <Checkbox
-            label="Other"
-            checked={other !== null}
-            onInput={(val) => {
-              if (!val) {
-                setOther(null);
-                return;
-              }
-              setOther({
-                value: '',
-                displayName: other?.displayName,
-              });
-            }}
+            label={question.otherFieldLabel ?? DEFAULT_OTHERS_FIELD_LABEL}
+            checked={other !== null} // when this option was picked
+            onInput={handleClickOthers}
           />
           <OneLineText
             value={other?.displayName}
-            disabled={other === null}
-            onChange={(e) => {
-              const input = e.target.value;
-              setOther((prev) => ({ ...prev, displayName: input }));
-            }}
+            disabled={other === null} // disable when didn't pick Others
+            onChange={handleChangeOthersText}
           />
         </OtherWrapper>
       )}

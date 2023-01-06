@@ -2,11 +2,11 @@ import { HackformQuestionType } from '@hibiscus/types';
 import { useHackform } from '../../../hooks/use-hackform/use-hackform';
 import React from 'react';
 import styled from 'styled-components';
-import LongTextQuestion from '../long-text-input/long-text-input';
-import SearchableOptionsInput from '../searchable-options-input/searchable-options-input';
+import LongTextQuestion from '../long-text-question/long-text-question';
+import SearchableOptionsInput from '../searchable-options-question/searchable-options-question';
 import { SingleChoiceInput } from '../single-choice-input/single-choice-input';
 import { DateQuestionInput } from '../date-question/date-question';
-import ShortTextInput from '../short-text-input/short-text-input';
+import ShortTextInput from '../short-text-question/short-text-question';
 import MultiSelectQuestion from '../multi-select-question/multi-select-question';
 import FileQuestion from '../file-question/file-question';
 

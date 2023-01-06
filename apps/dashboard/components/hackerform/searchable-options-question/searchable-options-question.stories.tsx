@@ -1,5 +1,5 @@
 import type { ComponentStory, ComponentMeta } from '@storybook/react';
-import { SearchableOptionsInput } from './searchable-options-input';
+import { SearchableOptionsInput } from './searchable-options-question';
 
 const Story: ComponentMeta<typeof SearchableOptionsInput> = {
   component: SearchableOptionsInput,

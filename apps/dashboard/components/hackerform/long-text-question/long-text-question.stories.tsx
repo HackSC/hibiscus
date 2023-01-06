@@ -1,5 +1,5 @@
 import type { ComponentStory, ComponentMeta } from '@storybook/react';
-import { LongTextQuestion } from './long-text-input';
+import { LongTextQuestion } from './long-text-question';
 
 const Story: ComponentMeta<typeof LongTextQuestion> = {
   component: LongTextQuestion,

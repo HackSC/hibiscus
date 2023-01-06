@@ -31,6 +31,7 @@ export default HackformQuestionHeader;
 
 const Wrapper = styled.div`
   color: ${Colors2023.GRAY.LIGHT};
+  max-width: 100rem;
 `;
 
 const SpanRed = styled.span`
