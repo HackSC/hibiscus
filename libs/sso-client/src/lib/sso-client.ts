@@ -99,7 +99,7 @@ export const callbackApiHandler =
     }
   };
 
-const validCallbacks = [process.env.NEXT_PUBLIC_SSO_MOCK_APP_URL].map(getHost);
+const VALID_CALLBACKS = [process.env.NEXT_PUBLIC_SSO_MOCK_APP_URL];
 
 /**
  * Calls the app's callback API route which sets the token as a cookie on the app
@@ -115,7 +115,7 @@ export async function ssoCallback(callback: string, token: string) {
   }
 
   try {
-    if (!validCallbacks.includes(getHost(callback))) {
+    if (!VALID_CALLBACKS.map(getHost).includes(getHost(callback))) {
       return null;
     }
 
