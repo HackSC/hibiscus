@@ -19,7 +19,7 @@ export function Index() {
       sessionStorage.setItem('callback', router.query.callback.toString());
       setCallback(router.query.callback.toString());
     } else {
-      setCallback(sessionStorage.getItem('callback') ?? '/');
+      setCallback(sessionStorage.getItem('callback') ?? '');
     }
   }, [router.isReady, router.query]);
 

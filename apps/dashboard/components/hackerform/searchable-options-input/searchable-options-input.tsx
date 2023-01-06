@@ -1,17 +1,18 @@
-import { Option } from '@hibiscus/types';
+import { HackformQuestion, Option } from '@hibiscus/types';
 import { SearchableOptionSelectInput } from '@hibiscus/ui-kit-2023';
 import { useHackform } from '../../../hooks/use-hackform/use-hackform';
 import { useState } from 'react';
 import QuestionCreator from '../question-creator/question-creator';
 
 type SearchableOptionsInputProps = {
-  options: Option[];
+  options: HackformQuestion['options'];
   initialError?: string; // for passing in default error
 };
 
 export const SearchableOptionsInput = (props: SearchableOptionsInputProps) => {
   const { currentQuestionIndex, ...hackformUtils } = useHackform();
   const currentInput = hackformUtils.getCurrentResponse()?.input;
+  const question = hackformUtils.getCurrentQuestion();
   const [textInput, setTextInput] = useState(currentInput?.text ?? '');
   const [chosenOption, setChosenOption] = useState<Option | null>(
     currentInput?.singleChoiceValue
@@ -31,7 +32,6 @@ export const SearchableOptionsInput = (props: SearchableOptionsInputProps) => {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     option: Option
   ) => {
-    e.preventDefault();
     setChosenOption(option);
     setTextInput(option.displayName);
   };
@@ -43,6 +43,7 @@ export const SearchableOptionsInput = (props: SearchableOptionsInputProps) => {
   const InputComponent = (
     <SearchableOptionSelectInput
       onChange={handleInputChange}
+      limitDropdownItems={question.limitOptions}
       onClickChooseOption={handleChooseOptionFromDropdown}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
