@@ -16,8 +16,11 @@ export function LoginGuard({ callback, children }: LoginGuardProps) {
         const supabase = container.resolve(HibiscusSupabaseClient);
         const data = await supabase.validateSession();
         if (data != null) {
-          HibiscusSupabaseClient.setTokenCookieClientSide(data.token);
-          const res = await SSOClient.ssoCallback(callback, data.token);
+          HibiscusSupabaseClient.setTokenCookieClientSide(
+            data.access_token,
+            data.refresh_token
+          );
+          const res = await SSOClient.ssoCallback(callback, data.access_token);
           window.location.replace(
             res?.redirect ?? process.env.NEXT_PUBLIC_SSO_DEFAULT_REDIRECT_URL
           );
