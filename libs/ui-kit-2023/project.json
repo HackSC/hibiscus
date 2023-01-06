@@ -20,6 +20,26 @@
         "passWithNoTests": true
       }
     },
+    "build": {
+      "executor": "@nrwl/rollup:rollup",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/ui-kit-2023",
+        "tsConfig": "libs/ui-kit-2023/tsconfig.lib.json",
+        "project": "libs/ui-kit-2023/package.json",
+        "entryFile": "libs/ui-kit-2023/src/index.ts",
+        "external": ["react/jsx-runtime"],
+        "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+        "compiler": "babel",
+        "assets": [
+          {
+            "glob": "libs/ui-kit-2023/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ]
+      }
+    },
     "storybook": {
       "executor": "@nrwl/storybook:storybook",
       "options": {

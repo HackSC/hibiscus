@@ -35,32 +35,7 @@ h2 {
   font-weight: 400;
   font-style: normal;
 }
-#titleText {
-  width: 90vw;
-  margin: 0 auto;
-}
 a {
   color: inherit;
   text-decoration: inherit;
-}
-#mainDiv {
-  display: flex;
-  /* grid-template-columns: (8, 1fr);
-  grid-column-gap: 7%; */
-  width: 90vw;
-  height: 80vh;
-  margin: 0 auto;
-  justify-content: space-between;
-}
-#nav {
-  background-color: #d9d9d9;
-  width: 25%;
-}
-ul {
-  margin-top: 100px;
-}
-
-li {
-  list-style-type: none;
-  margin-top: 10px;
 }

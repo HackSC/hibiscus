@@ -1,12 +1,16 @@
+import { Colors2023 } from '@hibiscus/styles';
+import { Text } from '@hibiscus/ui';
 import { useRef } from 'react';
 import styled from 'styled-components';
 
 export interface CheckboxProps {
   label: string;
+  checked?: boolean;
+  disabled?: boolean;
   onInput: (value: boolean) => void;
 }
 
-export function Checkbox({ onInput, label }: CheckboxProps) {
+export function Checkbox({ onInput, label, checked, disabled }: CheckboxProps) {
   const ref = useRef<HTMLInputElement>(null);
   function handleChange() {
     if (!ref.current) {
@@ -17,8 +21,14 @@ export function Checkbox({ onInput, label }: CheckboxProps) {
 
   return (
     <StyledCheckbox>
-      {label}
-      <input ref={ref} onChange={handleChange} type="checkbox" />
+      <TextWrap disabled={disabled}>{label}</TextWrap>
+      <input
+        ref={ref}
+        disabled={disabled}
+        onChange={handleChange}
+        type="checkbox"
+        checked={checked}
+      />
       <span className="checkmark"></span>
     </StyledCheckbox>
   );
@@ -62,6 +72,7 @@ const StyledCheckbox = styled.label`
   input:checked ~ .checkmark {
     background-color: #76d3ef;
   }
+
   .checkmark:after {
     content: '';
     position: absolute;
@@ -70,6 +81,7 @@ const StyledCheckbox = styled.label`
   input:checked ~ .checkmark:after {
     display: block;
   }
+
   .checkmark:after {
     left: 9px;
     top: 5px;
@@ -81,4 +93,30 @@ const StyledCheckbox = styled.label`
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
   }
+
+  input:disabled ~ .checkmark {
+    background-color: #7a7a7a;
+  }
+
+  input:disabled ~ .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid #585858;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+
+  :hover input:disabled ~ .checkmark {
+    /* background-color: #ccc; */
+    filter: none;
+    cursor: not-allowed;
+  }
+`;
+
+const TextWrap = styled(Text)<{ disabled?: boolean }>`
+  color: ${(props) => (props.disabled ? Colors2023.GRAY.MEDIUM : 'white')};
 `;

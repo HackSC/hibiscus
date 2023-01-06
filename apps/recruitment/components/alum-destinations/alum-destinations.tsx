@@ -1,6 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
-import { H2 } from '@hacksc-platforms/ui';
-import Image from 'next/image';
+import { H2 } from '@hibiscus/ui';
 /* eslint-disable-next-line */
 export interface AlumDestinationsProps {}
 
@@ -9,20 +9,10 @@ export function AlumDestinations(props: AlumDestinationsProps) {
     <StyledAlumDestinations>
       <AlumHeaderH2>Alumni Destinations</AlumHeaderH2>
       <DesktopDestinations>
-        <Image
-          src="/img/destinations/dest2.png"
-          alt="Alumni Destinations"
-          width={1000}
-          height={600}
-        />
+        <img src="/img/destinations/dest2.png" alt="Alumni Destinations" />
       </DesktopDestinations>
       <MobileDestinations>
-        <Image
-          src="/img/destinations/dest1.png"
-          alt="Alumni Destinations"
-          width={1000}
-          height={1200}
-        />
+        <img src="/img/destinations/dest1.png" alt="Alumni Destinations" />
       </MobileDestinations>
     </StyledAlumDestinations>
   );
@@ -45,20 +35,26 @@ const AlumHeaderH2 = styled(H2)`
 `;
 
 const DesktopDestinations = styled.div`
-  padding: 0 15vw;
   @media only screen and (max-width: 1080px) {
     display: none !important;
     touch-action: none !important;
+  }
+  > img {
+    padding: 5vw 0;
+    width: 70vw;
   }
 `;
 
 const MobileDestinations = styled.div`
   display: none;
   touch-action: none;
-  padding: 0 20vw;
   @media screen and (max-width: 1080px) {
     display: flex !important;
     touch-action: auto !important;
+  }
+  > img {
+    padding: 10vw 0;
+    width: 70vw;
   }
 `;
 

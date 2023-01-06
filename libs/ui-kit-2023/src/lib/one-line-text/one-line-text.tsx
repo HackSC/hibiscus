@@ -1,4 +1,4 @@
-import { Colors2023 } from '@hacksc-platforms/styles';
+import { Colors2023 } from '@hibiscus/styles';
 import { InputHTMLAttributes } from 'react';
 import styled from 'styled-components';
 
@@ -33,11 +33,17 @@ const Input = styled.input`
 
   color: ${Colors2023.GRAY.LIGHT};
   :hover {
-    filter: drop-shadow(0px 0px 15px #c2c2c2);
+    filter: drop-shadow(0px 0px 3px rgba(194, 194, 194, 0.5));
+    transition: 0.1s;
   }
   :focus {
     background: ${Colors2023.GRAY.MEDIUM};
     border: 1.5px solid ${Colors2023.PURPLE.STANDARD};
     border-radius: 11px;
+  }
+  :disabled {
+    background-color: ${Colors2023.GRAY.DARK};
+    border-color: ${Colors2023.GRAY.SCHEMDIUM};
+    color: ${Colors2023.GRAY.MEDIUM};
   }
 `;

@@ -5,4 +5,13 @@ export const Text = styled.p`
   margin: 0;
 `;
 
-export default Text;
+export const BoldText = styled.p`
+  font-weight: 600;
+  margin: 0;
+`;
+
+export const ItalicText = styled.p`
+  font-weight: 400;
+  font-style: italic;
+  margin: 0;
+`;

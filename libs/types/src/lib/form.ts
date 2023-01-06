@@ -6,38 +6,44 @@ export interface Option {
   displayName: string;
 }
 
-export interface FormMetadata {
+export interface HackformMetadata {
   entry: {
     title: React.ReactNode;
     subtitle?: React.ReactNode;
     estTimeInMinutes?: number;
   };
-  questions: FormQuestion[];
+  questions: HackformQuestion[];
   end: {
     title: React.ReactNode;
     subtitle?: React.ReactNode;
   };
 }
 
-export interface FormQuestion {
+export interface HackformQuestion {
   title: string;
-  type: FormQuestionType;
+  type: HackformQuestionType;
   placeholder?: string;
   required?: boolean;
+  hasOtherField?: boolean;
   validationFunction?: (input: HackformQuestionResponse['input']) => {
     valid: boolean;
-    errorDescription?: string;
+    errorDescription?: HackformError;
   };
-  options?: Option[];
+  options?: Option[] | (() => Promise<Option[]>);
+  limitOptions?: number;
 }
 
-export enum FormQuestionType {
+export enum HackformQuestionType {
   ShortText = 'short-text',
   LongText = 'long-text',
   Email = 'email',
   Number = 'number',
   Date = 'date',
   SingleOptionDropdown = 'single-option-dropdown',
+  Boolean = 'boolean',
+  SingleChoice = 'single-choice',
+  File = 'file',
+  MultipleSelect = 'multi-select',
 }
 
 export interface HackformSubmission {
@@ -46,10 +52,16 @@ export interface HackformSubmission {
 
 export interface HackformQuestionResponse {
   input?: {
-    text?: string; // for text-based questions
+    text?: string; // for text-based questions + date
     number?: number; // for number-based questions e.g age
-    choices?: number[]; // indexes of the choices; if it's a single choice, size=1
+    choices?: string[]; // indexes of the choices; if it's a single choice, size=1
     boolean?: boolean;
     singleChoiceValue?: string; // value associated with the choice
+    file?: {
+      displayName: string; // display name to the user
+      fileKey: string; // actual filename in file storage
+    };
   };
 }
+
+export type HackformError = string | string[];

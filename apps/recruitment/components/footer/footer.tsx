@@ -1,4 +1,4 @@
-import { Link } from '@hacksc-platforms/ui';
+import { Link } from '@hibiscus/ui';
 import Image from 'next/image';
 import styled from 'styled-components';
 
@@ -32,7 +32,7 @@ export function Footer(props: FooterProps) {
     {
       src: '/img/vercel.svg',
       alt: 'Vercel',
-      href: 'https://www.vercel.com/hacksc/',
+      href: 'https://www.vercel.com/',
     },
   ];
 

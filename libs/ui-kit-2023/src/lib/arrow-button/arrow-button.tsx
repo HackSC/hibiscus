@@ -1,7 +1,7 @@
-import { Colors2023 } from '@hacksc-platforms/styles';
+import { Colors2023 } from '@hibiscus/styles';
 import styled from 'styled-components';
 import React from 'react';
-import Arrow from '../../assets/chevron-down.svg';
+import { ChevronRightIcon } from '@hibiscus/icons';
 
 /* eslint-disable-next-line */
 export interface ArrowButtonProps extends React.ButtonHTMLAttributes<any> {
@@ -11,8 +11,7 @@ export interface ArrowButtonProps extends React.ButtonHTMLAttributes<any> {
 export function ArrowButton(props: ArrowButtonProps) {
   return (
     <StyledArrowButton {...props} orientation={props.orientation}>
-      <img
-        src={Arrow}
+      <ChevronRightIcon
         alt={`Arrow if pressed will go to the ${
           props.orientation === 'right' || props.orientation === 'down'
             ? 'next'
@@ -46,5 +45,18 @@ const StyledArrowButton = styled.button<{
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  :hover {
+    border: 1.5px solid ${Colors2023.BLUE.STANDARD};
+    background: #307c93b2;
+    box-shadow: 0px 0px 5px rgba(118, 211, 239, 0.5);
+    cursor: pointer;
+    transition: 0.1s;
+  }
+  :active {
+    border: 1.5px solid ${Colors2023.BLUE.STANDARD};
+    background: ${Colors2023.BLUE.STANDARD};
+    color: ${Colors2023.BLUE.DARK};
+    box-shadow: 0px 0px 5px rgba(118, 211, 239, 0.5);
+    border-radius: 10px;
+  }
 `;

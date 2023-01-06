@@ -1,5 +1,5 @@
-import { GoogleAnalytics4Script } from '@hacksc-platforms/analytics';
-import { GlobalStyles } from '@hacksc-platforms/styles';
+import { GoogleAnalytics4Script } from '@hibiscus/analytics';
+import { GlobalStyles } from '@hibiscus/styles';
 import App, { AppContext, AppProps } from 'next/app';
 import Head from 'next/head';
 import { Toaster } from 'react-hot-toast';

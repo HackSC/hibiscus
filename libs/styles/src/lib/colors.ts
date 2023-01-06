@@ -1,4 +1,4 @@
-import { HibiscusRole } from '@hacksc-platforms/types';
+import { HibiscusRole } from '@hibiscus/types';
 
 export namespace TrademarkColors {
   export const LIGHT_PURPLE = 'rgba(215, 112, 199, 61%)';
@@ -36,12 +36,24 @@ export namespace Colors2023 {
     STANDARD: '#FE5139',
     LIGHT: '#FFA295',
   };
+  export const YELLOW = {
+    DARK: '#AE8C1D',
+    STANDARD: '#FFD23C',
+    LIGHT: '#FFE89C',
+  };
+  export const GREEN = {
+    DARK: '#6F9A28',
+    STANDARD: '#C2FA67',
+    LIGHT: '#E9FFC5',
+  };
   export const roleColors = {
     [HibiscusRole.HACKER]: {
-      color: BLUE,
+      light: BLUE.LIGHT,
+      standard: BLUE.STANDARD,
     },
     [HibiscusRole.ADMIN]: {
-      color: RED,
+      light: RED.LIGHT,
+      standard: RED.STANDARD,
     },
   };
 }
