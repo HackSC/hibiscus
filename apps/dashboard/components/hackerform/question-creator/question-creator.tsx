@@ -9,7 +9,7 @@ import {
 } from '../common-styled-components';
 import HackformQuestionHeader from '../hackform-question-header/hackform-question-header';
 import HackformBackNextWidget from '../hackform-backnext-widget/hackform-backnext-widget';
-import { FormQuestion, HackformError } from '@hibiscus/types';
+import { HackformQuestion, HackformError } from '@hibiscus/types';
 import { IoReturnDownBackOutline } from 'react-icons/io5';
 import styled from 'styled-components';
 import { GetInputResponseCb } from '../../../common/types';
@@ -18,7 +18,7 @@ import { useHackform } from '../../../hooks/use-hackform/use-hackform';
 interface QuestionCreatorProps {
   inputComponentChildren: React.ReactNode;
   getInputResponse: GetInputResponseCb;
-  question?: FormQuestion;
+  question?: HackformQuestion;
   qi?: number;
   handleSubmitWithValidation?: React.MouseEventHandler<HTMLButtonElement>;
   goNextQuestion?: () => void;
