@@ -17,7 +17,7 @@ export const middlewareHandler =
     if (path.length >= 2 && path[1] === 'api') {
       if (
         request.method !== 'GET' &&
-        request.headers.get('origin') === process.env.SSO_URL
+        request.headers.get('origin') === process.env.NEXT_PUBLIC_SSO_URL
       ) {
         return NextResponse.next();
       } else {
@@ -36,7 +36,7 @@ export const middlewareHandler =
       }
     }
 
-    const redirectUrl = new URL(`${process.env.SSO_URL}/login`);
+    const redirectUrl = new URL(`${process.env.NEXT_PUBLIC_SSO_URL}/login`);
     redirectUrl.search = `callback=${callbackUrl}`;
     return NextResponse.redirect(redirectUrl);
   };
@@ -52,8 +52,11 @@ export const callbackApiHandler =
   async (req: NextApiRequest, res: NextApiResponse) => {
     // Handle pre-flight requests
     if (req.method === 'OPTIONS') {
-      if (req.headers.origin === process.env.SSO_URL) {
-        res.setHeader('Access-Control-Allow-Origin', process.env.SSO_URL);
+      if (req.headers.origin === process.env.NEXT_PUBLIC_SSO_URL) {
+        res.setHeader(
+          'Access-Control-Allow-Origin',
+          process.env.NEXT_PUBLIC_SSO_URL
+        );
         res.setHeader(
           'Access-Control-Allow-Headers',
           'Authorization, Content-Type'
@@ -68,7 +71,10 @@ export const callbackApiHandler =
       if (auth_header != null && auth_header.startsWith('Bearer ')) {
         const token = auth_header.substring('Bearer '.length);
 
-        res.setHeader('Access-Control-Allow-Origin', process.env.SSO_URL);
+        res.setHeader(
+          'Access-Control-Allow-Origin',
+          process.env.NEXT_PUBLIC_SSO_URL
+        );
         res.setHeader(
           'Access-Control-Allow-Headers',
           'Authorization, Content-Type'
@@ -93,12 +99,14 @@ export const callbackApiHandler =
     }
   };
 
+const VALID_CALLBACKS = [process.env.NEXT_PUBLIC_SSO_MOCK_APP_URL];
+
 /**
  * Calls the app's callback API route which sets the token as a cookie on the app
  *
  * @param callback Callback URL for the app
  * @param token Access token obtained from login
- * @returns object containing `data` property
+ * @returns object containing `redirect` property or `null` if callback URL is not allowed
  */
 export async function ssoCallback(callback: string, token: string) {
   // callback can === '' (empty string) when no callback is specified
@@ -107,6 +115,10 @@ export async function ssoCallback(callback: string, token: string) {
   }
 
   try {
+    if (!VALID_CALLBACKS.map(getHost).includes(getHost(callback))) {
+      return null;
+    }
+
     const res = await axios.post(
       callback,
       {},
@@ -124,6 +136,10 @@ export async function ssoCallback(callback: string, token: string) {
   }
 }
 
+function getHost(url: string): string {
+  return new URL(url).host;
+}
+
 /**
  * Verifies whether the provided access token is valid or has expired
  * Exact copy of the one in hibiscus-supabase-client
@@ -135,14 +151,17 @@ export async function ssoCallback(callback: string, token: string) {
 async function verifyToken(token: string) {
   // The Fetch API is used instead of axios because this function needs to be used in
   // NextJS middleware and their edge functions do not support axios
-  const res = await fetch(`${process.env.SSO_URL}/api/verifyToken`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ token }),
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SSO_URL}/api/verifyToken`,
+    {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token }),
+    }
+  );
   const data = await res.json();
   return data;
 }
