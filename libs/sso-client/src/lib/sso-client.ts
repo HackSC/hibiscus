@@ -109,22 +109,31 @@ const validCallbacks = [process.env.NEXT_PUBLIC_SSO_MOCK_APP_URL].map(getHost);
  * @returns object containing `redirect` property or `null` if callback URL is not allowed
  */
 export async function ssoCallback(callback: string, token: string) {
-  if (!validCallbacks.includes(getHost(callback))) {
+  // callback can === '' (empty string) when no callback is specified
+  if (callback == null || callback === '') {
     return null;
   }
 
-  const res = await axios.post(
-    callback,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      withCredentials: true,
+  try {
+    if (!validCallbacks.includes(getHost(callback))) {
+      return null;
     }
-  );
 
-  return res.data;
+    const res = await axios.post(
+      callback,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      }
+    );
+
+    return res.data;
+  } catch {
+    return null;
+  }
 }
 
 function getHost(url: string): string {

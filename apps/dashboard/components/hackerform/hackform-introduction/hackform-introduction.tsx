@@ -1,11 +1,11 @@
 import { H1, H3, Text } from '@hibiscus/ui';
-import { FormMetadata } from '@hibiscus/types';
+import { HackformMetadata } from '@hibiscus/types';
 import styled from 'styled-components';
 import { Button, GlowSpan } from '@hibiscus/ui-kit-2023';
 import { Colors2023 } from '@hibiscus/styles';
 
 interface Props {
-  formMetadata: FormMetadata;
+  formMetadata: HackformMetadata;
   onClick: () => void;
 }
 

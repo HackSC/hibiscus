@@ -1,7 +1,12 @@
-import { FormMetadata, FormQuestionType } from '@hibiscus/types';
+import {
+  HackformMetadata,
+  HackformQuestionType,
+  Option,
+} from '@hibiscus/types';
 import moment from 'moment';
+import API from './api';
 
-export const formMetadata2023HackerApps: FormMetadata = {
+export const formMetadata2023HackerApps: HackformMetadata = {
   entry: {
     title: 'HackSC 2023 Application',
     subtitle:
@@ -11,7 +16,7 @@ export const formMetadata2023HackerApps: FormMetadata = {
   questions: [
     {
       title: 'Please confirm your full name',
-      type: FormQuestionType.ShortText,
+      type: HackformQuestionType.ShortText,
       placeholder: 'Enter your full name here',
       required: true, // TODO: add option to put error message if required condition violated
       validationFunction: (input) => {
@@ -26,7 +31,7 @@ export const formMetadata2023HackerApps: FormMetadata = {
     },
     {
       title: 'Please enter your date of birth:',
-      type: FormQuestionType.Date,
+      type: HackformQuestionType.Date,
       required: true,
       validationFunction: (input) => {
         const errors: string[] = [];
@@ -66,17 +71,26 @@ export const formMetadata2023HackerApps: FormMetadata = {
     },
     {
       title: 'What school do you go to?',
-      type: FormQuestionType.SingleOptionDropdown,
+      type: HackformQuestionType.SingleOptionDropdown,
       required: true,
       validationFunction: (input) => {
         if (input.text === '')
           return { valid: false, errorDescription: 'This field is required' };
         return { valid: true };
       },
+      limitOptions: 6,
+      options: async () => {
+        const schools = await API.getSchools();
+        const opts: Option[] = schools.map((str, i) => ({
+          displayName: str,
+          value: i.toString(),
+        }));
+        return opts;
+      },
     },
     {
       title: 'Select your program:',
-      type: FormQuestionType.SingleChoice,
+      type: HackformQuestionType.SingleChoice,
       required: true,
       validationFunction: (input) => {
         if (!input.singleChoiceValue && input.text === '')
@@ -95,7 +109,7 @@ export const formMetadata2023HackerApps: FormMetadata = {
     {
       title: 'Expected graduation date:',
       placeholder: 'e.g Spring 2024, Fall 2023',
-      type: FormQuestionType.ShortText,
+      type: HackformQuestionType.ShortText,
       required: true,
       validationFunction: (input) => {
         if (input.text === '') {
@@ -108,18 +122,71 @@ export const formMetadata2023HackerApps: FormMetadata = {
       },
     },
     {
-      title: 'Major field:',
-      type: FormQuestionType.SingleOptionDropdown,
-      options: [],
+      title:
+        'What is your major/primary area of study? If you already graduated, what was your major/primary area of study? Select all that apply',
+      type: HackformQuestionType.MultipleSelect,
+      hasOtherField: true,
+      options: [
+        {
+          value: 'cs',
+          displayName:
+            'Computer science, computer engineering, or software engineering',
+        },
+        {
+          value: 'eng',
+          displayName: `Another engineering discipline (such as civil, electrical, mechanical, etc.)`,
+        },
+        {
+          value: 'natural',
+          displayName: `A natural science (such as biology, chemistry, physics, etc.)`,
+        },
+        {
+          value: 'math',
+          displayName: `Mathematics or statistics`,
+        },
+        {
+          value: 'web',
+          displayName: `Web development or web design`,
+        },
+        {
+          value: 'business',
+          displayName: `Business discipline (such as accounting, finance, marketing, etc.)`,
+        },
+        {
+          value: 'human',
+          displayName:
+            'Humanities discipline (such as literature, history, philosophy, etc.)',
+        },
+        {
+          value: 'arts',
+          displayName: `Fine arts or performing arts (such as graphic design, music, studio art, etc.)`,
+        },
+        {
+          value: 'health',
+          displayName: `Health science (such as nursing, pharmacy, radiology, etc.)`,
+        },
+        {
+          value: 'undecided',
+          displayName: `Undecided / No Declared Major`,
+        },
+        {
+          value: 'no-offer',
+          displayName: `My school does not offer majors / primary areas of study`,
+        },
+        {
+          value: 'no-answer',
+          displayName: 'Prefer not to answer',
+        },
+      ],
     },
     {
       title: 'Minor:',
-      type: FormQuestionType.SingleOptionDropdown,
+      type: HackformQuestionType.SingleOptionDropdown,
       options: [],
     },
     {
       title: 'Preferred pronouns:',
-      type: FormQuestionType.SingleChoice,
+      type: HackformQuestionType.SingleChoice,
       required: true,
       hasOtherField: true,
       validationFunction: (input) => {
@@ -142,7 +209,7 @@ export const formMetadata2023HackerApps: FormMetadata = {
     },
     {
       title: 'Ethnicity:',
-      type: FormQuestionType.MultipleSelect,
+      type: HackformQuestionType.MultipleSelect,
       hasOtherField: true,
       required: true,
       options: [
@@ -171,17 +238,17 @@ export const formMetadata2023HackerApps: FormMetadata = {
     },
     {
       title: 'Do you have any allergies/dietary restrictions?',
-      type: FormQuestionType.LongText,
+      type: HackformQuestionType.LongText,
     },
     {
       title:
         'Do you require any other accommodations (wheelchair access, visibility)?',
-      type: FormQuestionType.ShortText,
+      type: HackformQuestionType.ShortText,
     },
     {
       title: 'Your shipping address:',
       required: true,
-      type: FormQuestionType.ShortText,
+      type: HackformQuestionType.ShortText,
       validationFunction: (input) => {
         if (input.text === '') {
           return {
@@ -194,7 +261,7 @@ export const formMetadata2023HackerApps: FormMetadata = {
     },
     {
       title: 'Shirt size:',
-      type: FormQuestionType.SingleChoice,
+      type: HackformQuestionType.SingleChoice,
       required: true,
       options: [
         {
@@ -217,11 +284,11 @@ export const formMetadata2023HackerApps: FormMetadata = {
     {
       title: 'How many hackathons have you done before?',
       required: true,
-      type: FormQuestionType.ShortText,
+      type: HackformQuestionType.ShortText,
     },
     {
       title: 'Have you attended HackSC before?',
-      type: FormQuestionType.SingleChoice,
+      type: HackformQuestionType.SingleChoice,
       required: true,
       options: [
         { value: 'y', displayName: 'Yes' },
@@ -230,7 +297,7 @@ export const formMetadata2023HackerApps: FormMetadata = {
     },
     {
       title: 'What is your level of proficiency with coding/programming?',
-      type: FormQuestionType.SingleChoice,
+      type: HackformQuestionType.SingleChoice,
       required: true,
       options: [
         { value: 'b', displayName: 'Beginner' },
@@ -238,18 +305,18 @@ export const formMetadata2023HackerApps: FormMetadata = {
         { value: 'a', displayName: 'Advanced' },
       ],
     },
-    // {
-    //   title: 'Upload your resume',
-    //   type: FormQuestionType.File,
-    // },
+    {
+      title: 'Upload your resume',
+      type: HackformQuestionType.File,
+    },
     {
       title: 'Link to personal website:',
-      type: FormQuestionType.ShortText,
+      type: HackformQuestionType.ShortText,
     },
     {
       title:
         'Tell us about a project you’re most proud of. What did you learn from it? (100-150 words)',
-      type: FormQuestionType.LongText,
+      type: HackformQuestionType.LongText,
       required: true,
       validationFunction: (input) => {
         if (!input.text) {
@@ -261,7 +328,7 @@ export const formMetadata2023HackerApps: FormMetadata = {
     {
       title:
         'What are you passionate about outside of technology? (max 100 words)',
-      type: FormQuestionType.LongText,
+      type: HackformQuestionType.LongText,
       required: true,
       validationFunction: (input) => {
         if (!input.text) {
@@ -272,7 +339,7 @@ export const formMetadata2023HackerApps: FormMetadata = {
     },
     {
       title: 'How did you hear about HackSC?',
-      type: FormQuestionType.SingleChoice,
+      type: HackformQuestionType.SingleChoice,
       options: [
         { value: 'f', displayName: 'Friend' },
         { value: 'e', displayName: 'Email' },
@@ -283,7 +350,7 @@ export const formMetadata2023HackerApps: FormMetadata = {
     },
     {
       title: `I have read and agree to the HackSC Code of Conduct, HackSC Terms and Conditions, as well as the MLH Code of Conduct."(https://static.mlh.io/docs/mlh-code-of-conduct.pdf)"`,
-      type: FormQuestionType.SingleChoice,
+      type: HackformQuestionType.SingleChoice,
       required: true,
       options: [
         { value: 'y', displayName: 'Yes' },
@@ -299,7 +366,7 @@ export const formMetadata2023HackerApps: FormMetadata = {
     {
       title: `I authorize you to share my application/registration information with Major League Hacking for event administration, ranking, and MLH administration in-line with the MLH Privacy Policy (https://mlh.io/privacy).
       I further agree to the terms of both the MLH Contest Terms and Conditions (https://github.com/MLH/mlh-policies/blob/main/contest-terms.md)and the MLH Privacy Policy (https://mlh.io/privacy)`,
-      type: FormQuestionType.SingleChoice,
+      type: HackformQuestionType.SingleChoice,
       required: true,
       options: [
         { value: 'y', displayName: 'Yes' },
@@ -314,7 +381,7 @@ export const formMetadata2023HackerApps: FormMetadata = {
     },
     {
       title: `I authorize MLH to send me an email where I can further opt into the MLH Hacker, Events, or Organizer Newsletters and other communications from MLH.`,
-      type: FormQuestionType.SingleChoice,
+      type: HackformQuestionType.SingleChoice,
       required: true,
       options: [
         { value: 'y', displayName: 'Yes' },

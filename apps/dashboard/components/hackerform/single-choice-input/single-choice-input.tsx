@@ -5,6 +5,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { useHackform } from '../../../hooks/use-hackform/use-hackform';
 import QuestionCreator from '../question-creator/question-creator';
+import { OtherField } from '../other-field';
 
 interface SingleChoiceInputProps {
   options: Option[];
@@ -53,21 +54,15 @@ export const SingleChoiceInput = (props: SingleChoiceInputProps) => {
         );
       })}
       {props.hasOtherField && (
-        <OtherWrapper>
-          <Radio
-            value={''} // special for other field
-            name="Others"
-            label="Others"
-            onChange={handleChangeValue}
-            checked={chosenOption?.value === ''}
-          />
-          <OneLineText
-            onInput={handleInputOther}
-            disabled={chosenOption?.value !== ''}
-            value={chosenOption?.value === '' ? chosenOption?.displayName : ''}
-            placeholder={hackformUtils.getCurrentQuestion().placeholder}
-          />
-        </OtherWrapper>
+        <OtherField
+          handleChangeValue={handleChangeValue}
+          handleInputOther={handleInputOther}
+          checked={chosenOption?.value === ''}
+          disabledTextInput={chosenOption?.value !== ''}
+          valueTextInput={
+            chosenOption?.value === '' ? chosenOption?.displayName : ''
+          }
+        />
       )}
     </Wrapper>
   );
@@ -82,8 +77,3 @@ export const SingleChoiceInput = (props: SingleChoiceInputProps) => {
 };
 
 const Wrapper = styled.div``;
-
-const OtherWrapper = styled.div`
-  display: flex;
-  gap: 10px;
-`;

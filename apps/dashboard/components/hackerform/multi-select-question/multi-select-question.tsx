@@ -1,4 +1,4 @@
-import { Checkbox } from '@hibiscus/ui-kit-2023';
+import { Checkbox, OneLineText } from '@hibiscus/ui-kit-2023';
 import { GetInputResponseCb } from '../../../common/types';
 import React, { useState } from 'react';
 import QuestionCreator from '../question-creator/question-creator';
@@ -14,6 +14,14 @@ export const MultiSelectQuestion = (props: MultiSelectQuestionProps) => {
   const { ...hackformUtils } = useHackform();
   const initialInput = hackformUtils.getCurrentResponse()?.input;
   const [values, setValues] = useState<string[]>(initialInput?.choices ?? []);
+  const [other, setOther] = useState<Option | null>(
+    initialInput && initialInput.singleChoiceValue === ''
+      ? {
+          displayName: initialInput?.text,
+          value: initialInput?.singleChoiceValue,
+        }
+      : null
+  );
 
   const createCbHandleOnCheck = (item: Option) => (newValue: boolean) => {
     if (newValue) {
@@ -32,20 +40,54 @@ export const MultiSelectQuestion = (props: MultiSelectQuestionProps) => {
   };
 
   const question = hackformUtils.getCurrentQuestion();
+
   const InputComponent = (
     <Wrapper>
-      {question.options.map((item, i) => (
-        <Checkbox
-          label={item.displayName}
-          key={i}
-          onInput={createCbHandleOnCheck(item)}
-          checked={values.includes(item.value)}
-        />
-      ))}
+      {Array.isArray(question.options) &&
+        question.options.map((item, i) => (
+          <Checkbox
+            label={item.displayName}
+            key={i}
+            onInput={createCbHandleOnCheck(item)}
+            checked={values.includes(item.value)}
+            disabled={other !== null}
+          />
+        ))}
+      {question.hasOtherField && (
+        <OtherWrapper>
+          <Checkbox
+            label="Other"
+            checked={other !== null}
+            onInput={(val) => {
+              if (!val) {
+                setOther(null);
+                return;
+              }
+              setOther({
+                value: '',
+                displayName: other?.displayName,
+              });
+            }}
+          />
+          <OneLineText
+            value={other?.displayName}
+            disabled={other === null}
+            onChange={(e) => {
+              const input = e.target.value;
+              setOther((prev) => ({ ...prev, displayName: input }));
+            }}
+          />
+        </OtherWrapper>
+      )}
     </Wrapper>
   );
 
-  const getInputResponse: GetInputResponseCb = () => ({ choices: values });
+  const getInputResponse: GetInputResponseCb = () => {
+    if (other !== null) {
+      return { singleChoiceValue: other.value, text: other.displayName };
+    }
+    return { choices: values };
+  };
 
   return (
     <QuestionCreator
@@ -61,5 +103,10 @@ export default MultiSelectQuestion;
 const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
+  gap: 10px;
+`;
+
+const OtherWrapper = styled.div`
+  display: flex;
   gap: 10px;
 `;

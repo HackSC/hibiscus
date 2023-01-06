@@ -10,13 +10,14 @@ import styled from 'styled-components';
 import OneLineText from '../one-line-text/one-line-text';
 import { Text } from '@hibiscus/ui';
 import Fuse from 'fuse.js';
-import { Option } from '@hibiscus/types';
+import { HackformQuestion, Option } from '@hibiscus/types';
 
 /* eslint-disable-next-line */
 export interface OptionSelectProps
   extends InputHTMLAttributes<HTMLInputElement> {
   value: string;
-  options: Option[];
+  limitDropdownItems?: number;
+  options: HackformQuestion['options'];
   onClickChooseOption?: (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     option: Option
@@ -25,13 +26,33 @@ export interface OptionSelectProps
 const fuse = new Fuse<Option>([], { keys: ['displayName'] });
 
 export function SearchableOptionSelectInput(props: OptionSelectProps) {
-  fuse.setCollection(props.options ?? []);
   const [displayedOptions, setDisplayedOptions] = useState<Option[] | null>(
-    props.options ?? null
+    null
   );
   const [showOptions, setShowOptions] = useState(false);
   const [textInput, setTextInput] = useState(props.value ?? '');
   const wrapperRef = useRef<HTMLDivElement>(null);
+
+  // loading in options depending on whether given loader fn or static array
+  useEffect(() => {
+    if (typeof props.options === 'function') {
+      props
+        .options()
+        .then((opts) => {
+          const limited = opts.slice(0, props.limitDropdownItems);
+          fuse.setCollection(opts ?? []);
+          setDisplayedOptions(limited);
+        })
+        .catch((e) => {
+          console.error(e);
+        });
+    } else if (Array.isArray(props.options)) {
+      const limited = props.options.slice(0, props.limitDropdownItems);
+      fuse.setCollection(props.options ?? []);
+      setDisplayedOptions(limited);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleShowOptionsOnClick = useCallback((e: MouseEvent) => {
     if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
@@ -44,7 +65,6 @@ export function SearchableOptionSelectInput(props: OptionSelectProps) {
 
   const getOptionClickHandler = (option: Option) => {
     return ((e) => {
-      e.preventDefault();
       setTextInput(option.displayName);
       setShowOptions(false);
       if (props.onClickChooseOption) props.onClickChooseOption(e, option);
@@ -72,13 +92,14 @@ export function SearchableOptionSelectInput(props: OptionSelectProps) {
     if (!showOptions) return;
     const searchText = textInput.trim(); // process the text
     if (searchText.length === 0) {
-      setDisplayedOptions(props.options ?? null); // show full options if no input
       return;
     }
     const res = fuse.search(searchText);
-    const items = res.map(({ item }) => item);
+    const items = res
+      .map(({ item }) => item)
+      .slice(0, props.limitDropdownItems);
     setDisplayedOptions(items);
-  }, [props.options, showOptions, textInput]);
+  }, [props.options, showOptions, textInput, props.limitDropdownItems]);
 
   const OptionsDropdown = () => (
     <Dropdown>

@@ -1,14 +1,15 @@
 import { Colors2023 } from '@hibiscus/styles';
-import { FormMetadata } from '@hibiscus/types';
+import { HackformMetadata } from '@hibiscus/types';
 import { H1, H3, Link } from '@hibiscus/ui';
 import { Button, GlowSpan } from '@hibiscus/ui-kit-2023';
 import { useHackform } from '../../../hooks/use-hackform/use-hackform';
 import Image from 'next/image';
 import styled from 'styled-components';
+import API from '../../../common/api';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface HackformEndingProps {
-  formMetadata: FormMetadata;
+  formMetadata: HackformMetadata;
 }
 
 export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
@@ -35,8 +36,10 @@ export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
       <Link
         href="/"
         anchortagpropsoverride={{ target: '_self' }}
-        onClick={() => {
+        onClick={async () => {
           // rate limit
+          const submission = hackformUtils.getSubmission();
+          await API.submitHackform(submission);
           setTimeout(() => {
             hackformUtils.reset();
           }, TIME_BEFORE_FORMSTATE_RESET);
