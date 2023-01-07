@@ -2,7 +2,7 @@ import { DashboardRepository } from '../../../repository/dashboard.repository';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { container } from 'tsyringe';
 
-export default async function invite(
+export default async function invite( //anyone in a team can invite
   req: NextApiRequest,
   res: NextApiResponse
 ) {

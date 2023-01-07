@@ -10,7 +10,7 @@ export default async function kickTeamMember(
   const supabase = repo.getClient();
 
   let teamId: string = req.body.team_id;
-  let organizerId: string = req.body.organizer_id; //TODO: consult if should be user_id or organizer_id
+  let organizerId: string = req.body.organizer_id;
   let kickId: string = req.body.kick_id;
 
   console.log(teamId);
