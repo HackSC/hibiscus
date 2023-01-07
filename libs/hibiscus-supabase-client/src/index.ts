@@ -127,17 +127,12 @@ export class HibiscusSupabaseClient {
     access_token: string,
     refresh_token: string
   ): SSOApiVerifyToken {
-    const res = await this.client.auth.getUser(access_token);
-    if (res.data.user != null) {
-      return res;
-    } else {
-      // Try to refresh the access token
-      const data = await this.client.auth.setSession({
-        access_token,
-        refresh_token,
-      });
-      return data;
-    }
+    // Refresh the access token if needed
+    const data = await this.client.auth.setSession({
+      access_token,
+      refresh_token,
+    });
+    return data;
   }
 
   /**
@@ -171,6 +166,38 @@ export class HibiscusSupabaseClient {
     await this.client.auth.signOut();
   }
 
+  async getUserProfile(
+    access_token: string,
+    refresh_token: string
+  ): Promise<UserProfile | null> {
+    const authRes = await this.verifyToken(access_token, refresh_token);
+    if ('session' in authRes.data && authRes.data.session != null) {
+      // Access token was refreshed, update cookies
+      HibiscusSupabaseClient.setTokenCookieClientSide(
+        authRes.data.session.access_token,
+        authRes.data.session.refresh_token
+      );
+    }
+
+    const user = authRes.data.user;
+    if (user == null) {
+      // Access token was invalid
+      return null;
+    }
+
+    const dbRes = await this.client
+      .from('user_profiles')
+      .select()
+      .eq('user_id', user.id);
+
+    if (dbRes.data.length !== 1) {
+      // User either not found or duplicates found == DB corrupted
+      return null;
+    }
+
+    return dbRes.data[0] as UserProfile;
+  }
+
   static setTokenCookieClientSide(access_token: string, refresh_token: string) {
     setCookie(
       process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME,
@@ -197,4 +224,13 @@ export class HibiscusSupabaseClient {
       }
     );
   }
+}
+
+interface UserProfile {
+  created_at: string;
+  first_name: string;
+  last_name: string;
+  user_id: string;
+  role: number;
+  team_id: number;
 }

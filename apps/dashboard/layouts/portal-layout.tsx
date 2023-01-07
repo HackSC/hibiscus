@@ -8,6 +8,9 @@ export type PortalLayoutProps = React.PropsWithChildren;
 
 function PortalLayout({ children }: PortalLayoutProps) {
   const { user } = useHibiscusUser();
+  if (user == null) {
+    return <></>;
+  }
 
   return (
     <MainPageWrapper>
