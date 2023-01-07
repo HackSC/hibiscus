@@ -23,6 +23,7 @@ export function PortalMenu(props: PortalMenuProps) {
   }));
   const dispatch = useAppDispatch();
   const { user } = useHibiscusUser();
+  const colors = getColorsForRole(user?.role ?? HibiscusRole.HACKER);
 
   const getTabIndexFromPageRoute = () => {
     const fti = tabRoutes.findIndex((item) => item.url === router.pathname);
@@ -41,8 +42,6 @@ export function PortalMenu(props: PortalMenuProps) {
     const fti = getTabIndexFromPageRoute();
     dispatch(changeTab(fti));
   }, []);
-
-  const colors = getColorsForRole(user?.role ?? HibiscusRole.HACKER);
 
   const LeftBarWhenActive = () => (
     <div
