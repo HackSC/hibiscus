@@ -124,7 +124,10 @@ export const callbackApiHandler =
     }
   };
 
-const VALID_CALLBACKS = [process.env.NEXT_PUBLIC_SSO_MOCK_APP_URL];
+const VALID_CALLBACKS = [
+  process.env.NEXT_PUBLIC_SSO_MOCK_APP_URL,
+  process.env.NEXT_PUBLIC_PORTAL_URL,
+];
 
 /**
  * Calls the app's callback API route which sets the token as a cookie on the app
@@ -151,7 +154,6 @@ export async function ssoCallback(callback: string, token: string) {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        withCredentials: true,
       }
     );
 
