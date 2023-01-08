@@ -45,8 +45,6 @@ alter table "public"."roles" add column "discord_role_id" text;
 
 alter table "public"."user_profiles" add column "team_id" uuid;
 
-alter table "public"."user_profiles" add column "email" text not null;
-
 CREATE UNIQUE INDEX discord_invites_pkey ON public.discord_invites USING btree (id);
 
 CREATE UNIQUE INDEX discord_profiles_pkey ON public.discord_profiles USING btree (id);

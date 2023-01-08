@@ -6,62 +6,41 @@ export default async function disbandTeam(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const repo = container.resolve(DashboardRepository);
-  const supabase = repo.getClient();
-  const teamId: string = req.body.team_id;
-  const organizerId: string = req.body.organizer_id;
-  // verify user is organizer of team
-  const isOrganizer = await repo.verifyUserIsOrganizer(organizerId, teamId);
+  try {
+    const repo = container.resolve(DashboardRepository);
+    const supabase = repo.getClient();
+    const teamId: string = req.body.team_id;
+    const organizerId: string = req.body.organizer_id;
 
-  if (!isOrganizer) {
-    res.status(500).json({
-      message: 'User is not the organizer and not authorized to this function.',
-    });
+    if (!teamId) {
+      throw new Error('Team ID is missing.');
+    }
+    if (!organizerId) {
+      throw new Error('Organizer ID is missing.');
+    }
+
+    // verify user is organizer of team
+    const isOrganizer = await repo.verifyUserIsOrganizer(organizerId, teamId);
+
+    if (!isOrganizer) {
+      throw new Error(
+        'User is not the organizer and not authorized to this function.'
+      );
+    }
+
+    // find all users related to team_id. update all their team_id to null
+    const returnData = await repo.updateAllTeamMembersToNull(teamId);
+
+    //delete all records of invites involving that team
+
+    await repo.deleteTeamInvites(teamId);
+    //delete record for corresponding team
+
+    let result = await repo.deleteTeam(teamId);
+
+    //return deleted team members, maybe find way to append deleted team??
+    return res.status(200).json(returnData.data);
+  } catch (e) {
+    return res.status(500).json({ message: e.message });
   }
-
-  // find all users related to team_id. update all their team_id to null
-  const updateAllTeamMembers = async () => {
-    const { data, error } = await supabase
-      .from('user_profiles')
-      .update({ team_id: null })
-      .eq('team_id', teamId)
-      .select();
-
-    return { data, error };
-  };
-
-  const returnData = await updateAllTeamMembers();
-  if (returnData.error) {
-    return res.status(500).json({ message: returnData.error.message });
-  }
-
-  //delete all records of invites involving that team
-  const deleteInvites = async () => {
-    const { data, error } = await supabase
-      .from('invitations')
-      .delete()
-      .eq('team_id', teamId);
-    return { data, error };
-  };
-  let result = await deleteInvites();
-  if (result.error) {
-    return res.status(500).json({ message: result.error.message });
-  }
-
-  //delete record for corresponding team
-  const deleteTeam = async () => {
-    const { data, error } = await supabase
-      .from('teams')
-      .delete()
-      .eq('team_id', teamId);
-    return { data, error };
-  };
-
-  result = await deleteTeam();
-  if (result.error) {
-    return res.status(500).json({ message: result.error.message });
-  }
-
-  //return deleted team members, maybe find way to append deleted team??
-  return res.status(200).json(returnData.data);
 }

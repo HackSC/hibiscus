@@ -1,4 +1,4 @@
-import { DashboardRepository } from 'apps/dashboard/repository/DashboardRepository';
+import { DashboardRepository } from '../../../repository/dashboard.repository';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { container } from 'tsyringe';
 /**
@@ -12,90 +12,54 @@ export default async function inviteAccept(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const repo = container.resolve(DashboardRepository);
-  const supabase = repo.getClient();
+  try {
+    const repo = container.resolve(DashboardRepository);
+    const supabase = repo.getClient();
 
-  const query = req.query;
-  const { inviteId } = query;
+    const query = req.query;
+    const { inviteId } = query;
 
-  //grab team_id, invitee_id
-  let getInviteInfo = async () => {
-    const { data, error } = await supabase
-      .from('invitations')
-      .select()
-      .eq('id', inviteId);
+    if (!inviteId) {
+      throw new Error('Invite ID is missing or null.');
+    }
 
-    return { data, error };
-  };
+    let stringifyInviteId = inviteId.toString();
 
-  let result = await getInviteInfo();
-  if (result.error) {
-    return res.status(500).json({ message: result.error.message });
-  }
-  if (result.data.length === 0) {
-    return res.status(500).json({ message: "Invite id doesn't exist." });
-  }
-  //extract team_id and invited_id from data object
-  const teamId: string = result.data[0]['team_id']; //should exist in the returned data object
-  const invitedId: string = result.data[0]['invited_id'];
+    //Gets invited_id and team_id. Also check if invite exists by checking length of getInvite.
+    let result = await repo.getInviteInfo(stringifyInviteId);
+    if (result.data.length === 0) {
+      throw new Error('Invite with the given ID does not exist.');
+    }
 
-  //check to make sure team isn't full
-  result = await repo.memberCount(teamId);
-  if (result.error) {
-    return res.status(500).json({ message: result.error.message });
-  }
-  if (result.data.length >= repo.MAX_TEAM_MEMBERS) {
-    return res
-      .status(500)
-      .json({ message: 'Team is already full (4 members max).' });
-  }
+    //extract team_id and invited_id from data object. Should only contain one invitation anyway
+    const teamId: string = result.data[0]['team_id'];
+    const invitedId: string = result.data[0]['invited_id'];
 
-  //check to make sure accepted member doesn't already have a team
-  result = await repo.checkHasNoTeam(invitedId);
-  if (result.error) {
-    return res.status(500).json({ message: result.error.message });
-  }
+    //check to make sure team isn't full
+    result = await repo.getAllTeamMembers(teamId);
+    console.log(result.data);
+    if (result.data.length >= repo.MAX_TEAM_MEMBERS) {
+      throw new Error('Team is already full (4 MEMBER MAX).');
+    }
 
-  if (result.data.length === 0) {
-    return res.status(500).json({
-      message:
-        'Requesting member already has a team. They must leave before the invite can be accepted',
-      //in the case of errors, should the invitation be deleted and a new one needs to be sent?
-    });
-  }
+    //check to make sure accepted member doesn't already have a team
+    result = await repo.checkHasNoTeam(invitedId);
+    if (result.data.length === 0) {
+      throw new Error(
+        'Requesting member already has a team. They must leave before the invite can be accepted'
+      );
+    }
 
-  let updaterUserAccepted = async () => {
-    const { data, error } = await supabase
-      .from('user_profiles')
-      .update({ team_id: teamId })
-      .eq('user_id', invitedId);
+    await repo.updateUserWithAcceptedInvite(teamId, invitedId);
 
-    return { data, error };
-  };
-
-  result = await updaterUserAccepted();
-  if (result.error) {
-    return res.status(500).json({ message: result.error.message });
-  }
-
-  //Assuming invitation already exists in db, otherwise error prob thrown anyway
-  let deleteAcceptedInvite = async () => {
-    const { data, error } = await supabase
-      .from('invitations')
-      .delete()
-      .eq('id', inviteId);
-
-    return { data, error };
-  };
-
-  result = await deleteAcceptedInvite();
-  if (result.error) {
-    return res.status(500).json({ message: result.error.message });
-  } else {
+    //Assuming invitation already exists in db, otherwise error prob thrown anyway
+    result = await repo.deleteAcceptedInvite(stringifyInviteId);
     return res
       .status(200)
       .json({ message: 'Invite request accepted successfully!' });
-  }
 
-  //add redirect to whatever page needs to go
+    //add redirect to whatever page needs to go
+  } catch (e) {
+    return res.status(500).json({ message: e.message });
+  }
 }

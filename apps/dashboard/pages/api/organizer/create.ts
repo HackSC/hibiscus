@@ -21,56 +21,45 @@ export default async function createTeam(
   const photoKey: string | null = req.body.photo_key;
   const organizerId: string = req.body.organizer_id;
 
-  //test name isnt "". Null and "" should be caught by frontend anyway but just in case
-  if (!name) {
-    return res.status(500).json({ message: 'Name cannot be empty.' });
+  console.log(`Name: ${name}`);
+  console.log(`Desc: ${description}`);
+  console.log(`PhotoKey: ${photoKey}`);
+  console.log(`Organizer ID: ${organizerId}`);
+
+  try {
+    //check to make sure accepted member doesn't already have a team
+    //test name isnt "". Null and "" should be caught by frontend anyway but just in case
+    if (!name) {
+      throw new Error('Name cannot be empty.');
+    }
+    if (!organizerId) {
+      throw new Error('Organizer ID is empty.');
+    }
+
+    //this could be redundant since supabase checks organizer_id is unique.
+    let result = await repo.checkHasNoTeam(organizerId);
+    console.log(result.data);
+
+    //if length 0, user with same id without a team doesn't exist.
+    if (result.data.length === 0) {
+      throw new Error(
+        'You are already in a team. You cannot create one before leaving.'
+      );
+    }
+
+    const insertedTeam = await repo.insertTeam(
+      name,
+      description,
+      photoKey,
+      organizerId
+    );
+    let teamId = insertedTeam.data[0]['team_id'];
+
+    //insert team_id into user_profiles table
+    result = await repo.updateOrganizerTeam(teamId, organizerId);
+
+    return res.status(201).json(insertedTeam.data);
+  } catch (e) {
+    return res.status(500).json({ message: e.message });
   }
-
-  //check to make sure accepted member doesn't already have a team
-  //this could be redundant since supabase checks organizer_id is unique. TODO: consult
-  let result = await repo.checkHasNoTeam(organizerId);
-  if (result.error) {
-    return res.status(500).json({ message: result.error.message });
-  }
-
-  //if length 0, user with same id without a team doesn't exist.
-  if (result.data.length === 0) {
-    return res.status(500).json({
-      message:
-        'You are already in a team. You cannot create one before leaving.',
-    });
-  }
-
-  const { data, error } = await supabase
-    .from('teams')
-    .insert([
-      {
-        name: name,
-        description: description,
-        photo_key: photoKey,
-        organizer_id: organizerId,
-      },
-    ])
-    .select();
-
-  if (error) {
-    return res.status(500).json({ message: error.message });
-  }
-
-  //insert team_id into user_profiles table
-  const updateOrganizerTeam = async (team_id: string) => {
-    const { data, error } = await supabase
-      .from('user_profiles')
-      .update({ team_id: team_id })
-      .eq('user_id', organizerId);
-
-    return { data, error };
-  };
-
-  result = await updateOrganizerTeam(data[0]['team_id']);
-  if (result.error) {
-    return res.status(500).json({ message: error.message });
-  }
-
-  return res.status(201).json(data);
 }

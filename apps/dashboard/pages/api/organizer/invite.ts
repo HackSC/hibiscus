@@ -12,10 +12,16 @@ export default async function invite( //anyone in a team can invite
   let teamId = req.body.team_id;
   let email = req.body.email;
   let organizerId = req.body.organizer_id;
-  let invitedId = req.body.invited_id;
+  let invitedId = req.body.invited_id; //TODO: cover the params and see if invitedID necessary if have email???
+
+  if (!teamId || !email || !organizerId || !invitedId) {
+    throw new Error(
+      'One of more required parameters is missing from message body.'
+    );
+  }
 
   //check to make sure team isn't full
-  let result = await repo.memberCount(teamId);
+  let result = await repo.getAllTeamMembers(teamId);
   if (result.error) {
     return res.status(500).json({ message: result.error.message });
   }
@@ -60,36 +66,6 @@ export default async function invite( //anyone in a team can invite
   //add logic for emailing invite
   //need team name, organizer's name
   //invite email will link to the online version and send invite_id
-  let ses = new AWS.SES();
-  let template = ses.createTemplate();
-  let params = {
-    RawMessage: {
-      /* required */
-      Data:
-        Buffer.from('...') ||
-        'test message from aws.' /* Strings will be Base-64 encoded on your behalf */ /* required */,
-    },
-    ConfigurationSetName: 'Simple Email Test',
-    Destinations: [
-      'benhwang@usc.edu',
-      /* more items */
-    ],
-    // FromArn: 'STRING_VALUE',
-    // ReturnPathArn: 'STRING_VALUE',
-    Source: 'test@notifications.hacksc.com',
-    // SourceArn: 'STRING_VALUE',
-    // Tags: [
-    //   {
-    //     Name: 'Hacksc Invite', /* required */
-    //     Value: 'STRING_VALUE' /* required */
-    //   },
-    //   /* more items */
-    // ]
-  };
-  ses.sendRawEmail(params, function (err, data) {
-    if (err) console.log(err, err.stack); // an error occurred
-    else console.log(data); // successful response
-  });
 
   return res.status(200).json({ message: 'Invite sent successfully!' });
 }
