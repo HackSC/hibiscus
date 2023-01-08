@@ -8,7 +8,6 @@ import { formMetadata2023HackerApps } from '../../common/hackform.metadata';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import {
   getCurrentError,
-  getCurrentQuestion,
   getCurrentResponse,
   goNextQuestion,
   goPreviousQuestion,
@@ -99,6 +98,7 @@ export function useHackform(formMetadata = formMetadata2023HackerApps) {
     currentQuestionIndex: cqi,
     responses: submission.responses,
     errors,
+    getHackformMetadata: () => formMetadata,
     getCurrentResponse: () => currentResponse,
     getCurrentError: () => currentError,
     getCurrentQuestion: () => currentQuestion,

@@ -54,6 +54,7 @@ export const FileQuestion = () => {
       getInputResponse={getInputResponse}
       handleSubmitWithValidation={handleSubmit}
       goNextQuestion={handleNext}
+      submitButtonUnder
     />
   );
 };

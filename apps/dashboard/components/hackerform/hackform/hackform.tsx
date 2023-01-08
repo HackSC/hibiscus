@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import HackformIntroduction from '../hackform-introduction/hackform-introduction';
 import HackformQuestionComponent from '../hackform-question/hackform-question';
 import { HackformMetadata } from '@hibiscus/types';
 import HackformEnding from '../hackform-end/hackform-end';
 import { useHackform } from '../../../hooks/use-hackform/use-hackform';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
+
+NProgress.configure({ showSpinner: false, trickle: false, minimum: 0.05 });
 
 /* eslint-disable-next-line */
 export interface HackerformProps {
@@ -13,6 +17,17 @@ export interface HackerformProps {
 
 export function Hackerform({ formMetadata }: HackerformProps) {
   const { currentQuestionIndex: cqi, ...hackformUtils } = useHackform();
+
+  useEffect(() => {
+    const numQuestionsTotal =
+      hackformUtils.getHackformMetadata().questions.length;
+    if (cqi === -1) {
+      NProgress.remove();
+      return;
+    }
+    const progress = (cqi + 1) / (numQuestionsTotal + 1);
+    NProgress.set(progress);
+  }, [cqi]);
 
   // get page to show based on question index etc...
   const getHackformPage = () => {

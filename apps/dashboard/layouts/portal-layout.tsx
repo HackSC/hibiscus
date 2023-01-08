@@ -16,7 +16,7 @@ function PortalLayout({ children }: PortalLayoutProps) {
         <MenuWrapper>
           <PortalMenu />
         </MenuWrapper>
-        <LayoutWrapper>{children}</LayoutWrapper>
+        <ChildrenWrapper>{children}</ChildrenWrapper>
       </MenuLayoutWrapper>
     </MainPageWrapper>
   );
@@ -39,6 +39,6 @@ const MenuWrapper = styled.div`
   z-index: 999; // always on top
 `;
 
-const LayoutWrapper = styled.div`
+const ChildrenWrapper = styled.div`
   height: 100%;
 `;
