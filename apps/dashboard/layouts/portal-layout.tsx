@@ -25,13 +25,16 @@ function PortalLayout({ children }: PortalLayoutProps) {
 export default PortalLayout;
 
 const MainPageWrapper = styled.div`
-  height: 88vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
 `;
 
 const MenuLayoutWrapper = styled.div`
-  height: 100%;
   position: relative;
   padding: 20px;
+  height: 100%;
 `;
 
 const MenuWrapper = styled.div`
