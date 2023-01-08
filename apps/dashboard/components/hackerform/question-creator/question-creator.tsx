@@ -1,12 +1,4 @@
 import { Button } from '@hibiscus/ui-kit-2023';
-import {
-  ButtonHintTextContainer,
-  ErrorText,
-  InputAndButtonWrapper,
-  PageWrapper,
-  QuestionWrapper,
-  SmallText,
-} from '../common-styled-components';
 import HackformQuestionHeader from '../hackform-question-header/hackform-question-header';
 import HackformBackNextWidget from '../hackform-backnext-widget/hackform-backnext-widget';
 import { HackformQuestion, HackformError } from '@hibiscus/types';
@@ -14,6 +6,8 @@ import { IoReturnDownBackOutline } from 'react-icons/io5';
 import styled from 'styled-components';
 import { GetInputResponseCb } from '../../../common/types';
 import { useHackform } from '../../../hooks/use-hackform/use-hackform';
+import { Colors2023 } from '@hibiscus/styles';
+import { Text } from '@hibiscus/ui';
 
 interface QuestionCreatorProps {
   inputComponentChildren: React.ReactNode;
@@ -68,7 +62,7 @@ export const QuestionCreator = ({
           question={question ?? hackformUtils.getCurrentQuestion()}
           qi={qi ?? currentQuestionIndex}
         />
-        <IBWrapperOverride submitButtonUnder={submitButtonUnder}>
+        <InputAndButtonWrapper submitButtonUnder={submitButtonUnder}>
           {inputComponentChildren}
           <ButtonHintTextContainer>
             <Button
@@ -83,7 +77,7 @@ export const QuestionCreator = ({
             <SmallText>press Enter</SmallText>
             <IoReturnDownBackOutline />
           </ButtonHintTextContainer>
-        </IBWrapperOverride>
+        </InputAndButtonWrapper>
         <ErrorContainer>
           <ErrorChildren />
         </ErrorContainer>
@@ -104,12 +98,44 @@ export const QuestionCreator = ({
 
 export default QuestionCreator;
 
-const IBWrapperOverride = styled(InputAndButtonWrapper)<{
+const InputAndButtonWrapper = styled.div<{
   submitButtonUnder?: boolean;
 }>`
+  display: flex;
+  align-items: center;
+  gap: 10px;
   flex-direction: ${(props) => (props.submitButtonUnder ? 'column' : 'row')};
   align-items: ${(props) =>
     props.submitButtonUnder ? 'flex-start' : 'center'};
+`;
+
+const QuestionWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  height: 100%;
+`;
+
+const ErrorText = styled(Text)`
+  color: ${Colors2023.RED.STANDARD};
+`;
+
+const SmallText = styled(Text)`
+  font-size: small;
+`;
+
+const PageWrapper = styled.div`
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
+const ButtonHintTextContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
 `;
 
 const ErrorContainer = styled.div`

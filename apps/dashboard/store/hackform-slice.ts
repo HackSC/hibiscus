@@ -26,6 +26,7 @@ const initialState: HackformState = {
       ...q,
       validationFunction: undefined,
       options: undefined,
+      title: undefined,
     })),
   },
   cqi: -1,

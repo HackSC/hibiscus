@@ -25,6 +25,7 @@ export function ArrowButton(props: ArrowButtonProps) {
 export default ArrowButton;
 
 const StyledArrowButton = styled.button<{
+  disabled?: boolean;
   orientation: ArrowButtonProps['orientation'];
 }>`
   transform: ${({ orientation }) =>
@@ -36,8 +37,11 @@ const StyledArrowButton = styled.button<{
       ? 'rotate(-90deg)'
       : 'rotate(0)'};
   background: transparent;
-  color: ${Colors2023.BLUE.STANDARD};
-  border: 1.5px solid ${Colors2023.BLUE.STANDARD};
+  color: ${(props) =>
+    props.disabled ? Colors2023.GRAY.MEDIUM : Colors2023.BLUE.STANDARD};
+  border: 1.5px solid
+    ${(props) =>
+      props.disabled ? Colors2023.GRAY.MEDIUM : Colors2023.BLUE.STANDARD};
   border-radius: 8px;
   padding: 8px
     ${({ orientation }) =>
@@ -46,9 +50,14 @@ const StyledArrowButton = styled.button<{
   align-items: center;
   justify-content: center;
   :hover {
-    border: 1.5px solid ${Colors2023.BLUE.STANDARD};
-    background: #307c93b2;
-    box-shadow: 0px 0px 5px rgba(118, 211, 239, 0.5);
+    border: 1.5px solid
+      ${(props) =>
+        props.disabled ? Colors2023.GRAY.MEDIUM : Colors2023.BLUE.STANDARD};
+    background: ${(props) =>
+      props.disabled ? Colors2023.GRAY.MEDIUM : '#307c93b2'};
+    box-shadow: 0px 0px 5px
+      ${(props) =>
+        props.disabled ? Colors2023.GRAY.MEDIUM : 'rgba(118, 211, 239, 0.5)'};
     cursor: pointer;
     transition: 0.1s;
   }
@@ -59,4 +68,5 @@ const StyledArrowButton = styled.button<{
     box-shadow: 0px 0px 5px rgba(118, 211, 239, 0.5);
     border-radius: 10px;
   }
+  cursor: ${(props) => (props.disabled ? 'not-allowed' : 'pointer')};
 `;

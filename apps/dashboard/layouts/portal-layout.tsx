@@ -16,7 +16,7 @@ function PortalLayout({ children }: PortalLayoutProps) {
         <MenuWrapper>
           <PortalMenu />
         </MenuWrapper>
-        <LayoutWrapper>{children}</LayoutWrapper>
+        <ChildrenWrapper>{children}</ChildrenWrapper>
       </MenuLayoutWrapper>
     </MainPageWrapper>
   );
@@ -25,13 +25,16 @@ function PortalLayout({ children }: PortalLayoutProps) {
 export default PortalLayout;
 
 const MainPageWrapper = styled.div`
-  height: 88vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
 `;
 
 const MenuLayoutWrapper = styled.div`
-  height: 100%;
   position: relative;
   padding: 20px;
+  height: 100%;
 `;
 
 const MenuWrapper = styled.div`
@@ -39,6 +42,6 @@ const MenuWrapper = styled.div`
   z-index: 999; // always on top
 `;
 
-const LayoutWrapper = styled.div`
+const ChildrenWrapper = styled.div`
   height: 100%;
 `;

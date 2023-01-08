@@ -36,12 +36,12 @@ export function Index() {
                 What would you like to do today?
               </H3>
             </div>
-            <Search
+            {/* <Search
               placeholder={'Search...'}
               onInput={function (value: string): void {
                 throw new Error('Function not implemented.');
               }}
-            ></Search>
+            ></Search> */}
           </div>
           <div>
             <p style={{ margin: '13px 0' }}>Quick Actions</p>
@@ -138,6 +138,6 @@ const AddOnAndStats = styled.div`
 const QuickActionContainer = styled.div`
   display: flex;
   width: 100%;
-  justify-content: space-between;
   flex-wrap: wrap;
+  gap: 30px;
 `;

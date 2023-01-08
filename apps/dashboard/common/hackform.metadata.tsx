@@ -6,6 +6,7 @@ import {
 import { getAge, isAbove, isUnder } from './utils';
 import API from './api';
 import { Link } from '@hibiscus/ui';
+import { hackformLinks } from './constants';
 
 export const formMetadata2023HackerApps: HackformMetadata = {
   entry: {
@@ -398,13 +399,16 @@ export const formMetadata2023HackerApps: HackformMetadata = {
     {
       title: (
         <span>
-          I have read and agree to the HackSC Code of Conduct, HackSC Terms and
-          Conditions, as well as the{' '}
-          <Link
-            href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
-            passHref
-            underline
-          >
+          I have read and agree to the{' '}
+          <Link href={hackformLinks.HackSC.CodeOfConduct} passHref underline>
+            HackSC Code of Conduct
+          </Link>
+          ,{' '}
+          <Link href={hackformLinks.HackSC.TermsOfService} passHref underline>
+            HackSC Terms and Conditions
+          </Link>
+          , as well as the{' '}
+          <Link href={hackformLinks.MLH.CodeOfConduct} passHref underline>
             MLH Code of Conduct
           </Link>
           .
@@ -426,19 +430,19 @@ export const formMetadata2023HackerApps: HackformMetadata = {
           I authorize you to share my application/registration information with
           Major League Hacking for event administration, ranking, and MLH
           administration in-line with the{' '}
-          <Link href="https://mlh.io/privacy" passHref underline>
+          <Link href={hackformLinks.MLH.PrivacyPolicy} passHref underline>
             MLH Privacy Policy
           </Link>
           . I further agree to the terms of both the{' '}
           <Link
-            href="https://github.com/MLH/mlh-policies/blob/main/contest-terms.md"
+            href={hackformLinks.MLH.ContestTermsAndConditions}
             passHref
             underline
           >
             MLH Contest Terms and Conditions
           </Link>{' '}
           and the{' '}
-          <Link href="https://mlh.io/privacy" passHref underline>
+          <Link href={hackformLinks.MLH.PrivacyPolicy} passHref underline>
             MLH Privacy Policy
           </Link>
         </span>

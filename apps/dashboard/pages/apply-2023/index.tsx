@@ -1,25 +1,32 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useEffect } from 'react';
 import Hackerform from '../../components/hackerform/hackform/hackform';
 import { formMetadata2023HackerApps } from '../../common/hackform.metadata';
 import PortalLayout from '../../layouts/portal-layout';
+import { useHackform } from '../../hooks/use-hackform/use-hackform';
+import NProgress from 'nprogress';
+import 'nprogress/nprogress.css';
+
+NProgress.configure({ showSpinner: false, trickle: false, minimum: 0.05 });
 
 export function Index() {
+  const { currentQuestionIndex: cqi, ...hackformUtils } = useHackform();
+
+  useEffect(() => {
+    const numQuestionsTotal =
+      hackformUtils.getHackformMetadata().questions.length;
+    if (cqi === -1) {
+      NProgress.remove();
+      return;
+    }
+    const progress = (cqi + 1) / (numQuestionsTotal + 1);
+    NProgress.set(progress);
+  }, [cqi]);
+
   return (
     <PortalLayout>
-      <MainPageWrapper>
-        <Hackerform formMetadata={formMetadata2023HackerApps} />
-      </MainPageWrapper>
+      <Hackerform formMetadata={formMetadata2023HackerApps} />
     </PortalLayout>
   );
 }
 
 export default Index;
-
-const MainPageWrapper = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
