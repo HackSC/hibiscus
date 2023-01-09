@@ -5,10 +5,13 @@ import Image from 'next/image';
 import { Colors2023 } from '@hibiscus/styles';
 import PortalLayout from '../../layouts/portal-layout';
 import styled from 'styled-components';
+import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 
 export function Index() {
+  const { user } = useHibiscusUser();
+
   return (
-    <PortalLayout>
+    <PortalLayout user={user}>
       <MainPageWrapper>
         <Wrapper>
           <H1 style={{ fontSize: '40px', lineHeight: '40px' }}>
