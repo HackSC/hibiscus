@@ -2,6 +2,7 @@ import NextLink, { LinkProps as NextLinkProps } from 'next/link';
 
 /* eslint-disable-next-line */
 export type LinkProps = React.PropsWithChildren<NextLinkProps> & {
+  underline?: boolean;
   anchortagpropsoverride?: React.AnchorHTMLAttributes<HTMLAnchorElement>;
 };
 
@@ -14,7 +15,10 @@ export function Link(props: LinkProps) {
   return (
     <NextLink
       {...props}
-      style={{ textDecoration: 'none', ...props.anchortagpropsoverride?.style }}
+      style={{
+        textDecoration: props.underline ? 'underline' : 'none',
+        ...props.anchortagpropsoverride?.style,
+      }}
       passHref
       target={'_blank'}
       rel="noreferrer"

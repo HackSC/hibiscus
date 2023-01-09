@@ -3,8 +3,10 @@ import {
   HackformQuestionType,
   Option,
 } from '@hibiscus/types';
-import moment from 'moment';
+import { getAge, isAbove, isUnder } from './utils';
 import API from './api';
+import { Link } from '@hibiscus/ui';
+import { hackformLinks } from './constants';
 
 export const formMetadata2023HackerApps: HackformMetadata = {
   entry: {
@@ -18,7 +20,7 @@ export const formMetadata2023HackerApps: HackformMetadata = {
       title: 'Please confirm your full name',
       type: HackformQuestionType.ShortText,
       placeholder: 'Enter your full name here',
-      required: true, // TODO: add option to put error message if required condition violated
+      required: true,
       validationFunction: (input) => {
         if (input.text === '') {
           return {
@@ -36,6 +38,7 @@ export const formMetadata2023HackerApps: HackformMetadata = {
       validationFunction: (input) => {
         const errors: string[] = [];
         if (input.text === '') errors.push('This field is required');
+
         // try to parse date
         const parsed = Date.parse(input.text);
         if (isNaN(parsed))
@@ -44,26 +47,12 @@ export const formMetadata2023HackerApps: HackformMetadata = {
           );
 
         // can't attend if you're <18
-        const today = new Date();
-        const birthday = new Date(parsed);
-        const todayMoment = moment([
-          today.getFullYear(),
-          today.getMonth(),
-          today.getDate(),
-        ]);
-        const bdayMoment = moment([
-          birthday.getFullYear(),
-          birthday.getMonth(),
-          birthday.getDate(),
-        ]);
-        const age = todayMoment.diff(bdayMoment, 'years'); // rounded down by default
-
+        const age = getAge(parsed);
         if (age < 18) {
           errors.push(
             "Sorry! Unfortunately we don't allow hackers under 18 to attend our event. "
           );
         }
-
         if (errors.length > 0)
           return { valid: false, errorDescription: errors };
         return { valid: true };
@@ -100,10 +89,10 @@ export const formMetadata2023HackerApps: HackformMetadata = {
       hasOtherField: true,
       placeholder: 'e.g a SWE bootcamp',
       options: [
+        { value: 'high-school', displayName: 'High school' },
         { value: 'undergrad', displayName: 'Undergraduate' },
         { value: 'master', displayName: 'Masters' },
         { value: 'phd', displayName: 'PhD' },
-        { value: 'high-school', displayName: 'High school' },
       ],
     },
     {
@@ -180,20 +169,10 @@ export const formMetadata2023HackerApps: HackformMetadata = {
       ],
     },
     {
-      title: 'Minor:',
-      type: HackformQuestionType.SingleOptionDropdown,
-      options: [],
-    },
-    {
       title: 'Preferred pronouns:',
       type: HackformQuestionType.SingleChoice,
       required: true,
       hasOtherField: true,
-      validationFunction: (input) => {
-        if (!input.singleChoiceValue && input.text === '')
-          return { valid: false, errorDescription: 'This field is required' };
-        return { valid: true };
-      },
       options: [
         {
           value: '1',
@@ -206,31 +185,49 @@ export const formMetadata2023HackerApps: HackformMetadata = {
         { value: '6', displayName: 'No Pronoun' },
         { value: '7', displayName: 'I do not wish to share' },
       ],
+      validationFunction: (input) => {
+        // check if they picked an option at all
+        if (input.singleChoiceValue === undefined)
+          return { valid: false, errorDescription: 'This field is required' };
+        // check if they provided input for Others but no text
+        if (input.singleChoiceValue === '' && input.text === '') {
+          return {
+            valid: false,
+            errorDescription: "Please provide an answer to 'Others'",
+          };
+        }
+        return { valid: true };
+      },
     },
     {
-      title: 'Ethnicity:',
-      type: HackformQuestionType.MultipleSelect,
+      title:
+        'Which race or ethnicity best describes you? (Please choose only one.)',
+      type: HackformQuestionType.SingleChoice,
       hasOtherField: true,
+      otherFieldLabel: 'Multiple ethnicities / Other',
       required: true,
       options: [
         {
-          value: 'b',
-          displayName: 'Black',
+          value: 'ai/an',
+          displayName: 'American Indian / Alaskan Native',
         },
-        { value: 'w', displayName: 'White' },
-        { value: 'ea', displayName: 'East Asian' },
-        { value: 'sa', displayName: 'South Asian' },
-        { value: 'sea', displayName: 'Southeast Asian' },
-        { value: 'na', displayName: 'North Asian' },
-        { value: 'ca', displayName: 'Central Asian' },
-        { value: 'me/na', displayName: 'Middle Eastern/North African' },
-        { value: 'ltx', displayName: 'Latinx' },
+        { value: 'a/pi', displayName: 'Asian / Pacific Islander' },
+        { value: 'b/aa', displayName: 'Black / African American' },
+        { value: 'h', displayName: 'Hispanic' },
+        { value: 'w/ccs', displayName: 'White / Caucasian' },
       ],
       validationFunction: (input) => {
-        if (input.choices.length === 0) {
+        // check if they entered input for Others
+        if (input.singleChoiceValue === '' && input.text === '')
           return {
             valid: false,
-            errorDescription: 'Please select more than one option',
+            errorDescription: "Please provide an answer for 'Others'",
+          };
+        // must have a non-Others choice now
+        if (input.choices?.length === 0) {
+          return {
+            valid: false,
+            errorDescription: 'Please select at least one option',
           };
         }
         return { valid: true };
@@ -253,7 +250,7 @@ export const formMetadata2023HackerApps: HackformMetadata = {
         if (input.text === '') {
           return {
             valid: false,
-            errorDescription: 'Please enter a mailing address!',
+            errorDescription: 'Please enter a shipping address!',
           };
         }
         return { valid: true };
@@ -285,6 +282,29 @@ export const formMetadata2023HackerApps: HackformMetadata = {
       title: 'How many hackathons have you done before?',
       required: true,
       type: HackformQuestionType.ShortText,
+      validationFunction: (input) => {
+        // required input
+        if (input.text === '') {
+          return {
+            valid: false,
+            errorDescription: 'This field is required!',
+          };
+        }
+        // check valid nonneg int
+        const num = Number.parseInt(input.text);
+        const isValidNonnegativeInt =
+          !isNaN(num) &&
+          Number.isInteger(num) &&
+          Number.isFinite(num) &&
+          num >= 0;
+        if (!isValidNonnegativeInt) {
+          return {
+            valid: false,
+            errorDescription: 'Please enter a valid, non-negative integer',
+          };
+        }
+        return { valid: true };
+      },
     },
     {
       title: 'Have you attended HackSC before?',
@@ -318,9 +338,29 @@ export const formMetadata2023HackerApps: HackformMetadata = {
         'Tell us about a project you’re most proud of. What did you learn from it? (100-150 words)',
       type: HackformQuestionType.LongText,
       required: true,
-      validationFunction: (input) => {
+      validatorMetadata: {
+        [HackformQuestionType.LongText]: {
+          minWordCount: 100,
+          maxWordCount: 150,
+        },
+      },
+      validationFunction: function (input) {
         if (!input.text) {
           return { valid: false, errorDescription: 'This field is required' };
+        }
+        const minWordCount = 100; // TODO: find a better way to do this with validatorMetadata
+        const maxWordCount = 150;
+        if (isUnder(input.text, minWordCount)) {
+          return {
+            valid: false,
+            errorDescription: `Please write at least ${minWordCount} words!`,
+          };
+        }
+        if (isAbove(input.text, maxWordCount)) {
+          return {
+            valid: false,
+            errorDescription: `Please write at most ${maxWordCount} words!`,
+          };
         }
         return { valid: true };
       },
@@ -334,28 +374,49 @@ export const formMetadata2023HackerApps: HackformMetadata = {
         if (!input.text) {
           return { valid: false, errorDescription: 'This field is required' };
         }
+        const maxWordCount = 100;
+        if (isAbove(input.text, maxWordCount)) {
+          return {
+            valid: false,
+            errorDescription: `Please write at most ${maxWordCount} words!`,
+          };
+        }
         return { valid: true };
       },
     },
     {
       title: 'How did you hear about HackSC?',
       type: HackformQuestionType.SingleChoice,
+      hasOtherField: true,
+      otherFieldLabel: 'Other social media',
       options: [
         { value: 'f', displayName: 'Friend' },
         { value: 'e', displayName: 'Email' },
         { value: 'i', displayName: 'Instagram' },
         { value: 'l', displayName: 'LinkedIn' },
-        { value: 'osm', displayName: 'Other social media' },
       ],
     },
     {
-      title: `I have read and agree to the HackSC Code of Conduct, HackSC Terms and Conditions, as well as the MLH Code of Conduct."(https://static.mlh.io/docs/mlh-code-of-conduct.pdf)"`,
+      title: (
+        <span>
+          I have read and agree to the{' '}
+          <Link href={hackformLinks.HackSC.CodeOfConduct} passHref underline>
+            HackSC Code of Conduct
+          </Link>
+          ,{' '}
+          <Link href={hackformLinks.HackSC.TermsOfService} passHref underline>
+            HackSC Terms and Conditions
+          </Link>
+          , as well as the{' '}
+          <Link href={hackformLinks.MLH.CodeOfConduct} passHref underline>
+            MLH Code of Conduct
+          </Link>
+          .
+        </span>
+      ),
       type: HackformQuestionType.SingleChoice,
       required: true,
-      options: [
-        { value: 'y', displayName: 'Yes' },
-        { value: 'n', displayName: 'No' },
-      ],
+      options: [{ value: 'y', displayName: 'Yes' }],
       validationFunction: (input) => {
         if (!input.singleChoiceValue) {
           return { valid: false, errorDescription: 'This field is required' };
@@ -364,14 +425,31 @@ export const formMetadata2023HackerApps: HackformMetadata = {
       },
     },
     {
-      title: `I authorize you to share my application/registration information with Major League Hacking for event administration, ranking, and MLH administration in-line with the MLH Privacy Policy (https://mlh.io/privacy).
-      I further agree to the terms of both the MLH Contest Terms and Conditions (https://github.com/MLH/mlh-policies/blob/main/contest-terms.md)and the MLH Privacy Policy (https://mlh.io/privacy)`,
+      title: (
+        <span>
+          I authorize you to share my application/registration information with
+          Major League Hacking for event administration, ranking, and MLH
+          administration in-line with the{' '}
+          <Link href={hackformLinks.MLH.PrivacyPolicy} passHref underline>
+            MLH Privacy Policy
+          </Link>
+          . I further agree to the terms of both the{' '}
+          <Link
+            href={hackformLinks.MLH.ContestTermsAndConditions}
+            passHref
+            underline
+          >
+            MLH Contest Terms and Conditions
+          </Link>{' '}
+          and the{' '}
+          <Link href={hackformLinks.MLH.PrivacyPolicy} passHref underline>
+            MLH Privacy Policy
+          </Link>
+        </span>
+      ),
       type: HackformQuestionType.SingleChoice,
       required: true,
-      options: [
-        { value: 'y', displayName: 'Yes' },
-        { value: 'n', displayName: 'No' },
-      ],
+      options: [{ value: 'y', displayName: 'Yes' }],
       validationFunction: (input) => {
         if (!input.singleChoiceValue) {
           return { valid: false, errorDescription: 'This field is required' };
@@ -383,10 +461,7 @@ export const formMetadata2023HackerApps: HackformMetadata = {
       title: `I authorize MLH to send me an email where I can further opt into the MLH Hacker, Events, or Organizer Newsletters and other communications from MLH.`,
       type: HackformQuestionType.SingleChoice,
       required: true,
-      options: [
-        { value: 'y', displayName: 'Yes' },
-        { value: 'n', displayName: 'No' },
-      ],
+      options: [{ value: 'y', displayName: 'Yes' }],
       validationFunction: (input) => {
         if (!input.singleChoiceValue) {
           return { valid: false, errorDescription: 'This field is required' };

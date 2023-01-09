@@ -63,8 +63,8 @@ const StyledRadio = styled.label`
     display: block;
   }
   .checkmark:after {
-    top: 5px;
-    left: 5px;
+    top: 4px;
+    left: 4px;
     width: 15px;
     height: 15px;
     border-radius: 50%;

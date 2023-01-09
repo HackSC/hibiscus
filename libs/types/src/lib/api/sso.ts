@@ -1,4 +1,8 @@
-import { GoTrueClient } from '@supabase/supabase-js';
+import {
+  AuthResponse,
+  GoTrueClient,
+  UserResponse,
+} from '@supabase/supabase-js';
 
 export type SSOApiResetResponseType = ReturnType<
   GoTrueClient['resetPasswordForEmail']
@@ -9,4 +13,4 @@ export type SSOApiSignInWithPassword = ReturnType<
 export type SSOApiUpdateUser = ReturnType<GoTrueClient['updateUser']>;
 export type SSOApiSignUp = ReturnType<GoTrueClient['signUp']>;
 export type SSOApiVerifyOtp = ReturnType<GoTrueClient['verifyOtp']>;
-export type SSOApiVerifyToken = ReturnType<GoTrueClient['getUser']>;
+export type SSOApiVerifyToken = Promise<UserResponse | AuthResponse>;

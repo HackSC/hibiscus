@@ -4,6 +4,7 @@ import 'reflect-metadata';
 import {
   createClient,
   EmailOtpType,
+  Session,
   SupabaseClient,
 } from '@supabase/supabase-js';
 import { injectable } from 'tsyringe';
@@ -15,7 +16,7 @@ import {
   SSOApiVerifyOtp,
   SSOApiVerifyToken,
 } from '@hibiscus/types';
-import { setCookie } from 'cookies-next';
+import { deleteCookie, setCookie } from 'cookies-next';
 
 @injectable()
 export class HibiscusSupabaseClient {
@@ -63,7 +64,8 @@ export class HibiscusSupabaseClient {
     const data = res.data;
     if (data.user) {
       HibiscusSupabaseClient.setTokenCookieClientSide(
-        data.session.access_token
+        data.session.access_token,
+        data.session.refresh_token
       );
     }
     return res;
@@ -117,42 +119,82 @@ export class HibiscusSupabaseClient {
   /**
    * Verifies whether the provided access token is valid or has expired
    *
-   * @param token JWT access token associated with a user
+   * @param access_token JWT access token associated with a user
+   * @param refresh_token Supabase refresh token
    * @returns object containing `data` and `error` properties, either of which may be undefined
    */
-  async verifyToken(token: string): SSOApiVerifyToken {
-    const res = await this.client.auth.getUser(token);
-    return res;
+  async verifyToken(
+    access_token: string,
+    refresh_token: string
+  ): SSOApiVerifyToken {
+    const res = await this.client.auth.getUser(access_token);
+    if (res.data.user != null) {
+      return res;
+    } else {
+      // Try to refresh the access token
+      const data = await this.client.auth.setSession({
+        access_token,
+        refresh_token,
+      });
+      return data;
+    }
   }
 
   /**
    * Validates the current session (stored in localStorage)
    *
-   * @returns `data` object `{ token }`
+   * @returns `Session` object
    */
-  async validateSession(): Promise<{ token: string }> {
+  async validateSession(): Promise<Session> {
     const { data } = await this.client.auth.getSession();
 
     if (data.session != null) {
-      return { token: data.session.access_token };
+      return data.session;
     }
 
     return null;
   }
 
-  static setTokenCookieClientSide(token: string) {
-    setCookie(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME, token, {
-      path: '/',
-      maxAge: Number.parseInt(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE),
-      sameSite: 'none',
-      secure: true,
-    });
-    setCookie(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME, token, {
+  /**
+   * Logs out of the current session
+   */
+  async logout() {
+    deleteCookie(process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME, {
       path: '/',
       domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
-      maxAge: Number.parseInt(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE),
-      sameSite: 'none',
-      secure: true,
     });
+    deleteCookie(process.env.NEXT_PUBLIC_HIBISCUS_REFRESH_COOKIE_NAME, {
+      path: '/',
+      domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
+    });
+
+    await this.client.auth.signOut();
+  }
+
+  static setTokenCookieClientSide(access_token: string, refresh_token: string) {
+    setCookie(
+      process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME,
+      access_token,
+      {
+        path: '/',
+        domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
+        maxAge: Number.parseInt(
+          process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE
+        ),
+        sameSite: 'lax',
+      }
+    );
+    setCookie(
+      process.env.NEXT_PUBLIC_HIBISCUS_REFRESH_COOKIE_NAME,
+      refresh_token,
+      {
+        path: '/',
+        domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
+        maxAge: Number.parseInt(
+          process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE
+        ),
+        sameSite: 'lax',
+      }
+    );
   }
 }

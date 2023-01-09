@@ -17,7 +17,7 @@ export const middlewareHandler =
     if (path.length >= 2 && path[1] === 'api') {
       if (
         request.method !== 'GET' &&
-        request.headers.get('origin') === process.env.SSO_URL
+        request.headers.get('origin') === process.env.NEXT_PUBLIC_SSO_URL
       ) {
         return NextResponse.next();
       } else {
@@ -25,18 +25,52 @@ export const middlewareHandler =
       }
     }
 
-    if (request.cookies.has(process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME)) {
-      const token = request.cookies.get(
-        process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME
+    if (
+      request.cookies.has(process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME)
+    ) {
+      const access_token = request.cookies.get(
+        process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME
       );
-      const { data } = await verifyToken(token);
+      const refresh_token = request.cookies.get(
+        process.env.NEXT_PUBLIC_HIBISCUS_REFRESH_COOKIE_NAME
+      );
+      const { data } = await verifyToken(access_token, refresh_token);
 
-      if (data != null && data.user != null) {
-        return NextResponse.next();
+      if (data != null) {
+        if (data.session != null) {
+          const res = NextResponse.next();
+          res.cookies.set(
+            process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME,
+            data.session.access_token,
+            {
+              path: '/',
+              domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
+              maxAge: Number.parseInt(
+                process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE
+              ),
+              sameSite: 'lax',
+            }
+          );
+          res.cookies.set(
+            process.env.NEXT_PUBLIC_HIBISCUS_REFRESH_COOKIE_NAME,
+            data.session.refresh_token,
+            {
+              path: '/',
+              domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
+              maxAge: Number.parseInt(
+                process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE
+              ),
+              sameSite: 'lax',
+            }
+          );
+          return res;
+        } else if (data.user != null) {
+          return NextResponse.next();
+        }
       }
     }
 
-    const redirectUrl = new URL(`${process.env.SSO_URL}/login`);
+    const redirectUrl = new URL(`${process.env.NEXT_PUBLIC_SSO_URL}/login`);
     redirectUrl.search = `callback=${callbackUrl}`;
     return NextResponse.redirect(redirectUrl);
   };
@@ -52,13 +86,15 @@ export const callbackApiHandler =
   async (req: NextApiRequest, res: NextApiResponse) => {
     // Handle pre-flight requests
     if (req.method === 'OPTIONS') {
-      if (req.headers.origin === process.env.SSO_URL) {
-        res.setHeader('Access-Control-Allow-Origin', process.env.SSO_URL);
+      if (req.headers.origin === process.env.NEXT_PUBLIC_SSO_URL) {
+        res.setHeader(
+          'Access-Control-Allow-Origin',
+          process.env.NEXT_PUBLIC_SSO_URL
+        );
         res.setHeader(
           'Access-Control-Allow-Headers',
           'Authorization, Content-Type'
         );
-        res.setHeader('Access-Control-Allow-Credentials', 'true');
         res.status(200).json({ message: 'Success' });
       } else {
         res.status(400).json({ message: 'Invalid request origin' });
@@ -66,18 +102,13 @@ export const callbackApiHandler =
     } else if (req.method === 'POST') {
       const auth_header = req.headers.authorization;
       if (auth_header != null && auth_header.startsWith('Bearer ')) {
-        const token = auth_header.substring('Bearer '.length);
-
-        res.setHeader('Access-Control-Allow-Origin', process.env.SSO_URL);
+        res.setHeader(
+          'Access-Control-Allow-Origin',
+          process.env.NEXT_PUBLIC_SSO_URL
+        );
         res.setHeader(
           'Access-Control-Allow-Headers',
           'Authorization, Content-Type'
-        );
-        res.setHeader('Access-Control-Allow-Credentials', 'true');
-        res.setHeader('Access-Control-Expose-Headers', 'Set-Cookie');
-        res.setHeader(
-          'Set-Cookie',
-          `${process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_NAME}=${token}; Path=/; Max-Age=${process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE}; HttpOnly; Secure; SameSite=None`
         );
         res.status(200).json({
           message: 'Authorization success',
@@ -93,12 +124,14 @@ export const callbackApiHandler =
     }
   };
 
+const VALID_CALLBACKS = [process.env.NEXT_PUBLIC_SSO_MOCK_APP_URL];
+
 /**
  * Calls the app's callback API route which sets the token as a cookie on the app
  *
  * @param callback Callback URL for the app
  * @param token Access token obtained from login
- * @returns object containing `data` property
+ * @returns object containing `redirect` property or `null` if callback URL is not allowed
  */
 export async function ssoCallback(callback: string, token: string) {
   // callback can === '' (empty string) when no callback is specified
@@ -107,6 +140,10 @@ export async function ssoCallback(callback: string, token: string) {
   }
 
   try {
+    if (!VALID_CALLBACKS.map(getHost).includes(getHost(callback))) {
+      return null;
+    }
+
     const res = await axios.post(
       callback,
       {},
@@ -124,25 +161,37 @@ export async function ssoCallback(callback: string, token: string) {
   }
 }
 
+function getHost(url: string): string {
+  return new URL(url).host;
+}
+
 /**
  * Verifies whether the provided access token is valid or has expired
  * Exact copy of the one in hibiscus-supabase-client
  * We cannot use the one there because it imports reflect-metadata which cannot run on NextJS middleware
  *
- * @param token JWT access token associated with a user
+ * @param access_token JWT access token associated with a user
+ * @param refresh_token Supabase refresh token
  * @returns object containing `data` and `error` properties, either of which may be undefined
  */
-async function verifyToken(token: string) {
+async function verifyToken(access_token: string, refresh_token: string) {
   // The Fetch API is used instead of axios because this function needs to be used in
   // NextJS middleware and their edge functions do not support axios
-  const res = await fetch(`${process.env.SSO_URL}/api/verifyToken`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ token }),
-  });
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_SSO_URL}/api/verifyToken`,
+    {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ access_token, refresh_token }),
+    }
+  );
   const data = await res.json();
   return data;
+}
+
+export async function logout() {
+  window.location.replace(`${process.env.NEXT_PUBLIC_SSO_URL}/logout`);
 }

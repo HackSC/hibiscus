@@ -6,11 +6,13 @@ html {
   line-height: 1.5;
   tab-size: 4;
   scroll-behavior: smooth;
+  height: 100%;
 }
 body {
   font-family: inherit;
   line-height: inherit;
   margin: 0;
+  height: 100%;
 }
 h1,
 h2,

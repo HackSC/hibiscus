@@ -3,6 +3,7 @@ import { AppProps } from 'next/app';
 import Head from 'next/head';
 import './styles.css';
 import { wrapper } from '../store/store';
+import styled from 'styled-components';
 
 function CustomApp({ Component, pageProps }: AppProps) {
   return (
@@ -11,12 +12,18 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <link rel="shortcut icon" href="/img/favicon.ico" />
         <title>Home | Hibiscus</title>
       </Head>
-      <main className="app">
+      <Main>
         <GlobalStyles2023 />
         <Component {...pageProps} />
-      </main>
+      </Main>
     </>
   );
 }
 
 export default wrapper.withRedux(CustomApp);
+
+const Main = styled.main`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+`;

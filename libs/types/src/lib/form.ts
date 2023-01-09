@@ -20,11 +20,18 @@ export interface HackformMetadata {
 }
 
 export interface HackformQuestion {
-  title: string;
+  title: string | React.ReactNode;
   type: HackformQuestionType;
   placeholder?: string;
   required?: boolean;
   hasOtherField?: boolean;
+  otherFieldLabel?: string;
+  validatorMetadata?: {
+    [HackformQuestionType.LongText]?: {
+      maxWordCount?: number;
+      minWordCount?: number;
+    };
+  };
   validationFunction?: (input: HackformQuestionResponse['input']) => {
     valid: boolean;
     errorDescription?: HackformError;
