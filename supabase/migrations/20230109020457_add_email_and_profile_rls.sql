@@ -12,6 +12,6 @@ CREATE POLICY "Enable all for users based on user_id"
     ON public.user_profiles
     AS PERMISSIVE
     FOR ALL
-    TO "anon, authenticated"
+    TO anon, authenticated
     USING ((auth.uid() = user_id))
     WITH CHECK ((auth.uid() = user_id));
