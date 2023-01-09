@@ -4,7 +4,9 @@ import { Link, Text } from '@hibiscus/ui';
 import { GlowSpan } from '@hibiscus/ui-kit-2023';
 import { getColorsForRole } from '../../common/role.utils';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux/hooks';
-import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
+import useHibiscusUser, {
+  HibiscusUser,
+} from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 import { changeTab, toggleMenuOpen } from '../../store/menu-slice';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
@@ -12,9 +14,11 @@ import styled from 'styled-components';
 import { HibiscusRole } from '@hibiscus/types';
 
 /* eslint-disable-next-line */
-export interface PortalMenuProps {}
+export interface PortalMenuProps {
+  user: HibiscusUser;
+}
 
-export function PortalMenu(props: PortalMenuProps) {
+export function PortalMenu({ user }: PortalMenuProps) {
   const router = useRouter();
   const { tabRoutes, cti, isOpen } = useAppSelector((state) => ({
     tabRoutes: state.menu.tabRoutes,
@@ -22,7 +26,6 @@ export function PortalMenu(props: PortalMenuProps) {
     isOpen: state.menu.isOpen,
   }));
   const dispatch = useAppDispatch();
-  const { user } = useHibiscusUser();
   const colors = getColorsForRole(user?.role ?? HibiscusRole.HACKER);
 
   const getTabIndexFromPageRoute = () => {

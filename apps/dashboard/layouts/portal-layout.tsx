@@ -2,12 +2,13 @@ import React from 'react';
 import styled from 'styled-components';
 import PortalMenu from '../components/portal-menu/portal-menu';
 import TopBar from '../components/top-bar/top-bar';
-import useHibiscusUser from '../hooks/use-hibiscus-user/use-hibiscus-user';
+import { HibiscusUser } from '../hooks/use-hibiscus-user/use-hibiscus-user';
 
-export type PortalLayoutProps = React.PropsWithChildren;
+export interface PortalLayoutProps extends React.PropsWithChildren {
+  user: HibiscusUser;
+}
 
-function PortalLayout({ children }: PortalLayoutProps) {
-  const { user } = useHibiscusUser();
+function PortalLayout({ children, user }: PortalLayoutProps) {
   if (user == null) {
     return <></>;
   }
@@ -17,7 +18,7 @@ function PortalLayout({ children }: PortalLayoutProps) {
       <TopBar userTag={user.tag} role={user.role} />
       <MenuLayoutWrapper>
         <MenuWrapper>
-          <PortalMenu />
+          <PortalMenu user={user} />
         </MenuWrapper>
         <ChildrenWrapper>{children}</ChildrenWrapper>
       </MenuLayoutWrapper>

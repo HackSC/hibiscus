@@ -16,7 +16,7 @@ export function Index() {
   const userColors = getColorsForRole(user?.role ?? HibiscusRole.HACKER);
 
   return (
-    <PortalLayout>
+    <PortalLayout user={user}>
       <Wrapper>
         <LayoutContainer>
           <div

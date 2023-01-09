@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { container } from 'tsyringe';
 import { getEnv } from '@hibiscus/env';
 
-interface HibiscusUser {
+export interface HibiscusUser {
   tag: string;
   role: HibiscusRole;
   firstName: string;
