@@ -4,6 +4,7 @@ import { Link, Text } from '@hibiscus/ui';
 import { GlowSpan } from '@hibiscus/ui-kit-2023';
 import { HibiscusRole } from '@hibiscus/types';
 import { Colors2023 } from '@hibiscus/styles';
+import { logout } from '@hibiscus/sso-client';
 
 /* eslint-disable-next-line */
 export interface TopBarProps {
@@ -12,7 +13,7 @@ export interface TopBarProps {
 }
 
 export function TopBar(props: TopBarProps) {
-  const userColors = Colors2023.roleColors[props.role];
+  const userColors = Colors2023.roleColors[props.role ?? HibiscusRole.HACKER];
   return (
     <StyledTopBar>
       <Link href="/" anchortagpropsoverride={{ target: '_self' }}>
@@ -31,7 +32,7 @@ export function TopBar(props: TopBarProps) {
             {props.role}
           </GlowSpan>
         </RoleText>
-        <LogoutButton>
+        <LogoutButton onClick={logout}>
           <Image
             style={{ position: 'relative', top: 3 }}
             width="18"

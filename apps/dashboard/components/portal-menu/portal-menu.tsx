@@ -9,6 +9,7 @@ import { changeTab, toggleMenuOpen } from '../../store/menu-slice';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { HibiscusRole } from '@hibiscus/types';
 
 /* eslint-disable-next-line */
 export interface PortalMenuProps {}
@@ -22,7 +23,8 @@ export function PortalMenu(props: PortalMenuProps) {
   }));
   const dispatch = useAppDispatch();
   const { user } = useHibiscusUser();
-  const colors = getColorsForRole(user.role);
+  const colors = getColorsForRole(user?.role ?? HibiscusRole.HACKER);
+
   const getTabIndexFromPageRoute = () => {
     const fti = tabRoutes.findIndex((item) => item.url === router.pathname);
     return fti;

@@ -5,10 +5,15 @@ import { Search } from '@hibiscus/ui-kit-2023';
 import PortalLayout from '../layouts/portal-layout';
 import useHibiscusUser from '../hooks/use-hibiscus-user/use-hibiscus-user';
 import { getColorsForRole } from '../common/role.utils';
+import { HibiscusRole } from '@hibiscus/types';
 
 export function Index() {
   const { user } = useHibiscusUser();
-  const userColors = getColorsForRole(user.role);
+  if (user == null) {
+    return <></>;
+  }
+
+  const userColors = getColorsForRole(user?.role ?? HibiscusRole.HACKER);
 
   return (
     <PortalLayout>

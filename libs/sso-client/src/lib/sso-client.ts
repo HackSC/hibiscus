@@ -124,16 +124,19 @@ export const callbackApiHandler =
     }
   };
 
-const VALID_CALLBACKS = [process.env.NEXT_PUBLIC_SSO_MOCK_APP_URL];
+const VALID_CALLBACKS = [
+  process.env.NEXT_PUBLIC_SSO_MOCK_APP_URL,
+  process.env.NEXT_PUBLIC_PORTAL_URL,
+];
 
 /**
  * Calls the app's callback API route which sets the token as a cookie on the app
  *
  * @param callback Callback URL for the app
- * @param token Access token obtained from login
+ * @param access_token Access token obtained from login
  * @returns object containing `redirect` property or `null` if callback URL is not allowed
  */
-export async function ssoCallback(callback: string, token: string) {
+export async function ssoCallback(callback: string, access_token: string) {
   // callback can === '' (empty string) when no callback is specified
   if (callback == null || callback === '') {
     return null;
@@ -149,9 +152,8 @@ export async function ssoCallback(callback: string, token: string) {
       {},
       {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${access_token}`,
         },
-        withCredentials: true,
       }
     );
 
