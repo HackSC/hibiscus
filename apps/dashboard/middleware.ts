@@ -1,7 +1,8 @@
+import { getEnv } from '@hibiscus/env';
 import { middlewareHandler } from '@hibiscus/sso-client';
 
 export const middleware = middlewareHandler(
-  `${process.env.NEXT_PUBLIC_PORTAL_URL}/api/callback`
+  `${getEnv().Hibiscus.AppURL.portal}/api/callback`
 );
 
 export const config = {

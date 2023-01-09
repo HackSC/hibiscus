@@ -3,6 +3,7 @@ import { HibiscusRole } from '@hibiscus/types';
 import { getCookie } from 'cookies-next';
 import { useEffect, useState } from 'react';
 import { container } from 'tsyringe';
+import { getEnv } from '@hibiscus/env';
 
 interface HibiscusUser {
   tag: string;
@@ -20,11 +21,13 @@ export function useHibiscusUser(): UseHibiscusUser {
   const [user, setUser] = useState<HibiscusUser>(null);
 
   async function getUserProfile() {
+    const env = getEnv();
+
     // Get user profile from db
     const supabase = container.resolve(HibiscusSupabaseClient);
     const profile = await supabase.getUserProfile(
-      getCookie(process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME) as string,
-      getCookie(process.env.NEXT_PUBLIC_HIBISCUS_REFRESH_COOKIE_NAME) as string
+      getCookie(env.Hibiscus.Cookies.accessTokenName) as string,
+      getCookie(env.Hibiscus.Cookies.refreshTokenName) as string
     );
 
     if (profile != null) {
@@ -39,9 +42,7 @@ export function useHibiscusUser(): UseHibiscusUser {
       const user = await supabase
         .getClient()
         .auth.getUser(
-          getCookie(
-            process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME
-          ) as string
+          getCookie(env.Hibiscus.Cookies.accessTokenName) as string
         );
       setUser({
         tag: user.data.user.email,
