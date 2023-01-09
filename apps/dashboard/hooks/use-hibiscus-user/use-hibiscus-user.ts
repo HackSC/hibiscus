@@ -30,7 +30,7 @@ export function useHibiscusUser(): UseHibiscusUser {
     if (profile != null) {
       setUser({
         tag: `${profile.first_name} ${profile.last_name}`,
-        role: Object.values(HibiscusRole)[profile.role],
+        role: Object.values(HibiscusRole)[profile.role - 1],
         firstName: profile.first_name,
       });
     } else {

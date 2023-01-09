@@ -26,8 +26,15 @@ export function VerifyCard() {
       setHideErrorMessage(true);
     }
     if (data.user) {
+      // Create user profile in database
+      await supabase.createUserProfile(
+        router.query.firstname.toString(),
+        router.query.lastname.toString(),
+        data.session.access_token,
+        data.session.refresh_token
+      );
+
       router.push('/');
-      setCookie('user', email);
     }
   };
 

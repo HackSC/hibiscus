@@ -9,6 +9,7 @@ import {
 } from '@supabase/supabase-js';
 import { injectable } from 'tsyringe';
 import {
+  HibiscusRole,
   SSOApiResetResponseType,
   SSOApiSignInWithPassword,
   SSOApiSignUp,
@@ -166,6 +167,13 @@ export class HibiscusSupabaseClient {
     await this.client.auth.signOut();
   }
 
+  /**
+   * Retrives the profile of the current logged-in user
+   *
+   * @param access_token
+   * @param refresh_token
+   * @returns nullable Promise containing UserProfile object
+   */
   async getUserProfile(
     access_token: string,
     refresh_token: string
@@ -196,6 +204,37 @@ export class HibiscusSupabaseClient {
     }
 
     return dbRes.data[0] as UserProfile;
+  }
+
+  /**
+   * Creates row in the user_profiles table.
+   * This must be run immediately after the user's email is verified, and before cookies are set
+   *
+   * @param firstname
+   * @param lastname
+   * @param access_token
+   * @param refresh_token
+   */
+  async createUserProfile(
+    firstname: string,
+    lastname: string,
+    access_token: string,
+    refresh_token: string
+  ) {
+    const authRes = await this.verifyToken(access_token, refresh_token);
+    const user = authRes.data.user;
+    if (user == null) {
+      // Access token was invalid
+      throw Error('Invalid session');
+    }
+
+    await this.client.from('user_profiles').insert({
+      user_id: user.id,
+      first_name: firstname,
+      last_name: lastname,
+      // Default role = HACKER
+      role: Object.keys(HibiscusRole).indexOf(HibiscusRole.HACKER) + 1,
+    });
   }
 
   static setTokenCookieClientSide(access_token: string, refresh_token: string) {
