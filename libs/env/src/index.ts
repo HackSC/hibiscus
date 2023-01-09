@@ -2,8 +2,8 @@ export const getEnv = () => {
   return {
     Hibiscus: {
       Supabase: {
-        apiUrl: process.env.HIBISCUS_SUPABASE_API_URL,
-        anonKey: process.env.HIBISCUS_SUPABASE_ANON_KEY,
+        apiUrl: process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_API_URL,
+        anonKey: process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_ANON_KEY,
       },
       AWS: {
         accessKeyID: process.env.HIBISCUS_AWS_ACCESS_KEY_ID,
