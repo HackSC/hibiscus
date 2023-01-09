@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import { DashboardRepository } from '../../../repository/dashboard.repository';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { container } from 'tsyringe';
@@ -23,14 +24,19 @@ export default async function invite( //anyone in a team can invite
 
     //check to make sure team isn't full
     let result = await repo.getAllTeamMembers(teamId);
-    if (result.error) {
-      return res.status(500).json({ message: result.error.message });
-    }
     if (result.data.length >= repo.MAX_TEAM_MEMBERS) {
-      return res
-        .status(500)
-        .json({ message: 'Team is already full (4 members max).' });
+      throw new Error('Team is already full (4 members max).');
     }
+
+    let organizerFname: string;
+    //get first names of organizer user
+    for (let i = 0; i < result.data.length; i++) {
+      if (result.data[0]['user_id'] === organizerId) {
+        organizerFname = result.data[0]['first_name'];
+      }
+    }
+
+    const teamName = (await repo.getTeamInfo(teamId)).data[0]['name'];
 
     //add check that invited user email even exists
     result = await repo.getUserByEmail(email);
@@ -39,13 +45,27 @@ export default async function invite( //anyone in a team can invite
       throw new Error('User by that email does not exist.');
     }
 
+    const invitedUserFname: string = result.data[0]['first_name'];
+
+    console.log(`Organizer Fname: ${organizerFname}`);
+    console.log(`Invited user fname: ${invitedUserFname}`);
+
     result = await repo.createInvite(organizerId, invitedId, teamId);
 
-    const invitationId = result.data[0]['id'];
+    const invitationId = result.data[0]['id']; //TODO: update template. Add field for the invite id to create the links...........
+
+    console.log(invitationId);
 
     //add logic for emailing invite
     //need invite id
     //invite email will link to the online version and send invite_id
+    await repo.sendTeamInviteEmail(
+      email,
+      invitedUserFname,
+      organizerFname,
+      teamName,
+      invitationId
+    );
 
     return res.status(200).json({ message: 'Invite sent successfully!' });
   } catch (e) {

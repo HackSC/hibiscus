@@ -1,5 +1,14 @@
 import { injectable } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import {
+  SESClient,
+  CreateTemplateCommand,
+  SendTemplatedEmailCommand,
+  GetTemplateCommand,
+  SendEmailCommand,
+  UpdateTemplateCommand,
+} from '@aws-sdk/client-ses';
+import { getEnv } from '@hibiscus/env';
 
 @injectable()
 export class DashboardRepository {
@@ -7,6 +16,16 @@ export class DashboardRepository {
   constructor(private readonly hbc: HibiscusSupabaseClient) {}
 
   private readonly client = this.hbc.getClient();
+  private static readonly env = getEnv();
+  private static readonly ses = new SESClient({
+    credentials: {
+      accessKeyId: DashboardRepository.env.Hibiscus.AWS.accessKeyID,
+      secretAccessKey: DashboardRepository.env.Hibiscus.AWS.secretAccessKey,
+    },
+    region: DashboardRepository.env.Hibiscus.AWS.region,
+  });
+
+  //TODO: refactor
   public readonly MAX_TEAM_MEMBERS: number = parseInt(
     process.env.NEXT_PUBLIC_MAX_TEAM_MEMBERS
   );
@@ -18,6 +37,14 @@ export class DashboardRepository {
   async getAllTeamMembers(teamId: string) {
     const { data, error } = await this.client
       .from('user_profiles')
+      .select()
+      .eq('team_id', teamId);
+    return { data, error };
+  }
+
+  async getTeamInfo(teamId: string) {
+    const { data, error } = await this.client
+      .from('teams')
       .select()
       .eq('team_id', teamId);
     return { data, error };
@@ -123,13 +150,16 @@ export class DashboardRepository {
   }
 
   async createInvite(organizerId: string, invitedId: string, teamId: string) {
-    const { data, error } = await this.client.from('invitations').insert([
-      {
-        organizer_id: organizerId,
-        invited_id: invitedId,
-        team_id: teamId,
-      },
-    ]);
+    const { data, error } = await this.client
+      .from('invitations')
+      .insert([
+        {
+          organizer_id: organizerId,
+          invited_id: invitedId,
+          team_id: teamId,
+        },
+      ])
+      .select();
 
     return { data, error };
   }
@@ -159,5 +189,46 @@ export class DashboardRepository {
       .eq('email', email);
 
     return { data, error };
+  }
+
+  async sendTeamInviteEmail(
+    toAddress: string,
+    recipient: string,
+    organizerName: string,
+    teamName: string,
+    invitationId: string
+  ) {
+    const TEMPLATE_NAME = 'InviteTemplate';
+    const acceptInviteLink =
+      process.env.NEXT_PUBLIC_SSO_DEFAULT_REDIRECT_URL +
+      `/api/invite/accept?inviteId=${invitationId}`;
+    const rejectInviteLink =
+      process.env.NEXT_PUBLIC_SSO_DEFAULT_REDIRECT_URL +
+      `/api/invite/reject?inviteId=${invitationId}`;
+    console.log(acceptInviteLink);
+    console.log(rejectInviteLink);
+    const createTemplateEmail = (templateName) => {
+      return new SendTemplatedEmailCommand({
+        Destination: { ToAddresses: [toAddress] },
+        TemplateData: JSON.stringify({
+          name: recipient,
+          organizerName: organizerName,
+          teamName: teamName,
+          acceptInviteLink: acceptInviteLink,
+          rejectInviteLink: rejectInviteLink,
+        }),
+        Source: 'no-reply@notifications.hacksc.com',
+        Template: templateName,
+      });
+    };
+    const sendTemplatedEmail = createTemplateEmail(TEMPLATE_NAME);
+
+    try {
+      await DashboardRepository.ses.send(sendTemplatedEmail);
+      console.log('Email send successfully.');
+      return; //if successful, just return. Otherwise throw error which will be caught in invite.ts
+    } catch (err) {
+      throw new Error('Failed to send email successfully.');
+    }
   }
 }
