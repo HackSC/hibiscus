@@ -1,34 +1,26 @@
 import PortalLayout from '../../layouts/portal-layout';
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import TeamHeader from '../../components/team/team-header';
 import TeamMembersWidget from '../../components/team/team-members-widget';
-import Modal from '../../components/team/modal';
-import { Button } from '@hibiscus/ui-kit-2023';
-import { RiTeamFill } from 'react-icons/ri';
+import NoTeamPlaceholder from '../../components/team/no-team-placeholder';
 
 const Index = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const hasTeam = false;
 
-  const closeModal = () => {
-    setIsOpen(false);
-  };
-
-  const openModal = () => {
-    setIsOpen(true);
+  const TeamView = () => {
+    return (
+      <>
+        <TeamHeader />
+        <TeamMembersWidget />
+      </>
+    );
   };
 
   return (
     <PortalLayout>
       <PageContainer>
-        <TeamHeader />
-        <TeamMembersWidget />
-        <div>
-          <Button color="black" onClick={openModal}>
-            <RiTeamFill /> Create a team
-          </Button>
-        </div>
-        <Modal isOpen={isOpen} closeModal={closeModal} />
+        {hasTeam ? <TeamView /> : <NoTeamPlaceholder />}
       </PageContainer>
     </PortalLayout>
   );

@@ -24,6 +24,7 @@ export function Button(props: ButtonProps) {
 export default Button;
 
 const PurpleButton = styled.button`
+  width: fit-content;
   height: 45px;
   display: flex;
   flex-direction: row;
@@ -56,6 +57,7 @@ const PurpleButton = styled.button`
 `;
 
 const BlackButton = styled.button`
+  width: fit-content;
   height: 45px;
   border: 1.5px solid ${Colors2023.BLUE.STANDARD};
   display: flex;
@@ -92,6 +94,7 @@ const BlackButton = styled.button`
 `;
 
 const BlueButton = styled.button`
+  width: fit-content;
   height: 45px;
   display: flex;
   flex-direction: row;
@@ -130,6 +133,7 @@ const BlueButton = styled.button`
 `;
 
 const RedButton = styled.button`
+  width: fit-content;
   height: 45px;
   border: 1.5px solid ${Colors2023.RED.STANDARD};
   display: flex;
