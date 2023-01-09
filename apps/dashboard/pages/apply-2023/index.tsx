@@ -11,6 +11,7 @@ NProgress.configure({ showSpinner: false, trickle: false, minimum: 0.05 });
 export function Index() {
   const { currentQuestionIndex: cqi, ...hackformUtils } = useHackform();
 
+  // change progress on question changes based on percentage questions passed
   useEffect(() => {
     const numQuestionsTotal =
       hackformUtils.getHackformMetadata().questions.length;

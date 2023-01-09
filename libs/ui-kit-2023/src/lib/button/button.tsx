@@ -4,7 +4,7 @@ import { Colors2023 } from '@hibiscus/styles';
 
 /* eslint-disable-next-line */
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  color: 'blue' | 'black' | 'purple';
+  color: 'blue' | 'black' | 'purple' | 'red';
 }
 
 export function Button(props: ButtonProps) {
@@ -12,10 +12,12 @@ export function Button(props: ButtonProps) {
     return <BlueButton onClick={props.onClick}>{props.children}</BlueButton>;
   } else if (props.color === 'black') {
     return <BlackButton onClick={props.onClick}>{props.children}</BlackButton>;
-  } else {
+  } else if (props.color === 'purple') {
     return (
       <PurpleButton onClick={props.onClick}>{props.children}</PurpleButton>
     );
+  } else {
+    return <RedButton onClick={props.onClick}>{props.children}</RedButton>;
   }
 }
 
@@ -111,11 +113,54 @@ const BlueButton = styled.button`
   border: none;
   color: #313131;
   :hover {
-    background: #307c93;
+    border: 1.5px solid ${Colors2023.BLUE.STANDARD};
+    background: #307c93b2;
+    color: ${Colors2023.BLUE.STANDARD};
+    box-shadow: 0px 0px 5px rgba(118, 211, 239, 0.5);
     cursor: pointer;
+    transition: 0.1s;
   }
   :active {
-    background: #76d3ef;
-    box-shadow: inset 1.5px 4px 0px rgba(0, 0, 0, 0.25);
+    border: 1.5px solid ${Colors2023.BLUE.STANDARD};
+    background: #307c93b2;
+    color: white;
+    box-shadow: 0px 0px 5px rgba(118, 211, 239, 0.5);
+    border-radius: 10px;
+  }
+`;
+
+const RedButton = styled.button`
+  height: 45px;
+  border: 1.5px solid ${Colors2023.RED.STANDARD};
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 30px;
+  gap: 10px;
+  background: ${Colors2023.GRAY.DARK};
+  border-radius: 10px;
+  //fonts
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 36px;
+  text-align: center;
+  letter-spacing: 0.2em;
+  color: ${Colors2023.RED.STANDARD};
+  :hover {
+    border: 1.5px solid ${Colors2023.RED.STANDARD};
+    background: #933030b1;
+    box-shadow: 0px 0px 5px ${Colors2023.RED.DARK};
+    cursor: pointer;
+    transition: 0.1s;
+  }
+  :active {
+    border: 1.5px solid ${Colors2023.RED.STANDARD};
+    background: ${Colors2023.RED.STANDARD};
+    color: ${Colors2023.RED.DARK};
+    box-shadow: 0px 0px 5px rgba(239, 118, 118, 0.5);
+    border-radius: 10px;
   }
 `;
