@@ -4,7 +4,6 @@ import { TrademarkColors } from '@hibiscus/styles';
 import OTPInput from '../otp-input/otp-input';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { setCookie } from 'cookies-next';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import GrayLink from '../gray-link/gray-link';
 import { container } from 'tsyringe';

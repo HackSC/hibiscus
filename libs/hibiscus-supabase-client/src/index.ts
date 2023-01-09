@@ -230,6 +230,7 @@ export class HibiscusSupabaseClient {
 
     await this.client.from('user_profiles').insert({
       user_id: user.id,
+      email: user.email,
       first_name: firstname,
       last_name: lastname,
       // Default role = HACKER
@@ -266,10 +267,10 @@ export class HibiscusSupabaseClient {
 }
 
 interface UserProfile {
-  created_at: string;
   first_name: string;
   last_name: string;
   user_id: string;
+  email: string;
   role: number;
   team_id: number;
 }
