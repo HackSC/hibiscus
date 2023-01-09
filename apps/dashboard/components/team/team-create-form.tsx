@@ -1,52 +1,71 @@
-import { H2 } from '@hibiscus/ui';
+import { H2, Text } from '@hibiscus/ui';
 import { Button, OneLineText, ParagraphText } from '@hibiscus/ui-kit-2023';
-import { useState } from 'react';
 import styled from 'styled-components';
 import { GrayBox } from '../gray-box/gray-box';
 import { toast } from 'react-hot-toast';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { SpanRed } from '../red-span';
 
 interface Props {
   closeModal: () => void;
 }
 
 export const TeamCreateForm = (props: Props) => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-
-  const handleSubmit = () => {
-    props.closeModal();
-    const createTeamSuccess = true;
-    if (createTeamSuccess) {
-      toast.success('Successfully created team');
-    }
-  };
+  const formik = useFormik({
+    initialValues: {
+      name: '',
+      description: '',
+    },
+    validationSchema: Yup.object({
+      name: Yup.string().required('Please enter your team name!'),
+      description: Yup.string().notRequired(),
+    }),
+    onSubmit(values, formikHelpers) {
+      formikHelpers.setSubmitting(true);
+      props.closeModal();
+      const createTeamSuccess = true;
+      if (createTeamSuccess) {
+        toast.success('Successfully created team');
+      }
+      formikHelpers.setSubmitting(false);
+    },
+  });
 
   return (
-    <Box>
-      <H2>Create your team</H2>
-      <FormDiv>
-        <label>Name:</label>
-        <OneLineText
-          value={name}
-          placeholder="e.g Trojan Hackers"
-          onChange={(e) => {
-            setName(e.target.value);
-          }}
-        />
-        <label>Description:</label>
-        <ParagraphText
-          style={{ width: '92%' }}
-          value={description}
-          onChange={(e) => {
-            setDescription(e.target.value);
-          }}
-          placeholder="e.g Team full of hackers :0 your local hackathon destroyer :)"
-        />
-      </FormDiv>
-      <Button color="blue" onClick={handleSubmit}>
-        SUBMIT
-      </Button>
-    </Box>
+    <form onSubmit={formik.handleSubmit}>
+      <Box>
+        <H2>Create your team</H2>
+        <FormDiv>
+          <label htmlFor="name">
+            Name:<SpanRed>*</SpanRed>
+          </label>
+          <OneLineText
+            id="name"
+            name="name"
+            value={formik.values.name}
+            placeholder="e.g Trojan Hackers"
+            onChange={formik.handleChange}
+          />
+          <Text>
+            <SpanRed>{formik.errors.name}</SpanRed>
+          </Text>
+          <label htmlFor="description">Description:</label>
+          <ParagraphText
+            id="description"
+            name="description"
+            style={{ width: '92%' }}
+            value={formik.values.description}
+            onChange={formik.handleChange}
+            placeholder="e.g Team full of hackers :0 your local hackathon destroyer :)"
+          />
+          <Text>{formik.errors.description}</Text>
+        </FormDiv>
+        <Button color="blue" type="submit">
+          SUBMIT
+        </Button>
+      </Box>
+    </form>
   );
 };
 
