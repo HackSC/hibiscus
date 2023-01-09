@@ -18,7 +18,8 @@ create table "public"."user_profiles" (
     "first_name" character varying not null,
     "last_name" character varying not null,
     "user_id" uuid not null,
-    "role" bigint
+    "role" bigint,
+    "email" character varying not null
 );
 
 

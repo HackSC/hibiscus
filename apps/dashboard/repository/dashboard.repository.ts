@@ -122,6 +122,18 @@ export class DashboardRepository {
     return { data, error };
   }
 
+  async createInvite(organizerId: string, invitedId: string, teamId: string) {
+    const { data, error } = await this.client.from('invitations').insert([
+      {
+        organizer_id: organizerId,
+        invited_id: invitedId,
+        team_id: teamId,
+      },
+    ]);
+
+    return { data, error };
+  }
+
   async updateUserWithAcceptedInvite(teamId: string, invitedId: string) {
     const { data, error } = await this.client
       .from('user_profiles')
@@ -136,6 +148,15 @@ export class DashboardRepository {
       .from('invitations')
       .delete()
       .eq('id', inviteId);
+
+    return { data, error };
+  }
+
+  async getUserByEmail(email: string) {
+    const { data, error } = await this.client
+      .from('user_profiles')
+      .select()
+      .eq('email', email);
 
     return { data, error };
   }
