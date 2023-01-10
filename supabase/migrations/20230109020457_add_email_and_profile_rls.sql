@@ -4,9 +4,7 @@
 -- Please report an issue for any failure with the reproduction steps.
 
 ALTER TABLE IF EXISTS public.user_profiles
-    ADD COLUMN email character varying COLLATE pg_catalog."default" NOT NULL;
-ALTER TABLE IF EXISTS public.user_profiles
-    ADD CONSTRAINT user_profiles_email_key UNIQUE (email);
+    ADD COLUMN email character varying COLLATE pg_catalog."default";
 
 CREATE POLICY "Enable all for users based on user_id"
     ON public.user_profiles
