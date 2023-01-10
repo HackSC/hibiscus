@@ -8,7 +8,6 @@ export default async function kickTeamMember(
 ) {
   try {
     const repo = container.resolve(DashboardRepository);
-    const supabase = repo.getClient();
 
     let teamId: string = req.body.team_id;
     let organizerId: string = req.body.organizer_id;

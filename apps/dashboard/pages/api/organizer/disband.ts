@@ -8,7 +8,6 @@ export default async function disbandTeam(
 ) {
   try {
     const repo = container.resolve(DashboardRepository);
-    const supabase = repo.getClient();
     const teamId: string = req.body.team_id;
     const organizerId: string = req.body.organizer_id;
 

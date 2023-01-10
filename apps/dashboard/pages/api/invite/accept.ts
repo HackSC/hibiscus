@@ -14,7 +14,6 @@ export default async function inviteAccept(
 ) {
   try {
     const repo = container.resolve(DashboardRepository);
-    const supabase = repo.getClient();
 
     const query = req.query;
     const { inviteId } = query;

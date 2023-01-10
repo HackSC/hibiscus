@@ -15,7 +15,6 @@ export default async function createTeam(
   res: NextApiResponse
 ) {
   const repo = container.resolve(DashboardRepository);
-  const supabase = repo.getClient();
   const name: string = req.body.name;
   const description: string | null = req.body.description;
   const photoKey: string | null = req.body.photo_key;

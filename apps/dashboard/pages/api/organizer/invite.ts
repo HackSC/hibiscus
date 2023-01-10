@@ -9,7 +9,6 @@ export default async function invite( //anyone in a team can invite
 ) {
   try {
     const repo = container.resolve(DashboardRepository);
-    const supabase = repo.getClient();
 
     let teamId = req.body.team_id;
     let email = req.body.email;
