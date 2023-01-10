@@ -5,11 +5,14 @@ import PortalLayout from '../../layouts/portal-layout';
 import { useHackform } from '../../hooks/use-hackform/use-hackform';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
+import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 
 NProgress.configure({ showSpinner: false, trickle: false, minimum: 0.05 });
 
 export function Index() {
   const { currentQuestionIndex: cqi, ...hackformUtils } = useHackform();
+
+  const { user } = useHibiscusUser();
 
   useEffect(() => {
     const numQuestionsTotal =
@@ -23,7 +26,7 @@ export function Index() {
   }, [cqi]);
 
   return (
-    <PortalLayout>
+    <PortalLayout user={user}>
       <Hackerform formMetadata={formMetadata2023HackerApps} />
     </PortalLayout>
   );

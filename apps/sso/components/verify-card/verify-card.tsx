@@ -4,7 +4,6 @@ import { TrademarkColors } from '@hibiscus/styles';
 import OTPInput from '../otp-input/otp-input';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { setCookie } from 'cookies-next';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import GrayLink from '../gray-link/gray-link';
 import { container } from 'tsyringe';
@@ -26,8 +25,15 @@ export function VerifyCard() {
       setHideErrorMessage(true);
     }
     if (data.user) {
+      // Create user profile in database
+      await supabase.createUserProfile(
+        router.query.firstname.toString(),
+        router.query.lastname.toString(),
+        data.session.access_token,
+        data.session.refresh_token
+      );
+
       router.push('/');
-      setCookie('user', email);
     }
   };
 

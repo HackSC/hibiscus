@@ -21,9 +21,23 @@ export function SignUpCard(props: SignUpProps) {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    const firstname = event.target.firstname.value;
+    const lastname = event.target.lastname.value;
     const email = event.target.email.value;
     const password = event.target.password.value;
     const confirmPassword = event.target.confirmPassword.value;
+
+    if (firstname == null || firstname === '') {
+      setErrorMessage('First name cannot be empty');
+      setHideErrorMessage(false);
+      return;
+    }
+
+    if (lastname == null || lastname === '') {
+      setErrorMessage('Last name cannot be empty');
+      setHideErrorMessage(false);
+      return;
+    }
 
     if (password !== confirmPassword) {
       setErrorMessage("Confirm password doesn't match");
@@ -46,7 +60,7 @@ export function SignUpCard(props: SignUpProps) {
     if (data.user) {
       router.push({
         pathname: '/verify',
-        query: { email: email },
+        query: { email, firstname, lastname },
       });
     }
   };
@@ -63,6 +77,8 @@ export function SignUpCard(props: SignUpProps) {
         Create a <GradientSpan>HackSC Account</GradientSpan>
       </StyledText>
       <StyledForm onSubmit={handleSubmit}>
+        <Input placeholder="first name" type="text" name="firstname" required />
+        <Input placeholder="last name" type="text" name="lastname" required />
         <Input
           placeholder="sample@email.edu"
           type="email"
