@@ -256,15 +256,14 @@ export class HibiscusSupabaseClient {
     }
   }
 
-  async hackerApplied(userId: string): Promise<{
+  async userApplied(userId: string): Promise<{
     error?: { message: string; code: string };
     data?: { applied: boolean };
   }> {
     const { data, error } = await this.client
       .from('user_profiles')
       .select('app_id')
-      .eq('user_id', userId)
-      .eq('role', HibiscusRole.HACKER);
+      .eq('user_id', userId);
     if (error) {
       console.error(error);
       return { error: { message: error.message, code: error.code } };

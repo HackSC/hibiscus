@@ -30,7 +30,7 @@ export default class APIService {
     const {
       data: { applied },
       error,
-    } = await supabase.hackerApplied(hackerId);
+    } = await supabase.userApplied(hackerId);
     if (error) {
       console.error(error);
       return null;
