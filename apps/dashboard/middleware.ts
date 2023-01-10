@@ -3,12 +3,10 @@ import { middlewareHandler } from '@hibiscus/sso-client';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function middleware(request: NextRequest) {
-  // Handle unprotected API routes
-  const path = request.nextUrl.pathname.split('/');
-  if (path.length >= 2 && path[1] === 'api') {
-    // if (path.length >= 3 && path[2] === 'schools') {
+  // Allow access for API routes (we assume these implement protections by itself)
+  const reg = /\/api\//g;
+  if (request.nextUrl.pathname.match(reg)?.length > 0) {
     return NextResponse.next();
-    // }
   }
 
   return middlewareHandler(`${getEnv().Hibiscus.AppURL.portal}/api/callback`)(
