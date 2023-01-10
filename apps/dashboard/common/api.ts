@@ -1,9 +1,16 @@
+import 'reflect-metadata';
 import { HackformSubmission } from '@hibiscus/types';
 import axios from 'axios';
 import { LocalAPIResponses } from './types';
 import mime from 'mime-types';
+import { container } from 'tsyringe';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { getCookie } from 'cookies-next';
+import { getEnv } from '@hibiscus/env';
 
-export default class API {
+// a service wrapping over our API requests (intended for client-side usage ONLY
+// since some interacts with Supabase on the client)
+export default class APIService {
   static createFileKey(file: File): string {
     const sfn = file.name.split('.');
     const defext = mime.extension(file.type);
@@ -28,11 +35,35 @@ export default class API {
 
   /**
    * Submits data for hacker application
+   * Also updates apps for the current user
+   *
    * @param submission HackformSubmission
+   * @param hackerId hacker ID
    * @returns whatever it returns
    */
-  static async submitHackform(submission: HackformSubmission) {
+  static async submitHackform(
+    hackerId: string,
+    submission: HackformSubmission
+  ) {
     const res = await axios.post('/api/hackform', { submission });
+    const data = res.data as LocalAPIResponses['/hackform'];
+    const supabase = container.resolve(HibiscusSupabaseClient);
+    // assoc current hacker with this form
+    const env = getEnv();
+    const user = await supabase.getUserProfile(
+      getCookie(env.Hibiscus.Cookies.accessTokenName) as string,
+      getCookie(env.Hibiscus.Cookies.refreshTokenName) as string
+    );
+    if (user.app_id) {
+      console.error('User already has an app');
+      return null;
+    }
+    const err = await supabase.updateUserProfile(hackerId, {
+      app_id: data.formId,
+    });
+    if (err) {
+      throw err;
+    }
     return res.data;
   }
 

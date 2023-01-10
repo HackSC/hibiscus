@@ -9,6 +9,7 @@ import {
 } from '@supabase/supabase-js';
 import { injectable } from 'tsyringe';
 import {
+  Database,
   HibiscusRole,
   SSOApiResetResponseType,
   SSOApiSignInWithPassword,
@@ -177,7 +178,7 @@ export class HibiscusSupabaseClient {
   async getUserProfile(
     access_token: string,
     refresh_token: string
-  ): Promise<UserProfile | null> {
+  ): Promise<UserProfileRow | null> {
     const authRes = await this.verifyToken(access_token, refresh_token);
     if ('session' in authRes.data && authRes.data.session != null) {
       // Access token was refreshed, update cookies
@@ -203,7 +204,7 @@ export class HibiscusSupabaseClient {
       return null;
     }
 
-    return dbRes.data[0] as UserProfile;
+    return dbRes.data[0] as UserProfileRow;
   }
 
   /**
@@ -236,6 +237,17 @@ export class HibiscusSupabaseClient {
       // Default role = HACKER
       role: Object.keys(HibiscusRole).indexOf(HibiscusRole.HACKER) + 1,
     });
+  }
+
+  async updateUserProfile(userId: string, update: UserProfileUpdate) {
+    const { error } = await this.client
+      .from('user_profiles')
+      .update(update)
+      .eq('user_id', userId);
+    if (error) {
+      console.error(error);
+      return { message: error.message, code: error.code };
+    }
   }
 
   static setTokenCookieClientSide(access_token: string, refresh_token: string) {
@@ -274,3 +286,9 @@ interface UserProfile {
   role: number;
   team_id: number;
 }
+
+type UserProfileRow = Database['public']['Tables']['user_profiles']['Row'];
+type UserProfileInsert =
+  Database['public']['Tables']['user_profiles']['Insert'];
+type UserProfileUpdate =
+  Database['public']['Tables']['user_profiles']['Update'];

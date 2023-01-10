@@ -1,4 +1,4 @@
-import API from '../../../common/api';
+import APIService from '../../../common/api';
 import { useState } from 'react';
 import { GetInputResponseCb } from '../../../common/types';
 import QuestionCreator from '../question-creator/question-creator';
@@ -20,13 +20,13 @@ export const FileQuestion = () => {
   ) => {
     const file = e.target.files.item(0);
     setUploaded(file);
-    const fk = API.createFileKey(file);
+    const fk = APIService.createFileKey(file);
     setKey(fk);
   };
 
   const handleSubmit = async () => {
     // send into the store
-    if (uploaded !== null) API.submitResume(uploaded, fileKey);
+    if (uploaded !== null) APIService.submitResume(uploaded, fileKey);
     // call the function with those
     const cb = hackformUtils.createCbSubmitValidate(getInputResponse);
     cb();
@@ -34,7 +34,7 @@ export const FileQuestion = () => {
 
   const handleNext = async () => {
     // send into the store
-    if (uploaded !== null) API.submitResume(uploaded, fileKey);
+    if (uploaded !== null) APIService.submitResume(uploaded, fileKey);
     const cb =
       hackformUtils.createCbGoNextQuestionValidateSilently(getInputResponse);
     cb();

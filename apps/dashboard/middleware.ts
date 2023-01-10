@@ -6,9 +6,9 @@ export async function middleware(request: NextRequest) {
   // Handle unprotected API routes
   const path = request.nextUrl.pathname.split('/');
   if (path.length >= 2 && path[1] === 'api') {
-    if (path.length >= 3 && path[2] === 'schools') {
-      return NextResponse.next();
-    }
+    // if (path.length >= 3 && path[2] === 'schools') {
+    return NextResponse.next();
+    // }
   }
 
   return middlewareHandler(`${getEnv().Hibiscus.AppURL.portal}/api/callback`)(

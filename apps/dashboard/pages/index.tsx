@@ -6,9 +6,21 @@ import PortalLayout from '../layouts/portal-layout';
 import useHibiscusUser from '../hooks/use-hibiscus-user/use-hibiscus-user';
 import { getColorsForRole } from '../common/role.utils';
 import { HibiscusRole } from '@hibiscus/types';
+import { useEffect } from 'react';
+import { container } from 'tsyringe';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { v4 } from 'uuid';
 
 export function Index() {
   const { user } = useHibiscusUser();
+
+  // useEffect(() => {
+  //   if (user) {
+  //     const supabase = container.resolve(HibiscusSupabaseClient);
+  //     supabase.updateUserProfile(user.id, { app_id: v4() });
+  //   }
+  // }, []);
+
   if (user == null) {
     return <></>;
   }

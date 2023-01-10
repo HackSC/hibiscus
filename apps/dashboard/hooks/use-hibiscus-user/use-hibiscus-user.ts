@@ -4,26 +4,28 @@ import { getCookie } from 'cookies-next';
 import { useEffect, useState } from 'react';
 import { container } from 'tsyringe';
 import { getEnv } from '@hibiscus/env';
+import { useAppDispatch } from '../redux/hooks';
+import { removeTabRoute } from '../../store/menu-slice';
 
-export interface HibiscusUser {
+interface HibiscusUser {
+  id: string;
   tag: string;
   role: HibiscusRole;
   firstName: string;
+  applicationId: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface UseHibiscusUser {
-  user: HibiscusUser;
-  setUser: (user: HibiscusUser) => void;
-}
 
-export function useHibiscusUser(): UseHibiscusUser {
-  const [user, setUser] = useState<HibiscusUser>(null);
+export function useHibiscusUser() {
+  const [user, setUser] = useState<HibiscusUser | null>(null);
+  const dispatch = useAppDispatch();
 
-  async function getUserProfile() {
+  const getUserProfile = async () => {
     const env = getEnv();
 
     // Get user profile from db
+    // uses cookie set from SSO
     const supabase = container.resolve(HibiscusSupabaseClient);
     const profile = await supabase.getUserProfile(
       getCookie(env.Hibiscus.Cookies.accessTokenName) as string,
@@ -31,11 +33,13 @@ export function useHibiscusUser(): UseHibiscusUser {
     );
 
     if (profile != null) {
-      setUser({
+      return {
+        id: profile.user_id,
         tag: `${profile.first_name} ${profile.last_name}`,
         role: Object.values(HibiscusRole)[profile.role - 1],
         firstName: profile.first_name,
-      });
+        applicationId: profile.app_id,
+      };
     } else {
       // Set user's name and tag to be their email as temporary placeholder
       // Assume we only show dashboard when user is logged in
@@ -44,19 +48,30 @@ export function useHibiscusUser(): UseHibiscusUser {
         .auth.getUser(
           getCookie(env.Hibiscus.Cookies.accessTokenName) as string
         );
-      setUser({
+      return {
+        id: user.data.user.id,
         tag: user.data.user.email,
         role: HibiscusRole.HACKER,
         firstName: user.data.user.email,
-      });
+        applicationId: null,
+      };
     }
-  }
+  };
 
   useEffect(() => {
-    getUserProfile();
+    getUserProfile().then((u) => {
+      setUser(u);
+    });
   }, []);
 
-  return { user, setUser };
+  // remove hackform from menu if applied
+  useEffect(() => {
+    if (user?.applicationId !== null) {
+      dispatch(removeTabRoute('/apply-2023'));
+    }
+  }, [user?.applicationId]);
+
+  return { user, setUser, getUserProfile };
 }
 
 export default useHibiscusUser;

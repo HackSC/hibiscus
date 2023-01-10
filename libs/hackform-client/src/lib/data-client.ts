@@ -29,11 +29,13 @@ export class HackformSubmissionDataClient {
    * @param formMetadata the original form metadata
    */
   async submitForm(data: HackformSubmission) {
+    const res = this.buildDDBItemFromResponse(data);
     const cmd = new PutItemCommand({
       TableName: this.tableName,
-      Item: this.buildDDBItemFromResponse(data),
+      Item: res.Item,
     });
-    return this.ddb.send(cmd);
+    const out = await this.ddb.send(cmd);
+    return { formId: res.id, res: out };
   }
 
   /**
@@ -54,14 +56,13 @@ export class HackformSubmissionDataClient {
     return res as HackformSubmission;
   }
 
-  private buildDDBItemFromResponse(
-    data: HackformSubmission
-  ): PutItemCommandInput['Item'] {
+  private buildDDBItemFromResponse(data: HackformSubmission) {
     const id = v4();
     const json = {
       id,
+      submittedAt: new Date().toISOString(),
       data: data,
     };
-    return marshall(json, { removeUndefinedValues: true });
+    return { id, Item: marshall(json, { removeUndefinedValues: true }) };
   }
 }
