@@ -22,6 +22,11 @@ export default async function invite( //anyone in a team can invite
       );
     }
 
+    //very first check, make sure invite doesn't already exist
+    if (!(await repo.checkInviteDoesNotExist(teamId, invitedId))) {
+      throw new Error('Invitation to that user already exists.');
+    }
+
     //check to make sure team isn't full
     let result = await repo.getAllTeamMembers(teamId);
     if (result.data.length >= repo.MAX_TEAM_MEMBERS) {
@@ -39,7 +44,7 @@ export default async function invite( //anyone in a team can invite
     const teamName = (await repo.getTeamInfo(teamId)).data[0]['name'];
 
     //add check that invited user email even exists
-    result = await repo.getUserByEmail(email);
+    result = await repo.getUserByEmailAndId(invitedId, email);
     //length 0 if user with email does not exist
     if (result.data.length === 0) {
       throw new Error('User by that email does not exist.');
@@ -52,9 +57,7 @@ export default async function invite( //anyone in a team can invite
 
     result = await repo.createInvite(organizerId, invitedId, teamId);
 
-    const invitationId = result.data[0]['id']; //TODO: update template. Add field for the invite id to create the links...........
-
-    console.log(invitationId);
+    const invitationId = result.data[0]['id'];
 
     //add logic for emailing invite
     //need invite id

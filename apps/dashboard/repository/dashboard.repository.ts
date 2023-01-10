@@ -149,6 +149,19 @@ export class DashboardRepository {
     return { data, error };
   }
 
+  async checkInviteDoesNotExist(teamId: string, invitedId: string) {
+    const { data, error } = await this.client
+      .from('invitations')
+      .select()
+      .eq('team_id', teamId)
+      .eq('invited_id', invitedId);
+
+    if (data.length === 0) {
+      return true;
+    }
+    return false;
+  }
+
   async createInvite(organizerId: string, invitedId: string, teamId: string) {
     const { data, error } = await this.client
       .from('invitations')
@@ -182,11 +195,12 @@ export class DashboardRepository {
     return { data, error };
   }
 
-  async getUserByEmail(email: string) {
+  async getUserByEmailAndId(invitedId: string, email: string) {
     const { data, error } = await this.client
       .from('user_profiles')
       .select()
-      .eq('email', email);
+      .eq('email', email)
+      .eq('user_id', invitedId);
 
     return { data, error };
   }
