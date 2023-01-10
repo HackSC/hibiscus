@@ -24,13 +24,27 @@ export default class APIService {
    * @param file File object
    * @returns data from API response
    */
-  static async submitResume(file: File, key: string) {
+  static async submitResume(file: File, key: string, hackerId: string) {
+    // prelim check if hacker has already submitted
+    const supabase = container.resolve(HibiscusSupabaseClient);
+    const {
+      data: { applied },
+      error,
+    } = await supabase.hackerApplied(hackerId);
+    if (error) {
+      console.error(error);
+      return null;
+    }
+    if (applied) {
+      console.error("Hacker already submitted form => can't submit resume");
+      return null;
+    }
     const form = new FormData();
     form.append('file', file);
     form.append('key', key);
     const res = await axios.post('/api/resume', form);
-    const data = res.data as LocalAPIResponses['/resume'];
-    return { key, filepath: data.filepath, meta: data.meta };
+    const { meta, filepath } = res.data as LocalAPIResponses['/resume'];
+    return { key, filepath: filepath, meta };
   }
 
   /**

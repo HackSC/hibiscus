@@ -239,6 +239,12 @@ export class HibiscusSupabaseClient {
     });
   }
 
+  /**
+   * Updates user under this user ID
+   * @param userId user ID
+   * @param update update schema
+   * @returns nothing if no error else {message, code}
+   */
   async updateUserProfile(userId: string, update: UserProfileUpdate) {
     const { error } = await this.client
       .from('user_profiles')
@@ -248,6 +254,28 @@ export class HibiscusSupabaseClient {
       console.error(error);
       return { message: error.message, code: error.code };
     }
+  }
+
+  async hackerApplied(userId: string): Promise<{
+    error?: { message: string; code: string };
+    data?: { applied: boolean };
+  }> {
+    const { data, error } = await this.client
+      .from('user_profiles')
+      .select('app_id')
+      .eq('user_id', userId)
+      .eq('role', HibiscusRole.HACKER);
+    if (error) {
+      console.error(error);
+      return { error: { message: error.message, code: error.code } };
+    }
+    if (data.length === 0) {
+      return {
+        error: { message: 'Could not find user', code: 'UserNotFound' },
+      };
+    }
+    const applied = data[0].app_id !== null;
+    return { data: { applied } };
   }
 
   static setTokenCookieClientSide(access_token: string, refresh_token: string) {
