@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import Hackerform from '../../components/hackerform/hackform/hackform';
 import { formMetadata2023HackerApps } from '../../common/hackform.metadata';
-import PortalLayout from '../../layouts/portal-layout';
 import { useHackform } from '../../hooks/use-hackform/use-hackform';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
@@ -29,28 +28,22 @@ export function Index() {
 
   if (user?.applicationId !== null) {
     return (
-      <PortalLayout user={user}>
-        <AppliedContainer>
-          <CenterContainer>
-            <H3>You have already applied!</H3>
-            <Link
-              href={'/'}
-              passHref
-              anchortagpropsoverride={{ target: '_self' }}
-            >
-              <Button color="black">Go back to home</Button>
-            </Link>
-          </CenterContainer>
-        </AppliedContainer>
-      </PortalLayout>
+      <AppliedContainer>
+        <CenterContainer>
+          <H3>You have already applied!</H3>
+          <Link
+            href={'/'}
+            passHref
+            anchortagpropsoverride={{ target: '_self' }}
+          >
+            <Button color="black">Go back to home</Button>
+          </Link>
+        </CenterContainer>
+      </AppliedContainer>
     );
   }
 
-  return (
-    <PortalLayout user={user}>
-      <Hackerform formMetadata={formMetadata2023HackerApps} />
-    </PortalLayout>
-  );
+  return <Hackerform formMetadata={formMetadata2023HackerApps} />;
 }
 
 export default Index;

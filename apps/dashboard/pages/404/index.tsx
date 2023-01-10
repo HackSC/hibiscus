@@ -3,42 +3,36 @@ import { Button, GlowSpan } from '@hibiscus/ui-kit-2023';
 
 import Image from 'next/image';
 import { Colors2023 } from '@hibiscus/styles';
-import PortalLayout from '../../layouts/portal-layout';
 import styled from 'styled-components';
-import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 
 export function Index() {
-  const { user } = useHibiscusUser();
-
   return (
-    <PortalLayout user={user}>
-      <MainPageWrapper>
-        <Wrapper>
-          <H1 style={{ fontSize: '40px', lineHeight: '40px' }}>
-            <GlowSpan
-              color={Colors2023.BLUE.LIGHT}
-              shadowColor={Colors2023.BLUE.STANDARD}
-            >
-              Oops!
-            </GlowSpan>
-          </H1>
-          <H3>This page does not seem to exist</H3>
-          {/* <Button color="black" style={{ display: 'flex' }}>Go to Home</Button> */}
-          <ButtonWrapper>
-            <Link href="/" anchortagpropsoverride={{ target: '_self' }}>
-              <Button color="black">Go to Home</Button>
-            </Link>
-          </ButtonWrapper>
-        </Wrapper>
+    <MainPageWrapper>
+      <Wrapper>
+        <H1 style={{ fontSize: '40px', lineHeight: '40px' }}>
+          <GlowSpan
+            color={Colors2023.BLUE.LIGHT}
+            shadowColor={Colors2023.BLUE.STANDARD}
+          >
+            Oops!
+          </GlowSpan>
+        </H1>
+        <H3>This page does not seem to exist</H3>
+        {/* <Button color="black" style={{ display: 'flex' }}>Go to Home</Button> */}
+        <ButtonWrapper>
+          <Link href="/" anchortagpropsoverride={{ target: '_self' }}>
+            <Button color="black">Go to Home</Button>
+          </Link>
+        </ButtonWrapper>
+      </Wrapper>
 
-        <Image
-          src={'/assets/earth-suitcase-moon.svg'}
-          width={200}
-          height={200}
-          alt="Earth-like character wearing shades pulling baggage and a moon"
-        />
-      </MainPageWrapper>
-    </PortalLayout>
+      <Image
+        src={'/assets/earth-suitcase-moon.svg'}
+        width={200}
+        height={200}
+        alt="Earth-like character wearing shades pulling baggage and a moon"
+      />
+    </MainPageWrapper>
   );
 }
 
