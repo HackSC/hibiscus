@@ -270,7 +270,7 @@ interface UserProfile {
   first_name: string;
   last_name: string;
   user_id: string;
-  email: string;
-  role: number;
-  team_id: number;
+  email?: string;
+  role?: number;
+  team_id?: number;
 }
