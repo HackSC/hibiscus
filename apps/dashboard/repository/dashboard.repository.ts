@@ -1,21 +1,22 @@
 import { injectable } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import {
-  SESClient,
-  CreateTemplateCommand,
-  SendTemplatedEmailCommand,
-  GetTemplateCommand,
-  SendEmailCommand,
-  UpdateTemplateCommand,
-} from '@aws-sdk/client-ses';
+  createServerSupabaseClient,
+  SupabaseClient,
+} from '@supabase/auth-helpers-nextjs';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { SESClient, SendTemplatedEmailCommand } from '@aws-sdk/client-ses';
 import { getEnv } from '@hibiscus/env';
 
 @injectable()
 export class DashboardRepository {
   // inject this wrapper around the Supabase SDK client for use
-  constructor(private readonly hbc: HibiscusSupabaseClient) {}
+  constructor(req: NextApiRequest, res: NextApiResponse) {
+    this.client = createServerSupabaseClient({ req, res });
+  }
 
-  private readonly client = this.hbc.getClient();
+  // private readonly client = this.hbc.getClient();
+  private readonly client: SupabaseClient;
   private static readonly env = getEnv();
   private static readonly ses = new SESClient({
     credentials: {

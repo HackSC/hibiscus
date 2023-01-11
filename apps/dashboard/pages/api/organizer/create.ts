@@ -15,6 +15,12 @@ export default async function createTeam(
   res: NextApiResponse
 ) {
   const repo = container.resolve(DashboardRepository);
+  console.log(`REPO: ${repo}`);
+  const {
+    data: { session },
+  } = await repo.getClient().auth.getSession();
+
+  console.log(`Session: ${session}`);
   const name: string = req.body.name;
   const description: string | null = req.body.description;
   const photoKey: string | null = req.body.photo_key;
@@ -26,6 +32,17 @@ export default async function createTeam(
   console.log(`Organizer ID: ${organizerId}`);
 
   try {
+    const {
+      data: { session },
+    } = await repo.getClient().auth.getSession();
+
+    if (!session)
+      return res.status(401).json({
+        error: 'not_authenticated',
+        description:
+          'The user does not have an active session or is not authenticated',
+      });
+
     //check to make sure accepted member doesn't already have a team
     //test name isnt "". Null and "" should be caught by frontend anyway but just in case
     if (!name) {
