@@ -6,15 +6,31 @@ import { wrapper } from '../store/store';
 import styled from 'styled-components';
 import useHibiscusUser from '../hooks/use-hibiscus-user/use-hibiscus-user';
 import PortalLayout from '../layouts/portal-layout';
+import { useRouter } from 'next/router';
+import { getWebTitle } from '@hibiscus/metadata';
 
 function CustomApp({ Component, pageProps }: AppProps) {
   const { user } = useHibiscusUser();
+  const router = useRouter();
+
+  const createWebTitle = () => {
+    switch (router.asPath) {
+      case '/':
+        return getWebTitle('Home');
+      case '/apply-2023':
+        return getWebTitle('Apply');
+      case '/team':
+        return getWebTitle('Your team');
+      default:
+        return getWebTitle('Home');
+    }
+  };
 
   return (
     <>
       <Head>
         <link rel="shortcut icon" href="/img/favicon.ico" />
-        <title>Home | Hibiscus</title>
+        <title>{createWebTitle()}</title>
       </Head>
       <Main>
         <GlobalStyles2023 />

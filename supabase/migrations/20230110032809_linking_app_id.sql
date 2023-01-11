@@ -7,3 +7,7 @@ ALTER TABLE IF EXISTS public.user_profiles
     ADD COLUMN app_id uuid;
 ALTER TABLE IF EXISTS public.user_profiles
     ADD CONSTRAINT user_profiles_app_id_key UNIQUE (app_id);
+
+ALTER TABLE "public"."user_profiles" ADD CONSTRAINT "user_profiles_user_id_fkey" FOREIGN KEY (user_id) REFERENCES auth.users(id) NOT VALID;
+
+ALTER TABLE "public"."user_profiles" VALIDATE CONSTRAINT "user_profiles_user_id_fkey";
