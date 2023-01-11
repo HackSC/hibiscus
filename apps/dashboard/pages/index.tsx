@@ -53,12 +53,12 @@ export function Index() {
             <QuickActionContainer>
               <GrayContentBox location="/redstar.svg"></GrayContentBox>
               <GrayContentBox location="/pinkstar.svg"></GrayContentBox>
-              <GrayContentBox location="/greenstar.svg"></GrayContentBox>
+              {/* <GrayContentBox location="/greenstar.svg"></GrayContentBox>
               <GrayContentBox location="/purplepin.svg"></GrayContentBox>
-              <GrayContentBox location="/yellowpin.svg"></GrayContentBox>
+              <GrayContentBox location="/yellowpin.svg"></GrayContentBox> */}
             </QuickActionContainer>
           </div>
-          <AddOnAndStats>
+          {/* <AddOnAndStats>
             <AddOnOuter>
               <p style={{ textAlign: 'left', width: '90%', margin: '10px 0' }}>
                 Add-Ons
@@ -71,7 +71,7 @@ export function Index() {
               </p>
               <Stats></Stats>
             </StatsOuter>
-          </AddOnAndStats>
+          </AddOnAndStats> */}
         </LayoutContainer>
       </Wrapper>
     </PortalLayout>
@@ -94,51 +94,51 @@ const LayoutContainer = styled.div`
   flex-direction: column;
 `;
 
-const AddOnOuter = styled.div`
-  width: 41%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-`;
+// const AddOnOuter = styled.div`
+//   width: 41%;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: flex-start;
+// `;
 
-const AddOn = styled.div`
-  width: 94%;
-  height: 90%;
-  background: #363636;
-  /* smaller-red-glow */
-  border: 2px solid #5a5a5a;
-  border-radius: 10px;
-  /* box-shadow: 0px 0px 10px rgba(254, 81, 57, 0.5); */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
+// const AddOn = styled.div`
+//   width: 94%;
+//   height: 90%;
+//   background: #363636;
+//   /* smaller-red-glow */
+//   border: 2px solid #5a5a5a;
+//   border-radius: 10px;
+//   /* box-shadow: 0px 0px 10px rgba(254, 81, 57, 0.5); */
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+// `;
 
-const Stats = styled.div`
-  width: 100%;
-  height: 90%;
-  background: #363636;
-  border: 2px solid #5a5a5a;
-  /* smaller-red-glow */
-  /* box-shadow: 0px 0px 10px rgba(254, 81, 57, 0.5); */
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
+// const Stats = styled.div`
+//   width: 100%;
+//   height: 90%;
+//   background: #363636;
+//   border: 2px solid #5a5a5a;
+//   /* smaller-red-glow */
+//   /* box-shadow: 0px 0px 10px rgba(254, 81, 57, 0.5); */
+//   border-radius: 10px;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+// `;
 
-const StatsOuter = styled.div`
-  width: 59%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-`;
+// const StatsOuter = styled.div`
+//   width: 59%;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: flex-start;
+// `;
 
-const AddOnAndStats = styled.div`
-  display: inline-flex;
-  width: 100%;
-  height: 300px;
-`;
+// const AddOnAndStats = styled.div`
+//   display: inline-flex;
+//   width: 100%;
+//   height: 300px;
+// `;
 
 const QuickActionContainer = styled.div`
   display: flex;
