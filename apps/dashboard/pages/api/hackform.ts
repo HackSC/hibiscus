@@ -11,10 +11,6 @@ const handler: NextApiHandler = async (req, res) => {
     // submits to hackform data store and get hackform id
     const data = await client.submitForm(submission);
     return res.status(200).json(data);
-  } else if (req.method === 'GET') {
-    const id = req.query.id as string;
-    const data = await client.getHackformSubmission(id);
-    return res.status(200).json(data);
   } else {
     return res.status(405).send('Method not allowed');
   }
