@@ -24,7 +24,8 @@
       "defaultConfiguration": "development",
       "options": {
         "buildTarget": "dashboard:build",
-        "dev": true
+        "dev": true,
+        "port": 5000
       },
       "configurations": {
         "development": {

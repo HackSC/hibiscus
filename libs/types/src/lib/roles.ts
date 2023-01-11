@@ -1,4 +1,8 @@
 export enum HibiscusRole {
-  HACKER = 'HACKER',
   ADMIN = 'ADMIN',
+  TEAM_MEMBER = 'TEAM MEMBER',
+  SPONSOR = 'SPONSOR',
+  VOLUNTEER = 'VOLUNTEER',
+  HACKER = 'HACKER',
+  APPLICANT = 'APPLICANT',
 }
