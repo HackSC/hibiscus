@@ -35,11 +35,15 @@ export const menuSlice = createSlice({
     toggleMenuOpen: (state) => {
       state.isOpen = !state.isOpen;
     },
+    removeTabRoute: (state, action: PayloadAction<string>) => {
+      const url = action.payload;
+      state.tabRoutes = state.tabRoutes.filter((item) => item.url !== url);
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { changeTab, toggleMenuOpen } = menuSlice.actions;
+export const { changeTab, toggleMenuOpen, removeTabRoute } = menuSlice.actions;
 
 const menuReducer = menuSlice.reducer;
 export default menuReducer;

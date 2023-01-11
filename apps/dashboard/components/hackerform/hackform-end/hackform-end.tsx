@@ -5,7 +5,8 @@ import { Button, GlowSpan } from '@hibiscus/ui-kit-2023';
 import { useHackform } from '../../../hooks/use-hackform/use-hackform';
 import Image from 'next/image';
 import styled from 'styled-components';
-import API from '../../../common/api';
+import APIService from '../../../common/api';
+import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface HackformEndingProps {
@@ -14,7 +15,16 @@ export interface HackformEndingProps {
 
 export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
   const hackformUtils = useHackform();
+  const { user } = useHibiscusUser();
   const TIME_BEFORE_FORMSTATE_RESET = 2000; // wait this much ms before we do reset
+
+  const handleSubmit = async () => {
+    const submission = hackformUtils.getSubmission();
+    await APIService.submitHackform(user.id, submission);
+    setTimeout(() => {
+      hackformUtils.reset();
+    }, TIME_BEFORE_FORMSTATE_RESET);
+  };
 
   return (
     <Wrapper>
@@ -36,14 +46,7 @@ export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
       <Link
         href="/"
         anchortagpropsoverride={{ target: '_self' }}
-        onClick={async () => {
-          // rate limit
-          const submission = hackformUtils.getSubmission();
-          await API.submitHackform(submission);
-          setTimeout(() => {
-            hackformUtils.reset();
-          }, TIME_BEFORE_FORMSTATE_RESET);
-        }}
+        onClick={handleSubmit}
       >
         <Button color="blue">Go to Home</Button>
       </Link>
