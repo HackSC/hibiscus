@@ -2,63 +2,62 @@ import { H1, H3 } from '@hibiscus/ui';
 import styled from 'styled-components';
 import GrayContentBox from '../components/gray-content-box/gray-content-box';
 import { Search } from '@hibiscus/ui-kit-2023';
-import PortalLayout from '../layouts/portal-layout';
 import useHibiscusUser from '../hooks/use-hibiscus-user/use-hibiscus-user';
 import { getColorsForRole } from '../common/role.utils';
 import { HibiscusRole } from '@hibiscus/types';
 
 export function Index() {
   const { user } = useHibiscusUser();
+
   if (user == null) {
-    return <></>;
+    return <>Loading</>;
   }
 
   const userColors = getColorsForRole(user?.role ?? HibiscusRole.HACKER);
 
   return (
-    <PortalLayout user={user}>
-      <Wrapper>
-        <LayoutContainer>
-          <div
-            style={{
-              display: 'inline-flex',
-              width: '100%',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <div>
-              <H1
-                style={{
-                  color: userColors.light,
-                  fontSize: '30px',
-                  textShadow: `0px 0px 10px ${userColors.standard}`,
-                }}
-              >
-                Welcome, {user.firstName}
-              </H1>
-              <H3 style={{ color: '#989898' }}>
-                What would you like to do today?
-              </H3>
-            </div>
-            {/* <Search
+    <Wrapper>
+      <LayoutContainer>
+        <div
+          style={{
+            display: 'inline-flex',
+            width: '100%',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <div>
+            <H1
+              style={{
+                color: userColors.light,
+                fontSize: '30px',
+                textShadow: `0px 0px 10px ${userColors.standard}`,
+              }}
+            >
+              Welcome, {user.firstName}
+            </H1>
+            <H3 style={{ color: '#989898' }}>
+              What would you like to do today?
+            </H3>
+          </div>
+          {/* <Search
               placeholder={'Search...'}
               onInput={function (value: string): void {
                 throw new Error('Function not implemented.');
               }}
             ></Search> */}
-          </div>
-          <div>
-            <p style={{ margin: '13px 0' }}>Quick Actions</p>
-            <QuickActionContainer>
-              <GrayContentBox location="/redstar.svg"></GrayContentBox>
-              <GrayContentBox location="/pinkstar.svg"></GrayContentBox>
-              {/* <GrayContentBox location="/greenstar.svg"></GrayContentBox>
+        </div>
+        <div>
+          <p style={{ margin: '13px 0' }}>Quick Actions</p>
+          <QuickActionContainer>
+            <GrayContentBox location="/redstar.svg"></GrayContentBox>
+            <GrayContentBox location="/pinkstar.svg"></GrayContentBox>
+            {/* <GrayContentBox location="/greenstar.svg"></GrayContentBox>
               <GrayContentBox location="/purplepin.svg"></GrayContentBox>
               <GrayContentBox location="/yellowpin.svg"></GrayContentBox> */}
-            </QuickActionContainer>
-          </div>
-          {/* <AddOnAndStats>
+          </QuickActionContainer>
+        </div>
+        {/* <AddOnAndStats>
             <AddOnOuter>
               <p style={{ textAlign: 'left', width: '90%', margin: '10px 0' }}>
                 Add-Ons
@@ -72,9 +71,8 @@ export function Index() {
               <Stats></Stats>
             </StatsOuter>
           </AddOnAndStats> */}
-        </LayoutContainer>
-      </Wrapper>
-    </PortalLayout>
+      </LayoutContainer>
+    </Wrapper>
   );
 }
 

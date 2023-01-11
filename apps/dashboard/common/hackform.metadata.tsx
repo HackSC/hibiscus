@@ -4,7 +4,7 @@ import {
   Option,
 } from '@hibiscus/types';
 import { getAge, isAbove, isUnder } from './utils';
-import API from './api';
+import APIService from './api';
 import { Link } from '@hibiscus/ui';
 import { hackformLinks } from './constants';
 
@@ -69,7 +69,7 @@ export const formMetadata2023HackerApps: HackformMetadata = {
       },
       limitOptions: 6,
       options: async () => {
-        const schools = await API.getSchools();
+        const schools = await APIService.getSchools();
         const opts: Option[] = schools.map((str, i) => ({
           displayName: str,
           value: i.toString(),

@@ -4,14 +4,11 @@ import { Link, Text } from '@hibiscus/ui';
 import { GlowSpan } from '@hibiscus/ui-kit-2023';
 import { getColorsForRole } from '../../common/role.utils';
 import { useAppDispatch, useAppSelector } from '../../hooks/redux/hooks';
-import useHibiscusUser, {
-  HibiscusUser,
-} from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 import { changeTab, toggleMenuOpen } from '../../store/menu-slice';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import styled from 'styled-components';
-import { HibiscusRole } from '@hibiscus/types';
+import { HibiscusRole, HibiscusUser } from '@hibiscus/types';
 
 /* eslint-disable-next-line */
 export interface PortalMenuProps {
@@ -28,10 +25,10 @@ export function PortalMenu({ user }: PortalMenuProps) {
   const dispatch = useAppDispatch();
   const colors = getColorsForRole(user?.role ?? HibiscusRole.HACKER);
 
-  const getTabIndexFromPageRoute = () => {
+  const getTabIndexFromPageRoute = useCallback(() => {
     const fti = tabRoutes.findIndex((item) => item.url === router.pathname);
     return fti;
-  };
+  }, [router.pathname, tabRoutes]);
 
   const handleMaximize = () => {
     dispatch(toggleMenuOpen());
@@ -44,7 +41,7 @@ export function PortalMenu({ user }: PortalMenuProps) {
   useEffect(() => {
     const fti = getTabIndexFromPageRoute();
     dispatch(changeTab(fti));
-  }, []);
+  }, [dispatch, getTabIndexFromPageRoute]);
 
   const LeftBarWhenActive = () => (
     <div

@@ -5,4 +5,6 @@ export interface HibiscusUser {
   firstName: string;
   lastName: string;
   role: HibiscusRole;
+  tag: string;
+  applicationId: string;
 }
