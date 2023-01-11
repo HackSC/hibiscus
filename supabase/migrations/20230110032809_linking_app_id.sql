@@ -4,12 +4,10 @@
 -- Please report an issue for any failure with the reproduction steps.
 
 ALTER TABLE IF EXISTS public.user_profiles
-    ADD COLUMN email character varying COLLATE pg_catalog."default";
+    ADD COLUMN app_id uuid;
+ALTER TABLE IF EXISTS public.user_profiles
+    ADD CONSTRAINT user_profiles_app_id_key UNIQUE (app_id);
 
-CREATE POLICY "Enable all for users based on user_id"
-    ON public.user_profiles
-    AS PERMISSIVE
-    FOR ALL
-    TO anon, authenticated
-    USING ((auth.uid() = user_id))
-    WITH CHECK ((auth.uid() = user_id));
+ALTER TABLE "public"."user_profiles" ADD CONSTRAINT "user_profiles_user_id_fkey" FOREIGN KEY (user_id) REFERENCES auth.users(id) NOT VALID;
+
+ALTER TABLE "public"."user_profiles" VALIDATE CONSTRAINT "user_profiles_user_id_fkey";

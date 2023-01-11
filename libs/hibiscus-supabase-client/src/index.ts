@@ -9,6 +9,7 @@ import {
 } from '@supabase/supabase-js';
 import { injectable } from 'tsyringe';
 import {
+  Database,
   HibiscusRole,
   SSOApiResetResponseType,
   SSOApiSignInWithPassword,
@@ -177,7 +178,7 @@ export class HibiscusSupabaseClient {
   async getUserProfile(
     access_token: string,
     refresh_token: string
-  ): Promise<UserProfile | null> {
+  ): Promise<UserProfileRow | null> {
     const authRes = await this.verifyToken(access_token, refresh_token);
     if ('session' in authRes.data && authRes.data.session != null) {
       // Access token was refreshed, update cookies
@@ -203,7 +204,7 @@ export class HibiscusSupabaseClient {
       return null;
     }
 
-    return dbRes.data[0] as UserProfile;
+    return dbRes.data[0] as UserProfileRow;
   }
 
   /**
@@ -238,6 +239,44 @@ export class HibiscusSupabaseClient {
     });
   }
 
+  /**
+   * Updates user under this user ID
+   * @param userId user ID
+   * @param update update schema
+   * @returns nothing if no error else {message, code}
+   */
+  async updateUserProfile(userId: string, update: UserProfileUpdate) {
+    const { error } = await this.client
+      .from('user_profiles')
+      .update(update)
+      .eq('user_id', userId);
+    if (error) {
+      console.error(error);
+      return { message: error.message, code: error.code };
+    }
+  }
+
+  async userApplied(userId: string): Promise<{
+    error?: { message: string; code: string };
+    data?: { applied: boolean };
+  }> {
+    const { data, error } = await this.client
+      .from('user_profiles')
+      .select('app_id')
+      .eq('user_id', userId);
+    if (error) {
+      console.error(error);
+      return { error: { message: error.message, code: error.code } };
+    }
+    if (data.length === 0) {
+      return {
+        error: { message: 'Could not find user', code: 'UserNotFound' },
+      };
+    }
+    const applied = data[0].app_id !== null;
+    return { data: { applied } };
+  }
+
   static setTokenCookieClientSide(access_token: string, refresh_token: string) {
     setCookie(
       process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME,
@@ -270,7 +309,13 @@ interface UserProfile {
   first_name: string;
   last_name: string;
   user_id: string;
-  email: string;
-  role: number;
-  team_id: number;
+  email?: string;
+  role?: number;
+  team_id?: number;
 }
+
+type UserProfileRow = Database['public']['Tables']['user_profiles']['Row'];
+type UserProfileInsert =
+  Database['public']['Tables']['user_profiles']['Insert'];
+type UserProfileUpdate =
+  Database['public']['Tables']['user_profiles']['Update'];
