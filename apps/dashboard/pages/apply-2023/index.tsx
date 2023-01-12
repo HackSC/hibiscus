@@ -26,9 +26,19 @@ export function Index() {
     NProgress.set(progress);
   }, [cqi]);
 
-  if (user?.applicationId !== null) {
+  if (user === null) {
     return (
-      <AppliedContainer>
+      <Container>
+        <CenterContainer>
+          <H3>Loading...</H3>
+        </CenterContainer>
+      </Container>
+    );
+  }
+
+  if (user.applicationId !== null) {
+    return (
+      <Container>
         <CenterContainer>
           <H3>You have already applied!</H3>
           <Link
@@ -39,7 +49,7 @@ export function Index() {
             <Button color="black">Go back to home</Button>
           </Link>
         </CenterContainer>
-      </AppliedContainer>
+      </Container>
     );
   }
 
@@ -48,7 +58,7 @@ export function Index() {
 
 export default Index;
 
-const AppliedContainer = styled.div`
+const Container = styled.div`
   height: 100%;
   display: flex;
   justify-content: center;
