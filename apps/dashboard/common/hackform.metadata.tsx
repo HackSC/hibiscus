@@ -253,7 +253,17 @@ export const formMetadata2023HackerApps: HackformMetadata = {
     },
     {
       title:
-        'Do you require any other accommodations (wheelchair access, visibility)?',
+        'If you require any disability related accommodations, please specify below:',
+      subtitle: (
+        <span>
+          Individuals with disabilities who need accommodations to attend this
+          event may contact HackSC’s event team at team@hacksc.com. For more
+          information regarding accommodations, please visit{' '}
+          <Link href="https://hack.sc/accessibility" passHref underline>
+            hack.sc/accessibility
+          </Link>
+        </span>
+      ),
       type: HackformQuestionType.ShortText,
     },
     {

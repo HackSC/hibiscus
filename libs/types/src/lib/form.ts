@@ -21,6 +21,7 @@ export interface HackformMetadata {
 
 export interface HackformQuestion {
   title: string | React.ReactNode;
+  subtitle?: string | React.ReactNode;
   type: HackformQuestionType;
   placeholder?: string;
   required?: boolean;
