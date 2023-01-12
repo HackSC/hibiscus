@@ -8,20 +8,31 @@ import APIService from './api';
 import { Link } from '@hibiscus/ui';
 import { hackformLinks } from './constants';
 
-const generateOptionsGradyear = () => {
-  const opts: Option[] = [
-    'Summer 2023',
-    'Fall 2023',
-    'Spring 2024',
-    'Summer 2024',
-    'Fall 2024',
-    'Spring 2025 or later',
-  ].map((w) => ({
+const generateOptionsGradyear = (): Option[] => {
+  const opts: string[] = ['Summer 2023', 'Fall 2023'];
+  for (const season of ['Spring', 'Summer', 'Fall']) {
+    for (const inc of [...Array(4).keys()]) {
+      opts.push(`${season} 202${4 + inc}`);
+    }
+  }
+
+  return opts.map((w) => ({
     value: w.toLowerCase().split(' ').join('-'),
     displayName: w,
   }));
-  return opts;
 };
+
+const startDateJobOptions: Option[] = [
+  'Summer 2023',
+  'Fall 2023',
+  'Spring 2024',
+  'Summer 2024',
+  'Fall 2024',
+  'Spring 2025 or later',
+].map((w) => ({
+  value: w.toLowerCase().split(' ').join('-'),
+  displayName: w,
+}));
 
 export const formMetadata2023HackerApps: HackformMetadata = {
   entry: {
@@ -113,12 +124,10 @@ export const formMetadata2023HackerApps: HackformMetadata = {
     {
       title: 'Expected graduation date:',
       placeholder: 'e.g Summer 2023',
-      type: HackformQuestionType.SingleChoice,
+      type: HackformQuestionType.SingleOptionDropdown,
       limitOptions: 6,
       required: true,
       options: generateOptionsGradyear(),
-      otherFieldLabel: 'Others (please specify)',
-      hasOtherField: true,
       validationFunction: (input) => {
         if (input.text === '') {
           return {
@@ -435,10 +444,10 @@ export const formMetadata2023HackerApps: HackformMetadata = {
     {
       title:
         'If you answered the previous question, enter your earliest ideal start date.',
-      type: HackformQuestionType.SingleChoice,
+      type: HackformQuestionType.SingleOptionDropdown,
       placeholder: 'e.g Summer 2023, Fall 2024',
       limitOptions: 6,
-      options: generateOptionsGradyear(), // for now
+      options: startDateJobOptions,
     },
     {
       title: 'How did you hear about HackSC?',
