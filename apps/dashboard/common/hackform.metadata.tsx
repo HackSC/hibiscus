@@ -9,13 +9,17 @@ import { Link } from '@hibiscus/ui';
 import { hackformLinks } from './constants';
 
 const generateOptionsGradyear = () => {
-  const opts: Option[] = [];
-  for (const inc of [...Array(5).keys()]) {
-    for (const season of ['Fall', 'Spring', 'Summer']) {
-      const displayName = `${season} 202${3 + inc}`;
-      opts.push({ value: displayName, displayName });
-    }
-  }
+  const opts: Option[] = [
+    'Summer 2023',
+    'Fall 2023',
+    'Spring 2024',
+    'Summer 2024',
+    'Fall 2024',
+    'Spring 2025 or later',
+  ].map((w) => ({
+    value: w.toLowerCase().split(' ').join('-'),
+    displayName: w,
+  }));
   return opts;
 };
 
@@ -108,11 +112,13 @@ export const formMetadata2023HackerApps: HackformMetadata = {
     },
     {
       title: 'Expected graduation date:',
-      placeholder: 'e.g Spring 2024, Fall 2023',
-      type: HackformQuestionType.SingleOptionDropdown,
+      placeholder: 'e.g Summer 2023',
+      type: HackformQuestionType.SingleChoice,
       limitOptions: 6,
       required: true,
       options: generateOptionsGradyear(),
+      otherFieldLabel: 'Others (please specify)',
+      hasOtherField: true,
       validationFunction: (input) => {
         if (input.text === '') {
           return {
@@ -429,10 +435,10 @@ export const formMetadata2023HackerApps: HackformMetadata = {
     {
       title:
         'If you answered the previous question, enter your earliest ideal start date.',
-      type: HackformQuestionType.SingleOptionDropdown,
+      type: HackformQuestionType.SingleChoice,
       placeholder: 'e.g Summer 2023, Fall 2024',
       limitOptions: 6,
-      options: generateOptionsGradyear(),
+      options: generateOptionsGradyear(), // for now
     },
     {
       title: 'How did you hear about HackSC?',
