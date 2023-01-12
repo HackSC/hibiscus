@@ -1834,7 +1834,7 @@ The University of Silesia in Katowice
 The University of South Carolina
 The University of South Florida
 The University of Southampton
-University of Southern California
+University of Southern California (USC)
 The University of Southern Denmark
 The University of St Andrews
 The University of St. Gallen

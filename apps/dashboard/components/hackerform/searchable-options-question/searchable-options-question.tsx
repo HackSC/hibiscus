@@ -45,6 +45,7 @@ export const SearchableOptionsInput = (props: SearchableOptionsInputProps) => {
       onChange={handleInputChange}
       limitDropdownItems={question.limitOptions}
       onClickChooseOption={handleChooseOptionFromDropdown}
+      placeholder={question.placeholder}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
           const cb = hackformUtils.createCbSubmitValidate(getInputResponse);
