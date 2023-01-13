@@ -14,6 +14,7 @@
     "interim": "apps/interim",
     "log-server": "apps/log-server",
     "metadata": "libs/metadata",
+    "pointr": "apps/pointr",
     "recruitment": "apps/recruitment",
     "sso": "apps/sso",
     "sso-client": "libs/sso-client",
