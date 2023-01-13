@@ -2,6 +2,9 @@ import { H1, H3 } from '@hibiscus/ui';
 import styled from 'styled-components';
 import GrayContentBox from '../components/gray-content-box/gray-content-box';
 import { Search } from '@hibiscus/ui-kit-2023';
+import Image from 'next/image';
+import { GlowSpan } from '@hibiscus/ui-kit-2023';
+import { Colors2023 } from '@hibiscus/styles';
 import useHibiscusUser from '../hooks/use-hibiscus-user/use-hibiscus-user';
 import { getColorsForRole } from '../common/role.utils';
 import { HibiscusRole } from '@hibiscus/types';
@@ -47,16 +50,35 @@ export function Index() {
               }}
             ></Search> */}
         </div>
-        <div>
-          <p style={{ margin: '13px 0' }}>Quick Actions</p>
-          <QuickActionContainer>
-            <GrayContentBox location="/redstar.svg"></GrayContentBox>
-            <GrayContentBox location="/pinkstar.svg"></GrayContentBox>
-            {/* <GrayContentBox location="/greenstar.svg"></GrayContentBox>
+
+        <MessageContainer>
+          <H1 style={{ fontSize: '50px', lineHeight: '60px' }}>
+            <GlowSpan
+              color={Colors2023.BLUE.LIGHT}
+              shadowColor={Colors2023.BLUE.STANDARD}
+            >
+              Coming Soon!
+            </GlowSpan>
+          </H1>
+
+          <Image
+            src={'/assets/earth-suitcase-moon.svg'}
+            width={200}
+            height={200}
+            alt="Earth-like character wearing shades pulling baggage and a moon"
+          />
+        </MessageContainer>
+
+        {/* <div> */}
+        {/* <p style={{ margin: '13px 0' }}>Quick Actions</p> */}
+        {/* <QuickActionContainer> */}
+        {/* <GrayContentBox location="/redstar.svg"></GrayContentBox> */}
+        {/* <GrayContentBox location="/pinkstar.svg"></GrayContentBox> */}
+        {/* <GrayContentBox location="/greenstar.svg"></GrayContentBox>
               <GrayContentBox location="/purplepin.svg"></GrayContentBox>
               <GrayContentBox location="/yellowpin.svg"></GrayContentBox> */}
-          </QuickActionContainer>
-        </div>
+        {/* </QuickActionContainer> */}
+        {/* </div> */}
         {/* <AddOnAndStats>
             <AddOnOuter>
               <p style={{ textAlign: 'left', width: '90%', margin: '10px 0' }}>
@@ -143,4 +165,14 @@ const QuickActionContainer = styled.div`
   width: 100%;
   flex-wrap: wrap;
   gap: 30px;
+`;
+
+const MessageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  padding-top: 100px;
 `;
