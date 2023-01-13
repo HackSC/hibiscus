@@ -1,6 +1,6 @@
 import { Colors2023 } from '@hibiscus/styles';
 import { HackformQuestion } from '@hibiscus/types';
-import { H1, H3 } from '@hibiscus/ui';
+import { H1, H3, H4 } from '@hibiscus/ui';
 import styled from 'styled-components';
 import { SpanRed } from '../../red-span';
 
@@ -24,6 +24,7 @@ export const HackformQuestionHeader = ({
         {question.title}
         {question.required && <SpanRed>*</SpanRed>}
       </H3>
+      <H4 style={{ color: Colors2023.GRAY.SHLIGHT }}>{question.subtitle}</H4>
     </Wrapper>
   );
 };

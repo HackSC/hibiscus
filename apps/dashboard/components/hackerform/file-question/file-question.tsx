@@ -1,12 +1,14 @@
-import API from '../../../common/api';
+import APIService from '../../../common/api';
 import { useState } from 'react';
 import { GetInputResponseCb } from '../../../common/types';
 import QuestionCreator from '../question-creator/question-creator';
 import { ALLOWED_RESUME_FORMATS } from '../../../common/constants';
 import mime from 'mime-types';
 import { useHackform } from '../../../hooks/use-hackform/use-hackform';
+import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
 
 export const FileQuestion = () => {
+  const { user } = useHibiscusUser();
   const hackformUtils = useHackform();
   const [uploaded, setUploaded] = useState<File | null>(null);
   const [fileKey, setKey] = useState<string | null>(null);
@@ -20,13 +22,14 @@ export const FileQuestion = () => {
   ) => {
     const file = e.target.files.item(0);
     setUploaded(file);
-    const fk = API.createFileKey(file);
+    const fk = APIService.createFileKey(file);
     setKey(fk);
   };
 
   const handleSubmit = async () => {
     // send into the store
-    if (uploaded !== null) API.submitResume(uploaded, fileKey);
+    if (user && uploaded !== null)
+      APIService.submitResume(uploaded, fileKey, user.id);
     // call the function with those
     const cb = hackformUtils.createCbSubmitValidate(getInputResponse);
     cb();
@@ -34,7 +37,8 @@ export const FileQuestion = () => {
 
   const handleNext = async () => {
     // send into the store
-    if (uploaded !== null) API.submitResume(uploaded, fileKey);
+    if (user && uploaded !== null)
+      APIService.submitResume(uploaded, fileKey, user.id);
     const cb =
       hackformUtils.createCbGoNextQuestionValidateSilently(getInputResponse);
     cb();

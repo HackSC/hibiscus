@@ -1,4 +1,4 @@
-export const schools = [
+export const SCHOOLS = [
   '21st Century Cyber Charter School',
   'Aalto University',
   'Aarhus University',
@@ -1835,7 +1835,7 @@ export const schools = [
   'The University of South Carolina',
   'The University of South Florida',
   'The University of Southampton',
-  'University of Southern California',
+  'University of Southern California (USC)',
   'The University of Southern Denmark',
   'The University of St Andrews',
   'The University of St. Gallen',

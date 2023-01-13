@@ -4,9 +4,35 @@ import {
   Option,
 } from '@hibiscus/types';
 import { getAge, isAbove, isUnder } from './utils';
-import API from './api';
+import APIService from './api';
 import { Link } from '@hibiscus/ui';
 import { hackformLinks } from './constants';
+
+const generateOptionsGradyear = (): Option[] => {
+  const opts: string[] = ['Summer 2023', 'Fall 2023'];
+  for (const season of ['Spring', 'Summer', 'Fall']) {
+    for (const inc of [...Array(4).keys()]) {
+      opts.push(`${season} 202${4 + inc}`);
+    }
+  }
+
+  return opts.map((w) => ({
+    value: w.toLowerCase().split(' ').join('-'),
+    displayName: w,
+  }));
+};
+
+const startDateJobOptions: Option[] = [
+  'Summer 2023',
+  'Fall 2023',
+  'Spring 2024',
+  'Summer 2024',
+  'Fall 2024',
+  'Spring 2025 or later',
+].map((w) => ({
+  value: w.toLowerCase().split(' ').join('-'),
+  displayName: w,
+}));
 
 export const formMetadata2023HackerApps: HackformMetadata = {
   entry: {
@@ -69,7 +95,7 @@ export const formMetadata2023HackerApps: HackformMetadata = {
       },
       limitOptions: 6,
       options: async () => {
-        const schools = await API.getSchools();
+        const schools = await APIService.getSchools();
         const opts: Option[] = schools.map((str, i) => ({
           displayName: str,
           value: i.toString(),
@@ -97,9 +123,11 @@ export const formMetadata2023HackerApps: HackformMetadata = {
     },
     {
       title: 'Expected graduation date:',
-      placeholder: 'e.g Spring 2024, Fall 2023',
-      type: HackformQuestionType.ShortText,
+      placeholder: 'e.g Summer 2023',
+      type: HackformQuestionType.SingleOptionDropdown,
+      limitOptions: 6,
       required: true,
+      options: generateOptionsGradyear(),
       validationFunction: (input) => {
         if (input.text === '') {
           return {
@@ -112,9 +140,10 @@ export const formMetadata2023HackerApps: HackformMetadata = {
     },
     {
       title:
-        'What is your major/primary area of study? If you already graduated, what was your major/primary area of study? Select all that apply',
-      type: HackformQuestionType.MultipleSelect,
+        'What is your major/primary area of study? If you already graduated, what was your major/primary area of study?',
+      type: HackformQuestionType.SingleOptionDropdown,
       hasOtherField: true,
+      limitOptions: 6,
       options: [
         {
           value: 'cs',
@@ -202,9 +231,9 @@ export const formMetadata2023HackerApps: HackformMetadata = {
     {
       title:
         'Which race or ethnicity best describes you? (Please choose only one.)',
-      type: HackformQuestionType.SingleChoice,
+      type: HackformQuestionType.MultipleSelect,
       hasOtherField: true,
-      otherFieldLabel: 'Multiple ethnicities / Other',
+      otherFieldLabel: 'Other',
       required: true,
       options: [
         {
@@ -213,7 +242,7 @@ export const formMetadata2023HackerApps: HackformMetadata = {
         },
         { value: 'a/pi', displayName: 'Asian / Pacific Islander' },
         { value: 'b/aa', displayName: 'Black / African American' },
-        { value: 'h', displayName: 'Hispanic' },
+        { value: 'h', displayName: 'Hispanic / Latino' },
         { value: 'w/ccs', displayName: 'White / Caucasian' },
       ],
       validationFunction: (input) => {
@@ -239,7 +268,17 @@ export const formMetadata2023HackerApps: HackformMetadata = {
     },
     {
       title:
-        'Do you require any other accommodations (wheelchair access, visibility)?',
+        'If you require any disability related accommodations, please specify below:',
+      subtitle: (
+        <span>
+          Individuals with disabilities who need accommodations to attend this
+          event may contact HackSC’s event team at team@hacksc.com. For more
+          information regarding accommodations, please visit{' '}
+          <Link href="https://hack.sc/accessibility" passHref underline>
+            hack.sc/accessibility
+          </Link>
+        </span>
+      ),
       type: HackformQuestionType.ShortText,
     },
     {
@@ -383,6 +422,32 @@ export const formMetadata2023HackerApps: HackformMetadata = {
         }
         return { valid: true };
       },
+    },
+    {
+      title: 'Are you looking for a full-time, part-time job or an internship?',
+      type: HackformQuestionType.SingleChoice,
+      options: [
+        { value: 'y', displayName: 'Yes' },
+        { value: 'n', displayName: 'No' },
+        { value: 'ns', displayName: 'I do not wish to share' },
+      ],
+    },
+    {
+      title: "If you answered 'Yes', what are you looking for?",
+      type: HackformQuestionType.MultipleSelect,
+      options: [
+        { value: 'f', displayName: 'Full-time' },
+        { value: 'p', displayName: 'Part-time' },
+        { value: 'i', displayName: 'Internship' },
+      ],
+    },
+    {
+      title:
+        'If you answered the previous question, enter your earliest ideal start date.',
+      type: HackformQuestionType.SingleOptionDropdown,
+      placeholder: 'e.g Summer 2023, Fall 2024',
+      limitOptions: 6,
+      options: startDateJobOptions,
     },
     {
       title: 'How did you hear about HackSC?',

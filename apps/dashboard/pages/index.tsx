@@ -2,63 +2,62 @@ import { H1, H3 } from '@hibiscus/ui';
 import styled from 'styled-components';
 import GrayContentBox from '../components/gray-content-box/gray-content-box';
 import { Search } from '@hibiscus/ui-kit-2023';
-import PortalLayout from '../layouts/portal-layout';
 import useHibiscusUser from '../hooks/use-hibiscus-user/use-hibiscus-user';
 import { getColorsForRole } from '../common/role.utils';
 import { HibiscusRole } from '@hibiscus/types';
 
 export function Index() {
   const { user } = useHibiscusUser();
+
   if (user == null) {
-    return <></>;
+    return <>Loading</>;
   }
 
   const userColors = getColorsForRole(user?.role ?? HibiscusRole.HACKER);
 
   return (
-    <PortalLayout user={user}>
-      <Wrapper>
-        <LayoutContainer>
-          <div
-            style={{
-              display: 'inline-flex',
-              width: '100%',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <div>
-              <H1
-                style={{
-                  color: userColors.light,
-                  fontSize: '30px',
-                  textShadow: `0px 0px 10px ${userColors.standard}`,
-                }}
-              >
-                Welcome, {user.firstName}
-              </H1>
-              <H3 style={{ color: '#989898' }}>
-                What would you like to do today?
-              </H3>
-            </div>
-            {/* <Search
+    <Wrapper>
+      <LayoutContainer>
+        <div
+          style={{
+            display: 'inline-flex',
+            width: '100%',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <div>
+            <H1
+              style={{
+                color: userColors.light,
+                fontSize: '30px',
+                textShadow: `0px 0px 10px ${userColors.standard}`,
+              }}
+            >
+              Welcome, {user.firstName}
+            </H1>
+            <H3 style={{ color: '#989898' }}>
+              What would you like to do today?
+            </H3>
+          </div>
+          {/* <Search
               placeholder={'Search...'}
               onInput={function (value: string): void {
                 throw new Error('Function not implemented.');
               }}
             ></Search> */}
-          </div>
-          <div>
-            <p style={{ margin: '13px 0' }}>Quick Actions</p>
-            <QuickActionContainer>
-              <GrayContentBox location="/redstar.svg"></GrayContentBox>
-              <GrayContentBox location="/pinkstar.svg"></GrayContentBox>
-              <GrayContentBox location="/greenstar.svg"></GrayContentBox>
+        </div>
+        <div>
+          <p style={{ margin: '13px 0' }}>Quick Actions</p>
+          <QuickActionContainer>
+            <GrayContentBox location="/redstar.svg"></GrayContentBox>
+            <GrayContentBox location="/pinkstar.svg"></GrayContentBox>
+            {/* <GrayContentBox location="/greenstar.svg"></GrayContentBox>
               <GrayContentBox location="/purplepin.svg"></GrayContentBox>
-              <GrayContentBox location="/yellowpin.svg"></GrayContentBox>
-            </QuickActionContainer>
-          </div>
-          <AddOnAndStats>
+              <GrayContentBox location="/yellowpin.svg"></GrayContentBox> */}
+          </QuickActionContainer>
+        </div>
+        {/* <AddOnAndStats>
             <AddOnOuter>
               <p style={{ textAlign: 'left', width: '90%', margin: '10px 0' }}>
                 Add-Ons
@@ -71,10 +70,9 @@ export function Index() {
               </p>
               <Stats></Stats>
             </StatsOuter>
-          </AddOnAndStats>
-        </LayoutContainer>
-      </Wrapper>
-    </PortalLayout>
+          </AddOnAndStats> */}
+      </LayoutContainer>
+    </Wrapper>
   );
 }
 
@@ -94,51 +92,51 @@ const LayoutContainer = styled.div`
   flex-direction: column;
 `;
 
-const AddOnOuter = styled.div`
-  width: 41%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-`;
+// const AddOnOuter = styled.div`
+//   width: 41%;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: flex-start;
+// `;
 
-const AddOn = styled.div`
-  width: 94%;
-  height: 90%;
-  background: #363636;
-  /* smaller-red-glow */
-  border: 2px solid #5a5a5a;
-  border-radius: 10px;
-  /* box-shadow: 0px 0px 10px rgba(254, 81, 57, 0.5); */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
+// const AddOn = styled.div`
+//   width: 94%;
+//   height: 90%;
+//   background: #363636;
+//   /* smaller-red-glow */
+//   border: 2px solid #5a5a5a;
+//   border-radius: 10px;
+//   /* box-shadow: 0px 0px 10px rgba(254, 81, 57, 0.5); */
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+// `;
 
-const Stats = styled.div`
-  width: 100%;
-  height: 90%;
-  background: #363636;
-  border: 2px solid #5a5a5a;
-  /* smaller-red-glow */
-  /* box-shadow: 0px 0px 10px rgba(254, 81, 57, 0.5); */
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
+// const Stats = styled.div`
+//   width: 100%;
+//   height: 90%;
+//   background: #363636;
+//   border: 2px solid #5a5a5a;
+//   /* smaller-red-glow */
+//   /* box-shadow: 0px 0px 10px rgba(254, 81, 57, 0.5); */
+//   border-radius: 10px;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+// `;
 
-const StatsOuter = styled.div`
-  width: 59%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-`;
+// const StatsOuter = styled.div`
+//   width: 59%;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: flex-start;
+// `;
 
-const AddOnAndStats = styled.div`
-  display: inline-flex;
-  width: 100%;
-  height: 300px;
-`;
+// const AddOnAndStats = styled.div`
+//   display: inline-flex;
+//   width: 100%;
+//   height: 300px;
+// `;
 
 const QuickActionContainer = styled.div`
   display: flex;

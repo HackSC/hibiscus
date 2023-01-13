@@ -4,28 +4,41 @@ import Head from 'next/head';
 import './styles.css';
 import { wrapper } from '../store/store';
 import styled from 'styled-components';
+import useHibiscusUser from '../hooks/use-hibiscus-user/use-hibiscus-user';
+import PortalLayout from '../layouts/portal-layout';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import NProgress from 'nprogress';
+import { getWebTitle } from '@hibiscus/metadata';
 import { Toaster } from 'react-hot-toast';
 
 function CustomApp({ Component, pageProps }: AppProps) {
+  const { user } = useHibiscusUser();
   const router = useRouter();
-  // without this, going to another page will still keep the progress bar as it was before
-  useEffect(() => {
-    NProgress.remove();
-  }, [router.asPath]);
+
+  const createWebTitle = () => {
+    switch (router.asPath) {
+      case '/':
+        return getWebTitle('Home');
+      case '/apply-2023':
+        return getWebTitle('Apply');
+      case '/team':
+        return getWebTitle('Your team');
+      default:
+        return getWebTitle('Home');
+    }
+  };
 
   return (
     <>
       <Head>
         <link rel="shortcut icon" href="/img/favicon.ico" />
-        <title>Home | Hibiscus</title>
+        <title>{createWebTitle()}</title>
       </Head>
       <Main>
         <Toaster />
         <GlobalStyles2023 />
-        <Component {...pageProps} />
+        <PortalLayout user={user}>
+          <Component {...pageProps} />
+        </PortalLayout>
       </Main>
     </>
   );
