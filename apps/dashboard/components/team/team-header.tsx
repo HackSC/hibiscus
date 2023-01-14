@@ -1,13 +1,12 @@
 import { Colors2023 } from '@hibiscus/styles';
 import { H1, Text } from '@hibiscus/ui';
 import { GlowSpan } from '@hibiscus/ui-kit-2023';
+import { useTeam } from '../../hooks/use-team/use-team';
 import React from 'react';
 import styled from 'styled-components';
 
 function TeamHeader() {
-  const teamName = 'Awesome';
-  const teamBio =
-    'asjdlasjda sdioasod aosid joaisdjoia doiasdo aosd oasdoa da sd oasd\n hello guys';
+  const { team } = useTeam();
   return (
     <Container>
       <NameBioContainer>
@@ -18,13 +17,13 @@ function TeamHeader() {
               color={Colors2023.GREEN.STANDARD}
               shadowColor={Colors2023.GREEN.DARK}
             >
-              {teamName}
+              {team.name}
             </GlowSpan>
           </H1>
         </NameDiv>
         <BioDiv>
           <GraySpan>Description:</GraySpan>
-          <Text>{teamBio}</Text>
+          <Text>{team.description}</Text>
         </BioDiv>
       </NameBioContainer>
     </Container>

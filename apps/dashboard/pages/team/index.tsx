@@ -1,12 +1,12 @@
-import PortalLayout from '../../layouts/portal-layout';
 import React from 'react';
 import styled from 'styled-components';
 import TeamHeader from '../../components/team/team-header';
 import TeamMembersWidget from '../../components/team/team-members-widget';
 import NoTeamPlaceholder from '../../components/team/no-team-placeholder';
+import { useTeam } from '../../hooks/use-team/use-team';
 
 const Index = () => {
-  const hasTeam = false;
+  const { team } = useTeam();
 
   const TeamView = () => {
     return (
@@ -19,7 +19,7 @@ const Index = () => {
 
   return (
     <PageContainer>
-      {hasTeam ? <TeamView /> : <NoTeamPlaceholder />}
+      {team !== null ? <TeamView /> : <NoTeamPlaceholder />}
     </PageContainer>
   );
 };

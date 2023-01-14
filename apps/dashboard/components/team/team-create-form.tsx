@@ -6,12 +6,14 @@ import { toast } from 'react-hot-toast';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { SpanRed } from '../red-span';
+import { useTeam } from '../../hooks/use-team/use-team';
 
 interface Props {
   closeModal: () => void;
 }
 
 export const TeamCreateForm = (props: Props) => {
+  const { setTeam } = useTeam();
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -27,6 +29,7 @@ export const TeamCreateForm = (props: Props) => {
       const createTeamSuccess = true;
       if (createTeamSuccess) {
         toast.success('Successfully created team');
+        setTeam({ name: values.name, description: values.description, id: '' });
       }
       formikHelpers.setSubmitting(false);
     },

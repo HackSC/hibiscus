@@ -1,40 +1,90 @@
 import { Colors2023 } from '@hibiscus/styles';
-import { H3, Text } from '@hibiscus/ui';
-import { Button } from '@hibiscus/ui-kit-2023';
-import React from 'react';
+import { H3, Modal, Text } from '@hibiscus/ui';
+import { Button, OneLineText } from '@hibiscus/ui-kit-2023';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { AiFillCrown, AiFillPlusCircle } from 'react-icons/ai';
 import { GrayBox } from '../gray-box/gray-box';
+import { TeamMember } from '../../common/types';
+import { toast } from 'react-hot-toast';
 
-interface Team {
-  members: TeamMember[];
-}
-
-interface TeamMember {
-  name?: string;
-  email: string;
-  admin?: boolean;
-}
+type Member = TeamMember & { admin: boolean; invited: boolean };
 
 function TeamMembersWidget() {
-  const teamMembers: TeamMember[] = [
-    { email: 'vinceny.fe@gmail.com', admin: true },
-    { email: 'asdasd@gmail.com' },
-  ].map((item) => ({ ...item, email: item.email.split('@', 1)[0] }));
+  const [teamMembers, setTeamMembers] = useState<Member[]>([]);
+  const [isOpen, setOpen] = useState(false);
   const isCurrentUserAdmin = true;
+  const [invites, setInvites] = useState<string[]>([]);
 
   const handleOnClickAddMembers: React.MouseEventHandler<HTMLButtonElement> = (
     e
   ) => {
-    // TODO: implement
+    setOpen(true);
   };
 
-  const handleOnClickKick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    // TODO: implement
+  const handleOnClickKick: (
+    member: TeamMember
+  ) => React.MouseEventHandler<HTMLButtonElement> = (member) => () => {
+    setTeamMembers((prev) => prev.filter((it) => it.id === member.id));
+    // TODO: call API to kick
+  };
+
+  const InviteForm = () => {
+    const [text, setText] = useState('');
+
+    const handleClickSubmitInviteMembers: React.MouseEventHandler<
+      HTMLButtonElement
+    > = (e) => {
+      toast.success('Successfully invited members!');
+      setInvites((prev) => [...prev, text]);
+      setOpen(false);
+      e.preventDefault();
+    };
+
+    const handleKeyEnter: React.KeyboardEventHandler<HTMLInputElement> = (
+      e
+    ) => {
+      e.stopPropagation();
+      if (e.key === 'Enter') {
+        toast.success('Successfully invited members!');
+        setInvites((prev) => [...prev, text]);
+        setOpen(false);
+      }
+    };
+
+    return (
+      <>
+        <OneLineText
+          placeholder="User email"
+          onKeyDown={handleKeyEnter}
+          value={text}
+          onChange={(e) => {
+            setText(e.target.value);
+          }}
+        />
+        <Button
+          color="blue"
+          type="submit"
+          onClick={handleClickSubmitInviteMembers}
+        >
+          SUBMIT
+        </Button>
+      </>
+    );
   };
 
   return (
     <Container>
+      <Modal
+        isOpen={isOpen}
+        closeModal={() => {
+          setOpen(false);
+        }}
+      >
+        <GrayBox style={{ gap: '10px' }}>
+          <InviteForm />
+        </GrayBox>
+      </Modal>
       <TopContainer>
         <H3 style={{ fontWeight: 600 }}>Members</H3>
         <Button color="black" onClick={handleOnClickAddMembers}>
@@ -47,18 +97,21 @@ function TeamMembersWidget() {
             return (
               <ListItemContainer key={i}>
                 <LeftItemContainer>
-                  <Text>{item.email}</Text>
+                  <Text>{item.name}</Text>
                   {item.admin && <AiFillCrown />}
                 </LeftItemContainer>
                 <ItemButtonsContainer>
                   {!item.admin && isCurrentUserAdmin && (
-                    <Button color="red" onClick={handleOnClickKick}>
+                    <Button color="red" onClick={handleOnClickKick(item)}>
                       KICK
                     </Button>
                   )}
                 </ItemButtonsContainer>
               </ListItemContainer>
             );
+          })}
+          {invites.map((inv, i) => {
+            return <p key={i}>{inv}</p>;
           })}
         </List>
       </GrayBox>
