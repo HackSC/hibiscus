@@ -1,6 +1,6 @@
 import { H2 } from '@hibiscus/ui';
 import { useState } from 'react';
-import Modal from '../../components/team/modal';
+import CreateTeamModal from '../../components/team/modal';
 import { Button } from '@hibiscus/ui-kit-2023';
 import { RiTeamFill } from 'react-icons/ri';
 import styled from 'styled-components';
@@ -21,7 +21,7 @@ function NoTeamPlaceholder() {
       <Button color="black" onClick={openModal}>
         <RiTeamFill /> Create a team
       </Button>
-      <Modal isOpen={isOpen} closeModal={closeModal} />
+      <CreateTeamModal isOpen={isOpen} closeModal={closeModal} />
     </Div>
   );
 }

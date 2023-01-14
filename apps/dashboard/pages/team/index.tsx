@@ -18,11 +18,9 @@ const Index = () => {
   };
 
   return (
-    <PortalLayout>
-      <PageContainer>
-        {hasTeam ? <TeamView /> : <NoTeamPlaceholder />}
-      </PageContainer>
-    </PortalLayout>
+    <PageContainer>
+      {hasTeam ? <TeamView /> : <NoTeamPlaceholder />}
+    </PageContainer>
   );
 };
 
