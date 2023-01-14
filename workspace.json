@@ -11,6 +11,7 @@
     "hackform-client": "libs/hackform-client",
     "hibiscus-supabase-client": "libs/hibiscus-supabase-client",
     "icons": "libs/icons",
+    "identity-portal": "apps/identity-portal",
     "interim": "apps/interim",
     "log-server": "apps/log-server",
     "metadata": "libs/metadata",
