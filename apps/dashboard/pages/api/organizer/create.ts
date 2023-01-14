@@ -2,6 +2,8 @@ import 'reflect-metadata';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { container } from 'tsyringe';
 import { DashboardRepository } from '../../../repository/dashboard.repository';
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { GetServerSidePropsContext } from 'next';
 
 /**
  * Creates a team in the teams table
@@ -15,12 +17,7 @@ export default async function createTeam(
   res: NextApiResponse
 ) {
   const repo = container.resolve(DashboardRepository);
-  console.log(`REPO: ${repo}`);
-  const {
-    data: { session },
-  } = await repo.getClient().auth.getSession();
-
-  console.log(`Session: ${session}`);
+  const supabase = repo.getClient();
   const name: string = req.body.name;
   const description: string | null = req.body.description;
   const photoKey: string | null = req.body.photo_key;
@@ -30,6 +27,19 @@ export default async function createTeam(
   console.log(`Desc: ${description}`);
   console.log(`PhotoKey: ${photoKey}`);
   console.log(`Organizer ID: ${organizerId}`);
+
+  const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
+    // Create authenticated Supabase Client
+    const supabase = createServerSupabaseClient(ctx);
+    // Check if we have a session
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    console.log(session);
+  };
+
+  console.log(`Session data???: ${supabase.auth.getUser()}`);
 
   try {
     const {
