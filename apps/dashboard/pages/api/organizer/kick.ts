@@ -9,16 +9,16 @@ export default async function kickTeamMember(
   try {
     const repo = container.resolve(DashboardRepository);
 
-    let teamId: string = req.body.team_id;
-    let organizerId: string = req.body.organizer_id;
-    let kickId: string = req.body.kick_id;
+    const teamId: string = req.body.team_id;
+    const organizerId: string = req.body.organizer_id;
+    const kickId: string = req.body.kick_id;
 
     if (!teamId || !organizerId || !kickId) {
       throw new Error('One or more of the required parameters is missing.');
     }
 
     //verify user is organizer of team
-    let isOrganizer = await repo.verifyUserIsOrganizer(organizerId, teamId);
+    const isOrganizer = await repo.verifyUserIsOrganizer(organizerId, teamId);
 
     if (!isOrganizer) {
       throw new Error(
@@ -27,7 +27,7 @@ export default async function kickTeamMember(
     }
 
     //find kickId in user_profiles and set team_id to null
-    let result = await repo.updateKickedUser(kickId, teamId);
+    const result = await repo.updateKickedUser(kickId, teamId);
 
     //returns the kicked user in case wanted to display
     return res.status(200).json(result.data);

@@ -3,17 +3,18 @@ import { container } from 'tsyringe';
 import { DashboardRepository } from '../../repository/dashboard.repository';
 
 const repo = container.resolve(DashboardRepository);
-const supabase = repo.getClient();
-
-export default async function getTeamMembers(req, res) {
+export default async function getTeamMembers(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   try {
-    let teamId = req.body.team_id;
+    const teamId = req.body.team_id;
     if (!teamId) {
       throw new Error('Team ID is missing or null.');
     }
 
     //query for all team members
-    let result = await repo.getAllTeamMembers(teamId);
+    const result = await repo.getAllTeamMembers(teamId);
     if (result.data.length === 0) {
       throw new Error('Team with given id does not exist.');
     }

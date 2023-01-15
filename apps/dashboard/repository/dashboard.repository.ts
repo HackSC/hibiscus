@@ -1,21 +1,11 @@
 import { injectable } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
-import {
-  createServerSupabaseClient,
-  SupabaseClient,
-} from '@supabase/auth-helpers-nextjs';
-import type { NextApiRequest, NextApiResponse } from 'next';
 import { SESClient, SendTemplatedEmailCommand } from '@aws-sdk/client-ses';
 import { getEnv } from '@hibiscus/env';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 @injectable()
 export class DashboardRepository {
-  // inject this wrapper around the Supabase SDK client for use
-  constructor(req: NextApiRequest, res: NextApiResponse) {
-    this.client = createServerSupabaseClient({ req, res });
-  }
-
-  // private readonly client = this.hbc.getClient();
   private readonly client: SupabaseClient;
   private static readonly env = getEnv();
   private static readonly ses = new SESClient({
@@ -25,6 +15,12 @@ export class DashboardRepository {
     },
     region: DashboardRepository.env.Hibiscus.AWS.region,
   });
+
+  constructor(private readonly hbc: HibiscusSupabaseClient) {
+    this.client = hbc.getClient();
+  }
+
+  // private readonly client = this.hbc.getClient();
 
   //TODO: refactor
   public readonly MAX_TEAM_MEMBERS: number = parseInt(
@@ -215,14 +211,13 @@ export class DashboardRepository {
   ) {
     const TEMPLATE_NAME = 'InviteTemplate';
     const acceptInviteLink =
-      process.env.NEXT_PUBLIC_SSO_DEFAULT_REDIRECT_URL +
+      getEnv().Hibiscus.AppURL.portal +
       `/api/invite/accept?inviteId=${invitationId}`;
     const rejectInviteLink =
-      process.env.NEXT_PUBLIC_SSO_DEFAULT_REDIRECT_URL +
+      getEnv().Hibiscus.AppURL.portal +
       `/api/invite/reject?inviteId=${invitationId}`;
-    console.log(acceptInviteLink);
-    console.log(rejectInviteLink);
-    const createTemplateEmail = (templateName) => {
+
+    const createTemplateEmail = (templateName: string) => {
       return new SendTemplatedEmailCommand({
         Destination: { ToAddresses: [toAddress] },
         TemplateData: JSON.stringify({
@@ -236,14 +231,14 @@ export class DashboardRepository {
         Template: templateName,
       });
     };
+
     const sendTemplatedEmail = createTemplateEmail(TEMPLATE_NAME);
 
     try {
       await DashboardRepository.ses.send(sendTemplatedEmail);
-      console.log('Email send successfully.');
       return; //if successful, just return. Otherwise throw error which will be caught in invite.ts
     } catch (err) {
-      throw new Error('Failed to send email successfully.');
+      throw new Error('Failed to send email.' + err);
     }
   }
 }

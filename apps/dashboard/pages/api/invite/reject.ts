@@ -3,9 +3,9 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { container } from 'tsyringe';
 /**
  * [inviteReject - When the team leader rejects the join request by another user]
- * @param  {[NextApiRequest]} req - (user_id) : (string)
- * @param {[NextApiResponse]} res - Only used for returning Json messages
- * @return {[NextApiResponse]} 500 if error in creation like Postgres error.
+ * @param req - (user_id) : (string)
+ * @param res - Only used for returning Json messages
+ * @return 500 if error in creation like Postgres error.
  *  200 if join request was rejected successfully.
  */
 export default async function inviteReject(
@@ -14,21 +14,16 @@ export default async function inviteReject(
 ) {
   try {
     const repo = container.resolve(DashboardRepository);
-    const supabase = repo.getClient();
 
     //only need to delete the invitation
     //Assuming invitation already exists in db, otherwise error prob thrown anyway
-    const query = req.query;
-    const { inviteId } = query;
+    const { inviteId } = req.query;
 
-    let stringifyInviteId = inviteId.toString();
+    const stringifyInviteId = inviteId.toString();
 
     if (!inviteId) {
       throw new Error('Invite ID is missing or null.');
     }
-
-    console.log(inviteId);
-    console.log(stringifyInviteId);
 
     //check if invite exists by checking length of getInvite
     let result = await repo.getInviteInfo(stringifyInviteId);

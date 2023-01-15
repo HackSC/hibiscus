@@ -11,12 +11,8 @@ export default async function disbandTeam(
     const teamId: string = req.body.team_id;
     const organizerId: string = req.body.organizer_id;
 
-    if (!teamId) {
-      throw new Error('Team ID is missing.');
-    }
-    if (!organizerId) {
-      throw new Error('Organizer ID is missing.');
-    }
+    if (!teamId) throw new Error('Team ID is missing.');
+    if (!organizerId) throw new Error('Organizer ID is missing.');
 
     // verify user is organizer of team
     const isOrganizer = await repo.verifyUserIsOrganizer(organizerId, teamId);
@@ -29,13 +25,10 @@ export default async function disbandTeam(
 
     // find all users related to team_id. update all their team_id to null
     const returnData = await repo.updateAllTeamMembersToNull(teamId);
-
     //delete all records of invites involving that team
-
     await repo.deleteTeamInvites(teamId);
     //delete record for corresponding team
-
-    let result = await repo.deleteTeam(teamId);
+    await repo.deleteTeam(teamId);
 
     //return deleted team members, maybe find way to append deleted team??
     return res.status(200).json(returnData.data);

@@ -23,22 +23,6 @@ export default async function createTeam(
   const photoKey: string | null = req.body.photo_key;
   const organizerId: string = req.body.organizer_id;
 
-  console.log(`Name: ${name}`);
-  console.log(`Desc: ${description}`);
-  console.log(`PhotoKey: ${photoKey}`);
-  console.log(`Organizer ID: ${organizerId}`);
-
-  const getServerSideProps = async (ctx: GetServerSidePropsContext) => {
-    // Create authenticated Supabase Client
-    const supabase = createServerSupabaseClient(ctx);
-    // Check if we have a session
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-
-    console.log(session);
-  };
-
   console.log(`Session data???: ${supabase.auth.getUser()}`);
 
   try {
@@ -79,7 +63,7 @@ export default async function createTeam(
       photoKey,
       organizerId
     );
-    let teamId = insertedTeam.data[0]['team_id'];
+    const teamId = insertedTeam.data[0]['team_id'];
 
     //insert team_id into user_profiles table
     result = await repo.updateOrganizerTeam(teamId, organizerId);

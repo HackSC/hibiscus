@@ -2,27 +2,24 @@ import { DashboardRepository } from '../../../repository/dashboard.repository';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { container } from 'tsyringe';
 /**
- * [inviteApprove - When the team leader accepts the join request by another user]
- * @param  {[NextApiRequest]} req - (team_id, invite_id) : (string, string)
- * @param {[NextApiResponse]} res - Only used for returning Json messages
- * @return {[NextApiResponse]} 500 if error in creation. Happens when requesting user already has a team, team is full, or Postgres error.
+ * inviteApprove - When the team leader accepts the join request by another user]
+ * @param req - (team_id, invite_id) : (string, string)
+ * @param res - Only used for returning Json messages
+ * @return 500 if error in creation. Happens when requesting user already has a team, team is full, or Postgres error.
  *  200 if join request was approved successfully and new team member is added.
  */
-export default async function inviteAccept(
+export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
   try {
     const repo = container.resolve(DashboardRepository);
-
     const query = req.query;
     const { inviteId } = query;
-
     if (!inviteId) {
       throw new Error('Invite ID is missing or null.');
     }
-
-    let stringifyInviteId = inviteId.toString();
+    const stringifyInviteId = inviteId.toString();
 
     //Gets invited_id and team_id. Also check if invite exists by checking length of getInvite.
     let result = await repo.getInviteInfo(stringifyInviteId);

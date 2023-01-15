@@ -10,10 +10,10 @@ export default async function invite( //anyone in a team can invite
   try {
     const repo = container.resolve(DashboardRepository);
 
-    let teamId = req.body.team_id;
-    let email = req.body.email;
-    let organizerId = req.body.organizer_id;
-    let invitedId = req.body.invited_id; //TODO: cover the params and see if invitedID necessary if have email???
+    const teamId = req.body.team_id;
+    const email = req.body.email;
+    const organizerId = req.body.organizer_id;
+    const invitedId = req.body.invited_id; //TODO: cover the params and see if invitedID necessary if have email???
 
     if (!teamId || !email || !organizerId || !invitedId) {
       throw new Error(
