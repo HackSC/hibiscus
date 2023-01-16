@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request
+from flask import Flask, jsonify
 from dotenv import load_dotenv, find_dotenv
 from supabase import create_client
 
@@ -13,6 +13,9 @@ supabase_service_key = os.getenv("HIBISCUS_SUPABASE_SERVICE_KEY")
 supabase = create_client(supabase_api_url, supabase_service_key)
 
 # TODO: configure CORs
+def get_user_pin_event(user_id: str, event_id: int):
+    res = supabase.table("pinned_events").select("id").eq("user_id", user_id).eq("event_id", event_id).execute()
+    return res
 
 @app.get("/events")
 def get_events():
@@ -26,6 +29,11 @@ def get_pinned_events(user_id: str):
 
 @app.post("/events/<user_id>/pins/<event_id>")
 def pin_event(user_id: str, event_id: int):
+    # current exist pin
+    existing_record = get_user_pin_event(user_id, event_id)
+    print(existing_record)
+    if len(existing_record.data)>0:
+        return jsonify({"error": "Event already pinned for user!"}), 400
     res = supabase.table("pinned_events").insert({"user_id": user_id, "event_id": event_id}).execute()
     return res.data
 
