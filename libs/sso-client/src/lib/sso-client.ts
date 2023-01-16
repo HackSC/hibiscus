@@ -14,14 +14,6 @@ export const middlewareHandler =
   (callbackUrl: string) => async (request: NextRequest) => {
     if (request.method === 'OPTIONS') {
       const res = NextResponse.next();
-      res.headers.set(
-        'Access-Control-Allow-Origin',
-        request.headers.get('origin')
-      );
-      res.headers.set(
-        'Access-Control-Allow-Headers',
-        'Authorization, Content-Type'
-      );
       res.headers.set('Access-Control-Allow-Credentials', 'true');
       return res;
     }
