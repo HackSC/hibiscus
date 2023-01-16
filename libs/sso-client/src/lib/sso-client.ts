@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { NextApiRequest, NextApiResponse } from 'next/types';
 import axios from 'axios';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 
 /**
  * Generates the NextJS middleware needed to integrate with the Hibiscus SSO system
@@ -15,14 +16,17 @@ export const middlewareHandler =
     // Guard API route
     const path = request.nextUrl.pathname.split('/');
     if (path.length >= 2 && path[1] === 'api') {
-      if (
-        request.method !== 'GET' &&
-        request.headers.get('origin') === process.env.NEXT_PUBLIC_SSO_URL
-      ) {
-        return NextResponse.next();
-      } else {
-        return NextResponse.redirect(new URL('/', request.url));
+      const auth_header = request.headers.get('Authorization');
+      if (auth_header != null && auth_header.startsWith('Bearer ')) {
+        const supabase = new HibiscusSupabaseClient();
+        const token = auth_header.slice(7);
+        const { data } = await supabase.getClient().auth.getUser(token);
+        if (data.user != null) {
+          return NextResponse.next();
+        }
       }
+
+      return NextResponse.redirect(new URL('/', request.url));
     }
 
     if (
