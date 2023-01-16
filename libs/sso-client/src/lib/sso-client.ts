@@ -2,7 +2,6 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { NextApiRequest, NextApiResponse } from 'next/types';
 import axios from 'axios';
-import { createClient } from '@supabase/supabase-js';
 
 /**
  * Generates the NextJS middleware needed to integrate with the Hibiscus SSO system
@@ -13,23 +12,18 @@ import { createClient } from '@supabase/supabase-js';
  */
 export const middlewareHandler =
   (callbackUrl: string) => async (request: NextRequest) => {
-    // Guard API route
-    const path = request.nextUrl.pathname.split('/');
-    if (path.length >= 2 && path[1] === 'api') {
-      const auth_header = request.headers.get('Authorization');
-      if (auth_header != null && auth_header.startsWith('Bearer ')) {
-        const supabase = createClient(
-          process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_API_URL,
-          process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_ANON_KEY
-        );
-        const token = auth_header.slice(7);
-        const { data } = await supabase.auth.getUser(token);
-        if (data.user != null) {
-          return NextResponse.next();
-        }
-      }
-
-      return NextResponse.redirect(new URL('/', request.url));
+    if (request.method === 'OPTIONS') {
+      const res = NextResponse.next();
+      res.headers.set(
+        'Access-Control-Allow-Origin',
+        request.headers.get('origin')
+      );
+      res.headers.set(
+        'Access-Control-Allow-Headers',
+        'Authorization, Content-Type'
+      );
+      res.headers.set('Access-Control-Allow-Credentials', 'true');
+      return res;
     }
 
     if (
@@ -117,6 +111,7 @@ export const callbackApiHandler =
           'Access-Control-Allow-Headers',
           'Authorization, Content-Type'
         );
+        res.setHeader('Access-Control-Allow-Credentials', 'true');
         res.status(200).json({
           message: 'Authorization success',
           redirect: redirectUrl,
@@ -161,6 +156,7 @@ export async function ssoCallback(callback: string, access_token: string) {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
+        withCredentials: true,
       }
     );
 
