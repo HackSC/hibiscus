@@ -8,6 +8,8 @@ import { Colors2023 } from '@hibiscus/styles';
 import useHibiscusUser from '../hooks/use-hibiscus-user/use-hibiscus-user';
 import { getColorsForRole } from '../common/role.utils';
 import { HibiscusRole } from '@hibiscus/types';
+import { Link } from '@hibiscus/ui';
+import HackerPortal from '../components/hacker-portal/hacker-portal';
 
 export function Index() {
   const { user } = useHibiscusUser();
@@ -17,6 +19,10 @@ export function Index() {
   }
 
   const userColors = getColorsForRole(user?.role ?? HibiscusRole.HACKER);
+
+  const renderDashboard = () => {
+    if (user.role === HibiscusRole.HACKER) return <HackerPortal user={user} />;
+  };
 
   return (
     <Wrapper>
@@ -43,6 +49,7 @@ export function Index() {
               What would you like to do today?
             </H3>
           </div>
+
           {/* <Search
               placeholder={'Search...'}
               onInput={function (value: string): void {
@@ -51,23 +58,7 @@ export function Index() {
             ></Search> */}
         </div>
 
-        <MessageContainer>
-          <H1 style={{ fontSize: '50px', lineHeight: '60px' }}>
-            <GlowSpan
-              color={Colors2023.BLUE.LIGHT}
-              shadowColor={Colors2023.BLUE.STANDARD}
-            >
-              Coming Soon!
-            </GlowSpan>
-          </H1>
-
-          <Image
-            src={'/assets/earth-suitcase-moon.svg'}
-            width={200}
-            height={200}
-            alt="Earth-like character wearing shades pulling baggage and a moon"
-          />
-        </MessageContainer>
+        {renderDashboard()}
 
         {/* <div> */}
         {/* <p style={{ margin: '13px 0' }}>Quick Actions</p> */}
@@ -175,4 +166,21 @@ const MessageContainer = styled.div`
   align-items: center;
   gap: 5px;
   padding-top: 100px;
+`;
+
+const ApplyButton = styled.button`
+  cursor: pointer;
+  background-color: #979797;
+  color: #f4f4f4;
+  font-weight: 500;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: #6f9a28;
+    color: #e9ffc5;
+    transition: all 0.3s;
+  }
 `;

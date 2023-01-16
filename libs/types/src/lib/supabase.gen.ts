@@ -77,6 +77,7 @@ export interface Database {
           last_name: string;
           role: number | null;
           user_id: string;
+          application_status: number;
         };
         Insert: {
           app_id?: string | null;
