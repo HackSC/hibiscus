@@ -2,9 +2,14 @@ import { H1, H3 } from '@hibiscus/ui';
 import styled from 'styled-components';
 import GrayContentBox from '../components/gray-content-box/gray-content-box';
 import { Search } from '@hibiscus/ui-kit-2023';
+import Image from 'next/image';
+import { GlowSpan } from '@hibiscus/ui-kit-2023';
+import { Colors2023 } from '@hibiscus/styles';
 import useHibiscusUser from '../hooks/use-hibiscus-user/use-hibiscus-user';
 import { getColorsForRole } from '../common/role.utils';
 import { HibiscusRole } from '@hibiscus/types';
+import { Link } from '@hibiscus/ui';
+import HackerPortal from '../components/hacker-portal/hacker-portal';
 
 export function Index() {
   const { user } = useHibiscusUser();
@@ -14,6 +19,10 @@ export function Index() {
   }
 
   const userColors = getColorsForRole(user?.role ?? HibiscusRole.HACKER);
+
+  const renderDashboard = () => {
+    if (user.role === HibiscusRole.HACKER) return <HackerPortal user={user} />;
+  };
 
   return (
     <Wrapper>
@@ -40,6 +49,7 @@ export function Index() {
               What would you like to do today?
             </H3>
           </div>
+
           {/* <Search
               placeholder={'Search...'}
               onInput={function (value: string): void {
@@ -47,16 +57,19 @@ export function Index() {
               }}
             ></Search> */}
         </div>
-        <div>
-          <p style={{ margin: '13px 0' }}>Quick Actions</p>
-          <QuickActionContainer>
-            <GrayContentBox location="/redstar.svg"></GrayContentBox>
-            <GrayContentBox location="/pinkstar.svg"></GrayContentBox>
-            {/* <GrayContentBox location="/greenstar.svg"></GrayContentBox>
+
+        {renderDashboard()}
+
+        {/* <div> */}
+        {/* <p style={{ margin: '13px 0' }}>Quick Actions</p> */}
+        {/* <QuickActionContainer> */}
+        {/* <GrayContentBox location="/redstar.svg"></GrayContentBox> */}
+        {/* <GrayContentBox location="/pinkstar.svg"></GrayContentBox> */}
+        {/* <GrayContentBox location="/greenstar.svg"></GrayContentBox>
               <GrayContentBox location="/purplepin.svg"></GrayContentBox>
               <GrayContentBox location="/yellowpin.svg"></GrayContentBox> */}
-          </QuickActionContainer>
-        </div>
+        {/* </QuickActionContainer> */}
+        {/* </div> */}
         {/* <AddOnAndStats>
             <AddOnOuter>
               <p style={{ textAlign: 'left', width: '90%', margin: '10px 0' }}>
@@ -143,4 +156,31 @@ const QuickActionContainer = styled.div`
   width: 100%;
   flex-wrap: wrap;
   gap: 30px;
+`;
+
+const MessageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  padding-top: 100px;
+`;
+
+const ApplyButton = styled.button`
+  cursor: pointer;
+  background-color: #979797;
+  color: #f4f4f4;
+  font-weight: 500;
+  padding: 8px;
+  border-radius: 8px;
+  font-size: 15px;
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: #6f9a28;
+    color: #e9ffc5;
+    transition: all 0.3s;
+  }
 `;
