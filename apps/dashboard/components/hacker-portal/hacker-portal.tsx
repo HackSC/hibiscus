@@ -75,7 +75,7 @@ export function HackerPortal({ user }: Props) {
             shadowColor={Colors2023.BLUE.STANDARD}
             style={{ fontSize: 20 }}
           >
-            We have noticed you have not applied to HackSC 2023 yet!
+            You have not applied to HackSC 2023 yet!
           </GlowSpan>
           <ApplyButton>
             <Link
