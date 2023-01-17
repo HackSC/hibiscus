@@ -75,7 +75,9 @@ export const QuestionCreator = ({
               OK
             </Button>
             <SmallText>press Enter</SmallText>
-            <IoReturnDownBackOutline />
+            <StyledEnterIcon>
+              <IoReturnDownBackOutline />
+            </StyledEnterIcon>
           </ButtonHintTextContainer>
         </InputAndButtonWrapper>
         <ErrorContainer>
@@ -123,6 +125,16 @@ const ErrorText = styled(Text)`
 
 const SmallText = styled(Text)`
   font-size: small;
+
+  @media (max-width: 400px) {
+    display: none;
+  }
+`;
+
+const StyledEnterIcon = styled.div`
+  @media (max-width: 400px) {
+    display: none;
+  }
 `;
 
 const PageWrapper = styled.div`
@@ -136,6 +148,9 @@ const ButtonHintTextContainer = styled.div`
   display: flex;
   gap: 10px;
   align-items: center;
+  @media (max-width: 400px) {
+    padding-right: 20px;
+  }
 `;
 
 const ErrorContainer = styled.div`

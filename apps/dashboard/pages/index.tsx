@@ -1,14 +1,8 @@
 import { H1, H3 } from '@hibiscus/ui';
 import styled from 'styled-components';
-import GrayContentBox from '../components/gray-content-box/gray-content-box';
-import { Search } from '@hibiscus/ui-kit-2023';
-import Image from 'next/image';
-import { GlowSpan } from '@hibiscus/ui-kit-2023';
-import { Colors2023 } from '@hibiscus/styles';
 import useHibiscusUser from '../hooks/use-hibiscus-user/use-hibiscus-user';
 import { getColorsForRole } from '../common/role.utils';
 import { HibiscusRole } from '@hibiscus/types';
-import { Link } from '@hibiscus/ui';
 import HackerPortal from '../components/hacker-portal/hacker-portal';
 
 export function Index() {
@@ -156,31 +150,4 @@ const QuickActionContainer = styled.div`
   width: 100%;
   flex-wrap: wrap;
   gap: 30px;
-`;
-
-const MessageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  justify-content: center;
-  align-items: center;
-  gap: 5px;
-  padding-top: 100px;
-`;
-
-const ApplyButton = styled.button`
-  cursor: pointer;
-  background-color: #979797;
-  color: #f4f4f4;
-  font-weight: 500;
-  padding: 8px;
-  border-radius: 8px;
-  font-size: 15px;
-  transition: all 0.3s;
-
-  &:hover {
-    background-color: #6f9a28;
-    color: #e9ffc5;
-    transition: all 0.3s;
-  }
 `;

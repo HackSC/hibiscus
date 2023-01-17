@@ -19,8 +19,7 @@ export const LongTextQuestion = ({ placeholder }: Props) => {
 
   const InputComponent = (
     <TextWrapper>
-      <ParagraphText
-        style={{ width: '50rem' }}
+      <StyledParagraphText
         value={textInput}
         placeholder={placeholder}
         onChange={(e) => {
@@ -53,4 +52,11 @@ const TextWrapper = styled.div``;
 const WordCountText = styled(Text)`
   color: ${Colors2023.GRAY.SHLIGHT};
   font-size: small;
+`;
+
+const StyledParagraphText = styled(ParagraphText)`
+  width: 50rem;
+  @media (max-width: 400px) {
+    width: 19rem;
+  }
 `;
