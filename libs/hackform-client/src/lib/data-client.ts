@@ -3,7 +3,6 @@ import {
   DynamoDBClient,
   GetItemCommand,
   PutItemCommand,
-  PutItemCommandInput,
 } from '@aws-sdk/client-dynamodb';
 import { injectable } from 'tsyringe';
 import { v4 } from 'uuid';

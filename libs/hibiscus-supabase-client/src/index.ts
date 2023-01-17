@@ -19,10 +19,11 @@ import {
   SSOApiVerifyToken,
 } from '@hibiscus/types';
 import { deleteCookie, setCookie } from 'cookies-next';
+import { getEnv } from '@hibiscus/env';
 
 @injectable()
 export class HibiscusSupabaseClient {
-  private readonly client: SupabaseClient;
+  private client: SupabaseClient;
 
   constructor() {
     this.client = createClient(
@@ -33,6 +34,15 @@ export class HibiscusSupabaseClient {
 
   getClient() {
     return this.client;
+  }
+
+  setOptions({ useServiceKey }: { useServiceKey: boolean }) {
+    if (useServiceKey) {
+      this.client = createClient(
+        getEnv().Hibiscus.Supabase.apiUrl,
+        getEnv().Hibiscus.Supabase.serviceKey
+      );
+    }
   }
 
   /**

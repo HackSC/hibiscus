@@ -1,0 +1,21 @@
+{
+  "name": "airplane",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/airplane",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "airplane dev"
+      }
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "airplane deploy"
+      }
+    }
+  },
+  "tags": []
+}
