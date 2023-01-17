@@ -63,6 +63,17 @@ export const middlewareHandler =
       }
     }
 
+    // Access token not found
+
+    // Redirect to show unauthorized if it is API endpoint
+    const path = request.nextUrl.pathname.split('/');
+    if (path.length >= 2 && path[1] === 'api') {
+      return NextResponse.redirect(
+        `${process.env.NEXT_PUBLIC_SSO_URL}/api/unauthorized`
+      );
+    }
+
+    // Redirect to login
     const redirectUrl = new URL(`${process.env.NEXT_PUBLIC_SSO_URL}/login`);
     redirectUrl.search = `callback=${callbackUrl}`;
     return NextResponse.redirect(redirectUrl);
