@@ -10,13 +10,6 @@
         "command": "airplane dev"
       }
     },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["apps/airplane/**/*.{ts,tsx,js,jsx}"]
-      }
-    },
     "deploy": {
       "executor": "nx:run-commands",
       "options": {
