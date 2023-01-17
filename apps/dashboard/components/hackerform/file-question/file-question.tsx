@@ -17,10 +17,10 @@ export const FileQuestion = () => {
   const { currentQuestionIndex: cqi, ...hackformUtils } = useHackform();
   const lastInput = hackformUtils.getCurrentResponse()?.input;
   const [uploaded, setUploaded] = useState<File | null>(null);
-  const [displayName, setDisplayName] = useState<string | null>(
-    lastInput?.file.displayName ?? null
-  );
-  const [fileKey, setKey] = useState<string | null>(lastInput?.file.fileKey);
+  const [response, setResponse] = useState<{
+    fileKey: string;
+    displayName: string;
+  } | null>(lastInput?.file ?? null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const MAX_FILE_SIZE = 5120; // 5MB
   const MAX_FILE_SIZE_MB = 5120 / 1024; // 5MB
@@ -31,7 +31,7 @@ export const FileQuestion = () => {
   };
 
   const getInputResponse: GetInputResponseCb = () => ({
-    file: { displayName, fileKey },
+    file: response,
   });
 
   const handleFileChange = async () => {
@@ -51,15 +51,14 @@ export const FileQuestion = () => {
       return;
     }
     hackformUtils.resolveError(cqi);
-    setDisplayName(file.name);
     const fk = APIService.createFileKey(file);
-    setKey(fk);
+    setResponse({ displayName: file.name, fileKey: fk });
   };
 
   const handleSubmit = async () => {
     // send into the store
     if (user && uploaded !== null)
-      APIService.submitResume(uploaded, fileKey, user.id);
+      APIService.submitResume(uploaded, response.fileKey, user.id);
     // call the function with those
     const cb = hackformUtils.createCbSubmitValidate(getInputResponse);
     cb();
@@ -68,7 +67,7 @@ export const FileQuestion = () => {
   const handleNext = async () => {
     // send into the store
     if (user && uploaded !== null)
-      APIService.submitResume(uploaded, fileKey, user.id);
+      APIService.submitResume(uploaded, response.fileKey, user.id);
     const cb =
       hackformUtils.createCbGoNextQuestionValidateSilently(getInputResponse);
     cb();
@@ -76,8 +75,7 @@ export const FileQuestion = () => {
 
   const handleRemoveFile = () => {
     setUploaded(null);
-    setDisplayName(null);
-    setKey(null);
+    setResponse(null);
   };
 
   const InputComponent = (
@@ -93,9 +91,9 @@ export const FileQuestion = () => {
         <Button color="blue" onClick={handleFileChange}>
           UPLOAD
         </Button>
-        {displayName && (
+        {response && (
           <>
-            <Text>{displayName}</Text>{' '}
+            <Text>{response.displayName}</Text>{' '}
             <button
               style={{
                 appearance: 'none',
