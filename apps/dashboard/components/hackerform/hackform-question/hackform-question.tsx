@@ -85,4 +85,9 @@ const QuestionWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   gap: 10px;
+
+  @media (max-width: 400px) {
+    margin-left: 0rem;
+    margin-top: 6rem;
+  }
 `;
