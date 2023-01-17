@@ -21,6 +21,7 @@
     "@reduxjs/toolkit": "^1.9.1",
     "@sendgrid/mail": "^7.7.0",
     "@supabase/supabase-js": "^2.2.0",
+    "airplane": "^0.2.30",
     "aws-sdk": "^2.1272.0",
     "axios": "^1.2.1",
     "classnames": "^2.3.2",

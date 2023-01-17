@@ -31,6 +31,20 @@ export interface Database {
   };
   public: {
     Tables: {
+      application_status: {
+        Row: {
+          id: number;
+          status: string | null;
+        };
+        Insert: {
+          id?: number;
+          status?: string | null;
+        };
+        Update: {
+          id?: number;
+          status?: string | null;
+        };
+      };
       pointr_shortlinks: {
         Row: {
           created_at: string | null;
@@ -71,8 +85,9 @@ export interface Database {
       user_profiles: {
         Row: {
           app_id: string | null;
+          application_status: number;
           created_at: string | null;
-          email: string;
+          email: string | null;
           first_name: string;
           last_name: string;
           role: number | null;
@@ -80,8 +95,9 @@ export interface Database {
         };
         Insert: {
           app_id?: string | null;
+          application_status?: number;
           created_at?: string | null;
-          email: string;
+          email?: string | null;
           first_name: string;
           last_name: string;
           role?: number | null;
@@ -89,8 +105,9 @@ export interface Database {
         };
         Update: {
           app_id?: string | null;
+          application_status?: number;
           created_at?: string | null;
-          email?: string;
+          email?: string | null;
           first_name?: string;
           last_name?: string;
           role?: number | null;

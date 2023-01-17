@@ -32,6 +32,10 @@ const BottomWidgetsContainer = styled.div`
   justify-content: flex-end;
   margin: 1rem;
   padding-bottom: 1rem;
+
+  @media (max-width: 400px) {
+    justify-content: center;
+  }
 `;
 
 const BackNextContainer = styled.div`

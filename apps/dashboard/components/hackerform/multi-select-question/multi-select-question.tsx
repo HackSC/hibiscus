@@ -80,7 +80,7 @@ export const MultiSelectQuestion = (props: MultiSelectQuestionProps) => {
             checked={other !== null} // when this option was picked
             onInput={handleClickOthers}
           />
-          <OneLineText
+          <StyledOneLineText
             value={other?.displayName}
             disabled={other === null} // disable when didn't pick Others
             onChange={handleChangeOthersText}
@@ -117,4 +117,13 @@ const Wrapper = styled.div`
 const OtherWrapper = styled.div`
   display: flex;
   gap: 10px;
+
+  @media (max-width: 400px) {
+    flex-direction: column;
+    padding-bottom: 2rem;
+  }
+`;
+
+const StyledOneLineText = styled(OneLineText)`
+  margin-top: -1rem;
 `;

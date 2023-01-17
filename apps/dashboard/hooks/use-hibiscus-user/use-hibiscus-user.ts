@@ -6,6 +6,8 @@ import { container } from 'tsyringe';
 import { getEnv } from '@hibiscus/env';
 import { useAppDispatch } from '../redux/hooks';
 import { removeTabRoute } from '../../store/menu-slice';
+// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
+import { ApplicationStatus } from 'libs/types/src/lib/application-status';
 
 export function useHibiscusUser() {
   const [user, setUser] = useState<HibiscusUser | null>(null);
@@ -30,6 +32,8 @@ export function useHibiscusUser() {
         firstName: profile.first_name,
         lastName: profile.last_name,
         applicationId: profile.app_id,
+        applicationStatus:
+          Object.values(ApplicationStatus)[profile.application_status - 1],
       };
     } else {
       // Set user's name and tag to be their email as temporary placeholder
@@ -46,6 +50,7 @@ export function useHibiscusUser() {
         firstName: user.data.user.email,
         lastName: null,
         applicationId: null,
+        applicationStatus: null,
       };
     }
   };

@@ -12,17 +12,10 @@ import axios from 'axios';
  */
 export const middlewareHandler =
   (callbackUrl: string) => async (request: NextRequest) => {
-    // Guard API route
-    const path = request.nextUrl.pathname.split('/');
-    if (path.length >= 2 && path[1] === 'api') {
-      if (
-        request.method !== 'GET' &&
-        request.headers.get('origin') === process.env.NEXT_PUBLIC_SSO_URL
-      ) {
-        return NextResponse.next();
-      } else {
-        return NextResponse.redirect(new URL('/', request.url));
-      }
+    if (request.method === 'OPTIONS') {
+      const res = NextResponse.next();
+      res.headers.set('Access-Control-Allow-Credentials', 'true');
+      return res;
     }
 
     if (
@@ -70,6 +63,17 @@ export const middlewareHandler =
       }
     }
 
+    // Access token not found
+
+    // Redirect to show unauthorized if it is API endpoint
+    const path = request.nextUrl.pathname.split('/');
+    if (path.length >= 2 && path[1] === 'api') {
+      return NextResponse.redirect(
+        `${process.env.NEXT_PUBLIC_SSO_URL}/api/unauthorized`
+      );
+    }
+
+    // Redirect to login
     const redirectUrl = new URL(`${process.env.NEXT_PUBLIC_SSO_URL}/login`);
     redirectUrl.search = `callback=${callbackUrl}`;
     return NextResponse.redirect(redirectUrl);
@@ -110,6 +114,7 @@ export const callbackApiHandler =
           'Access-Control-Allow-Headers',
           'Authorization, Content-Type'
         );
+        res.setHeader('Access-Control-Allow-Credentials', 'true');
         res.status(200).json({
           message: 'Authorization success',
           redirect: redirectUrl,
@@ -154,6 +159,7 @@ export async function ssoCallback(callback: string, access_token: string) {
         headers: {
           Authorization: `Bearer ${access_token}`,
         },
+        withCredentials: true,
       }
     );
 
