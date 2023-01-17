@@ -91,3 +91,62 @@ export default class APIService {
     return res.data as string[];
   }
 }
+
+type TeamServiceResponse = {
+  data?: any;
+  error?: { message: string };
+  status: string | number;
+};
+
+export class TeamServiceAPI {
+  static async acceptInvite(inviteId: string): Promise<TeamServiceResponse> {
+    const res = await axios.put(`/api/invite/accept`, { inviteId });
+    if (res.status >= 400) {
+      return { error: { message: res.data.message }, status: res.status };
+    }
+    return { data: res.data, status: res.status };
+  }
+
+  static async rejectInvite(inviteId: string): Promise<TeamServiceResponse> {
+    const res = await axios.put('/api/invite/reject', { inviteId });
+    if (res.status >= 400) {
+      return { error: { message: res.data.message }, status: res.status };
+    }
+    return { data: res.data, status: res.status };
+  }
+
+  static async createTeam(
+    name: string,
+    description: string,
+    organizerId: string
+  ) {
+    const res = await axios.post('/api/organizer/create', {
+      name,
+      description,
+      organizerId,
+    });
+    if (res.status >= 400) {
+      return { error: { message: res.data.message }, status: res.status };
+    }
+    return { data: res.data, status: res.status };
+  }
+
+  static async teamInviteUser(organizerId: string, inviteeEmail: string) {
+    const res = await axios.post('/api/organizer/invite', {
+      organizerId,
+      email: inviteeEmail,
+    });
+    if (res.status >= 400) {
+      return { error: { message: res.data.message }, status: res.status };
+    }
+    return { data: res.data, status: res.status };
+  }
+
+  static async getTeamById(teamId: string) {
+    const res = await axios.get(`/api/team?teamId=${teamId}`);
+    if (res.status >= 400) {
+      return { error: { message: res.data.message }, status: res.status };
+    }
+    return { data: res.data, status: res.status };
+  }
+}

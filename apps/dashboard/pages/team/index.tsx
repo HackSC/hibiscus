@@ -1,12 +1,36 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import TeamHeader from '../../components/team/team-header';
 import TeamMembersWidget from '../../components/team/team-members-widget';
 import NoTeamPlaceholder from '../../components/team/no-team-placeholder';
 import { useTeam } from '../../hooks/use-team/use-team';
+import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
+import { TeamServiceAPI } from '../../common/api';
+import { Text } from '@hibiscus/ui';
 
 const Index = () => {
-  const { team } = useTeam();
+  const { team, setTeam, isLoading, noTeam, setNoTeam } = useTeam();
+  const { user } = useHibiscusUser();
+
+  useEffect(() => {
+    if (!user) return;
+    if (!user.teamId) {
+      setNoTeam();
+      return;
+    }
+    TeamServiceAPI.getTeamById(user.teamId).then(({ data, error }) => {
+      if (error) {
+        console.error(error.message);
+        setTeam({ id: null, name: null, description: null });
+        return;
+      }
+      setTeam({
+        id: data.id,
+        name: data.name,
+        description: data.description,
+      });
+    });
+  }, [user, setTeam]);
 
   const TeamView = () => {
     return (
@@ -19,7 +43,13 @@ const Index = () => {
 
   return (
     <PageContainer>
-      {team !== null ? <TeamView /> : <NoTeamPlaceholder />}
+      {isLoading ? (
+        <Text>Loading...</Text>
+      ) : !noTeam ? (
+        <TeamView />
+      ) : (
+        <NoTeamPlaceholder />
+      )}
     </PageContainer>
   );
 };

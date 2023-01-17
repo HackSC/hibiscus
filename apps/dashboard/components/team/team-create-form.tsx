@@ -7,6 +7,8 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { SpanRed } from '../red-span';
 import { useTeam } from '../../hooks/use-team/use-team';
+import { TeamServiceAPI } from '../../common/api';
+import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 
 interface Props {
   closeModal: () => void;
@@ -14,6 +16,7 @@ interface Props {
 
 export const TeamCreateForm = (props: Props) => {
   const { setTeam } = useTeam();
+  const { user } = useHibiscusUser();
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -23,13 +26,27 @@ export const TeamCreateForm = (props: Props) => {
       name: Yup.string().required('Please enter your team name!'),
       description: Yup.string().notRequired(),
     }),
-    onSubmit(values, formikHelpers) {
+    onSubmit: async (values, formikHelpers) => {
       formikHelpers.setSubmitting(true);
       props.closeModal();
-      const createTeamSuccess = true;
+      const { data, error } = await TeamServiceAPI.createTeam(
+        values.name,
+        values.description,
+        user.id
+      );
+      let createTeamSuccess = true;
+      if (error) {
+        createTeamSuccess = false;
+      }
       if (createTeamSuccess) {
         toast.success('Successfully created team');
-        setTeam({ name: values.name, description: values.description, id: '' });
+        setTeam({
+          name: values.name,
+          description: values.description,
+          id: data.id,
+        });
+      } else {
+        toast.error("Oops, couldn't create your team; " + error.message);
       }
       formikHelpers.setSubmitting(false);
     },

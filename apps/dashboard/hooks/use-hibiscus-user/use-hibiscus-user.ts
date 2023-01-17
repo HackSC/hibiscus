@@ -34,6 +34,7 @@ export function useHibiscusUser() {
         applicationId: profile.app_id,
         applicationStatus:
           Object.values(ApplicationStatus)[profile.application_status - 1],
+        teamId: profile.team_id,
       };
     } else {
       // Set user's name and tag to be their email as temporary placeholder

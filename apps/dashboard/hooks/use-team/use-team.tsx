@@ -20,8 +20,17 @@ export const TeamProvider = (props: React.PropsWithChildren) => {
 
 export const useTeam = () => {
   const { team, setTeam } = useContext(TeamContext);
+  const isLoading = team === null;
+  const noTeam = team !== null && team.id === null;
+  const setNoTeam = () => {
+    setTeam({ id: null, name: null, description: null });
+  };
+
   return {
     team,
     setTeam,
+    isLoading,
+    noTeam,
+    setNoTeam,
   };
 };

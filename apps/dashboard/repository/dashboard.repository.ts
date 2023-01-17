@@ -42,7 +42,17 @@ export class DashboardRepository {
     const { data, error } = await this.client
       .from('teams')
       .select()
-      .eq('team_id', teamId);
+      .eq('team_id', teamId)
+      .single();
+    return { data, error };
+  }
+
+  async getUserTeam(userId: string) {
+    const { data, error } = await this.client
+      .from('user_profiles')
+      .select('team_id')
+      .eq('user_id', userId)
+      .single();
     return { data, error };
   }
 
