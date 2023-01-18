@@ -1,21 +1,11 @@
 import { injectable } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
-import {
-  createServerSupabaseClient,
-  SupabaseClient,
-} from '@supabase/auth-helpers-nextjs';
-import type { NextApiRequest, NextApiResponse } from 'next';
 import { SESClient, SendTemplatedEmailCommand } from '@aws-sdk/client-ses';
 import { getEnv } from '@hibiscus/env';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 @injectable()
 export class DashboardRepository {
-  // inject this wrapper around the Supabase SDK client for use
-  constructor(req: NextApiRequest, res: NextApiResponse) {
-    this.client = createServerSupabaseClient({ req, res });
-  }
-
-  // private readonly client = this.hbc.getClient();
   private readonly client: SupabaseClient;
   private static readonly env = getEnv();
   private static readonly ses = new SESClient({
@@ -25,6 +15,11 @@ export class DashboardRepository {
     },
     region: DashboardRepository.env.Hibiscus.AWS.region,
   });
+
+  constructor(private readonly hbc: HibiscusSupabaseClient) {
+    hbc.setOptions({ useServiceKey: true });
+    this.client = hbc.getClient();
+  }
 
   //TODO: refactor
   public readonly MAX_TEAM_MEMBERS: number = parseInt(
@@ -46,8 +41,18 @@ export class DashboardRepository {
   async getTeamInfo(teamId: string) {
     const { data, error } = await this.client
       .from('teams')
-      .select()
-      .eq('team_id', teamId);
+      .select('team_id,name,description')
+      .eq('team_id', teamId)
+      .single();
+    return { data, error };
+  }
+
+  async getUserTeam(userId: string) {
+    const { data, error } = await this.client
+      .from('user_profiles')
+      .select('team_id')
+      .eq('user_id', userId)
+      .single();
     return { data, error };
   }
 
@@ -173,7 +178,7 @@ export class DashboardRepository {
           team_id: teamId,
         },
       ])
-      .select();
+      .select('id,created_at');
 
     return { data, error };
   }
@@ -201,7 +206,8 @@ export class DashboardRepository {
       .from('user_profiles')
       .select()
       .eq('email', email)
-      .eq('user_id', invitedId);
+      .eq('user_id', invitedId)
+      .single();
 
     return { data, error };
   }
@@ -215,14 +221,13 @@ export class DashboardRepository {
   ) {
     const TEMPLATE_NAME = 'InviteTemplate';
     const acceptInviteLink =
-      process.env.NEXT_PUBLIC_SSO_DEFAULT_REDIRECT_URL +
-      `/api/invite/accept?inviteId=${invitationId}`;
+      getEnv().Hibiscus.AppURL.portal +
+      `/invite/accept?inviteId=${invitationId}`;
     const rejectInviteLink =
-      process.env.NEXT_PUBLIC_SSO_DEFAULT_REDIRECT_URL +
-      `/api/invite/reject?inviteId=${invitationId}`;
-    console.log(acceptInviteLink);
-    console.log(rejectInviteLink);
-    const createTemplateEmail = (templateName) => {
+      getEnv().Hibiscus.AppURL.portal +
+      `/invite/reject?inviteId=${invitationId}`;
+
+    const createTemplateEmail = (templateName: string) => {
       return new SendTemplatedEmailCommand({
         Destination: { ToAddresses: [toAddress] },
         TemplateData: JSON.stringify({
@@ -232,18 +237,18 @@ export class DashboardRepository {
           acceptInviteLink: acceptInviteLink,
           rejectInviteLink: rejectInviteLink,
         }),
-        Source: 'no-reply@notifications.hacksc.com',
+        Source: 'noreply@notifications.hacksc.com',
         Template: templateName,
       });
     };
+
     const sendTemplatedEmail = createTemplateEmail(TEMPLATE_NAME);
 
     try {
       await DashboardRepository.ses.send(sendTemplatedEmail);
-      console.log('Email send successfully.');
       return; //if successful, just return. Otherwise throw error which will be caught in invite.ts
     } catch (err) {
-      throw new Error('Failed to send email successfully.');
+      throw new Error('Failed to send email.' + err);
     }
   }
 }

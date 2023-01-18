@@ -91,3 +91,90 @@ export default class APIService {
     return res.data as string[];
   }
 }
+
+type TeamServiceResponse = {
+  data?: any;
+  error?: { message: string };
+  status: string | number;
+};
+
+export class TeamServiceAPI {
+  static async acceptInvite(inviteId: string): Promise<TeamServiceResponse> {
+    const res = await axios.put(
+      `/api/invite/accept?inviteId=${inviteId}`,
+      {},
+      {
+        validateStatus: (status) => {
+          return status >= 200 && status <= 503;
+        },
+      }
+    );
+    if (res.status >= 400) {
+      return { error: { message: res.data.message }, status: res.status };
+    }
+    return { data: res.data, status: res.status };
+  }
+
+  static async rejectInvite(inviteId: string): Promise<TeamServiceResponse> {
+    const res = await axios.put('/api/invite/reject', { inviteId });
+    if (res.status >= 400) {
+      return { error: { message: res.data.message }, status: res.status };
+    }
+    return { data: res.data, status: res.status };
+  }
+
+  static async createTeam(
+    name: string,
+    description: string,
+    organizerId: string
+  ) {
+    const res = await axios.post('/api/organizer/create', {
+      name,
+      description,
+      organizerId,
+    });
+    if (res.status >= 400) {
+      return { error: { message: res.data.message }, status: res.status };
+    }
+    return { data: res.data, status: res.status };
+  }
+
+  static async teamInviteUser(organizerId: string, inviteeEmail: string) {
+    const { data, status } = await axios.post(
+      '/api/organizer/invite',
+      {
+        organizerId,
+        email: inviteeEmail,
+      },
+      {
+        validateStatus: (status) => {
+          return status >= 200 && status <= 503;
+        },
+      }
+    );
+    if (status >= 400) {
+      return { error: { message: data.message }, status };
+    }
+    return {
+      data: {
+        inviteId: data.data.inviteId,
+        createdAt: data.data.createdAt,
+        invitee: {
+          id: data.data.invitee.id,
+          firstName: data.data.invitee.firstName,
+          lastName: data.data.invitee.lastName,
+          email: data.data.invitee.email,
+        },
+      },
+      status,
+    };
+  }
+
+  static async getTeamById(teamId: string) {
+    const res = await axios.get(`/api/team?teamId=${teamId}`);
+    if (res.status >= 400) {
+      return { error: { message: res.data.message }, status: res.status };
+    }
+    return { data: res.data, status: res.status };
+  }
+}

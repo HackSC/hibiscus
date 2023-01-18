@@ -315,15 +315,6 @@ export class HibiscusSupabaseClient {
   }
 }
 
-interface UserProfile {
-  first_name: string;
-  last_name: string;
-  user_id: string;
-  email?: string;
-  role?: number;
-  team_id?: number;
-}
-
 type UserProfileRow = Database['public']['Tables']['user_profiles']['Row'];
 type UserProfileInsert =
   Database['public']['Tables']['user_profiles']['Insert'];

@@ -15,3 +15,27 @@ export type LocalAPIResponses = {
     res: PutItemCommandOutput;
   };
 };
+
+export interface TeamMember {
+  user_id: string;
+  first_name: string;
+  last_name: string;
+}
+
+export interface Invite {
+  id: string;
+  created_at: string;
+  user_profiles: {
+    email: string;
+    first_name: string;
+    last_name: string;
+  };
+}
+
+export interface Team {
+  id: string;
+  name: string;
+  description?: string;
+  members: TeamMember[];
+  invites: Invite[];
+}

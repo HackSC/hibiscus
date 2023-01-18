@@ -24,6 +24,9 @@ export function Index() {
     }
     const progress = (cqi + 1) / (numQuestionsTotal + 1);
     NProgress.set(progress);
+    return () => {
+      NProgress.remove();
+    };
   }, [cqi]);
 
   if (user === null) {

@@ -6,3 +6,4 @@ export * from './lib/gradient-span/gradient-span';
 export * from './lib/accordion/accordion';
 export * from './lib/accordion/accordion-2023';
 export * from './lib/flipcard/flipcard';
+export * from './lib/modal/modal';
