@@ -10,6 +10,9 @@ import { toast } from 'react-hot-toast';
 import { useTeam } from '../../hooks/use-team/use-team';
 import { TeamServiceAPI } from '../../common/api';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import { SpanRed } from '../red-span';
 
 type Member = TeamMember & { admin: boolean; invited: boolean };
 
@@ -31,82 +34,74 @@ function TeamMembersWidget() {
   };
 
   const InviteForm = () => {
-    const [emailInvitee, setEmailInvitee] = useState('');
-
-    const handleSubmit = async () => {
-      try {
-        const { data, error } = await TeamServiceAPI.teamInviteUser(
-          user.id,
-          emailInvitee
-        );
-        if (error) {
-          toast.error(error.message, { duration: 5000 });
-        } else {
-          toast.success(
-            'An invite email has been sent to their email address!',
-            { duration: 5000 }
+    const formik = useFormik({
+      initialValues: { emailInvitee: '' },
+      validationSchema: Yup.object({
+        emailInvitee: Yup.string()
+          .email('Please enter a valid email')
+          .required('This field is required'),
+      }),
+      onSubmit: async (values, formikHelpers) => {
+        try {
+          const { data, error } = await TeamServiceAPI.teamInviteUser(
+            user.id,
+            values.emailInvitee
           );
-          // add to state
-          updateTeam({
-            invites: [
-              ...team.invites,
-              {
-                id: data.invitee.id,
-                created_at: data.createdAt,
-                user_profiles: {
-                  first_name: data.invitee.firstName,
-                  last_name: data.invitee.lastName,
-                  email: data.invitee.email,
+          if (error) {
+            toast.error(error.message, { duration: 5000 });
+          } else {
+            toast.success(
+              'An invite email has been sent to their email address!',
+              { duration: 5000 }
+            );
+            // add to state
+            updateTeam({
+              invites: [
+                ...team.invites,
+                {
+                  id: data.invitee.id,
+                  created_at: data.createdAt,
+                  user_profiles: {
+                    first_name: data.invitee.firstName,
+                    last_name: data.invitee.lastName,
+                    email: data.invitee.email,
+                  },
                 },
-              },
-            ],
-          });
+              ],
+            });
+          }
+        } catch (e) {
+          toast.error(
+            "Oops! Couldn't create your team; please try again later. " +
+              e.message
+          );
+        } finally {
+          setOpen(false);
         }
-      } catch (e) {
-        toast.error(
-          "Oops! Couldn't create your team; please try again later. " +
-            e.message
-        );
-      } finally {
-        setOpen(false);
-      }
-    };
-
-    const handleClickSubmitInviteMembers: React.MouseEventHandler<
-      HTMLButtonElement
-    > = (e) => {
-      handleSubmit();
-      e.preventDefault();
-    };
-
-    const handleKeyEnter: React.KeyboardEventHandler<HTMLInputElement> = (
-      e
-    ) => {
-      e.stopPropagation();
-      if (e.key === 'Enter') {
-        handleSubmit();
-      }
-    };
+      },
+    });
 
     return (
-      <>
-        <OneLineText
-          placeholder="User email"
-          type="email"
-          onKeyDown={handleKeyEnter}
-          value={emailInvitee}
-          onChange={(e) => {
-            setEmailInvitee(e.target.value);
-          }}
-        />
-        <Button
-          color="blue"
-          type="submit"
-          onClick={handleClickSubmitInviteMembers}
-        >
+      <form
+        onSubmit={formik.handleSubmit}
+        style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}
+      >
+        <div>
+          <OneLineText
+            placeholder="User email"
+            type="email"
+            name="emailInvitee"
+            id="emailInvitee"
+            value={formik.values.emailInvitee}
+            onChange={formik.handleChange}
+          />{' '}
+          <SpanRed>{'*'}</SpanRed>
+        </div>
+        <SpanRed>{formik.errors.emailInvitee}</SpanRed>
+        <Button color="black" type="submit">
           SUBMIT
         </Button>
-      </>
+      </form>
     );
   };
 
@@ -162,14 +157,14 @@ function TeamMembersWidget() {
           setOpen(false);
         }}
       >
-        <GrayBox style={{ gap: '10px' }}>
+        <GrayBox>
           <InviteForm />
         </GrayBox>
       </Modal>
       <TopContainer>
         <H3 style={{ fontWeight: 600 }}>Members</H3>
         <Button color="black" onClick={handleOnClickAddMembers}>
-          <AiFillPlusCircle /> Add members
+          <AiFillPlusCircle /> ADD MEMBERS
         </Button>
       </TopContainer>
       <GrayBox>

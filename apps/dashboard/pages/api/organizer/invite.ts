@@ -28,6 +28,10 @@ export default async function invite( //anyone in a team can invite
 
     const invitedUser = await userRepo.getUserIdByEmail(email);
     if (invitedUser.error) {
+      console.error(invitedUser.error);
+      throw new Error('Oops, an error occurred. Please try again later');
+    }
+    if (invitedUser.data === null) {
       throw new Error(
         "There's no user under this email! Please make sure whoever you invited have registered an account on HackSC"
       );

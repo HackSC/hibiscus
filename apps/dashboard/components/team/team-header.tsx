@@ -14,8 +14,8 @@ function TeamHeader() {
           <GraySpan>Team:</GraySpan>{' '}
           <H1>
             <GlowSpan
-              color={Colors2023.GREEN.STANDARD}
-              shadowColor={Colors2023.GREEN.DARK}
+              color={Colors2023.BLUE.STANDARD}
+              shadowColor={Colors2023.BLUE.DARK}
             >
               {team.name}
             </GlowSpan>
