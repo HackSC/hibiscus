@@ -19,8 +19,6 @@ export function VerifyCard() {
   const MAX_CODE_LENGTH = 6;
 
   const handleOTP = async () => {
-    setVerifyState('verifying');
-
     const email = String(router.query.email);
 
     const supabase = container.resolve(HibiscusSupabaseClient);
@@ -30,6 +28,7 @@ export function VerifyCard() {
       setHideErrorMessage(true);
     }
     if (data.user) {
+      setVerifyState('verifying');
       // Create user profile in database
       await supabase.createUserProfile(
         router.query.firstname.toString(),

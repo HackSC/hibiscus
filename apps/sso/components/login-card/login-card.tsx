@@ -16,7 +16,6 @@ export function LoginCard() {
 
   async function handleSubmit(event) {
     event.preventDefault();
-    setLoggedInState('logging in');
 
     const email = event.target.email.value;
     const password = event.target.password.value;
@@ -33,6 +32,7 @@ export function LoginCard() {
     }
 
     if (data.user) {
+      setLoggedInState('logging in');
       const token = data.session.access_token;
       const res = await SSOClient.ssoCallback(
         sessionStorage.getItem('callback'),
