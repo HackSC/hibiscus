@@ -100,7 +100,7 @@ export function Speakers(props: SpeakersProps) {
       <H2>
         <GlowSpan
           color={Colors2023.GRAY.LIGHT}
-          shadowColor={Colors2023.BLUE.STANDARD}
+          shadowColor={Colors2023.RED.STANDARD}
         >
           Featured Speakers
         </GlowSpan>

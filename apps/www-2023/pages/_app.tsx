@@ -6,7 +6,8 @@ function CustomApp({ Component, pageProps }: AppProps) {
   return (
     <>
       <Head>
-        <title>Welcome to landing-page!</title>
+        <link rel="shortcut icon" href="/img/favicon.ico" />
+        <title>HackSC 2023 | Around the World</title>
       </Head>
       <main className="app">
         <GlobalStyles2023 />

@@ -11,7 +11,7 @@ export function SolutionChallenge(props: SolutionChallengeProps) {
       <Label>
         <GlowSpan
           color={Colors2023.GRAY.LIGHT}
-          shadowColor={Colors2023.BLUE.STANDARD}
+          shadowColor={Colors2023.YELLOW.STANDARD}
         >
           Solution Challenge
         </GlowSpan>

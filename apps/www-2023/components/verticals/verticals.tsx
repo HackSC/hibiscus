@@ -56,7 +56,7 @@ export function Verticals(props: VerticalsProps) {
       <H2>
         <GlowSpan
           color={Colors2023.GRAY.LIGHT}
-          shadowColor={Colors2023.BLUE.STANDARD}
+          shadowColor={Colors2023.YELLOW.STANDARD}
         >
           Verticals
         </GlowSpan>

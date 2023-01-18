@@ -5,6 +5,7 @@ import Topic from '../components/topic/topic';
 import Verticals from '../components/verticals/verticals';
 import SolutionChallenge from '../components/solution-challenge/solution-challenge';
 import Speakers from '../components/speakers/speakers';
+import Sponsors from '../components/sponsors/sponsors';
 import FAQs from '../components/faqs/faqs';
 import Footer from '../components/footer/footer';
 
@@ -25,6 +26,9 @@ export function Index() {
       <SpeakerSection>
         <Speakers />
       </SpeakerSection>
+      <SponsorSection>
+        <Sponsors />
+      </SponsorSection>
       <FAQSection>
         <FAQs />
       </FAQSection>
@@ -44,10 +48,8 @@ const MainPageWrapper = styled.div`
 `;
 
 const NavbarWrapper = styled.div`
-  padding-top: 2rem;
   display: flex;
   justify-content: center;
-  margin-top: 5rem;
 `;
 
 const HeroSection = styled.div``;
@@ -65,6 +67,8 @@ const SpeakerSection = styled.div`
     height: 155vw;
   }
 `;
+
+const SponsorSection = styled.div``;
 
 const FAQSection = styled.div``;
 

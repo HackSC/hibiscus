@@ -18,6 +18,7 @@
     "@aws-sdk/util-dynamodb": "^3.241.0",
     "@fontsource/inter": "^4.5.11",
     "@reduxjs/toolkit": "^1.9.1",
+    "@rive-app/react-canvas": "^3.0.35",
     "@sendgrid/mail": "^7.7.0",
     "@supabase/supabase-js": "^2.2.0",
     "@uppy/core": "^3.0.4",
