@@ -86,12 +86,12 @@ export function VerifyCard() {
       >
         SUBMIT
       </GradientButton>
-      
+
       <StyledSmallText>
         If you did not receive your email, please sign up again
       </StyledSmallText>
 
-       {verifyState === 'verifying' ? (
+      {verifyState === 'verifying' ? (
         <MutatingDots
           height="100"
           width="100"
