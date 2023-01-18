@@ -1,4 +1,4 @@
-import { GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 
 export function Index() {
   return <p>Redirecting you...</p>;
@@ -6,7 +6,7 @@ export function Index() {
 
 export default Index;
 
-export const getStaticProps: GetStaticProps = () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   return {
     redirect: {
       statusCode: 301,
