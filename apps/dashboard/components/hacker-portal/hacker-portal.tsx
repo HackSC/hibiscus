@@ -158,7 +158,7 @@ const MessageContainer = styled.div`
 const BannerContainer = styled.div`
   display: flex;
   background-color: #3b3b3b;
-  padding: 20;
+  padding: 10px;
   border-radius: 10;
   margin-top: 20;
   box-shadow: 0px 0px 5px #8e8e8e;
