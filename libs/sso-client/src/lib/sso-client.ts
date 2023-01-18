@@ -8,77 +8,112 @@ import axios from 'axios';
  * Ensure that a suitable config is also exported in the middleware file such that static files are not blocked
  *
  * @param callbackUrl URL which the SSO will send a POST request to set a cookie on the app
+ * @param guardPaths Array of paths (with leading slash) which this middleware will guard
+ * @param redirectUrl URL to redirect unauthorized users to
+ * @param exhaustive Whether the middleware should terminate or propagate. Default true (terminate)
  * @returns NextJS middleware function
  */
 export const middlewareHandler =
-  (callbackUrl: string) => async (request: NextRequest) => {
+  (
+    callbackUrl: string,
+    guardPaths?: string[],
+    redirectUrl?: string,
+    exhaustive = true
+  ) =>
+  async (request: NextRequest): Promise<NextResponse | null> => {
+    // Handle preflight requests
     if (request.method === 'OPTIONS') {
       const res = NextResponse.next();
       res.headers.set('Access-Control-Allow-Credentials', 'true');
       return res;
     }
 
-    if (
-      request.cookies.has(process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME)
-    ) {
-      const access_token = request.cookies.get(
-        process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME
-      );
-      const refresh_token = request.cookies.get(
-        process.env.NEXT_PUBLIC_HIBISCUS_REFRESH_COOKIE_NAME
-      );
-      const { data } = await verifyToken(access_token, refresh_token);
+    guardPaths = guardPaths ?? [''];
 
-      if (data != null) {
-        if (data.session != null) {
-          const res = NextResponse.next();
-          res.cookies.set(
-            process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME,
-            data.session.access_token,
-            {
-              path: '/',
-              domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
-              maxAge: Number.parseInt(
-                process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE
-              ),
-              sameSite: 'lax',
-            }
+    for (const guardPathFull of guardPaths) {
+      const guardPath = splitPath(guardPathFull);
+      const path = splitPath(request.nextUrl.pathname);
+
+      if (
+        guardPath.length <= path.length &&
+        checkArrayContainsOrdered(guardPath, path)
+      ) {
+        if (
+          request.cookies.has(
+            process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME
+          )
+        ) {
+          const access_token = request.cookies.get(
+            process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME
           );
-          res.cookies.set(
-            process.env.NEXT_PUBLIC_HIBISCUS_REFRESH_COOKIE_NAME,
-            data.session.refresh_token,
-            {
-              path: '/',
-              domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
-              maxAge: Number.parseInt(
-                process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE
-              ),
-              sameSite: 'lax',
-            }
+          const refresh_token = request.cookies.get(
+            process.env.NEXT_PUBLIC_HIBISCUS_REFRESH_COOKIE_NAME
           );
-          return res;
-        } else if (data.user != null) {
-          return NextResponse.next();
+          const { data } = await verifyToken(access_token, refresh_token);
+
+          if (data != null) {
+            if (data.session != null) {
+              const res = NextResponse.next();
+              res.cookies.set(
+                process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME,
+                data.session.access_token,
+                {
+                  path: '/',
+                  domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
+                  maxAge: Number.parseInt(
+                    process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE
+                  ),
+                  sameSite: 'lax',
+                }
+              );
+              res.cookies.set(
+                process.env.NEXT_PUBLIC_HIBISCUS_REFRESH_COOKIE_NAME,
+                data.session.refresh_token,
+                {
+                  path: '/',
+                  domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
+                  maxAge: Number.parseInt(
+                    process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE
+                  ),
+                  sameSite: 'lax',
+                }
+              );
+              return res;
+            } else if (data.user != null) {
+              return NextResponse.next();
+            }
+          }
         }
+
+        // Access token not found
+
+        // Redirect to show unauthorized if it is API endpoint
+        if (path.length >= 2 && path[1] === 'api') {
+          return NextResponse.redirect(
+            `${process.env.NEXT_PUBLIC_SSO_URL}/api/unauthorized`
+          );
+        }
+
+        // Redirect to login
+        const redirect = generateRedirectUrl(
+          callbackUrl,
+          request.nextUrl.pathname,
+          redirectUrl
+        );
+        return NextResponse.redirect(redirect);
       }
     }
 
-    // Access token not found
-
-    // Redirect to show unauthorized if it is API endpoint
-    const path = request.nextUrl.pathname.split('/');
-    if (path.length >= 2 && path[1] === 'api') {
-      return NextResponse.redirect(
-        `${process.env.NEXT_PUBLIC_SSO_URL}/api/unauthorized`
+    if (exhaustive) {
+      const redirect = generateRedirectUrl(
+        callbackUrl,
+        request.nextUrl.pathname,
+        redirectUrl
       );
+      return NextResponse.redirect(redirect);
+    } else {
+      return null;
     }
-
-    // Redirect to login
-    const redirectUrl = new URL(`${process.env.NEXT_PUBLIC_SSO_URL}/login`);
-    redirectUrl.search = `callback=${callbackUrl}${encodeURIComponent(
-      `?redirect=${request.nextUrl.pathname}`
-    )}`;
-    return NextResponse.redirect(redirectUrl);
   };
 
 /**
@@ -206,4 +241,38 @@ export async function verifyToken(access_token: string, refresh_token: string) {
 
 export async function logout() {
   window.location.replace(`${process.env.NEXT_PUBLIC_SSO_URL}/logout`);
+}
+
+function generateRedirectUrl(
+  callbackUrl: string,
+  path: string,
+  redirect?: string
+): URL {
+  const redirectUrl = new URL(
+    redirect ?? `${process.env.NEXT_PUBLIC_SSO_URL}/login`
+  );
+  redirectUrl.search = `callback=${callbackUrl}${encodeURIComponent(
+    `?redirect=${path}`
+  )}`;
+  return redirectUrl;
+}
+
+function checkArrayContainsOrdered<T>(arr1: T[], arr2: T[]): boolean {
+  const length = arr1.length <= arr2.length ? arr1.length : arr2.length;
+  for (let i = 0; i < length; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function splitPath(path: string): string[] {
+  const split = path.split('/');
+  if (split.length > 0 && split[-1] === '') {
+    split.pop();
+  }
+
+  return split;
 }
