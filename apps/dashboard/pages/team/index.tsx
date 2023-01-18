@@ -9,7 +9,7 @@ import { TeamServiceAPI } from '../../common/api';
 import { Text } from '@hibiscus/ui';
 
 const Index = () => {
-  const { team, setTeam, isLoading, noTeam, setNoTeam } = useTeam();
+  const { updateTeam, isLoading, noTeam, setNoTeam } = useTeam();
   const { user } = useHibiscusUser();
 
   useEffect(() => {
@@ -21,32 +21,27 @@ const Index = () => {
     TeamServiceAPI.getTeamById(user.teamId).then(({ data, error }) => {
       if (error) {
         console.error(error.message);
-        setTeam({ id: null, name: null, description: null });
+        setNoTeam();
         return;
       }
-      setTeam({
+      updateTeam({
         id: data.id,
         name: data.name,
         description: data.description,
+        invites: data.invites,
       });
     });
-  }, [user, setTeam]);
-
-  const TeamView = () => {
-    return (
-      <>
-        <TeamHeader />
-        <TeamMembersWidget />
-      </>
-    );
-  };
+  }, [user]);
 
   return (
     <PageContainer>
       {isLoading ? (
         <Text>Loading...</Text>
       ) : !noTeam ? (
-        <TeamView />
+        <>
+          <TeamHeader />
+          <TeamMembersWidget />
+        </>
       ) : (
         <NoTeamPlaceholder />
       )}

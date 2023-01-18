@@ -78,12 +78,10 @@ export default async function invite( //anyone in a team can invite
       invitationId
     );
 
-    return res
-      .status(200)
-      .json({
-        message: 'Invite sent successfully!',
-        data: { inviteId: invitationId },
-      });
+    return res.status(200).json({
+      message: 'Invite sent successfully!',
+      data: { inviteId: invitationId },
+    });
   } catch (e) {
     return res.status(500).json({ message: e.message });
   }

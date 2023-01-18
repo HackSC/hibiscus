@@ -23,12 +23,15 @@ export const useTeam = () => {
   const isLoading = team === null;
   const noTeam = team !== null && team.id === null;
   const setNoTeam = () => {
-    setTeam({ id: null, name: null, description: null });
+    setTeam({ id: null, name: null, members: [], invites: [] });
+  };
+  const updateTeam = (update: Partial<Team>) => {
+    setTeam((prev) => ({ ...prev, ...update }));
   };
 
   return {
     team,
-    setTeam,
+    updateTeam,
     isLoading,
     noTeam,
     setNoTeam,

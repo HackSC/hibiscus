@@ -7,14 +7,17 @@ import { AiFillCrown, AiFillPlusCircle } from 'react-icons/ai';
 import { GrayBox } from '../gray-box/gray-box';
 import { TeamMember } from '../../common/types';
 import { toast } from 'react-hot-toast';
+import { HibiscusUser } from '@hibiscus/types';
+import { useTeam } from '../../hooks/use-team/use-team';
 
 type Member = TeamMember & { admin: boolean; invited: boolean };
 
 function TeamMembersWidget() {
+  const { team } = useTeam();
   const [teamMembers, setTeamMembers] = useState<Member[]>([]);
   const [isOpen, setOpen] = useState(false);
   const isCurrentUserAdmin = true;
-  const [invites, setInvites] = useState<string[]>([]);
+  const [invites, setInvites] = useState<HibiscusUser[]>([]);
 
   const handleOnClickAddMembers: React.MouseEventHandler<HTMLButtonElement> = (
     e
@@ -32,12 +35,18 @@ function TeamMembersWidget() {
   const InviteForm = () => {
     const [text, setText] = useState('');
 
+    const handleSubmit = () => {
+      toast.success('An invite email has been sent to their email address!', {
+        duration: 5000,
+      });
+      // TODO: logic
+      setOpen(false);
+    };
+
     const handleClickSubmitInviteMembers: React.MouseEventHandler<
       HTMLButtonElement
     > = (e) => {
-      toast.success('Successfully invited members!');
-      setInvites((prev) => [...prev, text]);
-      setOpen(false);
+      handleSubmit();
       e.preventDefault();
     };
 
@@ -46,9 +55,7 @@ function TeamMembersWidget() {
     ) => {
       e.stopPropagation();
       if (e.key === 'Enter') {
-        toast.success('Successfully invited members!');
-        setInvites((prev) => [...prev, text]);
-        setOpen(false);
+        handleSubmit();
       }
     };
 
@@ -73,6 +80,48 @@ function TeamMembersWidget() {
     );
   };
 
+  const SentInvites = () => {
+    return (
+      <div>
+        {team.invites.map((item, i) => (
+          <ListItemContainer>
+            <LeftItemContainer>
+              <Text style={{ color: 'gray' }}>
+                {item.user_profiles.first_name} {item.user_profiles.last_name}
+              </Text>
+            </LeftItemContainer>
+            <ItemButtonsContainer>
+              <Text style={{ color: 'gray' }}>Invite sent</Text>
+              <Button color="red">REMOVE</Button>
+            </ItemButtonsContainer>
+          </ListItemContainer>
+        ))}
+      </div>
+    );
+  };
+
+  const Members = () => (
+    <>
+      {teamMembers.map((item, i) => {
+        return (
+          <ListItemContainer key={i}>
+            <LeftItemContainer>
+              <Text>{item.name}</Text>
+              {item.admin && <AiFillCrown />}
+            </LeftItemContainer>
+            <ItemButtonsContainer>
+              {!item.admin && isCurrentUserAdmin && (
+                <Button color="red" onClick={handleOnClickKick(item)}>
+                  KICK
+                </Button>
+              )}
+            </ItemButtonsContainer>
+          </ListItemContainer>
+        );
+      })}
+    </>
+  );
+
   return (
     <Container>
       <Modal
@@ -93,26 +142,8 @@ function TeamMembersWidget() {
       </TopContainer>
       <GrayBox>
         <List>
-          {teamMembers.map((item, i) => {
-            return (
-              <ListItemContainer key={i}>
-                <LeftItemContainer>
-                  <Text>{item.name}</Text>
-                  {item.admin && <AiFillCrown />}
-                </LeftItemContainer>
-                <ItemButtonsContainer>
-                  {!item.admin && isCurrentUserAdmin && (
-                    <Button color="red" onClick={handleOnClickKick(item)}>
-                      KICK
-                    </Button>
-                  )}
-                </ItemButtonsContainer>
-              </ListItemContainer>
-            );
-          })}
-          {invites.map((inv, i) => {
-            return <p key={i}>{inv}</p>;
-          })}
+          <Members />
+          <SentInvites />
         </List>
       </GrayBox>
     </Container>
@@ -150,7 +181,12 @@ const ListItemContainer = styled.div`
   padding: 3px 0;
 `;
 
-const ItemButtonsContainer = styled.div``;
+const ItemButtonsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 10px;
+`;
+
 const LeftItemContainer = styled.div`
   display: flex;
   align-items: center;
