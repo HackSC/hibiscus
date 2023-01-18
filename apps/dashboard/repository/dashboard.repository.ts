@@ -150,7 +150,8 @@ export class DashboardRepository {
     const { data, error } = await this.client
       .from('invitations')
       .select()
-      .eq('id', inviteId);
+      .eq('id', inviteId)
+      .single();
 
     return { data, error };
   }

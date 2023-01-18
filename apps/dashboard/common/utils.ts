@@ -1,4 +1,6 @@
+import { getEnv } from '@hibiscus/env';
 import moment from 'moment';
+import { NextApiRequest } from 'next/types';
 
 export const getWordCount = (text: string) =>
   text.trim().length !== 0 ? text.trim().split(/\s+/).length : 0;
@@ -54,4 +56,10 @@ export const isUnder = (text: string, min: number) => {
 export const isAbove = (text: string, max: number) => {
   const wc = getWordCount(text);
   return wc > max;
+};
+
+export const getTokensFromCookies = (req: NextApiRequest) => {
+  const accessToken = req.cookies[getEnv().Hibiscus.Cookies.accessTokenName];
+  const refreshToken = req.cookies[getEnv().Hibiscus.Cookies.refreshTokenName];
+  return { accessToken, refreshToken };
 };

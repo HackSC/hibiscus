@@ -71,7 +71,7 @@ export default async function invite( //anyone in a team can invite
       throw new Error('[ERROR]: organizer not in own team');
     }
 
-    const teamName = team.data.name;
+    const teamName = team.data['name'];
     const invitedUserFname: string = invitedUser.data.first_name;
     const invitedUserLname: string = invitedUser.data.last_name;
     const resCreateInvite = await repo.createInvite(

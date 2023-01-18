@@ -3,12 +3,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { container } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { getEnv } from '@hibiscus/env';
-
-const getTokensFromCookies = (req: NextApiRequest) => {
-  const accessToken = req.cookies[getEnv().Hibiscus.Cookies.accessTokenName];
-  const refreshToken = req.cookies[getEnv().Hibiscus.Cookies.refreshTokenName];
-  return { accessToken, refreshToken };
-};
+import { getTokensFromCookies } from 'apps/dashboard/common/utils';
 
 /**
  * inviteReject - When the team leader rejects the join request by another user]
@@ -49,17 +44,15 @@ export default async function handler(
       throw new Error('Invite with the given ID does not exist.');
     }
 
-    if (result.data['invited_id'] !== user.user_id) {
-      throw new Error('You may not reject this invite.');
+    //check if user is organizer_id of the invitation
+    if (result.data['organizer_id'] !== user.user_id) {
+      throw new Error('You may not delete this invitation.');
     }
 
-    //do I need to notify organizer the invitation was rejected?
     result = await repo.deleteAcceptedInvite(stringifyInviteId);
     return res
       .status(200)
-      .json({ message: 'Invite request successfully rejected.' });
-
-    //TODO: add redirect to whatever page needs to go
+      .json({ message: 'Invite request successfully deleted.' });
   } catch (e) {
     return res.status(500).json({ message: e.message });
   }

@@ -33,6 +33,11 @@ export default async function handler(
     }
     const stringifyInviteId = inviteId.toString();
 
+    const hbc = container.resolve(HibiscusSupabaseClient);
+    // Get current user to later check if the current user should be the one accepting the invite
+    const { accessToken, refreshToken } = getTokensFromCookies(req);
+    const user = await hbc.getUserProfile(accessToken, refreshToken);
+
     //Gets invited_id and team_id. Also check if invite exists by checking length of getInvite.
     let result = await repo.getInviteInfo(stringifyInviteId);
     if (result.data.length === 0) {
@@ -40,16 +45,13 @@ export default async function handler(
     }
 
     //extract team_id and invited_id from data object. Should only contain one invitation anyway
-    const teamId: string = result.data[0]['team_id'];
-    const invitedId: string = result.data[0]['invited_id'];
+    const teamId: string = result.data['team_id'];
+    const invitedId: string = result.data['invited_id'];
 
-    // check if user is the one making invite
-    const { accessToken, refreshToken } = getTokensFromCookies(req);
-    const hbc = container.resolve(HibiscusSupabaseClient);
-    // const user = await hbc.getUserProfile(accessToken, refreshToken);
-    // if(user.user_id!==invitedId) {
-    //   throw new Error("You may not accept this invite");
-    // }
+    //match the invitedId from the invitation to the current user's profile
+    if (user.user_id !== invitedId) {
+      throw new Error('You may not accept this invite.');
+    }
 
     //check to make sure team isn't full
     result = await repo.getAllTeamMembers(teamId);
