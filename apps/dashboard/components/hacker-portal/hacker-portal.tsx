@@ -60,16 +60,7 @@ export function HackerPortal({ user }: Props) {
   const renderApplyMessage = () => {
     if (user.applicationStatus === ApplicationStatus.NOT_APPLIED) {
       return (
-        <div
-          style={{
-            display: 'flex',
-            backgroundColor: '#3b3b3b',
-            padding: 20,
-            borderRadius: 10,
-            marginTop: 20,
-            boxShadow: `0px 0px 5px #8e8e8e`,
-          }}
-        >
+        <BannerContainer>
           <GlowSpan
             color={Colors2023.GRAY.LIGHT}
             shadowColor={Colors2023.BLUE.STANDARD}
@@ -85,7 +76,7 @@ export function HackerPortal({ user }: Props) {
               Apply now
             </Link>
           </ApplyButton>
-        </div>
+        </BannerContainer>
       );
     }
   };
@@ -148,6 +139,10 @@ const ApplyButton = styled.button`
     color: #e9ffc5;
     transition: all 0.3s;
   }
+
+  @media (max-width: 400px) {
+    margin-left: 0px;
+  }
 `;
 
 const MessageContainer = styled.div`
@@ -158,4 +153,17 @@ const MessageContainer = styled.div`
   align-items: center;
   gap: 5px;
   padding-top: 100px;
+`;
+
+const BannerContainer = styled.div`
+  display: flex;
+  background-color: #3b3b3b;
+  padding: 20;
+  border-radius: 10;
+  margin-top: 20;
+  box-shadow: 0px 0px 5px #8e8e8e;
+
+  @media (max-width: 400px) {
+    flex-direction: column;
+  }
 `;
