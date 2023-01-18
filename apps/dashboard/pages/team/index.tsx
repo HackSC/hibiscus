@@ -30,6 +30,7 @@ const Index = () => {
         description: data.description,
         invites: data.invites,
         members: data.members,
+        organizerId: data.organizer_id,
       });
     });
   }, [user]);

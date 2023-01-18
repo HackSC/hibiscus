@@ -14,12 +14,11 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { SpanRed } from '../red-span';
 
-type Member = TeamMember & { admin: boolean; invited: boolean };
-
 function TeamMembersWidget() {
   const { user } = useHibiscusUser();
   const { team, updateTeam } = useTeam();
   const [isOpen, setOpen] = useState(false);
+  const isUserAdmin = team.organizerId === user?.id;
 
   const handleOnClickAddMembers: React.MouseEventHandler<HTMLButtonElement> = (
     e
@@ -134,14 +133,14 @@ function TeamMembersWidget() {
               <Text>
                 {item.first_name} {item.last_name}
               </Text>
-              {/*{item.admin && <AiFillCrown />}*/}
+              {isUserAdmin && item.user_id === user.id && <AiFillCrown />}
             </LeftItemContainer>
             <ItemButtonsContainer>
-              {/*{!item.admin && isCurrentUserAdmin && (
+              {!isUserAdmin && item.user_id !== user.id && (
                 <Button color="red" onClick={handleOnClickKick(item)}>
                   KICK
                 </Button>
-              )}*/}
+              )}
             </ItemButtonsContainer>
           </ListItemContainer>
         );
@@ -169,8 +168,12 @@ function TeamMembersWidget() {
       </TopContainer>
       <GrayBox>
         <List>
-          <Members />
-          <SentInvites />
+          {user && (
+            <>
+              <Members />
+              <SentInvites />
+            </>
+          )}
         </List>
       </GrayBox>
     </Container>

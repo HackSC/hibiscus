@@ -38,4 +38,5 @@ export interface Team {
   description?: string;
   members: TeamMember[];
   invites: Invite[];
+  organizerId?: string;
 }
