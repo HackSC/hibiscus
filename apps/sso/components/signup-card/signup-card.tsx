@@ -22,7 +22,7 @@ export function SignUpCard(props: SignUpProps) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setSignUpState('signning up');
+    setSignUpState('signing up');
 
     const firstname = event.target.firstname.value;
     const lastname = event.target.lastname.value;
@@ -109,7 +109,7 @@ export function SignUpCard(props: SignUpProps) {
       </StyledForm>
       <GrayLink href="/login">Have an account? Login</GrayLink>
 
-      {signUpState === 'signning up' ? (
+      {signUpState === 'signing up' ? (
         <MutatingDots
           height="100"
           width="100"

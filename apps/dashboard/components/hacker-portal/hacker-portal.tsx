@@ -60,16 +60,7 @@ export function HackerPortal({ user }: Props) {
   const renderApplyMessage = () => {
     if (user.applicationStatus === ApplicationStatus.NOT_APPLIED) {
       return (
-        <BannerContainer
-          style={{
-            display: 'flex',
-            backgroundColor: '#3b3b3b',
-            padding: 20,
-            borderRadius: 10,
-            marginTop: 20,
-            boxShadow: `0px 0px 5px #8e8e8e`,
-          }}
-        >
+        <BannerContainer>
           <GlowSpan
             color={Colors2023.GRAY.LIGHT}
             shadowColor={Colors2023.BLUE.STANDARD}
