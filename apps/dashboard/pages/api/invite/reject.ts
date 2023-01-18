@@ -26,7 +26,7 @@ export default async function handler(
     const stringifyInviteId = inviteId.toString();
 
     if (!inviteId) {
-      throw new Error('Invite ID is missing or null.');
+      throw new Error('Invite ID is missing.');
     }
 
     //check if invite exists by checking length of getInvite

@@ -7,7 +7,6 @@ import { AiFillCrown, AiFillPlusCircle } from 'react-icons/ai';
 import { GrayBox } from '../gray-box/gray-box';
 import { TeamMember } from '../../common/types';
 import { toast } from 'react-hot-toast';
-import { HibiscusUser } from '@hibiscus/types';
 import { useTeam } from '../../hooks/use-team/use-team';
 import { TeamServiceAPI } from '../../common/api';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
@@ -16,10 +15,8 @@ type Member = TeamMember & { admin: boolean; invited: boolean };
 
 function TeamMembersWidget() {
   const { user } = useHibiscusUser();
-  const { team } = useTeam();
+  const { team, updateTeam } = useTeam();
   const [isOpen, setOpen] = useState(false);
-  const isCurrentUserAdmin = true;
-  const [invites, setInvites] = useState<HibiscusUser[]>([]);
 
   const handleOnClickAddMembers: React.MouseEventHandler<HTMLButtonElement> = (
     e
@@ -38,17 +35,32 @@ function TeamMembersWidget() {
 
     const handleSubmit = async () => {
       try {
-        const { error } = await TeamServiceAPI.teamInviteUser(
+        const { data, error } = await TeamServiceAPI.teamInviteUser(
           user.id,
           emailInvitee
         );
         if (error) {
-          toast.error(error.message);
+          toast.error(error.message, { duration: 5000 });
         } else {
           toast.success(
             'An invite email has been sent to their email address!',
             { duration: 5000 }
           );
+          // add to state
+          updateTeam({
+            invites: [
+              ...team.invites,
+              {
+                id: data.invitee.id,
+                created_at: data.createdAt,
+                user_profiles: {
+                  first_name: data.invitee.firstName,
+                  last_name: data.invitee.lastName,
+                  email: data.invitee.email,
+                },
+              },
+            ],
+          });
         }
       } catch (e) {
         toast.error(
@@ -102,7 +114,7 @@ function TeamMembersWidget() {
     return (
       <div>
         {team.invites.map((item, i) => (
-          <ListItemContainer>
+          <ListItemContainer key={i}>
             <LeftItemContainer>
               <Text style={{ color: 'gray' }}>
                 {item.user_profiles.first_name} {item.user_profiles.last_name}

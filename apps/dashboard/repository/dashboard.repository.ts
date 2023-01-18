@@ -178,7 +178,7 @@ export class DashboardRepository {
           team_id: teamId,
         },
       ])
-      .select();
+      .select('id,created_at');
 
     return { data, error };
   }

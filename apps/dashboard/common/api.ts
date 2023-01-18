@@ -140,7 +140,7 @@ export class TeamServiceAPI {
   }
 
   static async teamInviteUser(organizerId: string, inviteeEmail: string) {
-    const res = await axios.post(
+    const { data, status } = await axios.post(
       '/api/organizer/invite',
       {
         organizerId,
@@ -152,10 +152,22 @@ export class TeamServiceAPI {
         },
       }
     );
-    if (res.status >= 400) {
-      return { error: { message: res.data.message }, status: res.status };
+    if (status >= 400) {
+      return { error: { message: data.message }, status };
     }
-    return { data: res.data, status: res.status };
+    return {
+      data: {
+        inviteId: data.data.inviteId,
+        createdAt: data.data.createdAt,
+        invitee: {
+          id: data.data.invitee.id,
+          firstName: data.data.invitee.firstName,
+          lastName: data.data.invitee.lastName,
+          email: data.data.invitee.email,
+        },
+      },
+      status,
+    };
   }
 
   static async getTeamById(teamId: string) {

@@ -26,18 +26,29 @@ export default async function invite( //anyone in a team can invite
       throw new Error(error.message);
     }
 
-    const teamId = data.team_id;
-    const team = await repo.getTeamInfo(teamId);
-
     const invitedUser = await userRepo.getUserIdByEmail(email);
-    if (invitedUser.error || !invitedUser.count) {
+    if (invitedUser.error) {
       throw new Error(
         "There's no user under this email! Please make sure whoever you invited have registered an account on HackSC"
       );
     }
     const invitedId = invitedUser.data.user_id;
 
+    // people who made the team invites can't invite themselves (obviously)
+    if (invitedId === organizerId) {
+      throw new Error(
+        `You're so lonely you invited yourself to your own team! 
+        Please invite someone else but yourself or get some friends :) 
+        -- 
+        Sincerely, 
+        HackSC Engineering
+      `
+      );
+    }
+
     //very first check, make sure invite doesn't already exist
+    const teamId = data.team_id;
+    const team = await repo.getTeamInfo(teamId);
     if (!(await repo.checkInviteDoesNotExist(teamId, invitedId))) {
       throw new Error('Invitation to that user already exists.');
     }
@@ -57,13 +68,15 @@ export default async function invite( //anyone in a team can invite
     }
 
     const teamName = team.data.name;
-    const invitedUserFname: string = invitedUser.data['first_name'];
+    const invitedUserFname: string = invitedUser.data.first_name;
+    const invitedUserLname: string = invitedUser.data.last_name;
     const resCreateInvite = await repo.createInvite(
       organizerId,
       invitedId,
       teamId
     );
-    const invitationId = resCreateInvite.data[0]['id'];
+    const invitationId = resCreateInvite.data[0].id;
+    const invitationCreatedAt = resCreateInvite.data[0].created_at;
 
     //add logic for emailing invite
     //need invite id
@@ -80,7 +93,16 @@ export default async function invite( //anyone in a team can invite
 
     return res.status(200).json({
       message: 'Invite sent successfully!',
-      data: { inviteId: invitationId },
+      data: {
+        inviteId: invitationId,
+        createdAt: invitationCreatedAt,
+        invitee: {
+          id: invitedId,
+          firstName: invitedUserFname,
+          lastName: invitedUserLname,
+          email,
+        },
+      },
     });
   } catch (e) {
     console.error(e);

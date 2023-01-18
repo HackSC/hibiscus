@@ -13,7 +13,7 @@ export class UserRepository {
   async getUserIdByEmail(email: string) {
     return this.client
       .from('user_profiles')
-      .select('user_id')
+      .select('user_id,first_name,last_name')
       .eq('email', email)
       .maybeSingle();
   }

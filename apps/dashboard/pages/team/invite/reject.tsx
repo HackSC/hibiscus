@@ -4,19 +4,19 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 
-const AcceptPage = () => {
+const RejectPage = () => {
   const router = useRouter();
 
   useEffect(() => {
     // accept invite
     const inviteId = router.query.inviteId as string;
-    TeamServiceAPI.acceptInvite(inviteId)
+    TeamServiceAPI.rejectInvite(inviteId)
       .then(({ data, error }) => {
         if (error) {
           console.error(error);
           toast.error(error.message);
         } else {
-          console.log(data);
+          toast.success('Rejected team invite');
           router.replace('/team');
         }
       })
@@ -28,9 +28,9 @@ const AcceptPage = () => {
 
   return (
     <div>
-      <Text>Accepting invite...</Text>
+      <Text>Rejecting invite...</Text>
     </div>
   );
 };
 
-export default AcceptPage;
+export default RejectPage;
