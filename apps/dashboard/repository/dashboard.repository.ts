@@ -41,7 +41,7 @@ export class DashboardRepository {
   async getTeamInfo(teamId: string) {
     const { data, error } = await this.client
       .from('teams')
-      .select()
+      .select('team_id,name,description')
       .eq('team_id', teamId)
       .single();
     return { data, error };
@@ -206,7 +206,8 @@ export class DashboardRepository {
       .from('user_profiles')
       .select()
       .eq('email', email)
-      .eq('user_id', invitedId);
+      .eq('user_id', invitedId)
+      .single();
 
     return { data, error };
   }
@@ -221,10 +222,10 @@ export class DashboardRepository {
     const TEMPLATE_NAME = 'InviteTemplate';
     const acceptInviteLink =
       getEnv().Hibiscus.AppURL.portal +
-      `/api/invite/accept?inviteId=${invitationId}`;
+      `/invite/accept?inviteId=${invitationId}`;
     const rejectInviteLink =
       getEnv().Hibiscus.AppURL.portal +
-      `/api/invite/reject?inviteId=${invitationId}`;
+      `/invite/reject?inviteId=${invitationId}`;
 
     const createTemplateEmail = (templateName: string) => {
       return new SendTemplatedEmailCommand({
@@ -236,7 +237,7 @@ export class DashboardRepository {
           acceptInviteLink: acceptInviteLink,
           rejectInviteLink: rejectInviteLink,
         }),
-        Source: 'no-reply@notifications.hacksc.com',
+        Source: 'noreply@notifications.hacksc.com',
         Template: templateName,
       });
     };

@@ -100,7 +100,15 @@ type TeamServiceResponse = {
 
 export class TeamServiceAPI {
   static async acceptInvite(inviteId: string): Promise<TeamServiceResponse> {
-    const res = await axios.put(`/api/invite/accept`, { inviteId });
+    const res = await axios.put(
+      `/api/invite/accept?inviteId=${inviteId}`,
+      {},
+      {
+        validateStatus: (status) => {
+          return status >= 200 && status <= 503;
+        },
+      }
+    );
     if (res.status >= 400) {
       return { error: { message: res.data.message }, status: res.status };
     }
@@ -132,10 +140,18 @@ export class TeamServiceAPI {
   }
 
   static async teamInviteUser(organizerId: string, inviteeEmail: string) {
-    const res = await axios.post('/api/organizer/invite', {
-      organizerId,
-      email: inviteeEmail,
-    });
+    const res = await axios.post(
+      '/api/organizer/invite',
+      {
+        organizerId,
+        email: inviteeEmail,
+      },
+      {
+        validateStatus: (status) => {
+          return status >= 200 && status <= 503;
+        },
+      }
+    );
     if (res.status >= 400) {
       return { error: { message: res.data.message }, status: res.status };
     }

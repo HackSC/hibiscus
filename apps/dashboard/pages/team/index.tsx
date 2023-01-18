@@ -29,6 +29,7 @@ const Index = () => {
         name: data.name,
         description: data.description,
         invites: data.invites,
+        members: data.members,
       });
     });
   }, [user]);

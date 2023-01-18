@@ -17,8 +17,9 @@ export type LocalAPIResponses = {
 };
 
 export interface TeamMember {
-  id: string;
-  name: string;
+  user_id: string;
+  first_name: string;
+  last_name: string;
 }
 
 export interface Invite {

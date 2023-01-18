@@ -21,15 +21,19 @@ export default async function invite( //anyone in a team can invite
       );
     }
 
-    const team = await repo.getUserTeam(organizerId);
-    if (team.error) {
-      throw new Error(team.error.message);
+    const { data, error } = await repo.getUserTeam(organizerId);
+    if (error) {
+      throw new Error(error.message);
     }
-    const teamId = team.data.team_id;
+
+    const teamId = data.team_id;
+    const team = await repo.getTeamInfo(teamId);
 
     const invitedUser = await userRepo.getUserIdByEmail(email);
-    if (invitedUser.error) {
-      throw new Error(invitedUser.error.message);
+    if (invitedUser.error || !invitedUser.count) {
+      throw new Error(
+        "There's no user under this email! Please make sure whoever you invited have registered an account on HackSC"
+      );
     }
     const invitedId = invitedUser.data.user_id;
 
@@ -52,37 +56,34 @@ export default async function invite( //anyone in a team can invite
       throw new Error('[ERROR]: organizer not in own team');
     }
 
-    const teamName = (await repo.getTeamInfo(teamId)).data[0]['name'];
-
-    //add check that invited user email even exists
-    const result = await repo.getUserByEmailAndId(invitedId, email);
-    //length 0 if user with email does not exist
-    if (result.data.length === 0) {
-      throw new Error('User by that email does not exist.');
-    }
-
-    const invitedUserFname: string = result.data[0]['first_name'];
-
-    await repo.createInvite(organizerId, invitedId, teamId);
-
-    const invitationId = result.data[0]['id'];
+    const teamName = team.data.name;
+    const invitedUserFname: string = invitedUser.data['first_name'];
+    const resCreateInvite = await repo.createInvite(
+      organizerId,
+      invitedId,
+      teamId
+    );
+    const invitationId = resCreateInvite.data[0]['id'];
 
     //add logic for emailing invite
     //need invite id
     //invite email will link to the online version and send invite_id
-    await repo.sendTeamInviteEmail(
-      email,
-      invitedUserFname,
-      organizerFname,
-      teamName,
-      invitationId
-    );
+    if (process.env.NODE_ENV === 'production') {
+      await repo.sendTeamInviteEmail(
+        email,
+        invitedUserFname,
+        organizerFname,
+        teamName,
+        invitationId
+      );
+    }
 
     return res.status(200).json({
       message: 'Invite sent successfully!',
       data: { inviteId: invitationId },
     });
   } catch (e) {
-    return res.status(500).json({ message: e.message });
+    console.error(e);
+    return res.status(400).json({ message: e.message });
   }
 }

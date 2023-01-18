@@ -1,6 +1,15 @@
 import { DashboardRepository } from '../../../repository/dashboard.repository';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { container } from 'tsyringe';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { getEnv } from '@hibiscus/env';
+
+const getTokensFromCookies = (req: NextApiRequest) => {
+  const accessToken = req.cookies[getEnv().Hibiscus.Cookies.accessTokenName];
+  const refreshToken = req.cookies[getEnv().Hibiscus.Cookies.refreshTokenName];
+  return { accessToken, refreshToken };
+};
+
 /**
  * inviteApprove - When the team leader accepts the join request by another user]
  * @param req - (inviteId) : (string)
@@ -34,9 +43,16 @@ export default async function handler(
     const teamId: string = result.data[0]['team_id'];
     const invitedId: string = result.data[0]['invited_id'];
 
+    // check if user is the one making invite
+    const { accessToken, refreshToken } = getTokensFromCookies(req);
+    const hbc = container.resolve(HibiscusSupabaseClient);
+    // const user = await hbc.getUserProfile(accessToken, refreshToken);
+    // if(user.user_id!==invitedId) {
+    //   throw new Error("You may not accept this invite");
+    // }
+
     //check to make sure team isn't full
     result = await repo.getAllTeamMembers(teamId);
-    console.log(result.data);
     if (result.data.length >= repo.MAX_TEAM_MEMBERS) {
       throw new Error('Team is already full (4 MEMBER MAX).');
     }

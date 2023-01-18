@@ -15,6 +15,6 @@ export class UserRepository {
       .from('user_profiles')
       .select('user_id')
       .eq('email', email)
-      .single();
+      .maybeSingle();
   }
 }

@@ -9,12 +9,14 @@ import { TeamMember } from '../../common/types';
 import { toast } from 'react-hot-toast';
 import { HibiscusUser } from '@hibiscus/types';
 import { useTeam } from '../../hooks/use-team/use-team';
+import { TeamServiceAPI } from '../../common/api';
+import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 
 type Member = TeamMember & { admin: boolean; invited: boolean };
 
 function TeamMembersWidget() {
+  const { user } = useHibiscusUser();
   const { team } = useTeam();
-  const [teamMembers, setTeamMembers] = useState<Member[]>([]);
   const [isOpen, setOpen] = useState(false);
   const isCurrentUserAdmin = true;
   const [invites, setInvites] = useState<HibiscusUser[]>([]);
@@ -28,19 +30,34 @@ function TeamMembersWidget() {
   const handleOnClickKick: (
     member: TeamMember
   ) => React.MouseEventHandler<HTMLButtonElement> = (member) => () => {
-    setTeamMembers((prev) => prev.filter((it) => it.id === member.id));
     // TODO: call API to kick
   };
 
   const InviteForm = () => {
-    const [text, setText] = useState('');
+    const [emailInvitee, setEmailInvitee] = useState('');
 
-    const handleSubmit = () => {
-      toast.success('An invite email has been sent to their email address!', {
-        duration: 5000,
-      });
-      // TODO: logic
-      setOpen(false);
+    const handleSubmit = async () => {
+      try {
+        const { error } = await TeamServiceAPI.teamInviteUser(
+          user.id,
+          emailInvitee
+        );
+        if (error) {
+          toast.error(error.message);
+        } else {
+          toast.success(
+            'An invite email has been sent to their email address!',
+            { duration: 5000 }
+          );
+        }
+      } catch (e) {
+        toast.error(
+          "Oops! Couldn't create your team; please try again later. " +
+            e.message
+        );
+      } finally {
+        setOpen(false);
+      }
     };
 
     const handleClickSubmitInviteMembers: React.MouseEventHandler<
@@ -63,10 +80,11 @@ function TeamMembersWidget() {
       <>
         <OneLineText
           placeholder="User email"
+          type="email"
           onKeyDown={handleKeyEnter}
-          value={text}
+          value={emailInvitee}
           onChange={(e) => {
-            setText(e.target.value);
+            setEmailInvitee(e.target.value);
           }}
         />
         <Button
@@ -102,19 +120,21 @@ function TeamMembersWidget() {
 
   const Members = () => (
     <>
-      {teamMembers.map((item, i) => {
+      {team.members.map((item, i) => {
         return (
           <ListItemContainer key={i}>
             <LeftItemContainer>
-              <Text>{item.name}</Text>
-              {item.admin && <AiFillCrown />}
+              <Text>
+                {item.first_name} {item.last_name}
+              </Text>
+              {/*{item.admin && <AiFillCrown />}*/}
             </LeftItemContainer>
             <ItemButtonsContainer>
-              {!item.admin && isCurrentUserAdmin && (
+              {/*{!item.admin && isCurrentUserAdmin && (
                 <Button color="red" onClick={handleOnClickKick(item)}>
                   KICK
                 </Button>
-              )}
+              )}*/}
             </ItemButtonsContainer>
           </ListItemContainer>
         );
