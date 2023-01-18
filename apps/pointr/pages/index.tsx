@@ -1,17 +1,16 @@
-import styled from 'styled-components';
+import { GetStaticProps } from 'next';
 
 export function Index() {
-  /*
-   * Replace the elements below with your own.
-   *
-   * Note: The corresponding styles are in the ./index.styled-components file.
-   */
-  return <StyledPage></StyledPage>;
+  return <p>Redirecting you...</p>;
 }
 
 export default Index;
 
-const StyledPage = styled.div`
-  .page {
-  }
-`;
+export const getStaticProps: GetStaticProps = () => {
+  return {
+    redirect: {
+      statusCode: 301,
+      destination: 'https://hacksc.com',
+    },
+  };
+};
