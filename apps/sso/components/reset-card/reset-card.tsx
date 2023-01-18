@@ -100,6 +100,9 @@ const StyledForm = styled.form`
 const StyledText = styled(Text)`
   font-size: 24px;
   padding-top: 1rem;
+  @media (max-width: 400px) {
+    font-size: 20px;
+  }
 `;
 
 const StyledErrorText = styled(Text)`

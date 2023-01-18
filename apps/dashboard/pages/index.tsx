@@ -1,10 +1,9 @@
 import { H1, H3 } from '@hibiscus/ui';
 import styled from 'styled-components';
-import GrayContentBox from '../components/gray-content-box/gray-content-box';
-import { Search } from '@hibiscus/ui-kit-2023';
 import useHibiscusUser from '../hooks/use-hibiscus-user/use-hibiscus-user';
 import { getColorsForRole } from '../common/role.utils';
 import { HibiscusRole } from '@hibiscus/types';
+import HackerPortal from '../components/hacker-portal/hacker-portal';
 
 export function Index() {
   const { user } = useHibiscusUser();
@@ -14,6 +13,10 @@ export function Index() {
   }
 
   const userColors = getColorsForRole(user?.role ?? HibiscusRole.HACKER);
+
+  const renderDashboard = () => {
+    if (user.role === HibiscusRole.HACKER) return <HackerPortal user={user} />;
+  };
 
   return (
     <Wrapper>
@@ -26,7 +29,7 @@ export function Index() {
             alignItems: 'center',
           }}
         >
-          <div>
+          <WelcomeContainer>
             <H1
               style={{
                 color: userColors.light,
@@ -39,7 +42,8 @@ export function Index() {
             <H3 style={{ color: '#989898' }}>
               What would you like to do today?
             </H3>
-          </div>
+          </WelcomeContainer>
+
           {/* <Search
               placeholder={'Search...'}
               onInput={function (value: string): void {
@@ -47,30 +51,33 @@ export function Index() {
               }}
             ></Search> */}
         </div>
-        <div>
-          <p style={{ margin: '13px 0' }}>Quick Actions</p>
-          <QuickActionContainer>
-            <GrayContentBox location="/redstar.svg"></GrayContentBox>
-            <GrayContentBox location="/pinkstar.svg"></GrayContentBox>
-            <GrayContentBox location="/greenstar.svg"></GrayContentBox>
-            <GrayContentBox location="/purplepin.svg"></GrayContentBox>
-            <GrayContentBox location="/yellowpin.svg"></GrayContentBox>
-          </QuickActionContainer>
-        </div>
-        <AddOnAndStats>
-          <AddOnOuter>
-            <p style={{ textAlign: 'left', width: '90%', margin: '10px 0' }}>
-              Add-Ons
-            </p>
-            <AddOn></AddOn>
-          </AddOnOuter>
-          <StatsOuter>
-            <p style={{ textAlign: 'left', width: '90%', margin: '10px 0' }}>
-              Stats
-            </p>
-            <Stats></Stats>
-          </StatsOuter>
-        </AddOnAndStats>
+
+        {renderDashboard()}
+
+        {/* <div> */}
+        {/* <p style={{ margin: '13px 0' }}>Quick Actions</p> */}
+        {/* <QuickActionContainer> */}
+        {/* <GrayContentBox location="/redstar.svg"></GrayContentBox> */}
+        {/* <GrayContentBox location="/pinkstar.svg"></GrayContentBox> */}
+        {/* <GrayContentBox location="/greenstar.svg"></GrayContentBox>
+              <GrayContentBox location="/purplepin.svg"></GrayContentBox>
+              <GrayContentBox location="/yellowpin.svg"></GrayContentBox> */}
+        {/* </QuickActionContainer> */}
+        {/* </div> */}
+        {/* <AddOnAndStats>
+            <AddOnOuter>
+              <p style={{ textAlign: 'left', width: '90%', margin: '10px 0' }}>
+                Add-Ons
+              </p>
+              <AddOn></AddOn>
+            </AddOnOuter>
+            <StatsOuter>
+              <p style={{ textAlign: 'left', width: '90%', margin: '10px 0' }}>
+                Stats
+              </p>
+              <Stats></Stats>
+            </StatsOuter>
+          </AddOnAndStats> */}
       </LayoutContainer>
     </Wrapper>
   );
@@ -92,55 +99,61 @@ const LayoutContainer = styled.div`
   flex-direction: column;
 `;
 
-const AddOnOuter = styled.div`
-  width: 41%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-`;
+// const AddOnOuter = styled.div`
+//   width: 41%;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: flex-start;
+// `;
 
-const AddOn = styled.div`
-  width: 94%;
-  height: 90%;
-  background: #363636;
-  /* smaller-red-glow */
-  border: 2px solid #5a5a5a;
-  border-radius: 10px;
-  /* box-shadow: 0px 0px 10px rgba(254, 81, 57, 0.5); */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
+// const AddOn = styled.div`
+//   width: 94%;
+//   height: 90%;
+//   background: #363636;
+//   /* smaller-red-glow */
+//   border: 2px solid #5a5a5a;
+//   border-radius: 10px;
+//   /* box-shadow: 0px 0px 10px rgba(254, 81, 57, 0.5); */
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+// `;
 
-const Stats = styled.div`
-  width: 100%;
-  height: 90%;
-  background: #363636;
-  border: 2px solid #5a5a5a;
-  /* smaller-red-glow */
-  /* box-shadow: 0px 0px 10px rgba(254, 81, 57, 0.5); */
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
+// const Stats = styled.div`
+//   width: 100%;
+//   height: 90%;
+//   background: #363636;
+//   border: 2px solid #5a5a5a;
+//   /* smaller-red-glow */
+//   /* box-shadow: 0px 0px 10px rgba(254, 81, 57, 0.5); */
+//   border-radius: 10px;
+//   display: flex;
+//   align-items: center;
+//   justify-content: center;
+// `;
 
-const StatsOuter = styled.div`
-  width: 59%;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-`;
+// const StatsOuter = styled.div`
+//   width: 59%;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: flex-start;
+// `;
 
-const AddOnAndStats = styled.div`
-  display: inline-flex;
-  width: 100%;
-  height: 300px;
-`;
+// const AddOnAndStats = styled.div`
+//   display: inline-flex;
+//   width: 100%;
+//   height: 300px;
+// `;
 
 const QuickActionContainer = styled.div`
   display: flex;
   width: 100%;
   flex-wrap: wrap;
   gap: 30px;
+`;
+
+const WelcomeContainer = styled.div`
+  @media (max-width: 400px) {
+    margin-top: 5rem;
+  }
 `;

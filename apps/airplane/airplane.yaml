@@ -1,0 +1,4 @@
+javascript:
+  nodeVersion: '16'
+python:
+  version: '3.10'

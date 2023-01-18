@@ -76,4 +76,8 @@ export const SingleChoiceInput = (props: SingleChoiceInputProps) => {
   );
 };
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;

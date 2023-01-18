@@ -12,7 +12,7 @@ const REGISTERED_PATHS = new Set([
 
 export function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname.split('/');
-  if (path.length >= 2 && path[1] === 'api' && request.method !== 'GET') {
+  if (path.length >= 2 && path[1] === 'api') {
     return NextResponse.next();
   } else if (path.length === 2 && REGISTERED_PATHS.has(path[1])) {
     return NextResponse.next();
