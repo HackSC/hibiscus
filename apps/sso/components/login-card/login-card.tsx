@@ -109,6 +109,10 @@ const StyledLoginCard = styled.div`
   align-items: center;
   border-radius: 20px;
   border: 4px solid rgba(255, 255, 255, 0.5);
+
+  @media (max-width: 400px) {
+    min-width: 23rem;
+  }
 `;
 
 const StyledForm = styled.form`
@@ -123,6 +127,9 @@ const StyledForm = styled.form`
 const StyledText = styled(Text)`
   font-size: 24px;
   padding-top: 1rem;
+  @media (max-width: 400px) {
+    font-size: 20px;
+  }
 `;
 
 const StyledErrorText = styled(Text)`
