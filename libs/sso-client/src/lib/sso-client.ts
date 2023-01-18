@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { NextApiRequest, NextApiResponse } from 'next/types';
 import axios from 'axios';
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { getEnv } from '@hibiscus/env';
+import { getCookie } from 'cookies-next';
 
 /**
  * Generates the NextJS middleware needed to integrate with the Hibiscus SSO system
@@ -196,4 +200,48 @@ async function verifyToken(access_token: string, refresh_token: string) {
 
 export async function logout() {
   window.location.replace(`${process.env.NEXT_PUBLIC_SSO_URL}/logout`);
+}
+
+/**
+ * Sets the Supabase auth session on client side for situations that require it
+ * e.g. adhere to RLS during database access, reset password
+ *
+ * @param supabase optional
+ * @param access_token optional
+ * @param refresh_token optional
+ */
+export async function setSessionClientSide(
+  supabase: SupabaseClient = createClient(
+    process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_API_URL,
+    process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_ANON_KEY
+  ),
+  access_token: string = getCookie(
+    getEnv().Hibiscus.Cookies.accessTokenName
+  ) as string,
+  refresh_token: string = getCookie(
+    getEnv().Hibiscus.Cookies.refreshTokenName
+  ) as string
+) {
+  const sessionRes = await supabase.auth.getSession();
+  if ('session' in sessionRes.data && sessionRes.data.session != null) {
+    // Update cookies in case session was refreshed
+    HibiscusSupabaseClient.setTokenCookieClientSide(
+      sessionRes.data.session.access_token,
+      sessionRes.data.session.refresh_token
+    );
+    return;
+  }
+
+  // Else no session was found in current context
+  const authRes = await supabase.auth.setSession({
+    access_token,
+    refresh_token,
+  });
+  if ('session' in authRes.data && authRes.data.session != null) {
+    // Update cookies in case session was refreshed
+    HibiscusSupabaseClient.setTokenCookieClientSide(
+      authRes.data.session.access_token,
+      authRes.data.session.refresh_token
+    );
+  }
 }
