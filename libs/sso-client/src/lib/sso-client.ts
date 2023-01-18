@@ -75,7 +75,9 @@ export const middlewareHandler =
 
     // Redirect to login
     const redirectUrl = new URL(`${process.env.NEXT_PUBLIC_SSO_URL}/login`);
-    redirectUrl.search = `callback=${callbackUrl}`;
+    redirectUrl.search = `callback=${callbackUrl}${encodeURIComponent(
+      `?redirect=${request.nextUrl.pathname}`
+    )}`;
     return NextResponse.redirect(redirectUrl);
   };
 
@@ -106,6 +108,8 @@ export const callbackApiHandler =
     } else if (req.method === 'POST') {
       const auth_header = req.headers.authorization;
       if (auth_header != null && auth_header.startsWith('Bearer ')) {
+        const redirectPath = req.query.redirect;
+
         res.setHeader(
           'Access-Control-Allow-Origin',
           process.env.NEXT_PUBLIC_SSO_URL
@@ -117,7 +121,7 @@ export const callbackApiHandler =
         res.setHeader('Access-Control-Allow-Credentials', 'true');
         res.status(200).json({
           message: 'Authorization success',
-          redirect: redirectUrl,
+          redirect: `${redirectUrl}${redirectPath}`,
         });
       } else {
         res.status(400).json({ error: 'Bearer token must be provided' });
