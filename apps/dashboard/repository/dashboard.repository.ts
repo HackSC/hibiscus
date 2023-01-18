@@ -41,7 +41,7 @@ export class DashboardRepository {
   async getTeamInfo(teamId: string) {
     const { data, error } = await this.client
       .from('teams')
-      .select('team_id,name,description')
+      .select('team_id,name,created_at,description,organizer_id')
       .eq('team_id', teamId)
       .single();
     return { data, error };

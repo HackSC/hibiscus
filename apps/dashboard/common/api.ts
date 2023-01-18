@@ -177,4 +177,16 @@ export class TeamServiceAPI {
     }
     return { data: res.data, status: res.status };
   }
+
+  static async kickUser(kickId: string) {
+    const res = await axios.put('/api/organizer/kick', { kickId });
+    if (res.status >= 400) {
+      return { error: { message: res.data.message }, status: res.status };
+    }
+    return { data: res.data, status: res.status };
+  }
+
+  static async removeInvite(inviteId: string) {
+    // TODO
+  }
 }
