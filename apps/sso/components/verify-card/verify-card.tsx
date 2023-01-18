@@ -63,7 +63,9 @@ export function VerifyCard() {
       >
         SUBMIT
       </GradientButton>
-      <GrayLink href="/verify">Resend confirmation email</GrayLink>
+      <StyledSmallText>
+        If you did not receive your email, please sign up again
+      </StyledSmallText>
     </StyledVerifyCard>
   );
 }
