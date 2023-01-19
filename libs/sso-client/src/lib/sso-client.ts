@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { NextApiRequest, NextApiResponse } from 'next/types';
 import axios from 'axios';
+import { getEnv } from '@hibiscus/env';
 
 /**
  * Generates the NextJS middleware needed to integrate with the Hibiscus SSO system
@@ -9,7 +10,7 @@ import axios from 'axios';
  *
  * @param callbackUrl URL which the SSO will send a POST request to set a cookie on the app
  * @param guardPaths Array of paths (with leading slash) which this middleware will guard
- * @param redirectUrl URL to redirect unauthorized users to
+ * @param unauthorizedRredirectUrl URL to redirect unauthorized users to
  * @param exhaustive Whether the middleware should terminate or propagate. Default true (terminate)
  * @returns NextJS middleware function
  */
@@ -17,7 +18,7 @@ export const middlewareHandler =
   (
     callbackUrl: string,
     guardPaths?: string[],
-    redirectUrl?: string,
+    unauthorizedRredirectUrl?: string,
     exhaustive = true
   ) =>
   async (request: NextRequest): Promise<NextResponse | null> => {
@@ -38,16 +39,12 @@ export const middlewareHandler =
         guardPath.length <= path.length &&
         checkArrayContainsOrdered(guardPath, path)
       ) {
-        if (
-          request.cookies.has(
-            process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME
-          )
-        ) {
+        if (request.cookies.has(getEnv().Hibiscus.Cookies.accessTokenName)) {
           const access_token = request.cookies.get(
-            process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME
+            getEnv().Hibiscus.Cookies.accessTokenName
           );
           const refresh_token = request.cookies.get(
-            process.env.NEXT_PUBLIC_HIBISCUS_REFRESH_COOKIE_NAME
+            getEnv().Hibiscus.Cookies.refreshTokenName
           );
           const { data } = await verifyToken(access_token, refresh_token);
 
@@ -55,26 +52,22 @@ export const middlewareHandler =
             if (data.session != null) {
               const res = NextResponse.next();
               res.cookies.set(
-                process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME,
+                getEnv().Hibiscus.Cookies.accessTokenName,
                 data.session.access_token,
                 {
                   path: '/',
-                  domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
-                  maxAge: Number.parseInt(
-                    process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE
-                  ),
+                  domain: getEnv().Hibiscus.AppURL.baseDomain,
+                  maxAge: Number.parseInt(getEnv().Hibiscus.Cookies.maxAge),
                   sameSite: 'lax',
                 }
               );
               res.cookies.set(
-                process.env.NEXT_PUBLIC_HIBISCUS_REFRESH_COOKIE_NAME,
+                getEnv().Hibiscus.Cookies.refreshTokenName,
                 data.session.refresh_token,
                 {
                   path: '/',
-                  domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
-                  maxAge: Number.parseInt(
-                    process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE
-                  ),
+                  domain: getEnv().Hibiscus.AppURL.baseDomain,
+                  maxAge: Number.parseInt(getEnv().Hibiscus.Cookies.maxAge),
                   sameSite: 'lax',
                 }
               );
@@ -90,7 +83,7 @@ export const middlewareHandler =
         // Redirect to show unauthorized if it is API endpoint
         if (path.length >= 2 && path[1] === 'api') {
           return NextResponse.redirect(
-            `${process.env.NEXT_PUBLIC_SSO_URL}/api/unauthorized`
+            `${getEnv().Hibiscus.AppURL.sso}/api/unauthorized`
           );
         }
 
@@ -98,7 +91,7 @@ export const middlewareHandler =
         const redirect = generateRedirectUrl(
           callbackUrl,
           request.nextUrl.pathname,
-          redirectUrl
+          unauthorizedRredirectUrl
         );
         return NextResponse.redirect(redirect);
       }
@@ -108,7 +101,7 @@ export const middlewareHandler =
       const redirect = generateRedirectUrl(
         callbackUrl,
         request.nextUrl.pathname,
-        redirectUrl
+        unauthorizedRredirectUrl
       );
       return NextResponse.redirect(redirect);
     } else {
@@ -127,10 +120,10 @@ export const callbackApiHandler =
   async (req: NextApiRequest, res: NextApiResponse) => {
     // Handle pre-flight requests
     if (req.method === 'OPTIONS') {
-      if (req.headers.origin === process.env.NEXT_PUBLIC_SSO_URL) {
+      if (req.headers.origin === getEnv().Hibiscus.AppURL.sso) {
         res.setHeader(
           'Access-Control-Allow-Origin',
-          process.env.NEXT_PUBLIC_SSO_URL
+          getEnv().Hibiscus.AppURL.sso
         );
         res.setHeader(
           'Access-Control-Allow-Headers',
@@ -147,7 +140,7 @@ export const callbackApiHandler =
 
         res.setHeader(
           'Access-Control-Allow-Origin',
-          process.env.NEXT_PUBLIC_SSO_URL
+          getEnv().Hibiscus.AppURL.sso
         );
         res.setHeader(
           'Access-Control-Allow-Headers',
@@ -169,8 +162,8 @@ export const callbackApiHandler =
   };
 
 const VALID_CALLBACKS = [
-  process.env.NEXT_PUBLIC_SSO_MOCK_APP_URL,
-  process.env.NEXT_PUBLIC_PORTAL_URL,
+  getEnv().Hibiscus.AppURL.ssoMockApp,
+  getEnv().Hibiscus.AppURL.portal,
 ];
 
 /**
@@ -224,23 +217,20 @@ function getHost(url: string): string {
 export async function verifyToken(access_token: string, refresh_token: string) {
   // The Fetch API is used instead of axios because this function needs to be used in
   // NextJS middleware and their edge functions do not support axios
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_SSO_URL}/api/verifyToken`,
-    {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ access_token, refresh_token }),
-    }
-  );
+  const res = await fetch(`${getEnv().Hibiscus.AppURL.sso}/api/verifyToken`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ access_token, refresh_token }),
+  });
   const data = await res.json();
   return data;
 }
 
 export async function logout() {
-  window.location.replace(`${process.env.NEXT_PUBLIC_SSO_URL}/logout`);
+  window.location.replace(`${getEnv().Hibiscus.AppURL.sso}/logout`);
 }
 
 function generateRedirectUrl(
@@ -249,7 +239,7 @@ function generateRedirectUrl(
   redirect?: string
 ): URL {
   const redirectUrl = new URL(
-    redirect ?? `${process.env.NEXT_PUBLIC_SSO_URL}/login`
+    redirect ?? `${getEnv().Hibiscus.AppURL.sso}/login`
   );
   redirectUrl.search = `callback=${callbackUrl}${encodeURIComponent(
     `?redirect=${path}`
