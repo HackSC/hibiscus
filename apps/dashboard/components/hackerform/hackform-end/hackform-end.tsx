@@ -31,20 +31,10 @@ export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
 
     const supabase = container.resolve(HibiscusSupabaseClient);
     const client = supabase.getClient();
-    const accessToken = getCookie(
-      getEnv().Hibiscus.Cookies.accessTokenName
-    ).toString();
-    const refreshToken = getCookie(
-      getEnv().Hibiscus.Cookies.refreshTokenName
-    ).toString();
-    const userProfile = await supabase.getUserProfile(
-      accessToken,
-      refreshToken
-    );
     await client
       .from('user_profiles')
       .update({ application_status: 3 })
-      .eq('user_id', userProfile.user_id);
+      .eq('user_id', user.id);
   };
 
   return (
