@@ -1,11 +1,12 @@
 import styled from 'styled-components';
-import Rive, {
+import {
   useRive,
   useStateMachineInput,
   Layout,
   Fit,
   Alignment,
 } from '@rive-app/react-canvas';
+import { Button } from '@hibiscus/ui-kit-2023';
 
 /* eslint-disable-next-line */
 export interface HeroProps {}
@@ -22,13 +23,12 @@ export function Hero(props: HeroProps) {
     src: './img/graphics/hacksc.riv',
     autoplay: true,
     artboard: 'hero',
-    stateMachines: ['time', 'press', 'device'],
+    stateMachines: ['time', 'device'],
 
     layout: new Layout({ fit: Fit.Cover, alignment: Alignment.Center }),
   });
   const deviceInput = useStateMachineInput(rive, 'device', 'devicenum', 1);
   const timeInput = useStateMachineInput(rive, 'time', 'timer');
-  const pressInput = useStateMachineInput(rive, 'press', 'buttonp');
   return (
     <StyledHero>
       <RiveComponent />

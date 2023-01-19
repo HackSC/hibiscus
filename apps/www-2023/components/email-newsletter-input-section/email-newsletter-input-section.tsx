@@ -65,6 +65,7 @@ export function EmailNewsletterInputSection(
             name="email"
             type="email"
             value={formik.values.email}
+            style={{ minWidth: '24vw' }}
           />
           {formik.errors.email && formik.touched.email ? (
             <Text style={{ color: 'red' }}>{formik.errors.email}</Text>
@@ -85,7 +86,7 @@ const Container = styled.div`
   display: flex;
   padding: 2rem 0 1rem;
   align-items: flex-start;
-  justify-content: space-around;
+  justify-content: space-between;
   @media (max-width: 1080px) {
     flex-direction: column;
     justify-content: space-around;
@@ -98,6 +99,7 @@ const Container = styled.div`
 `;
 
 const TextInput = styled.div`
+  flex-basis: 60%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;

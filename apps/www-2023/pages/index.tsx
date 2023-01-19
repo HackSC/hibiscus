@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Navbar from '../components/navbar/navbar';
 import Hero from '../components/hero/hero';
+import ApplyNow from '../components/apply-now/apply-now';
 import Newsletter from '../components/newsletter/newsletter';
 import Topic from '../components/topic/topic';
 import Verticals from '../components/verticals/verticals';
@@ -17,6 +18,7 @@ export function Index() {
         <Navbar />
       </NavbarWrapper>
       <HeroSection>
+        <ApplyNow />
         <Hero />
         <Newsletter />
         <Topic />

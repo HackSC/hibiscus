@@ -60,7 +60,7 @@ const StyledNewsletter = styled.div`
 `;
 
 const StyledContent = styled.div`
-  height: 60vh;
+  height: 100vh;
   margin-left: 50vw;
   margin-right: 5rem;
   display: flex;
@@ -70,6 +70,7 @@ const StyledContent = styled.div`
     text-align: justify;
   }
   @media screen and (max-width: 1080px) {
+    height: 60vh;
     margin-top: 40vh;
     justify-content: flex-start;
     margin-left: 3rem;
