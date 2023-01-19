@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { container } from 'tsyringe';
 import { DashboardRepository } from '../../../repository/dashboard.repository';
+import { TSRV_RELEASE_FLAG } from '../../../common/constants';
 
 /**
  * Creates a team in the teams table
