@@ -3,12 +3,13 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 import { GradientSpan, Text } from '@hibiscus/ui';
-import { TrademarkColors } from '@hibiscus/styles';
+import { TrademarkColors, Colors2023 } from '@hibiscus/styles';
 import { useRouter } from 'next/router';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import Image from 'next/image';
 import GrayLink from '../gray-link/gray-link';
 import { container } from 'tsyringe';
+import { MutatingDots } from 'react-loader-spinner';
 
 /* eslint-disable-next-line */
 export interface SignUpProps {}
@@ -17,9 +18,11 @@ export function SignUpCard(props: SignUpProps) {
   const router = useRouter();
   const [hideErrorMessage, setHideErrorMessage] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
+  const [signUpState, setSignUpState] = useState('');
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setSignUpState('signing up');
 
     const firstname = event.target.firstname.value;
     const lastname = event.target.lastname.value;
@@ -105,6 +108,19 @@ export function SignUpCard(props: SignUpProps) {
         <GradientButton type="submit">SIGN UP</GradientButton>
       </StyledForm>
       <GrayLink href="/login">Have an account? Login</GrayLink>
+
+      {signUpState === 'signing up' ? (
+        <MutatingDots
+          height="100"
+          width="100"
+          color={Colors2023.PINK.LIGHT}
+          secondaryColor={Colors2023.PINK.LIGHT}
+          radius="12.5"
+          ariaLabel="mutating-dots-loading"
+        />
+      ) : (
+        ''
+      )}
     </Wrapper>
   );
 }
@@ -124,6 +140,10 @@ const Wrapper = styled.div`
   align-items: center;
   border-radius: 20px;
   border: 4px solid rgba(255, 255, 255, 0.5);
+
+  @media (max-width: 400px) {
+    min-width: 23rem;
+  }
 `;
 
 const StyledForm = styled.form`
@@ -138,6 +158,9 @@ const StyledForm = styled.form`
 const StyledText = styled(Text)`
   font-size: 24px;
   padding-top: 1rem;
+  @media (max-width: 400px) {
+    font-size: 20px;
+  }
 `;
 
 const StyledErrorText = styled(Text)`

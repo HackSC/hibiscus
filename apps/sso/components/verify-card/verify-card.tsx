@@ -1,21 +1,26 @@
 import styled from 'styled-components';
 import { Text } from '@hibiscus/ui';
-import { TrademarkColors } from '@hibiscus/styles';
+import { TrademarkColors, Colors2023 } from '@hibiscus/styles';
 import OTPInput from '../otp-input/otp-input';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import GrayLink from '../gray-link/gray-link';
 import { container } from 'tsyringe';
+import Image from 'next/image';
+import { MutatingDots } from 'react-loader-spinner';
 
 export function VerifyCard() {
   const router = useRouter();
+  const [verifyState, setVerifyState] = useState('');
   const [hideErrorMessage, setHideErrorMessage] = useState(false);
   const [code, setCode] = useState('');
   const [pinReady, setPinReady] = useState(false);
   const MAX_CODE_LENGTH = 6;
 
   const handleOTP = async () => {
+    setVerifyState('verifying');
+
     const email = String(router.query.email);
 
     const supabase = container.resolve(HibiscusSupabaseClient);
@@ -37,9 +42,22 @@ export function VerifyCard() {
     }
   };
 
+  const handleKeyDown = (e) => {
+    //it triggers by pressing the enter key
+    console.log(e.target.value);
+    if (e.keyCode === 13) {
+      handleOTP();
+    }
+  };
+
   return (
     <StyledVerifyCard>
-      <img src="/static/images/Logo.svg" alt="HackSC Logo" width="100px" />
+      <Image
+        src="/static/images/Logo.svg"
+        alt="HackSC Logo"
+        width={100}
+        height={100}
+      />
       <StyledText>
         We’ve sent you an email containing a unique 6-digit PIN code.
       </StyledText>
@@ -52,6 +70,7 @@ export function VerifyCard() {
         code={code}
         setCode={setCode}
         maxLength={MAX_CODE_LENGTH}
+        handleKeyDown={handleKeyDown}
       />
       <StyledErrorText style={{ display: hideErrorMessage ? 'block' : 'none' }}>
         Token is expired or incorrect.
@@ -59,11 +78,31 @@ export function VerifyCard() {
       <GradientButton
         onClick={handleOTP}
         disabled={!pinReady}
-        style={{ opacity: !pinReady ? 0.5 : 1 }}
+        style={{
+          opacity: !pinReady ? 0.5 : 1,
+          cursor: 'pointer',
+          transitionDuration: '0.5s',
+        }}
       >
         SUBMIT
       </GradientButton>
-      <GrayLink href="/verify">Resend confirmation email</GrayLink>
+
+      <StyledSmallText>
+        If you did not receive your email, please sign up again
+      </StyledSmallText>
+
+      {verifyState === 'verifying' ? (
+        <MutatingDots
+          height="100"
+          width="100"
+          color={Colors2023.PINK.LIGHT}
+          secondaryColor={Colors2023.PINK.LIGHT}
+          radius="12.5"
+          ariaLabel="mutating-dots-loading"
+        />
+      ) : (
+        ''
+      )}
     </StyledVerifyCard>
   );
 }

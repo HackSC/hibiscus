@@ -29,7 +29,7 @@ export function Index() {
             alignItems: 'center',
           }}
         >
-          <div>
+          <WelcomeContainer>
             <H1
               style={{
                 color: userColors.light,
@@ -42,7 +42,7 @@ export function Index() {
             <H3 style={{ color: '#989898' }}>
               What would you like to do today?
             </H3>
-          </div>
+          </WelcomeContainer>
 
           {/* <Search
               placeholder={'Search...'}
@@ -150,4 +150,10 @@ const QuickActionContainer = styled.div`
   width: 100%;
   flex-wrap: wrap;
   gap: 30px;
+`;
+
+const WelcomeContainer = styled.div`
+  @media (max-width: 400px) {
+    margin-top: 5rem;
+  }
 `;

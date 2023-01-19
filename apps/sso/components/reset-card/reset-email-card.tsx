@@ -85,6 +85,9 @@ const StyledSuccessText = styled(Text)`
 const StyledText = styled(Text)`
   font-size: 24px;
   padding-top: 1rem;
+  @media (max-width: 400px) {
+    font-size: 20px;
+  }
 `;
 
 const Input = styled.input`

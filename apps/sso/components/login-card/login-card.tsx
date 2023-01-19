@@ -1,19 +1,22 @@
 import styled from 'styled-components';
 import { useState } from 'react';
 import { GradientSpan, Text } from '@hibiscus/ui';
-import { TrademarkColors } from '@hibiscus/styles';
+import { Colors2023, TrademarkColors } from '@hibiscus/styles';
 import Image from 'next/image';
 import * as SSOClient from '@hibiscus/sso-client';
 import GrayLink from '../gray-link/gray-link';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { container } from 'tsyringe';
+import { MutatingDots } from 'react-loader-spinner';
 
 export function LoginCard() {
   const [hideErrorMessage, setHideErrorMessage] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
+  const [loggedInState, setLoggedInState] = useState('');
 
   async function handleSubmit(event) {
     event.preventDefault();
+    setLoggedInState('logging in');
 
     const email = event.target.email.value;
     const password = event.target.password.value;
@@ -74,6 +77,19 @@ export function LoginCard() {
       </StyledForm>
       <GrayLink href="/reset-email">Forgot Password?</GrayLink>
       <GrayLink href="/signup">Create a HackSC account</GrayLink>
+
+      {loggedInState === 'logging in' ? (
+        <MutatingDots
+          height="100"
+          width="100"
+          color={Colors2023.PINK.LIGHT}
+          secondaryColor={Colors2023.PINK.LIGHT}
+          radius="12.5"
+          ariaLabel="mutating-dots-loading"
+        />
+      ) : (
+        ''
+      )}
     </StyledLoginCard>
   );
 }
@@ -93,6 +109,10 @@ const StyledLoginCard = styled.div`
   align-items: center;
   border-radius: 20px;
   border: 4px solid rgba(255, 255, 255, 0.5);
+
+  @media (max-width: 400px) {
+    min-width: 23rem;
+  }
 `;
 
 const StyledForm = styled.form`
@@ -107,6 +127,9 @@ const StyledForm = styled.form`
 const StyledText = styled(Text)`
   font-size: 24px;
   padding-top: 1rem;
+  @media (max-width: 400px) {
+    font-size: 20px;
+  }
 `;
 
 const StyledErrorText = styled(Text)`
