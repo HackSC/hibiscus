@@ -25,16 +25,22 @@ export default async function kickTeamMember(
     }
 
     //get the kickedUser's team. Check that the team exists
-    let result = await repo.getUserTeam(kickId);
-    if (!result.data) {
-      throw new Error('The user is not in a team. Cannot be kicked.');
+    const userTeamResponse = await repo.getUserTeam(kickId);
+    if (!userTeamResponse.data) {
+      throw new Error('The selected user is not in a team. Cannot be kicked.');
     }
-
-    const teamId = result.data.team_id;
+    if (userTeamResponse.error) {
+      throw new Error(userTeamResponse.error.message);
+    }
+    const teamId = userTeamResponse.data.team_id;
 
     //get the organizer of the team and verify the user is the organizer
-    result = await repo.getTeamInfo(teamId); //shouldn't be null since checked if null earlier
-    if (result.data['organizer_id'] !== user.user_id) {
+    const teamInfoResponse = await repo.getTeamInfo(teamId); //shouldn't be null since checked if null earlier
+    if (teamInfoResponse.error) {
+      throw new Error(teamInfoResponse.error.message);
+    }
+    const organizerId = teamInfoResponse.data.organizer_id;
+    if (teamInfoResponse.data['organizer_id'] !== user.user_id) {
       throw new Error(
         'User is not the organizer and not authorized to this function.'
       );
@@ -51,10 +57,13 @@ export default async function kickTeamMember(
 
     //find kickId in user_profiles and set team_id to null
     let kickedUser = await repo.updateKickedUser(kickId, teamId);
+    if (kickedUser.error) {
+      throw new Error(kickedUser.error.message);
+    }
 
     //returns the kicked user in case wanted to display
     return res.status(200).json(kickedUser.data);
   } catch (e) {
-    return res.status(500).json({ message: e.message });
+    return res.status(400).json({ message: e.message });
   }
 }

@@ -16,7 +16,7 @@ import { SpanRed } from '../red-span';
 
 function TeamMembersWidget() {
   const { user } = useHibiscusUser();
-  const { team, updateTeam } = useTeam();
+  const { team, updateTeam, removeMember } = useTeam();
   const [isOpen, setOpen] = useState(false);
   const isUserAdmin = team.organizerId === user?.id;
 
@@ -28,8 +28,18 @@ function TeamMembersWidget() {
 
   const handleOnClickKick: (
     member: TeamMember
-  ) => React.MouseEventHandler<HTMLButtonElement> = (member) => () => {
+  ) => React.MouseEventHandler<HTMLButtonElement> = (member) => async () => {
     // TODO: call API to kick
+    const { error } = await TeamServiceAPI.kickUser(member.user_id);
+    if (error) {
+      throw new Error(error.message);
+    } else {
+      // remove user from member list
+      toast.success(
+        `Successfully kicked ${member.first_name} ${member.last_name} from list!`
+      );
+      removeMember(member.user_id);
+    }
   };
 
   const InviteForm = () => {
@@ -116,7 +126,7 @@ function TeamMembersWidget() {
             </LeftItemContainer>
             <ItemButtonsContainer>
               <Text style={{ color: 'gray' }}>Invite sent</Text>
-              <Button color="red">REMOVE</Button>
+              {isUserAdmin && <Button color="red">REMOVE</Button>}
             </ItemButtonsContainer>
           </ListItemContainer>
         ))}
@@ -133,10 +143,10 @@ function TeamMembersWidget() {
               <Text>
                 {item.first_name} {item.last_name}
               </Text>
-              {isUserAdmin && item.user_id === user.id && <AiFillCrown />}
+              {team.organizerId === item.user_id && <AiFillCrown />}
             </LeftItemContainer>
             <ItemButtonsContainer>
-              {!isUserAdmin && item.user_id !== user.id && (
+              {isUserAdmin && item.user_id !== user.id && (
                 <Button color="red" onClick={handleOnClickKick(item)}>
                   KICK
                 </Button>
@@ -150,21 +160,25 @@ function TeamMembersWidget() {
 
   return (
     <Container>
-      <Modal
-        isOpen={isOpen}
-        closeModal={() => {
-          setOpen(false);
-        }}
-      >
-        <GrayBox>
-          <InviteForm />
-        </GrayBox>
-      </Modal>
+      {isUserAdmin && (
+        <Modal
+          isOpen={isOpen}
+          closeModal={() => {
+            setOpen(false);
+          }}
+        >
+          <GrayBox>
+            <InviteForm />
+          </GrayBox>
+        </Modal>
+      )}
       <TopContainer>
         <H3 style={{ fontWeight: 600 }}>Members</H3>
-        <Button color="black" onClick={handleOnClickAddMembers}>
-          <AiFillPlusCircle /> ADD MEMBERS
-        </Button>
+        {isUserAdmin && (
+          <Button color="black" onClick={handleOnClickAddMembers}>
+            <AiFillPlusCircle /> ADD MEMBERS
+          </Button>
+        )}
       </TopContainer>
       <GrayBox>
         <List>

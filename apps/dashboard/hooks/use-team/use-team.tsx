@@ -28,6 +28,9 @@ export const useTeam = () => {
   const updateTeam = (update: Partial<Team>) => {
     setTeam((prev) => ({ ...prev, ...update }));
   };
+  const removeMember = (userId: string) => {
+    updateTeam({ members: team.members.filter((m) => m.user_id !== userId) });
+  };
 
   return {
     team,
@@ -35,5 +38,6 @@ export const useTeam = () => {
     isLoading,
     noTeam,
     setNoTeam,
+    removeMember,
   };
 };
