@@ -7,6 +7,7 @@ import { useTeam } from '../../hooks/use-team/use-team';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 import { TeamServiceAPI } from '../../common/api';
 import { Text } from '@hibiscus/ui';
+import Image from 'next/image';
 
 const Index = () => {
   const { updateTeam, isLoading, noTeam, setNoTeam } = useTeam();
@@ -40,12 +41,36 @@ const Index = () => {
       {isLoading ? (
         <Text>Loading...</Text>
       ) : !noTeam ? (
-        <>
-          <TeamHeader />
-          <TeamMembersWidget />
-        </>
+        <div
+          style={{
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <TeamHeader />
+            <TeamMembersWidget />
+          </div>
+          <StyledImage
+            style={{ marginLeft: '100px', marginTop: '100px' }}
+            width="350"
+            height="250"
+            src={'/hackform-illustrations/postcard-world.svg'}
+            alt="Illustration"
+          />
+        </div>
       ) : (
-        <NoTeamPlaceholder />
+        <div>
+          <NoTeamPlaceholder />
+          <StyledImage
+            style={{ marginTop: '5rem' }}
+            width="450"
+            height="350"
+            src={'/hackform-illustrations/postcard.svg'}
+            alt="Illustration"
+          />
+        </div>
       )}
     </PageContainer>
   );
@@ -58,4 +83,13 @@ const PageContainer = styled.div`
   flex-direction: column;
   gap: 3rem;
   margin: 6rem 16rem;
+  @media (max-width: 400px) {
+    margin: 8rem 0rem;
+  }
+`;
+
+const StyledImage = styled(Image)`
+  @media (max-width: 400px) {
+    display: none;
+  }
 `;
