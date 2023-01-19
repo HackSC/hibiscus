@@ -20,6 +20,7 @@
     "@fontsource/inter": "^4.5.11",
     "@headlessui/react": "^1.7.7",
     "@reduxjs/toolkit": "^1.9.1",
+    "@rive-app/react-canvas": "^3.0.35",
     "@sendgrid/mail": "^7.7.0",
     "@supabase/auth-helpers-nextjs": "^0.5.2",
     "@supabase/supabase-js": "^2.2.0",

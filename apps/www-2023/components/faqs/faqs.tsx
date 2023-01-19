@@ -66,7 +66,7 @@ export default FAQs;
 const StyledFAQs = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 5rem;
+  padding: 3rem;
 `;
 
 const FAQContainer = styled.div`
