@@ -8,16 +8,23 @@ export default async function kickTeamMember(
 ) {
   try {
     const repo = container.resolve(DashboardRepository);
+    const kickId: string = req.body.kickId;
 
-    const teamId: string = req.body.team_id;
-    const organizerId: string = req.body.organizer_id;
-    const kickId: string = req.body.kick_id;
-
-    if (!teamId || !organizerId || !kickId) {
+    if (!kickId) {
       throw new Error('One or more of the required parameters is missing.');
     }
 
     //verify user is organizer of team
+    const userTeamResponse = await repo.getUserTeam(kickId);
+    if (userTeamResponse.error) {
+      throw new Error(userTeamResponse.error.message);
+    }
+    const teamId = userTeamResponse.data.team_id;
+    const teamInfoResponse = await repo.getTeamInfo(teamId);
+    if (teamInfoResponse.error) {
+      throw new Error(teamInfoResponse.error.message);
+    }
+    const organizerId = teamInfoResponse.data.organizer_id;
     const isOrganizer = await repo.verifyUserIsOrganizer(organizerId, teamId);
 
     if (!isOrganizer) {
@@ -29,9 +36,13 @@ export default async function kickTeamMember(
     //find kickId in user_profiles and set team_id to null
     const result = await repo.updateKickedUser(kickId, teamId);
 
+    if (result.error) {
+      throw new Error(result.error.message);
+    }
+
     //returns the kicked user in case wanted to display
     return res.status(200).json(result.data);
   } catch (e) {
-    return res.status(500).json({ message: e.message });
+    return res.status(400).json({ message: e.message });
   }
 }
