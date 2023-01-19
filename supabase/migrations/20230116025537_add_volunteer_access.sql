@@ -16,4 +16,7 @@ create policy "Allow volunteers to access and modify all rows"
     to authenticated
     using (auth.uid() in (
         select get_volunteers()
+    ))
+    with check (auth.uid() in (
+        select get_volunteers()
     ));
