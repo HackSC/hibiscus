@@ -1,8 +1,15 @@
 /* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
 import { useRef, useState, useEffect } from 'react';
+import { Text } from '@hibiscus/ui';
 
-export function OTPInput({ setPinReady, code, setCode, maxLength }) {
+export function OTPInput({
+  setPinReady,
+  code,
+  setCode,
+  maxLength,
+  handleKeyDown,
+}) {
   const codeDigitsArray = new Array(maxLength).fill(0);
 
   // ref for text input
@@ -63,6 +70,7 @@ export function OTPInput({ setPinReady, code, setCode, maxLength }) {
         value={code}
         onChange={inputHandler}
         onBlur={handleOnBlur}
+        onKeyUp={handleKeyDown}
         ref={textInputRef}
       />
     </OTPInputSection>
@@ -111,7 +119,7 @@ export const OTPInputField = styled.div`
   }
 `;
 
-export const OTPInputText = styled.text`
+export const OTPInputText = styled(Text)`
   font-size: 22px;
   font-weight: bold;
   text-align: center;

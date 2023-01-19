@@ -33,6 +33,9 @@ const handler: NextApiHandler = async (req, res) => {
       return res.status(500).json({ msg: 'Something went wrong' });
     }
     const file = files.file as formidable.File;
+    if (!file) {
+      return res.status(400).json({ msg: 'No file detected; skipping upload' });
+    }
     const key = fields.key as string;
 
     if (!validateFormat(file)) {
@@ -56,7 +59,7 @@ const handler: NextApiHandler = async (req, res) => {
     } catch (e) {
       console.error(e);
       // TODO: better handling
-      return res.status(500).json({ msg: 'Something went wrong', e });
+      return res.status(500).json({ msg: 'Something went wrong' });
     }
   });
 };

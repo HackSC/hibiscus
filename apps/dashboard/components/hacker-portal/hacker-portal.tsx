@@ -27,7 +27,8 @@ export function HackerPortal({ user }: Props) {
               Colors2023.GREEN.DARK) ||
             (user.applicationStatus === ApplicationStatus.NOT_ADMITTED &&
               Colors2023.RED.DARK) ||
-            (user.applicationId && Colors2023.BLUE.DARK),
+            (user.applicationStatus === ApplicationStatus.IN_REVIEW &&
+              Colors2023.BLUE.DARK),
           color:
             (user.applicationStatus === ApplicationStatus.NOT_APPLIED &&
               Colors2023.GRAY.LIGHT) ||
@@ -37,7 +38,8 @@ export function HackerPortal({ user }: Props) {
               Colors2023.GREEN.LIGHT) ||
             (user.applicationStatus === ApplicationStatus.NOT_ADMITTED &&
               Colors2023.RED.LIGHT) ||
-            (user.applicationId && Colors2023.BLUE.LIGHT),
+            (user.applicationStatus === ApplicationStatus.IN_REVIEW &&
+              Colors2023.BLUE.LIGHT),
           fontWeight: 500,
           padding: 8,
           borderRadius: 8,
@@ -52,7 +54,8 @@ export function HackerPortal({ user }: Props) {
             'Admitted') ||
           (user.applicationStatus === ApplicationStatus.NOT_ADMITTED &&
             'Not Admitted') ||
-          (user.applicationId && 'In Review')}
+          (user.applicationStatus === ApplicationStatus.IN_REVIEW &&
+            'In Review')}
       </span>
     );
   };
@@ -60,16 +63,7 @@ export function HackerPortal({ user }: Props) {
   const renderApplyMessage = () => {
     if (user.applicationStatus === ApplicationStatus.NOT_APPLIED) {
       return (
-        <div
-          style={{
-            display: 'flex',
-            backgroundColor: '#3b3b3b',
-            padding: 20,
-            borderRadius: 10,
-            marginTop: 20,
-            boxShadow: `0px 0px 5px #8e8e8e`,
-          }}
-        >
+        <BannerContainer>
           <GlowSpan
             color={Colors2023.GRAY.LIGHT}
             shadowColor={Colors2023.BLUE.STANDARD}
@@ -85,7 +79,7 @@ export function HackerPortal({ user }: Props) {
               Apply now
             </Link>
           </ApplyButton>
-        </div>
+        </BannerContainer>
       );
     }
   };
@@ -148,6 +142,10 @@ const ApplyButton = styled.button`
     color: #e9ffc5;
     transition: all 0.3s;
   }
+
+  @media (max-width: 400px) {
+    margin-left: 0px;
+  }
 `;
 
 const MessageContainer = styled.div`
@@ -158,4 +156,17 @@ const MessageContainer = styled.div`
   align-items: center;
   gap: 5px;
   padding-top: 100px;
+`;
+
+const BannerContainer = styled.div`
+  display: flex;
+  background-color: #3b3b3b;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 20px;
+  box-shadow: 0px 0px 5px #8e8e8e;
+
+  @media (max-width: 400px) {
+    flex-direction: column;
+  }
 `;
