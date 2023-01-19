@@ -6,7 +6,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
 
 @injectable()
 export class DashboardRepository {
-  private readonly client: SupabaseClient;
+  private client: SupabaseClient;
   private static readonly env = getEnv();
   private static readonly ses = new SESClient({
     credentials: {
