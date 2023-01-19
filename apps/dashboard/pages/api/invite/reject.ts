@@ -30,7 +30,7 @@ export default async function handler(
 
     //only need to delete the invitation
     //Assuming invitation already exists in db, otherwise error prob thrown anyway
-    const { inviteId } = req.body;
+    const { inviteId } = req.query;
 
     const stringifyInviteId = inviteId.toString();
 

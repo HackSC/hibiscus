@@ -116,7 +116,15 @@ export class TeamServiceAPI {
   }
 
   static async rejectInvite(inviteId: string): Promise<TeamServiceResponse> {
-    const res = await axios.put('/api/invite/reject', { inviteId });
+    const res = await axios.put(
+      `/api/invite/reject?inviteId=${inviteId}`,
+      {},
+      {
+        validateStatus: (status) => {
+          return status >= 200 && status <= 503;
+        },
+      }
+    );
     if (res.status >= 400) {
       return { error: { message: res.data.message }, status: res.status };
     }
