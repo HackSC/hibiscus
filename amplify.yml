@@ -1,0 +1,15 @@
+version: 1
+applications:
+  - frontend:
+      phases:
+        build:
+          commands:
+            - yarn install
+            - yarn nx build interim --no-cache --prod
+      artifacts:
+        baseDirectory: ../../dist/apps/interim
+        files:
+          - '**/*'
+      cache:
+        paths: []
+    appRoot: apps/interim
