@@ -161,9 +161,9 @@ const MessageContainer = styled.div`
 const BannerContainer = styled.div`
   display: flex;
   background-color: #3b3b3b;
-  padding: 20;
-  border-radius: 10;
-  margin-top: 20;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 20px;
   box-shadow: 0px 0px 5px #8e8e8e;
 
   @media (max-width: 400px) {

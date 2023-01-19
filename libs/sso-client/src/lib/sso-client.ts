@@ -2,81 +2,111 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { NextApiRequest, NextApiResponse } from 'next/types';
 import axios from 'axios';
+import { getEnv } from '@hibiscus/env';
 
 /**
  * Generates the NextJS middleware needed to integrate with the Hibiscus SSO system
  * Ensure that a suitable config is also exported in the middleware file such that static files are not blocked
  *
  * @param callbackUrl URL which the SSO will send a POST request to set a cookie on the app
+ * @param guardPaths Array of paths (with leading slash) which this middleware will guard
+ * @param unauthorizedRredirectUrl URL to redirect unauthorized users to
+ * @param exhaustive Whether the middleware should terminate or propagate. Default true (terminate)
  * @returns NextJS middleware function
  */
 export const middlewareHandler =
-  (callbackUrl: string) => async (request: NextRequest) => {
+  (
+    callbackUrl: string,
+    guardPaths?: string[],
+    unauthorizedRredirectUrl?: string,
+    exhaustive = true
+  ) =>
+  async (request: NextRequest): Promise<NextResponse | null> => {
+    // Handle preflight requests
     if (request.method === 'OPTIONS') {
       const res = NextResponse.next();
       res.headers.set('Access-Control-Allow-Credentials', 'true');
       return res;
     }
 
-    if (
-      request.cookies.has(process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME)
-    ) {
-      const access_token = request.cookies.get(
-        process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME
-      );
-      const refresh_token = request.cookies.get(
-        process.env.NEXT_PUBLIC_HIBISCUS_REFRESH_COOKIE_NAME
-      );
-      const { data } = await verifyToken(access_token, refresh_token);
+    guardPaths = guardPaths ?? [''];
 
-      if (data != null) {
-        if (data.session != null) {
-          const res = NextResponse.next();
-          res.cookies.set(
-            process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME,
-            data.session.access_token,
-            {
-              path: '/',
-              domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
-              maxAge: Number.parseInt(
-                process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE
-              ),
-              sameSite: 'lax',
-            }
+    for (const guardPathFull of guardPaths) {
+      const guardPath = splitPath(guardPathFull);
+      const path = splitPath(request.nextUrl.pathname);
+
+      if (
+        guardPath.length <= path.length &&
+        checkArrayContainsOrdered(guardPath, path)
+      ) {
+        if (request.cookies.has(getEnv().Hibiscus.Cookies.accessTokenName)) {
+          const access_token = request.cookies.get(
+            getEnv().Hibiscus.Cookies.accessTokenName
           );
-          res.cookies.set(
-            process.env.NEXT_PUBLIC_HIBISCUS_REFRESH_COOKIE_NAME,
-            data.session.refresh_token,
-            {
-              path: '/',
-              domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
-              maxAge: Number.parseInt(
-                process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE
-              ),
-              sameSite: 'lax',
-            }
+          const refresh_token = request.cookies.get(
+            getEnv().Hibiscus.Cookies.refreshTokenName
           );
-          return res;
-        } else if (data.user != null) {
-          return NextResponse.next();
+          const { data } = await verifyToken(access_token, refresh_token);
+
+          if (data != null) {
+            if (data.session != null) {
+              const res = NextResponse.next();
+              res.cookies.set(
+                getEnv().Hibiscus.Cookies.accessTokenName,
+                data.session.access_token,
+                {
+                  path: '/',
+                  domain: getEnv().Hibiscus.AppURL.baseDomain,
+                  maxAge: Number.parseInt(getEnv().Hibiscus.Cookies.maxAge),
+                  sameSite: 'lax',
+                }
+              );
+              res.cookies.set(
+                getEnv().Hibiscus.Cookies.refreshTokenName,
+                data.session.refresh_token,
+                {
+                  path: '/',
+                  domain: getEnv().Hibiscus.AppURL.baseDomain,
+                  maxAge: Number.parseInt(getEnv().Hibiscus.Cookies.maxAge),
+                  sameSite: 'lax',
+                }
+              );
+              return res;
+            } else if (data.user != null) {
+              return NextResponse.next();
+            }
+          }
         }
+
+        // Access token not found
+
+        // Redirect to show unauthorized if it is API endpoint
+        if (path.length >= 2 && path[1] === 'api') {
+          return NextResponse.redirect(
+            `${getEnv().Hibiscus.AppURL.sso}/api/unauthorized`
+          );
+        }
+
+        // Redirect to login
+        const redirect = generateRedirectUrl(
+          callbackUrl,
+          request.nextUrl.pathname,
+          unauthorizedRredirectUrl
+        );
+        return NextResponse.redirect(redirect);
       }
     }
 
-    // Access token not found
-
-    // Redirect to show unauthorized if it is API endpoint
-    const path = request.nextUrl.pathname.split('/');
-    if (path.length >= 2 && path[1] === 'api') {
-      return NextResponse.redirect(
-        `${process.env.NEXT_PUBLIC_SSO_URL}/api/unauthorized`
+    if (exhaustive) {
+      const redirect = generateRedirectUrl(
+        callbackUrl,
+        request.nextUrl.pathname,
+        unauthorizedRredirectUrl
       );
+      return NextResponse.redirect(redirect);
+    } else {
+      return null;
     }
-
-    // Redirect to login
-    const redirectUrl = new URL(`${process.env.NEXT_PUBLIC_SSO_URL}/login`);
-    redirectUrl.search = `callback=${callbackUrl}`;
-    return NextResponse.redirect(redirectUrl);
   };
 
 /**
@@ -90,10 +120,10 @@ export const callbackApiHandler =
   async (req: NextApiRequest, res: NextApiResponse) => {
     // Handle pre-flight requests
     if (req.method === 'OPTIONS') {
-      if (req.headers.origin === process.env.NEXT_PUBLIC_SSO_URL) {
+      if (req.headers.origin === getEnv().Hibiscus.AppURL.sso) {
         res.setHeader(
           'Access-Control-Allow-Origin',
-          process.env.NEXT_PUBLIC_SSO_URL
+          getEnv().Hibiscus.AppURL.sso
         );
         res.setHeader(
           'Access-Control-Allow-Headers',
@@ -106,9 +136,11 @@ export const callbackApiHandler =
     } else if (req.method === 'POST') {
       const auth_header = req.headers.authorization;
       if (auth_header != null && auth_header.startsWith('Bearer ')) {
+        const redirectPath = req.query.redirect;
+
         res.setHeader(
           'Access-Control-Allow-Origin',
-          process.env.NEXT_PUBLIC_SSO_URL
+          getEnv().Hibiscus.AppURL.sso
         );
         res.setHeader(
           'Access-Control-Allow-Headers',
@@ -117,7 +149,7 @@ export const callbackApiHandler =
         res.setHeader('Access-Control-Allow-Credentials', 'true');
         res.status(200).json({
           message: 'Authorization success',
-          redirect: redirectUrl,
+          redirect: `${redirectUrl}${redirectPath}`,
         });
       } else {
         res.status(400).json({ error: 'Bearer token must be provided' });
@@ -130,8 +162,8 @@ export const callbackApiHandler =
   };
 
 const VALID_CALLBACKS = [
-  process.env.NEXT_PUBLIC_SSO_MOCK_APP_URL,
-  process.env.NEXT_PUBLIC_PORTAL_URL,
+  getEnv().Hibiscus.AppURL.ssoMockApp,
+  getEnv().Hibiscus.AppURL.portal,
 ];
 
 /**
@@ -182,24 +214,55 @@ function getHost(url: string): string {
  * @param refresh_token Supabase refresh token
  * @returns object containing `data` and `error` properties, either of which may be undefined
  */
-async function verifyToken(access_token: string, refresh_token: string) {
+export async function verifyToken(access_token: string, refresh_token: string) {
   // The Fetch API is used instead of axios because this function needs to be used in
   // NextJS middleware and their edge functions do not support axios
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_SSO_URL}/api/verifyToken`,
-    {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ access_token, refresh_token }),
-    }
-  );
+  const res = await fetch(`${getEnv().Hibiscus.AppURL.sso}/api/verifyToken`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ access_token, refresh_token }),
+  });
   const data = await res.json();
   return data;
 }
 
 export async function logout() {
-  window.location.replace(`${process.env.NEXT_PUBLIC_SSO_URL}/logout`);
+  window.location.replace(`${getEnv().Hibiscus.AppURL.sso}/logout`);
+}
+
+function generateRedirectUrl(
+  callbackUrl: string,
+  path: string,
+  redirect?: string
+): URL {
+  const redirectUrl = new URL(
+    redirect ?? `${getEnv().Hibiscus.AppURL.sso}/login`
+  );
+  redirectUrl.search = `callback=${callbackUrl}${encodeURIComponent(
+    `?redirect=${path}`
+  )}`;
+  return redirectUrl;
+}
+
+function checkArrayContainsOrdered<T>(arr1: T[], arr2: T[]): boolean {
+  const length = arr1.length <= arr2.length ? arr1.length : arr2.length;
+  for (let i = 0; i < length; i++) {
+    if (arr1[i] !== arr2[i]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function splitPath(path: string): string[] {
+  const split = path.split('/');
+  if (split.length > 0 && split[-1] === '') {
+    split.pop();
+  }
+
+  return split;
 }
