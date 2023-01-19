@@ -7,6 +7,10 @@ import Image from 'next/image';
 import styled from 'styled-components';
 import APIService from '../../../common/api';
 import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
+import { container } from 'tsyringe';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { getCookie } from 'cookies-next';
+import { getEnv } from '@hibiscus/env';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface HackformEndingProps {
@@ -24,6 +28,13 @@ export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
     setTimeout(() => {
       hackformUtils.reset();
     }, TIME_BEFORE_FORMSTATE_RESET);
+
+    const supabase = container.resolve(HibiscusSupabaseClient);
+    const client = supabase.getClient();
+    await client
+      .from('user_profiles')
+      .update({ application_status: 3 })
+      .eq('user_id', user.id);
   };
 
   return (

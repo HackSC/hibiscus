@@ -22,7 +22,6 @@ export function SignUpCard(props: SignUpProps) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setSignUpState('signing up');
 
     const firstname = event.target.firstname.value;
     const lastname = event.target.lastname.value;
@@ -61,6 +60,7 @@ export function SignUpCard(props: SignUpProps) {
     }
 
     if (data.user) {
+      setSignUpState('signing up');
       router.push({
         pathname: '/verify',
         query: { email, firstname, lastname },

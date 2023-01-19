@@ -27,7 +27,8 @@ export function HackerPortal({ user }: Props) {
               Colors2023.GREEN.DARK) ||
             (user.applicationStatus === ApplicationStatus.NOT_ADMITTED &&
               Colors2023.RED.DARK) ||
-            (user.applicationId && Colors2023.BLUE.DARK),
+            (user.applicationStatus === ApplicationStatus.IN_REVIEW &&
+              Colors2023.BLUE.DARK),
           color:
             (user.applicationStatus === ApplicationStatus.NOT_APPLIED &&
               Colors2023.GRAY.LIGHT) ||
@@ -37,7 +38,8 @@ export function HackerPortal({ user }: Props) {
               Colors2023.GREEN.LIGHT) ||
             (user.applicationStatus === ApplicationStatus.NOT_ADMITTED &&
               Colors2023.RED.LIGHT) ||
-            (user.applicationId && Colors2023.BLUE.LIGHT),
+            (user.applicationStatus === ApplicationStatus.IN_REVIEW &&
+              Colors2023.BLUE.LIGHT),
           fontWeight: 500,
           padding: 8,
           borderRadius: 8,
@@ -52,7 +54,8 @@ export function HackerPortal({ user }: Props) {
             'Admitted') ||
           (user.applicationStatus === ApplicationStatus.NOT_ADMITTED &&
             'Not Admitted') ||
-          (user.applicationId && 'In Review')}
+          (user.applicationStatus === ApplicationStatus.IN_REVIEW &&
+            'In Review')}
       </span>
     );
   };
