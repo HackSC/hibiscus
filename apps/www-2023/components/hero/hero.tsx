@@ -21,15 +21,14 @@ export function Hero(props: HeroProps) {
   const { rive, RiveComponent } = useRive({
     src: './img/graphics/hacksc.riv',
     autoplay: true,
-    artboard: 'HackSC-Hero',
-    stateMachines: 'time',
-    onStateChange: (button) => {
-      window.location.assign('https://dashboard.hacksc.com/apply-2023');
-    },
+    artboard: 'hero',
+    stateMachines: ['time', 'press', 'device'],
+
     layout: new Layout({ fit: Fit.Cover, alignment: Alignment.Center }),
   });
-
-  const timeInput = useStateMachineInput(rive, 'trigger');
+  const deviceInput = useStateMachineInput(rive, 'device', 'devicenum', 1);
+  const timeInput = useStateMachineInput(rive, 'time', 'timer');
+  const pressInput = useStateMachineInput(rive, 'press', 'buttonp');
   return (
     <StyledHero>
       <RiveComponent />

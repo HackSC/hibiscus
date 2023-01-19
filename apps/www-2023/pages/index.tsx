@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Navbar from '../components/navbar/navbar';
 import Hero from '../components/hero/hero';
+import Newsletter from '../components/newsletter/newsletter';
 import Topic from '../components/topic/topic';
 import Verticals from '../components/verticals/verticals';
 import SolutionChallenge from '../components/solution-challenge/solution-challenge';
@@ -17,6 +18,7 @@ export function Index() {
       </NavbarWrapper>
       <HeroSection>
         <Hero />
+        <Newsletter />
         <Topic />
       </HeroSection>
       <VerticalsSection>
@@ -52,7 +54,9 @@ const NavbarWrapper = styled.div`
   justify-content: center;
 `;
 
-const HeroSection = styled.div``;
+const HeroSection = styled.div`
+  max-width: 100vw;
+`;
 
 const VerticalsSection = styled.div`
   display: flex;
@@ -68,7 +72,9 @@ const SpeakerSection = styled.div`
   }
 `;
 
-const SponsorSection = styled.div``;
+const SponsorSection = styled.div`
+  margin: auto;
+`;
 
 const FAQSection = styled.div``;
 

@@ -41,4 +41,7 @@ const StyledSolutionChallenge = styled.div`
 const Blurb = styled(Text)`
   text-align: center;
   margin: 2rem 7rem;
+  @media (max-width: 800px) {
+    margin: 2rem 3rem;
+  }
 `;

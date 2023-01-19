@@ -13,7 +13,7 @@ export function DesktopNavbar(props: DesktopNavbarProps) {
       <NavbarLeftLogoText>
         <Link href={'/'} anchortagpropsoverride={{ target: '_self' }}>
           <LogoContainer>
-            <img src="./img/logo.svg" alt="HackSC 2023 Logo" />
+            <img src="./img/logos/logo.svg" alt="HackSC 2023 Logo" />
           </LogoContainer>
         </Link>
       </NavbarLeftLogoText>

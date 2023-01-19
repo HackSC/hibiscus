@@ -26,10 +26,15 @@ export function Sponsors(props: SponsorsProps) {
             rel="noreferrer"
           >
             <img
-              src="/img/logos/elastic.svg"
+              src="/img/logos/elastic.png"
               alt="Elastic Logo"
               loading="lazy"
             />
+          </a>
+        </Sponsor>
+        <Sponsor>
+          <a href="https://www.carc.usc.edu/" target="_blank" rel="noreferrer">
+            <img src="/img/logos/carc.png" alt="Elastic Logo" loading="lazy" />
           </a>
         </Sponsor>
       </SponsorsContainer>
@@ -38,6 +43,7 @@ export function Sponsors(props: SponsorsProps) {
 }
 
 const StyledSponsors = styled.div`
+  margin-top: 5rem;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -48,10 +54,10 @@ const SponsorsContainer = styled.div`
   column-count: 4;
   column-gap: 10px;
   @media (max-width: 1920px) {
-    column-count: 1;
+    column-count: 2;
   }
   @media (max-width: 1080px) {
-    column-count: 1;
+    column-count: 2;
   }
   @media (max-width: 768px) {
     column-count: 1;
@@ -74,9 +80,15 @@ const Sponsor = styled.div`
     max-width: 100%;
     display: block;
   }
-  a {
+  > a {
     color: black;
     text-decoration: none;
+    > img {
+      grid-row: 1 / -1;
+      grid-column: 1;
+      max-width: 100%;
+      display: block;
+    }
   }
 `;
 

@@ -138,6 +138,12 @@ const StyledVerticals = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  > p {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    text-align: center;
+    padding-top: 1rem;
+  }
 `;
 
 const VerticalImg = styled.div`
@@ -147,11 +153,27 @@ const VerticalImg = styled.div`
     height: 10vw;
     object-fit: fit;
   }
+  @media (max-width: 1080px) {
+    width: 15vw;
+    > img {
+      width: 15vw;
+      height: 15vw;
+      object-fit: contain;
+    }
+  }
   @media (max-width: 800px) {
     width: 25vw;
     > img {
       width: 25vw;
       height: 25vw;
+      object-fit: contain;
+    }
+  }
+  @media (max-width: 480px) {
+    width: 20vw;
+    > img {
+      width: 20vw;
+      height: 20vw;
       object-fit: contain;
     }
   }
@@ -165,6 +187,7 @@ const VerticalsContainer = styled.div`
   align-items: center;
   @media (max-width: 800px) {
     flex-direction: column;
+    margin-top: 0rem;
   }
 `;
 
@@ -228,5 +251,9 @@ const StyledFlippy = styled(Flippy)`
   @media (max-width: 800px) {
     height: 55vw;
     width: 60vw;
+  }
+  @media (max-width: 480px) {
+    height: 70vw;
+    width: 80vw;
   }
 `;
