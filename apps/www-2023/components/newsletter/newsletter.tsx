@@ -60,7 +60,7 @@ const StyledNewsletter = styled.div`
 `;
 
 const StyledContent = styled.div`
-  height: 100vh;
+  height: 60vh;
   margin-left: 50vw;
   margin-right: 5rem;
   display: flex;
@@ -70,15 +70,15 @@ const StyledContent = styled.div`
     text-align: justify;
   }
   @media screen and (max-width: 1080px) {
-    padding-top: 5rem;
+    margin-top: 40vh;
     justify-content: flex-start;
     margin-left: 3rem;
     margin-right: 3rem;
     align-items: center;
   }
   @media screen and (max-width: 800px) {
-    margin-left: 1rem;
-    margin-right: 1rem;
+    margin-left: 5vw;
+    margin-right: 5vw;
   }
 `;
 
