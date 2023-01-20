@@ -86,6 +86,9 @@ const StyledButton = styled.button`
   gap: 5px;
   background: ${Colors2023.GRAY.DARK};
   border-radius: 10px;
+  -moz-box-shadow: 0px 0px 10px #765f52;
+  -webkit-box-shadow: 0px 0px 10px #765f52;
+  box-shadow: 0px 0px 10px #765f52;
   //fonts
   font-family: 'Inter';
   font-style: normal;
@@ -95,7 +98,6 @@ const StyledButton = styled.button`
   :hover {
     border: 1.5px solid ${Colors2023.GRAY.LIGHT};
     background: ${Colors2023.GRAY.STANDARD};
-    box-shadow: 10px rgba(118, 211, 239, 0.5);
     cursor: pointer;
     transition: 0.1s;
     padding: 10px 32.5px;
@@ -103,7 +105,6 @@ const StyledButton = styled.button`
   :active {
     border: 1.5px solid ${Colors2023.GRAY.STANDARD};
     background: ${Colors2023.GRAY.LIGHT};
-    box-shadow: 0px 0px 5px rgba(118, 211, 239, 0.5);
     border-radius: 10px;
   }
 `;
