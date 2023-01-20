@@ -17,9 +17,10 @@ export function Newsletter(props: NewsletterProps) {
           <Label>socal&apos;s flagship hackathon</Label>
         </GlowSpan>
         <Text>
-          Located in the heart of sunny Los Angeles, HackSC brings hundreds of
-          hackers, designers, and visionaries from all across the world together
-          for a weekend of{' '}
+          Located in the heart of sunny Los Angeles, based at the University of
+          Southern California in the heart of Los Angeles, HackSC HackSC brings
+          hundreds of hackers, designers, and visionaries from all across the
+          world together for a weekend of{' '}
           <ColorSpan color={Colors2023.BLUE.STANDARD}>innovation</ColorSpan>,{' '}
           <ColorSpan color={Colors2023.YELLOW.STANDARD}>connection</ColorSpan>,
           and <ColorSpan color={Colors2023.RED.STANDARD}>education</ColorSpan>.
@@ -66,12 +67,13 @@ const StyledContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  text-align: center;
   > p {
     text-align: justify;
   }
   @media screen and (max-width: 1080px) {
-    height: 60vh;
-    margin-top: 40vh;
+    height: 50vh;
+    margin-top: 50vh;
     justify-content: flex-start;
     margin-left: 3rem;
     margin-right: 3rem;
@@ -82,5 +84,4 @@ const StyledContent = styled.div`
     margin-right: 5vw;
   }
 `;
-
 export default Newsletter;
