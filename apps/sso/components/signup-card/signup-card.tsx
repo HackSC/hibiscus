@@ -2,14 +2,15 @@
 /* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
 import { useState } from 'react';
-import { GradientSpan, Text } from '@hibiscus/ui';
-import { TrademarkColors, Colors2023 } from '@hibiscus/styles';
+import { H3, Text } from '@hibiscus/ui';
+import { Colors2023 } from '@hibiscus/styles';
 import { useRouter } from 'next/router';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import Image from 'next/image';
 import GrayLink from '../gray-link/gray-link';
 import { container } from 'tsyringe';
 import { MutatingDots } from 'react-loader-spinner';
+import { OneLineText, Button, ColorSpanBold } from '@hibiscus/ui-kit-2023';
 
 /* eslint-disable-next-line */
 export interface SignUpProps {}
@@ -71,30 +72,43 @@ export function SignUpCard(props: SignUpProps) {
   return (
     <Wrapper>
       <Image
-        src="/static/images/Logo.svg"
+        src="/static/images/logo-2023.svg"
         alt="HackSC Logo"
         width={100}
         height={100}
       />
-      <StyledText>
-        Create a <GradientSpan>HackSC Account</GradientSpan>
-      </StyledText>
+      <H3>
+        Create a{' '}
+        <ColorSpanBold color={Colors2023.BLUE.STANDARD}>
+          HackSC Account
+        </ColorSpanBold>
+      </H3>
       <StyledForm onSubmit={handleSubmit}>
-        <Input placeholder="first name" type="text" name="firstname" required />
-        <Input placeholder="last name" type="text" name="lastname" required />
-        <Input
+        <OneLineText
+          placeholder="first name"
+          type="text"
+          name="firstname"
+          required
+        />
+        <OneLineText
+          placeholder="last name"
+          type="text"
+          name="lastname"
+          required
+        />
+        <OneLineText
           placeholder="sample@email.edu"
           type="email"
           name="email"
           required
         />
-        <Input
+        <OneLineText
           placeholder="password"
           type="password"
           name="password"
           required
         />
-        <Input
+        <OneLineText
           placeholder="re-enter password"
           type="password"
           name="confirmPassword"
@@ -105,7 +119,7 @@ export function SignUpCard(props: SignUpProps) {
         >
           {errorMessage}
         </StyledErrorText>
-        <GradientButton type="submit">SIGN UP</GradientButton>
+        <Button color="blue">SIGN UP</Button>
       </StyledForm>
       <GrayLink href="/login">Have an account? Login</GrayLink>
 
@@ -128,10 +142,9 @@ export function SignUpCard(props: SignUpProps) {
 export default SignUpCard;
 
 const Wrapper = styled.div`
-  min-width: 35rem;
-  max-width: 50rem;
-  color: #2b2b2b;
-  background-color: rgba(255, 255, 255, 0.6);
+  min-width: 55vw;
+  max-width: 90vw;
+  background-color: ${Colors2023.GRAY.DARK};
   padding: 5rem 2rem;
   display: flex;
   flex-direction: column;
@@ -139,8 +152,9 @@ const Wrapper = styled.div`
   margin: auto;
   align-items: center;
   border-radius: 20px;
-  border: 4px solid rgba(255, 255, 255, 0.5);
-
+  min-height: 70vh;
+  border: 4px solid ${Colors2023.BLUE.STANDARD};
+  box-shadow: 0px 0px 10px ${Colors2023.BLUE.LIGHT};
   @media (max-width: 400px) {
     min-width: 23rem;
   }
@@ -153,56 +167,11 @@ const StyledForm = styled.form`
   justify-content: center;
   align-items: center;
   padding: 20px;
-`;
-
-const StyledText = styled(Text)`
-  font-size: 24px;
-  padding-top: 1rem;
-  @media (max-width: 400px) {
-    font-size: 20px;
-  }
+  gap: 15px;
 `;
 
 const StyledErrorText = styled(Text)`
   font-size: 20px;
   padding-top: 1rem;
   color: red;
-`;
-
-const Input = styled.input`
-  border: solid 0.1rem #bcbcbc;
-  background-color: #f8f8f8;
-  border-radius: 0.3rem;
-  padding: 10px;
-  padding-left: 15px;
-  font-family: InterVariable, sans-serif;
-  font-size: 1.1rem;
-  color: #676767;
-  width: 100%;
-  margin-top: 1rem;
-  ::placeholder {
-    color: #bcbcbc;
-  }
-  ::-ms-input-placeholder {
-    /* Microsoft Edge */
-    color: #bcbcbc;
-  }
-`;
-
-const GradientButton = styled.button`
-  background: linear-gradient(
-    90deg,
-    ${TrademarkColors.LIGHT_BLUE} 0%,
-    ${TrademarkColors.LIGHT_PURPLE} 100%
-  );
-  color: white;
-  border-radius: 0.3rem;
-  font-family: Intervariable, sans-serif;
-  padding: 10px 15px;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  width: 50%;
-  font-size: 1.1rem;
-  font-weight: bold;
-  cursor: pointer;
 `;

@@ -1,14 +1,14 @@
 import styled from 'styled-components';
-import { Text } from '@hibiscus/ui';
-import { TrademarkColors, Colors2023 } from '@hibiscus/styles';
+import { H3, ItalicText, Text } from '@hibiscus/ui';
+import { Colors2023 } from '@hibiscus/styles';
 import OTPInput from '../otp-input/otp-input';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
-import GrayLink from '../gray-link/gray-link';
 import { container } from 'tsyringe';
 import Image from 'next/image';
 import { MutatingDots } from 'react-loader-spinner';
+import { Button } from '@hibiscus/ui-kit-2023';
 
 export function VerifyCard() {
   const router = useRouter();
@@ -52,18 +52,18 @@ export function VerifyCard() {
   return (
     <StyledVerifyCard>
       <Image
-        src="/static/images/Logo.svg"
+        src="/static/images/logo-2023.svg"
         alt="HackSC Logo"
         width={100}
         height={100}
       />
       <StyledText>
-        We’ve sent you an email containing a unique 6-digit PIN code.
+        We&apos;ve sent you an email containing a unique 6-digit PIN code.
       </StyledText>
-      <StyledSmallText>
+      <ItalicText>
         This email may take up to 2 minutes to arrive. Do not share this code
         with anyone else.
-      </StyledSmallText>
+      </ItalicText>
       <OTPInput
         setPinReady={setPinReady}
         code={code}
@@ -74,7 +74,8 @@ export function VerifyCard() {
       <StyledErrorText style={{ display: hideErrorMessage ? 'block' : 'none' }}>
         Token is expired or incorrect.
       </StyledErrorText>
-      <GradientButton
+      <Button
+        color="blue"
         onClick={handleOTP}
         disabled={!pinReady}
         style={{
@@ -84,11 +85,9 @@ export function VerifyCard() {
         }}
       >
         SUBMIT
-      </GradientButton>
+      </Button>
 
-      <StyledSmallText>
-        If you did not receive your email, please sign up again
-      </StyledSmallText>
+      <Text>If you did not receive your email, please sign up again</Text>
 
       {verifyState === 'verifying' ? (
         <MutatingDots
@@ -109,54 +108,31 @@ export function VerifyCard() {
 export default VerifyCard;
 
 const StyledVerifyCard = styled.div`
-  color: #2b2b2b;
-  background-color: rgba(255, 255, 255, 0.6);
-  padding: 5rem;
+  min-width: 55vw;
+  max-width: 90vw;
+  padding: 5rem 2rem;
   display: flex;
   flex-direction: column;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-left: 10%;
-  margin-right: 10%;
+  margin: auto;
   align-items: center;
   border-radius: 20px;
-  border: 5px rgba(255, 255, 255, 0.3) solid;
-
+  border: 5px solid ${Colors2023.BLUE.STANDARD};
+  box-shadow: 0px 0px 10px ${Colors2023.BLUE.LIGHT};
+  gap: 15px;
+  > p {
+    text-align: center;
+  }
   @media (max-width: 400px) {
     padding: 2rem;
   }
 `;
 
-const StyledText = styled(Text)`
-  font-size: 24px;
-  padding-top: 3rem;
-  color: #2b2b2b;
+const StyledText = styled(H3)`
+  text-align: center;
 `;
 
 const StyledErrorText = styled(Text)`
   font-size: 20px;
   padding-top: 1rem;
   color: red;
-`;
-
-const StyledSmallText = styled(Text)`
-  font-size: 16px;
-  padding-top: 1rem;
-  color: #939393;
-`;
-
-const GradientButton = styled.button`
-  background: linear-gradient(
-    90deg,
-    ${TrademarkColors.LIGHT_BLUE} 0%,
-    ${TrademarkColors.LIGHT_PURPLE} 100%
-  );
-  color: white;
-  font-family: Intervariable, sans-serif;
-  font-weight: 700;
-  font-size: 22px;
-  padding: 15px 70px;
-  margin-top: 2rem;
-  border-radius: 10px;
-  filter: drop-shadow(0px 0px 15px rgba(0, 0, 0, 0.2));
 `;

@@ -101,8 +101,8 @@ export const OTPInputContainer = styled.button`
 `;
 
 export const OTPInputField = styled.div`
-  width: 60px;
-  height: 60px;
+  width: 4rem;
+  height: 4rem;
   border-color: #bcbcbc;
   border-width: 15%;
   border-width: 2px;
@@ -111,9 +111,15 @@ export const OTPInputField = styled.div`
   margin-right: 10px;
   background-color: #f8f8f8;
 
-  @media (max-width: 400px) {
-    width: 40px;
-    height: 40px;
+  @media (max-width: 500px) {
+    width: 3rem;
+    height: 3rem;
+    padding-top: 5px;
+    margin-right: 5px;
+  }
+  @media (max-width: 320px) {
+    width: 2rem;
+    height: 2rem;
     padding-top: 5px;
     margin-right: 5px;
   }
