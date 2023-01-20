@@ -153,6 +153,9 @@ const Wrapper = styled.div`
   align-items: center;
   border-radius: 20px;
   min-height: 70vh;
+  > h3 {
+    text-align: center;
+  }
   border: 4px solid ${Colors2023.BLUE.STANDARD};
   box-shadow: 0px 0px 10px ${Colors2023.BLUE.LIGHT};
   @media (max-width: 400px) {
