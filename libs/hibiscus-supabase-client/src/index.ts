@@ -19,10 +19,11 @@ import {
   SSOApiVerifyToken,
 } from '@hibiscus/types';
 import { deleteCookie, setCookie } from 'cookies-next';
+import { getEnv } from '@hibiscus/env';
 
 @injectable()
 export class HibiscusSupabaseClient {
-  private readonly client: SupabaseClient;
+  private client: SupabaseClient;
 
   constructor() {
     this.client = createClient(
@@ -33,6 +34,15 @@ export class HibiscusSupabaseClient {
 
   getClient() {
     return this.client;
+  }
+
+  setOptions({ useServiceKey }: { useServiceKey: boolean }) {
+    if (useServiceKey) {
+      this.client = createClient(
+        getEnv().Hibiscus.Supabase.apiUrl,
+        getEnv().Hibiscus.Supabase.serviceKey
+      );
+    }
   }
 
   /**
@@ -303,15 +313,6 @@ export class HibiscusSupabaseClient {
       }
     );
   }
-}
-
-interface UserProfile {
-  first_name: string;
-  last_name: string;
-  user_id: string;
-  email?: string;
-  role?: number;
-  team_id?: number;
 }
 
 type UserProfileRow = Database['public']['Tables']['user_profiles']['Row'];

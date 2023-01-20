@@ -47,3 +47,10 @@ Thumbs.db
 
 # Next.js
 .next
+
+# Python
+/**/venv
+/**/__pycache__
+
+# Airplane
+/**/.airplane

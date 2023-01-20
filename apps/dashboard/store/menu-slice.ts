@@ -10,7 +10,7 @@ interface TabRoute {
 const tabRoutes: TabRoute[] = [
   { displayName: 'Home', url: '/' },
   { displayName: 'Apply as a hacker', url: '/apply-2023' },
-  { displayName: 'Team', url: '/team' },
+  // { displayName: 'Team', url: '/team' },
 ];
 
 export interface MenuState {

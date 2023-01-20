@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
 import { H5, Link, Text } from '@hibiscus/ui';
-import { ColorSpanBold } from '@hibiscus/ui-kit-2023';
+import { ColorSpanBold, GlowSpan } from '@hibiscus/ui-kit-2023';
 import { Colors2023 } from '@hibiscus/styles';
 
 /* eslint-disable-next-line */
@@ -13,7 +13,7 @@ export function DesktopNavbar(props: DesktopNavbarProps) {
       <NavbarLeftLogoText>
         <Link href={'/'} anchortagpropsoverride={{ target: '_self' }}>
           <LogoContainer>
-            <img src="./img/logo.svg" alt="HackSC 2023 Logo" />
+            <img src="./img/logos/logo.svg" alt="HackSC 2023 Logo" />
           </LogoContainer>
         </Link>
       </NavbarLeftLogoText>
@@ -21,8 +21,13 @@ export function DesktopNavbar(props: DesktopNavbarProps) {
         <Link href={'/'} anchortagpropsoverride={{ target: '_self' }}>
           <MenuOption>
             <H5>
-              <ColorSpanBold color={Colors2023.BLUE.STANDARD}>
-                Overview
+              <ColorSpanBold color={Colors2023.PURPLE.STANDARD}>
+                <GlowSpan
+                  color={Colors2023.PURPLE.STANDARD}
+                  shadowColor={Colors2023.PURPLE.STANDARD}
+                >
+                  Overview
+                </GlowSpan>
               </ColorSpanBold>
             </H5>
           </MenuOption>
@@ -72,9 +77,8 @@ const StyledDesktopNavbar = styled.nav`
 `;
 
 const LogoContainer = styled.div`
-  width: 25vw;
   > img {
-    width: 25vw;
+    width: 15rem;
   }
 `;
 
@@ -86,8 +90,7 @@ const RightMenuDiv = styled.div`
 
 const MenuOption = styled.div`
   color: ${Colors2023.GRAY.LIGHT};
-  border: none;
-  background: none;
+
   font-size: 1.5rem;
   font-weight: 400;
   padding: 1rem;

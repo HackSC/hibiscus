@@ -137,6 +137,7 @@ const Dropdown = styled.div`
   gap: 10px;
   margin-top: 10px;
   width: 100%;
+  z-index: 100;
 `;
 
 const DropdownItem = styled.button`
@@ -148,6 +149,7 @@ const DropdownItem = styled.button`
   border: none;
   border-radius: 5px;
   color: ${Colors2023.GRAY.LIGHT};
+  z-index: 100;
   :hover {
     background-color: ${Colors2023.GRAY.SHLIGHT};
   }

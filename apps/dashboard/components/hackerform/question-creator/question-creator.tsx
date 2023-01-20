@@ -8,6 +8,7 @@ import { GetInputResponseCb } from '../../../common/types';
 import { useHackform } from '../../../hooks/use-hackform/use-hackform';
 import { Colors2023 } from '@hibiscus/styles';
 import { Text } from '@hibiscus/ui';
+import Image from 'next/image';
 
 interface QuestionCreatorProps {
   inputComponentChildren: React.ReactNode;
@@ -55,33 +56,86 @@ export const QuestionCreator = ({
     }
   };
 
+  const getRandomIllustration = () => {
+    const illustrations = [
+      'heart.svg',
+      'heart-flying.svg',
+      'heart-standing.svg',
+      'heart-astronaut.svg',
+      'detective.svg',
+      'detective-dance.svg',
+      'detective-lying.svg',
+      'detective-curious.svg',
+      'detective-astronaut.svg',
+      'purple-planet-jump.svg',
+      'purple-planet-stand.svg',
+      'purple-planet.svg',
+      'puzzle.svg',
+      'purple-puzzle.svg',
+      'green-puzzle.svg',
+      'stacking-puzzle.svg',
+      'earth.svg',
+      'earth-waving.svg',
+      'earth-standing.svg',
+      'earth-dancing.svg',
+      'postcard.svg',
+      'postcard-plane.svg',
+      'postcard-traveler.svg',
+      'postcard-world.svg',
+      'stamp-coin.svg',
+      'stamp-puzzle.svg',
+      'stamp-heart.svg',
+      'stamp-planet.svg',
+      'stamp-earth.svg',
+      'stamp-hacksc.svg',
+    ];
+
+    const pathname =
+      '/hackform-illustrations/' +
+      illustrations[Math.floor(Math.random() * illustrations.length)];
+    return pathname;
+  };
+
   return (
     <PageWrapper>
-      <QuestionWrapper>
-        <HackformQuestionHeader
-          question={question ?? hackformUtils.getCurrentQuestion()}
-          qi={qi ?? currentQuestionIndex}
-        />
-        <InputAndButtonWrapper submitButtonUnder={submitButtonUnder}>
-          {inputComponentChildren}
-          <ButtonHintTextContainer>
-            <Button
-              color="black"
-              onClick={
-                handleSubmitWithValidation ??
-                hackformUtils.createCbSubmitValidate(getInputResponse)
-              }
-            >
-              OK
-            </Button>
-            <SmallText>press Enter</SmallText>
-            <IoReturnDownBackOutline />
-          </ButtonHintTextContainer>
-        </InputAndButtonWrapper>
-        <ErrorContainer>
-          <ErrorChildren />
-        </ErrorContainer>
-      </QuestionWrapper>
+      <IllustrationAndQuestionWrapper>
+        <QuestionWrapper>
+          <HackformQuestionHeader
+            question={question ?? hackformUtils.getCurrentQuestion()}
+            qi={qi ?? currentQuestionIndex}
+          />
+          <InputAndButtonWrapper submitButtonUnder={submitButtonUnder}>
+            {inputComponentChildren}
+            <ButtonHintTextContainer>
+              <Button
+                color="black"
+                onClick={
+                  handleSubmitWithValidation ??
+                  hackformUtils.createCbSubmitValidate(getInputResponse)
+                }
+              >
+                OK
+              </Button>
+              <SmallText>press Enter</SmallText>
+              <StyledEnterIcon>
+                <IoReturnDownBackOutline />
+              </StyledEnterIcon>
+            </ButtonHintTextContainer>
+          </InputAndButtonWrapper>
+          <ErrorContainer>
+            <ErrorChildren />
+          </ErrorContainer>
+        </QuestionWrapper>
+        <IllustrationWrapper>
+          <Image
+            style={{ margin: '5px 0 0 20px' }}
+            width="350"
+            height="250"
+            src={getRandomIllustration()}
+            alt="Illustration"
+          />
+        </IllustrationWrapper>
+      </IllustrationAndQuestionWrapper>
       <HackformBackNextWidget
         goNextQuestion={
           goNextQuestion ??
@@ -97,6 +151,25 @@ export const QuestionCreator = ({
 };
 
 export default QuestionCreator;
+
+const IllustrationAndQuestionWrapper = styled.div`
+  display: flex;
+  gap: 10px;
+  height: 100%;
+`;
+
+const IllustrationWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  height: 100%;
+  margin-left: 5rem;
+
+  @media (max-width: 400px) {
+    display: none;
+  }
+`;
 
 const InputAndButtonWrapper = styled.div<{
   submitButtonUnder?: boolean;
@@ -123,6 +196,16 @@ const ErrorText = styled(Text)`
 
 const SmallText = styled(Text)`
   font-size: small;
+
+  @media (max-width: 400px) {
+    display: none;
+  }
+`;
+
+const StyledEnterIcon = styled.div`
+  @media (max-width: 400px) {
+    display: none;
+  }
 `;
 
 const PageWrapper = styled.div`
@@ -136,6 +219,9 @@ const ButtonHintTextContainer = styled.div`
   display: flex;
   gap: 10px;
   align-items: center;
+  @media (max-width: 400px) {
+    padding-right: 20px;
+  }
 `;
 
 const ErrorContainer = styled.div`

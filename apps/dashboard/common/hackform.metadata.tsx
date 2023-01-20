@@ -9,10 +9,10 @@ import { Link } from '@hibiscus/ui';
 import { hackformLinks } from './constants';
 
 const generateOptionsGradyear = (): Option[] => {
-  const opts: string[] = ['Summer 2023', 'Fall 2023'];
-  for (const season of ['Spring', 'Summer', 'Fall']) {
-    for (const inc of [...Array(4).keys()]) {
-      opts.push(`${season} 202${4 + inc}`);
+  const opts: string[] = [];
+  for (const inc of [...Array(5).keys()]) {
+    for (const season of ['Spring', 'Fall']) {
+      opts.push(`${season} 202${3 + inc}`);
     }
   }
 
@@ -229,8 +229,7 @@ export const formMetadata2023HackerApps: HackformMetadata = {
       },
     },
     {
-      title:
-        'Which race or ethnicity best describes you? (Please choose only one.)',
+      title: 'Which race or ethnicity best describes you?',
       type: HackformQuestionType.MultipleSelect,
       hasOtherField: true,
       otherFieldLabel: 'Other',
@@ -462,19 +461,21 @@ export const formMetadata2023HackerApps: HackformMetadata = {
       ],
     },
     {
+      title: "If you're applying with others as a team, drop their emails here",
+      subtitle:
+        'Put them comma-separated. We will review everyone as a team going into the hackathon!',
+      type: HackformQuestionType.LongText,
+    },
+    {
       title: (
         <span>
           I have read and agree to the{' '}
           <Link href={hackformLinks.HackSC.CodeOfConduct} passHref underline>
             HackSC Code of Conduct
-          </Link>
-          ,{' '}
+          </Link>{' '}
+          and{' '}
           <Link href={hackformLinks.HackSC.TermsOfService} passHref underline>
             HackSC Terms and Conditions
-          </Link>
-          , as well as the{' '}
-          <Link href={hackformLinks.MLH.CodeOfConduct} passHref underline>
-            MLH Code of Conduct
           </Link>
           .
         </span>
@@ -489,51 +490,51 @@ export const formMetadata2023HackerApps: HackformMetadata = {
         return { valid: true };
       },
     },
-    {
-      title: (
-        <span>
-          I authorize you to share my application/registration information with
-          Major League Hacking for event administration, ranking, and MLH
-          administration in-line with the{' '}
-          <Link href={hackformLinks.MLH.PrivacyPolicy} passHref underline>
-            MLH Privacy Policy
-          </Link>
-          . I further agree to the terms of both the{' '}
-          <Link
-            href={hackformLinks.MLH.ContestTermsAndConditions}
-            passHref
-            underline
-          >
-            MLH Contest Terms and Conditions
-          </Link>{' '}
-          and the{' '}
-          <Link href={hackformLinks.MLH.PrivacyPolicy} passHref underline>
-            MLH Privacy Policy
-          </Link>
-        </span>
-      ),
-      type: HackformQuestionType.SingleChoice,
-      required: true,
-      options: [{ value: 'y', displayName: 'Yes' }],
-      validationFunction: (input) => {
-        if (!input.singleChoiceValue) {
-          return { valid: false, errorDescription: 'This field is required' };
-        }
-        return { valid: true };
-      },
-    },
-    {
-      title: `I authorize MLH to send me an email where I can further opt into the MLH Hacker, Events, or Organizer Newsletters and other communications from MLH.`,
-      type: HackformQuestionType.SingleChoice,
-      required: true,
-      options: [{ value: 'y', displayName: 'Yes' }],
-      validationFunction: (input) => {
-        if (!input.singleChoiceValue) {
-          return { valid: false, errorDescription: 'This field is required' };
-        }
-        return { valid: true };
-      },
-    },
+    // {
+    //   title: (
+    //     <span>
+    //       I authorize you to share my application/registration information with
+    //       Major League Hacking for event administration, ranking, and MLH
+    //       administration in-line with the{' '}
+    //       <Link href={hackformLinks.MLH.PrivacyPolicy} passHref underline>
+    //         MLH Privacy Policy
+    //       </Link>
+    //       . I further agree to the terms of both the{' '}
+    //       <Link
+    //         href={hackformLinks.MLH.ContestTermsAndConditions}
+    //         passHref
+    //         underline
+    //       >
+    //         MLH Contest Terms and Conditions
+    //       </Link>{' '}
+    //       and the{' '}
+    //       <Link href={hackformLinks.MLH.PrivacyPolicy} passHref underline>
+    //         MLH Privacy Policy
+    //       </Link>
+    //     </span>
+    //   ),
+    //   type: HackformQuestionType.SingleChoice,
+    //   required: true,
+    //   options: [{ value: 'y', displayName: 'Yes' }],
+    //   validationFunction: (input) => {
+    //     if (!input.singleChoiceValue) {
+    //       return { valid: false, errorDescription: 'This field is required' };
+    //     }
+    //     return { valid: true };
+    //   },
+    // },
+    //   {
+    //     title: `I authorize MLH to send me an email where I can further opt into the MLH Hacker, Events, or Organizer Newsletters and other communications from MLH.`,
+    //     type: HackformQuestionType.SingleChoice,
+    //     required: true,
+    //     options: [{ value: 'y', displayName: 'Yes' }],
+    //     validationFunction: (input) => {
+    //       if (!input.singleChoiceValue) {
+    //         return { valid: false, errorDescription: 'This field is required' };
+    //       }
+    //       return { valid: true };
+    //     },
+    //   },
   ],
   end: {
     title: 'Thank you for applying!',

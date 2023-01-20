@@ -2,7 +2,7 @@ import { render } from '@testing-library/react';
 
 import OTPInput from './otp-input';
 
-describe('LoginCard', () => {
+describe('OTPInput', () => {
   it('should render successfully', () => {
     const { baseElement } = render(
       <OTPInput
@@ -10,6 +10,7 @@ describe('LoginCard', () => {
         code={undefined}
         setCode={undefined}
         maxLength={undefined}
+        handleKeyDown={undefined}
       />
     );
     expect(baseElement).toBeTruthy();

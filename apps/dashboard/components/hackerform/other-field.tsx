@@ -30,7 +30,7 @@ export const OtherField = ({
         onChange={handleChangeValue}
         checked={checked}
       />
-      <OneLineText
+      <StyledOneLineText
         onInput={handleInputOther}
         disabled={disabledTextInput}
         value={valueTextInput}
@@ -42,5 +42,13 @@ export const OtherField = ({
 
 const OtherWrapper = styled.div`
   display: flex;
+  @media (max-width: 400px) {
+    flex-direction: column;
+    padding-bottom: 2rem;
+  }
   gap: 10px;
+`;
+
+const StyledOneLineText = styled(OneLineText)`
+  margin-top: -1rem;
 `;
