@@ -59,7 +59,7 @@ export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
         anchortagpropsoverride={{ target: '_self' }}
         onClick={handleSubmit}
       >
-        <Button color="blue">Go to Home</Button>
+        <Button color="blue">SUBMIT YOUR APPLICATION</Button>
       </Link>
     </Wrapper>
   );
