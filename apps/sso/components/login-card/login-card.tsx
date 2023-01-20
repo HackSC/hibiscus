@@ -86,8 +86,8 @@ export function LoginCard() {
         <MutatingDots
           height="100"
           width="100"
-          color={Colors2023.PINK.LIGHT}
-          secondaryColor={Colors2023.PINK.LIGHT}
+          color={Colors2023.BLUE.LIGHT}
+          secondaryColor={Colors2023.BLUE.LIGHT}
           radius="12.5"
           ariaLabel="mutating-dots-loading"
         />
