@@ -16009,6 +16009,13 @@ react-refresh@^0.14.0:
   resolved "https://registry.yarnpkg.com/react-refresh/-/react-refresh-0.14.0.tgz#4e02825378a5f227079554d4284889354e5f553e"
   integrity sha512-wViHqhAd8OHeLS/IRMJjTSDHF3U9eWi62F/MledQGPdJGDhodXJ9PBLNGr6WWL7qlH12Mt3TyTpbS+hGXMjCzQ==
 
+react-resize-detector@^8.0.2:
+  version "8.0.2"
+  resolved "https://registry.yarnpkg.com/react-resize-detector/-/react-resize-detector-8.0.2.tgz#e7329904581d89e84df3a098d10c6bb716c6aeec"
+  integrity sha512-9o0RcWV/gi3raRc6jnqim8j1OFYlcWAWkTWCRCrRl0pgk/9ixYlCEhxxA3rwM9RIy9oLkV++SpY3JuRUYXsiRA==
+  dependencies:
+    lodash "^4.17.21"
+
 react-shallow-renderer@^16.15.0:
   version "16.15.0"
   resolved "https://registry.yarnpkg.com/react-shallow-renderer/-/react-shallow-renderer-16.15.0.tgz#48fb2cf9b23d23cde96708fe5273a7d3446f4457"
