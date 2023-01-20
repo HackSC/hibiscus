@@ -8,7 +8,12 @@ import GrayLink from '../gray-link/gray-link';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { container } from 'tsyringe';
 import { MutatingDots } from 'react-loader-spinner';
-import { Button, ColorSpanBold, OneLineText } from '@hibiscus/ui-kit-2023';
+import {
+  Button,
+  ColorSpanBold,
+  OneLinePassword,
+  OneLineText,
+} from '@hibiscus/ui-kit-2023';
 
 export function LoginCard() {
   const [hideErrorMessage, setHideErrorMessage] = useState(true);
@@ -66,7 +71,7 @@ export function LoginCard() {
           name="email"
           required
         />
-        <OneLineText
+        <OneLinePassword
           placeholder="enter your password"
           type="password"
           name="password"

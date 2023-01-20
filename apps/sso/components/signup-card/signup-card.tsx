@@ -10,7 +10,12 @@ import Image from 'next/image';
 import GrayLink from '../gray-link/gray-link';
 import { container } from 'tsyringe';
 import { MutatingDots } from 'react-loader-spinner';
-import { OneLineText, Button, ColorSpanBold } from '@hibiscus/ui-kit-2023';
+import {
+  OneLineText,
+  Button,
+  ColorSpanBold,
+  OneLinePassword,
+} from '@hibiscus/ui-kit-2023';
 
 /* eslint-disable-next-line */
 export interface SignUpProps {}
@@ -102,13 +107,13 @@ export function SignUpCard(props: SignUpProps) {
           name="email"
           required
         />
-        <OneLineText
+        <OneLinePassword
           placeholder="password"
           type="password"
           name="password"
           required
         />
-        <OneLineText
+        <OneLinePassword
           placeholder="re-enter password"
           type="password"
           name="confirmPassword"
