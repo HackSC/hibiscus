@@ -1,9 +1,8 @@
-import { H1, H3 } from '@hibiscus/ui';
 import styled from 'styled-components';
 import useHibiscusUser from '../hooks/use-hibiscus-user/use-hibiscus-user';
-import { getColorsForRole } from '../common/role.utils';
 import { HibiscusRole } from '@hibiscus/types';
 import HackerPortal from '../components/hacker-portal/hacker-portal';
+import SponsorPortal from '../components/sponsor-portal/sponsor-portal';
 
 export function Index() {
   const { user } = useHibiscusUser();
@@ -12,10 +11,10 @@ export function Index() {
     return <>Loading</>;
   }
 
-  const userColors = getColorsForRole(user?.role ?? HibiscusRole.HACKER);
-
   const renderDashboard = () => {
     if (user.role === HibiscusRole.HACKER) return <HackerPortal user={user} />;
+    if (user.role === HibiscusRole.SPONSOR)
+      return <SponsorPortal user={user} />;
   };
 
   return (
@@ -29,21 +28,6 @@ export function Index() {
             alignItems: 'center',
           }}
         >
-          <WelcomeContainer>
-            <H1
-              style={{
-                color: userColors.light,
-                fontSize: '30px',
-                textShadow: `0px 0px 10px ${userColors.standard}`,
-              }}
-            >
-              Welcome, {user.firstName}
-            </H1>
-            <H3 style={{ color: '#989898' }}>
-              What would you like to do today?
-            </H3>
-          </WelcomeContainer>
-
           {/* <Search
               placeholder={'Search...'}
               onInput={function (value: string): void {
