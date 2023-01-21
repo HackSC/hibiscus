@@ -461,6 +461,12 @@ export const formMetadata2023HackerApps: HackformMetadata = {
       ],
     },
     {
+      title: "If you're applying with others as a team, drop their emails here",
+      subtitle:
+        'Put them comma-separated. We will review everyone as a team going into the hackathon!',
+      type: HackformQuestionType.LongText,
+    },
+    {
       title: (
         <span>
           I have read and agree to the{' '}

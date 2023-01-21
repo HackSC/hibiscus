@@ -1,4 +1,9 @@
 import moment from 'moment';
+import { NextApiRequest, NextApiResponse } from 'next';
+import { getClientIp } from 'request-ip';
+import slowDown from 'express-slow-down';
+import rateLimit from 'express-rate-limit';
+import { getEnv } from '@hibiscus/env';
 
 export const getWordCount = (text: string) =>
   text.trim().length !== 0 ? text.trim().split(/\s+/).length : 0;
@@ -54,4 +59,50 @@ export const isUnder = (text: string, min: number) => {
 export const isAbove = (text: string, max: number) => {
   const wc = getWordCount(text);
   return wc > max;
+};
+
+/**
+ * Apply middleware to Next.js API handler
+ * @param middleware middleware
+ * @returns an API handler with the middleware applied
+ */
+export const applyMiddleware =
+  (middleware) => (request: NextApiRequest, response: NextApiResponse) =>
+    new Promise((resolve, reject) => {
+      middleware(request, response, (result) =>
+        result instanceof Error ? reject(result) : resolve(result)
+      );
+    });
+
+const getIP = (request) =>
+  getClientIp(request) ||
+  request.headers['x-forwarded-for'] ||
+  request.headers['x-real-ip'] ||
+  request.socket.remoteAddress;
+
+export const getRateLimitMiddlewares = ({
+  limit = 10,
+  windowMs = 60 * 1000,
+  delayAfter = Math.round(10 / 2),
+  delayMs = 500,
+} = {}) => [
+  slowDown({ keyGenerator: getIP, windowMs, delayAfter, delayMs }),
+  rateLimit({ keyGenerator: getIP, windowMs, max: limit }),
+];
+
+export const rateLimitHandler = async (
+  req: NextApiRequest,
+  res: NextApiResponse
+) => {
+  // rate limiting
+  const middlewares = getRateLimitMiddlewares({ limit: 50 }).map(
+    applyMiddleware
+  );
+  await Promise.all(middlewares.map((middleware) => middleware(req, res)));
+};
+
+export const getTokensFromNextRequest = (req: NextApiRequest) => {
+  const accessToken = req.cookies[getEnv().Hibiscus.Cookies.accessTokenName];
+  const refreshToken = req.cookies[getEnv().Hibiscus.Cookies.refreshTokenName];
+  return { refreshToken, accessToken };
 };

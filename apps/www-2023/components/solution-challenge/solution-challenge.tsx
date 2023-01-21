@@ -11,7 +11,7 @@ export function SolutionChallenge(props: SolutionChallengeProps) {
       <Label>
         <GlowSpan
           color={Colors2023.GRAY.LIGHT}
-          shadowColor={Colors2023.BLUE.STANDARD}
+          shadowColor={Colors2023.YELLOW.STANDARD}
         >
           Solution Challenge
         </GlowSpan>
@@ -41,4 +41,7 @@ const StyledSolutionChallenge = styled.div`
 const Blurb = styled(Text)`
   text-align: center;
   margin: 2rem 7rem;
+  @media (max-width: 800px) {
+    margin: 2rem 3rem;
+  }
 `;

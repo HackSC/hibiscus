@@ -1,10 +1,13 @@
 import styled from 'styled-components';
 import Navbar from '../components/navbar/navbar';
 import Hero from '../components/hero/hero';
+import ApplyNow from '../components/apply-now/apply-now';
+import Newsletter from '../components/newsletter/newsletter';
 import Topic from '../components/topic/topic';
 import Verticals from '../components/verticals/verticals';
 import SolutionChallenge from '../components/solution-challenge/solution-challenge';
 import Speakers from '../components/speakers/speakers';
+import Sponsors from '../components/sponsors/sponsors';
 import FAQs from '../components/faqs/faqs';
 import Footer from '../components/footer/footer';
 
@@ -15,7 +18,9 @@ export function Index() {
         <Navbar />
       </NavbarWrapper>
       <HeroSection>
+        <ApplyNow />
         <Hero />
+        <Newsletter />
         <Topic />
       </HeroSection>
       <VerticalsSection>
@@ -25,6 +30,9 @@ export function Index() {
       <SpeakerSection>
         <Speakers />
       </SpeakerSection>
+      <SponsorSection>
+        <Sponsors />
+      </SponsorSection>
       <FAQSection>
         <FAQs />
       </FAQSection>
@@ -44,13 +52,13 @@ const MainPageWrapper = styled.div`
 `;
 
 const NavbarWrapper = styled.div`
-  padding-top: 2rem;
   display: flex;
   justify-content: center;
-  margin-top: 5rem;
 `;
 
-const HeroSection = styled.div``;
+const HeroSection = styled.div`
+  max-width: 100vw;
+`;
 
 const VerticalsSection = styled.div`
   display: flex;
@@ -64,6 +72,10 @@ const SpeakerSection = styled.div`
   @media (max-width: 800px) {
     height: 155vw;
   }
+`;
+
+const SponsorSection = styled.div`
+  margin: auto;
 `;
 
 const FAQSection = styled.div``;

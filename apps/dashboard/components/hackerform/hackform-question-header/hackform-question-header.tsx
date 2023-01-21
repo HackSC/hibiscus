@@ -2,6 +2,7 @@ import { Colors2023 } from '@hibiscus/styles';
 import { HackformQuestion } from '@hibiscus/types';
 import { H1, H3, H4 } from '@hibiscus/ui';
 import styled from 'styled-components';
+import { SpanRed } from '../../red-span';
 
 interface HackformQuestionHeaderProps {
   question: HackformQuestion;
@@ -33,8 +34,4 @@ export default HackformQuestionHeader;
 const Wrapper = styled.div`
   color: ${Colors2023.GRAY.LIGHT};
   max-width: 100rem;
-`;
-
-const SpanRed = styled.span`
-  color: ${Colors2023.RED.STANDARD};
 `;
