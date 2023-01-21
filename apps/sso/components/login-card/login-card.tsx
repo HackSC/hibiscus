@@ -1,13 +1,19 @@
 import styled from 'styled-components';
 import { useState } from 'react';
-import { GradientSpan, Text } from '@hibiscus/ui';
-import { Colors2023, TrademarkColors } from '@hibiscus/styles';
+import { H3, Text } from '@hibiscus/ui';
+import { Colors2023 } from '@hibiscus/styles';
 import Image from 'next/image';
 import * as SSOClient from '@hibiscus/sso-client';
 import GrayLink from '../gray-link/gray-link';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { container } from 'tsyringe';
 import { MutatingDots } from 'react-loader-spinner';
+import {
+  Button,
+  ColorSpanBold,
+  OneLinePassword,
+  OneLineText,
+} from '@hibiscus/ui-kit-2023';
 
 export function LoginCard() {
   const [hideErrorMessage, setHideErrorMessage] = useState(true);
@@ -47,22 +53,25 @@ export function LoginCard() {
   return (
     <StyledLoginCard>
       <Image
-        src="/static/images/Logo.svg"
+        src="/static/images/logo-2023.svg"
         alt="HackSC Logo"
         width={100}
         height={100}
       />
-      <StyledText>
-        Login to your <GradientSpan>HackSC Account</GradientSpan>
-      </StyledText>
+      <H3>
+        Login to your{' '}
+        <ColorSpanBold color={Colors2023.BLUE.STANDARD}>
+          HackSC Account
+        </ColorSpanBold>
+      </H3>
       <StyledForm onSubmit={handleSubmit}>
-        <Input
+        <OneLineText
           placeholder="enter your email"
           type="email"
           name="email"
           required
         />
-        <Input
+        <OneLinePassword
           placeholder="enter your password"
           type="password"
           name="password"
@@ -73,7 +82,7 @@ export function LoginCard() {
         >
           {errorMessage}
         </StyledErrorText>
-        <GradientButton type="submit">SIGN IN</GradientButton>
+        <Button color="blue">SIGN IN</Button>
       </StyledForm>
       <GrayLink href="/reset-email">Forgot Password?</GrayLink>
       <GrayLink href="/signup">Create a HackSC account</GrayLink>
@@ -82,8 +91,8 @@ export function LoginCard() {
         <MutatingDots
           height="100"
           width="100"
-          color={Colors2023.PINK.LIGHT}
-          secondaryColor={Colors2023.PINK.LIGHT}
+          color={Colors2023.BLUE.LIGHT}
+          secondaryColor={Colors2023.BLUE.LIGHT}
           radius="12.5"
           ariaLabel="mutating-dots-loading"
         />
@@ -97,10 +106,8 @@ export function LoginCard() {
 export default LoginCard;
 
 const StyledLoginCard = styled.div`
-  min-width: 35rem;
-  max-width: 50rem;
-  color: #2b2b2b;
-  background-color: rgba(255, 255, 255, 0.6);
+  min-width: 55vw;
+  max-width: 90vw;
   padding: 5rem 2rem;
   display: flex;
   flex-direction: column;
@@ -108,11 +115,12 @@ const StyledLoginCard = styled.div`
   margin: auto;
   align-items: center;
   border-radius: 20px;
-  border: 4px solid rgba(255, 255, 255, 0.5);
-
-  @media (max-width: 400px) {
-    min-width: 23rem;
+  min-height: 55vh;
+  > h3 {
+    text-align: center;
   }
+  border: 4px solid ${Colors2023.BLUE.STANDARD};
+  box-shadow: 0px 0px 10px ${Colors2023.BLUE.LIGHT};
 `;
 
 const StyledForm = styled.form`
@@ -122,61 +130,11 @@ const StyledForm = styled.form`
   justify-content: center;
   align-items: center;
   padding: 20px;
-`;
-
-const StyledText = styled(Text)`
-  font-size: 24px;
-  padding-top: 1rem;
-  @media (max-width: 400px) {
-    font-size: 20px;
-  }
+  gap: 15px;
 `;
 
 const StyledErrorText = styled(Text)`
   font-size: 20px;
   padding-top: 1rem;
   color: red;
-`;
-
-const Input = styled.input`
-  border: solid 0.1rem #bcbcbc;
-  background-color: #f8f8f8;
-  border-radius: 0.3rem;
-  padding: 10px;
-  padding-left: 15px;
-  font-family: InterVariable, sans-serif;
-  font-size: 1.1rem;
-  color: #676767;
-  width: 100%;
-  margin-top: 1rem;
-  ::placeholder {
-    color: #bcbcbc;
-  }
-  ::-ms-input-placeholder {
-    /* Microsoft Edge */
-    color: #bcbcbc;
-  }
-`;
-
-const GradientButton = styled.button`
-  background: linear-gradient(
-    90deg,
-    ${TrademarkColors.LIGHT_BLUE} 0%,
-    ${TrademarkColors.LIGHT_PURPLE} 100%
-  );
-  color: white;
-  border-radius: 0.3rem;
-  padding: 10px 15px;
-  cursor: pointer;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  width: 50%;
-  font-size: 1.1rem;
-  font-weight: bold;
-`;
-
-const StyledLink = styled(Text)`
-  font-size: 1rem;
-  color: #939393;
-  text-decoration: underline;
 `;

@@ -2,6 +2,7 @@
 import styled from 'styled-components';
 import { useRef, useState, useEffect } from 'react';
 import { Text } from '@hibiscus/ui';
+import { Colors2023 } from '@hibiscus/styles';
 
 export function OTPInput({
   setPinReady,
@@ -96,24 +97,28 @@ export const HiddenTextInput = styled.input`
 
 export const OTPInputContainer = styled.button`
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
   background-color: transparent;
 `;
 
 export const OTPInputField = styled.div`
-  width: 60px;
-  height: 60px;
-  border-color: #bcbcbc;
+  width: 4rem;
+  height: 4rem;
+  border-color: ${Colors2023.GRAY.LIGHT};
   border-width: 15%;
   border-width: 2px;
   border-radius: 10px;
   padding-top: 15px;
   margin-right: 10px;
-  background-color: #f8f8f8;
-
-  @media (max-width: 400px) {
-    width: 40px;
-    height: 40px;
+  @media (max-width: 500px) {
+    width: 3rem;
+    height: 3rem;
+    padding-top: 5px;
+    margin-right: 5px;
+  }
+  @media (max-width: 320px) {
+    width: 2rem;
+    height: 2rem;
     padding-top: 5px;
     margin-right: 5px;
   }
@@ -123,9 +128,9 @@ export const OTPInputText = styled(Text)`
   font-size: 22px;
   font-weight: bold;
   text-align: center;
-  color: #2b2b2b;
+  color: ${Colors2023.GRAY.LIGHT};
 `;
 
 export const OTPInputFocused = styled(OTPInputField)`
-  border-color: #d770c7;
+  border-color: ${Colors2023.BLUE.STANDARD};
 `;
