@@ -31,6 +31,132 @@ export interface Database {
   };
   public: {
     Tables: {
+      application_status: {
+        Row: {
+          id: number;
+          status: string | null;
+        };
+        Insert: {
+          id?: number;
+          status?: string | null;
+        };
+        Update: {
+          id?: number;
+          status?: string | null;
+        };
+      };
+      discord_invites: {
+        Row: {
+          id: number;
+          invite_code: string | null;
+          invite_used: boolean;
+          time_invite_used: string | null;
+          user_profile_id: string | null;
+        };
+        Insert: {
+          id?: number;
+          invite_code?: string | null;
+          invite_used: boolean;
+          time_invite_used?: string | null;
+          user_profile_id?: string | null;
+        };
+        Update: {
+          id?: number;
+          invite_code?: string | null;
+          invite_used?: boolean;
+          time_invite_used?: string | null;
+          user_profile_id?: string | null;
+        };
+      };
+      discord_profiles: {
+        Row: {
+          discord_profile: string | null;
+          id: number;
+          user_profile_id: string | null;
+        };
+        Insert: {
+          discord_profile?: string | null;
+          id?: number;
+          user_profile_id?: string | null;
+        };
+        Update: {
+          discord_profile?: string | null;
+          id?: number;
+          user_profile_id?: string | null;
+        };
+      };
+      events: {
+        Row: {
+          created_at: string | null;
+          description: string | null;
+          end: string;
+          id: number;
+          location: string;
+          name: string;
+          start: string;
+        };
+        Insert: {
+          created_at?: string | null;
+          description?: string | null;
+          end: string;
+          id?: number;
+          location: string;
+          name: string;
+          start: string;
+        };
+        Update: {
+          created_at?: string | null;
+          description?: string | null;
+          end?: string;
+          id?: number;
+          location?: string;
+          name?: string;
+          start?: string;
+        };
+      };
+      invitations: {
+        Row: {
+          created_at: string | null;
+          id: string;
+          invited_id: string;
+          organizer_id: string;
+          team_id: string;
+        };
+        Insert: {
+          created_at?: string | null;
+          id?: string;
+          invited_id: string;
+          organizer_id: string;
+          team_id: string;
+        };
+        Update: {
+          created_at?: string | null;
+          id?: string;
+          invited_id?: string;
+          organizer_id?: string;
+          team_id?: string;
+        };
+      };
+      pinned_events: {
+        Row: {
+          created_at: string | null;
+          event_id: number;
+          id: number;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string | null;
+          event_id: number;
+          id?: number;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string | null;
+          event_id?: number;
+          id?: number;
+          user_id?: string;
+        };
+      };
       pointr_shortlinks: {
         Row: {
           created_at: string | null;
@@ -54,46 +180,81 @@ export interface Database {
       roles: {
         Row: {
           created_at: string | null;
+          discord_role_id: string | null;
           id: number;
           name: string;
         };
         Insert: {
           created_at?: string | null;
+          discord_role_id?: string | null;
           id?: number;
           name: string;
         };
         Update: {
           created_at?: string | null;
+          discord_role_id?: string | null;
           id?: number;
           name?: string;
+        };
+      };
+      teams: {
+        Row: {
+          created_at: string | null;
+          description: string | null;
+          name: string;
+          organizer_id: string;
+          photo_key: string | null;
+          team_id: string;
+        };
+        Insert: {
+          created_at?: string | null;
+          description?: string | null;
+          name: string;
+          organizer_id: string;
+          photo_key?: string | null;
+          team_id?: string;
+        };
+        Update: {
+          created_at?: string | null;
+          description?: string | null;
+          name?: string;
+          organizer_id?: string;
+          photo_key?: string | null;
+          team_id?: string;
         };
       };
       user_profiles: {
         Row: {
           app_id: string | null;
+          application_status: number;
           created_at: string | null;
-          email: string;
+          email: string | null;
           first_name: string;
           last_name: string;
           role: number | null;
+          team_id: string | null;
           user_id: string;
         };
         Insert: {
           app_id?: string | null;
+          application_status?: number;
           created_at?: string | null;
-          email: string;
+          email?: string | null;
           first_name: string;
           last_name: string;
           role?: number | null;
+          team_id?: string | null;
           user_id: string;
         };
         Update: {
           app_id?: string | null;
+          application_status?: number;
           created_at?: string | null;
-          email?: string;
+          email?: string | null;
           first_name?: string;
           last_name?: string;
           role?: number | null;
+          team_id?: string | null;
           user_id?: string;
         };
       };

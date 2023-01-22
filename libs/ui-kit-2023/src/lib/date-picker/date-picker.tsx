@@ -73,4 +73,5 @@ const Wrapper = styled.div`
 
 const CalendarWrapper = styled.div`
   position: absolute;
+  z-index: 100;
 `;

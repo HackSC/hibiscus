@@ -15,3 +15,5 @@ export const hackformLinks = {
       'https://github.com/MLH/mlh-policies/blob/main/contest-terms.md',
   },
 };
+
+export const TSRV_RELEASE_FLAG = false;

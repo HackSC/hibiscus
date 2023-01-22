@@ -4,19 +4,21 @@ import Image from 'next/image';
 
 export interface GrayContentBoxProps extends React.PropsWithChildren {
   // title?: string;
-  location: string;
+  location?: string;
 }
 
 export function GrayContentBox(props: GrayContentBoxProps) {
   return (
     <StyledGrayContentBox>
-      <Image
-        style={{ position: 'relative', bottom: 21, left: 30 }}
-        width="40"
-        height="40"
-        src={props.location}
-        alt=""
-      />
+      {props.location && (
+        <Image
+          style={{ position: 'relative', bottom: 21, left: 30 }}
+          width="40"
+          height="40"
+          src={props.location}
+          alt=""
+        />
+      )}
       {/* <TitleHeading>{props.title?.toUpperCase()}</TitleHeading>
       {props.children} */}
     </StyledGrayContentBox>

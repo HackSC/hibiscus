@@ -152,7 +152,7 @@ require_automerge_label = true # default: true
 
 # If a PR is opened by a user with a username in the `approve.auto_approve_usernames` list,
 # Kodiak will automatically add an approval to the PR.
-auto_approve_usernames = ["dependabot"] # default: []
+auto_approve_usernames = ["dependabot", "snokpok"] # default: []
 
 # If a PR has a label assigned which is in the `approve.auto_approve_labels` list,
 # Kodiak will automatically add an approval to the PR.

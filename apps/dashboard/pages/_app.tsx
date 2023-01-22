@@ -8,6 +8,8 @@ import useHibiscusUser from '../hooks/use-hibiscus-user/use-hibiscus-user';
 import PortalLayout from '../layouts/portal-layout';
 import { useRouter } from 'next/router';
 import { getWebTitle } from '@hibiscus/metadata';
+import { Toaster } from 'react-hot-toast';
+import { TeamProvider } from '../hooks/use-team/use-team';
 
 function CustomApp({ Component, pageProps }: AppProps) {
   const { user } = useHibiscusUser();
@@ -33,10 +35,13 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <title>{createWebTitle()}</title>
       </Head>
       <Main>
+        <Toaster />
         <GlobalStyles2023 />
-        <PortalLayout user={user}>
-          <Component {...pageProps} />
-        </PortalLayout>
+        <TeamProvider>
+          <PortalLayout user={user}>
+            <Component {...pageProps} />
+          </PortalLayout>
+        </TeamProvider>
       </Main>
     </>
   );

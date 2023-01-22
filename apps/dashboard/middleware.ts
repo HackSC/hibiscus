@@ -1,16 +1,29 @@
 import { getEnv } from '@hibiscus/env';
 import { middlewareHandler } from '@hibiscus/sso-client';
 import { NextRequest, NextResponse } from 'next/server';
+import { TSRV_RELEASE_FLAG } from './common/constants';
 
 export async function middleware(request: NextRequest) {
-  // Allow access for API routes (we assume these implement protections by itself)
-  const reg = /\/api\//g;
-  if (request.nextUrl.pathname.match(reg)?.length > 0) {
-    return NextResponse.next();
+  // Intercept requests to application page and redirect to signup page if no session detected
+  const res = await middlewareHandler(
+    `${getEnv().Hibiscus.AppURL.portal}/api/callback`,
+    ['/apply-2023'],
+    `${getEnv().Hibiscus.AppURL.sso}/signup`,
+    false
+  )(request);
+
+  const regTeamAPIs = /\/api\/(team|organizer)/g;
+  if (regTeamAPIs.test(request.nextUrl.pathname) && !TSRV_RELEASE_FLAG) {
+    return NextResponse.redirect(
+      `${getEnv().Hibiscus.AppURL.sso}/api/unauthorized`
+    );
   }
 
-  return middlewareHandler(`${getEnv().Hibiscus.AppURL.portal}/api/callback`)(
-    request
+  return (
+    res ??
+    middlewareHandler(`${getEnv().Hibiscus.AppURL.portal}/api/callback`)(
+      request
+    )
   );
 }
 

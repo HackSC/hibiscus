@@ -7,7 +7,7 @@ const MobileNavbar: FC = () => {
   return (
     <MobileNavbarContainer>
       <LogoContainer>
-        <img src="./img/logo.svg" alt="HackSC 2023 Logo" />
+        <img src="./img/logos/logo.svg" alt="HackSC 2023 Logo" />
       </LogoContainer>
       <TheBurger />
     </MobileNavbarContainer>
@@ -74,7 +74,7 @@ const MobileNavbarContainer = styled.div`
   width: 100%;
   padding-top: 2vh;
   padding-left: 7%;
-  padding-right: 10%;
+  padding-right: 12%;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

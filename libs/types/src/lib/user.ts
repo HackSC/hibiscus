@@ -1,4 +1,5 @@
 import { HibiscusRole } from './roles';
+import { ApplicationStatus } from './application-status';
 
 export interface HibiscusUser {
   id: string;
@@ -6,5 +7,7 @@ export interface HibiscusUser {
   lastName: string;
   role: HibiscusRole;
   tag: string;
-  applicationId: string;
+  applicationId?: string;
+  applicationStatus: ApplicationStatus;
+  teamId?: string;
 }
