@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 import Image from 'next/image';
-import { Button, GlowSpan } from '@hibiscus/ui-kit-2023';
 import { Colors2023 } from '@hibiscus/styles';
-import { H1, H3, Link } from '@hibiscus/ui';
+import { H1 } from '@hibiscus/ui';
 import Clock from 'react-live-clock';
 import { Text } from '@hibiscus/ui';
 import { HackerTab } from '../../components/sponsor-portal/hacker-tab';
 import HackerProfile from '../../components/sponsor-portal/hacker-profile';
+import { useRouter } from 'next/router';
 
 export interface Attendee {
   firstName: string;
@@ -22,6 +22,7 @@ export interface Attendee {
 const Index = () => {
   const [attendees, setAttendees] = useState<Attendee[]>([]);
   const [currentAttendee, setCurrentAttendee] = useState<Attendee>(null);
+  const router = useRouter();
 
   const MockAttendeesList: Attendee[] = [
     {
@@ -38,6 +39,41 @@ const Index = () => {
       school: 'USC',
       major: 'CS',
       graduationYear: '2024',
+    },
+    {
+      firstName: 'Kelly',
+      lastName: 'Bui',
+      school: 'USC',
+      major: 'Business',
+      graduationYear: '2023',
+    },
+    {
+      firstName: 'Kelly',
+      lastName: 'Bui',
+      school: 'USC',
+      major: 'Business',
+      graduationYear: '2023',
+    },
+    {
+      firstName: 'Kelly',
+      lastName: 'Bui',
+      school: 'USC',
+      major: 'Business',
+      graduationYear: '2023',
+    },
+    {
+      firstName: 'Kelly',
+      lastName: 'Bui',
+      school: 'USC',
+      major: 'Business',
+      graduationYear: '2023',
+    },
+    {
+      firstName: 'Kelly',
+      lastName: 'Bui',
+      school: 'USC',
+      major: 'Business',
+      graduationYear: '2023',
     },
     {
       firstName: 'Kelly',
@@ -72,10 +108,12 @@ const Index = () => {
 
   return (
     <Wrapper>
-      <StyledButton>
-        <Link href="/" anchortagpropsoverride={{ target: '_self' }}>
-          <Image width="30" height="30" src={'/arrow.svg'} alt="Illustration" />
-        </Link>
+      <StyledButton
+        onClick={() => {
+          router.replace('/');
+        }}
+      >
+        <Image width="30" height="30" src={'/arrow.svg'} alt="Illustration" />
       </StyledButton>
       <MainContainer>
         <LeftContainer>

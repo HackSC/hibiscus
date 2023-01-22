@@ -19,50 +19,7 @@ export function Index() {
 
   return (
     <Wrapper>
-      <LayoutContainer>
-        <div
-          style={{
-            display: 'inline-flex',
-            width: '100%',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          {/* <Search
-              placeholder={'Search...'}
-              onInput={function (value: string): void {
-                throw new Error('Function not implemented.');
-              }}
-            ></Search> */}
-        </div>
-
-        {renderDashboard()}
-
-        {/* <div> */}
-        {/* <p style={{ margin: '13px 0' }}>Quick Actions</p> */}
-        {/* <QuickActionContainer> */}
-        {/* <GrayContentBox location="/redstar.svg"></GrayContentBox> */}
-        {/* <GrayContentBox location="/pinkstar.svg"></GrayContentBox> */}
-        {/* <GrayContentBox location="/greenstar.svg"></GrayContentBox>
-              <GrayContentBox location="/purplepin.svg"></GrayContentBox>
-              <GrayContentBox location="/yellowpin.svg"></GrayContentBox> */}
-        {/* </QuickActionContainer> */}
-        {/* </div> */}
-        {/* <AddOnAndStats>
-            <AddOnOuter>
-              <p style={{ textAlign: 'left', width: '90%', margin: '10px 0' }}>
-                Add-Ons
-              </p>
-              <AddOn></AddOn>
-            </AddOnOuter>
-            <StatsOuter>
-              <p style={{ textAlign: 'left', width: '90%', margin: '10px 0' }}>
-                Stats
-              </p>
-              <Stats></Stats>
-            </StatsOuter>
-          </AddOnAndStats> */}
-      </LayoutContainer>
+      <LayoutContainer>{renderDashboard()}</LayoutContainer>
     </Wrapper>
   );
 }
