@@ -4,15 +4,21 @@ import { getEnv } from '@hibiscus/env';
 import { SupabaseClient } from '@supabase/supabase-js';
 
 @injectable()
-export class DashboardRepository {
+export class BattlePassRepository {
   private client: SupabaseClient;
   private static readonly env = getEnv();
 
-  async getLeaderboard(userId: string) {
+  async getLeaderboard() {
+    const { data, error } = await this.client.from('leaderboard').select();
+    console.log('test');
+    data.sort();
+    return { data, error };
+  }
+
+  async getPosition(userId: string) {
     const { data, error } = await this.client
       .from('leaderboard')
       .select()
       .eq('user_id', userId);
-    return { data, error };
   }
 }
