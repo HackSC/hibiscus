@@ -28,7 +28,8 @@
       "@hibiscus/styles": ["libs/styles/src/index.ts"],
       "@hibiscus/types": ["libs/types/src/index.ts"],
       "@hibiscus/ui": ["libs/ui/src/index.ts"],
-      "@hibiscus/ui-kit-2023": ["libs/ui-kit-2023/src/index.ts"]
+      "@hibiscus/ui-kit-2023": ["libs/ui-kit-2023/src/index.ts"],
+      "@hibiscus/ui-portal": ["libs/ui-portal/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

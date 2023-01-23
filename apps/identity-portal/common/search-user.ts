@@ -1,10 +1,13 @@
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { setSessionClientSide } from '@hibiscus/sso-client';
+import { Database } from '@hibiscus/types';
 import { container } from 'tsyringe';
 
-export default async function searchUser(query: string): Promise<string[]> {
+export default async function searchUser(
+  query: string
+): Promise<Database['public']['Tables']['user_profiles']['Row'][]> {
   const supabase = container.resolve(HibiscusSupabaseClient);
-  await setSessionClientSide(supabase.getClient());
+  await setSessionClientSide(supabase);
 
   const firstnameMatches = await supabase
     .getClient()
@@ -18,14 +21,16 @@ export default async function searchUser(query: string): Promise<string[]> {
     .textSearch('last_name', `'${query}'`);
 
   // Merge the results of both queries
-  const uniqueMatches = new Set(
-    firstnameMatches.data.map((user) => user.user_id)
+  const uniqueMatchIds = new Set(
+    firstnameMatches.data.map((match) => match.user_id)
   );
+  const uniqueMatches = [...firstnameMatches.data];
   for (const match of lastnameMatches.data) {
-    if (!uniqueMatches.has(match.user_id)) {
-      uniqueMatches.add(match.user_id);
+    if (!uniqueMatchIds.has(match.user_id)) {
+      uniqueMatchIds.add(match.user_id);
+      uniqueMatches.push(match);
     }
   }
 
-  return [...uniqueMatches];
+  return uniqueMatches as Database['public']['Tables']['user_profiles']['Row'][];
 }

@@ -2,10 +2,10 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { NextApiRequest, NextApiResponse } from 'next/types';
 import axios from 'axios';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { getEnv } from '@hibiscus/env';
 import { getCookie } from 'cookies-next';
+import { container } from 'tsyringe';
 
 /**
  * Generates the NextJS middleware needed to integrate with the Hibiscus SSO system
@@ -279,10 +279,7 @@ function splitPath(path: string): string[] {
  * @param refresh_token optional
  */
 export async function setSessionClientSide(
-  supabase: SupabaseClient = createClient(
-    process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_API_URL,
-    process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_ANON_KEY
-  ),
+  supabase = container.resolve(HibiscusSupabaseClient),
   access_token: string = getCookie(
     getEnv().Hibiscus.Cookies.accessTokenName
   ) as string,
@@ -290,21 +287,14 @@ export async function setSessionClientSide(
     getEnv().Hibiscus.Cookies.refreshTokenName
   ) as string
 ) {
-  const sessionRes = await supabase.auth.getSession();
-  if ('session' in sessionRes.data && sessionRes.data.session != null) {
-    // Update cookies in case session was refreshed
-    HibiscusSupabaseClient.setTokenCookieClientSide(
-      sessionRes.data.session.access_token,
-      sessionRes.data.session.refresh_token
-    );
+  const userRes = await supabase.getClient().auth.getUser();
+  if (userRes.data.user != null) {
+    // Valid session detected
     return;
   }
 
-  // Else no session was found in current context
-  const authRes = await supabase.auth.setSession({
-    access_token,
-    refresh_token,
-  });
+  // No valid session, proceed to set session
+  const authRes = await supabase.verifyToken(access_token, refresh_token);
   if ('session' in authRes.data && authRes.data.session != null) {
     // Update cookies in case session was refreshed
     HibiscusSupabaseClient.setTokenCookieClientSide(
