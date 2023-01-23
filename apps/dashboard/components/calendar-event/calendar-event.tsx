@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 import { H2 } from '@hibiscus/ui';
 import { Colors2023 } from '@hibiscus/styles';
-import { AiOutlineClockCircle } from 'react-icons/ai';
-import { MdLocationOn } from 'react-icons/Md';
 
 /* eslint-disable-next-line */
 export interface CalendarEventProps {
@@ -54,13 +52,6 @@ const PointSection = styled.div`
 `;
 
 export function CalendarEvent(props: CalendarEventProps) {
-  // const addZero = (minutes) => {
-  //   if(minutes=='0') {
-  //     return '00';
-  //   }
-  //   else return minutes;
-  // }
-
   const eventDay = props.eventStartTime.getDay();
   const eventMonth = props.eventStartTime.toLocaleString('en-US', {
     month: 'short',
