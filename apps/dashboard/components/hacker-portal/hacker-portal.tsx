@@ -4,11 +4,10 @@ import styled from 'styled-components';
 import { Link } from '@hibiscus/ui';
 import { GlowSpan } from '@hibiscus/ui-kit-2023';
 import { Colors2023 } from '@hibiscus/styles';
-import { HibiscusUser, HibiscusRole } from '@hibiscus/types';
+import { HibiscusUser, HibiscusRole, ApplicationStatus } from '@hibiscus/types';
 import { H1, H3 } from '@hibiscus/ui';
 import Image from 'next/image';
-import { ApplicationStatus } from 'libs/types/src/lib/application-status';
-import { getColorsForRole } from 'apps/dashboard/common/role.utils';
+import { getColorsForRole } from '../../common/role.utils';
 
 interface Props {
   user: HibiscusUser;
