@@ -15,7 +15,7 @@ const getModeFromScreenWidth = (width: number) => {
   if (width >= 1600) {
     return 1;
   } else if (width >= 1440 && width < 1600) {
-    return 2;
+    return 0;
   } else if (width >= 1024 && width < 1440) {
     return 3;
   } else if (width >= 768 && width < 1024) {
