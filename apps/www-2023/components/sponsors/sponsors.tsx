@@ -26,7 +26,7 @@ export function Sponsors(props: SponsorsProps) {
             rel="noreferrer"
           >
             <img
-              src="/img/logos/sticker-mule-transparent.png"
+              src="/img/logos/sticker-mule-logo-white.png"
               alt="Stickermule Logo"
               loading="lazy"
             />
