@@ -27,7 +27,6 @@
     "ui": "libs/ui",
     "ui-kit-2023": "libs/ui-kit-2023",
     "ui-kit-2023-e2e": "apps/ui-kit-2023-e2e",
-    "ui-portal": "libs/ui-portal",
     "www-2023": "apps/www-2023"
   }
 }
