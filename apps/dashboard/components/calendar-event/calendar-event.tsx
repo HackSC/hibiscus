@@ -5,21 +5,22 @@ import { AiOutlineClockCircle } from 'react-icons/ai';
 import { MdLocationOn } from 'react-icons/Md';
 
 /* eslint-disable-next-line */
-export interface CalendarEventProps {}
-
-const Day = '04';
-const Month = 'Feb';
-const EventName = 'Puppy Pen';
-const EventLocation = 'TTH 102';
-const EventPoints = '100';
-const StartAndEndTime = '12:00 - 3:00 pm';
+export interface CalendarEventProps {
+  eventStartTime: Date;
+  eventEndTime: Date;
+  eventName: string;
+  eventDescription: string;
+  eventLocation: string;
+  eventPoints: number;
+}
 
 const StyledCalendarEvent = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  width: 420px;
+  width: 600px;
   height: 80px;
+  margin-bottom: 10px;
 `;
 
 const EventDescription = styled.div`
@@ -38,7 +39,7 @@ const EventDate = styled.div`
   flex: 20%;
   text-align: center;
   color: white;
-  top: 30%;
+  top: 18%;
   position: relative;
   font-size: 12px;
 `;
@@ -53,15 +54,40 @@ const PointSection = styled.div`
 `;
 
 export function CalendarEvent(props: CalendarEventProps) {
+  // const addZero = (minutes) => {
+  //   if(minutes=='0') {
+  //     return '00';
+  //   }
+  //   else return minutes;
+  // }
+
+  const eventDay = props.eventStartTime.getDay();
+  const eventMonth = props.eventStartTime.toLocaleString('en-US', {
+    month: 'short',
+  });
+  const formattedTime =
+    props.eventStartTime.toLocaleString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    }) +
+    ' - ' +
+    props.eventEndTime.toLocaleString('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    });
+  const eventPointsFormatted = props.eventPoints + ' PTS';
+
   return (
     <StyledCalendarEvent>
       <EventDate>
-        <H2 style={{ fontSize: '24px', height: '24px' }}>{Day}</H2>
-        <H2 style={{ fontSize: '24px', height: '24px' }}>{Month}</H2>
+        <H2 style={{ fontSize: '24px', height: '24px' }}>{eventDay}</H2>
+        <H2 style={{ fontSize: '24px', height: '24px' }}>{eventMonth}</H2>
       </EventDate>
       <EventDescription>
         <H2 style={{ fontSize: '24px', height: '24px', color: 'white' }}>
-          {EventName}
+          {props.eventName}
         </H2>
         <div
           style={{
@@ -70,17 +96,11 @@ export function CalendarEvent(props: CalendarEventProps) {
             position: 'relative',
           }}
         >
-          <div>
-            <AiOutlineClockCircle style={{ verticalAlign: 'middle' }} />
-            {StartAndEndTime}
-          </div>
-          <div>
-            <MdLocationOn style={{ verticalAlign: 'middle' }} />
-            {EventLocation}
-          </div>
+          <div>{' ' + props.eventLocation + ' | ' + formattedTime}</div>
+          <div>{props.eventDescription}</div>
         </div>
       </EventDescription>
-      <PointSection>{EventPoints} PTS</PointSection>
+      <PointSection>{eventPointsFormatted}</PointSection>
     </StyledCalendarEvent>
   );
 }
