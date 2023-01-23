@@ -42,7 +42,7 @@ export const OtherField = ({
 
 const OtherWrapper = styled.div`
   display: flex;
-  @media (max-width: 400px) {
+  @media (max-width: 430px) {
     flex-direction: column;
     padding-bottom: 2rem;
   }
