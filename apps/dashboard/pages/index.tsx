@@ -4,6 +4,7 @@ import useHibiscusUser from '../hooks/use-hibiscus-user/use-hibiscus-user';
 import { getColorsForRole } from '../common/role.utils';
 import { HibiscusRole } from '@hibiscus/types';
 import HackerPortal from '../components/hacker-portal/hacker-portal';
+import IdentityPortal from '../components/identity-portal/identity-portal';
 
 export function Index() {
   const { user } = useHibiscusUser();
@@ -16,6 +17,7 @@ export function Index() {
 
   const renderDashboard = () => {
     if (user.role === HibiscusRole.HACKER) return <HackerPortal user={user} />;
+    else if (user.role === HibiscusRole.SPONSOR) return <IdentityPortal />;
   };
 
   return (

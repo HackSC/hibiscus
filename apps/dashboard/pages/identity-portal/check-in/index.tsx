@@ -1,7 +1,7 @@
 import { Colors2023 } from '@hibiscus/styles';
 import { BoldText, Modal, Text } from '@hibiscus/ui';
 import { ColorSpan, GlowSpan, Search } from '@hibiscus/ui-kit-2023';
-import searchUser from '../../common/search-user';
+import searchUser from '../../../common/search-user';
 import { useState } from 'react';
 import styled from 'styled-components';
 
