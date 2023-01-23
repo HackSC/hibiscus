@@ -23,6 +23,10 @@ export const getEnv = () => {
         portal: process.env.NEXT_PUBLIC_PORTAL_URL,
         defaultRedirect: process.env.NEXT_PUBLIC_SSO_DEFAULT_REDIRECT_URL,
       },
+      Hackform: {
+        HackerAppResponsesTable:
+          process.env.HIBISCUS_HACKER_APP_RESPONSES_TABLENAME,
+      },
     },
   };
 };

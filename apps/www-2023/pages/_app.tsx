@@ -1,19 +1,56 @@
-import { AppProps } from 'next/app';
-import Head from 'next/head';
 import { GlobalStyles2023 } from '@hibiscus/styles';
+import { GoogleAnalytics4Script } from '@hibiscus/analytics';
+import App, { AppContext, AppProps } from 'next/app';
+import Head from 'next/head';
+import { Toaster } from 'react-hot-toast';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { SendgridClient } from '../common/sendgrid.client';
+import SendgridClientContext from '../contexts/SendgridClientProvider';
 
-function CustomApp({ Component, pageProps }: AppProps) {
+export interface CustomAppProps extends AppProps {
+  envs: {
+    sendgridApiKey: string;
+    googleAnalyticsMeasuringId: string;
+  };
+}
+
+function CustomApp({ Component, pageProps, envs }: CustomAppProps) {
+  const queryClient = new QueryClient();
+  const sendgridClient = new SendgridClient(envs.sendgridApiKey);
+
   return (
-    <>
-      <Head>
-        <title>Welcome to landing-page!</title>
-      </Head>
-      <main className="app">
-        <GlobalStyles2023 />
-        <Component {...pageProps} />
-      </main>
-    </>
+    <SendgridClientContext.Provider value={sendgridClient}>
+      <QueryClientProvider client={queryClient}>
+        <Toaster />
+        <>
+          <Head>
+            <title>HackSC 2023 | Around the Globe!</title>
+            <link rel="shortcut icon" href="./img/favicon.ico" />
+          </Head>
+          <main className="app">
+            <GoogleAnalytics4Script
+              measuringId={envs.googleAnalyticsMeasuringId}
+            />
+            <GlobalStyles2023 />
+            <Component {...pageProps} />
+          </main>
+        </>
+      </QueryClientProvider>
+    </SendgridClientContext.Provider>
   );
 }
+
+CustomApp.getInitialProps = async (
+  ctx: AppContext
+): Promise<Partial<CustomAppProps>> => {
+  const appProps = await App.getInitialProps(ctx);
+  return {
+    ...appProps,
+    envs: {
+      sendgridApiKey: process.env.SENDGRID_API_KEY,
+      googleAnalyticsMeasuringId: process.env.GA_MEASURING_ID,
+    },
+  };
+};
 
 export default CustomApp;

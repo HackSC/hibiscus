@@ -66,7 +66,7 @@ export default FAQs;
 const StyledFAQs = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 5rem;
+  padding: 3rem;
 `;
 
 const FAQContainer = styled.div`
@@ -104,7 +104,7 @@ const faqQuestionsAndAnswersData: {
   {
     titleText: 'Who can attend?',
     disclosedText:
-      'All college students, undergraduate or graduate, are eligible. We welcome all majors and experience levels!',
+      'Participants must be 18+ and currently enrolled in an accredited institution. All college students, undergraduate or graduate, are eligible. We welcome all majors and experience levels!',
     color: Colors2023.GREEN.STANDARD,
   },
   {
@@ -182,5 +182,23 @@ const faqQuestionsAndAnswersData: {
     disclosedText:
       'We’ll have spaces specifically designed for sleeping. Feel free to bring a blanket or a sleeping bag if you so desire!',
     color: Colors2023.YELLOW.STANDARD,
+  },
+  {
+    titleText: 'I’m under 18 years old. Can I attend?',
+    disclosedText:
+      'Unfortunately, due to University policy and insurance limitations, participants under the age of 18 are not allowed to apply for the event. We hope to see you at a future event!',
+    color: Colors2023.PINK.STANDARD,
+  },
+  {
+    titleText: 'Is travel reimbursement provided?',
+    disclosedText:
+      'Due to limited funds this year, travel for HackSC 2023 will not be reimbursed.',
+    color: Colors2023.RED.STANDARD,
+  },
+  {
+    titleText: 'Is food provided at the event?',
+    disclosedText:
+      'At this time, due to limited funding, participants are asked to provide their own food & drink during the event. We are putting together a dining guide for our participants to assist them in finding delicious and affordable food adjacent to our campus! Our team plans to provide catering at future events.',
+    color: Colors2023.PURPLE.STANDARD,
   },
 ];

@@ -7,6 +7,8 @@ import formidable, { IncomingForm } from 'formidable';
 import fs from 'fs';
 import { ALLOWED_RESUME_FORMATS } from '../../common/constants';
 import mime from 'mime-types';
+import { getTokensFromNextRequest, rateLimitHandler } from '../../common/utils';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 
 export const config = {
   api: {
@@ -21,9 +23,27 @@ const validateFormat = (file: formidable.File) => {
   );
 };
 
+const hbc = container.resolve(HibiscusSupabaseClient);
+
 const handler: NextApiHandler = async (req, res) => {
   if (req.method !== 'POST') {
     return res.status(405).send('Method not allowed');
+  }
+  const { accessToken, refreshToken } = getTokensFromNextRequest(req);
+  const user = await hbc.getUserProfile(accessToken, refreshToken);
+  if (!user) {
+    return res.status(400).json({ message: 'Unauthorized' });
+  }
+  if (user?.app_id !== null) {
+    return res
+      .status(400)
+      .json({ message: 'You have already submitted your application!' });
+  }
+
+  try {
+    await rateLimitHandler(req, res);
+  } catch (e) {
+    return res.status(429).send('Too many requests');
   }
 
   const form = new IncomingForm();

@@ -2,12 +2,14 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
+    "airplane": "apps/airplane",
     "analytics": "libs/analytics",
     "api-interfaces": "libs/api-interfaces",
     "dashboard": "apps/dashboard",
     "dashboard-e2e": "apps/dashboard-e2e",
     "discord-identity-bot": "apps/discord-identity-bot",
     "env": "libs/env",
+    "event-service": "apps/event-service",
     "hackform-client": "libs/hackform-client",
     "hibiscus-supabase-client": "libs/hibiscus-supabase-client",
     "icons": "libs/icons",
@@ -25,8 +27,6 @@
     "ui": "libs/ui",
     "ui-kit-2023": "libs/ui-kit-2023",
     "ui-kit-2023-e2e": "apps/ui-kit-2023-e2e",
-    "www-2023": "apps/www-2023",
-    "airplane": "apps/airplane",
-    "event-service": "apps/event-service"
+    "www-2023": "apps/www-2023"
   }
 }
