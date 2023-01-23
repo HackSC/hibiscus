@@ -21,6 +21,19 @@ export function Sponsors(props: SponsorsProps) {
       <SponsorsContainer>
         <Sponsor>
           <a
+            href="https://www.stickermule.com/uses/laptop-stickers?utm_source=sponsorship&utm_medium=referral&utm_campaign=HACKSC2023/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <img
+              src="/img/logos/sticker-mule-transparent.png"
+              alt="Stickermule Logo"
+              loading="lazy"
+            />
+          </a>
+        </Sponsor>
+        <Sponsor>
+          <a
             href="https://www.elastic.co/community/"
             target="_blank"
             rel="noreferrer"
