@@ -24,7 +24,7 @@ const cards = [
   <Card
     key={1}
     name="Michael Hovarth"
-    title="Exec Dir of SpaceLab"
+    title="CEO and Co-Founder of Strava"
     description="Michael Horvath is CEO and Co-founder of Strava, the leading subscription platform at the center of connected fitness, with more than 100 million active people in 195 countries. The platform offers a holistic view of your active lifestyle, no matter where you live, which sport you love and/or what device you use. Prior to Strava, Michael co-founded Kana Software, an enterprise software firm, and was the CFO and VP of Operations at GlycoFi, a biotech company. He holds a Ph.D. in economics from Northwestern University and an A.B. in economics from Harvard University where he was men’s lightweight crew team captain. In his former life, Michael was an economics professor at Stanford University and an entrepreneurship professor at the Tuck School of Business at Dartmouth College."
     photo="./img/speakers/michael.png"
   />,
