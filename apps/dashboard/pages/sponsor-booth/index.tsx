@@ -211,8 +211,12 @@ const Index = () => {
             >
               RECENTLY SAVED
             </H1>
-            <HackerTab user={MockAttendeesList[0]} />
-            <HackerTab user={MockAttendeesList[1]} />
+            <SavedAttendeeContainer>
+              <HackerTab user={MockAttendeesList[0]} />
+            </SavedAttendeeContainer>
+            <SavedAttendeeContainer>
+              <HackerTab user={MockAttendeesList[1]} />
+            </SavedAttendeeContainer>
           </SavedSection>
           <ViewAllButton>
             <H1
@@ -228,6 +232,14 @@ const Index = () => {
         </LeftContainer>
 
         <MiddleContainer>
+          <Text
+            style={{
+              color: Colors2023.GRAY.LIGHT,
+              fontSize: '30px',
+            }}
+          >
+            All Check-Ins
+          </Text>
           <div
             style={{
               display: 'flex',
@@ -237,14 +249,6 @@ const Index = () => {
               overflow: 'auto',
             }}
           >
-            <Text
-              style={{
-                color: Colors2023.GRAY.LIGHT,
-                fontSize: '30px',
-              }}
-            >
-              All Check-Ins
-            </Text>
             {getAttendees()}
           </div>
           <ViewAllButton>
@@ -368,13 +372,19 @@ const SupportSection = styled.div`
 const SavedSection = styled.div`
   display: 'flex';
   margin-top: 1.5rem;
-  padding: 15px;
+  padding: 30px 15px;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   background-color: ${Colors2023.GRAY.STANDARD};
   border-radius: 10px;
   border: 4px solid ${Colors2023.GRAY.MEDIUM};
+`;
+
+const SavedAttendeeContainer = styled.div`
+  width: 100%;
+  display: flex;
+  border-bottom: solid 2px ${Colors2023.GRAY.SHLIGHT};
 `;
 
 const MiddleContainer = styled.div`
