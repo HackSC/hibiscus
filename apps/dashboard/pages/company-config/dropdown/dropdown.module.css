@@ -1,0 +1,76 @@
+/*
+ * Replace this with your own classes
+ *
+ * e.g.
+ * .container {
+ * }
+*/
+.container {
+  position: relative;
+  display: inline-block;
+}
+
+.button {
+  padding: 0;
+  width: 50px;
+  border: 0;
+  background-color: #fff;
+  color: #333;
+  cursor: pointer;
+  outline: 0;
+  font-size: 40px;
+  height: 100%;
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+  /* border: 5px solid red; */
+  box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14);
+  border-bottom: 3px solid #565656;
+  border-left: 3px solid #565656;
+  border-right: 3px solid #565656;
+  background-color: #313131;
+}
+
+.current-collection {
+  border-radius: 5px;
+  border: 3px solid #565656;
+  background-color: #313131;
+  min-height: 40px;
+  display: flex;
+  justify-content: space-between;
+}
+.ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.li {
+  padding: 8px 12px;
+}
+
+.li:hover {
+  background-color: rgba(0, 0, 0, 0.14);
+  cursor: pointer;
+}
+
+.tag {
+  display: inline-block;
+  border-radius: 3px;
+  padding: 5px 8px;
+  letter-spacing: 2px;
+  height: 70%;
+  text-align: center;
+}
+
+.tags-container {
+  width: 100%;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  padding: 0px 10px;
+}

@@ -68,7 +68,7 @@ export function SponsorPortal({ user }: Props) {
           </Link>
         </StyledButton>
         <StyledButton color={'black'}>
-          <Link href="/">
+          <Link href="/company-config">
             <H1
               style={{
                 color: Colors2023.GRAY.LIGHT,
