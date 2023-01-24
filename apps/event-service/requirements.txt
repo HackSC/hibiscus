@@ -1,3 +1,2 @@
 Flask==2.2.2
 supabase==0.7.1
-datetime==5.0
