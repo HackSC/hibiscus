@@ -21,19 +21,6 @@ export function Sponsors(props: SponsorsProps) {
       <SponsorsContainer>
         <Sponsor>
           <a
-            href="https://www.stickermule.com/uses/laptop-stickers?utm_source=sponsorship&utm_medium=referral&utm_campaign=HACKSC2023/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <img
-              src="/img/logos/sticker-mule-logo-white.png"
-              alt="Stickermule Logo"
-              loading="lazy"
-            />
-          </a>
-        </Sponsor>
-        <Sponsor>
-          <a
             href="https://www.elastic.co/community/"
             target="_blank"
             rel="noreferrer"
@@ -45,9 +32,32 @@ export function Sponsors(props: SponsorsProps) {
             />
           </a>
         </Sponsor>
+
         <Sponsor>
           <a href="https://www.carc.usc.edu/" target="_blank" rel="noreferrer">
             <img src="/img/logos/carc.png" alt="Elastic Logo" loading="lazy" />
+          </a>
+        </Sponsor>
+        <Sponsor>
+          <a href="https://www.soylent.com/" target="_blank" rel="noreferrer">
+            <img
+              src="/img/logos/soylent.png"
+              alt="Stickermule Logo"
+              loading="lazy"
+            />
+          </a>
+        </Sponsor>
+        <Sponsor>
+          <a
+            href="https://www.stickermule.com/uses/laptop-stickers?utm_source=sponsorship&utm_medium=referral&utm_campaign=HACKSC2023/"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <img
+              src="/img/logos/stickermule.png"
+              alt="Stickermule Logo"
+              loading="lazy"
+            />
           </a>
         </Sponsor>
       </SponsorsContainer>
@@ -81,13 +91,12 @@ const Sponsor = styled.div`
   margin: 0;
   display: grid;
   grid-template-rows: 1fr auto;
-  margin-bottom: 10px;
   break-inside: avoid;
+  margin-left: 20px;
   > img {
     grid-row: 1 / -1;
     grid-column: 1;
     max-width: 100%;
-    display: block;
   }
   > video {
     max-width: 100%;
@@ -100,6 +109,9 @@ const Sponsor = styled.div`
       grid-row: 1 / -1;
       grid-column: 1;
       max-width: 100%;
+      min-height: 150px;
+      max-height: 150px;
+      object-fit: contain;
       display: block;
     }
   }
