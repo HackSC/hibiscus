@@ -32,9 +32,19 @@ export function Sponsors(props: SponsorsProps) {
             />
           </a>
         </Sponsor>
+
         <Sponsor>
           <a href="https://www.carc.usc.edu/" target="_blank" rel="noreferrer">
             <img src="/img/logos/carc.png" alt="Elastic Logo" loading="lazy" />
+          </a>
+        </Sponsor>
+        <Sponsor>
+          <a href="https://www.soylent.com/" target="_blank" rel="noreferrer">
+            <img
+              src="/img/logos/soylent.png"
+              alt="Stickermule Logo"
+              loading="lazy"
+            />
           </a>
         </Sponsor>
         <Sponsor>
@@ -45,15 +55,6 @@ export function Sponsors(props: SponsorsProps) {
           >
             <img
               src="/img/logos/stickermule.png"
-              alt="Stickermule Logo"
-              loading="lazy"
-            />
-          </a>
-        </Sponsor>
-        <Sponsor>
-          <a href="https://www.soylent.com/" target="_blank" rel="noreferrer">
-            <img
-              src="/img/logos/soylent.png"
               alt="Stickermule Logo"
               loading="lazy"
             />
@@ -91,7 +92,7 @@ const Sponsor = styled.div`
   display: grid;
   grid-template-rows: 1fr auto;
   break-inside: avoid;
-  grid-gap: 5vw;
+  margin-left: 20px;
   > img {
     grid-row: 1 / -1;
     grid-column: 1;
@@ -108,6 +109,9 @@ const Sponsor = styled.div`
       grid-row: 1 / -1;
       grid-column: 1;
       max-width: 100%;
+      min-height: 150px;
+      max-height: 150px;
+      object-fit: contain;
       display: block;
     }
   }
