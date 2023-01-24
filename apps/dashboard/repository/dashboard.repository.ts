@@ -6,7 +6,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
 
 @injectable()
 export class DashboardRepository {
-  private readonly client: SupabaseClient;
+  private client: SupabaseClient;
   private static readonly env = getEnv();
   private static readonly ses = new SESClient({
     credentials: {
@@ -207,6 +207,72 @@ export class DashboardRepository {
       .select()
       .eq('email', email)
       .eq('user_id', invitedId)
+      .single();
+
+    return { data, error };
+  }
+
+  //prob paginate. Also unsure if needed frankly
+  async getAllParticipants() {
+    const { data, error } = await this.client.from('participants').select('*');
+
+    return { data, error };
+  }
+
+  async getParticipantInfo(id: string) {
+    const { data, error } = await this.client
+      .from('participants')
+      .select()
+      .eq('id', id);
+
+    return { data, error };
+  }
+
+  async insertNewParticipant(
+    id: string,
+    firstName: string,
+    lastName: string,
+    major: string,
+    graduationYear: string,
+    resume?: string,
+    portfolioLink?: string
+  ) {
+    const { data, error } = await this.client
+      .from('participants')
+      .insert([
+        {
+          id: id,
+          first_name: firstName,
+          last_name: lastName,
+          major: major,
+          resume: resume,
+          graduation_year: graduationYear,
+          portfolio_link: portfolioLink,
+        },
+      ])
+      .select()
+      .single();
+
+    return { data, error };
+  }
+
+  async updateParticipantResume(id: string, resume: string) {
+    const { data, error } = await this.client
+      .from('participants')
+      .update({ resume: resume })
+      .eq('id', id)
+      .select()
+      .single();
+
+    return { data, error };
+  }
+
+  async updateParticipantPortfolioLink(id: string, portfolioLink: string) {
+    const { data, error } = await this.client
+      .from('participants')
+      .update({ portfolio_link: portfolioLink })
+      .eq('id', id)
+      .select()
       .single();
 
     return { data, error };
