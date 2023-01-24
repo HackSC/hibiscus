@@ -57,7 +57,12 @@ export class LogController {
       const query = req.query.query;
       const sortMethod = req.query.sortMethod;
       const page = req.query.page;
-      const log = await userRepo.getLogs(type, query, sortMethod, page);
+      const log = await this.userRepo.getLogs({
+        type,
+        query,
+        sortMethod,
+        page,
+      });
       res.status(200).json(log);
     } catch (err) {
       res.status(400).json({ message: err.message });
