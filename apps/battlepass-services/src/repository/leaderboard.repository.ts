@@ -14,7 +14,7 @@ export class Leaderboard {
     return { data, error };
   }
 
-  async getUserRank(userId) {
+  async getUser(userId) {
     const { data, error } = await this.client
       .from('leaderboard')
       .select()

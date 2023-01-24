@@ -27,7 +27,9 @@ export class LeaderboardController {
       const leaderboard = await this.repository.getLeaderboard();
       const list = leaderboard.data;
       list.sort();
-      const user = await this.repository.getUserRank(_req.params.user_id);
+      const user = await this.repository.getUser(_req.params.user_id);
+      const rank = list.indexOf(user);
+      res.status(200).json({ rank: rank });
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
