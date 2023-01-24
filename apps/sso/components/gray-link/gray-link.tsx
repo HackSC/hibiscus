@@ -1,3 +1,4 @@
+import { Colors2023 } from '@hibiscus/styles';
 import { Text, Link, LinkProps } from '@hibiscus/ui';
 import styled from 'styled-components';
 
@@ -16,6 +17,6 @@ export default GrayLink;
 
 const StyledText = styled(Text)`
   font-size: 1rem;
-  color: #939393;
+  color: ${Colors2023.GRAY.LIGHT};
   text-decoration: underline;
 `;

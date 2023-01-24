@@ -14,6 +14,10 @@ export function OneLineText(props: OneLineTextProps) {
 
 export default OneLineText;
 
+export function OneLinePassword(props: OneLineTextProps) {
+  return <Input {...props} type="password" />;
+}
+
 const Input = styled.input`
   all: unset;
   background: ${Colors2023.GRAY.MEDIUM};
