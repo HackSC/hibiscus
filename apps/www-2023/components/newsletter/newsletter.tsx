@@ -18,7 +18,7 @@ export function Newsletter(props: NewsletterProps) {
         </GlowSpan>
         <Text>
           Located in the heart of sunny Los Angeles, based at the University of
-          Southern California in the heart of Los Angeles, HackSC HackSC brings
+          Southern California in the heart of Los Angeles, HackSC brings
           hundreds of hackers, designers, and visionaries from all across the
           world together for a weekend of{' '}
           <ColorSpan color={Colors2023.BLUE.STANDARD}>innovation</ColorSpan>,{' '}
@@ -71,9 +71,13 @@ const StyledContent = styled.div`
   > p {
     text-align: justify;
   }
+<<<<<<<<< Temporary merge branch 1
+  @media screen and (max-width: 1020px) {
+=========
   @media screen and (max-width: 1080px) {
-    height: 60vh;
-    margin-top: 40vh;
+>>>>>>>>> Temporary merge branch 2
+    height: 50vh;
+    margin-top: 50vh;
     justify-content: flex-start;
     margin-left: 3rem;
     margin-right: 3rem;
