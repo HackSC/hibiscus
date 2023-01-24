@@ -18,7 +18,7 @@ import {
   SSOApiVerifyOtp,
   SSOApiVerifyToken,
 } from '@hibiscus/types';
-import { deleteCookie, setCookie } from 'cookies-next';
+import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import { getEnv } from '@hibiscus/env';
 
 @injectable()
@@ -209,7 +209,7 @@ export class HibiscusSupabaseClient {
       .select()
       .eq('user_id', user.id);
 
-    if (dbRes.data.length !== 1) {
+    if (dbRes.data?.length !== 1) {
       // User either not found or duplicates found == DB corrupted
       return null;
     }
@@ -313,9 +313,42 @@ export class HibiscusSupabaseClient {
       }
     );
   }
+
+  /**
+   * Sets the Supabase auth session on client side for situations that require it
+   * e.g. adhere to RLS during database access, reset password
+   *
+   * @param access_token optional
+   * @param refresh_token optional
+   */
+  async setSessionClientSide(
+    access_token: string = getCookie(
+      getEnv().Hibiscus.Cookies.accessTokenName
+    ) as string,
+    refresh_token: string = getCookie(
+      getEnv().Hibiscus.Cookies.refreshTokenName
+    ) as string
+  ) {
+    const userRes = await this.client.auth.getUser();
+    if (userRes.data.user != null) {
+      // Valid session detected
+      return;
+    }
+
+    // No valid session, proceed to set session
+    const authRes = await this.verifyToken(access_token, refresh_token);
+    if ('session' in authRes.data && authRes.data.session != null) {
+      // Update cookies in case session was refreshed
+      HibiscusSupabaseClient.setTokenCookieClientSide(
+        authRes.data.session.access_token,
+        authRes.data.session.refresh_token
+      );
+    }
+  }
 }
 
-type UserProfileRow = Database['public']['Tables']['user_profiles']['Row'];
+export type UserProfileRow =
+  Database['public']['Tables']['user_profiles']['Row'];
 type UserProfileInsert =
   Database['public']['Tables']['user_profiles']['Insert'];
 type UserProfileUpdate =

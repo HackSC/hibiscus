@@ -2,10 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { NextApiRequest, NextApiResponse } from 'next/types';
 import axios from 'axios';
-import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { getEnv } from '@hibiscus/env';
-import { getCookie } from 'cookies-next';
-import { container } from 'tsyringe';
 
 /**
  * Generates the NextJS middleware needed to integrate with the Hibiscus SSO system
@@ -268,38 +265,4 @@ function splitPath(path: string): string[] {
   }
 
   return split;
-}
-
-/**
- * Sets the Supabase auth session on client side for situations that require it
- * e.g. adhere to RLS during database access, reset password
- *
- * @param supabase optional
- * @param access_token optional
- * @param refresh_token optional
- */
-export async function setSessionClientSide(
-  supabase = container.resolve(HibiscusSupabaseClient),
-  access_token: string = getCookie(
-    getEnv().Hibiscus.Cookies.accessTokenName
-  ) as string,
-  refresh_token: string = getCookie(
-    getEnv().Hibiscus.Cookies.refreshTokenName
-  ) as string
-) {
-  const userRes = await supabase.getClient().auth.getUser();
-  if (userRes.data.user != null) {
-    // Valid session detected
-    return;
-  }
-
-  // No valid session, proceed to set session
-  const authRes = await supabase.verifyToken(access_token, refresh_token);
-  if ('session' in authRes.data && authRes.data.session != null) {
-    // Update cookies in case session was refreshed
-    HibiscusSupabaseClient.setTokenCookieClientSide(
-      authRes.data.session.access_token,
-      authRes.data.session.refresh_token
-    );
-  }
 }

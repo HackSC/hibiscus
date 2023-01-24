@@ -4,6 +4,7 @@ import { ColorSpan, GlowSpan, Search } from '@hibiscus/ui-kit-2023';
 import searchUser from '../../../common/search-user';
 import { useState } from 'react';
 import styled from 'styled-components';
+import { ScrollableListBox } from '../../../components/scrollable-list-box/scrollable-list-box';
 
 export function Index() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -24,7 +25,7 @@ export function Index() {
           <ColumnCenter>
             <GlowSpan
               color={Colors2023.YELLOW.STANDARD}
-              style={{ fontSize: '3rem' }}
+              style={{ fontSize: '3em' }}
             >
               Check-in
             </GlowSpan>
@@ -39,25 +40,25 @@ export function Index() {
 
         <ColumnSpacedLeft>
           <Text>Recent check-ins</Text>
-          <CheckInContainer>
+          <ScrollableListBox width="360px" height="385px">
             {[...Array(10)].map((_, i) => (
-              <CheckInRow key={i}>
-                <BoldText style={{ fontSize: '1rem' }}>Faith Wang</BoldText>
-                <Text style={{ fontSize: '0.75rem' }}>Checked-in</Text>
-              </CheckInRow>
+              <ScrollableListBox.Item key={i}>
+                <BoldText style={{ fontSize: '1em' }}>Faith Wang</BoldText>
+                <Text style={{ fontSize: '0.75em' }}>Checked-in</Text>
+              </ScrollableListBox.Item>
             ))}
-          </CheckInContainer>
+          </ScrollableListBox>
         </ColumnSpacedLeft>
       </Container>
 
       <Modal isOpen={isModalOpen} closeModal={() => setModalOpen(false)}>
         {searchRes.map((user, i) => (
-          <CheckInRow key={i}>
-            <BoldText style={{ fontSize: '1rem' }}>
+          <ScrollableListBox.Item key={i}>
+            <BoldText style={{ fontSize: '1em' }}>
               {user.first_name} {user.last_name}
             </BoldText>
-            <Text style={{ fontSize: '0.75rem' }}>{user.email}</Text>
-          </CheckInRow>
+            <Text style={{ fontSize: '0.75em' }}>{user.email}</Text>
+          </ScrollableListBox.Item>
         ))}
       </Modal>
     </>
@@ -68,7 +69,7 @@ export default Index;
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
   align-items: center;
   justify-items: center;
   min-height: 100%;
@@ -84,40 +85,11 @@ const ColumnSpacedCenter = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.5em;
 `;
 
 const ColumnSpacedLeft = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-`;
-
-const CheckInContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  width: 360px;
-  height: 385px;
-
-  padding: 1.5rem 2.5rem;
-
-  background-color: ${Colors2023.GRAY.STANDARD};
-
-  border: thick solid ${Colors2023.GRAY.MEDIUM};
-  border-radius: 9px;
-
-  overflow-y: scroll;
-`;
-
-const CheckInRow = styled.div`
-  display: grid;
-  grid-template-columns: 3fr 2fr;
-  align-items: end;
-
-  padding: 1rem 0;
-
-  &:not(:last-child) {
-    border-bottom: thin solid ${Colors2023.GRAY.MEDIUM};
-  }
+  gap: 1.5em;
 `;

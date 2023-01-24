@@ -1,18 +1,235 @@
 import { Colors2023 } from '@hibiscus/styles';
-import { BoldText, Modal, Text } from '@hibiscus/ui';
-import { ColorSpan, GlowSpan, Search } from '@hibiscus/ui-kit-2023';
-import searchUser from '../../../common/search-user';
-import { useState } from 'react';
+import { BoldText, ItalicText, Text } from '@hibiscus/ui';
+import { Button, GlowSpan } from '@hibiscus/ui-kit-2023';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { container } from 'tsyringe';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { useRouter } from 'next/router';
+import { BiArrowBack, BiCheckCircle } from 'react-icons/bi';
+import { ScrollableListBox } from '../../../components/scrollable-list-box/scrollable-list-box';
+import Image from 'next/image';
+
+const COLUMN_WIDTH = 510;
+const TEAM_MEMBER_ICONS = [
+  '/hackform-illustrations/purple-planet-stand.svg',
+  '/hackform-illustrations/detective.svg',
+  '/hackform-illustrations/heart-flying.svg',
+];
 
 export function Index() {
+  const [user, setUser] = useState<any>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    async function getUserProfile(wristbandId: string): Promise<any> {
+      const supabase = container.resolve(HibiscusSupabaseClient);
+      const userRes = await supabase
+        .getClient()
+        .from('user_profiles')
+        .select()
+        .eq('wristband_id', wristbandId);
+
+      if (userRes.data?.length !== 1) {
+        // User either not found or duplicates found == DB corrupted
+        return null;
+      }
+
+      const userId = userRes.data[0].user_id;
+      const teamId = userRes.data[0].team_id;
+
+      const leaderboardRes = await supabase
+        .getClient()
+        .from('leaderboard')
+        .select()
+        .eq('user_id', userId);
+
+      const eventRes = await supabase
+        .getClient()
+        .from('event_log')
+        .select(
+          `
+          *,
+          events (
+            *
+          )
+        `
+        )
+        .eq('user_id', userId)
+        .limit(5)
+        .order('check_in_time', { ascending: false });
+
+      let team = null;
+      if (teamId != null) {
+        const teamRes = await supabase
+          .getClient()
+          .from('user_profiles')
+          .select()
+          .eq('team_id', teamId)
+          .neq('user_id', userId);
+
+        team = teamRes.data ?? [];
+      }
+
+      return {
+        ...userRes.data[0],
+        ...leaderboardRes.data?.[0],
+        checkIns: eventRes.data ?? [],
+        team,
+      };
+    }
+
+    const userId = router.query['id']?.toString();
+    if (userId != null) {
+      getUserProfile(userId).then(setUser);
+    }
+  }, [router.isReady, router.query]);
+
+  if (user == null) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100%',
+        }}
+      >
+        Loading
+      </div>
+    );
+  }
+
   return (
     <>
       <Container>
-        <ColumnSpacedCenter></ColumnSpacedCenter>
+        <ColumnSpacedLeft>
+          <Button color="black">
+            <BiArrowBack color={Colors2023.GRAY.SHLIGHT} size="20px" />
+          </Button>
+
+          <ColumnSpacedCenter>
+            <UserCardContainer>
+              <GlowSpan
+                color={Colors2023.YELLOW.LIGHT}
+                style={{ fontSize: '2em' }}
+              >
+                {user.first_name} {user.last_name}
+              </GlowSpan>
+              <div>
+                <ItalicText>School Placeholder</ItalicText>
+                <ItalicText>Graduation Date Placeholder</ItalicText>
+                <ItalicText>Major Placeholder</ItalicText>
+              </div>
+              <div>
+                <Text>{user.email}</Text>
+                <Text>Phone Number Placeholder</Text>
+              </div>
+              <div
+                style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
+              >
+                <GlowSpan
+                  style={{ letterSpacing: '0.2em', fontWeight: 'bold' }}
+                >
+                  CHECKED IN?
+                </GlowSpan>
+                <BiCheckCircle color={Colors2023.GREEN.DARK} size="1.5em" />
+              </div>
+            </UserCardContainer>
+
+            <Button color="red">REASSIGN BAND</Button>
+          </ColumnSpacedCenter>
+        </ColumnSpacedLeft>
 
         <ColumnSpacedLeft>
-          <Text>Recent check-ins</Text>
+          <div>
+            <Text>{user.first_name}&apos;s Points</Text>
+            <ProgressBarOuter>
+              <ProgressBarInner
+                progress={
+                  (user.event_points ?? 0 + user.bonus_points ?? 0) / 100
+                }
+              />
+            </ProgressBarOuter>
+            {user.event_points != null ? (
+              <SpacedRow>
+                <GlowSpan
+                  color={Colors2023.YELLOW.STANDARD}
+                  style={{ letterSpacing: '0.2em', fontWeight: 'bold' }}
+                >
+                  {user.event_points + user.bonus_points} PTS
+                </GlowSpan>
+                <div style={{ display: 'flex', gap: '0.3em' }}>
+                  <span
+                    style={{
+                      color: Colors2023.GRAY.SHLIGHT,
+                      fontSize: '0.9em',
+                    }}
+                  >
+                    Next prize @
+                  </span>
+                  <GlowSpan
+                    color={Colors2023.YELLOW.STANDARD}
+                    style={{ letterSpacing: '0.2em', fontWeight: 'bold' }}
+                  >
+                    Placeholder PTS
+                  </GlowSpan>
+                </div>
+              </SpacedRow>
+            ) : (
+              <Text>ERROR: User has no leaderboard entry</Text>
+            )}
+          </div>
+
+          <div>
+            <Text>Most recent swipes</Text>
+            <ScrollableListBox width={`${COLUMN_WIDTH}px`} height="200px">
+              {user.checkIns.map((event) => (
+                <ScrollableListBox.Item key={event.log_id}>
+                  <BoldText style={{ fontSize: '1em' }}>
+                    {event.events.name}
+                  </BoldText>
+                  <Text style={{ fontSize: '0.75em' }}>
+                    {event.events.location} on{' '}
+                    {formatTimestamp(event.check_in_time)}
+                  </Text>
+                </ScrollableListBox.Item>
+              ))}
+            </ScrollableListBox>
+          </div>
+
+          <div>
+            <Text>{user.first_name}&apos;s Team</Text>
+            {user.team == null ? (
+              <TeamContainerEmpty>
+                {user.first_name} is not in a team!
+              </TeamContainerEmpty>
+            ) : user.team.length == 0 ? (
+              <TeamContainerEmpty>
+                No other team members to display
+              </TeamContainerEmpty>
+            ) : user.team.length > 3 ? (
+              <TeamContainerEmpty>
+                ERROR: Team has more than 3 members!
+              </TeamContainerEmpty>
+            ) : (
+              <TeamContainer>
+                {user.team.map((member, i) => (
+                  <TeamMember key={member.user_id}>
+                    <Image
+                      src={TEAM_MEMBER_ICONS[i]}
+                      width={100}
+                      height={100}
+                      alt=""
+                    />
+                    <Text>
+                      {member.first_name} {member.last_name}
+                    </Text>
+                  </TeamMember>
+                ))}
+              </TeamContainer>
+            )}
+          </div>
         </ColumnSpacedLeft>
       </Container>
     </>
@@ -21,10 +238,21 @@ export function Index() {
 
 export default Index;
 
+function formatTimestamp(timestamp: string): string {
+  const date = new Date(timestamp);
+  return new Intl.DateTimeFormat('default', {
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+  })
+    .format(date)
+    .replace(' at ', ', ');
+}
+
 const Container = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  align-items: center;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
   justify-items: center;
   min-height: 100%;
 `;
@@ -39,23 +267,24 @@ const ColumnSpacedCenter = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.5em;
 `;
 
 const ColumnSpacedLeft = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.5em;
 `;
 
-const CardContainer = styled.div`
+const UserCardContainer = styled.div`
   display: flex;
   flex-direction: column;
 
   width: 360px;
-  height: 385px;
 
-  padding: 1.5rem 2.5rem;
+  padding: 1.5em 2.5em;
+
+  gap: 1.5em;
 
   background-color: ${Colors2023.GRAY.STANDARD};
 
@@ -63,14 +292,66 @@ const CardContainer = styled.div`
   border-radius: 9px;
 `;
 
-const CheckInRow = styled.div`
+const SpacedRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const ProgressBarOuter = styled.div`
+  width: ${COLUMN_WIDTH}px;
+  height: 20px;
+
+  border: 3px solid ${Colors2023.YELLOW.LIGHT};
+  border-radius: 10px;
+`;
+
+const ProgressBarInner = styled.div<{ progress: number }>`
+  width: ${(props) => props.progress * COLUMN_WIDTH}px;
+  height: 20px;
+
+  border: solid ${Colors2023.YELLOW.LIGHT};
+  border-radius: 10px;
+
+  background-color: ${Colors2023.YELLOW.STANDARD};
+
+  margin-left: -3px;
+  margin-top: -3px;
+`;
+
+const TeamContainerEmpty = styled.div`
+  width: ${COLUMN_WIDTH}px;
+
+  padding: 1.5em 2.5em;
+
+  gap: 1.5em;
+
+  background-color: ${Colors2023.GRAY.STANDARD};
+
+  border: thick solid ${Colors2023.GRAY.MEDIUM};
+  border-radius: 9px;
+`;
+
+const TeamContainer = styled.div`
   display: grid;
-  grid-template-columns: 3fr 2fr;
-  align-items: end;
+  grid-template-columns: repeat(3, 1fr);
 
-  padding: 1rem 0;
+  width: ${COLUMN_WIDTH}px;
 
-  &:not(:last-child) {
-    border-bottom: thin solid ${Colors2023.GRAY.MEDIUM};
-  }
+  padding: 1.5em 2.5em;
+
+  gap: 1.5em;
+
+  background-color: ${Colors2023.GRAY.STANDARD};
+
+  border: thick solid ${Colors2023.GRAY.MEDIUM};
+  border-radius: 9px;
+`;
+
+const TeamMember = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 1em;
 `;
