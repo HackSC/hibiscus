@@ -10,6 +10,15 @@ export class Leaderboard {
   }
 
   async getLeaderboard() {
-    return null;
+    const { data, error } = await this.client.from('leaderboard').select();
+    return { data, error };
+  }
+
+  async getUserRank(userId) {
+    const { data, error } = await this.client
+      .from('leaderboard')
+      .select()
+      .eq('user_id', userId);
+    return { data, error };
   }
 }
