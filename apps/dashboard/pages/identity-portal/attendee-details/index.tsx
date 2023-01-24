@@ -257,12 +257,6 @@ const Container = styled.div`
   min-height: 100%;
 `;
 
-const ColumnCenter = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
 const ColumnSpacedCenter = styled.div`
   display: flex;
   flex-direction: column;
