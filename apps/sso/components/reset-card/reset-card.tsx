@@ -1,10 +1,9 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { GradientSpan, Text } from '@hibiscus/ui';
 import { TrademarkColors } from '@hibiscus/styles';
 import { useRouter } from 'next/router';
-import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
-import { container } from 'tsyringe';
+import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
 
 /* eslint-disable-next-line */
 export interface ResetCardProps {}
@@ -13,6 +12,7 @@ export function ResetCard(props: ResetCardProps) {
   const router = useRouter();
   const [hideErrorMessage, setHideErrorMessage] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
+  const { supabase } = useContext(SupabaseContext);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -26,7 +26,6 @@ export function ResetCard(props: ResetCardProps) {
       return;
     }
 
-    const supabase = container.resolve(HibiscusSupabaseClient);
     const { data, error } = await supabase.updatePassword(newPassword);
 
     if (error) {

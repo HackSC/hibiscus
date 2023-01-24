@@ -2,18 +2,18 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 /* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { GradientSpan, Text } from '@hibiscus/ui';
 import { TrademarkColors } from '@hibiscus/styles';
-import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import GrayLink from '../gray-link/gray-link';
-import { container } from 'tsyringe';
+import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
 
 /* eslint-disable-next-line */
 export interface ResetCardProps {}
 
 export function ResetEmailCard(props: ResetCardProps) {
   const [hideSuccessMessage, setHideSuccessMessage] = useState(false);
+  const { supabase } = useContext(SupabaseContext);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -21,7 +21,6 @@ export function ResetEmailCard(props: ResetCardProps) {
     const email = event.target.email.value;
     const callbackUrl = `${window.location.protocol}//${window.location.host}/reset`;
 
-    const supabase = container.resolve(HibiscusSupabaseClient);
     const { error } = await supabase.resetPasswordViaEmail(email, callbackUrl);
 
     if (error) {

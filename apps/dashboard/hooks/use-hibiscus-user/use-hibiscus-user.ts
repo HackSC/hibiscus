@@ -1,8 +1,7 @@
-import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
 import { HibiscusRole, HibiscusUser } from '@hibiscus/types';
 import { getCookie } from 'cookies-next';
-import { useEffect, useState } from 'react';
-import { container } from 'tsyringe';
+import { useContext, useEffect, useState } from 'react';
 import { getEnv } from '@hibiscus/env';
 import { useAppDispatch } from '../redux/hooks';
 import { removeTabRoute } from '../../store/menu-slice';
@@ -12,13 +11,13 @@ import { ApplicationStatus } from 'libs/types/src/lib/application-status';
 export function useHibiscusUser() {
   const [user, setUser] = useState<HibiscusUser | null>(null);
   const dispatch = useAppDispatch();
+  const { supabase } = useContext(SupabaseContext);
 
   const getUserProfile = async (): Promise<HibiscusUser> => {
     const env = getEnv();
 
     // Get user profile from db
     // uses cookie set from SSO
-    const supabase = container.resolve(HibiscusSupabaseClient);
     const profile = await supabase.getUserProfile(
       getCookie(env.Hibiscus.Cookies.accessTokenName) as string,
       getCookie(env.Hibiscus.Cookies.refreshTokenName) as string

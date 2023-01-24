@@ -7,10 +7,8 @@ import Image from 'next/image';
 import styled from 'styled-components';
 import APIService from '../../../common/api';
 import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
-import { container } from 'tsyringe';
-import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
-import { getCookie } from 'cookies-next';
-import { getEnv } from '@hibiscus/env';
+import { useContext } from 'react';
+import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface HackformEndingProps {
@@ -21,6 +19,7 @@ export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
   const hackformUtils = useHackform();
   const { user } = useHibiscusUser();
   const TIME_BEFORE_FORMSTATE_RESET = 2000; // wait this much ms before we do reset
+  const { supabase } = useContext(SupabaseContext);
 
   const handleSubmit = async () => {
     const submission = hackformUtils.getSubmission();
@@ -29,7 +28,6 @@ export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
       hackformUtils.reset();
     }, TIME_BEFORE_FORMSTATE_RESET);
 
-    const supabase = container.resolve(HibiscusSupabaseClient);
     const client = supabase.getClient();
     await client
       .from('user_profiles')

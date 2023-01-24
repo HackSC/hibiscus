@@ -1,12 +1,11 @@
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { H3, Text } from '@hibiscus/ui';
 import { Colors2023 } from '@hibiscus/styles';
 import Image from 'next/image';
 import * as SSOClient from '@hibiscus/sso-client';
 import GrayLink from '../gray-link/gray-link';
-import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
-import { container } from 'tsyringe';
+import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
 import { MutatingDots } from 'react-loader-spinner';
 import {
   Button,
@@ -19,6 +18,7 @@ export function LoginCard() {
   const [hideErrorMessage, setHideErrorMessage] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [loggedInState, setLoggedInState] = useState('');
+  const { supabase } = useContext(SupabaseContext);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -26,7 +26,6 @@ export function LoginCard() {
     const email = event.target.email.value;
     const password = event.target.password.value;
 
-    const supabase = container.resolve(HibiscusSupabaseClient);
     const { data, error } = await supabase.signInWithPassword(email, password);
 
     if (error) {
