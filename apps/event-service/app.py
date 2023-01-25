@@ -30,17 +30,8 @@ def get_events():
   
 @app.get("/events/<day>")
 def get_events_by_day(day: int):
-  day_begin, day_end = None, None
-  one_day = timedelta(1)
-  
-  if day == "1":
-    day_begin = datetime(2023,2,3)
-  elif day == "2":
-    day_begin = datetime(2023,2,4)
-  elif day == "3":
-    day_begin = datetime(2023,2,5)
-    
-  day_end = day_begin + one_day
+  day_begin = datetime(2023,2,3) + timedelta(int(day) - 1)
+  day_end = day_begin + timedelta(1)
       
   res = supabase.table("events").select("name,description,start,end,id").gt('start', day_begin.isoformat('T','auto')).lt('start', day_end.isoformat('T','auto')).order('start').execute()                   
   
