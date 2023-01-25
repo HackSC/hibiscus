@@ -99,7 +99,7 @@ const faqQuestionsAndAnswersData: {
   {
     titleText: 'When is HackSC?',
     disclosedText:
-      'HackSC 2023 will take begin on February 3 2023 at 6pm and end on Feb 5 2023 at2pm.',
+      'HackSC 2023 will take begin on February 3 2023 at 6pm and end on Feb 5 2023 at 2pm.',
     color: Colors2023.BLUE.STANDARD,
   },
   {
