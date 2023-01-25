@@ -3,6 +3,8 @@ create table "public"."participants" (
     "created_at" timestamp with time zone default now(),
     "first_name" character varying,
     "last_name" character varying,
+    "DOB" character varying,
+    "school" character varying,
     "major" character varying,
     "graduation_year" character varying,
     "resume" character varying,
