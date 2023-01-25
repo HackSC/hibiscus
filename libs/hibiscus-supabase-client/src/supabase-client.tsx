@@ -166,24 +166,16 @@ export class HibiscusSupabaseClient {
    * Retrives the profile of the current logged-in user
    *
    * @param access_token
-   * @param refresh_token
+   * @param refresh_token (deprecated)
    * @returns nullable Promise containing UserProfile object
    */
   async getUserProfile(
     access_token: string,
-    refresh_token: string
+    refresh_token?: string
   ): Promise<UserProfileRow | null> {
-    // This is used on both client-side and server-side so this has to stay
-    const authRes = await this.verifyToken(access_token, refresh_token);
-    if ('session' in authRes.data && authRes.data.session != null) {
-      // Access token was refreshed, update cookies
-      HibiscusSupabaseClient.setTokenCookieClientSide(
-        authRes.data.session.access_token,
-        authRes.data.session.refresh_token
-      );
-    }
+    const { data } = await this.client.auth.getUser(access_token);
+    const user = data.user;
 
-    const user = authRes.data.user;
     if (user == null) {
       // Access token was invalid
       return null;

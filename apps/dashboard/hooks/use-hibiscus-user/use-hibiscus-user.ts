@@ -19,8 +19,7 @@ export function useHibiscusUser() {
     // Get user profile from db
     // uses cookie set from SSO
     const profile = await supabase.getUserProfile(
-      getCookie(env.Hibiscus.Cookies.accessTokenName) as string,
-      getCookie(env.Hibiscus.Cookies.refreshTokenName) as string
+      getCookie(env.Hibiscus.Cookies.accessTokenName) as string
     );
 
     if (profile != null) {

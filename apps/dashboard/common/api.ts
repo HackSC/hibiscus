@@ -65,8 +65,7 @@ export default class APIService {
     // assoc current hacker with this form
     const env = getEnv();
     const user = await supabase.getUserProfile(
-      getCookie(env.Hibiscus.Cookies.accessTokenName) as string,
-      getCookie(env.Hibiscus.Cookies.refreshTokenName) as string
+      getCookie(env.Hibiscus.Cookies.accessTokenName) as string
     );
     if (user.app_id) {
       console.error('User already has an app');

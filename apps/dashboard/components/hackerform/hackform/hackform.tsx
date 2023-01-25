@@ -5,7 +5,6 @@ import HackformQuestionComponent from '../hackform-question/hackform-question';
 import { HackformMetadata } from '@hibiscus/types';
 import HackformEnding from '../hackform-end/hackform-end';
 import { useHackform } from '../../../hooks/use-hackform/use-hackform';
-import { container } from 'tsyringe';
 import { getCookie } from 'cookies-next';
 import { getEnv } from '@hibiscus/env';
 import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
@@ -26,10 +25,7 @@ export function Hackerform({ formMetadata }: HackerformProps) {
     const accessToken = getCookie(
       getEnv().Hibiscus.Cookies.accessTokenName
     ).toString();
-    const refreshToken = getCookie(
-      getEnv().Hibiscus.Cookies.refreshTokenName
-    ).toString();
-    const user = await supabase.getUserProfile(accessToken, refreshToken);
+    const user = await supabase.getUserProfile(accessToken);
     await client
       .from('user_profiles')
       .update({ application_status: 2 })
