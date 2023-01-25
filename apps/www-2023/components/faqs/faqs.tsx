@@ -98,7 +98,8 @@ const faqQuestionsAndAnswersData: {
   },
   {
     titleText: 'When is HackSC?',
-    disclosedText: 'HackSC will take place on February 3-5, 2023.',
+    disclosedText:
+      'HackSC 2023 will take begin on February 3 2023 at 6pm and end on Feb 5 2023 at2pm.',
     color: Colors2023.BLUE.STANDARD,
   },
   {
