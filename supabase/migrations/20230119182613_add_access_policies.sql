@@ -37,7 +37,7 @@ create policy "Allow volunteers to access all rows"
     to authenticated
     using (auth.uid() in (
         select get_volunteers()
-    ))
+    ));
 
 create policy "Allow volunteers to access all rows"
     on public.bonus_points
@@ -45,4 +45,4 @@ create policy "Allow volunteers to access all rows"
     to authenticated
     using (auth.uid() in (
         select get_volunteers()
-    ))
+    ));

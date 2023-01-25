@@ -17,7 +17,7 @@ export function Index() {
 
   const renderDashboard = () => {
     if (user.role === HibiscusRole.HACKER) return <HackerPortal user={user} />;
-    else if (user.role === HibiscusRole.SPONSOR) return <IdentityPortal />;
+    else if (user.role === HibiscusRole.VOLUNTEER) return <IdentityPortal />;
   };
 
   return (

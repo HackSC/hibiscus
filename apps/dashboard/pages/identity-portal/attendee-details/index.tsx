@@ -6,9 +6,10 @@ import styled from 'styled-components';
 import { container } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { useRouter } from 'next/router';
-import { BiArrowBack, BiCheckCircle } from 'react-icons/bi';
-import { ScrollableListBox } from '../../../components/scrollable-list-box/scrollable-list-box';
+import { BiCheckCircle } from 'react-icons/bi';
+import { ScrollableListBox } from '../../../components/identity-portal/scrollable-list-box/scrollable-list-box';
 import Image from 'next/image';
+import { BackButton } from '../../../components/identity-portal/back-button/back-button';
 
 const COLUMN_WIDTH = 510;
 const TEAM_MEMBER_ICONS = [
@@ -17,21 +18,31 @@ const TEAM_MEMBER_ICONS = [
   '/hackform-illustrations/heart-flying.svg',
 ];
 
+enum State {
+  LOADING,
+  USER_FOUND,
+  USER_NOT_FOUND,
+  NO_ID_PROVIDED,
+}
+
 export function Index() {
   const [user, setUser] = useState<any>(null);
+  const [state, setState] = useState(State.LOADING);
   const router = useRouter();
 
   useEffect(() => {
-    async function getUserProfile(wristbandId: string): Promise<any> {
+    async function getUserProfile(id: string, wristband = true): Promise<any> {
       const supabase = container.resolve(HibiscusSupabaseClient);
+
       const userRes = await supabase
         .getClient()
         .from('user_profiles')
         .select()
-        .eq('wristband_id', wristbandId);
+        .eq(wristband ? 'wristband_id' : 'user_id', id);
 
       if (userRes.data?.length !== 1) {
         // User either not found or duplicates found == DB corrupted
+        setState(State.USER_NOT_FOUND);
         return null;
       }
 
@@ -71,6 +82,8 @@ export function Index() {
         team = teamRes.data ?? [];
       }
 
+      setState(State.USER_FOUND);
+
       return {
         ...userRes.data[0],
         ...leaderboardRes.data?.[0],
@@ -79,13 +92,20 @@ export function Index() {
       };
     }
 
-    const userId = router.query['id']?.toString();
-    if (userId != null) {
-      getUserProfile(userId).then(setUser);
+    const wristbandId = router.query['wristband_id']?.toString();
+    if (wristbandId != null) {
+      getUserProfile(wristbandId).then(setUser);
+    } else {
+      const userId = router.query['user_id']?.toString();
+      if (userId != null) {
+        getUserProfile(userId, false).then(setUser);
+      } else {
+        setState(State.NO_ID_PROVIDED);
+      }
     }
   }, [router.isReady, router.query]);
 
-  if (user == null) {
+  if (state !== State.USER_FOUND) {
     return (
       <div
         style={{
@@ -95,144 +115,140 @@ export function Index() {
           height: '100%',
         }}
       >
-        Loading
+        {state === State.LOADING
+          ? 'Loading'
+          : state === State.USER_NOT_FOUND
+          ? 'User not found!'
+          : state === State.NO_ID_PROVIDED
+          ? 'No parameters provided!'
+          : 'An unknown error occured'}
       </div>
     );
   }
 
   return (
-    <>
-      <Container>
-        <ColumnSpacedLeft>
-          <Button color="black">
-            <BiArrowBack color={Colors2023.GRAY.SHLIGHT} size="20px" />
-          </Button>
+    <Container>
+      <ColumnSpacedLeft>
+        <BackButton link="/identity-portal/attendee-details-scan" />
 
-          <ColumnSpacedCenter>
-            <UserCardContainer>
-              <GlowSpan
-                color={Colors2023.YELLOW.LIGHT}
-                style={{ fontSize: '2em' }}
-              >
-                {user.first_name} {user.last_name}
+        <ColumnSpacedCenter>
+          <UserCardContainer>
+            <GlowSpan
+              color={Colors2023.YELLOW.LIGHT}
+              style={{ fontSize: '2em' }}
+            >
+              {user.first_name} {user.last_name}
+            </GlowSpan>
+            <div>
+              <ItalicText>School Placeholder</ItalicText>
+              <ItalicText>Graduation Date Placeholder</ItalicText>
+              <ItalicText>Major Placeholder</ItalicText>
+            </div>
+            <div>
+              <Text>{user.email}</Text>
+              <Text>Phone Number Placeholder</Text>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <GlowSpan style={{ letterSpacing: '0.2em', fontWeight: 'bold' }}>
+                CHECKED IN?
               </GlowSpan>
-              <div>
-                <ItalicText>School Placeholder</ItalicText>
-                <ItalicText>Graduation Date Placeholder</ItalicText>
-                <ItalicText>Major Placeholder</ItalicText>
-              </div>
-              <div>
-                <Text>{user.email}</Text>
-                <Text>Phone Number Placeholder</Text>
-              </div>
-              <div
-                style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
+              <BiCheckCircle color={Colors2023.GREEN.DARK} size="1.5em" />
+            </div>
+          </UserCardContainer>
+
+          <Button color="red">REASSIGN BAND</Button>
+        </ColumnSpacedCenter>
+      </ColumnSpacedLeft>
+
+      <ColumnSpacedLeft>
+        <div>
+          <Text>{user.first_name}&apos;s Points</Text>
+          <ProgressBarOuter>
+            <ProgressBarInner
+              progress={(user.event_points ?? 0 + user.bonus_points ?? 0) / 100}
+            />
+          </ProgressBarOuter>
+          {user.event_points != null ? (
+            <SpacedRow>
+              <GlowSpan
+                color={Colors2023.YELLOW.STANDARD}
+                style={{ letterSpacing: '0.2em', fontWeight: 'bold' }}
               >
-                <GlowSpan
-                  style={{ letterSpacing: '0.2em', fontWeight: 'bold' }}
+                {user.event_points + user.bonus_points} PTS
+              </GlowSpan>
+              <div style={{ display: 'flex', gap: '0.3em' }}>
+                <span
+                  style={{
+                    color: Colors2023.GRAY.SHLIGHT,
+                    fontSize: '0.9em',
+                  }}
                 >
-                  CHECKED IN?
-                </GlowSpan>
-                <BiCheckCircle color={Colors2023.GREEN.DARK} size="1.5em" />
-              </div>
-            </UserCardContainer>
-
-            <Button color="red">REASSIGN BAND</Button>
-          </ColumnSpacedCenter>
-        </ColumnSpacedLeft>
-
-        <ColumnSpacedLeft>
-          <div>
-            <Text>{user.first_name}&apos;s Points</Text>
-            <ProgressBarOuter>
-              <ProgressBarInner
-                progress={
-                  (user.event_points ?? 0 + user.bonus_points ?? 0) / 100
-                }
-              />
-            </ProgressBarOuter>
-            {user.event_points != null ? (
-              <SpacedRow>
+                  Next prize @
+                </span>
                 <GlowSpan
                   color={Colors2023.YELLOW.STANDARD}
                   style={{ letterSpacing: '0.2em', fontWeight: 'bold' }}
                 >
-                  {user.event_points + user.bonus_points} PTS
+                  Placeholder PTS
                 </GlowSpan>
-                <div style={{ display: 'flex', gap: '0.3em' }}>
-                  <span
-                    style={{
-                      color: Colors2023.GRAY.SHLIGHT,
-                      fontSize: '0.9em',
-                    }}
-                  >
-                    Next prize @
-                  </span>
-                  <GlowSpan
-                    color={Colors2023.YELLOW.STANDARD}
-                    style={{ letterSpacing: '0.2em', fontWeight: 'bold' }}
-                  >
-                    Placeholder PTS
-                  </GlowSpan>
-                </div>
-              </SpacedRow>
-            ) : (
-              <Text>ERROR: User has no leaderboard entry</Text>
-            )}
-          </div>
+              </div>
+            </SpacedRow>
+          ) : (
+            <Text>ERROR: User has no leaderboard entry</Text>
+          )}
+        </div>
 
-          <div>
-            <Text>Most recent swipes</Text>
-            <ScrollableListBox width={`${COLUMN_WIDTH}px`} height="200px">
-              {user.checkIns.map((event) => (
-                <ScrollableListBox.Item key={event.log_id}>
-                  <BoldText style={{ fontSize: '1em' }}>
-                    {event.events.name}
-                  </BoldText>
-                  <Text style={{ fontSize: '0.75em' }}>
-                    {event.events.location} on{' '}
-                    {formatTimestamp(event.check_in_time)}
+        <div>
+          <Text>Most recent swipes</Text>
+          <ScrollableListBox width={`${COLUMN_WIDTH}px`} height="200px">
+            {user.checkIns.map((event) => (
+              <ScrollableListBox.Item key={event.log_id}>
+                <BoldText style={{ fontSize: '1em' }}>
+                  {event.events.name}
+                </BoldText>
+                <Text style={{ fontSize: '0.75em' }}>
+                  {event.events.location} on{' '}
+                  {formatTimestamp(event.check_in_time)}
+                </Text>
+              </ScrollableListBox.Item>
+            ))}
+          </ScrollableListBox>
+        </div>
+
+        <div>
+          <Text>{user.first_name}&apos;s Team</Text>
+          {user.team == null ? (
+            <TeamContainerEmpty>
+              {user.first_name} is not in a team!
+            </TeamContainerEmpty>
+          ) : user.team.length == 0 ? (
+            <TeamContainerEmpty>
+              No other team members to display
+            </TeamContainerEmpty>
+          ) : user.team.length > 3 ? (
+            <TeamContainerEmpty>
+              ERROR: Team has more than 3 members!
+            </TeamContainerEmpty>
+          ) : (
+            <TeamContainer>
+              {user.team.map((member, i) => (
+                <TeamMember key={member.user_id}>
+                  <Image
+                    src={TEAM_MEMBER_ICONS[i]}
+                    width={100}
+                    height={100}
+                    alt=""
+                  />
+                  <Text>
+                    {member.first_name} {member.last_name}
                   </Text>
-                </ScrollableListBox.Item>
+                </TeamMember>
               ))}
-            </ScrollableListBox>
-          </div>
-
-          <div>
-            <Text>{user.first_name}&apos;s Team</Text>
-            {user.team == null ? (
-              <TeamContainerEmpty>
-                {user.first_name} is not in a team!
-              </TeamContainerEmpty>
-            ) : user.team.length == 0 ? (
-              <TeamContainerEmpty>
-                No other team members to display
-              </TeamContainerEmpty>
-            ) : user.team.length > 3 ? (
-              <TeamContainerEmpty>
-                ERROR: Team has more than 3 members!
-              </TeamContainerEmpty>
-            ) : (
-              <TeamContainer>
-                {user.team.map((member, i) => (
-                  <TeamMember key={member.user_id}>
-                    <Image
-                      src={TEAM_MEMBER_ICONS[i]}
-                      width={100}
-                      height={100}
-                      alt=""
-                    />
-                    <Text>
-                      {member.first_name} {member.last_name}
-                    </Text>
-                  </TeamMember>
-                ))}
-              </TeamContainer>
-            )}
-          </div>
-        </ColumnSpacedLeft>
-      </Container>
-    </>
+            </TeamContainer>
+          )}
+        </div>
+      </ColumnSpacedLeft>
+    </Container>
   );
 }
 

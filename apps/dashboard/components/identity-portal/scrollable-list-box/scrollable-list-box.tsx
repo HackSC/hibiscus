@@ -15,11 +15,33 @@ export function ScrollableListBox({
   return <Container style={{ width, height }}>{children}</Container>;
 }
 
+interface ItemClickableProps<T> extends PropsWithChildren {
+  value: T;
+  onClick: (value: T) => void;
+}
+
+ScrollableListBox.ItemClickable = function ItemClickable<T>({
+  children,
+  value,
+  onClick,
+}: ItemClickableProps<T>) {
+  function clickHandler() {
+    onClick(value);
+  }
+
+  return (
+    <Clickable onClick={clickHandler}>
+      <ScrollableListBox.Item>{children}</ScrollableListBox.Item>
+    </Clickable>
+  );
+};
+
 ScrollableListBox.Item = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
-  padding: 1rem 0;
+  padding: 1em 0;
 
   &:not(:last-child) {
     border-bottom: thin solid ${Colors2023.GRAY.MEDIUM};
@@ -33,7 +55,7 @@ const Container = styled.div`
   width: 360px;
   height: 385px;
 
-  padding: 1.5rem 2.5rem;
+  padding: 1.5em 2.5em;
 
   background-color: ${Colors2023.GRAY.STANDARD};
 
@@ -41,4 +63,20 @@ const Container = styled.div`
   border-radius: 9px;
 
   overflow-y: scroll;
+`;
+
+const Clickable = styled.div`
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${Colors2023.GRAY.MEDIUM};
+    padding: 0 1.5em;
+    margin: 0 -1.5em;
+  }
+
+  &:active {
+    background-color: ${Colors2023.GRAY.DARK};
+    padding: 0 1.5em;
+    margin: 0 -1.5em;
+  }
 `;
