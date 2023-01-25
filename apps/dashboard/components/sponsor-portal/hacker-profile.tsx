@@ -16,16 +16,16 @@ export function HackerProfile({ hacker }: Props) {
   return (
     <Container>
       <Text style={{ fontSize: '30px' }}>
-        {hacker.firstName} {hacker.lastName}
+        {hacker.first_name} {hacker.last_name}
       </Text>
-      <Text style={{ fontSize: '18px' }}>School: {hacker.school}</Text>
+      <Text style={{ fontSize: '18px' }}>School: {hacker.major}</Text>
       <Text style={{ fontSize: '18px' }}>Major: {hacker.major}</Text>
       <Text style={{ fontSize: '18px' }}>
-        Grad Year: {hacker.graduationYear}
+        Grad Year: {hacker.graduation_year}
       </Text>
       <TitleText style={{ marginTop: '1rem' }}>QUICK NOTES</TitleText>
       <NoteContainer>
-        <Text>{hacker.note ?? 'No note added'}</Text>
+        <Text>No note added</Text>
       </NoteContainer>
       <div
         style={{

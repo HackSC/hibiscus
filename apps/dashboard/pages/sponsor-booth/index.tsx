@@ -1,3 +1,4 @@
+/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
@@ -9,14 +10,15 @@ import { Text } from '@hibiscus/ui';
 import { HackerTab } from '../../components/sponsor-portal/hacker-tab';
 import HackerProfile from '../../components/sponsor-portal/hacker-profile';
 import { useRouter } from 'next/router';
-
+import { SponsorAPI } from 'apps/dashboard/common/mock-sponsor';
 export interface Attendee {
-  firstName: string;
-  lastName: string;
-  school: string;
+  id: string;
+  first_name: string;
+  last_name: string;
   major: string;
-  graduationYear: string;
-  note?: string;
+  resume: string; //WILL BE CHANGED SOON, STRING FOR NOW
+  graduation_year: string;
+  portfolio_link: string;
 }
 
 const Index = () => {
@@ -24,69 +26,74 @@ const Index = () => {
   const [currentAttendee, setCurrentAttendee] = useState<Attendee>(null);
   const router = useRouter();
 
-  const MockAttendeesList: Attendee[] = [
-    {
-      firstName: 'Huy',
-      lastName: 'Vu',
-      school: 'USC',
-      major: 'CS',
-      graduationYear: '2024',
-      note: 'This is a potential candidate that is sufficient in communication skill.',
-    },
-    {
-      firstName: 'Vincent',
-      lastName: 'Vu',
-      school: 'USC',
-      major: 'CS',
-      graduationYear: '2024',
-    },
-    {
-      firstName: 'Kelly',
-      lastName: 'Bui',
-      school: 'USC',
-      major: 'Business',
-      graduationYear: '2023',
-    },
-    {
-      firstName: 'Kelly',
-      lastName: 'Bui',
-      school: 'USC',
-      major: 'Business',
-      graduationYear: '2023',
-    },
-    {
-      firstName: 'Kelly',
-      lastName: 'Bui',
-      school: 'USC',
-      major: 'Business',
-      graduationYear: '2023',
-    },
-    {
-      firstName: 'Kelly',
-      lastName: 'Bui',
-      school: 'USC',
-      major: 'Business',
-      graduationYear: '2023',
-    },
-    {
-      firstName: 'Kelly',
-      lastName: 'Bui',
-      school: 'USC',
-      major: 'Business',
-      graduationYear: '2023',
-    },
-    {
-      firstName: 'Kelly',
-      lastName: 'Bui',
-      school: 'USC',
-      major: 'Business',
-      graduationYear: '2023',
-    },
-  ];
+  // const MockAttendeesList: Attendee[] = [
+  //   {
+  //     firstName: 'Huy',
+  //     lastName: 'Vu',
+  //     school: 'USC',
+  //     major: 'CS',
+  //     graduationYear: '2024',
+  //     note: 'This is a potential candidate that is sufficient in communication skill.',
+  //   },
+  //   {
+  //     firstName: 'Vincent',
+  //     lastName: 'Vu',
+  //     school: 'USC',
+  //     major: 'CS',
+  //     graduationYear: '2024',
+  //   },
+  //   {
+  //     firstName: 'Kelly',
+  //     lastName: 'Bui',
+  //     school: 'USC',
+  //     major: 'Business',
+  //     graduationYear: '2023',
+  //   },
+  //   {
+  //     firstName: 'Kelly',
+  //     lastName: 'Bui',
+  //     school: 'USC',
+  //     major: 'Business',
+  //     graduationYear: '2023',
+  //   },
+  //   {
+  //     firstName: 'Kelly',
+  //     lastName: 'Bui',
+  //     school: 'USC',
+  //     major: 'Business',
+  //     graduationYear: '2023',
+  //   },
+  //   {
+  //     firstName: 'Kelly',
+  //     lastName: 'Bui',
+  //     school: 'USC',
+  //     major: 'Business',
+  //     graduationYear: '2023',
+  //   },
+  //   {
+  //     firstName: 'Kelly',
+  //     lastName: 'Bui',
+  //     school: 'USC',
+  //     major: 'Business',
+  //     graduationYear: '2023',
+  //   },
+  //   {
+  //     firstName: 'Kelly',
+  //     lastName: 'Bui',
+  //     school: 'USC',
+  //     major: 'Business',
+  //     graduationYear: '2023',
+  //   },
+  // ];
 
   useEffect(() => {
-    setAttendees(MockAttendeesList);
-  }, [attendees]);
+    async function fetchData() {
+      const mockAPI = new SponsorAPI(true);
+      const response = await (await mockAPI.getAttendees()).data;
+      setAttendees(response);
+    }
+    fetchData();
+  }, []); // Or [] if effect doesn't need props or state
 
   const { user } = useHibiscusUser();
   if (user == null) {
@@ -212,10 +219,10 @@ const Index = () => {
               RECENTLY SAVED
             </H1>
             <SavedAttendeeContainer>
-              <HackerTab user={MockAttendeesList[0]} />
+              {/* <HackerTab user={MockAttendeesList[0]} /> */}
             </SavedAttendeeContainer>
             <SavedAttendeeContainer>
-              <HackerTab user={MockAttendeesList[1]} />
+              {/* <HackerTab user={MockAttendeesList[1]} /> */}
             </SavedAttendeeContainer>
           </SavedSection>
           <ViewAllButton>
