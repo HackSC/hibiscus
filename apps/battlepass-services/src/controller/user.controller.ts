@@ -3,7 +3,7 @@ import { Leaderboard } from '../repository/leaderboard.repository';
 import * as express from 'express';
 
 @injectable()
-export class BonusPointsController {
+export class UserController {
   constructor(private repository: Leaderboard) {}
   /**
    * Get bonus point events
@@ -11,11 +11,11 @@ export class BonusPointsController {
    * @param _req - incoming request (unused)
    * @param res - outgoing response { keys }
    */
-  async getBonusPointEvents(_req: express.Request, res: express.Response) {
+  async getUser(req, res) {
     try {
-      const user = await this.repository.getUser(_req.params.user_id);
+      const user = await this.repository.getUser(req.params.user_id);
       const userData = user.data;
-      res.status(200).json({ user: userData });
+      res.status(200).json({ points: userData });
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
