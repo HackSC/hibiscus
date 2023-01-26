@@ -118,7 +118,7 @@ const OtherWrapper = styled.div`
   display: flex;
   gap: 10px;
 
-  @media (max-width: 400px) {
+  @media (max-width: 430px) {
     flex-direction: column;
     padding-bottom: 2rem;
   }

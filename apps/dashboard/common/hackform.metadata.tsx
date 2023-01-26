@@ -373,12 +373,12 @@ export const formMetadata2023HackerApps: HackformMetadata = {
     },
     {
       title:
-        'Tell us about a project you’re most proud of. What did you learn from it? (100-150 words)',
+        'Tell us about a project you’re most proud of. What did you learn from it? (50-150 words)',
       type: HackformQuestionType.LongText,
       required: true,
       validatorMetadata: {
         [HackformQuestionType.LongText]: {
-          minWordCount: 100,
+          minWordCount: 50,
           maxWordCount: 150,
         },
       },
@@ -386,7 +386,7 @@ export const formMetadata2023HackerApps: HackformMetadata = {
         if (!input.text) {
           return { valid: false, errorDescription: 'This field is required' };
         }
-        const minWordCount = 100; // TODO: find a better way to do this with validatorMetadata
+        const minWordCount = 50; // TODO: find a better way to do this with validatorMetadata
         const maxWordCount = 150;
         if (isUnder(input.text, minWordCount)) {
           return {
