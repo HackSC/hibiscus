@@ -38,7 +38,7 @@ const BottomWidgetsContainer = styled.div`
   margin: 1rem;
   padding-bottom: 1rem;
 
-  @media (max-width: 400px) {
+  @media (max-width: 430px) {
     justify-content: center;
   }
 `;
