@@ -5,7 +5,7 @@ import { Colors2023 } from '@hibiscus/styles';
 /* eslint-disable-next-line */
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   color: 'blue' | 'black' | 'purple' | 'red';
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 export function Button(props: ButtonProps) {
@@ -182,7 +182,7 @@ const DisabledButton = styled.button`
   align-items: center;
   padding: 10px 30px;
   gap: 10px;
-  background: rgba(151, 151, 151, 0.6);
+  background: rgb(151, 151, 151);
   border-radius: 10px;
   cursor: pointer;
   //fonts
