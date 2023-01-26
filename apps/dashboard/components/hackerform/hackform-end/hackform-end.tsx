@@ -1,5 +1,5 @@
 import { Colors2023 } from '@hibiscus/styles';
-import { HackformMetadata } from '@hibiscus/types';
+import { ApplicationStatus, HackformMetadata } from '@hibiscus/types';
 import { H1, H3 } from '@hibiscus/ui';
 import { Button, GlowSpan } from '@hibiscus/ui-kit-2023';
 import { useHackform } from '../../../hooks/use-hackform/use-hackform';
@@ -10,6 +10,7 @@ import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user'
 import { container } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface HackformEndingProps {
@@ -17,12 +18,14 @@ export interface HackformEndingProps {
 }
 
 export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
+  const [disabledButton, setDisabledButton] = useState(false);
   const hackformUtils = useHackform();
-  const { user } = useHibiscusUser();
+  const { user, setUser } = useHibiscusUser();
   const TIME_BEFORE_FORMSTATE_RESET = 2000; // wait this much ms before we do reset
   const router = useRouter();
 
   const handleSubmit = async () => {
+    setDisabledButton(true); // can't clickjack
     const submission = hackformUtils.getSubmission();
     await APIService.submitHackform(user.id, submission);
     setTimeout(() => {
@@ -31,10 +34,18 @@ export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
 
     const supabase = container.resolve(HibiscusSupabaseClient);
     const client = supabase.getClient();
-    await client
+    const { error } = await client
       .from('user_profiles')
       .update({ application_status: 3 })
       .eq('user_id', user.id);
+    if (error) {
+      console.error('An error occured: ' + error.message);
+    } else {
+      setUser((prev) => ({
+        ...prev,
+        applicationStatus: ApplicationStatus.IN_REVIEW,
+      }));
+    }
     router.replace('/');
   };
 
@@ -55,7 +66,7 @@ export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
         height={200}
         alt="Earth-like character wearing shades pulling baggage and a moon"
       />
-      <Button color="blue" onClick={handleSubmit}>
+      <Button color="blue" onClick={handleSubmit} disabled={disabledButton}>
         SUBMIT YOUR APPLICATION
       </Button>
     </Wrapper>

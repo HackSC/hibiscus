@@ -4,7 +4,7 @@ import Head from 'next/head';
 import './styles.css';
 import { wrapper } from '../store/store';
 import styled from 'styled-components';
-import useHibiscusUser from '../hooks/use-hibiscus-user/use-hibiscus-user';
+import { HibiscusUserProvider } from '../hooks/use-hibiscus-user/use-hibiscus-user';
 import PortalLayout from '../layouts/portal-layout';
 import { useRouter } from 'next/router';
 import { getWebTitle } from '@hibiscus/metadata';
@@ -12,7 +12,6 @@ import { Toaster } from 'react-hot-toast';
 import { TeamProvider } from '../hooks/use-team/use-team';
 
 function CustomApp({ Component, pageProps }: AppProps) {
-  const { user } = useHibiscusUser();
   const router = useRouter();
 
   const createWebTitle = () => {
@@ -38,9 +37,11 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <Toaster />
         <GlobalStyles2023 />
         <TeamProvider>
-          <PortalLayout user={user}>
-            <Component {...pageProps} />
-          </PortalLayout>
+          <HibiscusUserProvider>
+            <PortalLayout>
+              <Component {...pageProps} />
+            </PortalLayout>
+          </HibiscusUserProvider>
         </TeamProvider>
       </Main>
     </>

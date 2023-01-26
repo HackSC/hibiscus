@@ -1,14 +1,14 @@
-import { HibiscusUser } from '@hibiscus/types';
 import React from 'react';
 import styled from 'styled-components';
 import PortalMenu from '../components/portal-menu/portal-menu';
 import TopBar from '../components/top-bar/top-bar';
+import useHibiscusUser from '../hooks/use-hibiscus-user/use-hibiscus-user';
 
-export interface PortalLayoutProps extends React.PropsWithChildren {
-  user: HibiscusUser;
-}
+export type PortalLayoutProps = React.PropsWithChildren;
 
-function PortalLayout({ children, user }: PortalLayoutProps) {
+function PortalLayout({ children }: PortalLayoutProps) {
+  const { user } = useHibiscusUser();
+
   if (user == null) {
     return <></>;
   }

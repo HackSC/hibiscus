@@ -6,33 +6,11 @@ import {
 import { getAge, getMLHMajors, isAbove, isUnder } from './utils';
 import APIService from './api';
 import { Link } from '@hibiscus/ui';
-import { hackformLinks } from './constants';
-
-const generateOptionsGradyear = (): Option[] => {
-  const opts: string[] = [];
-  for (const inc of [...Array(5).keys()]) {
-    for (const season of ['Spring', 'Fall']) {
-      opts.push(`${season} 202${3 + inc}`);
-    }
-  }
-
-  return opts.map((w) => ({
-    value: w.toLowerCase().split(' ').join('-'),
-    displayName: w,
-  }));
-};
-
-const startDateJobOptions: Option[] = [
-  'Summer 2023',
-  'Fall 2023',
-  'Spring 2024',
-  'Summer 2024',
-  'Fall 2024',
-  'Spring 2025 or later',
-].map((w) => ({
-  value: w.toLowerCase().split(' ').join('-'),
-  displayName: w,
-}));
+import {
+  getOptionsGraduationYear,
+  getStartDateJobOptions,
+  hackformLinks,
+} from './constants';
 
 export const formMetadata2023HackerApps: HackformMetadata = {
   entry: {
@@ -88,6 +66,7 @@ export const formMetadata2023HackerApps: HackformMetadata = {
       title: 'What school do you go to?',
       type: HackformQuestionType.SingleOptionDropdown,
       required: true,
+      limitOptions: 10,
       validationFunction: (input) => {
         if (input.text === '')
           return { valid: false, errorDescription: 'This field is required' };
@@ -125,7 +104,7 @@ export const formMetadata2023HackerApps: HackformMetadata = {
       placeholder: 'e.g Summer 2023',
       type: HackformQuestionType.SingleOptionDropdown,
       required: true,
-      options: generateOptionsGradyear(),
+      options: getOptionsGraduationYear(),
       validationFunction: (input) => {
         if (input.text === '') {
           return {
@@ -402,7 +381,7 @@ export const formMetadata2023HackerApps: HackformMetadata = {
       type: HackformQuestionType.SingleOptionDropdown,
       placeholder: 'e.g Summer 2023, Fall 2024',
       limitOptions: 6,
-      options: startDateJobOptions,
+      options: getStartDateJobOptions(),
     },
     {
       title: 'How did you hear about HackSC?',

@@ -35,6 +35,19 @@ export const getOptionsGraduationYear = (): Option[] => {
   }));
 };
 
+export const getStartDateJobOptions = (): Option[] =>
+  [
+    'Summer 2023',
+    'Fall 2023',
+    'Spring 2024',
+    'Summer 2024',
+    'Fall 2024',
+    'Spring 2025 or later',
+  ].map((w) => ({
+    value: w.toLowerCase().split(' ').join('-'),
+    displayName: w,
+  }));
+
 export const HACKER_POSTAPP_STATUSES = [
   ApplicationStatus.NOT_ADMITTED,
   ApplicationStatus.IN_REVIEW,
