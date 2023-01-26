@@ -36,8 +36,8 @@ const Index = () => {
         {
           event: 'INSERT',
           schema: 'public',
-          table: 'events',
-          filter: `company_id=eq.${COMPANY_ID}`,
+          table: 'event_log',
+          // filter: `company_id=eq.${COMPANY_ID}`,
         },
         (payload) => {
           console.log('Change received!', payload);
