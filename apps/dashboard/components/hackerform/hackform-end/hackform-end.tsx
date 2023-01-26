@@ -23,7 +23,7 @@ export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
 
   const handleSubmit = async () => {
     const submission = hackformUtils.getSubmission();
-    await APIService.submitHackform(user.id, submission);
+    await APIService.submitHackform(user.id, submission, supabase);
     setTimeout(() => {
       hackformUtils.reset();
     }, TIME_BEFORE_FORMSTATE_RESET);

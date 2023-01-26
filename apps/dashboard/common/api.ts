@@ -24,9 +24,13 @@ export default class APIService {
    * @param file File object
    * @returns data from API response
    */
-  static async submitResume(file: File, key: string, hackerId: string) {
+  static async submitResume(
+    file: File,
+    key: string,
+    hackerId: string,
+    supabase: HibiscusSupabaseClient
+  ) {
     // prelim check if hacker has already submitted
-    const supabase = container.resolve(HibiscusSupabaseClient);
     const {
       data: { applied },
       error,
@@ -57,11 +61,11 @@ export default class APIService {
    */
   static async submitHackform(
     hackerId: string,
-    submission: HackformSubmission
+    submission: HackformSubmission,
+    supabase: HibiscusSupabaseClient
   ) {
     const res = await axios.post('/api/hackform', { submission });
     const data = res.data as LocalAPIResponses['/hackform'];
-    const supabase = container.resolve(HibiscusSupabaseClient);
     // assoc current hacker with this form
     const env = getEnv();
     const user = await supabase.getUserProfile(

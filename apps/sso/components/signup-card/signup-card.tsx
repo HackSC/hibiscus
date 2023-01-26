@@ -1,14 +1,12 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { H3, Text } from '@hibiscus/ui';
 import { Colors2023 } from '@hibiscus/styles';
 import { useRouter } from 'next/router';
-import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import Image from 'next/image';
 import GrayLink from '../gray-link/gray-link';
-import { container } from 'tsyringe';
 import { MutatingDots } from 'react-loader-spinner';
 import {
   OneLineText,
@@ -16,12 +14,14 @@ import {
   ColorSpanBold,
   OneLinePassword,
 } from '@hibiscus/ui-kit-2023';
+import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
 
 /* eslint-disable-next-line */
 export interface SignUpProps {}
 
 export function SignUpCard(props: SignUpProps) {
   const router = useRouter();
+  const { supabase } = useContext(SupabaseContext);
   const [hideErrorMessage, setHideErrorMessage] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [signUpState, setSignUpState] = useState('');
@@ -53,7 +53,6 @@ export function SignUpCard(props: SignUpProps) {
       return;
     }
 
-    const supabase = container.resolve(HibiscusSupabaseClient);
     const { data, error } = await supabase.signUp(email, password);
 
     if (error) {
