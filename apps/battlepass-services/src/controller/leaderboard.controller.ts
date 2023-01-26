@@ -22,16 +22,14 @@ export class LeaderboardController {
       if (pageNum < 1) pageNum = 1;
       if (pageNum > pageCount) pageNum = pageCount;
       //split into pages
-      res
-        .status(200)
-        .json({
-          page_number: pageNum,
-          page_count: pageCount,
-          ranking: response.slice(
-            pageNum * pageSize - pageSize,
-            pageNum * pageSize
-          ),
-        });
+      res.status(200).json({
+        page_number: pageNum,
+        page_count: pageCount,
+        ranking: response.slice(
+          pageNum * pageSize - pageSize,
+          pageNum * pageSize
+        ),
+      });
     } catch (err) {
       res.status(500).json({ message: err.message });
     }

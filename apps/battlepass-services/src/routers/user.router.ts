@@ -4,8 +4,8 @@ import { UserController } from '../controller/user.controller';
 
 const router = express.Router();
 
-router.get('/user', async (req, res) =>
+router.get('/user/:user_id', async (req, res) =>
   container.resolve(UserController).getUser(req, res)
 );
 
-export { router as LeaderboardRouter };
+export { router as UserRouter };
