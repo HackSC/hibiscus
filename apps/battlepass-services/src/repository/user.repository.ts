@@ -16,4 +16,20 @@ export class User {
       .eq('user_id', userId);
     return { data, error };
   }
+
+  async getBonuPoints(userId: string) {
+    const { data, error } = await this.client
+      .from('leaderboard')
+      .select('bonus_points')
+      .eq('user_id', userId);
+    return { data, error };
+  }
+
+  async updateBonusPoints(userId: string, bonus_points: number) {
+    const { data, error } = await this.client
+      .from('leaderboard')
+      .update({ bonus_points: bonus_points })
+      .eq('user_id', userId);
+    return { data, error };
+  }
 }

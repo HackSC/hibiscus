@@ -20,4 +20,17 @@ export class UserController {
       res.status(500).json({ message: err.message });
     }
   }
+
+  async updateBonusPoint(req, res) {
+    try {
+      const points = await this.repository.getBonuPoints(req.param.user_id);
+      const point = parseInt(points.data.toString()) + req.param.bonus_point;
+      const user = await this.repository.updateBonusPoints(
+        req.param.user_id,
+        point
+      );
+    } catch (err) {
+      res.status(500).json({ status: -1 });
+    }
+  }
 }
