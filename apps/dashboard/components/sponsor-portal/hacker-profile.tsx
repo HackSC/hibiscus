@@ -18,7 +18,7 @@ export function HackerProfile({ hacker }: Props) {
       <Text style={{ fontSize: '30px' }}>
         {hacker.first_name} {hacker.last_name}
       </Text>
-      <Text style={{ fontSize: '18px' }}>School: {hacker.major}</Text>
+      <Text style={{ fontSize: '18px' }}>School: {hacker.school}</Text>
       <Text style={{ fontSize: '18px' }}>Major: {hacker.major}</Text>
       <Text style={{ fontSize: '18px' }}>
         Grad Year: {hacker.graduation_year}

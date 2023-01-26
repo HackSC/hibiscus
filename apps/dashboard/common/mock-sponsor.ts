@@ -4,6 +4,7 @@ export type Attendee = {
   id: string;
   first_name: string;
   last_name: string;
+  school: string;
   major: string;
   resume: string; //WILL BE CHANGED SOON, STRING FOR NOW
   graduation_year: string;
@@ -24,9 +25,10 @@ export class SponsorAPI implements SponsorAPIInterface {
           id: faker.datatype.uuid(),
           first_name: faker.name.firstName(),
           last_name: faker.name.lastName(),
-          major: faker.name.firstName(),
-          resume: faker.name.firstName(),
-          graduation_year: faker.name.firstName(),
+          school: faker.company.name(),
+          major: faker.name.jobTitle(),
+          resume: faker.name.jobDescriptor(),
+          graduation_year: faker.name.jobArea(),
           portfolio_link: faker.name.firstName(),
         })),
       };
