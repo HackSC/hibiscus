@@ -1,10 +1,10 @@
 import { injectable } from 'tsyringe';
-import { Leaderboard } from '../repository/leaderboard.repository';
+import { User } from '../repository/user.repository';
 import * as express from 'express';
 
 @injectable()
 export class UserController {
-  constructor(private repository: Leaderboard) {}
+  constructor(private repository: User) {}
   /**
    * Get bonus point events
    *
@@ -13,7 +13,7 @@ export class UserController {
    */
   async getUser(req, res) {
     try {
-      const user = await this.repository.getUser(req.params.user_id);
+      const user = await this.repository.getPoints(req.params.user_id);
       const userData = user.data;
       res.status(200).json({ points: userData });
     } catch (err) {
