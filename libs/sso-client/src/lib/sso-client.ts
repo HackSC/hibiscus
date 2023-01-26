@@ -3,6 +3,11 @@ import type { NextRequest } from 'next/server';
 import { NextApiRequest, NextApiResponse } from 'next/types';
 import axios from 'axios';
 import { getEnv } from '@hibiscus/env';
+import { createClient } from '@supabase/supabase-js';
+import { HibiscusRole } from '@hibiscus/types';
+
+const FAKE_USER_EMAIL = 'example@hacksc.com';
+const FAKE_USER_PASSWORD = 'hacksc';
 
 /**
  * Generates the NextJS middleware needed to integrate with the Hibiscus SSO system
@@ -22,6 +27,10 @@ export const middlewareHandler =
     exhaustive = true
   ) =>
   async (request: NextRequest): Promise<NextResponse | null> => {
+    if (getEnv().Hibiscus.Cookies.disableSSO === 'true') {
+      await initializeFakeUser(request);
+    }
+
     // Handle preflight requests
     if (request.method === 'OPTIONS') {
       const res = NextResponse.next();
@@ -265,4 +274,76 @@ function splitPath(path: string): string[] {
   }
 
   return split;
+}
+
+async function initializeFakeUser(request: NextRequest) {
+  const access_token = request.cookies.get(
+    getEnv().Hibiscus.Cookies.accessTokenName
+  );
+  const refresh_token = request.cookies.get(
+    getEnv().Hibiscus.Cookies.refreshTokenName
+  );
+  if (access_token == null || refresh_token == null) {
+    const supabase = createClient(
+      getEnv().Hibiscus.Supabase.apiUrl,
+      getEnv().Hibiscus.Supabase.serviceKey
+    );
+    let {
+      data: { user, session },
+    } = await supabase.auth.signInWithPassword({
+      email: FAKE_USER_EMAIL,
+      password: FAKE_USER_PASSWORD,
+    });
+
+    if (user == null || session == null) {
+      ({
+        data: { user },
+      } = await supabase.auth.admin.createUser({
+        email: FAKE_USER_EMAIL,
+        password: FAKE_USER_PASSWORD,
+        email_confirm: true,
+      }));
+
+      if (user != null) {
+        ({
+          data: { user, session },
+        } = await supabase.auth.signInWithPassword({
+          email: FAKE_USER_EMAIL,
+          password: FAKE_USER_PASSWORD,
+        }));
+      }
+    }
+
+    if (user != null && session != null) {
+      await supabase.from('user_profiles').insert({
+        user_id: user.id,
+        email: user.email,
+        first_name: 'Hack',
+        last_name: 'SC',
+        // Default role = HACKER
+        role: Object.keys(HibiscusRole).indexOf(HibiscusRole.HACKER) + 1,
+      });
+
+      request.cookies.set(
+        getEnv().Hibiscus.Cookies.accessTokenName,
+        session.access_token,
+        {
+          path: '/',
+          domain: getEnv().Hibiscus.AppURL.baseDomain,
+          maxAge: Number.parseInt(getEnv().Hibiscus.Cookies.maxAge),
+          sameSite: 'lax',
+        }
+      );
+      request.cookies.set(
+        getEnv().Hibiscus.Cookies.refreshTokenName,
+        session.refresh_token,
+        {
+          path: '/',
+          domain: getEnv().Hibiscus.AppURL.baseDomain,
+          maxAge: Number.parseInt(getEnv().Hibiscus.Cookies.maxAge),
+          sameSite: 'lax',
+        }
+      );
+    }
+  }
 }
