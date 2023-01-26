@@ -237,8 +237,8 @@ const Index = () => {
             }}
           >
             <Image
-              width="50"
-              height="60"
+              width="20"
+              height="20"
               src={'/x-button.svg'}
               alt="x-button"
             />
@@ -363,7 +363,7 @@ const MiddleContainer = styled.div`
 const RightContainer = styled.div`
   display: flex;
   width: 30%;
-  padding: 5px;
+  padding: 30px;
   flex-direction: column;
   justify-content: flex-start;
   background-color: ${Colors2023.GRAY.STANDARD};

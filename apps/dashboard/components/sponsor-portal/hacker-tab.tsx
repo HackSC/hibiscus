@@ -6,7 +6,7 @@ import { Colors2023 } from '@hibiscus/styles';
 import { HibiscusUser } from '@hibiscus/types';
 import { H1, H2, H3 } from '@hibiscus/ui';
 import Image from 'next/image';
-import { Attendee } from '../../pages/sponsor-booth/index';
+import { Attendee } from '../../common/mock-sponsor';
 
 interface Props {
   user: Attendee;

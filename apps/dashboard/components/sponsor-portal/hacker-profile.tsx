@@ -67,7 +67,6 @@ const Container = styled.div`
   width: 100%;
   justify-content: flex-start;
   align-items: flex-start;
-  padding: 0px 30px;
 `;
 
 const TitleText = styled(H1)`
