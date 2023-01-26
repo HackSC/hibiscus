@@ -5,9 +5,13 @@ import { Colors2023 } from '@hibiscus/styles';
 /* eslint-disable-next-line */
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   color: 'blue' | 'black' | 'purple' | 'red';
+  disabled?: boolean;
 }
 
 export function Button(props: ButtonProps) {
+  if (props.disabled) {
+    return <DisabledButton>{props.children}</DisabledButton>;
+  }
   if (props.color === 'blue') {
     return <BlueButton onClick={props.onClick}>{props.children}</BlueButton>;
   } else if (props.color === 'black') {
@@ -167,4 +171,29 @@ const RedButton = styled.button`
     box-shadow: 0px 0px 5px rgba(239, 118, 118, 0.5);
     border-radius: 10px;
   }
+`;
+
+const DisabledButton = styled.button`
+  width: fit-content;
+  height: 45px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 30px;
+  gap: 10px;
+  background: rgb(151, 151, 151);
+  border-radius: 10px;
+  cursor: pointer;
+  //fonts
+  font-family: 'Inter';
+
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 36px;
+  text-align: center;
+  letter-spacing: 0.2em;
+  border: none;
+  color: #cecece;
+  border: 1.5px solid #cecece;
 `;
