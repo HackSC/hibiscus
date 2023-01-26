@@ -92,7 +92,7 @@ export const QuestionCreator = ({
 
     const pathname =
       '/hackform-illustrations/' +
-      illustrations[Math.floor(Math.random() * illustrations.length)];
+      illustrations[currentQuestionIndex % (illustrations.length - 1)];
     return pathname;
   };
 

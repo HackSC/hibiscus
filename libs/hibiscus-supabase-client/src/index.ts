@@ -4,7 +4,6 @@ import 'reflect-metadata';
 import {
   createClient,
   EmailOtpType,
-  Session,
   SupabaseClient,
 } from '@supabase/supabase-js';
 import { injectable } from 'tsyringe';
@@ -28,7 +27,12 @@ export class HibiscusSupabaseClient {
   constructor() {
     this.client = createClient(
       process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_API_URL,
-      process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_ANON_KEY
+      process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_ANON_KEY,
+      {
+        auth: {
+          autoRefreshToken: false,
+        },
+      }
     );
   }
 
@@ -145,21 +149,6 @@ export class HibiscusSupabaseClient {
       refresh_token,
     });
     return data;
-  }
-
-  /**
-   * Validates the current session (stored in localStorage)
-   *
-   * @returns `Session` object
-   */
-  async validateSession(): Promise<Session> {
-    const { data } = await this.client.auth.getSession();
-
-    if (data.session != null) {
-      return data.session;
-    }
-
-    return null;
   }
 
   /**

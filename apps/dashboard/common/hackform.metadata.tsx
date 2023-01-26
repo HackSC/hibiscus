@@ -537,8 +537,8 @@ export const formMetadata2023HackerApps: HackformMetadata = {
     //   },
   ],
   end: {
-    title: 'Thank you for applying!',
+    title: 'Press below to submit your application!',
     subtitle:
-      'We will get back to you soon via email. Meanwhile, feel free to check out the portal and make a Team',
+      'Thank you for filling the form out. Once you press the button below, your application will be submitted to us for review. Thank you for applying to HackSC and we look forward to seeing you in February!',
   },
 };

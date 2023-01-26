@@ -4,16 +4,18 @@ import styled from 'styled-components';
 import { Link } from '@hibiscus/ui';
 import { GlowSpan } from '@hibiscus/ui-kit-2023';
 import { Colors2023 } from '@hibiscus/styles';
-import { HibiscusUser } from '@hibiscus/types';
+import { HibiscusUser, HibiscusRole, ApplicationStatus } from '@hibiscus/types';
 import { H1, H3 } from '@hibiscus/ui';
 import Image from 'next/image';
-import { ApplicationStatus } from 'libs/types/src/lib/application-status';
+import { getColorsForRole } from '../../common/role.utils';
 
 interface Props {
   user: HibiscusUser;
 }
 
 export function HackerPortal({ user }: Props) {
+  const userColors = getColorsForRole(user?.role ?? HibiscusRole.HACKER);
+
   const getApplicationStatus = () => {
     return (
       <span
@@ -86,6 +88,19 @@ export function HackerPortal({ user }: Props) {
 
   return (
     <>
+      <WelcomeContainer>
+        <H1
+          style={{
+            color: userColors.light,
+            fontSize: '30px',
+            textShadow: `0px 0px 10px ${userColors.standard}`,
+          }}
+        >
+          Welcome, {user.firstName}
+        </H1>
+        <H3 style={{ color: '#989898' }}>What would you like to do today?</H3>
+      </WelcomeContainer>
+
       {renderApplyMessage()}
 
       <div
@@ -168,5 +183,11 @@ const BannerContainer = styled.div`
 
   @media (max-width: 400px) {
     flex-direction: column;
+  }
+`;
+
+const WelcomeContainer = styled.div`
+  @media (max-width: 400px) {
+    margin-top: 5rem;
   }
 `;
