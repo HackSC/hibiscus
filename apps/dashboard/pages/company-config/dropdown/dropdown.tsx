@@ -4,19 +4,14 @@ import { Colors2023 } from '@hibiscus/styles';
 import { useState } from 'react';
 import Image from 'next/image';
 import arrow from './arrow.png';
+import { useEffect } from 'react';
+
 /* eslint-disable-next-line */
 export interface DropdownProps {}
 
 export function Dropdown(props: DropdownProps) {
   const [open, setOpen] = useState(false);
-  const [options, setOptions] = useState([
-    'Spring 2024',
-    'Fall 2024',
-    'Spring 2025',
-    'Fall 2025',
-    'Spring 2026',
-    'Fall 2026',
-  ]);
+  const options = props.options;
   const tagBorders = ['#B5A9FF', '#EB93F4', '#BFF0FF', '#FFA295'];
   const tagBackground = ['#7A65FD', '#DB3FEB', '#76D3EF', '#FE5139'];
 
@@ -45,7 +40,7 @@ export function Dropdown(props: DropdownProps) {
                 }}
                 key={i}
               >
-                {option}
+                {option.toUpperCase()}
               </div>
             );
           })}
@@ -55,7 +50,7 @@ export function Dropdown(props: DropdownProps) {
           className={styles['button']}
           onClick={handleButtonClick}
         >
-          <Image src={'/arrow.png'} width={50} height={45} alt="dropdown" />
+          <Image src="/dropdown.svg" alt="dropdown" width={25} height={25} />
         </button>
       </div>
       {open && (
@@ -70,7 +65,6 @@ export function Dropdown(props: DropdownProps) {
                     if (!chosen.includes(option)) {
                       setChosen((prev) => [...prev, option]);
                     }
-                    console.log(option);
                   }}
                 >
                   {option}

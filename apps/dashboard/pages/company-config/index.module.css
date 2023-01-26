@@ -11,3 +11,18 @@
   padding: 0;
   margin: 0;
 }
+
+.input {
+  background-color: transparent;
+  border: 0;
+  color: white;
+}
+
+.input:hover {
+  background-color: #d3d3d3;
+  cursor: pointer;
+}
+
+.full-width {
+  width: 100%;
+}
