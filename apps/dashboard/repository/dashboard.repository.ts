@@ -212,6 +212,75 @@ export class DashboardRepository {
     return { data, error };
   }
 
+  async getCompanyById(companyId: string) {
+    const { data, error } = await this.client
+      .from('companies')
+      .select(
+        `
+      id,
+      name,
+      description,
+      website,
+      profile_photo
+      target_majors (
+        major
+      )
+      target_graduations (
+        graduation_year
+      )
+    `
+      )
+      .eq('id', companyId)
+      .single();
+
+    return { data, error };
+  }
+
+  async insertCompany(
+    name: string,
+    description?: string,
+    website?: string,
+    profilePhoto?: string
+  ) {
+    const { data, error } = await this.client
+      .from('companies')
+      .insert([
+        {
+          name: name,
+          description: description,
+          website: website,
+          profile_photo: profilePhoto,
+        },
+      ])
+      .select()
+      .single();
+    return { data, error };
+  }
+
+  async insertMajors(companyId: string, targetMajors: string[]) {
+    const majorInsertObjects = targetMajors.map((ele) => {
+      return { company_id: companyId, major: ele };
+    });
+    const { data, error } = await this.client
+      .from('target_majors')
+      .insert(majorInsertObjects)
+      .select();
+
+    return { data, error };
+  }
+
+  async insertGraduationTerms(companyId: string, targetGraduations: string[]) {
+    const graduationInsertObjects = targetGraduations.map((ele) => {
+      return { company_id: companyId, graduation_year: ele };
+    });
+    const { data, error } = await this.client
+      .from('target_graduations')
+      .insert(graduationInsertObjects)
+      .select();
+
+    return { data, error };
+  }
+
   async sendTeamInviteEmail(
     toAddress: string,
     recipient: string,
