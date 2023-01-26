@@ -8,6 +8,7 @@ import { useAppDispatch } from '../redux/hooks';
 import { removeTabRoute } from '../../store/menu-slice';
 // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
 import { ApplicationStatus } from 'libs/types/src/lib/application-status';
+import { isHackerPostAppStatus } from '../../common/utils';
 
 export function useHibiscusUser() {
   const [user, setUser] = useState<HibiscusUser | null>(null);
@@ -35,6 +36,7 @@ export function useHibiscusUser() {
         applicationStatus:
           Object.values(ApplicationStatus)[profile.application_status - 1],
         teamId: profile.team_id,
+        attendanceConfirmed: profile.attendance_confirmed,
       };
     } else {
       // Set user's name and tag to be their email as temporary placeholder
@@ -64,10 +66,10 @@ export function useHibiscusUser() {
 
   // remove hackform from menu if applied
   useEffect(() => {
-    if (user?.applicationId) {
+    if (isHackerPostAppStatus(user?.applicationStatus)) {
       dispatch(removeTabRoute('/apply-2023'));
     }
-  }, [dispatch, user?.applicationId]);
+  }, [dispatch, user?.applicationStatus]);
 
   return { user, setUser, getUserProfile };
 }

@@ -1,19 +1,26 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import styled from 'styled-components';
-import { Link } from '@hibiscus/ui';
-import { GlowSpan } from '@hibiscus/ui-kit-2023';
+import { Link, Modal } from '@hibiscus/ui';
+import { Button, GlowSpan } from '@hibiscus/ui-kit-2023';
 import { Colors2023 } from '@hibiscus/styles';
 import { HibiscusUser } from '@hibiscus/types';
 import { H1, H3 } from '@hibiscus/ui';
 import Image from 'next/image';
-import { ApplicationStatus } from 'libs/types/src/lib/application-status';
+import { ApplicationStatus } from '@hibiscus/types';
+import { useState } from 'react';
+import RSVPForm from '../rsvp-form/rsvp-form';
+import ComingSoonBattlepassPlaceholder from '../battlepass/coming-soon-battlepass-placeholder';
+import { ComingSoon } from './coming-soon';
 
 interface Props {
   user: HibiscusUser;
 }
 
 export function HackerPortal({ user }: Props) {
+  const [modalOpen, setModalOpen] = useState(false);
+  const closeModal = () => setModalOpen(false);
+
   const getApplicationStatus = () => {
     return (
       <span
@@ -84,6 +91,24 @@ export function HackerPortal({ user }: Props) {
     }
   };
 
+  const ConfirmationPlaceholder = () => {
+    return (
+      <div>
+        <Button color="black" onClick={() => setModalOpen(true)}>
+          CONFIRM YOUR SPOT
+        </Button>
+      </div>
+    );
+  };
+
+  if (user.attendanceConfirmed) {
+    return (
+      <>
+        <ComingSoonBattlepassPlaceholder />
+      </>
+    );
+  }
+
   return (
     <>
       {renderApplyMessage()}
@@ -102,23 +127,16 @@ export function HackerPortal({ user }: Props) {
           Your Application Status: {getApplicationStatus()}
         </GlowSpan>
       </div>
+      <Modal isOpen={modalOpen} closeModal={closeModal}>
+        <RSVPForm closeModal={closeModal} />
+      </Modal>
 
       <MessageContainer>
-        <H1 style={{ fontSize: '50px', lineHeight: '60px' }}>
-          <GlowSpan
-            color={Colors2023.BLUE.LIGHT}
-            shadowColor={Colors2023.BLUE.STANDARD}
-          >
-            Coming Soon!
-          </GlowSpan>
-        </H1>
-        <H3>Keep an eye out for more stuff to come.</H3>
-        <Image
-          src={'/assets/earth-suitcase-moon.svg'}
-          width={200}
-          height={200}
-          alt="Earth-like character wearing shades pulling baggage and a moon"
-        />
+        {user.applicationStatus === ApplicationStatus.ADMITTED ? (
+          <ConfirmationPlaceholder />
+        ) : (
+          <ComingSoon />
+        )}
       </MessageContainer>
     </>
   );
