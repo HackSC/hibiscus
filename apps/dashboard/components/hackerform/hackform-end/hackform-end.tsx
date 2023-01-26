@@ -1,6 +1,6 @@
 import { Colors2023 } from '@hibiscus/styles';
 import { HackformMetadata } from '@hibiscus/types';
-import { H1, H3, Link } from '@hibiscus/ui';
+import { H1, H3 } from '@hibiscus/ui';
 import { Button, GlowSpan } from '@hibiscus/ui-kit-2023';
 import { useHackform } from '../../../hooks/use-hackform/use-hackform';
 import Image from 'next/image';
@@ -9,8 +9,7 @@ import APIService from '../../../common/api';
 import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
 import { container } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
-import { getCookie } from 'cookies-next';
-import { getEnv } from '@hibiscus/env';
+import { useRouter } from 'next/router';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface HackformEndingProps {
@@ -21,6 +20,7 @@ export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
   const hackformUtils = useHackform();
   const { user } = useHibiscusUser();
   const TIME_BEFORE_FORMSTATE_RESET = 2000; // wait this much ms before we do reset
+  const router = useRouter();
 
   const handleSubmit = async () => {
     const submission = hackformUtils.getSubmission();
@@ -35,6 +35,7 @@ export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
       .from('user_profiles')
       .update({ application_status: 3 })
       .eq('user_id', user.id);
+    router.replace('/');
   };
 
   return (
@@ -54,13 +55,9 @@ export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
         height={200}
         alt="Earth-like character wearing shades pulling baggage and a moon"
       />
-      <Link
-        href="/"
-        anchortagpropsoverride={{ target: '_self' }}
-        onClick={handleSubmit}
-      >
-        <Button color="blue">Go to Home</Button>
-      </Link>
+      <Button color="blue" onClick={handleSubmit}>
+        SUBMIT YOUR APPLICATION
+      </Button>
     </Wrapper>
   );
 };

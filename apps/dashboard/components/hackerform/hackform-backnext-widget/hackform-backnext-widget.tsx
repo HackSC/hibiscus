@@ -1,6 +1,7 @@
 import { ArrowButton } from '@hibiscus/ui-kit-2023';
 import { useHackform } from '../../../hooks/use-hackform/use-hackform';
 import styled from 'styled-components';
+import { Text } from '@hibiscus/ui';
 
 interface HackformBackNextWidgetProps {
   goPreviousQuestion: () => void;
@@ -12,11 +13,13 @@ export const HackformBackNextWidget = ({
   goPreviousQuestion,
 }: HackformBackNextWidgetProps) => {
   const { currentQuestionIndex, ...hackformUtils } = useHackform();
-  const isLastQuestion =
-    currentQuestionIndex ===
-    hackformUtils.getHackformMetadata().questions.length - 1;
+  const numQuestions = hackformUtils.getHackformMetadata().questions.length;
+  const isLastQuestion = currentQuestionIndex === numQuestions - 1;
   return (
     <BottomWidgetsContainer>
+      <Text>
+        {currentQuestionIndex + 1} / {numQuestions}
+      </Text>
       <BackNextContainer>
         <ArrowButton orientation="left" onClick={goPreviousQuestion} />
         <ArrowButton onClick={goNextQuestion} disabled={isLastQuestion} />
@@ -30,6 +33,8 @@ export default HackformBackNextWidget;
 const BottomWidgetsContainer = styled.div`
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  gap: 20px;
   margin: 1rem;
   padding-bottom: 1rem;
 
