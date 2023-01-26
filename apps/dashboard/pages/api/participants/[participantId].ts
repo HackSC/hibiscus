@@ -1,22 +1,21 @@
 import 'reflect-metadata';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { container } from 'tsyringe';
-import { DashboardRepository } from '../../../repository/dashboard.repository';
 import { PostgrestError } from '@supabase/supabase-js';
-import e from 'express';
+import { ParticipantRepository } from 'apps/dashboard/repository/participant.repository';
 
 /**
  * Creates a team in the teams table
- * @param req - (name, description, photoKey, userId) : (string, string,
- *      string-link to photo, string-user_id of person creating team)
+ * @param req - (id in url, resume, portfolio_link) : (string, string-link to resume,
+ *      string-url link to portfolio)
  * @param res - Only used for returning Json messages
- * @return 500 if error in creation. 200 if team created successfully
+ * @return 400 if error in PUT. 500 if error in GET. 200 if get or put executed successfully
  */
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const repo = container.resolve(DashboardRepository);
+  const repo = container.resolve(ParticipantRepository);
   const { participantId } = req.query;
   const stringifyId = participantId.toString();
   const resume: string | null = req.body.resume;
