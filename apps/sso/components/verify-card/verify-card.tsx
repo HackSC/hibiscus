@@ -42,6 +42,11 @@ export function VerifyCard() {
         data.session.refresh_token
       );
 
+      HibiscusSupabaseClient.setTokenCookieClientSide(
+        data.session.access_token,
+        data.session.refresh_token
+      );
+
       router.push('/');
     }
   };
