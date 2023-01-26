@@ -6,7 +6,7 @@ import * as express from 'express';
 export class UserController {
   constructor(private repository: User) {}
   /**
-   * Get bonus point events
+   * Get the points that a user has
    *
    * @param _req - incoming request (unused)
    * @param res - outgoing response { keys }

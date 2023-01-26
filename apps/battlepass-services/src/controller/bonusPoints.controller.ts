@@ -15,7 +15,7 @@ export class BonusPointsController {
     try {
       const bonusPoints = await this.repository.getBonusPointEvents();
       const result = bonusPoints.data;
-      res.status(200).json({ result: result });
+      res.status(200).json({ data: result });
     } catch (err) {
       res.status(500).json({ message: err.message });
     }

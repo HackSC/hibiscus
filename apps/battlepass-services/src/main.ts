@@ -8,6 +8,7 @@ import 'reflect-metadata';
 import * as express from 'express';
 import { LeaderboardRouter } from './routers/leaderboard.router';
 import { BonusPointsRouter } from './routers/bonusPoints.router';
+import { UserRouter } from './routers/user.router';
 import * as path from 'path';
 
 const app = express();
@@ -20,6 +21,7 @@ app.get('/api', (req, res) => {
 
 app.use('/leaderboard', LeaderboardRouter);
 app.use('/events', BonusPointsRouter);
+app.use('/user', UserRouter);
 
 const port = process.env.port || 3333;
 const server = app.listen(port, () => {
