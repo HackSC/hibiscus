@@ -13,16 +13,24 @@ const tabRoutes: TabRoute[] = [
   // { displayName: 'Team', url: '/team' },
 ];
 
+const sponsorRoutes: TabRoute[] = [
+  { displayName: 'Home', url: '/' },
+  { displayName: 'My Booth', url: '/sponsor-booth' },
+  { displayName: 'Configure', url: '/' }, // Have to change later
+];
+
 export interface MenuState {
   currentTabIndex: number;
   isOpen: boolean;
   tabRoutes: TabRoute[];
+  sponsorRoutes?: TabRoute[];
 }
 
 const initialState: MenuState = {
   currentTabIndex: -1,
   isOpen: false,
   tabRoutes,
+  sponsorRoutes,
 };
 
 export const menuSlice = createSlice({
