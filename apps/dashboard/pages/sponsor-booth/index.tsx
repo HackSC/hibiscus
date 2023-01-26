@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 import { SponsorAPI, Attendee } from '../../common/mock-sponsor';
 import { container } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { HibiscusRole } from '@hibiscus/types';
 
 const Index = () => {
   const [attendees, setAttendees] = useState<Attendee[]>([]);
@@ -47,11 +48,16 @@ const Index = () => {
     return () => {
       supabase.removeChannel(events);
     };
-  }, []); // Or [] if effect doesn't need props or state
+  }, []);
 
   const { user } = useHibiscusUser();
   if (user == null) {
     return <>Loading</>;
+  }
+
+  if (user?.role !== HibiscusRole.SPONSOR) {
+    router.push('/');
+    return <></>;
   }
 
   const getAttendees = () => {
