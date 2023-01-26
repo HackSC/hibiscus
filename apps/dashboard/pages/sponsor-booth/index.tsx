@@ -10,11 +10,14 @@ import { HackerTab } from '../../components/sponsor-portal/hacker-tab';
 import HackerProfile from '../../components/sponsor-portal/hacker-profile';
 import { useRouter } from 'next/router';
 import { SponsorAPI, Attendee } from '../../common/mock-sponsor';
+import { container } from 'tsyringe';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 
 const Index = () => {
   const [attendees, setAttendees] = useState<Attendee[]>([]);
   const [currentAttendee, setCurrentAttendee] = useState<Attendee>(null);
   const router = useRouter();
+  const supabase = container.resolve(HibiscusSupabaseClient).getClient();
 
   useEffect(() => {
     async function fetchData() {
@@ -23,6 +26,27 @@ const Index = () => {
       setAttendees(response);
     }
     fetchData();
+
+    const COMPANY_ID = 'a8e21c21-948c-4a04-b231-015434aacc0b'; // Will change later
+    const events = supabase
+      .channel('custom-insert-channel')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'events',
+          filter: `company_id=eq.${COMPANY_ID}`,
+        },
+        (payload) => {
+          console.log('Change received!', payload);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(events);
+    };
   }, []); // Or [] if effect doesn't need props or state
 
   const { user } = useHibiscusUser();
