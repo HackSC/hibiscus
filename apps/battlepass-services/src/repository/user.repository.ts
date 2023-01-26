@@ -3,21 +3,16 @@ import { SupabaseClient } from '@supabase/supabase-js';
 import { injectable } from 'tsyringe';
 
 @injectable()
-export class Leaderboard {
+export class User {
   private client: SupabaseClient;
   constructor(private readonly hbc: HibiscusSupabaseClient) {
     this.client = hbc.getClient();
   }
 
-  async getLeaderboard() {
-    const { data, error } = await this.client.from('leaderboard').select();
-    return { data, error };
-  }
-
-  async getUser(userId) {
+  async getPoints(userId: string) {
     const { data, error } = await this.client
       .from('leaderboard')
-      .select()
+      .select('bonus_points, event_points')
       .eq('user_id', userId);
     return { data, error };
   }
