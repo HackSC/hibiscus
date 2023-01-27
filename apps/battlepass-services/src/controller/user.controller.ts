@@ -15,7 +15,8 @@ export class UserController {
     try {
       const user = await this.repository.getPoints(req.params.user_id);
       const userData = user.data;
-      res.status(200).json({ points: userData });
+      const points = userData.at(0).bonus_points + userData.at(0).event_points;
+      res.status(200).json({ points: points });
     } catch (err) {
       res.status(500).json({ message: err.message });
     }
