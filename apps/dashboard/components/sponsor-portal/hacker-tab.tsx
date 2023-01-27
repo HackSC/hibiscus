@@ -1,18 +1,20 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Link, Text } from '@hibiscus/ui';
+import { Text } from '@hibiscus/ui';
 import { Colors2023 } from '@hibiscus/styles';
 import { HibiscusUser } from '@hibiscus/types';
-import { H1, H2, H3 } from '@hibiscus/ui';
 import Image from 'next/image';
 import { Attendee } from '../../common/mock-sponsor';
+import ShortTextInput from '../hackerform/short-text-question/short-text-question';
 
 interface Props {
   user: Attendee;
+  onClick;
 }
 
-export function HackerTab({ user }: Props) {
+export function HackerTab({ user, onClick }: Props) {
   return (
     <Container>
       <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -22,7 +24,7 @@ export function HackerTab({ user }: Props) {
         </Text>
       </div>
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        <StyledButton style={{ marginRight: '1rem' }}>
+        <StyledButton style={{ marginRight: '1rem' }} onClick={onClick}>
           <Image width="35" height="35" src={'/note.svg'} alt="Illustration" />
         </StyledButton>
         <StyledButton>

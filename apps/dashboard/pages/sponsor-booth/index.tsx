@@ -13,10 +13,16 @@ import { SponsorAPI, Attendee } from '../../common/mock-sponsor';
 import { container } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { HibiscusRole } from '@hibiscus/types';
+import { Button, ParagraphText } from '@hibiscus/ui-kit-2023';
+import { getWordCount } from '../../common/utils';
 
 const Index = () => {
   const [attendees, setAttendees] = useState<Attendee[]>([]);
   const [currentAttendee, setCurrentAttendee] = useState<Attendee>(null);
+  const [modalActive, setModalActive] = useState(false);
+  const [attendeeName, setAttendeeName] = useState('');
+  const [textInput, setInput] = useState('');
+
   const router = useRouter();
   const supabase = container.resolve(HibiscusSupabaseClient).getClient();
 
@@ -60,6 +66,11 @@ const Index = () => {
     return <></>;
   }
 
+  const openQuickNote = (attendee: Attendee) => {
+    setModalActive(true);
+    setAttendeeName(attendee.first_name);
+  };
+
   const getAttendees = () => {
     return attendees.map((attendee, index) => (
       <HackerTabContainer
@@ -68,13 +79,13 @@ const Index = () => {
           setCurrentAttendee(attendee);
         }}
       >
-        <HackerTab user={attendee} />
+        <HackerTab user={attendee} onClick={() => openQuickNote(attendee)} />
       </HackerTabContainer>
     ));
   };
 
   return (
-    <Wrapper>
+    <Wrapper style={{ position: 'relative' }}>
       <StyledButton
         onClick={() => {
           router.replace('/');
@@ -224,6 +235,50 @@ const Index = () => {
               VIEW ALL ATTENDEES
             </H1>
           </ViewAllButton>
+          {modalActive && (
+            <ModalContainer>
+              <QuickNoteContainer>
+                <CloseButton
+                  onClick={() => {
+                    setModalActive(false);
+                  }}
+                >
+                  <Image
+                    width="20"
+                    height="20"
+                    src={'/x-button.svg'}
+                    alt="x-button"
+                  />
+                </CloseButton>
+                <H1 style={{ fontSize: '30px', letterSpacing: '0.2rem' }}>
+                  QUICK NOTES
+                </H1>
+                <Text style={{ fontSize: '25px', marginTop: '1rem' }}>
+                  {attendeeName}
+                </Text>
+                <TextWrapper>
+                  <StyledParagraphText
+                    value={textInput}
+                    placeholder={'Add quick note . . . '}
+                    onChange={(e) => {
+                      setInput(e.target.value);
+                    }}
+                  />
+                  <WordCountText>
+                    Word count: {getWordCount(textInput)}
+                  </WordCountText>
+                </TextWrapper>
+                <div style={{ marginTop: '1rem', display: 'flex' }}>
+                  <Button color={'red'} onClick={() => setModalActive(false)}>
+                    CANCEL
+                  </Button>
+                  <div style={{ marginLeft: '0.5rem' }}>
+                    <Button color={'black'}>SAVE</Button>
+                  </div>
+                </div>
+              </QuickNoteContainer>
+            </ModalContainer>
+          )}
         </MiddleContainer>
 
         <RightContainer
@@ -333,6 +388,7 @@ const SupportSection = styled.div`
 
 const SavedSection = styled.div`
   display: 'flex';
+  height: 190px;
   margin-top: 1.5rem;
   padding: 30px 15px;
   flex-direction: column;
@@ -357,7 +413,44 @@ const MiddleContainer = styled.div`
   justify-content: space-between;
   padding: 30px;
   margin-top: -4rem;
-  /* background-color: blue; */
+`;
+
+const ModalContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 15px;
+  border: 4px solid ${Colors2023.GRAY.MEDIUM};
+`;
+
+const QuickNoteContainer = styled.div`
+  margin: auto;
+  margin-top: 10rem;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  background-color: ${Colors2023.GRAY.STANDARD};
+  border-radius: 10px;
+  border: 4px solid ${Colors2023.GRAY.MEDIUM};
+  box-shadow: 1px 2px 15px ${Colors2023.GRAY.MEDIUM};
+`;
+
+const TextWrapper = styled.div`
+  margin-top: 0.5rem;
+`;
+
+const WordCountText = styled(Text)`
+  color: ${Colors2023.GRAY.SHLIGHT};
+  font-size: small;
+`;
+
+const StyledParagraphText = styled(ParagraphText)`
+  width: 80%;
 `;
 
 const RightContainer = styled.div`
