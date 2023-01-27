@@ -10,9 +10,10 @@ import { Attendee } from '../../common/mock-sponsor';
 
 interface Props {
   hacker: Attendee;
+  onClick;
 }
 
-export function HackerProfile({ hacker }: Props) {
+export function HackerProfile({ hacker, onClick }: Props) {
   return (
     <Container>
       <Text style={{ fontSize: '30px' }}>
@@ -23,7 +24,19 @@ export function HackerProfile({ hacker }: Props) {
       <Text style={{ fontSize: '18px' }}>
         Grad Year: {hacker.graduation_year}
       </Text>
-      <TitleText style={{ marginTop: '1rem' }}>QUICK NOTES</TitleText>
+      <div
+        style={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <TitleText style={{ marginTop: '1rem' }}>QUICK NOTES</TitleText>
+        <StyledButton style={{ marginTop: '0.5rem' }} onClick={onClick}>
+          <Image width="30" height="30" src={'/note.svg'} alt="note-button" />
+        </StyledButton>
+      </div>
       <NoteContainer>
         <Text>No note added</Text>
       </NoteContainer>

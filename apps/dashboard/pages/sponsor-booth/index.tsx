@@ -60,7 +60,7 @@ const Index = () => {
   if (user == null) {
     return <>Loading</>;
   }
-
+  // Limit access to only sponsor role
   if (user?.role !== HibiscusRole.SPONSOR) {
     router.push('/');
     return <></>;
@@ -68,7 +68,7 @@ const Index = () => {
 
   const openQuickNote = (attendee: Attendee) => {
     setModalActive(true);
-    setAttendeeName(attendee.first_name);
+    setAttendeeName(`${attendee.first_name} ${attendee.last_name}`);
   };
 
   const getAttendees = () => {
@@ -269,7 +269,13 @@ const Index = () => {
                   </WordCountText>
                 </TextWrapper>
                 <div style={{ marginTop: '1rem', display: 'flex' }}>
-                  <Button color={'red'} onClick={() => setModalActive(false)}>
+                  <Button
+                    color={'red'}
+                    onClick={() => {
+                      setModalActive(false);
+                      setInput('');
+                    }}
+                  >
                     CANCEL
                   </Button>
                   <div style={{ marginLeft: '0.5rem' }}>
@@ -299,7 +305,10 @@ const Index = () => {
             />
           </CloseButton>
           {currentAttendee !== null ? (
-            <HackerProfile hacker={currentAttendee} />
+            <HackerProfile
+              hacker={currentAttendee}
+              onClick={() => openQuickNote(currentAttendee)}
+            />
           ) : (
             <></>
           )}
