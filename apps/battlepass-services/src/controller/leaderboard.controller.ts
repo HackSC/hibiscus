@@ -18,7 +18,7 @@ export class LeaderboardController {
       response.sort();
       const pageSize = req.params.number_per_page;
       const pageCount = Math.ceil(response.length / pageSize);
-      let pageNum = parseInt(req.param.page_number);
+      let pageNum = parseInt(req.params.page_number);
       if (pageNum < 1) pageNum = 1;
       if (pageNum > pageCount) pageNum = pageCount;
       //split into pages
@@ -39,9 +39,16 @@ export class LeaderboardController {
     try {
       const leaderboard = await this.repository.getLeaderboard();
       const list = leaderboard.data;
-      list.sort();
-      const user = await this.repository.getUser(_req.params.user_id);
-      const rank = list.indexOf(user);
+      // Sort leaderboard in descending order of points
+      list.sort(
+        (a, b) =>
+          b.bonus_points + b.event_points - (a.bonus_points + a.event_points)
+      );
+      const rank =
+        list.findIndex((user) => user.user_id === _req.params.user_id) + 1;
+      if (rank === 0) {
+        throw new Error('Error: User not found in leaderboard!');
+      }
       res.status(200).json({ place: rank });
     } catch (err) {
       res.status(500).json({ message: err.message });
