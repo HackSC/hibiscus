@@ -2,8 +2,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
-import { getEnv } from './libs/env/src';
-import { HibiscusRole } from './libs/types/src';
+import { getEnv } from '../../libs/env/src';
+import { HibiscusRole } from '../../libs/types/src';
 
 const FAKE_USER_EMAIL = 'example@hacksc.com';
 const FAKE_USER_PASSWORD = 'hacksc';
