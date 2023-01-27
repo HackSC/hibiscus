@@ -10,6 +10,17 @@ import { useRouter } from 'next/router';
 import { getWebTitle } from '@hibiscus/metadata';
 import { Toaster } from 'react-hot-toast';
 import { TeamProvider } from '../hooks/use-team/use-team';
+import { createContext, Dispatch, SetStateAction } from 'react';
+
+interface HeaderContent {
+  header: string;
+  subtext: string;
+}
+
+const WelcomeHeaderContext = createContext<{
+  content: HeaderContent | null;
+  setContent: Dispatch<SetStateAction<HeaderContent>> | null;
+}>({ content: null, setContent: null });
 
 function CustomApp({ Component, pageProps }: AppProps) {
   const router = useRouter();

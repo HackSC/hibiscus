@@ -127,13 +127,15 @@ export function HackerPortal({ user }: Props) {
           Your Application Status: {getApplicationStatus()}
         </GlowSpan>
       </div>
-      <Modal isOpen={modalOpen} closeModal={closeModal}>
-        <RSVPForm closeModal={closeModal} />
-      </Modal>
 
       <MessageContainer>
         {user.applicationStatus === ApplicationStatus.ADMITTED ? (
-          <ConfirmationPlaceholder />
+          <>
+            <Modal isOpen={modalOpen} closeModal={closeModal}>
+              <RSVPForm closeModal={closeModal} />
+            </Modal>
+            <ConfirmationPlaceholder />
+          </>
         ) : (
           <ComingSoon />
         )}

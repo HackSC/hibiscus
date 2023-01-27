@@ -160,6 +160,7 @@ const DropdownItem = styled.button`
   border: none;
   border-radius: 5px;
   color: ${Colors2023.GRAY.LIGHT};
+  transition: 0.1s;
   :hover {
     background-color: #bff0ff51;
   }

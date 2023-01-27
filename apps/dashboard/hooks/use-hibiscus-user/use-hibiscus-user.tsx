@@ -91,6 +91,13 @@ export function useHibiscusUser() {
   const { user, setUser } = useContext(HibiscusUserContext);
   const dispatch = useAppDispatch();
 
+  const updateUser = (update: Partial<HibiscusUser>) => {
+    setUser((prev) => ({
+      ...prev,
+      ...update,
+    }));
+  };
+
   // remove hackform from menu if applied
   useEffect(() => {
     if (isHackerPostAppStatus(user?.applicationStatus)) {
@@ -98,7 +105,7 @@ export function useHibiscusUser() {
     }
   }, [dispatch, user?.applicationStatus]);
 
-  return { user, setUser, getUserProfile };
+  return { user, setUser, getUserProfile, updateUser };
 }
 
 export default useHibiscusUser;

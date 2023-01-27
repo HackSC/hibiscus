@@ -18,7 +18,7 @@ function PortalLayout({ children }: PortalLayoutProps) {
       <TopBar userTag={user.tag} role={user.role} />
       <MenuLayoutWrapper>
         <MenuWrapper>
-          <PortalMenu user={user} />
+          <PortalMenu />
         </MenuWrapper>
         <ChildrenWrapper>{children}</ChildrenWrapper>
       </MenuLayoutWrapper>
