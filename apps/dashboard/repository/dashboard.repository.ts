@@ -162,6 +162,9 @@ export class DashboardRepository {
       .eq('team_id', teamId)
       .eq('invited_id', invitedId);
 
+    if (error) {
+      throw new Error(error.message);
+    }
     if (data.length === 0) {
       return true;
     }

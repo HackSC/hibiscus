@@ -305,6 +305,7 @@ export class HibiscusSupabaseClient {
 }
 
 type UserProfileRow = Database['public']['Tables']['user_profiles']['Row'];
+// eslint-disable-next-line
 type UserProfileInsert =
   Database['public']['Tables']['user_profiles']['Insert'];
 type UserProfileUpdate =

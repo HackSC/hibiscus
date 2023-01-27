@@ -93,6 +93,7 @@ export default class APIService {
 }
 
 type TeamServiceResponse = {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   data?: any;
   error?: { message: string };
   status: string | number;
