@@ -18,7 +18,7 @@ export function HackerTab({ user }: Props) {
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <Circle />
         <Text style={{ paddingLeft: '20px', fontSize: '23px' }}>
-          {user.firstName} {user.lastName}
+          {user.first_name} {user.last_name}
         </Text>
       </div>
       <div style={{ display: 'flex', alignItems: 'center' }}>
