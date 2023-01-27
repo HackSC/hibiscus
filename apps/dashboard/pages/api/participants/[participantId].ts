@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { container } from 'tsyringe';
 import { PostgrestError } from '@supabase/supabase-js';
-import { ParticipantRepository } from 'apps/dashboard/repository/participant.repository';
+import { ParticipantRepository } from '../../../repository/participant.repository';
 
 /**
  * Creates a team in the teams table

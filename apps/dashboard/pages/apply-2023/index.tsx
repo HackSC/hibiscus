@@ -27,6 +27,7 @@ export function Index() {
     return () => {
       NProgress.remove();
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cqi]);
 
   if (user === null) {

@@ -34,6 +34,7 @@ const Index = () => {
         organizerId: data.organizer_id,
       });
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   return (

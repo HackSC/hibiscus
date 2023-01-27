@@ -59,12 +59,14 @@ export function Hero(props: HeroProps) {
 
     layout: new Layout({ fit: Fit.Cover, alignment: Alignment.Center }),
   });
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const deviceInput = useStateMachineInput(
     rive,
     'device',
     'devicenum',
     screenWidth
   );
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const timeInput = useStateMachineInput(rive, 'time', 'timer');
   return (
     <StyledHero ref={ref}>

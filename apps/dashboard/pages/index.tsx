@@ -86,6 +86,7 @@ const LayoutContainer = styled.div`
 //   height: 300px;
 // `;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const QuickActionContainer = styled.div`
   display: flex;
   width: 100%;
@@ -93,6 +94,7 @@ const QuickActionContainer = styled.div`
   gap: 30px;
 `;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const WelcomeContainer = styled.div`
   @media (max-width: 400px) {
     margin-top: 5rem;
