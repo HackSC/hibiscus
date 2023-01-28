@@ -5,8 +5,7 @@ import React, {
   useState,
 } from 'react';
 import { HibiscusSupabaseClient } from './supabase-client';
-// eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
-import { logout } from '../../sso-client/src';
+import { logout } from '@hibiscus/sso-client';
 import { container } from 'tsyringe';
 
 const supabase = container.resolve(HibiscusSupabaseClient);

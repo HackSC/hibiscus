@@ -11,6 +11,26 @@
         "lintFilePatterns": ["libs/sso-client/**/*.ts"]
       }
     },
+    "build": {
+      "executor": "@nrwl/rollup:rollup",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/sso-client",
+        "tsConfig": "libs/sso-client/tsconfig.lib.json",
+        "project": "libs/sso-client/package.json",
+        "entryFile": "libs/sso-client/src/index.ts",
+        "external": ["react/jsx-runtime"],
+        "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+        "compiler": "babel",
+        "assets": [
+          {
+            "glob": "libs/sso-client/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ]
+      }
+    },
     "test": {
       "executor": "@nrwl/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
