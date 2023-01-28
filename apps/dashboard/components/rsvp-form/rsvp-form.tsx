@@ -5,7 +5,10 @@ import { GrayBox } from '../gray-box/gray-box';
 import { Button, Combobox } from '@hibiscus/ui-kit-2023';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { getOptionsGraduationYear } from '../../common/constants';
+import {
+  ALLOWED_RESUME_FORMATS,
+  getOptionsGraduationYear,
+} from '../../common/constants';
 import APIService from '../../common/api';
 import { getMLHMajors } from '../../common/utils';
 import { Option } from '@hibiscus/types';
@@ -14,6 +17,8 @@ import { container } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 import { toast } from 'react-hot-toast';
+import { getEnv } from '@hibiscus/env';
+import mime from 'mime-types';
 
 interface Props {
   closeModal: () => void;
@@ -40,12 +45,26 @@ function RSVPForm({ closeModal }: Props) {
       closeModal();
       const supabase = container.resolve(HibiscusSupabaseClient);
       const client = supabase.getClient();
+      // upload resume
+      let resumeStoragePath: string | null = null;
+      if (resumeFile !== null) {
+        const fileKey = `resume.${mime.extension(resumeFile.type)}`;
+        const storageResponse = await client.storage
+          .from(getEnv().Hibiscus.RSVPForm.ResumeStorageBucketName)
+          .upload(`${user.id}/${fileKey}`, resumeFile);
+        if (storageResponse.error) {
+          console.error(storageResponse.error.message);
+        } else {
+          resumeStoragePath = storageResponse.data.path;
+        }
+      }
       // update participants information
       const res = await client.from('participants').upsert({
         id: user.id,
         graduation_year: values.graduationYear,
         major: values.major,
         school: values.school,
+        resume: resumeStoragePath,
       });
       if (res.error) {
         console.error(res.error.message);
@@ -59,12 +78,11 @@ function RSVPForm({ closeModal }: Props) {
         console.error(error.message);
         return;
       }
-      formikHelpers.setSubmitting(false);
       updateUser({ attendanceConfirmed: true });
       toast.success('Confirmation received! Welcome to HackSC 2023 🌺', {
         icon: '🎉',
-        duration: 5,
       });
+      formikHelpers.setSubmitting(false);
     },
   });
 
@@ -75,12 +93,31 @@ function RSVPForm({ closeModal }: Props) {
       formik.setValues((prev) => ({ ...prev, [field]: opt.displayName }));
   };
 
+  const handleResumeFileChange: React.ChangeEventHandler<HTMLInputElement> = (
+    e
+  ) => {
+    if (e.target.files.length === 0) {
+      setResumeFile(null);
+      return;
+    }
+    setResumeFile(e.target.files[0]);
+  };
+
   return (
     <form onSubmit={formik.handleSubmit}>
       <OwnGrayBox>
-        <H2>Fill in details below</H2>
+        <H2>Please confirm some details</H2>
+        <Text>
+          To validate you when you come to HackSC 2023, please enter details
+          below. We use this information to check you in when you first check-in
+          with us for the event on February 3rd.
+        </Text>
         <div style={{ zIndex: 2 }}>
-          <Text>Your school:</Text>
+          <label htmlFor="school">
+            <Text>
+              Your school:<SpanRed>*</SpanRed>{' '}
+            </Text>
+          </label>
           <Combobox
             key="1"
             name="school"
@@ -101,7 +138,11 @@ function RSVPForm({ closeModal }: Props) {
           {formik.touched.school && <SpanRed>{formik.errors.school}</SpanRed>}
         </div>
         <div style={{ zIndex: 1 }}>
-          <Text>Your graduation date:</Text>
+          <label htmlFor="graduationYear">
+            <Text>
+              Your graduation date:<SpanRed>*</SpanRed>
+            </Text>
+          </label>
           <Combobox
             key="2"
             name="graduationYear"
@@ -119,7 +160,12 @@ function RSVPForm({ closeModal }: Props) {
           )}
         </div>
         <div style={{ zIndex: 0 }}>
-          <Text>Your major:</Text>
+          <label htmlFor="major">
+            <Text>
+              Your major:
+              <SpanRed>*</SpanRed>
+            </Text>
+          </label>
           <Combobox
             key="3"
             name="major"
@@ -132,6 +178,18 @@ function RSVPForm({ closeModal }: Props) {
           />
           {formik.touched.major && <SpanRed>{formik.errors.major}</SpanRed>}
         </div>
+        <div>
+          <label>
+            <Text>Your resume:</Text>
+          </label>
+          <input
+            type="file"
+            onChange={handleResumeFileChange}
+            accept={ALLOWED_RESUME_FORMATS.map((it) => mime.lookup(it)).join(
+              ','
+            )}
+          />
+        </div>
         <Button color="blue" type="submit">
           SUBMIT AND CONFIRM YOUR SPOT!
         </Button>
@@ -143,8 +201,11 @@ function RSVPForm({ closeModal }: Props) {
 export default RSVPForm;
 
 const OwnGrayBox = styled(GrayBox)`
+  text-align: center;
+  max-width: 30rem;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  align-items: center;
+  gap: 20px;
   padding: 30px;
 `;

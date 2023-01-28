@@ -1,25 +1,46 @@
-/* eslint-disable @nrwl/nx/enforce-module-boundaries */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import styled from 'styled-components';
 import { Link, Modal } from '@hibiscus/ui';
 import { Button, GlowSpan } from '@hibiscus/ui-kit-2023';
 import { Colors2023 } from '@hibiscus/styles';
-import { HibiscusUser } from '@hibiscus/types';
+import { HibiscusRole } from '@hibiscus/types';
 import { H1, H3 } from '@hibiscus/ui';
-import Image from 'next/image';
 import { ApplicationStatus } from '@hibiscus/types';
 import { useState } from 'react';
 import RSVPForm from '../rsvp-form/rsvp-form';
 import ComingSoonBattlepassPlaceholder from '../battlepass/coming-soon-battlepass-placeholder';
 import { ComingSoon } from './coming-soon';
+import { getColorsForRole } from '../../common/role.utils';
+import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 
-interface Props {
-  user: HibiscusUser;
-}
-
-export function HackerPortal({ user }: Props) {
+export function HackerPortal() {
   const [modalOpen, setModalOpen] = useState(false);
+  const { user } = useHibiscusUser();
   const closeModal = () => setModalOpen(false);
+  const userColors = getColorsForRole(user?.role ?? HibiscusRole.HACKER);
+
+  const WelcomeHeader = () => (
+    <div
+      style={{
+        display: 'inline-flex',
+        width: '100%',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
+    >
+      <WelcomeContainer>
+        <H1
+          style={{
+            color: userColors.light,
+            fontSize: '30px',
+            textShadow: `0px 0px 10px ${userColors.standard}`,
+          }}
+        >
+          Welcome, {user.firstName}
+        </H1>
+        <H3 style={{ color: '#989898' }}>What would you like to do today?</H3>
+      </WelcomeContainer>
+    </div>
+  );
 
   const getApplicationStatus = () => {
     return (
@@ -111,6 +132,7 @@ export function HackerPortal({ user }: Props) {
 
   return (
     <>
+      <WelcomeHeader />
       {renderApplyMessage()}
 
       <div
@@ -188,5 +210,11 @@ const BannerContainer = styled.div`
 
   @media (max-width: 400px) {
     flex-direction: column;
+  }
+`;
+
+const WelcomeContainer = styled.div`
+  @media (max-width: 400px) {
+    margin-top: 5rem;
   }
 `;
