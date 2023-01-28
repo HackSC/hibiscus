@@ -19,6 +19,7 @@ import {
 } from '@hibiscus/types';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import { getEnv } from '@hibiscus/env';
+import { container } from 'tsyringe';
 
 @injectable()
 export class HibiscusSupabaseClient {
@@ -276,6 +277,67 @@ export class HibiscusSupabaseClient {
     return { data: { applied } };
   }
 
+  async addEvent(user_id: string, event_id: number) {
+    await this.client.from('event_log').insert({
+      user_id: user_id,
+      event_id: event_id,
+    });
+  }
+
+  async addtoLeaderboard(user_id: string, event_points: number) {
+    const supabase = container.resolve(HibiscusSupabaseClient);
+    await supabase.setSessionClientSide();
+
+    const userMatches = await supabase
+      .getClient()
+      .from('user_profiles')
+      .select()
+      .eq('user_id', `${user_id}`);
+
+    const userLeaderboardMatches = await supabase
+      .getClient()
+      .from('leaderboard')
+      .select()
+      .eq('user_id', `${user_id}`);
+
+    if (userLeaderboardMatches.data.length == 0) {
+      console.log(userLeaderboardMatches);
+
+      await this.client.from('leaderboard').insert({
+        user_id: user_id,
+        event_points: event_points,
+      });
+    } else {
+      console.log(userLeaderboardMatches.data[0].event_points);
+
+      await this.client
+        .from('leaderboard')
+        .update({
+          event_points:
+            event_points + userLeaderboardMatches.data[0].event_points,
+        })
+        .eq('user_id', user_id);
+    }
+  }
+
+  // async updateUserLeaderboard(userId: string, points: number) {
+  //   const user = await this.client
+  //     .from('leaderboard')
+  //     .select()
+  //     .eq('user_id', userId);
+  //   const newpoints = user.data[0].points + points
+
+  //   const {error} = await this.client
+  //     .from('leaderboard')
+  //     .update()
+  //     .eq('user_id', userId);
+  //     if (error) {
+  //     console.error(error);
+  //     return { message: error.message, code: error.code };
+  //   }
+
+  // }
+
   static setTokenCookieClientSide(access_token: string, refresh_token: string) {
     setCookie(
       process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME,
@@ -342,3 +404,4 @@ type UserProfileInsert =
   Database['public']['Tables']['user_profiles']['Insert'];
 type UserProfileUpdate =
   Database['public']['Tables']['user_profiles']['Update'];
+type LeaderboardUpdate = Database['public']['Tables']['leaderboard']['Update'];

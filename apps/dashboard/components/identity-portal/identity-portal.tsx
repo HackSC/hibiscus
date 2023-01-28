@@ -31,9 +31,7 @@ export function IdentityPortal() {
         />
       </OptionCard>
 
-      <OptionCard
-        onClick={() => router.push('/identity-portal/event-check-in')}
-      >
+      <OptionCard onClick={() => router.push('/identity-portal/event-checkin')}>
         <LabelText>Event-specific Check-in</LabelText>
         <Image
           src="/hackform-illustrations/heart-flying.svg"

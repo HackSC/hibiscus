@@ -16,6 +16,7 @@ export default async function searchUser(
     .from('user_profiles')
     .select()
     .textSearch('first_name', `'${query}'`);
+
   const lastnameMatches = await supabase
     .getClient()
     .from('user_profiles')
