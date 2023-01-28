@@ -1,14 +1,18 @@
 import { Colors2023 } from '@hibiscus/styles';
-import { Text } from '@hibiscus/ui';
+import { Text, Modal } from '@hibiscus/ui';
 import { Button, GlowSpan, Search } from '@hibiscus/ui-kit-2023';
 import { SearchUserBox } from '../../../components/identity-portal/search-user-box/search-user-box';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { BiWifi2 } from 'react-icons/bi';
 import { BackButton } from '../../../components/identity-portal/back-button/back-button';
+import { ScrollableListBox } from '../../../components/identity-portal/scrollable-list-box/scrollable-list-box';
+import { useState } from 'react';
+import { CheckInBox } from '../../../components/identity-portal/check-in-box/check-in-box';
 
 export function Index() {
   const router = useRouter();
+  // const [isModalOpen, setModalOpen] = useState(true);
 
   return (
     <>
@@ -54,6 +58,7 @@ export function Index() {
 
         <Button color="blue">SUBMIT</Button>
       </ColumnSpacedCenter>
+      <CheckInBox></CheckInBox>
     </>
   );
 }

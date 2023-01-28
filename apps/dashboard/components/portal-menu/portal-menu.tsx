@@ -18,7 +18,10 @@ export interface PortalMenuProps {
 export function PortalMenu({ user }: PortalMenuProps) {
   const router = useRouter();
   const { tabRoutes, cti, isOpen } = useAppSelector((state) => ({
-    tabRoutes: state.menu.tabRoutes,
+    tabRoutes:
+      (user?.role === HibiscusRole.HACKER && state.menu.tabRoutes) ||
+      (user?.role === HibiscusRole.SPONSOR && state.menu.sponsorRoutes) ||
+      [],
     cti: state.menu.currentTabIndex,
     isOpen: state.menu.isOpen,
   }));
