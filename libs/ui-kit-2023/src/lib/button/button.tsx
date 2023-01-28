@@ -4,7 +4,7 @@ import { Colors2023 } from '@hibiscus/styles';
 
 /* eslint-disable-next-line */
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  color: 'blue' | 'black' | 'purple' | 'red';
+  color: 'blue' | 'black' | 'purple' | 'red' | 'yellow' | 'grey';
   disabled?: boolean;
 }
 
@@ -20,12 +20,90 @@ export function Button(props: ButtonProps) {
     return (
       <PurpleButton onClick={props.onClick}>{props.children}</PurpleButton>
     );
+  } else if (props.color === 'yellow') {
+    return (
+      <YellowButton onClick={props.onClick}>{props.children}</YellowButton>
+    );
+  } else if (props.color === 'grey') {
+    return <GreyButton onClick={props.onClick}>{props.children}</GreyButton>;
   } else {
     return <RedButton onClick={props.onClick}>{props.children}</RedButton>;
   }
 }
 
 export default Button;
+const GreyButton = styled.button`
+  width: fit-content;
+  height: 45px;
+  border: 1.5px solid ${Colors2023.GRAY.SHLIGHT};
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 30px;
+  gap: 10px;
+  background: ${Colors2023.GRAY.DARK};
+  border-radius: 10px;
+  //fonts
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 36px;
+  text-align: center;
+  letter-spacing: 0.2em;
+  color: ${Colors2023.GRAY.SHLIGHT};
+  :hover {
+    border: 1.5px solid ${Colors2023.GRAY.MEDIUM};
+    background: #777;
+    box-shadow: 0px 0px 5px ${Colors2023.GRAY.DARK};
+    cursor: pointer;
+    transition: 0.1s;
+  }
+  :active {
+    border: 1.5px solid ${Colors2023.GRAY.SHLIGHT};
+    background: ${Colors2023.GRAY.SHLIGHT};
+    color: ${Colors2023.GRAY.DARK};
+    box-shadow: 0px 0px 5px #777;
+    border-radius: 10px;
+  }
+`;
+const YellowButton = styled.button`
+  width: fit-content;
+  height: 45px;
+  border: 1.5px solid ${Colors2023.YELLOW.STANDARD};
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 30px;
+  gap: 10px;
+  background: ${Colors2023.GRAY.DARK};
+  border-radius: 10px;
+  //fonts
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 36px;
+  text-align: center;
+  letter-spacing: 0.2em;
+  color: ${Colors2023.YELLOW.STANDARD};
+  :hover {
+    border: 1.5px solid ${Colors2023.YELLOW.STANDARD};
+    background: #958141;
+    box-shadow: 0px 0px 5px ${Colors2023.YELLOW.DARK};
+    cursor: pointer;
+    transition: 0.1s;
+  }
+  :active {
+    border: 1.5px solid ${Colors2023.YELLOW.STANDARD};
+    background: ${Colors2023.YELLOW.STANDARD};
+    color: ${Colors2023.YELLOW.DARK};
+    box-shadow: 0px 0px 5px #958141;
+    border-radius: 10px;
+  }
+`;
 
 const PurpleButton = styled.button`
   width: fit-content;
