@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Link, Modal } from '@hibiscus/ui';
+import { H2, Link, Modal, Text } from '@hibiscus/ui';
 import { Button, GlowSpan } from '@hibiscus/ui-kit-2023';
 import { Colors2023 } from '@hibiscus/styles';
 import { HibiscusRole } from '@hibiscus/types';
@@ -11,12 +11,22 @@ import ComingSoonBattlepassPlaceholder from '../battlepass/coming-soon-battlepas
 import { ComingSoon } from './coming-soon';
 import { getColorsForRole } from '../../common/role.utils';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
+import Image from 'next/image';
+import { GrayBox } from '../gray-box/gray-box';
+import { container } from 'tsyringe';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import DeclinedPlaceholder from './declined-placeholder';
+
+type RSVPChoice = 'DECLINE' | 'ACCEPT';
 
 export function HackerPortal() {
   const [modalOpen, setModalOpen] = useState(false);
-  const { user } = useHibiscusUser();
+  const { user, updateUser } = useHibiscusUser();
   const closeModal = () => setModalOpen(false);
   const userColors = getColorsForRole(user?.role ?? HibiscusRole.HACKER);
+  const [choice, setChoice] = useState<RSVPChoice | null>(null);
+  const hbc = container.resolve(HibiscusSupabaseClient);
+  const client = hbc.getClient();
 
   const WelcomeHeader = () => (
     <div
@@ -112,22 +122,118 @@ export function HackerPortal() {
     }
   };
 
-  const ConfirmationPlaceholder = () => {
+  const RSVPPlaceholder = () => {
     return (
-      <div>
-        <Button color="black" onClick={() => setModalOpen(true)}>
-          CONFIRM YOUR SPOT
-        </Button>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <Image
+          src="/hackform-illustrations/heart.svg"
+          width={100}
+          height={100}
+          alt="Heart character"
+        />
+        <H3>Congratulations on being accepted to HackSC 2023!</H3>
+        <Text>
+          We are so excited to welcome you to our event this year, and hope that
+          you will be able to attend. It’s going to be an amazing weekend with
+          plenty of workshops, speakers, games, and of course, project building!
+        </Text>
+        <Text>
+          Please complete this RSVP form by{' '}
+          <GlowSpan style={{ fontWeight: 'bold' }}>
+            February 1st, 2023 at 11:59pm
+          </GlowSpan>{' '}
+          to secure your spot at HackSC 2023. By submitting, you are committing
+          to attending the event. If you do not submit this form by the posted
+          deadline, your spot will be given to another hacker.
+        </Text>
+        <Text>
+          We kindly remind you that no-shows after RSVPing mean that you are
+          taking someone else’s opportunity to attend this event. If you are no
+          longer able to attend the event after RSVPing, please email{' '}
+          <Link
+            href="mailto:team@hacksc.com"
+            passHref
+            underline
+            anchortagpropsoverride={{
+              style: { color: Colors2023.BLUE.STANDARD },
+            }}
+          >
+            team@hacksc.com
+          </Link>{' '}
+          at least 12 hours prior to the start of the event.
+        </Text>
+        <Text>
+          HackSC is committed to providing participants with the best experience
+          possible. If there’s anything we can do to improve your time at our
+          event, please let us know!
+        </Text>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <Button
+            color="red"
+            onClick={() => {
+              setChoice('DECLINE');
+              setModalOpen(true);
+            }}
+          >
+            DECLINE YOUR SPOT
+          </Button>
+          <Button
+            color="black"
+            onClick={() => {
+              setChoice('ACCEPT');
+              setModalOpen(true);
+            }}
+          >
+            CONFIRM YOUR SPOT
+          </Button>
+        </div>
       </div>
     );
   };
 
-  if (user.attendanceConfirmed) {
+  const DeclineSpotContent = () => (
+    <GrayBox
+      style={{
+        maxWidth: '30rem',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '20px',
+      }}
+    >
+      <div>
+        <H2>Are you sure?</H2>
+        <Text>
+          Once submitted, you confirm that you will not be able to join HackSC
+          2023. This action is irreversible.
+        </Text>
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Button
+          color="red"
+          onClick={async (e) => {
+            e.stopPropagation();
+            setModalOpen(false);
+            await client
+              .from('user_profiles')
+              .update({ attendance_confirmed: false })
+              .eq('user_id', user.id);
+            updateUser({ attendanceConfirmed: false });
+          }}
+        >
+          CONFIRM
+        </Button>
+      </div>
+    </GrayBox>
+  );
+
+  if (user.attendanceConfirmed === true) {
     return (
       <>
         <ComingSoonBattlepassPlaceholder />
       </>
     );
+  } else if (user.attendanceConfirmed === false) {
+    return <DeclinedPlaceholder />;
   }
 
   return (
@@ -154,9 +260,10 @@ export function HackerPortal() {
         {user.applicationStatus === ApplicationStatus.ADMITTED ? (
           <>
             <Modal isOpen={modalOpen} closeModal={closeModal}>
-              <RSVPForm closeModal={closeModal} />
+              {choice === 'ACCEPT' && <RSVPForm closeModal={closeModal} />}
+              {choice === 'DECLINE' && <DeclineSpotContent />}
             </Modal>
-            <ConfirmationPlaceholder />
+            <RSVPPlaceholder />
           </>
         ) : (
           <ComingSoon />
