@@ -49,7 +49,7 @@ const Circle = styled.div`
   width: 12px;
   height: 12px;
   border-radius: 50px;
-  background-color: ${Colors2023.BLUE.LIGHT};
+  background-color: ${Colors2023.GREEN.LIGHT};
   box-shadow: 0px 0px 10px rgba(118, 211, 239, 0.5);
 `;
 

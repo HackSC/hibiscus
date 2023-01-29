@@ -191,7 +191,11 @@ const Index = () => {
             </H1>
             <SavedAttendeeContainer></SavedAttendeeContainer>
           </SavedSection>
-          <ViewAllButton>
+          <ViewAllButton
+            style={
+              currentAttendee !== null ? { width: '100%' } : { width: '70%' }
+            }
+          >
             <H1
               style={{
                 color: Colors2023.GREEN.STANDARD,
@@ -224,7 +228,12 @@ const Index = () => {
           >
             {getAttendees()}
           </div>
-          <ViewAllButton>
+          <ViewAllButton
+            style={
+              currentAttendee !== null ? { width: '100%' } : { width: '70%' }
+            }
+            onClick={() => router.push('participant-database')}
+          >
             <H1
               style={{
                 color: Colors2023.GREEN.STANDARD,
@@ -239,6 +248,7 @@ const Index = () => {
             <ModalContainer>
               <QuickNoteContainer>
                 <CloseButton
+                  style={{ justifyContent: 'flex-end' }}
                   onClick={() => {
                     setModalActive(false);
                   }}
@@ -297,6 +307,15 @@ const Index = () => {
               setCurrentAttendee(null);
             }}
           >
+            <Text
+              style={{
+                fontSize: '20px',
+                color: Colors2023.GREEN.STANDARD,
+                letterSpacing: '0.2rem',
+              }}
+            >
+              HACKER
+            </Text>
             <Image
               width="20"
               height="20"
@@ -305,10 +324,12 @@ const Index = () => {
             />
           </CloseButton>
           {currentAttendee !== null ? (
-            <HackerProfile
-              hacker={currentAttendee}
-              onClick={() => openQuickNote(currentAttendee)}
-            />
+            <div style={{ marginTop: '1.5rem' }}>
+              <HackerProfile
+                hacker={currentAttendee}
+                onClick={() => openQuickNote(currentAttendee)}
+              />
+            </div>
           ) : (
             <></>
           )}
@@ -478,7 +499,7 @@ const RightContainer = styled.div`
 const CloseButton = styled.button`
   display: flex;
   width: 100%;
-  justify-content: flex-end;
+  justify-content: space-between;
   background-color: ${Colors2023.GRAY.STANDARD};
   cursor: pointer;
   :hover {
@@ -490,6 +511,7 @@ const CloseButton = styled.button`
 `;
 
 const ViewAllButton = styled.button`
+  width: 70%;
   display: flex;
   justify-content: center;
   align-items: center;
