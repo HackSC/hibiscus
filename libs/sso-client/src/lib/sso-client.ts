@@ -214,7 +214,7 @@ function getHost(url: string): string {
  * @param refresh_token Supabase refresh token
  * @returns object containing `data` and `error` properties, either of which may be undefined
  */
-export async function verifyToken(access_token: string, refresh_token: string) {
+async function verifyToken(access_token: string, refresh_token: string) {
   // The Fetch API is used instead of axios because this function needs to be used in
   // NextJS middleware and their edge functions do not support axios
   const res = await fetch(`${getEnv().Hibiscus.AppURL.sso}/api/verifyToken`, {

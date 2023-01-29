@@ -1,5 +1,5 @@
 import { Colors2023 } from '@hibiscus/styles';
-import { ApplicationStatus, HackformMetadata } from '@hibiscus/types';
+import { HackformMetadata } from '@hibiscus/types';
 import { H1, H3 } from '@hibiscus/ui';
 import { Button, GlowSpan } from '@hibiscus/ui-kit-2023';
 import { useHackform } from '../../../hooks/use-hackform/use-hackform';
@@ -11,6 +11,8 @@ import { container } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import * as Sentry from '@sentry/browser';
+import { toast } from 'react-hot-toast';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface HackformEndingProps {
@@ -20,33 +22,37 @@ export interface HackformEndingProps {
 export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
   const [disabledButton, setDisabledButton] = useState(false);
   const hackformUtils = useHackform();
-  const { user, setUser } = useHibiscusUser();
+  const { user } = useHibiscusUser();
   const TIME_BEFORE_FORMSTATE_RESET = 2000; // wait this much ms before we do reset
   const router = useRouter();
 
   const handleSubmit = async () => {
     setDisabledButton(true); // can't clickjack
     const submission = hackformUtils.getSubmission();
-    await APIService.submitHackform(user.id, submission);
-    setTimeout(() => {
-      hackformUtils.reset();
-    }, TIME_BEFORE_FORMSTATE_RESET);
+    try {
+      await APIService.submitHackform(user.id, submission);
 
-    const supabase = container.resolve(HibiscusSupabaseClient);
-    const client = supabase.getClient();
-    const { error } = await client
-      .from('user_profiles')
-      .update({ application_status: 3 })
-      .eq('user_id', user.id);
-    if (error) {
-      console.error('An error occured: ' + error.message);
-    } else {
-      setUser((prev) => ({
-        ...prev,
-        applicationStatus: ApplicationStatus.IN_REVIEW,
-      }));
+      setTimeout(() => {
+        hackformUtils.reset();
+      }, TIME_BEFORE_FORMSTATE_RESET);
+
+      const supabase = container.resolve(HibiscusSupabaseClient);
+      const client = supabase.getClient();
+      const { error } = await client
+        .from('user_profiles')
+        .update({ application_status: 3 })
+        .eq('user_id', user.id);
+
+      if (error) {
+        throw error;
+      }
+      router.replace('/');
+    } catch (e) {
+      toast.error(
+        'Oops! Something went wrong with submitting your application; please try again'
+      );
+      Sentry.captureException(e);
     }
-    router.replace('/');
   };
 
   return (
