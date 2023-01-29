@@ -53,25 +53,24 @@ export default class APIService {
    *
    * @param submission HackformSubmission
    * @param hackerId hacker ID
-   * @returns whatever it returns
+   * @returns whatever it returns; if hacker already submitted an app before, returns null
    */
   static async submitHackform(
     hackerId: string,
     submission: HackformSubmission
   ) {
-    const res = await axios.post('/api/hackform', { submission });
-    const data = res.data as LocalAPIResponses['/hackform'];
-    const supabase = container.resolve(HibiscusSupabaseClient);
     // assoc current hacker with this form
+    const supabase = container.resolve(HibiscusSupabaseClient);
     const env = getEnv();
     const user = await supabase.getUserProfile(
       getCookie(env.Hibiscus.Cookies.accessTokenName) as string,
       getCookie(env.Hibiscus.Cookies.refreshTokenName) as string
     );
-    if (user.app_id) {
-      console.error('User already has an app');
+    if (user.application_status === 3 || user.app_id !== null) {
       return null;
     }
+    const res = await axios.post('/api/hackform', { submission });
+    const data = res.data as LocalAPIResponses['/hackform'];
     const err = await supabase.updateUserProfile(hackerId, {
       app_id: data.formId,
     });

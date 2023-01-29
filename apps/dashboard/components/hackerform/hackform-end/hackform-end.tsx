@@ -36,6 +36,7 @@ export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
         hackformUtils.reset();
       }, TIME_BEFORE_FORMSTATE_RESET);
 
+      // update user app status to 3
       const supabase = container.resolve(HibiscusSupabaseClient);
       const client = supabase.getClient();
       const { error } = await client
