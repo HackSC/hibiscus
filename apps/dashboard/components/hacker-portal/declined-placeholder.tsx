@@ -13,8 +13,8 @@ export const DeclinedPlaceholder = () => {
       />
       <H1>You have declined your spot for HackSC 2023</H1>
       <H3>
-        Bummer 😞 Welp, there's always another chance to build something cool 😄
-        Make sure to stay up to date with HackSC through our{' '}
+        Bummer 😞 Welp, there{"'"}s always another chance to build something
+        cool 😄 Make sure to stay up to date with HackSC through our{' '}
         <Link href="https://instagram.com/hackscofficial/" passHref underline>
           social media
         </Link>{' '}
