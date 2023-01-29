@@ -59,7 +59,7 @@ export default class APIService {
     hackerId: string,
     submission: HackformSubmission
   ) {
-    // assoc current hacker with this form
+    // check if user already submitted and abort submission if so
     const supabase = container.resolve(HibiscusSupabaseClient);
     const env = getEnv();
     const user = await supabase.getUserProfile(
@@ -69,15 +69,19 @@ export default class APIService {
     if (user.application_status === 3 || user.app_id !== null) {
       return null;
     }
+
+    // submits the form
     const res = await axios.post('/api/hackform', { submission });
     const data = res.data as LocalAPIResponses['/hackform'];
+
+    // assoc current hacker with this form
     const err = await supabase.updateUserProfile(hackerId, {
       app_id: data.formId,
     });
     if (err) {
       throw err;
     }
-    return res.data;
+    return { formId: data.formId, data: res.data };
   }
 
   static async getHackformSubmission(id: string) {
