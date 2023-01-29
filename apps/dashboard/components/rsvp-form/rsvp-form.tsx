@@ -2,7 +2,12 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { H2, Text } from '@hibiscus/ui';
 import { GrayBox } from '../gray-box/gray-box';
-import { Button, Combobox } from '@hibiscus/ui-kit-2023';
+import {
+  Button,
+  Combobox,
+  DatePicker,
+  OneLineText,
+} from '@hibiscus/ui-kit-2023';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {
@@ -32,6 +37,8 @@ function RSVPForm({ closeModal }: Props) {
       school: '',
       major: '',
       graduationYear: '',
+      dob: null,
+      portfolioLink: '',
     },
     validationSchema: Yup.object({
       school: Yup.string().required('Please enter your school'),
@@ -39,6 +46,8 @@ function RSVPForm({ closeModal }: Props) {
       graduationYear: Yup.string().required(
         'Please enter your graduation year'
       ),
+      dob: Yup.date().required('This field is required'),
+      portfolioLink: Yup.string(),
     }),
     onSubmit: async (values, formikHelpers) => {
       formikHelpers.setSubmitting(true);
@@ -65,6 +74,8 @@ function RSVPForm({ closeModal }: Props) {
         major: values.major,
         school: values.school,
         resume: resumeStoragePath,
+        dob: values.dob,
+        portfolio_link: values.portfolioLink,
       });
       if (res.error) {
         console.error(res.error.message);
@@ -112,7 +123,7 @@ function RSVPForm({ closeModal }: Props) {
           below. We use this information to check you in when you first check-in
           with us for the event on February 3rd.
         </Text>
-        <div style={{ zIndex: 2 }}>
+        <div style={{ zIndex: 3 }}>
           <label htmlFor="school">
             <Text>
               Your school:<SpanRed>*</SpanRed>{' '}
@@ -137,7 +148,7 @@ function RSVPForm({ closeModal }: Props) {
           />
           {formik.touched.school && <SpanRed>{formik.errors.school}</SpanRed>}
         </div>
-        <div style={{ zIndex: 1 }}>
+        <div style={{ zIndex: 2 }}>
           <label htmlFor="graduationYear">
             <Text>
               Your graduation date:<SpanRed>*</SpanRed>
@@ -159,7 +170,7 @@ function RSVPForm({ closeModal }: Props) {
             <SpanRed>{formik.errors.graduationYear}</SpanRed>
           )}
         </div>
-        <div style={{ zIndex: 0 }}>
+        <div style={{ zIndex: 1 }}>
           <label htmlFor="major">
             <Text>
               Your major:
@@ -177,6 +188,43 @@ function RSVPForm({ closeModal }: Props) {
             onClickChooseOption={createHandlerClickChooseOption('major')}
           />
           {formik.touched.major && <SpanRed>{formik.errors.major}</SpanRed>}
+        </div>
+        <div>
+          <label htmlFor="dob">
+            <Text>
+              Date of birth:
+              <SpanRed>*</SpanRed>
+            </Text>
+          </label>
+          <DatePicker
+            name="dob"
+            id="dob"
+            value={formik.values.dob}
+            placeholder="in MM/DD/YYYY format e.g 12/22/2002"
+            onChange={formik.handleChange}
+            onClickDay={(d, e) => {
+              formik.setFieldValue('dob', d);
+            }}
+          />
+          {formik.touched.dob && formik.errors.dob ? (
+            <SpanRed>{formik.errors.dob?.toString()}</SpanRed>
+          ) : null}
+        </div>
+        <div>
+          <label htmlFor="portfolioLink">
+            <Text>Your personal website link:</Text>
+          </label>
+          <OneLineText
+            key="4"
+            name="portfolioLink"
+            id="portfolioLink"
+            value={formik.values.portfolioLink}
+            placeholder="e.g https://vuvincent.com"
+            onChange={formik.handleChange}
+          />
+          {formik.touched.portfolioLink && (
+            <SpanRed>{formik.errors.portfolioLink}</SpanRed>
+          )}
         </div>
         <div>
           <label>
@@ -203,6 +251,8 @@ export default RSVPForm;
 const OwnGrayBox = styled(GrayBox)`
   text-align: center;
   max-width: 30rem;
+  max-height: 40rem;
+  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   align-items: center;
