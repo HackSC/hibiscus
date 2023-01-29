@@ -8,13 +8,13 @@ import { HibiscusSupabaseClient } from './supabase-client';
 import { logout } from '@hibiscus/sso-client';
 import { container } from 'tsyringe';
 
-const supabase = container.resolve(HibiscusSupabaseClient);
-
 export const SupabaseContext = createContext({
-  supabase,
+  supabase: container.resolve(HibiscusSupabaseClient),
 });
 
 export function SupabaseContextProvider(props: PropsWithChildren) {
+  const supabase = container.resolve(HibiscusSupabaseClient);
+
   const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
