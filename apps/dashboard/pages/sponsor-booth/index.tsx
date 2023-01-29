@@ -110,7 +110,7 @@ const Index = () => {
                   textShadow: `0px 0px 10px ${Colors2023.GREEN.DARK}`,
                 }}
               >
-                {user.firstName}
+                {user.firstName} {user.lastName}
               </H1>
               <ClockContainer>
                 <H1
@@ -328,7 +328,7 @@ const Wrapper = styled.div`
 `;
 
 const StyledButton = styled.button`
-  width: 80px;
+  width: 60px;
   height: 60px;
   padding-top: 12px;
   flex-direction: column;
@@ -336,7 +336,7 @@ const StyledButton = styled.button`
   align-items: center;
   background-color: ${Colors2023.GRAY.STANDARD};
   border-radius: 15px;
-  border: 3px solid ${Colors2023.GRAY.MEDIUM};
+  border: 4px solid ${Colors2023.GRAY.MEDIUM};
   gap: 10px;
   cursor: pointer;
   transition: all 0.3s;
