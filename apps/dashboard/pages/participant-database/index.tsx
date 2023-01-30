@@ -559,7 +559,6 @@ const StyledScrollBar = styled.div`
   width: 100%;
   height: 560px;
   overflow-y: scroll;
-  scrollbar-color: rebeccapurple green;
 
   &::-webkit-scrollbar {
     width: 8px;
