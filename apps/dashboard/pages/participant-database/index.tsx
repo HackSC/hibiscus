@@ -12,6 +12,10 @@ import { useRouter } from 'next/router';
 import { OneLineText } from '@hibiscus/ui-kit-2023';
 import { HackerTab } from '../../components/sponsor-portal/hacker-tab';
 import { SponsorAPI, Attendee } from '../../common/mock-sponsor';
+import { Button, ParagraphText } from '@hibiscus/ui-kit-2023';
+import { H1 } from '@hibiscus/ui';
+import { getWordCount } from '../../common/utils';
+import HackerProfile from '../../components/sponsor-portal/hacker-profile';
 
 const Index = () => {
   const [textInput, setInput] = useState('');
@@ -22,6 +26,9 @@ const Index = () => {
     useState<Option | null>(null);
   const [attendees, setAttendees] = useState<Attendee[]>([]);
   const [currentAttendee, setCurrentAttendee] = useState<Attendee>(null);
+  const [modalActive, setModalActive] = useState(false);
+  const [attendeeName, setAttendeeName] = useState('');
+
   const router = useRouter();
 
   useEffect(() => {
@@ -122,12 +129,18 @@ const Index = () => {
           showYear={true}
           showMajor={true}
           showSchool={true}
-          showNoteButton={true}
           showSaveButton={true}
-          onClick={{}}
+          onClick={() => {
+            setCurrentAttendee(attendee);
+          }}
         />
       </HackerTabContainer>
     ));
+  };
+
+  const openQuickNote = (attendee: Attendee) => {
+    setModalActive(true);
+    setAttendeeName(`${attendee.first_name} ${attendee.last_name}`);
   };
 
   return (
@@ -258,19 +271,129 @@ const Index = () => {
         </FilterContainer>
       </Container>
 
-      <Container>{getAttendees()}</Container>
+      <DatabaseContainer>
+        <Container style={{ flex: 2 }}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              width: '100%',
+              height: '560px',
+              overflow: 'auto',
+            }}
+          >
+            {getAttendees()}
+          </div>
+        </Container>
+        <RightContainer
+          style={
+            currentAttendee !== null ? { display: 'flex' } : { display: 'none' }
+          }
+        >
+          <CloseButton
+            onClick={() => {
+              setCurrentAttendee(null);
+            }}
+          >
+            <Text
+              style={{
+                fontSize: '20px',
+                color: Colors2023.GREEN.STANDARD,
+                letterSpacing: '0.2rem',
+              }}
+            >
+              HACKER
+            </Text>
+            <Image
+              width="20"
+              height="20"
+              src={'/x-button.svg'}
+              alt="x-button"
+            />
+          </CloseButton>
+          {currentAttendee !== null ? (
+            <div style={{ marginTop: '1.5rem' }}>
+              <HackerProfile
+                hacker={currentAttendee}
+                onClick={() => openQuickNote(currentAttendee)}
+              />
+            </div>
+          ) : (
+            <></>
+          )}
+        </RightContainer>
+      </DatabaseContainer>
+
+      {modalActive && (
+        <ModalContainer>
+          <QuickNoteContainer>
+            <CloseButton
+              style={{ justifyContent: 'flex-end' }}
+              onClick={() => {
+                setModalActive(false);
+              }}
+            >
+              <Image
+                width="20"
+                height="20"
+                src={'/x-button.svg'}
+                alt="x-button"
+              />
+            </CloseButton>
+            <H1 style={{ fontSize: '30px', letterSpacing: '0.2rem' }}>
+              QUICK NOTES
+            </H1>
+            <Text style={{ fontSize: '25px', marginTop: '1rem' }}>
+              {attendeeName}
+            </Text>
+            <TextWrapper>
+              <StyledParagraphText
+                value={textInput}
+                placeholder={'Add quick note . . . '}
+                onChange={(e) => {
+                  setInput(e.target.value);
+                }}
+              />
+              <WordCountText>
+                Word count: {getWordCount(textInput)}
+              </WordCountText>
+            </TextWrapper>
+            <div style={{ marginTop: '1rem', display: 'flex' }}>
+              <Button
+                color={'red'}
+                onClick={() => {
+                  setModalActive(false);
+                  setInput('');
+                }}
+              >
+                CANCEL
+              </Button>
+              <div style={{ marginLeft: '0.5rem' }}>
+                <Button color={'black'}>SAVE</Button>
+              </div>
+            </div>
+          </QuickNoteContainer>
+        </ModalContainer>
+      )}
     </Wrapper>
   );
 };
 
 export default Index;
 
+const DatabaseContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+`;
+
 const Wrapper = styled.div`
-  width: 90%;
+  width: 95%;
+  position: relative;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-left: 6rem;
+  margin-left: 4rem;
   padding: 30px;
 `;
 
@@ -372,4 +495,71 @@ const HackerTabContainer = styled.button`
   :active {
     opacity: 0.5;
   }
+`;
+
+const CloseButton = styled.button`
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  background-color: ${Colors2023.GRAY.STANDARD};
+  cursor: pointer;
+  :hover {
+    opacity: 0.5;
+  }
+  :active {
+    opacity: 0.8;
+  }
+`;
+
+const RightContainer = styled.div`
+  display: flex;
+  flex: 1;
+  /* width: 30%; */
+  margin-top: 2rem;
+  margin-left: 1rem;
+  padding: 30px;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: ${Colors2023.GRAY.STANDARD};
+  border-radius: 10px;
+  border: 4px solid ${Colors2023.GRAY.MEDIUM};
+  box-shadow: 1px 2px 15px ${Colors2023.GRAY.MEDIUM};
+`;
+
+const TextWrapper = styled.div`
+  margin-top: 0.5rem;
+`;
+
+const WordCountText = styled(Text)`
+  color: ${Colors2023.GRAY.SHLIGHT};
+  font-size: small;
+`;
+
+const StyledParagraphText = styled(ParagraphText)`
+  width: 80%;
+`;
+
+const ModalContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  background-color: rgba(0, 0, 0, 0.8);
+  border-radius: 15px;
+  border: 4px solid ${Colors2023.GRAY.MEDIUM};
+`;
+
+const QuickNoteContainer = styled.div`
+  margin: auto;
+  margin-top: 10rem;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  background-color: ${Colors2023.GRAY.STANDARD};
+  border-radius: 10px;
+  border: 4px solid ${Colors2023.GRAY.MEDIUM};
+  box-shadow: 1px 2px 15px ${Colors2023.GRAY.MEDIUM};
 `;
