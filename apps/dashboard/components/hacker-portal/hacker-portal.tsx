@@ -49,7 +49,6 @@ export function HackerPortal() {
           Welcome, {user.firstName}
         </H1>
         <H3 style={{ color: '#989898' }}>What would you like to do today?</H3>
-        <Text>{}</Text>
       </WelcomeContainer>
     </div>
   );
