@@ -44,15 +44,25 @@ export function HackerTab({
         </Text>
       </div>
       {showYear && (
-        <Text style={{ fontSize: '20px', flex: 1 }}>
+        <Text style={{ fontSize: '20px', flex: 1, textAlign: 'left' }}>
           {user.graduation_year}
         </Text>
       )}
       {showMajor && (
-        <Text style={{ fontSize: '20px', flex: 1 }}>{user.major}</Text>
+        <Text
+          style={{
+            fontSize: '20px',
+            flex: 1,
+            textAlign: 'left',
+          }}
+        >
+          {user.major}
+        </Text>
       )}
       {showSchool && (
-        <Text style={{ fontSize: '20px', flex: 1 }}>{user.school}</Text>
+        <Text style={{ fontSize: '20px', flex: 1, textAlign: 'right' }}>
+          {user.school}
+        </Text>
       )}
       <div
         style={{
