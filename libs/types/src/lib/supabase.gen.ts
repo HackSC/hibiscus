@@ -45,6 +45,112 @@ export interface Database {
           status?: string | null;
         };
       };
+      bonus_point_status: {
+        Row: {
+          id: number;
+          status: string;
+        };
+        Insert: {
+          id: number;
+          status: string;
+        };
+        Update: {
+          id?: number;
+          status?: string;
+        };
+      };
+      bonus_points: {
+        Row: {
+          created_at: string | null;
+          id: string;
+          name: string;
+          points: number;
+        };
+        Insert: {
+          created_at?: string | null;
+          id: string;
+          name: string;
+          points: number;
+        };
+        Update: {
+          created_at?: string | null;
+          id?: string;
+          name?: string;
+          points?: number;
+        };
+      };
+      bonus_points_log: {
+        Row: {
+          bonus_points_id: string;
+          log_id: string;
+          status: number;
+          timestamp: string | null;
+          user_id: string;
+        };
+        Insert: {
+          bonus_points_id: string;
+          log_id: string;
+          status?: number;
+          timestamp?: string | null;
+          user_id: string;
+        };
+        Update: {
+          bonus_points_id?: string;
+          log_id?: string;
+          status?: number;
+          timestamp?: string | null;
+          user_id?: string;
+        };
+      };
+      companies: {
+        Row: {
+          created_at: string | null;
+          description: string | null;
+          id: string;
+          name: string;
+          profile_photo: string | null;
+          website: string | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          description?: string | null;
+          id?: string;
+          name: string;
+          profile_photo?: string | null;
+          website?: string | null;
+        };
+        Update: {
+          created_at?: string | null;
+          description?: string | null;
+          id?: string;
+          name?: string;
+          profile_photo?: string | null;
+          website?: string | null;
+        };
+      };
+      companies_saved_user_profiles: {
+        Row: {
+          company_id: string | null;
+          created_at: string | null;
+          id: number;
+          participant_id: string | null;
+          saved: boolean | null;
+        };
+        Insert: {
+          company_id?: string | null;
+          created_at?: string | null;
+          id?: number;
+          participant_id?: string | null;
+          saved?: boolean | null;
+        };
+        Update: {
+          company_id?: string | null;
+          created_at?: string | null;
+          id?: number;
+          participant_id?: string | null;
+          saved?: boolean | null;
+        };
+      };
       discord_invites: {
         Row: {
           id: number;
@@ -85,32 +191,58 @@ export interface Database {
           user_profile_id?: string | null;
         };
       };
+      event_log: {
+        Row: {
+          check_in_time: string;
+          event_id: number;
+          log_id: number;
+          user_id: string;
+        };
+        Insert: {
+          check_in_time?: string;
+          event_id: number;
+          log_id?: number;
+          user_id: string;
+        };
+        Update: {
+          check_in_time?: string;
+          event_id?: number;
+          log_id?: number;
+          user_id?: string;
+        };
+      };
       events: {
         Row: {
+          company_id: string | null;
           created_at: string | null;
           description: string | null;
           end: string;
           id: number;
           location: string;
           name: string;
+          points: number;
           start: string;
         };
         Insert: {
+          company_id?: string | null;
           created_at?: string | null;
           description?: string | null;
           end: string;
           id?: number;
           location: string;
           name: string;
+          points: number;
           start: string;
         };
         Update: {
+          company_id?: string | null;
           created_at?: string | null;
           description?: string | null;
           end?: string;
           id?: number;
           location?: string;
           name?: string;
+          points?: number;
           start?: string;
         };
       };
@@ -135,6 +267,81 @@ export interface Database {
           invited_id?: string;
           organizer_id?: string;
           team_id?: string;
+        };
+      };
+      leaderboard: {
+        Row: {
+          bonus_points: number;
+          event_points: number;
+          user_id: string;
+        };
+        Insert: {
+          bonus_points?: number;
+          event_points?: number;
+          user_id: string;
+        };
+        Update: {
+          bonus_points?: number;
+          event_points?: number;
+          user_id?: string;
+        };
+      };
+      notes: {
+        Row: {
+          company_id: string | null;
+          created_at: string | null;
+          id: string;
+          note: string | null;
+          participant_id: string | null;
+        };
+        Insert: {
+          company_id?: string | null;
+          created_at?: string | null;
+          id?: string;
+          note?: string | null;
+          participant_id?: string | null;
+        };
+        Update: {
+          company_id?: string | null;
+          created_at?: string | null;
+          id?: string;
+          note?: string | null;
+          participant_id?: string | null;
+        };
+      };
+      participants: {
+        Row: {
+          created_at: string | null;
+          dob: string | null;
+          graduation_year: string | null;
+          id: string;
+          major: string | null;
+          portfolio_link: string | null;
+          resume: string | null;
+          school: string | null;
+          wristband_id: string | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          dob?: string | null;
+          graduation_year?: string | null;
+          id: string;
+          major?: string | null;
+          portfolio_link?: string | null;
+          resume?: string | null;
+          school?: string | null;
+          wristband_id?: string | null;
+        };
+        Update: {
+          created_at?: string | null;
+          dob?: string | null;
+          graduation_year?: string | null;
+          id?: string;
+          major?: string | null;
+          portfolio_link?: string | null;
+          resume?: string | null;
+          school?: string | null;
+          wristband_id?: string | null;
         };
       };
       pinned_events: {
@@ -195,6 +402,46 @@ export interface Database {
           discord_role_id?: string | null;
           id?: number;
           name?: string;
+        };
+      };
+      target_graduations: {
+        Row: {
+          company_id: string | null;
+          created_at: string | null;
+          graduation_year: string | null;
+          id: string;
+        };
+        Insert: {
+          company_id?: string | null;
+          created_at?: string | null;
+          graduation_year?: string | null;
+          id?: string;
+        };
+        Update: {
+          company_id?: string | null;
+          created_at?: string | null;
+          graduation_year?: string | null;
+          id?: string;
+        };
+      };
+      target_majors: {
+        Row: {
+          company_id: string | null;
+          created_at: string | null;
+          id: string;
+          major: string | null;
+        };
+        Insert: {
+          company_id?: string | null;
+          created_at?: string | null;
+          id?: string;
+          major?: string | null;
+        };
+        Update: {
+          company_id?: string | null;
+          created_at?: string | null;
+          id?: string;
+          major?: string | null;
         };
       };
       teams: {
@@ -263,7 +510,10 @@ export interface Database {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      get_volunteers: {
+        Args: Record<PropertyKey, never>;
+        Returns: string;
+      };
     };
     Enums: {
       [_ in never]: never;
