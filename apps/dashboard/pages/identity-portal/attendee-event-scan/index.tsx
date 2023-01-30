@@ -5,28 +5,21 @@ import { Button, GlowSpan, Search } from '@hibiscus/ui-kit-2023';
 import addEvent from '../../../common/add-event';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
-import { Route, Link, Routes, useParams } from 'react-router-dom';
 import { BiWifi2 } from 'react-icons/bi';
 import React from 'react';
-import { container } from 'tsyringe';
-import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { BackButton } from '../../../components/identity-portal/back-button/back-button';
-import { SupabaseAuthClient } from '@supabase/supabase-js/dist/module/lib/SupabaseAuthClient';
-import { SetIdentityDkimEnabledCommand } from '@aws-sdk/client-ses';
-import { SearchEventBox } from 'apps/dashboard/components/identity-portal/search-event-box/search-event-box';
-import { SearchUserEventBox } from 'apps/dashboard/components/identity-portal/search-user-event-box/search-user-event-box';
+import { SearchUserEventBox } from '../../../components/identity-portal/search-user-event-box/search-user-event-box';
 import addEventUserId from '../../../common/add-event-user-id';
 import searchEventId from '../../../common/search-event-id';
 
 export function Index() {
-  const [eventId, setEventId] = useState<any>(null);
-  const [userId, setUserId] = useState<any>(null);
+  const [eventId, setEventId] = useState<number | null>(null);
 
   const router = useRouter();
 
-  const [response, setResponse] = useState<any>(null);
+  const [response, setResponse] = useState<boolean | null>(null);
 
-  const [isAlertVisible, setIsAlertVisible] = React.useState(false);
+  const [isAlertVisible, setIsAlertVisible] = useState(false);
 
   const [eventName, setEventName] = useState(
     [] as unknown as Awaited<ReturnType<typeof searchEventId>>
@@ -41,21 +34,22 @@ export function Index() {
     if (id != null) {
       setEventId(Number(id));
       search(Number(id));
-    } else {
     }
   }, [router.isReady, router.query]);
 
   useEffect(() => {
     if (response) {
       setIsAlertVisible(true);
+      setResponse(null);
+      setTimeout(() => setIsAlertVisible(false), 50);
     } else {
-      setIsAlertVisible(false);
+      // setIsAlertVisible(false);
     }
   }, [response]);
 
-  setTimeout(() => {
-    setIsAlertVisible(false);
-  }, 3000);
+  if (eventId == null) {
+    return <></>;
+  }
 
   return (
     <>
@@ -64,11 +58,11 @@ export function Index() {
       </div>
       <div style={{ position: 'absolute', right: '100px' }}>
         <GlowSpan color={Colors2023.GRAY.DARK} style={{ fontSize: '.68em' }}>
-          {isAlertVisible && (
-            <div>
-              <SuccessText>Success!</SuccessText>
-            </div>
-          )}
+          <div>
+            <SuccessText className={isAlertVisible ? 'shown' : 'hidden'}>
+              Success!
+            </SuccessText>
+          </div>
         </GlowSpan>
       </div>
 
@@ -77,7 +71,7 @@ export function Index() {
           color={Colors2023.YELLOW.STANDARD}
           style={{ fontSize: '3em' }}
         >
-          {eventName} Check - in
+          {eventName} Check-in
         </GlowSpan>
 
         <FlexRow>
@@ -95,16 +89,16 @@ export function Index() {
           <div>
             <FlexRowTight>
               <LabelText>Scan Wristband</LabelText>
-              <BiWifi2 size={40} style={{ transform: 'rotate(90deg)' }} />
+              <BiWifi2 size={36} style={{ transform: 'rotate(90deg)' }} />
             </FlexRowTight>
             <Search
-              placeholder="RFID"
+              placeholder="ID number"
               onInput={(id) => addEvent(eventId, id).then(setResponse)}
             />
           </div>
         </FlexRow>
 
-        <Button color="blue">SUBMIT</Button>
+        <Button color="yellow">SUBMIT</Button>
       </ColumnSpacedCenter>
     </>
   );
@@ -137,7 +131,7 @@ const FlexRowTight = styled.div`
 
 const LabelText = styled(Text)`
   color: ${Colors2023.YELLOW.LIGHT};
-  font-size: 1.3em;
+  font-size: 1.5em;
 `;
 
 const SuccessText = styled(Text)`
@@ -149,4 +143,13 @@ const SuccessText = styled(Text)`
   border-radius: 0.5em;
   border: 0.4em solid ${Colors2023.YELLOW.STANDARD};
   background-color: ${Colors2023.YELLOW.STANDARD};
+
+  &.shown {
+    opacity: 1;
+  }
+
+  &.hidden {
+    transition: opacity 1s linear 1s;
+    opacity: 0;
+  }
 `;

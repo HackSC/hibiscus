@@ -288,12 +288,6 @@ export class HibiscusSupabaseClient {
     const supabase = container.resolve(HibiscusSupabaseClient);
     await supabase.setSessionClientSide();
 
-    const userMatches = await supabase
-      .getClient()
-      .from('user_profiles')
-      .select()
-      .eq('user_id', `${user_id}`);
-
     const userLeaderboardMatches = await supabase
       .getClient()
       .from('leaderboard')

@@ -30,7 +30,10 @@ export function SearchUserEventBox({ onClick }: SearchUserEventBoxProps) {
             <ScrollableListBox.ItemClickable
               key={i}
               value={user.user_id}
-              onClick={onClick}
+              onClick={(value) => {
+                onClick(value);
+                setModalOpen(false);
+              }}
             >
               <BoldText style={{ fontSize: '1em' }}>
                 {user.first_name} {user.last_name}

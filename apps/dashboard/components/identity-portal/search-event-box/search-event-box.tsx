@@ -5,11 +5,7 @@ import searchEvent from '../../../common/search-event';
 import { ScrollableListBox } from '../scrollable-list-box/scrollable-list-box';
 import { useRouter } from 'next/router';
 
-interface SearchEventBoxProps {
-  onClick: (value: string) => void;
-}
-
-export function SearchEventBox({ onClick }: SearchEventBoxProps) {
+export function SearchEventBox() {
   const router = useRouter();
   const [isModalOpen, setModalOpen] = useState(false);
   const [searchRes, setSearchRes] = useState(
