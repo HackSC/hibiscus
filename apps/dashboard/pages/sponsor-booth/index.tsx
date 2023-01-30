@@ -222,17 +222,7 @@ const Index = () => {
           >
             All Check-Ins
           </Text>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              width: '100%',
-              height: '560px',
-              overflow: 'auto',
-            }}
-          >
-            {getAttendees()}
-          </div>
+          <StyledScrollBar>{getAttendees()}</StyledScrollBar>
           <ViewAllButton
             style={
               currentAttendee !== null ? { width: '100%' } : { width: '70%' }
@@ -547,5 +537,25 @@ const HackerTabContainer = styled.button`
 
   :active {
     opacity: 0.5;
+  }
+`;
+
+const StyledScrollBar = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 560px;
+  overflow-y: scroll;
+  scrollbar-color: rebeccapurple green;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    background-color: ${Colors2023.GRAY.MEDIUM};
+    border-radius: 50px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${Colors2023.GREEN.DARK};
+    border-radius: 50px;
   }
 `;

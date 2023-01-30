@@ -205,7 +205,7 @@ const Index = () => {
 
           {chosenYearOption !== null && (
             <FilterPill>
-              <Text>{chosenYearOption.value}</Text>
+              <Text>{chosenYearOption.displayName}</Text>
               <DeleteFilterButton onClick={() => setYearOption(null)}>
                 <Image
                   width="15"
@@ -218,7 +218,7 @@ const Index = () => {
           )}
           {chosenMajorOption !== null && (
             <FilterPill>
-              <Text>{chosenMajorOption.value}</Text>
+              <Text>{chosenMajorOption.displayName}</Text>
               <DeleteFilterButton onClick={() => setMajorOption(null)}>
                 <Image
                   width="15"
@@ -272,17 +272,7 @@ const Index = () => {
 
       <DatabaseContainer>
         <Container style={{ flex: 2 }}>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              width: '100%',
-              height: '560px',
-              overflow: 'auto',
-            }}
-          >
-            {getAttendees()}
-          </div>
+          <StyledScrollBar>{getAttendees()}</StyledScrollBar>
         </Container>
         <RightContainer
           style={
@@ -561,4 +551,24 @@ const QuickNoteContainer = styled.div`
   border-radius: 10px;
   border: 4px solid ${Colors2023.GRAY.MEDIUM};
   box-shadow: 1px 2px 15px ${Colors2023.GRAY.MEDIUM};
+`;
+
+const StyledScrollBar = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 560px;
+  overflow-y: scroll;
+  scrollbar-color: rebeccapurple green;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+    background-color: ${Colors2023.GRAY.MEDIUM};
+    border-radius: 50px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: ${Colors2023.GREEN.DARK};
+    border-radius: 50px;
+  }
 `;
