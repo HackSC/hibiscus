@@ -12,7 +12,7 @@ export const UploadImage = (props: Props) => {
     <Box>
       <input type="file" id="file" />
       <Button color="blue" onClick={() => props.setUploadImage(false)}>
-        Finished
+        Submit
       </Button>
     </Box>
   );
@@ -20,16 +20,9 @@ export const UploadImage = (props: Props) => {
 
 export default UploadImage;
 
-const FormDiv = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
 const Box = styled.div`
   gap: 20px;
-  min-width: 40rem;
+  /* min-width: 40rem; */
   display: flex;
   flex-direction: column;
   padding: 1rem 1.5rem;
@@ -40,4 +33,5 @@ const Box = styled.div`
   background: #363636;
   border: 2px solid #5a5a5a;
   border-radius: 10px;
+  align-items: center;
 `;

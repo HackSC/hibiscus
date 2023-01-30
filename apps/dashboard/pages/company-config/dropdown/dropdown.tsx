@@ -1,9 +1,6 @@
+/* eslint-disable @next/next/no-img-element */
 import styles from './dropdown.module.css';
-import styled from 'styled-components';
-import { Colors2023 } from '@hibiscus/styles';
 import { useState } from 'react';
-import Image from 'next/image';
-import arrow from './arrow.png';
 import { useEffect } from 'react';
 
 /* eslint-disable-next-line */
@@ -15,16 +12,15 @@ export interface DropdownProps {}
 export function Dropdown(props: DropdownProps) {
   const [open, setOpen] = useState(false);
   const { options, key } = props;
-  // const options = props.options;
-  // const key = props.key;
 
   const tagBorders = ['#B5A9FF', '#EB93F4', '#BFF0FF', '#FFA295'];
   const tagBackground = ['#7A65FD', '#DB3FEB', '#76D3EF', '#FE5139'];
 
   const [chosen, setChosen] = useState([]);
   const [randomKey, setKey] = useState(0);
+
   // toggle dropdown
-  const handleButtonClick = () => {
+  const toggleDropdown = () => {
     setOpen((state) => !state);
   };
 
@@ -53,7 +49,9 @@ export function Dropdown(props: DropdownProps) {
                   border: `2px solid ${
                     tagBorders[(i + randomKey) % tagBorders.length]
                   }`,
+                  cursor: 'pointer',
                 }}
+                // delete item from dropdown
                 onClick={() => {
                   setChosen((prev) => prev.filter((item) => item !== option));
                 }}
@@ -67,20 +65,23 @@ export function Dropdown(props: DropdownProps) {
         <button
           type="button"
           className={styles['button']}
-          onClick={handleButtonClick}
+          onClick={toggleDropdown}
+          style={{
+            backgroundColor: 'rgb(0,0,0,0)',
+          }}
         >
-          <Image
+          <img
             src="/dropdown.svg"
             alt="dropdown"
-            width={25}
-            height={25}
             style={{
-              background: 'rgb(0,0,0,0)',
+              width: '25px',
+              height: '25px',
             }}
           />
         </button>
       </div>
       {open && (
+        // show dropdown options
         <div className={styles['dropdown']}>
           <ul className={styles['ul']}>
             {options.map((option, i) => {
@@ -88,6 +89,7 @@ export function Dropdown(props: DropdownProps) {
                 <li
                   key={i}
                   className={styles['li']}
+                  // add to array of chosen items
                   onClick={() => {
                     if (!chosen.includes(option)) {
                       setChosen((prev) => [...prev, option]);
@@ -106,17 +108,3 @@ export function Dropdown(props: DropdownProps) {
 }
 
 export default Dropdown;
-
-const Background = styled.div`
-  width: 100%;
-  height: 50px;
-  margin: auto;
-  /* padding: 30px; */
-  border: 3px solid ${Colors2023.GRAY.MEDIUM};
-  background-color: ${Colors2023.GRAY.STANDARD};
-`;
-
-const RandomColor = styled.div`
-  width: 20px;
-  background-color: aliceblue;
-`;

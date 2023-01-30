@@ -1,6 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
 import { Colors2023 } from '@hibiscus/styles';
 import { H1, H5, H6, Text } from '@hibiscus/ui';
+import { useState } from 'react';
 import { Button } from '@hibiscus/ui-kit-2023';
 
 interface Props {
@@ -9,20 +11,39 @@ interface Props {
 
 export const EditForm = (props: Props) => {
   const {
-    handleWebsite,
-    handleDescription,
+    MockCompany,
     companyWebsite,
     companyName,
     companyDescription,
     setModal,
+    setMockCompany,
   } = props;
+  const [tempWebsite, setTempWebsite] = useState(companyWebsite);
+  const [tempDesc, setTempDesc] = useState(companyDescription);
+
+  // edit website
+  function handleWebsite(e) {
+    setTempWebsite(e.target.value);
+  }
+
+  // edit description
+  function handleDescription(e) {
+    setTempDesc(e.target.value);
+  }
+
   return (
     <Box>
+      <img
+        src={'/x-button.svg'}
+        alt={'x button'}
+        style={{ cursor: 'pointer' }}
+        onClick={() => setModal(false)}
+      />
       <H1>{companyName}</H1>
       <H5>Company Description</H5>
 
       <textarea
-        value={companyDescription}
+        value={tempDesc}
         onChange={handleDescription}
         style={{
           resize: 'none',
@@ -36,7 +57,7 @@ export const EditForm = (props: Props) => {
       />
       <H5>Company Website</H5>
       <input
-        value={companyWebsite}
+        value={tempWebsite}
         onChange={handleWebsite}
         style={{
           resize: 'none',
@@ -48,22 +69,25 @@ export const EditForm = (props: Props) => {
           padding: 15,
         }}
       />
-      <H6>* Changes will automatically save</H6>
-      <Button color="blue" onClick={() => setModal(false)}>
-        Finished
+      <Button
+        color="blue"
+        onClick={() => {
+          setModal(false);
+
+          setMockCompany({
+            ...MockCompany,
+            website: tempWebsite,
+            description: tempDesc,
+          });
+        }}
+      >
+        Submit
       </Button>
     </Box>
   );
 };
 
 export default EditForm;
-
-const FormDiv = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
 
 const Box = styled.div`
   gap: 20px;
@@ -78,4 +102,13 @@ const Box = styled.div`
   background: #363636;
   border: 2px solid #5a5a5a;
   border-radius: 10px;
+  position: relative;
+
+  > img {
+    top: 0;
+    right: 0;
+    position: absolute;
+    width: 40px;
+    margin: 10px;
+  }
 `;

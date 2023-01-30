@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import styles from './index.module.css';
 import styled from 'styled-components';
 import { Colors2023 } from '@hibiscus/styles';
@@ -43,23 +44,27 @@ export function CompanyConfig(props) {
       'lorem ipsume description description description description description description description description ',
   });
 
+  // edit company description, website modal
   const [modal, setModal] = useState(false);
+
+  // edit image modal
   const [uploadImage, setUploadImage] = useState(false);
-  const inputFile = useRef(null);
 
-  function handleWebsite(e) {
-    setMockCompany({
-      ...MockCompany,
-      website: e.target.value,
-    });
-  }
+  // // edit website
+  // function handleWebsite(e) {
+  //   setMockCompany({
+  //     ...MockCompany,
+  //     website: e.target.value,
+  //   });
+  // }
 
-  function handleDescription(e) {
-    setMockCompany({
-      ...MockCompany,
-      description: e.target.value,
-    });
-  }
+  // // edit description
+  // function handleDescription(e) {
+  //   setMockCompany({
+  //     ...MockCompany,
+  //     description: e.target.value,
+  //   });
+  // }
 
   useEffect(() => {
     console.log('Updating target graduation terms and graduation');
@@ -67,6 +72,7 @@ export function CompanyConfig(props) {
 
   return (
     <MainContainer>
+      {/* Modal for editing company  */}
       <Modal
         isOpen={modal}
         closeModal={() => {
@@ -77,11 +83,13 @@ export function CompanyConfig(props) {
           companyName={MockCompany.name}
           companyWebsite={MockCompany.website}
           companyDescription={MockCompany.description}
-          handleWebsite={handleWebsite}
-          handleDescription={handleDescription}
+          setMockCompany={setMockCompany}
+          MockCompay={MockCompany}
           setModal={setModal}
         />
       </Modal>
+
+      {/* Modal for editing image */}
       <Modal
         isOpen={uploadImage}
         closeModal={() => {
@@ -90,19 +98,14 @@ export function CompanyConfig(props) {
       >
         <UploadImage setUploadImage={setUploadImage} />
       </Modal>
+
       <Top>
-        <CompanyPicture>
-          <Image fill src={'/googleLog.png'} alt={'google'} />
-          <CenterImageContainer>
-            <Image
-              width={20}
-              height={20}
-              src={'/edit.svg'}
-              alt="edit"
-              onClick={() => setUploadImage(true)}
-            />
-          </CenterImageContainer>
+        {/* Profile image */}
+        <CompanyPicture className={styles['company-pic']}>
+          <img src={'/googleLog.png'} alt={'google'} />
         </CompanyPicture>
+
+        {/* Company info */}
         <CompanyDescription>
           <h1 className={styles['sponsor-font']}>{MockCompany.name}</h1>
           <Flex>
@@ -134,7 +137,6 @@ export function CompanyConfig(props) {
           <Flex>
             <div className={styles['full-width']}>
               <h3>Company Website</h3>
-
               <a
                 style={{ textDecoration: 'underline' }}
                 href={MockCompany.website}
@@ -145,6 +147,7 @@ export function CompanyConfig(props) {
           </Flex>
         </CompanyDescription>
       </Top>
+      {/* Dropdowns */}
       <Bottom>
         <Dropdown
           key={3}
@@ -165,16 +168,14 @@ const RightImageContainer = styled.div`
 `;
 
 const CenterImageContainer = styled.div`
-  border: 3px solid blue;
   position: absolute;
   z-index: 5;
-  right: 150px;
-  top: 100px;
+  right: 45%; // why
+  top: 45%;
 `;
 
 const MainContainer = styled.div`
   width: 70%;
-  height: 80%;
   margin: auto;
 `;
 
@@ -189,20 +190,25 @@ const Bottom = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  height: 40%;
-  /* margin: auto; */
 `;
 
 const CompanyPicture = styled.div`
-  height: 200px;
+  height: 250px;
   border: 5px solid white;
+  box-sizing: border-box;
+  border-radius: 50%;
   position: relative;
+  overflow: hidden;
   width: 250px;
+  display: flex;
+  align-items: center;
+  > img {
+    width: 250px;
+  }
 `;
 const CompanyDescription = styled.div`
   display: flex;
-  width: 60%;
-  padding: 5px;
+  width: 65%;
   flex-direction: column;
   justify-content: flex-start;
 `;
