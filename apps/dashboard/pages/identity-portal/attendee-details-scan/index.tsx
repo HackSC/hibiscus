@@ -1,18 +1,14 @@
 import { Colors2023 } from '@hibiscus/styles';
-import { Text, Modal } from '@hibiscus/ui';
+import { Text } from '@hibiscus/ui';
 import { Button, GlowSpan, Search } from '@hibiscus/ui-kit-2023';
 import { SearchUserBox } from '../../../components/identity-portal/search-user-box/search-user-box';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { BiWifi2 } from 'react-icons/bi';
 import { BackButton } from '../../../components/identity-portal/back-button/back-button';
-import { ScrollableListBox } from '../../../components/identity-portal/scrollable-list-box/scrollable-list-box';
-import { useState } from 'react';
-import { CheckInBox } from '../../../components/identity-portal/check-in-box/check-in-box';
 
 export function Index() {
   const router = useRouter();
-  // const [isModalOpen, setModalOpen] = useState(true);
 
   return (
     <>
@@ -43,7 +39,7 @@ export function Index() {
           <div>
             <FlexRowTight>
               <LabelText>Scan Wristband</LabelText>
-              <BiWifi2 size={40} style={{ transform: 'rotate(90deg)' }} />
+              <BiWifi2 size={36} style={{ transform: 'rotate(90deg)' }} />
             </FlexRowTight>
             <Search
               placeholder="ID number"
@@ -56,9 +52,8 @@ export function Index() {
           </div>
         </FlexRow>
 
-        <Button color="blue">SUBMIT</Button>
+        <Button color="yellow">SUBMIT</Button>
       </ColumnSpacedCenter>
-      <CheckInBox></CheckInBox>
     </>
   );
 }

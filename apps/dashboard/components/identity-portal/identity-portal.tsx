@@ -1,5 +1,6 @@
 import { Colors2023 } from '@hibiscus/styles';
 import { Text } from '@hibiscus/ui';
+import { GlowSpan } from '@hibiscus/ui-kit-2023';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import styled from 'styled-components';
@@ -8,49 +9,58 @@ export function IdentityPortal() {
   const router = useRouter();
 
   return (
-    <OptionsRow>
-      <OptionCard onClick={() => router.push('/identity-portal/check-in')}>
-        <LabelText>Check-in</LabelText>
-        <Image
-          src="/hackform-illustrations/purple-planet-stand.svg"
-          width={150}
-          height={150}
-          alt=""
-        />
-      </OptionCard>
+    <Container>
+      <GlowSpan color={Colors2023.YELLOW.STANDARD} style={{ fontSize: '3em' }}>
+        What would you like to do today?
+      </GlowSpan>
 
-      <OptionCard
-        onClick={() => router.push('/identity-portal/attendee-details-scan')}
-      >
-        <LabelText>Attendee Details</LabelText>
-        <Image
-          src="/hackform-illustrations/detective-curious.svg"
-          width={150}
-          height={150}
-          alt=""
-        />
-      </OptionCard>
+      <OptionsRow>
+        <OptionCard
+          onClick={() => router.push('/identity-portal/attendee-details-scan')}
+        >
+          <LabelText>Attendee Details</LabelText>
+          <Image
+            src="/hackform-illustrations/detective-curious.svg"
+            width={150}
+            height={150}
+            alt=""
+          />
+        </OptionCard>
 
-      <OptionCard onClick={() => router.push('/identity-portal/event-checkin')}>
-        <LabelText>Event-specific Check-in</LabelText>
-        <Image
-          src="/hackform-illustrations/heart-flying.svg"
-          width={150}
-          height={150}
-          alt=""
-        />
-      </OptionCard>
-    </OptionsRow>
+        <OptionCard
+          onClick={() => router.push('/identity-portal/event-checkin')}
+        >
+          <LabelText>Event-specific Check-in</LabelText>
+          <Image
+            src="/hackform-illustrations/heart-flying.svg"
+            width={150}
+            height={150}
+            alt=""
+          />
+        </OptionCard>
+      </OptionsRow>
+    </Container>
   );
 }
 
 export default IdentityPortal;
 
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+
+  gap: 2em;
+`;
+
 const OptionsRow = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: center;
+
+  gap: 2em;
 
   width: 100%;
 `;

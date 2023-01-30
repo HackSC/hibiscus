@@ -10,6 +10,9 @@ import { BiCheckCircle } from 'react-icons/bi';
 import { ScrollableListBox } from '../../../components/identity-portal/scrollable-list-box/scrollable-list-box';
 import Image from 'next/image';
 import { BackButton } from '../../../components/identity-portal/back-button/back-button';
+import { CheckInBox } from '../../../components/identity-portal/check-in-box/check-in-box';
+import { ImCross } from 'react-icons/im';
+
 const COLUMN_WIDTH = 510;
 const TEAM_MEMBER_ICONS = [
   '/hackform-illustrations/purple-planet-stand.svg',
@@ -27,6 +30,7 @@ enum State {
 export function Index() {
   const [user, setUser] = useState<any>(null);
   const [state, setState] = useState(State.LOADING);
+  const [isModalOpen, setModalOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -47,6 +51,12 @@ export function Index() {
 
       const userId = userRes.data[0].user_id;
       const teamId = userRes.data[0].team_id;
+
+      const participantRes = await supabase
+        .getClient()
+        .from('participants')
+        .select()
+        .eq('id', userId);
 
       const leaderboardRes = await supabase
         .getClient()
@@ -85,6 +95,7 @@ export function Index() {
 
       return {
         ...userRes.data[0],
+        ...participantRes.data?.[0],
         ...leaderboardRes.data?.[0],
         checkIns: eventRes.data ?? [],
         team,
@@ -140,9 +151,11 @@ export function Index() {
                 {user.first_name} {user.last_name}
               </GlowSpan>
               <div>
-                <ItalicText>School Placeholder</ItalicText>
-                <ItalicText>Graduation Date Placeholder</ItalicText>
-                <ItalicText>Major Placeholder</ItalicText>
+                <ItalicText>{user.school ?? 'No school provided'}</ItalicText>
+                <ItalicText>
+                  {user.graduation_year ?? 'No graduation date provided'}
+                </ItalicText>
+                <ItalicText>{user.major ?? 'No major provided'}</ItalicText>
               </div>
               <div>
                 <Text>{user.email}</Text>
@@ -156,11 +169,17 @@ export function Index() {
                 >
                   CHECKED IN?
                 </GlowSpan>
-                <BiCheckCircle color={Colors2023.GREEN.DARK} size="1.5em" />
+                {user.wristband_id != null ? (
+                  <BiCheckCircle color={Colors2023.GREEN.DARK} size="1.5em" />
+                ) : (
+                  <ImCross color={Colors2023.RED.DARK} size="1em" />
+                )}
               </div>
             </UserCardContainer>
 
-            <Button color="red">REASSIGN BAND</Button>
+            <Button color="yellow" onClick={() => setModalOpen(true)}>
+              {user.wristband_id != null ? 'RE' : ''}ASSIGN BAND
+            </Button>
           </ColumnSpacedCenter>
         </ColumnSpacedLeft>
 
@@ -255,6 +274,12 @@ export function Index() {
           </div>
         </ColumnSpacedLeft>
       </Container>
+
+      <CheckInBox
+        isModalOpen={isModalOpen}
+        setModalOpen={setModalOpen}
+        user={user}
+      />
     </>
   );
 }
@@ -275,7 +300,7 @@ function formatTimestamp(timestamp: string): string {
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(${COLUMN_WIDTH}px, 1fr));
   justify-items: center;
   min-height: 100%;
 `;

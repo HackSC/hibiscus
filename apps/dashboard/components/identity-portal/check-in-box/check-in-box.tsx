@@ -1,34 +1,75 @@
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { Colors2023 } from '@hibiscus/styles';
-import { Text, BoldText, Modal } from '@hibiscus/ui';
+import { Modal } from '@hibiscus/ui';
 import { Button, Checkbox, Search } from '@hibiscus/ui-kit-2023';
 import { useState } from 'react';
 import styled from 'styled-components';
-import searchUser from '../../../common/search-user';
+import { container } from 'tsyringe';
 
 interface CheckInBoxProps {
-  //   onClick: (value: string) => void;
+  isModalOpen: boolean;
+  setModalOpen: (open: boolean) => void;
+  user: any;
 }
 
-export function CheckInBox() {
-  const [isModalOpen, setModalOpen] = useState(true);
-  const [isModal2Open, setModal2Open] = useState(false);
-  function handleClick() {
-    console.log('Button was clicked');
+enum ModalScreen {
+  ASSIGN,
+  CONFIRM,
+}
+
+export function CheckInBox(props: CheckInBoxProps) {
+  const { isModalOpen, setModalOpen, user } = props;
+  const [modalScreen, setModalScreen] = useState(ModalScreen.ASSIGN);
+  const [wristbandId, setWristbandId] = useState(null);
+  const [admitted, setAdmitted] = useState(false);
+  const [age, setAge] = useState(false);
+  const [status, setStatus] = useState(false);
+
+  const handleClick = (setter: (value: boolean) => void) => (value: boolean) =>
+    setter(value);
+
+  function handleAssign(value: string) {
+    if (isReady()) {
+      setWristbandId(value);
+      setModalScreen(ModalScreen.CONFIRM);
+    }
   }
-  function handleAssign() {
+
+  async function handleConfirm() {
+    const supabase = container.resolve(HibiscusSupabaseClient);
+    await supabase
+      .getClient()
+      .from('user_profiles')
+      .update({ wristband_id: wristbandId })
+      .eq('user_id', user.user_id);
+
+    window.location.reload();
+  }
+
+  function closeModal() {
     setModalOpen(false);
-    setModal2Open(true);
+    setModalScreen(ModalScreen.ASSIGN);
+    setWristbandId(null);
+    setAdmitted(false);
+    setAge(false);
+    setStatus(false);
+  }
+
+  function isReady() {
+    return admitted && age && status;
   }
 
   return (
-    <>
-      <Modal isOpen={isModalOpen} closeModal={() => setModalOpen(false)}>
+    <Modal isOpen={isModalOpen} closeModal={closeModal}>
+      {modalScreen === ModalScreen.ASSIGN ? (
         <Container>
           <UpperDiv>
-            <Name>Suhit Agarwal</Name>
-            <InfoText>suhit@usc.edu</InfoText>
-            <InfoText>(213)-513-4225</InfoText>
-            <InfoText>Computer Science</InfoText>
+            <Name>
+              {user.first_name} {user.last_name}
+            </Name>
+            <InfoText>{user.email}</InfoText>
+            <InfoText>PLACEHOLDER</InfoText>
+            <InfoText>PLACEHOLDER</InfoText>
           </UpperDiv>
           <LowerDiv>
             <LowerLeft>
@@ -36,48 +77,51 @@ export function CheckInBox() {
               <VerificationBox>
                 <Checkbox
                   color="yellow"
-                  label={'Admitted'}
-                  onInput={handleClick}
-                ></Checkbox>
+                  label="Admitted"
+                  onInput={handleClick(setAdmitted)}
+                />
                 <Checkbox
                   color="yellow"
-                  label={'Age'}
-                  onInput={handleClick}
-                ></Checkbox>
+                  label="Age"
+                  onInput={handleClick(setAge)}
+                />
                 <Checkbox
                   color="yellow"
-                  label={'Status'}
-                  onInput={handleClick}
-                ></Checkbox>
+                  label="Education Status"
+                  onInput={handleClick(setStatus)}
+                />
               </VerificationBox>
             </LowerLeft>
             <LowerRight>
               <SubHeader2>Scan Wristband or</SubHeader2>
               <Search
-                placeholder="Search by attendee name"
+                placeholder="Search ID number"
                 onInput={handleAssign}
               ></Search>
-              <Button color={'yellow'} onClick={handleAssign}>
+              <Button color="yellow" disabled={!isReady()}>
                 Assign
               </Button>
             </LowerRight>
           </LowerDiv>
         </Container>
-      </Modal>
-      <Modal isOpen={isModal2Open} closeModal={() => setModal2Open(false)}>
+      ) : (
         <Container>
           <Name>Confirm</Name>
           <ConfirmText>
-            Please confirm you would like to map wristband “0X5DG7” to Suhit
-            Agarwal.
+            Please confirm you would like to map wristband “{wristbandId}” to{' '}
+            {user.first_name} {user.last_name}.
           </ConfirmText>
           <ButtonDiv>
-            <Button color={'grey'}>CANCEL</Button>
-            <Button color={'yellow'}>CONFIRM</Button>
+            <Button color="grey" onClick={closeModal}>
+              CANCEL
+            </Button>
+            <Button color="yellow" onClick={handleConfirm}>
+              CONFIRM
+            </Button>
           </ButtonDiv>
         </Container>
-      </Modal>
-    </>
+      )}
+    </Modal>
   );
 }
 const ButtonDiv = styled.div`
