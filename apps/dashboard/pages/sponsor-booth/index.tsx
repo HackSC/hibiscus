@@ -79,7 +79,12 @@ const Index = () => {
           setCurrentAttendee(attendee);
         }}
       >
-        <HackerTab user={attendee} onClick={() => openQuickNote(attendee)} />
+        <HackerTab
+          user={attendee}
+          showNoteButton={true}
+          showSaveButton={true}
+          onClick={() => openQuickNote(attendee)}
+        />
       </HackerTabContainer>
     ));
   };

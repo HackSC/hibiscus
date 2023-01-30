@@ -35,7 +35,7 @@ export function DropDown({
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     option: Option
   ) => {
-    setTextInput(option.displayName);
+    setTextInput('');
     chooseOption(option);
     setShowOptions(false);
   };
@@ -44,6 +44,7 @@ export function DropDown({
     if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
       // clicked outside
       setShowOptions(false);
+      setTextInput('');
     }
   }, []);
 
