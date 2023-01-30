@@ -398,4 +398,4 @@ type UserProfileInsert =
   Database['public']['Tables']['user_profiles']['Insert'];
 type UserProfileUpdate =
   Database['public']['Tables']['user_profiles']['Update'];
-type LeaderboardUpdate = Database['public']['Tables']['leaderboard']['Update'];
+// type LeaderboardUpdate = Database['public']['Tables']['leaderboard']['Update'];

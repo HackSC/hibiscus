@@ -1,38 +1,39 @@
 import { Text, BoldText, Modal } from '@hibiscus/ui';
-import { Search } from '@hibiscus/ui-kit-2023';
-import { useState } from 'react';
+import { OneLineText } from '@hibiscus/ui-kit-2023';
+import { ChangeEvent } from 'react';
 import searchUser from '../../../common/search-user';
 import { ScrollableListBox } from '../scrollable-list-box/scrollable-list-box';
 
 interface SearchUserEventBoxProps {
+  value: string;
+  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onClick: (value: string) => void;
+  searchRes: Awaited<ReturnType<typeof searchUser>>;
+  isModalOpen: boolean;
+  setModalOpen: (value: boolean) => void;
 }
 
-export function SearchUserEventBox({ onClick }: SearchUserEventBoxProps) {
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [searchRes, setSearchRes] = useState(
-    [] as Awaited<ReturnType<typeof searchUser>>
-  );
-
-  async function search(name: string) {
-    setSearchRes(await searchUser(name));
-
-    setModalOpen(true);
-  }
-
+export function SearchUserEventBox(props: SearchUserEventBoxProps) {
   return (
     <>
-      <Search placeholder="Search by attendee name" onInput={search}></Search>
+      <OneLineText
+        placeholder="Search by attendee name"
+        value={props.value}
+        onChange={props.onChange}
+      />
 
-      <Modal isOpen={isModalOpen} closeModal={() => setModalOpen(false)}>
+      <Modal
+        isOpen={props.isModalOpen}
+        closeModal={() => props.setModalOpen(false)}
+      >
         <ScrollableListBox width={500} height={500}>
-          {searchRes.map((user, i) => (
+          {props.searchRes.map((user, i) => (
             <ScrollableListBox.ItemClickable
               key={i}
               value={user.user_id}
               onClick={(value) => {
-                onClick(value);
-                setModalOpen(false);
+                props.onClick(value);
+                props.setModalOpen(false);
               }}
             >
               <BoldText style={{ fontSize: '1em' }}>
@@ -46,20 +47,3 @@ export function SearchUserEventBox({ onClick }: SearchUserEventBoxProps) {
     </>
   );
 }
-
-// .alert-container {
-//   position: absolute;
-//   top: 2rem;
-//   left: 0;
-//   right: 0;
-// }
-
-// .alert-inner {
-//   display: inline-block;
-//   padding: 8px 16px;
-//   z-index: 1;
-//   background-color: #ffffff;
-//   box-shadow: 1px 2px 10px -3px rgb(0 0 0 / 70%);
-//   -webkit-box-shadow: 1px 2px 10px -3px rgb(0 0 0 / 70%);
-//   -moz-box-shadow: 1px 2px 10px -3px rgb(0 0 0 / 70%);
-// }

@@ -1,7 +1,7 @@
 import { Colors2023 } from '@hibiscus/styles';
 import { Text } from '@hibiscus/ui';
 import { useEffect, useState } from 'react';
-import { Button, GlowSpan, Search } from '@hibiscus/ui-kit-2023';
+import { Button, GlowSpan, OneLineText } from '@hibiscus/ui-kit-2023';
 import addEvent from '../../../common/add-event';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
@@ -11,11 +11,20 @@ import { BackButton } from '../../../components/identity-portal/back-button/back
 import { SearchUserEventBox } from '../../../components/identity-portal/search-user-event-box/search-user-event-box';
 import addEventUserId from '../../../common/add-event-user-id';
 import searchEventId from '../../../common/search-event-id';
+import searchUser from '../../../common/search-user';
 
 export function Index() {
   const [eventId, setEventId] = useState<number | null>(null);
+  const [isModalOpen, setModalOpen] = useState(false);
 
   const router = useRouter();
+
+  const [searchRes, setSearchRes] = useState(
+    [] as Awaited<ReturnType<typeof searchUser>>
+  );
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [wristbandId, setWristbandId] = useState('');
 
   const [response, setResponse] = useState<boolean | null>(null);
 
@@ -27,6 +36,24 @@ export function Index() {
 
   async function search(id: number) {
     setEventName(await searchEventId(id));
+  }
+
+  async function searchUserQuery(name: string) {
+    setSearchRes(await searchUser(name));
+
+    setModalOpen(true);
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    if (wristbandId !== '') {
+      const res = await addEvent(eventId, wristbandId);
+      setWristbandId('');
+      setResponse(res);
+    } else if (searchQuery !== '') {
+      await searchUserQuery(searchQuery);
+      setSearchQuery('');
+    }
   }
 
   useEffect(() => {
@@ -66,7 +93,7 @@ export function Index() {
         </GlowSpan>
       </div>
 
-      <ColumnSpacedCenter>
+      <ColumnSpacedCenter onSubmit={handleSubmit}>
         <GlowSpan
           color={Colors2023.YELLOW.STANDARD}
           style={{ fontSize: '3em' }}
@@ -81,6 +108,11 @@ export function Index() {
               onClick={(value) =>
                 addEventUserId(eventId, value).then(setResponse)
               }
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              searchRes={searchRes}
+              isModalOpen={isModalOpen}
+              setModalOpen={setModalOpen}
             />
           </div>
 
@@ -91,9 +123,10 @@ export function Index() {
               <LabelText>Scan Wristband</LabelText>
               <BiWifi2 size={36} style={{ transform: 'rotate(90deg)' }} />
             </FlexRowTight>
-            <Search
+            <OneLineText
               placeholder="ID number"
-              onInput={(id) => addEvent(eventId, id).then(setResponse)}
+              value={wristbandId}
+              onChange={(e) => setWristbandId(e.target.value)}
             />
           </div>
         </FlexRow>
@@ -106,7 +139,7 @@ export function Index() {
 
 export default Index;
 
-const ColumnSpacedCenter = styled.div`
+const ColumnSpacedCenter = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
