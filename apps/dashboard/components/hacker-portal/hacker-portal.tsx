@@ -11,12 +11,12 @@ import ComingSoonBattlepassPlaceholder from '../battlepass/coming-soon-battlepas
 import { ComingSoon } from './coming-soon';
 import { getColorsForRole } from '../../common/role.utils';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
-import Image from 'next/image';
 import { GrayBox } from '../gray-box/gray-box';
 import { container } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import DeclinedPlaceholder from './declined-placeholder';
 import { CongratsMessage } from './congrats-message';
+import { RejectionMessage } from './rejection-message';
 
 type RSVPChoice = 'DECLINE' | 'ACCEPT';
 
@@ -49,6 +49,7 @@ export function HackerPortal() {
           Welcome, {user.firstName}
         </H1>
         <H3 style={{ color: '#989898' }}>What would you like to do today?</H3>
+        <Text>{}</Text>
       </WelcomeContainer>
     </div>
   );
@@ -225,6 +226,8 @@ export function HackerPortal() {
             </Modal>
             <RSVPPlaceholder />
           </>
+        ) : user.applicationStatus === ApplicationStatus.NOT_ADMITTED ? (
+          <RejectionMessage />
         ) : (
           <ComingSoon />
         )}
