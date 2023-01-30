@@ -166,7 +166,7 @@ const IllustrationWrapper = styled.div`
   height: 100%;
   margin-left: 5rem;
 
-  @media (max-width: 400px) {
+  @media (max-width: 430px) {
     display: none;
   }
 `;
@@ -197,13 +197,13 @@ const ErrorText = styled(Text)`
 const SmallText = styled(Text)`
   font-size: small;
 
-  @media (max-width: 400px) {
+  @media (max-width: 430px) {
     display: none;
   }
 `;
 
 const StyledEnterIcon = styled.div`
-  @media (max-width: 400px) {
+  @media (max-width: 430px) {
     display: none;
   }
 `;
@@ -219,7 +219,7 @@ const ButtonHintTextContainer = styled.div`
   display: flex;
   gap: 10px;
   align-items: center;
-  @media (max-width: 400px) {
+  @media (max-width: 430px) {
     padding-right: 20px;
   }
 `;

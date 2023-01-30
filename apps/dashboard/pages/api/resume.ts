@@ -30,6 +30,7 @@ const handler: NextApiHandler = async (req, res) => {
     return res.status(405).send('Method not allowed');
   }
   const { accessToken, refreshToken } = getTokensFromNextRequest(req);
+  hbc.setOptions({ useServiceKey: true });
   const user = await hbc.getUserProfile(accessToken, refreshToken);
   if (!user) {
     return res.status(400).json({ message: 'Unauthorized' });

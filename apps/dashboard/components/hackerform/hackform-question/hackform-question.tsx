@@ -86,7 +86,7 @@ const QuestionWrapper = styled.div`
   justify-content: center;
   gap: 10px;
 
-  @media (max-width: 400px) {
+  @media (max-width: 430px) {
     margin-left: 0rem;
     margin-top: 6rem;
   }

@@ -56,7 +56,7 @@ const WordCountText = styled(Text)`
 
 const StyledParagraphText = styled(ParagraphText)`
   width: 50rem;
-  @media (max-width: 400px) {
+  @media (max-width: 430px) {
     width: 19rem;
   }
 `;
