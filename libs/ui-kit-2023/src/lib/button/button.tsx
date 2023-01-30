@@ -9,15 +9,13 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export function Button(props: ButtonProps) {
   if (props.color === 'blue') {
-    return <BlueButton onClick={props.onClick}>{props.children}</BlueButton>;
+    return <BlueButton {...props}>{props.children}</BlueButton>;
   } else if (props.color === 'black') {
-    return <BlackButton onClick={props.onClick}>{props.children}</BlackButton>;
+    return <BlackButton {...props}>{props.children}</BlackButton>;
   } else if (props.color === 'purple') {
-    return (
-      <PurpleButton onClick={props.onClick}>{props.children}</PurpleButton>
-    );
+    return <PurpleButton {...props}>{props.children}</PurpleButton>;
   } else {
-    return <RedButton onClick={props.onClick}>{props.children}</RedButton>;
+    return <RedButton {...props}>{props.children}</RedButton>;
   }
 }
 

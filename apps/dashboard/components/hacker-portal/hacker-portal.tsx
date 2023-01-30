@@ -1,19 +1,58 @@
-/* eslint-disable @nrwl/nx/enforce-module-boundaries */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import styled from 'styled-components';
-import { Link } from '@hibiscus/ui';
-import { GlowSpan } from '@hibiscus/ui-kit-2023';
+import { H2, Link, Modal, Text } from '@hibiscus/ui';
+import { Button, GlowSpan } from '@hibiscus/ui-kit-2023';
 import { Colors2023 } from '@hibiscus/styles';
-import { HibiscusUser } from '@hibiscus/types';
+import { HibiscusRole } from '@hibiscus/types';
 import { H1, H3 } from '@hibiscus/ui';
+import { ApplicationStatus } from '@hibiscus/types';
+import { useState } from 'react';
+import RSVPForm from '../rsvp-form/rsvp-form';
+import ComingSoonBattlepassPlaceholder from '../battlepass/coming-soon-battlepass-placeholder';
+import { ComingSoon } from './coming-soon';
+import { getColorsForRole } from '../../common/role.utils';
+import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 import Image from 'next/image';
-import { ApplicationStatus } from 'libs/types/src/lib/application-status';
+import { GrayBox } from '../gray-box/gray-box';
+import { container } from 'tsyringe';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import DeclinedPlaceholder from './declined-placeholder';
+import { CongratsMessage } from './congrats-message';
 
-interface Props {
-  user: HibiscusUser;
-}
+type RSVPChoice = 'DECLINE' | 'ACCEPT';
 
-export function HackerPortal({ user }: Props) {
+export function HackerPortal() {
+  const [modalOpen, setModalOpen] = useState(false);
+  const { user, updateUser } = useHibiscusUser();
+  const closeModal = () => setModalOpen(false);
+  const userColors = getColorsForRole(user?.role ?? HibiscusRole.HACKER);
+  const [choice, setChoice] = useState<RSVPChoice | null>(null);
+  const hbc = container.resolve(HibiscusSupabaseClient);
+  const client = hbc.getClient();
+
+  const WelcomeHeader = () => (
+    <div
+      style={{
+        display: 'inline-flex',
+        width: '100%',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+      }}
+    >
+      <WelcomeContainer>
+        <H1
+          style={{
+            color: userColors.light,
+            fontSize: '30px',
+            textShadow: `0px 0px 10px ${userColors.standard}`,
+          }}
+        >
+          Welcome, {user.firstName}
+        </H1>
+        <H3 style={{ color: '#989898' }}>What would you like to do today?</H3>
+      </WelcomeContainer>
+    </div>
+  );
+
   const getApplicationStatus = () => {
     return (
       <span
@@ -84,8 +123,82 @@ export function HackerPortal({ user }: Props) {
     }
   };
 
+  const RSVPPlaceholder = () => {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        <CongratsMessage />
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <Button
+            color="red"
+            onClick={() => {
+              setChoice('DECLINE');
+              setModalOpen(true);
+            }}
+          >
+            DECLINE YOUR SPOT
+          </Button>
+          <Button
+            color="black"
+            onClick={() => {
+              setChoice('ACCEPT');
+              setModalOpen(true);
+            }}
+          >
+            CONFIRM YOUR SPOT
+          </Button>
+        </div>
+      </div>
+    );
+  };
+
+  const DeclineSpotContent = () => (
+    <GrayBox
+      style={{
+        maxWidth: '30rem',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '20px',
+      }}
+    >
+      <div>
+        <H2>Are you sure?</H2>
+        <Text>
+          Once submitted, you confirm that you will not be able to join HackSC
+          2023. This action is irreversible.
+        </Text>
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Button
+          color="red"
+          onClick={async (e) => {
+            e.stopPropagation();
+            setModalOpen(false);
+            await client
+              .from('user_profiles')
+              .update({ attendance_confirmed: false })
+              .eq('user_id', user.id);
+            updateUser({ attendanceConfirmed: false });
+          }}
+        >
+          CONFIRM
+        </Button>
+      </div>
+    </GrayBox>
+  );
+
+  if (user.attendanceConfirmed === true) {
+    return (
+      <>
+        <ComingSoonBattlepassPlaceholder />
+      </>
+    );
+  } else if (user.attendanceConfirmed === false) {
+    return <DeclinedPlaceholder />;
+  }
+
   return (
     <>
+      <WelcomeHeader />
       {renderApplyMessage()}
 
       <div
@@ -104,21 +217,17 @@ export function HackerPortal({ user }: Props) {
       </div>
 
       <MessageContainer>
-        <H1 style={{ fontSize: '50px', lineHeight: '60px' }}>
-          <GlowSpan
-            color={Colors2023.BLUE.LIGHT}
-            shadowColor={Colors2023.BLUE.STANDARD}
-          >
-            Coming Soon!
-          </GlowSpan>
-        </H1>
-        <H3>Keep an eye out for more stuff to come.</H3>
-        <Image
-          src={'/assets/earth-suitcase-moon.svg'}
-          width={200}
-          height={200}
-          alt="Earth-like character wearing shades pulling baggage and a moon"
-        />
+        {user.applicationStatus === ApplicationStatus.ADMITTED ? (
+          <>
+            <Modal isOpen={modalOpen} closeModal={closeModal}>
+              {choice === 'ACCEPT' && <RSVPForm closeModal={closeModal} />}
+              {choice === 'DECLINE' && <DeclineSpotContent />}
+            </Modal>
+            <RSVPPlaceholder />
+          </>
+        ) : (
+          <ComingSoon />
+        )}
       </MessageContainer>
     </>
   );
@@ -155,7 +264,7 @@ const MessageContainer = styled.div`
   justify-content: center;
   align-items: center;
   gap: 5px;
-  padding-top: 100px;
+  padding-top: 50px;
 `;
 
 const BannerContainer = styled.div`
@@ -168,5 +277,11 @@ const BannerContainer = styled.div`
 
   @media (max-width: 400px) {
     flex-direction: column;
+  }
+`;
+
+const WelcomeContainer = styled.div`
+  @media (max-width: 400px) {
+    margin-top: 5rem;
   }
 `;

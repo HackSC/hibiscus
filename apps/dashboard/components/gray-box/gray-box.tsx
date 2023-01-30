@@ -2,7 +2,6 @@ import { Colors2023 } from '@hibiscus/styles';
 import styled from 'styled-components';
 
 export const GrayBox = styled.div`
-  min-width: 40rem;
   display: flex;
   flex-direction: column;
   padding: 1rem 1.5rem;

@@ -8,6 +8,7 @@ import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 import { H3, Link } from '@hibiscus/ui';
 import { Button } from '@hibiscus/ui-kit-2023';
 import styled from 'styled-components';
+import { isHackerPostAppStatus } from '../../common/utils';
 
 NProgress.configure({ showSpinner: false, trickle: false, minimum: 0.05 });
 
@@ -39,7 +40,7 @@ export function Index() {
     );
   }
 
-  if (user.applicationId !== null) {
+  if (isHackerPostAppStatus(user.applicationStatus)) {
     return (
       <Container>
         <CenterContainer>
