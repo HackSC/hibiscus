@@ -115,7 +115,7 @@ function RSVPForm({ closeModal }: Props) {
   };
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form>
       <OwnGrayBox>
         <H2>Please confirm some details</H2>
         <Text>
@@ -238,7 +238,13 @@ function RSVPForm({ closeModal }: Props) {
             )}
           />
         </div>
-        <Button color="blue" type="submit">
+        <Button
+          color="blue"
+          onClick={(e) => {
+            e.preventDefault();
+            formik.handleSubmit();
+          }}
+        >
           SUBMIT AND CONFIRM YOUR SPOT!
         </Button>
       </OwnGrayBox>

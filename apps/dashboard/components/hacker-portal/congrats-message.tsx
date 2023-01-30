@@ -21,7 +21,7 @@ export const CongratsMessage = () => {
       <Text>
         Please complete this RSVP form by{' '}
         <GlowSpan style={{ fontWeight: 'bold' }}>
-          February 1st, 2023 at 11:59pm
+          February 1st, 2023 at 12pm (noon)
         </GlowSpan>{' '}
         to secure your spot at HackSC 2023. By submitting, you are committing to
         attending the event. If you do not submit this form by the posted
