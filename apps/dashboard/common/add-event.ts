@@ -18,7 +18,7 @@ export default async function addEvent(
 
   const nameMatches = await supabase
     .getClient()
-    .from('user_profiles')
+    .from('participants')
     .select()
     .eq('wristband_id', `${user_id}`);
 
@@ -27,9 +27,9 @@ export default async function addEvent(
   console.log(eventnameMatches.data[0].points);
 
   try {
-    supabase.addEvent(nameMatches.data[0].user_id, event_id);
+    supabase.addEvent(nameMatches.data[0].id, event_id);
     supabase.addtoLeaderboard(
-      nameMatches.data[0].user_id,
+      nameMatches.data[0].id,
       eventnameMatches.data[0].points
     );
 

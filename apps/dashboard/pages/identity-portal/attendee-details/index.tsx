@@ -37,26 +37,27 @@ export function Index() {
     async function getUserProfile(id: string, wristband = true): Promise<any> {
       const supabase = container.resolve(HibiscusSupabaseClient);
 
-      const userRes = await supabase
+      const participantRes = await supabase
         .getClient()
-        .from('user_profiles')
+        .from('participants')
         .select()
-        .eq(wristband ? 'wristband_id' : 'user_id', id);
+        .eq(wristband ? 'wristband_id' : 'id', id);
 
-      if (userRes.data?.length !== 1) {
+      if (participantRes.data?.length !== 1) {
         // User either not found or duplicates found == DB corrupted
         setState(State.USER_NOT_FOUND);
         return null;
       }
 
-      const userId = userRes.data[0].user_id;
-      const teamId = userRes.data[0].team_id;
+      const userId = participantRes.data[0].id;
 
-      const participantRes = await supabase
+      const userRes = await supabase
         .getClient()
-        .from('participants')
+        .from('user_profiles')
         .select()
-        .eq('id', userId);
+        .eq('user_id', userId);
+
+      const teamId = userRes.data[0].team_id;
 
       const leaderboardRes = await supabase
         .getClient()

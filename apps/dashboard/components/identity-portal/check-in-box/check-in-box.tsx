@@ -39,9 +39,9 @@ export function CheckInBox(props: CheckInBoxProps) {
     const supabase = container.resolve(HibiscusSupabaseClient);
     await supabase
       .getClient()
-      .from('user_profiles')
+      .from('participants')
       .update({ wristband_id: wristbandId })
-      .eq('user_id', user.user_id);
+      .eq('id', user.user_id);
 
     window.location.reload();
   }
