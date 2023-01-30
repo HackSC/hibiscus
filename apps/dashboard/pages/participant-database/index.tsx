@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
-import { BoldText, Text } from '@hibiscus/ui';
+import { BoldText, Text, H1 } from '@hibiscus/ui';
 import { Colors2023 } from '@hibiscus/styles';
 import { Option } from '@hibiscus/types';
 import Image from 'next/image';
@@ -13,7 +13,6 @@ import { OneLineText } from '@hibiscus/ui-kit-2023';
 import { HackerTab } from '../../components/sponsor-portal/hacker-tab';
 import { SponsorAPI, Attendee } from '../../common/mock-sponsor';
 import { Button, ParagraphText } from '@hibiscus/ui-kit-2023';
-import { H1 } from '@hibiscus/ui';
 import { getWordCount } from '../../common/utils';
 import HackerProfile from '../../components/sponsor-portal/hacker-profile';
 

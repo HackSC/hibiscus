@@ -1,13 +1,10 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Text } from '@hibiscus/ui';
 import { Colors2023 } from '@hibiscus/styles';
-import { HibiscusUser } from '@hibiscus/types';
 import Image from 'next/image';
 import { Attendee } from '../../common/mock-sponsor';
-import ShortTextInput from '../hackerform/short-text-question/short-text-question';
 
 interface Props {
   user: Attendee;
