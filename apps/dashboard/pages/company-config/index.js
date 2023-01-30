@@ -2,11 +2,12 @@ import styles from './index.module.css';
 import styled from 'styled-components';
 import { Colors2023 } from '@hibiscus/styles';
 import Dropdown from './dropdown/dropdown';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Image from 'next/image';
 import { useEffect } from 'react';
 import { Modal } from '@hibiscus/ui';
 import EditForm from './EditForm';
+import UploadImage from '../UploadImage';
 
 const graduation = [
   'Spring 2024',
@@ -42,7 +43,9 @@ export function CompanyConfig(props) {
       'lorem ipsume description description description description description description description description ',
   });
 
-  const [modal, setModal] = useState(true);
+  const [modal, setModal] = useState(false);
+  const [uploadImage, setUploadImage] = useState(false);
+  const inputFile = useRef(null);
 
   function handleWebsite(e) {
     setMockCompany({
@@ -79,11 +82,25 @@ export function CompanyConfig(props) {
           setModal={setModal}
         />
       </Modal>
+      <Modal
+        isOpen={uploadImage}
+        closeModal={() => {
+          setUploadImage(false);
+        }}
+      >
+        <UploadImage setUploadImage={setUploadImage} />
+      </Modal>
       <Top>
         <CompanyPicture>
           <Image fill src={'/googleLog.png'} alt={'google'} />
           <CenterImageContainer>
-            <Image width={20} height={20} src={'/edit.svg'} alt="edit" />
+            <Image
+              width={20}
+              height={20}
+              src={'/edit.svg'}
+              alt="edit"
+              onClick={() => setUploadImage(true)}
+            />
           </CenterImageContainer>
         </CompanyPicture>
         <CompanyDescription>
@@ -129,8 +146,12 @@ export function CompanyConfig(props) {
         </CompanyDescription>
       </Top>
       <Bottom>
-        <Dropdown options={graduation} label="Target Graduation Terms" />
-        <Dropdown options={majors} label="Target Majors" />
+        <Dropdown
+          key={3}
+          options={graduation}
+          label="Target Graduation Terms"
+        />
+        <Dropdown key={1} options={majors} label="Target Majors" />
       </Bottom>
     </MainContainer>
   );

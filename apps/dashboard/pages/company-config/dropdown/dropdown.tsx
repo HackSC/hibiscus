@@ -9,18 +9,33 @@ import { useEffect } from 'react';
 /* eslint-disable-next-line */
 export interface DropdownProps {}
 
+/*
+  Props: options, and a random key (to shuffle the colors)
+*/
 export function Dropdown(props: DropdownProps) {
   const [open, setOpen] = useState(false);
-  const options = props.options;
+  const { options, key } = props;
+  // const options = props.options;
+  // const key = props.key;
+
   const tagBorders = ['#B5A9FF', '#EB93F4', '#BFF0FF', '#FFA295'];
   const tagBackground = ['#7A65FD', '#DB3FEB', '#76D3EF', '#FE5139'];
 
   const [chosen, setChosen] = useState([]);
-
+  const [randomKey, setKey] = useState(0);
   // toggle dropdown
   const handleButtonClick = () => {
     setOpen((state) => !state);
   };
+
+  // generate random key - used for shuffling colors in each dropdown
+  useEffect(() => {
+    const min = 1;
+    const max = 100;
+    const rand = min + Math.random() * (max - min);
+    console.log('Setting random key', rand);
+    setKey(Math.floor(rand));
+  }, []);
 
   return (
     <div className={styles['container']}>
@@ -32,8 +47,12 @@ export function Dropdown(props: DropdownProps) {
               <div
                 className={styles['tag']}
                 style={{
-                  backgroundColor: `${tagBackground[i % tagBackground.length]}`,
-                  border: `2px solid ${tagBorders[i % tagBorders.length]}`,
+                  backgroundColor: `${
+                    tagBackground[(i + randomKey) % tagBackground.length]
+                  }`,
+                  border: `2px solid ${
+                    tagBorders[(i + randomKey) % tagBorders.length]
+                  }`,
                 }}
                 onClick={() => {
                   setChosen((prev) => prev.filter((item) => item !== option));
@@ -50,7 +69,15 @@ export function Dropdown(props: DropdownProps) {
           className={styles['button']}
           onClick={handleButtonClick}
         >
-          <Image src="/dropdown.svg" alt="dropdown" width={25} height={25} />
+          <Image
+            src="/dropdown.svg"
+            alt="dropdown"
+            width={25}
+            height={25}
+            style={{
+              background: 'rgb(0,0,0,0)',
+            }}
+          />
         </button>
       </div>
       {open && (
