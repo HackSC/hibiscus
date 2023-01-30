@@ -195,6 +195,11 @@ const About = styled.div`
   flex-direction: column;
   padding: 2vw;
   overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   @media (max-width: 800px) {
     border-radius: 0 0 20px 20px;
     border-top: 0px;
