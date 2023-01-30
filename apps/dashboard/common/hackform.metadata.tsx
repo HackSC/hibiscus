@@ -373,12 +373,12 @@ export const formMetadata2023HackerApps: HackformMetadata = {
     },
     {
       title:
-        'Tell us about a project you’re most proud of. What did you learn from it? (100-150 words)',
+        'Tell us about a project you’re most proud of. What did you learn from it? (50-150 words)',
       type: HackformQuestionType.LongText,
       required: true,
       validatorMetadata: {
         [HackformQuestionType.LongText]: {
-          minWordCount: 100,
+          minWordCount: 50,
           maxWordCount: 150,
         },
       },
@@ -386,7 +386,7 @@ export const formMetadata2023HackerApps: HackformMetadata = {
         if (!input.text) {
           return { valid: false, errorDescription: 'This field is required' };
         }
-        const minWordCount = 100; // TODO: find a better way to do this with validatorMetadata
+        const minWordCount = 50; // TODO: find a better way to do this with validatorMetadata
         const maxWordCount = 150;
         if (isUnder(input.text, minWordCount)) {
           return {
@@ -537,8 +537,8 @@ export const formMetadata2023HackerApps: HackformMetadata = {
     //   },
   ],
   end: {
-    title: 'Thank you for applying!',
+    title: 'Press below to submit your application!',
     subtitle:
-      'We will get back to you soon via email. Meanwhile, feel free to check out the portal and make a Team',
+      'Thank you for filling the form out. Once you press the button below, your application will be submitted to us for review. Thank you for applying to HackSC and we look forward to seeing you in February!',
   },
 };

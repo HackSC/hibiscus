@@ -8,11 +8,13 @@ import { injectable } from 'tsyringe';
 import { v4 } from 'uuid';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { credentials, region } from './aws';
+import { getEnv } from '@hibiscus/env';
 
 @injectable()
 export class HackformSubmissionDataClient {
   private readonly ddb: DynamoDBClient;
-  private readonly tableName: string = 'hacker-app-responses'; // table name in the database
+  private readonly tableName: string =
+    getEnv().Hibiscus.Hackform.HackerAppResponsesTable; // table name in the database
 
   constructor() {
     this.ddb = new DynamoDBClient({

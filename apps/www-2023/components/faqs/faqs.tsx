@@ -98,13 +98,14 @@ const faqQuestionsAndAnswersData: {
   },
   {
     titleText: 'When is HackSC?',
-    disclosedText: 'HackSC will take place on February 3-5, 2023.',
+    disclosedText:
+      'HackSC 2023 will begin on February 3rd 2023 at 6pm and end on February 5th 2023 at 2pm.',
     color: Colors2023.BLUE.STANDARD,
   },
   {
     titleText: 'Who can attend?',
     disclosedText:
-      'All college students, undergraduate or graduate, are eligible. We welcome all majors and experience levels!',
+      'Participants must be 18+ and currently enrolled in an accredited institution. All college students, undergraduate or graduate, are eligible. We welcome all majors and experience levels!',
     color: Colors2023.GREEN.STANDARD,
   },
   {
@@ -182,5 +183,23 @@ const faqQuestionsAndAnswersData: {
     disclosedText:
       'We’ll have spaces specifically designed for sleeping. Feel free to bring a blanket or a sleeping bag if you so desire!',
     color: Colors2023.YELLOW.STANDARD,
+  },
+  {
+    titleText: 'I’m under 18 years old. Can I attend?',
+    disclosedText:
+      'Unfortunately, due to University policy and insurance limitations, participants under the age of 18 are not allowed to apply for the event. We hope to see you at a future event!',
+    color: Colors2023.PINK.STANDARD,
+  },
+  {
+    titleText: 'Is travel reimbursement provided?',
+    disclosedText:
+      'Due to limited funds this year, travel for HackSC 2023 will not be reimbursed.',
+    color: Colors2023.RED.STANDARD,
+  },
+  {
+    titleText: 'Is food provided at the event?',
+    disclosedText:
+      'At this time, due to limited funding, participants are asked to provide their own food & drink during the event. We are putting together a dining guide for our participants to assist them in finding delicious and affordable food adjacent to our campus! Our team plans to provide catering at future events.',
+    color: Colors2023.PURPLE.STANDARD,
   },
 ];

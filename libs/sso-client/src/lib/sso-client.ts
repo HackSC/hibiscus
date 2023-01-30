@@ -3,6 +3,16 @@ import type { NextRequest } from 'next/server';
 import { NextApiRequest, NextApiResponse } from 'next/types';
 import axios from 'axios';
 import { getEnv } from '@hibiscus/env';
+import {
+  AuthResponse,
+  createClient,
+  SupabaseClient,
+  UserResponse,
+} from '@supabase/supabase-js';
+import { HibiscusRole } from '@hibiscus/types';
+
+const FAKE_USER_EMAIL = 'example@hacksc.com';
+const FAKE_USER_PASSWORD = 'hacksc';
 
 /**
  * Generates the NextJS middleware needed to integrate with the Hibiscus SSO system
@@ -22,6 +32,10 @@ export const middlewareHandler =
     exhaustive = true
   ) =>
   async (request: NextRequest): Promise<NextResponse | null> => {
+    if (getEnv().Hibiscus.Cookies.disableSSO === 'true') {
+      await initializeFakeUser(request);
+    }
+
     // Handle preflight requests
     if (request.method === 'OPTIONS') {
       const res = NextResponse.next();
@@ -40,41 +54,43 @@ export const middlewareHandler =
         checkArrayContainsOrdered(guardPath, path)
       ) {
         if (request.cookies.has(getEnv().Hibiscus.Cookies.accessTokenName)) {
-          const access_token = request.cookies.get(
+          let access_token = request.cookies.get(
             getEnv().Hibiscus.Cookies.accessTokenName
           );
-          const refresh_token = request.cookies.get(
+          let refresh_token = request.cookies.get(
             getEnv().Hibiscus.Cookies.refreshTokenName
           );
           const { data } = await verifyToken(access_token, refresh_token);
 
-          if (data != null) {
-            if (data.session != null) {
-              const res = NextResponse.next();
-              res.cookies.set(
-                getEnv().Hibiscus.Cookies.accessTokenName,
-                data.session.access_token,
-                {
-                  path: '/',
-                  domain: getEnv().Hibiscus.AppURL.baseDomain,
-                  maxAge: Number.parseInt(getEnv().Hibiscus.Cookies.maxAge),
-                  sameSite: 'lax',
-                }
-              );
-              res.cookies.set(
-                getEnv().Hibiscus.Cookies.refreshTokenName,
-                data.session.refresh_token,
-                {
-                  path: '/',
-                  domain: getEnv().Hibiscus.AppURL.baseDomain,
-                  maxAge: Number.parseInt(getEnv().Hibiscus.Cookies.maxAge),
-                  sameSite: 'lax',
-                }
-              );
-              return res;
-            } else if (data.user != null) {
-              return NextResponse.next();
-            }
+          if ('session' in data && data.session != null) {
+            // Access token refreshed
+            access_token = data.session.access_token;
+            refresh_token = data.session.refresh_token;
+          }
+
+          if (data.user != null) {
+            const res = NextResponse.next();
+            res.cookies.set(
+              getEnv().Hibiscus.Cookies.accessTokenName,
+              access_token,
+              {
+                path: '/',
+                domain: getEnv().Hibiscus.AppURL.baseDomain,
+                maxAge: Number.parseInt(getEnv().Hibiscus.Cookies.maxAge),
+                sameSite: 'lax',
+              }
+            );
+            res.cookies.set(
+              getEnv().Hibiscus.Cookies.refreshTokenName,
+              refresh_token,
+              {
+                path: '/',
+                domain: getEnv().Hibiscus.AppURL.baseDomain,
+                maxAge: Number.parseInt(getEnv().Hibiscus.Cookies.maxAge),
+                sameSite: 'lax',
+              }
+            );
+            return res;
           }
         }
 
@@ -214,19 +230,25 @@ function getHost(url: string): string {
  * @param refresh_token Supabase refresh token
  * @returns object containing `data` and `error` properties, either of which may be undefined
  */
-export async function verifyToken(access_token: string, refresh_token: string) {
-  // The Fetch API is used instead of axios because this function needs to be used in
-  // NextJS middleware and their edge functions do not support axios
-  const res = await fetch(`${getEnv().Hibiscus.AppURL.sso}/api/verifyToken`, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ access_token, refresh_token }),
-  });
-  const data = await res.json();
-  return data;
+async function verifyToken(
+  access_token: string,
+  refresh_token: string
+): Promise<AuthResponse | UserResponse> {
+  const supabase = createSupabaseServiceClient();
+
+  // Verify access token
+  const userRes = await supabase.auth.getUser(access_token);
+
+  if (userRes.data.user == null) {
+    // Refresh the access token if needed
+    const authRes = await supabase.auth.setSession({
+      access_token,
+      refresh_token,
+    });
+    return authRes;
+  } else {
+    return userRes;
+  }
 }
 
 export async function logout() {
@@ -265,4 +287,87 @@ function splitPath(path: string): string[] {
   }
 
   return split;
+}
+
+async function initializeFakeUser(request: NextRequest) {
+  const access_token = request.cookies.get(
+    getEnv().Hibiscus.Cookies.accessTokenName
+  );
+  const refresh_token = request.cookies.get(
+    getEnv().Hibiscus.Cookies.refreshTokenName
+  );
+  const supabase = createSupabaseServiceClient();
+
+  if (
+    access_token == null ||
+    refresh_token == null ||
+    (await supabase.auth.getUser(access_token)).data.user == null
+  ) {
+    let {
+      data: { user, session },
+    } = await supabase.auth.signInWithPassword({
+      email: FAKE_USER_EMAIL,
+      password: FAKE_USER_PASSWORD,
+    });
+
+    if (user == null || session == null) {
+      ({
+        data: { user },
+      } = await supabase.auth.admin.createUser({
+        email: FAKE_USER_EMAIL,
+        password: FAKE_USER_PASSWORD,
+        email_confirm: true,
+      }));
+
+      console.log(user);
+
+      if (user != null) {
+        ({
+          data: { user, session },
+        } = await supabase.auth.signInWithPassword({
+          email: FAKE_USER_EMAIL,
+          password: FAKE_USER_PASSWORD,
+        }));
+      }
+    }
+
+    if (user != null && session != null) {
+      await supabase.from('user_profiles').insert({
+        user_id: user.id,
+        email: user.email,
+        first_name: 'Hack',
+        last_name: 'SC',
+        // Default role = HACKER
+        role: Object.keys(HibiscusRole).indexOf(HibiscusRole.HACKER) + 1,
+      });
+
+      request.cookies.set(
+        getEnv().Hibiscus.Cookies.accessTokenName,
+        session.access_token,
+        {
+          path: '/',
+          domain: getEnv().Hibiscus.AppURL.baseDomain,
+          maxAge: Number.parseInt(getEnv().Hibiscus.Cookies.maxAge),
+          sameSite: 'lax',
+        }
+      );
+      request.cookies.set(
+        getEnv().Hibiscus.Cookies.refreshTokenName,
+        session.refresh_token,
+        {
+          path: '/',
+          domain: getEnv().Hibiscus.AppURL.baseDomain,
+          maxAge: Number.parseInt(getEnv().Hibiscus.Cookies.maxAge),
+          sameSite: 'lax',
+        }
+      );
+    }
+  }
+}
+
+function createSupabaseServiceClient(): SupabaseClient {
+  return createClient(
+    getEnv().Hibiscus.Supabase.apiUrl,
+    getEnv().Hibiscus.Supabase.serviceKey
+  );
 }
