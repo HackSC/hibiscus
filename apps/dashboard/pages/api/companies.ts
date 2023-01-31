@@ -57,13 +57,11 @@ export default async function handler(
         );
       }
 
-      return res
-        .status(201)
-        .json({
-          ...result.data,
-          target_majors: majorsData.data,
-          target_graduations: graduationYearsData.data,
-        });
+      return res.status(201).json({
+        ...result.data,
+        target_majors: majorsData.data,
+        target_graduations: graduationYearsData.data,
+      });
     }
 
     return res.status(400).json({ message: 'Invalid request type.' });

@@ -1,17 +1,19 @@
-* 						@snokpok @SuhitAgarwal
+* 						@snokpok
 /.github				@snokpok
 
-/apps/dashboard 		@snokpok @SuhitAgarwal
+/apps/dashboard 		@snokpok
 /apps/interim 			@snokpok @SuhitAgarwal
 /apps/log-server 		@snokpok
 /apps/recruitment 		@snokpok @SuhitAgarwal
-/apps/sso 				@snokpok @SuhitAgarwal
+/apps/sso 				@snokpok
 /apps/sso-mock-app 		@VictiniX888
+/apps/event-service     @snokpok
+/apps/pointr            @snokpok
+/apps/www-2023			@SuhitAgarwal
 
 /libs/analytics			@snokpok
 /libs/ui-kit-2023		@snokpok
 /libs/hackform-client				@snokpok
 /libs/hibiscus-supabase-client		@snokpok
-/libs/www-2023			@SuhitAgarwal
 
 /tools 				@snokpok

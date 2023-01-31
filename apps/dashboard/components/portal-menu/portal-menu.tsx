@@ -8,14 +8,14 @@ import { changeTab, toggleMenuOpen } from '../../store/menu-slice';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect } from 'react';
 import styled from 'styled-components';
-import { HibiscusRole, HibiscusUser } from '@hibiscus/types';
+import { HibiscusRole } from '@hibiscus/types';
+import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 
 /* eslint-disable-next-line */
-export interface PortalMenuProps {
-  user: HibiscusUser;
-}
+export interface PortalMenuProps {}
 
-export function PortalMenu({ user }: PortalMenuProps) {
+export function PortalMenu() {
+  const { user } = useHibiscusUser();
   const router = useRouter();
   const { tabRoutes, cti, isOpen } = useAppSelector((state) => ({
     tabRoutes:
