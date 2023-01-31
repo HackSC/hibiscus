@@ -1,5 +1,5 @@
 import { Colors2023 } from '@hibiscus/styles';
-import { Text } from '@hibiscus/ui';
+import { BoldText, Text } from '@hibiscus/ui';
 import { useEffect, useState } from 'react';
 import { Button, GlowSpan, OneLineText } from '@hibiscus/ui-kit-2023';
 import addEvent from '../../../common/add-event';
@@ -12,6 +12,9 @@ import { SearchUserEventBox } from '../../../components/identity-portal/search-u
 import addEventUserId from '../../../common/add-event-user-id';
 import searchEventId from '../../../common/search-event-id';
 import searchUser from '../../../common/search-user';
+import { ScrollableListBox } from '../../../components/identity-portal/scrollable-list-box/scrollable-list-box';
+import { container } from 'tsyringe';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 
 export function Index() {
   const [eventId, setEventId] = useState<number | null>(null);
@@ -33,6 +36,10 @@ export function Index() {
   const [eventName, setEventName] = useState(
     [] as unknown as Awaited<ReturnType<typeof searchEventId>>
   );
+
+  const [attendees, setAttendees] = useState([]);
+
+  const supabase = container.resolve(HibiscusSupabaseClient).getClient();
 
   async function search(id: number) {
     setEventName(await searchEventId(id));
@@ -74,6 +81,66 @@ export function Index() {
     }
   }, [response]);
 
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     const res = await supabase
+  //       .from('event_log')
+  //       .select()
+  //       .eq('event_id', eventId);
+  //     setAttendees(res.data);
+  //   }
+
+  //   if (eventId != null) {
+  //     fetchData();
+  //   }
+
+  //   const events = supabase
+  //     .channel('any')
+  //     .on(
+  //       'postgres_changes',
+  //       {
+  //         event: 'INSERT',
+  //         schema: 'public',
+  //         table: 'event_log',
+  //         // filter: `event_id=eq.${eventId}`,
+  //       },
+  //       (payload) => {
+  //         console.log('Change received!', payload);
+  //       }
+  //     )
+  //     .subscribe();
+
+  //   console.log(events);
+
+  //   return () => {
+  //     supabase.removeChannel(events);
+  //     console.log('Channel removed');
+  //   };
+  // }, []);
+
+  useEffect(() => {
+    const events = supabase
+      .channel('custom-insert-channel')
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'event_log',
+        },
+        (payload) => {
+          console.log('Change received!', payload);
+        }
+      )
+      .subscribe();
+    console.log('Channel created');
+
+    return () => {
+      supabase.removeChannel(events);
+      console.log('Channel removed');
+    };
+  }, []);
+
   if (eventId == null) {
     return <></>;
   }
@@ -83,6 +150,7 @@ export function Index() {
       <div style={{ position: 'absolute', left: '100px' }}>
         <BackButton link="/" />
       </div>
+
       <div style={{ position: 'absolute', right: '100px' }}>
         <GlowSpan color={Colors2023.GRAY.DARK} style={{ fontSize: '.68em' }}>
           <div>
@@ -93,7 +161,7 @@ export function Index() {
         </GlowSpan>
       </div>
 
-      <ColumnSpacedCenter onSubmit={handleSubmit}>
+      <Container>
         <GlowSpan
           color={Colors2023.YELLOW.STANDARD}
           style={{ fontSize: '3em' }}
@@ -101,59 +169,88 @@ export function Index() {
           {eventName} Check-in
         </GlowSpan>
 
-        <FlexRow>
-          <div>
-            <LabelText>Search by Name</LabelText>
-            <SearchUserEventBox
-              onClick={(value) =>
-                addEventUserId(eventId, value).then(setResponse)
-              }
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              searchRes={searchRes}
-              isModalOpen={isModalOpen}
-              setModalOpen={setModalOpen}
-            />
-          </div>
+        <ContainerInner>
+          <ColumnSpaced onSubmit={handleSubmit}>
+            <div>
+              <LabelText>Search by Name</LabelText>
+              <SearchUserEventBox
+                onClick={(value) =>
+                  addEventUserId(eventId, value).then(setResponse)
+                }
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                searchRes={searchRes}
+                isModalOpen={isModalOpen}
+                setModalOpen={setModalOpen}
+              />
+            </div>
 
-          <Text>or</Text>
+            <Text>or</Text>
 
-          <div>
-            <FlexRowTight>
-              <LabelText>Scan Wristband</LabelText>
-              <BiWifi2 size={36} style={{ transform: 'rotate(90deg)' }} />
-            </FlexRowTight>
-            <OneLineText
-              placeholder="ID number"
-              value={wristbandId}
-              onChange={(e) => setWristbandId(e.target.value)}
-            />
-          </div>
-        </FlexRow>
+            <div>
+              <FlexRowTight>
+                <LabelText>Scan Wristband</LabelText>
+                <BiWifi2 size={36} style={{ transform: 'rotate(90deg)' }} />
+              </FlexRowTight>
+              <OneLineText
+                autoFocus
+                placeholder="ID number"
+                value={wristbandId}
+                onChange={(e) => setWristbandId(e.target.value)}
+              />
+            </div>
 
-        <Button color="yellow">SUBMIT</Button>
-      </ColumnSpacedCenter>
+            <Button color="yellow">SUBMIT</Button>
+          </ColumnSpaced>
+
+          <ScrollableListBox width={510}>
+            {attendees.map((attendee, i) => (
+              <ScrollableListBox.Item key={i}>
+                <BoldText style={{ fontSize: '1em' }}>
+                  {attendee.user_id}
+                </BoldText>
+                <Text style={{ fontSize: '0.75em' }}>
+                  {attendee.check_in_time}
+                </Text>
+              </ScrollableListBox.Item>
+            ))}
+          </ScrollableListBox>
+        </ContainerInner>
+      </Container>
     </>
   );
 }
 
 export default Index;
 
-const ColumnSpacedCenter = styled.form`
+const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 1.5em;
 
-  min-height: 100%;
+  height: 100%;
 `;
 
-const FlexRow = styled.div`
+const ContainerInner = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
+  gap: 3em;
+
+  width: 100%;
+`;
+
+const ColumnSpaced = styled.form`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   gap: 1.5em;
+
+  min-height: 100%;
 `;
 
 const FlexRowTight = styled.div`

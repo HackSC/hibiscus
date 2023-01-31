@@ -22,10 +22,6 @@ export default async function addEventUserId(
     .select()
     .eq('user_id', `${user_id}`);
 
-  console.log(nameMatches);
-
-  console.log(eventnameMatches.data[0].points);
-
   try {
     supabase.addEvent(nameMatches.data[0].user_id, event_id);
     supabase.addtoLeaderboard(
@@ -37,16 +33,4 @@ export default async function addEventUserId(
   } catch {
     return false;
   }
-
-  // Merge the results of both queries
-  // const uniqueMatchIds = new Set(
-  //   eventnameMatches.data.map((match) => match.id)
-  // );
-  // const uniqueMatches = [eventnameMatches.data];
-  // for (const match of nameMatches.data) {
-  //   if (!uniqueMatchIds.has(match.name)) {
-  //     uniqueMatchIds.add(match.name);
-  //     uniqueMatches.push(match.name);
-  //   }
-  // }
 }

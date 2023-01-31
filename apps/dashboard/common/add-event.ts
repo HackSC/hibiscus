@@ -22,10 +22,6 @@ export default async function addEvent(
     .select()
     .eq('wristband_id', `${user_id}`);
 
-  console.log(nameMatches);
-
-  console.log(eventnameMatches.data[0].points);
-
   try {
     supabase.addEvent(nameMatches.data[0].id, event_id);
     supabase.addtoLeaderboard(

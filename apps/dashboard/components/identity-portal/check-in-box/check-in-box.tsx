@@ -82,8 +82,7 @@ export function CheckInBox(props: CheckInBoxProps) {
               {user.first_name} {user.last_name}
             </Name>
             <InfoText>{user.email}</InfoText>
-            <InfoText>PLACEHOLDER</InfoText>
-            <InfoText>PLACEHOLDER</InfoText>
+            <InfoText>{user.major}</InfoText>
           </UpperDiv>
           <LowerDiv>
             <LowerLeft>

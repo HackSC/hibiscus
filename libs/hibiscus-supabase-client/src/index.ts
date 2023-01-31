@@ -295,15 +295,11 @@ export class HibiscusSupabaseClient {
       .eq('user_id', `${user_id}`);
 
     if (userLeaderboardMatches.data.length == 0) {
-      console.log(userLeaderboardMatches);
-
       await this.client.from('leaderboard').insert({
         user_id: user_id,
         event_points: event_points,
       });
     } else {
-      console.log(userLeaderboardMatches.data[0].event_points);
-
       await this.client
         .from('leaderboard')
         .update({
