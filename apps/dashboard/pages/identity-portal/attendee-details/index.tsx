@@ -160,7 +160,6 @@ export function Index() {
               </div>
               <div>
                 <Text>{user.email}</Text>
-                <Text>Phone Number Placeholder</Text>
               </div>
               <div
                 style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
@@ -346,19 +345,19 @@ const ProgressBarOuter = styled.div`
 
   border: 3px solid ${Colors2023.YELLOW.LIGHT};
   border-radius: 10px;
+
+  overflow: hidden;
 `;
 
 const ProgressBarInner = styled.div<{ progress: number }>`
   width: ${(props) => props.progress * COLUMN_WIDTH}px;
-  height: 20px;
-
-  border: solid ${Colors2023.YELLOW.LIGHT};
-  border-radius: 10px;
+  height: 100%;
 
   background-color: ${Colors2023.YELLOW.STANDARD};
 
-  margin-left: -3px;
-  margin-top: -3px;
+  margin-left: -2px;
+
+  overflow: hidden;
 `;
 
 const TeamContainerEmpty = styled.div`

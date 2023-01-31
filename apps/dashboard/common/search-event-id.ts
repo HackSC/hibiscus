@@ -17,6 +17,6 @@ export default async function searchEventId(query: number): Promise<string> {
   try {
     return eventnameMatches.data[0].name;
   } catch {
-    ('Event not found');
+    throw new Error('Event not found');
   }
 }

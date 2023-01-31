@@ -1,6 +1,6 @@
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { Colors2023 } from '@hibiscus/styles';
-import { Modal } from '@hibiscus/ui';
+import { Modal, Text } from '@hibiscus/ui';
 import { Button, Checkbox, Search } from '@hibiscus/ui-kit-2023';
 import { useState } from 'react';
 import styled from 'styled-components';
@@ -24,6 +24,7 @@ export function CheckInBox(props: CheckInBoxProps) {
   const [admitted, setAdmitted] = useState(false);
   const [age, setAge] = useState(false);
   const [status, setStatus] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const handleClick = (setter: (value: boolean) => void) => (value: boolean) =>
     setter(value);
@@ -37,13 +38,26 @@ export function CheckInBox(props: CheckInBoxProps) {
 
   async function handleConfirm() {
     const supabase = container.resolve(HibiscusSupabaseClient);
-    await supabase
+    let { error } = await supabase
       .getClient()
       .from('participants')
       .update({ wristband_id: wristbandId })
       .eq('id', user.user_id);
 
-    window.location.reload();
+    if (error == null) {
+      const res = await supabase
+        .getClient()
+        .from('leaderboard')
+        .upsert({ user_id: user.user_id }, { ignoreDuplicates: true });
+      error = res.error;
+
+      if (error == null) {
+        window.location.reload();
+        return;
+      }
+    }
+
+    setErrorMessage(error.message);
   }
 
   function closeModal() {
@@ -109,7 +123,10 @@ export function CheckInBox(props: CheckInBoxProps) {
           <Name>Confirm</Name>
           <ConfirmText>
             Please confirm you would like to map wristband “{wristbandId}” to{' '}
-            {user.first_name} {user.last_name}.
+            {user.first_name} {user.last_name}.{'\n'}
+            <span style={{ color: Colors2023.RED.STANDARD }}>
+              {errorMessage}
+            </span>
           </ConfirmText>
           <ButtonDiv>
             <Button color="grey" onClick={closeModal}>
