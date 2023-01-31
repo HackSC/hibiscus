@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 // a generic option interface for multiple/single choice questions
 export interface Option {
