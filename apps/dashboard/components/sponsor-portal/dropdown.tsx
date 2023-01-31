@@ -6,8 +6,7 @@ import { Text } from '@hibiscus/ui';
 import { Colors2023 } from '@hibiscus/styles';
 import Image from 'next/image';
 import { Option } from '@hibiscus/types';
-import { SearchableOptionSelectInput } from '@hibiscus/ui-kit-2023';
-
+import { Combobox } from '@hibiscus/ui-kit-2023';
 interface Props {
   title: string;
   options: Option[] | (() => Promise<Option[]>);
@@ -104,7 +103,7 @@ export function DropDown({
       )}
       {showOptions && (
         <SearchContainer>
-          <SearchableOptionSelectInput
+          <Combobox
             onChange={handleInputChange}
             limitDropdownItems={5}
             onClickChooseOption={handleChooseOptionFromDropdown}
