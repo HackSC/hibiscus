@@ -64,11 +64,11 @@ const LayoutContainer = styled.div`
   flex-direction: column;
 `;
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const appsOpen = await get('appsOpen');
-  return {
-    props: {
-      appsOpen,
-    } as ServerSideProps,
-  };
-};
+// export const getServerSideProps: GetServerSideProps = async (ctx) => {
+//   const appsOpen = await get('appsOpen');
+//   return {
+//     props: {
+//       appsOpen,
+//     } as ServerSideProps,
+//   };
+// };
