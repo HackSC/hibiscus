@@ -67,9 +67,9 @@ export class BattlepassAPI implements BattlepassAPIInterface {
             }))
             .sort(
               (a, b) =>
-                a.bonus_points +
-                a.event_points -
-                (b.bonus_points + b.event_points)
+                b.bonus_points +
+                b.event_points -
+                (a.bonus_points + a.event_points)
             ),
         },
       };

@@ -1,4 +1,3 @@
-import { H3 } from '@hibiscus/ui';
 import React from 'react';
 import styled from 'styled-components';
 import { GrayBox } from '../../gray-box/gray-box';
@@ -9,23 +8,18 @@ interface Props {
   items: BonusPointItem[];
 }
 
-function BonusPointsList({ items }: Props) {
+function BattlepassBonusPointsList({ items }: Props) {
   return (
     <Div>
-      <H3>Bonus Points</H3>
-      <GrayBox>
-        {items.map((item, i) => (
-          <BonusPointsItem data={item} key={i} />
-        ))}
-      </GrayBox>
+      {items.map((item, i) => (
+        <BonusPointsItem data={item} key={i} />
+      ))}
     </Div>
   );
 }
 
-export default BonusPointsList;
+export default BattlepassBonusPointsList;
 
-const Div = styled.div`
-  display: flex;
-  flex-direction: column;
+const Div = styled(GrayBox)`
   gap: 10px;
 `;

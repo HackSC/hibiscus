@@ -7,7 +7,6 @@ import { H1, H3 } from '@hibiscus/ui';
 import { ApplicationStatus } from '@hibiscus/types';
 import { useState } from 'react';
 import RSVPForm from '../rsvp-form/rsvp-form';
-import ComingSoonBattlepassPlaceholder from '../battlepass/coming-soon-battlepass-placeholder';
 import { ComingSoon } from './coming-soon';
 import { getColorsForRole } from '../../common/role.utils';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
@@ -17,6 +16,8 @@ import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import DeclinedPlaceholder from './declined-placeholder';
 import { CongratsMessage } from './congrats-message';
 import { RejectionMessage } from './rejection-message';
+import BattlepassPage from '../battlepass/battlepass-page';
+import { BattlepassAPIProvider } from '../../hooks/use-battlepass-api/use-battlepass-api';
 
 type RSVPChoice = 'DECLINE' | 'ACCEPT';
 
@@ -188,9 +189,9 @@ export function HackerPortal() {
 
   if (user.attendanceConfirmed === true) {
     return (
-      <>
-        <ComingSoonBattlepassPlaceholder />
-      </>
+      <BattlepassAPIProvider mock={true}>
+        <BattlepassPage />
+      </BattlepassAPIProvider>
     );
   } else if (user.attendanceConfirmed === false) {
     return <DeclinedPlaceholder />;

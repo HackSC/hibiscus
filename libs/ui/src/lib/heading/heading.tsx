@@ -20,6 +20,7 @@ export const H4 = styled.h4`
   font-weight: 350;
   margin-top: 0;
   margin-bottom: 0;
+  font-size: 20px;
 `;
 export const H5 = styled.h5`
   font-weight: 350;

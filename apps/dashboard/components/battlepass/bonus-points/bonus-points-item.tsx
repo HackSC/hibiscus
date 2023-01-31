@@ -1,4 +1,7 @@
+import { H3, H4, Text } from '@hibiscus/ui';
+import { Button } from '@hibiscus/ui-kit-2023';
 import React from 'react';
+import styled from 'styled-components';
 import { BonusPointItem } from './types';
 
 interface Props {
@@ -6,7 +9,26 @@ interface Props {
 }
 
 function BonusPointsItem({ data }: Props) {
-  return null;
+  return (
+    <Container>
+      <div>
+        <Text style={{ color: 'gray' }}>{data.points} pts</Text>
+        <H4>{data.title}</H4>
+      </div>
+      <div>
+        <Button color="black" disabled={data.status === 'PENDING'}>
+          {data.status}
+        </Button>
+      </div>
+    </Container>
+  );
 }
 
 export default BonusPointsItem;
+
+const Container = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  gap: 10px;
+`;
