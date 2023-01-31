@@ -4,6 +4,8 @@ import { getClientIp } from 'request-ip';
 import slowDown from 'express-slow-down';
 import rateLimit from 'express-rate-limit';
 import { getEnv } from '@hibiscus/env';
+import { ApplicationStatus } from '@hibiscus/types';
+import { HACKER_POSTAPP_STATUSES, MLH_MAJORS_OPTIONS_LIST } from './constants';
 
 export const getWordCount = (text: string) =>
   text.trim().length !== 0 ? text.trim().split(/\s+/).length : 0;
@@ -106,3 +108,9 @@ export const getTokensFromNextRequest = (req: NextApiRequest) => {
   const refreshToken = req.cookies[getEnv().Hibiscus.Cookies.refreshTokenName];
   return { refreshToken, accessToken };
 };
+
+export const isHackerPostAppStatus = (status: ApplicationStatus) => {
+  return HACKER_POSTAPP_STATUSES.includes(status);
+};
+
+export const getMLHMajors = () => MLH_MAJORS_OPTIONS_LIST;
