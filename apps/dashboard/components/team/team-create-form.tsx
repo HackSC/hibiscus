@@ -15,7 +15,7 @@ interface Props {
 }
 
 export const TeamCreateForm = (props: Props) => {
-  const { setTeam } = useTeam();
+  const { updateTeam } = useTeam();
   const { user } = useHibiscusUser();
   const formik = useFormik({
     initialValues: {
@@ -40,7 +40,7 @@ export const TeamCreateForm = (props: Props) => {
       }
       if (createTeamSuccess) {
         toast.success('Successfully created team');
-        setTeam({
+        updateTeam({
           name: values.name,
           description: values.description,
           id: data.id,

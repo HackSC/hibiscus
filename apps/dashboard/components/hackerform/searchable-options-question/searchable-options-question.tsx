@@ -1,5 +1,5 @@
 import { HackformQuestion, Option } from '@hibiscus/types';
-import { SearchableOptionSelectInput } from '@hibiscus/ui-kit-2023';
+import { Combobox } from '@hibiscus/ui-kit-2023';
 import { useHackform } from '../../../hooks/use-hackform/use-hackform';
 import { useState } from 'react';
 import QuestionCreator from '../question-creator/question-creator';
@@ -41,7 +41,7 @@ export const SearchableOptionsInput = (props: SearchableOptionsInputProps) => {
   };
 
   const InputComponent = (
-    <SearchableOptionSelectInput
+    <Combobox
       onChange={handleInputChange}
       limitDropdownItems={question.limitOptions}
       onClickChooseOption={handleChooseOptionFromDropdown}
