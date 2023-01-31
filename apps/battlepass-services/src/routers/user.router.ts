@@ -8,7 +8,7 @@ router.get('/:user_id/points', async (req, res) =>
   container.resolve(UserController).getUser(req, res)
 );
 
-router.get('<user_id>/<bonus_point>/updateBonusPoints', async (req, res) =>
+router.get('/:user_id/:bonus_point/updateBonusPoints', async (req, res) =>
   container.resolve(UserController).updateBonusPoint(req, res)
 );
 
