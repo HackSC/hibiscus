@@ -21,7 +21,7 @@ export class SponsorAPI implements SponsorAPIInterface {
   async getAttendees(): Promise<{ data: Attendee[] }> {
     if (this.mock) {
       return {
-        data: Array.from(Array(5).keys()).map(() => ({
+        data: Array.from(Array(10).keys()).map(() => ({
           id: faker.datatype.uuid(),
           first_name: faker.name.firstName(),
           last_name: faker.name.lastName(),
