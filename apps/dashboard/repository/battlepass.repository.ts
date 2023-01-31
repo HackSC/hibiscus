@@ -10,7 +10,6 @@ export class BattlePassRepository {
 
   async getLeaderboard() {
     const { data, error } = await this.client.from('leaderboard').select();
-    console.log('test');
     data.sort();
     return { data, error };
   }
