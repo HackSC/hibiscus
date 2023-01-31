@@ -26,6 +26,7 @@
     "@sentry/nextjs": "^7.34.0",
     "@supabase/auth-helpers-nextjs": "^0.5.2",
     "@supabase/supabase-js": "^2.2.0",
+    "@vercel/edge-config": "^0.1.1",
     "airplane": "^0.2.30",
     "axios": "^1.2.1",
     "classnames": "^2.3.2",

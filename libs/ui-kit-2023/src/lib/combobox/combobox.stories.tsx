@@ -1,10 +1,10 @@
 import React from 'react';
 import type { ComponentStory, ComponentMeta } from '@storybook/react';
-import { SearchableOptionSelectInput } from './searchable-option-select-input';
+import { Combobox } from './combobox';
 
-const Story: ComponentMeta<typeof SearchableOptionSelectInput> = {
-  component: SearchableOptionSelectInput,
-  title: SearchableOptionSelectInput.name,
+const Story: ComponentMeta<typeof Combobox> = {
+  component: Combobox,
+  title: Combobox.name,
   argTypes: {
     placeholder: {
       control: { type: 'text' },
@@ -13,8 +13,8 @@ const Story: ComponentMeta<typeof SearchableOptionSelectInput> = {
 };
 export default Story;
 
-const Template: ComponentStory<typeof SearchableOptionSelectInput> = (args) => (
-  <SearchableOptionSelectInput {...args} />
+const Template: ComponentStory<typeof Combobox> = (args) => (
+  <Combobox {...args} />
 );
 
 export const Primary = Template.bind({});

@@ -137,6 +137,61 @@ export interface Database {
           team_id?: string;
         };
       };
+      notes: {
+        Row: {
+          company_id: string | null;
+          created_at: string | null;
+          id: string;
+          note: string | null;
+          participant_id: string | null;
+        };
+        Insert: {
+          company_id?: string | null;
+          created_at?: string | null;
+          id?: string;
+          note?: string | null;
+          participant_id?: string | null;
+        };
+        Update: {
+          company_id?: string | null;
+          created_at?: string | null;
+          id?: string;
+          note?: string | null;
+          participant_id?: string | null;
+        };
+      };
+      participants: {
+        Row: {
+          created_at: string | null;
+          dob: string | null;
+          graduation_year: string | null;
+          id: string;
+          major: string | null;
+          portfolio_link: string | null;
+          resume: string | null;
+          school: string | null;
+        };
+        Insert: {
+          created_at?: string | null;
+          dob?: string | null;
+          graduation_year?: string | null;
+          id: string;
+          major?: string | null;
+          portfolio_link?: string | null;
+          resume?: string | null;
+          school?: string | null;
+        };
+        Update: {
+          created_at?: string | null;
+          dob?: string | null;
+          graduation_year?: string | null;
+          id?: string;
+          major?: string | null;
+          portfolio_link?: string | null;
+          resume?: string | null;
+          school?: string | null;
+        };
+      };
       pinned_events: {
         Row: {
           created_at: string | null;
@@ -227,6 +282,7 @@ export interface Database {
         Row: {
           app_id: string | null;
           application_status: number;
+          attendance_confirmed: boolean | null;
           created_at: string | null;
           email: string | null;
           first_name: string;
@@ -238,6 +294,7 @@ export interface Database {
         Insert: {
           app_id?: string | null;
           application_status?: number;
+          attendance_confirmed?: boolean | null;
           created_at?: string | null;
           email?: string | null;
           first_name: string;
@@ -249,6 +306,7 @@ export interface Database {
         Update: {
           app_id?: string | null;
           application_status?: number;
+          attendance_confirmed?: boolean | null;
           created_at?: string | null;
           email?: string | null;
           first_name?: string;

@@ -13,21 +13,17 @@ export function Button(props: ButtonProps) {
     return <DisabledButton>{props.children}</DisabledButton>;
   }
   if (props.color === 'blue') {
-    return <BlueButton onClick={props.onClick}>{props.children}</BlueButton>;
+    return <BlueButton {...props}>{props.children}</BlueButton>;
   } else if (props.color === 'black') {
-    return <BlackButton onClick={props.onClick}>{props.children}</BlackButton>;
+    return <BlackButton {...props}>{props.children}</BlackButton>;
   } else if (props.color === 'purple') {
-    return (
-      <PurpleButton onClick={props.onClick}>{props.children}</PurpleButton>
-    );
+    return <PurpleButton {...props}>{props.children}</PurpleButton>;
   } else if (props.color === 'yellow') {
-    return (
-      <YellowButton onClick={props.onClick}>{props.children}</YellowButton>
-    );
+    return <YellowButton {...props}>{props.children}</YellowButton>;
   } else if (props.color === 'grey') {
-    return <GreyButton onClick={props.onClick}>{props.children}</GreyButton>;
+    return <GreyButton {...props}>{props.children}</GreyButton>;
   } else {
-    return <RedButton onClick={props.onClick}>{props.children}</RedButton>;
+    return <RedButton {...props}>{props.children}</RedButton>;
   }
 }
 

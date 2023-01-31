@@ -4,24 +4,48 @@ import { HibiscusRole } from '@hibiscus/types';
 import HackerPortal from '../components/hacker-portal/hacker-portal';
 import IdentityPortal from '../components/identity-portal/identity-portal';
 import SponsorPortal from '../components/sponsor-portal/sponsor-portal';
+import { GetServerSideProps } from 'next';
+import { get } from '@vercel/edge-config';
+import AppsClosedPlaceholder from '../components/hacker-portal/apps-closed-placeholder';
+import { isHackerPostAppStatus } from '../common/utils';
+import { useEffect } from 'react';
+import { useAppDispatch } from '../hooks/redux/hooks';
+import { removeTabRoute } from '../store/menu-slice';
 
-export function Index() {
+interface ServerSideProps {
+  appsOpen: boolean;
+}
+
+export function Index({ appsOpen }: ServerSideProps) {
+  const dispatch = useAppDispatch();
   const { user } = useHibiscusUser();
+
+  useEffect(() => {
+    if (!appsOpen) {
+      dispatch(removeTabRoute('/apply-2023'));
+    }
+  }, [appsOpen, dispatch]);
 
   if (user == null) {
     return <>Loading</>;
   }
 
-  const renderDashboard = () => {
-    if (user.role === HibiscusRole.HACKER) return <HackerPortal user={user} />;
-    else if (user.role === HibiscusRole.VOLUNTEER) return <IdentityPortal />;
-    if (user.role === HibiscusRole.SPONSOR)
+  const Dashboard = () => {
+    if (user.role === HibiscusRole.HACKER) {
+      if (!appsOpen && !isHackerPostAppStatus(user.applicationStatus)) {
+        return <AppsClosedPlaceholder />;
+      }
+      return <HackerPortal />;
+    } else if (user.role === HibiscusRole.SPONSOR)
       return <SponsorPortal user={user} />;
+    else if (user.role === HibiscusRole.VOLUNTEER) return <IdentityPortal />;
   };
 
   return (
     <Wrapper>
-      <LayoutContainer>{renderDashboard()}</LayoutContainer>
+      <LayoutContainer>
+        <Dashboard />
+      </LayoutContainer>
     </Wrapper>
   );
 }
@@ -42,61 +66,11 @@ const LayoutContainer = styled.div`
   flex-direction: column;
 `;
 
-// const AddOnOuter = styled.div`
-//   width: 41%;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: flex-start;
-// `;
-
-// const AddOn = styled.div`
-//   width: 94%;
-//   height: 90%;
-//   background: #363636;
-//   /* smaller-red-glow */
-//   border: 2px solid #5a5a5a;
-//   border-radius: 10px;
-//   /* box-shadow: 0px 0px 10px rgba(254, 81, 57, 0.5); */
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-// `;
-
-// const Stats = styled.div`
-//   width: 100%;
-//   height: 90%;
-//   background: #363636;
-//   border: 2px solid #5a5a5a;
-//   /* smaller-red-glow */
-//   /* box-shadow: 0px 0px 10px rgba(254, 81, 57, 0.5); */
-//   border-radius: 10px;
-//   display: flex;
-//   align-items: center;
-//   justify-content: center;
-// `;
-
-// const StatsOuter = styled.div`
-//   width: 59%;
-//   display: flex;
-//   flex-direction: column;
-//   align-items: flex-start;
-// `;
-
-// const AddOnAndStats = styled.div`
-//   display: inline-flex;
-//   width: 100%;
-//   height: 300px;
-// `;
-
-const QuickActionContainer = styled.div`
-  display: flex;
-  width: 100%;
-  flex-wrap: wrap;
-  gap: 30px;
-`;
-
-const WelcomeContainer = styled.div`
-  @media (max-width: 400px) {
-    margin-top: 5rem;
-  }
-`;
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const appsOpen = await get('appsOpen');
+  return {
+    props: {
+      appsOpen,
+    } as ServerSideProps,
+  };
+};
