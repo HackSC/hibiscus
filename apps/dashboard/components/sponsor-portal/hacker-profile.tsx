@@ -1,7 +1,7 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import styled from 'styled-components';
-import { Link, Text } from '@hibiscus/ui';
+import { BoldText, Link, Text } from '@hibiscus/ui';
 import { Colors2023 } from '@hibiscus/styles';
 import { HibiscusUser } from '@hibiscus/types';
 import { H1, H2, H3 } from '@hibiscus/ui';
@@ -10,20 +10,45 @@ import { Attendee } from '../../common/mock-sponsor';
 
 interface Props {
   hacker: Attendee;
+  onClick;
 }
 
-export function HackerProfile({ hacker }: Props) {
+export function HackerProfile({ hacker, onClick }: Props) {
   return (
     <Container>
-      <Text style={{ fontSize: '30px' }}>
-        {hacker.first_name} {hacker.last_name}
-      </Text>
-      <Text style={{ fontSize: '18px' }}>School: {hacker.school}</Text>
-      <Text style={{ fontSize: '18px' }}>Major: {hacker.major}</Text>
-      <Text style={{ fontSize: '18px' }}>
+      <div
+        style={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <BoldText style={{ fontSize: '30px' }}>
+          {hacker.first_name} {hacker.last_name}
+        </BoldText>
+        <StyledButton>
+          <Image width="30" height="30" src={'/save.svg'} alt="save-button" />
+        </StyledButton>
+      </div>
+      <Text style={{ fontSize: '15px' }}>School: {hacker.school}</Text>
+      <Text style={{ fontSize: '15px' }}>Major: {hacker.major}</Text>
+      <Text style={{ fontSize: '15px' }}>
         Grad Year: {hacker.graduation_year}
       </Text>
-      <TitleText style={{ marginTop: '1rem' }}>QUICK NOTES</TitleText>
+      <div
+        style={{
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+        }}
+      >
+        <TitleText style={{ marginTop: '1rem' }}>QUICK NOTES</TitleText>
+        <StyledButton style={{ marginTop: '0.5rem' }} onClick={onClick}>
+          <Image width="30" height="30" src={'/note.svg'} alt="note-button" />
+        </StyledButton>
+      </div>
       <NoteContainer>
         <Text>No note added</Text>
       </NoteContainer>
@@ -42,9 +67,6 @@ export function HackerProfile({ hacker }: Props) {
             alignItems: 'center',
           }}
         >
-          <StyledButton style={{ marginRight: '0.5rem' }}>
-            <Image width="30" height="30" src={'/save.svg'} alt="save-button" />
-          </StyledButton>
           <StyledButton>
             <Image
               width="30"
@@ -67,7 +89,6 @@ const Container = styled.div`
   width: 100%;
   justify-content: flex-start;
   align-items: flex-start;
-  padding: 0px 30px;
 `;
 
 const TitleText = styled(H1)`
