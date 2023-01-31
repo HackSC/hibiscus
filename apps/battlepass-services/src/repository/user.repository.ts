@@ -17,7 +17,7 @@ export class User {
     return { data, error };
   }
 
-  async getBonuPoints(userId: string) {
+  async getBonusPoints(userId: string) {
     const { data, error } = await this.client
       .from('leaderboard')
       .select('bonus_points')
