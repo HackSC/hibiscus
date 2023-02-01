@@ -15,7 +15,6 @@ import searchUser from '../../../common/search-user';
 import { ScrollableListBox } from '../../../components/identity-portal/scrollable-list-box/scrollable-list-box';
 import { container } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
-import { log } from 'console';
 import { formatTimestamp } from 'apps/dashboard/common/format-timestamp';
 import { PostgrestError } from '@supabase/supabase-js';
 
@@ -162,7 +161,10 @@ export function Index() {
       <div style={{ position: 'absolute', right: '100px' }}>
         <GlowSpan color={Colors2023.GRAY.DARK} style={{ fontSize: '.68em' }}>
           <div>
-            <SuccessText className={isAlertVisible ? 'shown' : 'hidden'}>
+            <SuccessText
+              className={isAlertVisible ? 'shown' : 'hidden'}
+              error={response !== true}
+            >
               {alertMessage}
             </SuccessText>
           </div>
@@ -272,15 +274,18 @@ const LabelText = styled(Text)`
   font-size: 1.5em;
 `;
 
-const SuccessText = styled(Text)`
+const SuccessText = styled(Text)<{ error: boolean }>`
   font-size: 1.5em;
   padding-left: 0.4em;
   padding-right: 0.4em;
   padding-top: 0.3em;
   padding-bottom: 0.3em;
   border-radius: 0.5em;
-  border: 0.4em solid ${Colors2023.YELLOW.STANDARD};
-  background-color: ${Colors2023.YELLOW.STANDARD};
+  border: 0.4em solid
+    ${(props) =>
+      props.error ? Colors2023.RED.STANDARD : Colors2023.YELLOW.STANDARD};
+  background-color: ${(props) =>
+    props.error ? Colors2023.RED.STANDARD : Colors2023.YELLOW.STANDARD};
 
   &.shown {
     opacity: 1;

@@ -5,9 +5,7 @@ import {
 import { Database } from '@hibiscus/types';
 import { container } from 'tsyringe';
 
-export default async function searchUser(
-  query: string
-): Promise<UserProfileRow[]> {
+export default async function searchUser(query: string): Promise<any[]> {
   const supabase = container.resolve(HibiscusSupabaseClient);
   await supabase.setSessionClientSide();
 
@@ -35,5 +33,18 @@ export default async function searchUser(
     }
   }
 
-  return uniqueMatches as Database['public']['Tables']['user_profiles']['Row'][];
+  // Add DoB
+  for (let i = 0; i < uniqueMatches.length; i++) {
+    const userId = uniqueMatches[i].user_id;
+    const res = await supabase
+      .getClient()
+      .from('participants')
+      .select()
+      .eq('id', userId);
+    if (res.data.length > 0) {
+      uniqueMatches[i].dob = res.data[0].dob;
+    }
+  }
+
+  return uniqueMatches;
 }

@@ -35,7 +35,7 @@ export function SearchUserBox({ onClick }: SearchUserBoxProps) {
               <BoldText style={{ fontSize: '1em' }}>
                 {user.first_name} {user.last_name}
               </BoldText>
-              <Text style={{ fontSize: '0.75em' }}>{user.email}</Text>
+              <Text style={{ fontSize: '0.75em' }}>{user.dob ?? ''}</Text>
             </ScrollableListBox.ItemClickable>
           ))}
         </ScrollableListBox>

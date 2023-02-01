@@ -32,10 +32,8 @@ export function SearchEventBox() {
                 router.push(`/identity-portal/attendee-event-scan?id=${id}`)
               }
             >
-              <BoldText style={{ fontSize: '1em' }}>
-                {event.name} {event.location}
-              </BoldText>
-              <Text style={{ fontSize: '0.75em' }}>{event.points}</Text>
+              <BoldText style={{ fontSize: '1em' }}>{event.name}</BoldText>
+              <Text style={{ fontSize: '0.75em' }}>{event.location}</Text>
             </ScrollableListBox.ItemClickable>
           ))}
         </ScrollableListBox>
