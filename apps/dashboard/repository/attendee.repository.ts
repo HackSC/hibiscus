@@ -1,8 +1,8 @@
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { SupabaseClient } from '@supabase/supabase-js';
 
 export class AttendeeRepository {
-  private readonly client: SupabaseClient;
+  private client: SupabaseClient;
 
   constructor(private readonly hbc: HibiscusSupabaseClient) {
     hbc.setOptions({ useServiceKey: true });
