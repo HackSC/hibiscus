@@ -1,7 +1,7 @@
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { Colors2023 } from '@hibiscus/styles';
 import { Modal, Text } from '@hibiscus/ui';
-import { Button, Checkbox, Search } from '@hibiscus/ui-kit-2023';
+import { Button, Checkbox, OneLineText, Search } from '@hibiscus/ui-kit-2023';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { container } from 'tsyringe';
@@ -29,9 +29,8 @@ export function CheckInBox(props: CheckInBoxProps) {
   const handleClick = (setter: (value: boolean) => void) => (value: boolean) =>
     setter(value);
 
-  function handleAssign(value: string) {
+  function handleAssign() {
     if (isReady()) {
-      setWristbandId(value);
       setModalScreen(ModalScreen.CONFIRM);
     }
   }
@@ -105,12 +104,13 @@ export function CheckInBox(props: CheckInBoxProps) {
                 />
               </VerificationBox>
             </LowerLeft>
-            <LowerRight>
-              <SubHeader2>Scan Wristband or</SubHeader2>
-              <Search
-                placeholder="Search ID number"
-                onInput={handleAssign}
-              ></Search>
+            <LowerRight onSubmit={handleAssign}>
+              <SubHeader2>Scan Wristband</SubHeader2>
+              <OneLineText
+                placeholder="ID number"
+                value={wristbandId}
+                onChange={(e) => setWristbandId(e.target.value)}
+              ></OneLineText>
               <Button color="yellow" disabled={!isReady()}>
                 Assign
               </Button>
@@ -215,7 +215,7 @@ const LowerLeft = styled.div`
   gap: 20px;
   padding-left: 30px;
 `;
-const LowerRight = styled.div`
+const LowerRight = styled.form`
   width: 50%;
   display: flex;
   flex-direction: column;

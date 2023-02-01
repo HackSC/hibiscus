@@ -10,7 +10,7 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export function Button(props: ButtonProps) {
   if (props.disabled) {
-    return <DisabledButton>{props.children}</DisabledButton>;
+    return <DisabledButton disabled>{props.children}</DisabledButton>;
   }
   if (props.color === 'blue') {
     return <BlueButton {...props}>{props.children}</BlueButton>;
@@ -258,7 +258,6 @@ const DisabledButton = styled.button`
   gap: 10px;
   background: rgb(151, 151, 151);
   border-radius: 10px;
-  cursor: pointer;
   //fonts
   font-family: 'Inter';
 

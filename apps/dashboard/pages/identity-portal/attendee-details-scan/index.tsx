@@ -64,7 +64,7 @@ export function Index() {
           </div>
         </FlexRow>
 
-        <Button color="yellow">SUBMIT</Button>
+        {/* <Button color="yellow">SUBMIT</Button> */}
       </ColumnSpacedCenter>
     </>
   );
