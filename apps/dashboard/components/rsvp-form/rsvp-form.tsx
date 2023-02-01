@@ -4,11 +4,12 @@ import { H2, Text } from '@hibiscus/ui';
 import { GrayBox } from '../gray-box/gray-box';
 import {
   Button,
+  Checkbox,
   Combobox,
   DatePicker,
   OneLineText,
 } from '@hibiscus/ui-kit-2023';
-import { useFormik } from 'formik';
+import { FormikProvider, useFormik } from 'formik';
 import * as Yup from 'yup';
 import {
   ALLOWED_RESUME_FORMATS,
@@ -24,6 +25,8 @@ import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 import { toast } from 'react-hot-toast';
 import { getEnv } from '@hibiscus/env';
 import mime from 'mime-types';
+import * as Sentry from '@sentry/browser';
+import { formMetadata2023HackerApps } from '../../common/hackform.metadata';
 
 interface Props {
   closeModal: () => void;
@@ -37,8 +40,9 @@ function RSVPForm({ closeModal }: Props) {
       school: '',
       major: '',
       graduationYear: '',
-      dob: null,
+      dob: '',
       portfolioLink: '',
+      acknowledgement: false,
     },
     validationSchema: Yup.object({
       school: Yup.string().required('Please enter your school'),
@@ -46,54 +50,75 @@ function RSVPForm({ closeModal }: Props) {
       graduationYear: Yup.string().required(
         'Please enter your graduation year'
       ),
-      dob: Yup.date().required('This field is required'),
       portfolioLink: Yup.string(),
+      acknowledgement: Yup.boolean()
+        .isTrue('This field is required')
+        .required('This field is required'),
     }),
+    validate: async (values) => {
+      const { valid, errorDescription } =
+        formMetadata2023HackerApps.questions[1].validationFunction({
+          text: values.dob,
+        });
+      if (!valid) {
+        if (Array.isArray(errorDescription)) {
+          return { dob: errorDescription[0] };
+        }
+        return { dob: errorDescription };
+      }
+      return {};
+    },
     onSubmit: async (values, formikHelpers) => {
       formikHelpers.setSubmitting(true);
       closeModal();
-      const supabase = container.resolve(HibiscusSupabaseClient);
-      const client = supabase.getClient();
-      // upload resume
-      let resumeStoragePath: string | null = null;
-      if (resumeFile !== null) {
-        const fileKey = `resume.${mime.extension(resumeFile.type)}`;
-        const storageResponse = await client.storage
-          .from(getEnv().Hibiscus.RSVPForm.ResumeStorageBucketName)
-          .upload(`${user.id}/${fileKey}`, resumeFile);
-        if (storageResponse.error) {
-          console.error(storageResponse.error.message);
-        } else {
-          resumeStoragePath = storageResponse.data.path;
+      try {
+        const supabase = container.resolve(HibiscusSupabaseClient);
+        const client = supabase.getClient();
+        // upload resume
+        let resumeStoragePath: string | null = null;
+        if (resumeFile !== null) {
+          const fileKey = `resume.${mime.extension(resumeFile.type)}`;
+          const storageResponse = await client.storage
+            .from(getEnv().Hibiscus.RSVPForm.ResumeStorageBucketName)
+            .upload(`${user.id}/${fileKey}`, resumeFile);
+          if (storageResponse.error) {
+            throw storageResponse.error.message;
+          } else {
+            resumeStoragePath = storageResponse.data.path;
+          }
         }
+        // update participants information
+        const res = await client.from('participants').upsert({
+          id: user.id,
+          graduation_year: values.graduationYear,
+          major: values.major,
+          school: values.school,
+          resume: resumeStoragePath,
+          dob: values.dob,
+          portfolio_link: values.portfolioLink,
+        });
+        if (res.error) {
+          throw res.error;
+        }
+        // update confirmation
+        const { error } = await client
+          .from('user_profiles')
+          .update({ attendance_confirmed: true })
+          .eq('user_id', user.id);
+        if (error) {
+          throw error;
+        }
+        updateUser({ attendanceConfirmed: true });
+        toast.success('Confirmation received! Welcome to HackSC 2023 🌺', {
+          icon: '🎉',
+        });
+        formikHelpers.setSubmitting(false);
+      } catch (e) {
+        Sentry.captureException(e);
+        toast.error(
+          'Oops! Something went wrong with submitting your RSVP. Please try again or contact us if this problem persists.'
+        );
       }
-      // update participants information
-      const res = await client.from('participants').upsert({
-        id: user.id,
-        graduation_year: values.graduationYear,
-        major: values.major,
-        school: values.school,
-        resume: resumeStoragePath,
-        dob: values.dob,
-        portfolio_link: values.portfolioLink,
-      });
-      if (res.error) {
-        console.error(res.error.message);
-      }
-      // update confirmation
-      const { error } = await client
-        .from('user_profiles')
-        .update({ attendance_confirmed: true })
-        .eq('user_id', user.id);
-      if (error) {
-        console.error(error.message);
-        return;
-      }
-      updateUser({ attendanceConfirmed: true });
-      toast.success('Confirmation received! Welcome to HackSC 2023 🌺', {
-        icon: '🎉',
-      });
-      formikHelpers.setSubmitting(false);
     },
   });
 
@@ -123,7 +148,7 @@ function RSVPForm({ closeModal }: Props) {
           below. We use this information to check you in when you first check-in
           with us for the event on February 3rd.
         </Text>
-        <div style={{ zIndex: 3 }}>
+        <QuestionWrap style={{ zIndex: 3 }}>
           <label htmlFor="school">
             <Text>
               Your school:<SpanRed>*</SpanRed>{' '}
@@ -147,8 +172,8 @@ function RSVPForm({ closeModal }: Props) {
             onClickChooseOption={createHandlerClickChooseOption('school')}
           />
           {formik.touched.school && <SpanRed>{formik.errors.school}</SpanRed>}
-        </div>
-        <div style={{ zIndex: 2 }}>
+        </QuestionWrap>
+        <QuestionWrap style={{ zIndex: 2 }}>
           <label htmlFor="graduationYear">
             <Text>
               Your graduation date:<SpanRed>*</SpanRed>
@@ -169,8 +194,8 @@ function RSVPForm({ closeModal }: Props) {
           {formik.touched.graduationYear && (
             <SpanRed>{formik.errors.graduationYear}</SpanRed>
           )}
-        </div>
-        <div style={{ zIndex: 1 }}>
+        </QuestionWrap>
+        <QuestionWrap style={{ zIndex: 1 }}>
           <label htmlFor="major">
             <Text>
               Your major:
@@ -188,8 +213,8 @@ function RSVPForm({ closeModal }: Props) {
             onClickChooseOption={createHandlerClickChooseOption('major')}
           />
           {formik.touched.major && <SpanRed>{formik.errors.major}</SpanRed>}
-        </div>
-        <div>
+        </QuestionWrap>
+        <QuestionWrap>
           <label htmlFor="dob">
             <Text>
               Date of birth:
@@ -199,18 +224,18 @@ function RSVPForm({ closeModal }: Props) {
           <DatePicker
             name="dob"
             id="dob"
-            value={formik.values.dob}
+            valueOneLineText={formik.values.dob}
             placeholder="in MM/DD/YYYY format e.g 12/22/2002"
             onChange={formik.handleChange}
-            onClickDay={(d, e) => {
+            onClickDay={(d) => {
               formik.setFieldValue('dob', d);
             }}
           />
           {formik.touched.dob && formik.errors.dob ? (
-            <SpanRed>{formik.errors.dob?.toString()}</SpanRed>
+            <SpanRed>{formik.errors.dob}</SpanRed>
           ) : null}
-        </div>
-        <div>
+        </QuestionWrap>
+        <QuestionWrap>
           <label htmlFor="portfolioLink">
             <Text>Your personal website link:</Text>
           </label>
@@ -222,11 +247,8 @@ function RSVPForm({ closeModal }: Props) {
             placeholder="e.g https://vuvincent.com"
             onChange={formik.handleChange}
           />
-          {formik.touched.portfolioLink && (
-            <SpanRed>{formik.errors.portfolioLink}</SpanRed>
-          )}
-        </div>
-        <div>
+        </QuestionWrap>
+        <QuestionWrap>
           <label>
             <Text>Your resume:</Text>
           </label>
@@ -237,9 +259,37 @@ function RSVPForm({ closeModal }: Props) {
               ','
             )}
           />
+        </QuestionWrap>
+        <QuestionWrap>
+          <Checkbox
+            onInput={(newVal) => {
+              formik.setFieldValue('acknowledgement', newVal);
+            }}
+            label={
+              <Text>
+                By RSVPing, I confirm that I will be attending HackSC 2023
+                in-person. Below are the opening and closing ceremony times:
+                <SpanRed>*</SpanRed>
+              </Text>
+            }
+          />
+          {formik.touched.acknowledgement && (
+            <SpanRed>{formik.errors.acknowledgement}</SpanRed>
+          )}
+        </QuestionWrap>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <Text>
+            <span style={{ fontWeight: 'bold' }}>Opening Ceremony:</span>
+            <Text>Fri, Feb 3 @ 7:30pm - Bovard Auditorium</Text>
+          </Text>
+          <Text>
+            <span style={{ fontWeight: 'bold' }}>Closing Ceremony:</span>
+            <Text>Sun, Feb 5 @ 1:30pm - Online (livestreamed)</Text>
+          </Text>
         </div>
         <Button
           color="blue"
+          type="submit"
           onClick={(e) => {
             e.preventDefault();
             formik.handleSubmit();
@@ -264,4 +314,11 @@ const OwnGrayBox = styled(GrayBox)`
   align-items: center;
   gap: 20px;
   padding: 30px;
+`;
+
+const QuestionWrap = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 `;
