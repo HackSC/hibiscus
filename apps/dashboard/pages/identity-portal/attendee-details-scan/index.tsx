@@ -6,9 +6,21 @@ import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { BiWifi2 } from 'react-icons/bi';
 import { BackButton } from '../../../components/identity-portal/back-button/back-button';
+import { HibiscusRole } from '@hibiscus/types';
+import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
 
 export function Index() {
   const router = useRouter();
+
+  const { user: authUser } = useHibiscusUser();
+  if (authUser == null) {
+    return <>Loading</>;
+  }
+  // Limit access to only volunteer role
+  if (authUser?.role !== HibiscusRole.VOLUNTEER) {
+    router.push('/');
+    return <></>;
+  }
 
   return (
     <>

@@ -4,8 +4,21 @@ import { GlowSpan } from '@hibiscus/ui-kit-2023';
 import styled from 'styled-components';
 import { SearchEventBox } from '../../../components/identity-portal/search-event-box/search-event-box';
 import { BackButton } from '../../../components/identity-portal/back-button/back-button';
+import { HibiscusRole } from '@hibiscus/types';
+import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
+import router from 'next/router';
 
 export function Index() {
+  const { user: authUser } = useHibiscusUser();
+  if (authUser == null) {
+    return <>Loading</>;
+  }
+  // Limit access to only volunteer role
+  if (authUser?.role !== HibiscusRole.VOLUNTEER) {
+    router.push('/');
+    return <></>;
+  }
+
   return (
     <>
       <div style={{ position: 'absolute', left: '100px' }}>

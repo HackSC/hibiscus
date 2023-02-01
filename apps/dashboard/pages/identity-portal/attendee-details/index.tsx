@@ -13,6 +13,8 @@ import { BackButton } from '../../../components/identity-portal/back-button/back
 import { CheckInBox } from '../../../components/identity-portal/check-in-box/check-in-box';
 import { ImCross } from 'react-icons/im';
 import { formatTimestamp } from '../../../common/format-timestamp';
+import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
+import { HibiscusRole } from '@hibiscus/types';
 
 const COLUMN_WIDTH = 510;
 const TEAM_MEMBER_ICONS = [
@@ -116,6 +118,16 @@ export function Index() {
       }
     }
   }, [router.isReady, router.query]);
+
+  const { user: authUser } = useHibiscusUser();
+  if (authUser == null) {
+    return <>Loading</>;
+  }
+  // Limit access to only volunteer role
+  if (authUser?.role !== HibiscusRole.VOLUNTEER) {
+    router.push('/');
+    return <></>;
+  }
 
   if (state !== State.USER_FOUND) {
     return (

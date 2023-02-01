@@ -15,8 +15,10 @@ import searchUser from '../../../common/search-user';
 import { ScrollableListBox } from '../../../components/identity-portal/scrollable-list-box/scrollable-list-box';
 import { container } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
-import { formatTimestamp } from 'apps/dashboard/common/format-timestamp';
+import { formatTimestamp } from '../../../common/format-timestamp';
 import { PostgrestError } from '@supabase/supabase-js';
+import { HibiscusRole } from '@hibiscus/types';
+import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
 
 const SUCCESS_MESSAGE = 'Success';
 
@@ -148,8 +150,29 @@ export function Index() {
     }
   }, [eventId]);
 
-  if (eventId == null) {
+  const { user: authUser } = useHibiscusUser();
+  if (authUser == null) {
+    return <>Loading</>;
+  }
+  // Limit access to only volunteer role
+  if (authUser?.role !== HibiscusRole.VOLUNTEER) {
+    router.push('/');
     return <></>;
+  }
+
+  if (eventId == null) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100%',
+        }}
+      >
+        No parameters provided!
+      </div>
+    );
   }
 
   return (
