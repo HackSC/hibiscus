@@ -11,10 +11,10 @@ import { useState, useEffect } from 'react';
 /* eslint-disable-next-line */
 export interface HeroProps {}
 
-const getModeFromScreenWidth = (width: number) => {
-  if (width >= 1600) {
+const getModeFromScreenWidth = (width: number, height: number) => {
+  if (width >= 1600 || width / height > 1.66) {
     return 1;
-  } else if (width >= 1440 && width < 1600) {
+  } else if ((width >= 1440 && width < 1600) || width / height > 0.8) {
     return 2;
   } else if (width >= 1024 && width < 1440) {
     return 3;
@@ -32,12 +32,12 @@ const getModeFromScreenWidth = (width: number) => {
 };
 
 function useScreenWidth() {
-  const { width, ref } = useResizeDetector();
+  const { height, width, ref } = useResizeDetector();
   const [mode, setMode] = useState(1);
 
   useEffect(() => {
-    setMode(getModeFromScreenWidth(width));
-  }, [width]);
+    setMode(getModeFromScreenWidth(width, height));
+  }, [width, height]);
 
   return { mode, ref };
 }

@@ -269,23 +269,6 @@ export interface Database {
           team_id?: string;
         };
       };
-      leaderboard: {
-        Row: {
-          bonus_points: number;
-          event_points: number;
-          user_id: string;
-        };
-        Insert: {
-          bonus_points?: number;
-          event_points?: number;
-          user_id: string;
-        };
-        Update: {
-          bonus_points?: number;
-          event_points?: number;
-          user_id?: string;
-        };
-      };
       notes: {
         Row: {
           company_id: string | null;
@@ -319,7 +302,6 @@ export interface Database {
           portfolio_link: string | null;
           resume: string | null;
           school: string | null;
-          wristband_id: string | null;
         };
         Insert: {
           created_at?: string | null;
@@ -330,7 +312,6 @@ export interface Database {
           portfolio_link?: string | null;
           resume?: string | null;
           school?: string | null;
-          wristband_id?: string | null;
         };
         Update: {
           created_at?: string | null;
@@ -341,7 +322,6 @@ export interface Database {
           portfolio_link?: string | null;
           resume?: string | null;
           school?: string | null;
-          wristband_id?: string | null;
         };
       };
       pinned_events: {
@@ -474,6 +454,7 @@ export interface Database {
         Row: {
           app_id: string | null;
           application_status: number;
+          attendance_confirmed: boolean | null;
           created_at: string | null;
           email: string | null;
           first_name: string;
@@ -485,6 +466,7 @@ export interface Database {
         Insert: {
           app_id?: string | null;
           application_status?: number;
+          attendance_confirmed?: boolean | null;
           created_at?: string | null;
           email?: string | null;
           first_name: string;
@@ -496,6 +478,7 @@ export interface Database {
         Update: {
           app_id?: string | null;
           application_status?: number;
+          attendance_confirmed?: boolean | null;
           created_at?: string | null;
           email?: string | null;
           first_name?: string;
