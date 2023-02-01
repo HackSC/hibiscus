@@ -11,8 +11,8 @@ export class FeatureFlagRepository {
 
   async getAll(): Promise<Record<string, boolean>> {
     const keys = await this.redis.keys('*');
-    let vals = {};
-    for (let key of keys) {
+    const vals = {};
+    for (const key of keys) {
       const val = await this.redis.get(key);
       vals[key] = val === 'true';
     }
