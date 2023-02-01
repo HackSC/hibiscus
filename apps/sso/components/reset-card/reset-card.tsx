@@ -15,6 +15,7 @@ export function ResetCard(props: ResetCardProps) {
   const router = useRouter();
   const [hideErrorMessage, setHideErrorMessage] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
+  const supabase = container.resolve(HibiscusSupabaseClient);
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -28,7 +29,6 @@ export function ResetCard(props: ResetCardProps) {
       return;
     }
 
-    const supabase = container.resolve(HibiscusSupabaseClient);
     const { data, error } = await supabase.updatePassword(newPassword);
 
     if (error) {
