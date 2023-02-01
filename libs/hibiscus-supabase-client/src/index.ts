@@ -334,24 +334,6 @@ export class HibiscusSupabaseClient {
     }
   }
 
-  // async updateUserLeaderboard(userId: string, points: number) {
-  //   const user = await this.client
-  //     .from('leaderboard')
-  //     .select()
-  //     .eq('user_id', userId);
-  //   const newpoints = user.data[0].points + points
-
-  //   const {error} = await this.client
-  //     .from('leaderboard')
-  //     .update()
-  //     .eq('user_id', userId);
-  //     if (error) {
-  //     console.error(error);
-  //     return { message: error.message, code: error.code };
-  //   }
-
-  // }
-
   static setTokenCookieClientSide(access_token: string, refresh_token: string) {
     setCookie(
       process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME,
@@ -418,4 +400,3 @@ type UserProfileInsert =
   Database['public']['Tables']['user_profiles']['Insert'];
 type UserProfileUpdate =
   Database['public']['Tables']['user_profiles']['Update'];
-// type LeaderboardUpdate = Database['public']['Tables']['leaderboard']['Update'];

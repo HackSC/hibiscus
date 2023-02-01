@@ -90,8 +90,6 @@ export function Index() {
       setIsAlertVisible(true);
       setResponse(null);
       setTimeout(() => setIsAlertVisible(false), 50);
-    } else {
-      // setIsAlertVisible(false);
     }
   }, [response]);
 
