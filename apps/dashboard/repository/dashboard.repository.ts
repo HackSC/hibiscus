@@ -21,7 +21,6 @@ export class DashboardRepository {
     this.client = hbc.getClient();
   }
 
-  //TODO: refactor
   public readonly MAX_TEAM_MEMBERS: number = parseInt(
     process.env.NEXT_PUBLIC_MAX_TEAM_MEMBERS
   );
