@@ -15,6 +15,7 @@ import { ImCross } from 'react-icons/im';
 import { formatTimestamp } from '../../../common/format-timestamp';
 import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
 import { HibiscusRole } from '@hibiscus/types';
+import { calculateBattlepassProgress } from '../../../common/calculate-battlepass-progress';
 
 const COLUMN_WIDTH = 510;
 const TEAM_MEMBER_ICONS = [
@@ -34,6 +35,7 @@ export function Index() {
   const [user, setUser] = useState<any>(null);
   const [state, setState] = useState(State.LOADING);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [battlepassProgress, setBattlepassProgress] = useState(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -108,11 +110,30 @@ export function Index() {
 
     const wristbandId = router.query['wristband_id']?.toString();
     if (wristbandId != null) {
-      getUserProfile(wristbandId).then(setUser);
+      getUserProfile(wristbandId).then((user) => {
+        setBattlepassProgress(
+          calculateBattlepassProgress(
+            user.bonus_points ?? 0 + user.event_points ?? 0
+          )
+        );
+        setUser(user);
+      });
     } else {
       const userId = router.query['user_id']?.toString();
       if (userId != null) {
-        getUserProfile(userId, false).then(setUser);
+        getUserProfile(userId, false).then((user) => {
+          setBattlepassProgress(
+            calculateBattlepassProgress(
+              user.bonus_points ?? 0 + user.event_points ?? 0
+            )
+          );
+          console.log(
+            calculateBattlepassProgress(
+              user.bonus_points ?? 0 + user.event_points ?? 0
+            )
+          );
+          setUser(user);
+        });
       } else {
         setState(State.NO_ID_PROVIDED);
       }
@@ -200,11 +221,7 @@ export function Index() {
           <div>
             <Text>{user.first_name}&apos;s Points</Text>
             <ProgressBarOuter>
-              <ProgressBarInner
-                progress={
-                  (user.event_points ?? 0 + user.bonus_points ?? 0) / 100
-                }
-              />
+              <ProgressBarInner progress={battlepassProgress.progress} />
             </ProgressBarOuter>
             {user.event_points != null ? (
               <SpacedRow>
@@ -214,22 +231,26 @@ export function Index() {
                 >
                   {user.event_points + user.bonus_points} PTS
                 </GlowSpan>
-                <div style={{ display: 'flex', gap: '0.3em' }}>
-                  <span
-                    style={{
-                      color: Colors2023.GRAY.SHLIGHT,
-                      fontSize: '0.9em',
-                    }}
-                  >
-                    Next prize @
-                  </span>
-                  <GlowSpan
-                    color={Colors2023.YELLOW.STANDARD}
-                    style={{ letterSpacing: '0.2em', fontWeight: 'bold' }}
-                  >
-                    Placeholder PTS
-                  </GlowSpan>
-                </div>
+                {battlepassProgress.nextLevel ? (
+                  <div style={{ display: 'flex', gap: '0.3em' }}>
+                    <span
+                      style={{
+                        color: Colors2023.GRAY.SHLIGHT,
+                        fontSize: '0.9em',
+                      }}
+                    >
+                      Next prize @
+                    </span>
+                    <GlowSpan
+                      color={Colors2023.YELLOW.STANDARD}
+                      style={{ letterSpacing: '0.2em', fontWeight: 'bold' }}
+                    >
+                      {battlepassProgress.nextLevel} PTS
+                    </GlowSpan>
+                  </div>
+                ) : (
+                  <div>Max level</div>
+                )}
               </SpacedRow>
             ) : (
               <Text>ERROR: User has no leaderboard entry</Text>
