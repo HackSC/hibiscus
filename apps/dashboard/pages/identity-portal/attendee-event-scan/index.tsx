@@ -96,7 +96,7 @@ export function Index() {
   }, [response]);
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchDataInit() {
       const res = await supabase
         .from('event_log')
         .select()
@@ -116,7 +116,7 @@ export function Index() {
 
           return {
             ...log,
-            check_in_time: formatTimestamp(log.check_in_time),
+            check_in_time_display: formatTimestamp(log.check_in_time),
             first_name,
             last_name,
           };
@@ -125,28 +125,47 @@ export function Index() {
       setAttendees(mappedLogs);
     }
 
+    async function updateData() {
+      const res = await supabase
+        .from('event_log')
+        .select()
+        .eq('event_id', eventId)
+        .gt('check_in_time', attendees[0].check_in_time)
+        .order('check_in_time', { ascending: false });
+
+      const logs = res.data;
+      const mappedLogs = await Promise.all(
+        logs.map(async (log) => {
+          const {
+            data: [{ first_name, last_name }],
+          } = await supabase
+            .from('user_profiles')
+            .select()
+            .eq('user_id', log.user_id);
+
+          return {
+            ...log,
+            check_in_time_display: formatTimestamp(log.check_in_time),
+            first_name,
+            last_name,
+          };
+        })
+      );
+
+      const updatedAttendees = [...mappedLogs, ...attendees].slice(0, 20);
+      setAttendees(updatedAttendees);
+    }
+
     if (eventId != null) {
-      fetchData();
+      fetchDataInit();
 
-      const events = supabase
-        .channel('identity-channel')
-        .on(
-          'postgres_changes',
-          {
-            event: 'INSERT',
-            schema: 'public',
-            table: 'event_log',
-            filter: `event_id=eq.${eventId}`,
-          },
-          (payload) => {
-            console.log('Change received!', payload);
-          }
-        )
-        .subscribe();
-
-      return () => {
-        supabase.removeChannel(events);
-      };
+      setInterval(() => {
+        if (attendees.length === 0) {
+          fetchDataInit();
+        } else {
+          updateData();
+        }
+      }, 5000);
     }
   }, [eventId]);
 
@@ -243,7 +262,7 @@ export function Index() {
                   {attendee.first_name} {attendee.last_name}
                 </BoldText>
                 <Text style={{ fontSize: '0.75em' }}>
-                  {attendee.check_in_time}
+                  {attendee.check_in_time_display}
                 </Text>
               </ScrollableListBox.Item>
             ))}

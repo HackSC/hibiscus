@@ -1,7 +1,7 @@
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { Colors2023 } from '@hibiscus/styles';
-import { Modal, Text } from '@hibiscus/ui';
-import { Button, Checkbox, OneLineText, Search } from '@hibiscus/ui-kit-2023';
+import { Modal } from '@hibiscus/ui';
+import { Button, Checkbox, OneLineText } from '@hibiscus/ui-kit-2023';
 import { useState } from 'react';
 import styled from 'styled-components';
 import { container } from 'tsyringe';

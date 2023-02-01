@@ -1,6 +1,6 @@
 import { Colors2023 } from '@hibiscus/styles';
 import { Text } from '@hibiscus/ui';
-import { Button, GlowSpan, Search } from '@hibiscus/ui-kit-2023';
+import { GlowSpan, Search } from '@hibiscus/ui-kit-2023';
 import { SearchUserBox } from '../../../components/identity-portal/search-user-box/search-user-box';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
