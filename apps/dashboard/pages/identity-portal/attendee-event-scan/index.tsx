@@ -15,6 +15,9 @@ import searchUser from '../../../common/search-user';
 import { ScrollableListBox } from '../../../components/identity-portal/scrollable-list-box/scrollable-list-box';
 import { container } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { log } from 'console';
+import { formatTimestamp } from 'apps/dashboard/common/format-timestamp';
+import { PostgrestError } from '@supabase/supabase-js';
 
 export function Index() {
   const [eventId, setEventId] = useState<number | null>(null);
@@ -29,9 +32,12 @@ export function Index() {
   const [searchQuery, setSearchQuery] = useState('');
   const [wristbandId, setWristbandId] = useState('');
 
-  const [response, setResponse] = useState<boolean | null>(null);
+  const [response, setResponse] = useState<PostgrestError | boolean | null>(
+    null
+  );
 
   const [isAlertVisible, setIsAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('Success');
 
   const [eventName, setEventName] = useState(
     [] as unknown as Awaited<ReturnType<typeof searchEventId>>
@@ -73,6 +79,11 @@ export function Index() {
 
   useEffect(() => {
     if (response) {
+      if (response === true) {
+        setAlertMessage('Success');
+      } else {
+        setAlertMessage(response.message);
+      }
       setIsAlertVisible(true);
       setResponse(null);
       setTimeout(() => setIsAlertVisible(false), 50);
@@ -81,65 +92,62 @@ export function Index() {
     }
   }, [response]);
 
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     const res = await supabase
-  //       .from('event_log')
-  //       .select()
-  //       .eq('event_id', eventId);
-  //     setAttendees(res.data);
-  //   }
-
-  //   if (eventId != null) {
-  //     fetchData();
-  //   }
-
-  //   const events = supabase
-  //     .channel('any')
-  //     .on(
-  //       'postgres_changes',
-  //       {
-  //         event: 'INSERT',
-  //         schema: 'public',
-  //         table: 'event_log',
-  //         // filter: `event_id=eq.${eventId}`,
-  //       },
-  //       (payload) => {
-  //         console.log('Change received!', payload);
-  //       }
-  //     )
-  //     .subscribe();
-
-  //   console.log(events);
-
-  //   return () => {
-  //     supabase.removeChannel(events);
-  //     console.log('Channel removed');
-  //   };
-  // }, []);
-
   useEffect(() => {
-    const events = supabase
-      .channel('custom-insert-channel')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'event_log',
-        },
-        (payload) => {
-          console.log('Change received!', payload);
-        }
-      )
-      .subscribe();
-    console.log('Channel created');
+    async function fetchData() {
+      const res = await supabase
+        .from('event_log')
+        .select()
+        .eq('event_id', eventId)
+        .order('check_in_time', { ascending: false })
+        .limit(20);
 
-    return () => {
-      supabase.removeChannel(events);
-      console.log('Channel removed');
-    };
-  }, []);
+      const logs = res.data;
+      const mappedLogs = await Promise.all(
+        logs.map(async (log) => {
+          const {
+            data: [{ first_name, last_name }],
+          } = await supabase
+            .from('user_profiles')
+            .select()
+            .eq('user_id', log.user_id);
+
+          return {
+            ...log,
+            check_in_time: formatTimestamp(log.check_in_time),
+            first_name,
+            last_name,
+          };
+        })
+      );
+      setAttendees(mappedLogs);
+    }
+
+    if (eventId != null) {
+      fetchData();
+
+      const events = supabase
+        .channel('identity-channel')
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'event_log',
+            filter: `event_id=eq.${eventId}`,
+          },
+          (payload) => {
+            console.log('Change received!', payload);
+          }
+        )
+        .subscribe();
+
+      console.log(events);
+
+      return () => {
+        supabase.removeChannel(events);
+      };
+    }
+  }, [eventId]);
 
   if (eventId == null) {
     return <></>;
@@ -155,7 +163,7 @@ export function Index() {
         <GlowSpan color={Colors2023.GRAY.DARK} style={{ fontSize: '.68em' }}>
           <div>
             <SuccessText className={isAlertVisible ? 'shown' : 'hidden'}>
-              Success!
+              {alertMessage}
             </SuccessText>
           </div>
         </GlowSpan>
@@ -207,7 +215,7 @@ export function Index() {
             {attendees.map((attendee, i) => (
               <ScrollableListBox.Item key={i}>
                 <BoldText style={{ fontSize: '1em' }}>
-                  {attendee.user_id}
+                  {attendee.first_name} {attendee.last_name}
                 </BoldText>
                 <Text style={{ fontSize: '0.75em' }}>
                   {attendee.check_in_time}

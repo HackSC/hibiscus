@@ -4,6 +4,7 @@ import 'reflect-metadata';
 import {
   createClient,
   EmailOtpType,
+  PostgrestError,
   SupabaseClient,
 } from '@supabase/supabase-js';
 import { injectable } from 'tsyringe';
@@ -277,14 +278,35 @@ export class HibiscusSupabaseClient {
     return { data: { applied } };
   }
 
-  async addEvent(user_id: string, event_id: number) {
-    await this.client.from('event_log').insert({
+  async addEvent(
+    user_id: string,
+    event_id: number
+  ): Promise<PostgrestError | null> {
+    const selectRes = await this.client
+      .from('event_log')
+      .select()
+      .eq('user_id', user_id)
+      .eq('event_id', event_id);
+    if (selectRes.data.length > 0) {
+      return {
+        message: 'Already checked in',
+        hint: '',
+        code: '400',
+        details: '',
+      };
+    }
+
+    const res = await this.client.from('event_log').insert({
       user_id: user_id,
       event_id: event_id,
     });
+    return res.error;
   }
 
-  async addtoLeaderboard(user_id: string, event_points: number) {
+  async addtoLeaderboard(
+    user_id: string,
+    event_points: number
+  ): Promise<PostgrestError | null> {
     const supabase = container.resolve(HibiscusSupabaseClient);
     await supabase.setSessionClientSide();
 
@@ -295,18 +317,20 @@ export class HibiscusSupabaseClient {
       .eq('user_id', `${user_id}`);
 
     if (userLeaderboardMatches.data.length == 0) {
-      await this.client.from('leaderboard').insert({
+      const res = await this.client.from('leaderboard').insert({
         user_id: user_id,
         event_points: event_points,
       });
+      return res.error;
     } else {
-      await this.client
+      const res = await this.client
         .from('leaderboard')
         .update({
           event_points:
             event_points + userLeaderboardMatches.data[0].event_points,
         })
         .eq('user_id', user_id);
+      return res.error;
     }
   }
 

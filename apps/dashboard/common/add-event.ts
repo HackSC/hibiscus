@@ -1,11 +1,12 @@
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { Database } from '@hibiscus/types';
+import { PostgrestError } from '@supabase/supabase-js';
 import { container } from 'tsyringe';
 
 export default async function addEvent(
   event_id: number,
   user_id: string
-): Promise<any> {
+): Promise<PostgrestError | true> {
   //Database['public']['Tables']['event_log']['Row'][]
   const supabase = container.resolve(HibiscusSupabaseClient);
   await supabase.setSessionClientSide();
@@ -22,17 +23,31 @@ export default async function addEvent(
     .select()
     .eq('wristband_id', `${user_id}`);
 
-  try {
-    supabase.addEvent(nameMatches.data[0].id, event_id);
-    supabase.addtoLeaderboard(
-      nameMatches.data[0].id,
-      eventnameMatches.data[0].points
-    );
-
-    return true;
-  } catch {
-    return false;
+  if (nameMatches.data.length === 0) {
+    return {
+      message: 'Wristband not assigned',
+      details: '',
+      hint: '',
+      code: '',
+    };
   }
+
+  const resEvent = await supabase.addEvent(nameMatches.data[0].id, event_id);
+
+  if (resEvent != null) {
+    return resEvent;
+  }
+
+  const resLeaderboard = await supabase.addtoLeaderboard(
+    nameMatches.data[0].id,
+    eventnameMatches.data[0].points
+  );
+
+  if (resLeaderboard != null) {
+    return resLeaderboard;
+  }
+
+  return true;
 
   // Merge the results of both queries
   // const uniqueMatchIds = new Set(

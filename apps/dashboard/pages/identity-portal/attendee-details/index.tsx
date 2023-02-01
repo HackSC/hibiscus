@@ -12,6 +12,7 @@ import Image from 'next/image';
 import { BackButton } from '../../../components/identity-portal/back-button/back-button';
 import { CheckInBox } from '../../../components/identity-portal/check-in-box/check-in-box';
 import { ImCross } from 'react-icons/im';
+import { formatTimestamp } from '../../../common/format-timestamp';
 
 const COLUMN_WIDTH = 510;
 const TEAM_MEMBER_ICONS = [
@@ -285,18 +286,6 @@ export function Index() {
 }
 
 export default Index;
-
-function formatTimestamp(timestamp: string): string {
-  const date = new Date(timestamp);
-  return new Intl.DateTimeFormat('default', {
-    month: 'long',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-  })
-    .format(date)
-    .replace(' at ', ', ');
-}
 
 const Container = styled.div`
   display: grid;

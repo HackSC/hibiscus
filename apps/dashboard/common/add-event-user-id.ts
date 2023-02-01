@@ -1,11 +1,12 @@
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { Database } from '@hibiscus/types';
+import { PostgrestError } from '@supabase/supabase-js';
 import { container } from 'tsyringe';
 
 export default async function addEventUserId(
   event_id: number,
   user_id: string
-): Promise<any> {
+): Promise<PostgrestError | true> {
   //Database['public']['Tables']['event_log']['Row'][]
   const supabase = container.resolve(HibiscusSupabaseClient);
   await supabase.setSessionClientSide();
@@ -22,15 +23,23 @@ export default async function addEventUserId(
     .select()
     .eq('user_id', `${user_id}`);
 
-  try {
-    supabase.addEvent(nameMatches.data[0].user_id, event_id);
-    supabase.addtoLeaderboard(
-      nameMatches.data[0].user_id,
-      eventnameMatches.data[0].points
-    );
+  const resEvent = await supabase.addEvent(
+    nameMatches.data[0].user_id,
+    event_id
+  );
 
-    return true;
-  } catch {
-    return false;
+  if (resEvent != null) {
+    return resEvent;
   }
+
+  const resLeaderboard = await supabase.addtoLeaderboard(
+    nameMatches.data[0].user_id,
+    eventnameMatches.data[0].points
+  );
+
+  if (resLeaderboard != null) {
+    return resLeaderboard;
+  }
+
+  return true;
 }
