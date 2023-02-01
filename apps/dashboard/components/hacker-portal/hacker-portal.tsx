@@ -7,7 +7,7 @@ import { H1, H3 } from '@hibiscus/ui';
 import { ApplicationStatus } from '@hibiscus/types';
 import { useState } from 'react';
 import RSVPForm from '../rsvp-form/rsvp-form';
-import ComingSoonBattlepassPlaceholder from '../battlepass/coming-soon-battlepass-placeholder';
+import BattlepassDescription from '../battlepass/battlepass-description';
 import { ComingSoon } from './coming-soon';
 import { getColorsForRole } from '../../common/role.utils';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
@@ -187,11 +187,7 @@ export function HackerPortal() {
   );
 
   if (user.attendanceConfirmed === true) {
-    return (
-      <>
-        <ComingSoonBattlepassPlaceholder />
-      </>
-    );
+    return <BattlepassDescription />;
   } else if (user.attendanceConfirmed === false) {
     return <DeclinedPlaceholder />;
   }

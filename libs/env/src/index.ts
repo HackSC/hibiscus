@@ -31,6 +31,9 @@ export const getEnv = () => {
       RSVPForm: {
         ResumeStorageBucketName: 'rsvp-resume-hacker-2023',
       },
+      FeatureFlag: {
+        RedisURL: process.env.HIBISCUS_FEATURE_FLAG_REDIS_URL,
+      },
     },
   };
 };
