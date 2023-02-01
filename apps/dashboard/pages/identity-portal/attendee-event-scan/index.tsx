@@ -18,6 +18,8 @@ import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { formatTimestamp } from 'apps/dashboard/common/format-timestamp';
 import { PostgrestError } from '@supabase/supabase-js';
 
+const SUCCESS_MESSAGE = 'Success';
+
 export function Index() {
   const [eventId, setEventId] = useState<number | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -36,7 +38,7 @@ export function Index() {
   );
 
   const [isAlertVisible, setIsAlertVisible] = useState(false);
-  const [alertMessage, setAlertMessage] = useState('Success');
+  const [alertMessage, setAlertMessage] = useState(SUCCESS_MESSAGE);
 
   const [eventName, setEventName] = useState(
     [] as unknown as Awaited<ReturnType<typeof searchEventId>>
@@ -79,7 +81,7 @@ export function Index() {
   useEffect(() => {
     if (response) {
       if (response === true) {
-        setAlertMessage('Success');
+        setAlertMessage(SUCCESS_MESSAGE);
       } else {
         setAlertMessage(response.message);
       }
@@ -140,8 +142,6 @@ export function Index() {
         )
         .subscribe();
 
-      console.log(events);
-
       return () => {
         supabase.removeChannel(events);
       };
@@ -163,7 +163,7 @@ export function Index() {
           <div>
             <SuccessText
               className={isAlertVisible ? 'shown' : 'hidden'}
-              error={response !== true}
+              error={alertMessage !== SUCCESS_MESSAGE}
             >
               {alertMessage}
             </SuccessText>
