@@ -6,7 +6,7 @@ import { SupabaseClient } from '@supabase/supabase-js';
 
 @injectable()
 export class DashboardRepository {
-  private readonly client: SupabaseClient;
+  private client: SupabaseClient;
   private static readonly env = getEnv();
   private static readonly ses = new SESClient({
     credentials: {
@@ -21,7 +21,6 @@ export class DashboardRepository {
     this.client = hbc.getClient();
   }
 
-  //TODO: refactor
   public readonly MAX_TEAM_MEMBERS: number = parseInt(
     process.env.NEXT_PUBLIC_MAX_TEAM_MEMBERS
   );
