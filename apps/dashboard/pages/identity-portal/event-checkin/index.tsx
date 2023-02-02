@@ -1,5 +1,5 @@
 import { Colors2023 } from '@hibiscus/styles';
-import { BoldText, Modal } from '@hibiscus/ui';
+import { BoldText } from '@hibiscus/ui';
 import { Text } from '@hibiscus/ui';
 import { GlowSpan } from '@hibiscus/ui-kit-2023';
 import styled from 'styled-components';
@@ -8,11 +8,20 @@ import { HibiscusRole } from '@hibiscus/types';
 import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
 import router from 'next/router';
 import { ScrollableListBox } from '../../../components/identity-portal/scrollable-list-box/scrollable-list-box';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import searchEvent from '../../../common/search-event';
 
 export function Index() {
   const { user: authUser } = useHibiscusUser();
+  //search for all events in supabase table
+  const [searchRes, setSearchRes] = useState(
+    [] as Awaited<ReturnType<typeof searchEvent>>
+  );
+
+  useEffect(() => {
+    search();
+  }, []);
+
   if (authUser == null) {
     return <>Loading</>;
   }
@@ -22,17 +31,9 @@ export function Index() {
     return <></>;
   }
 
-  //search for all events in supabase table
-  const [searchRes, setSearchRes] = useState(
-    [] as Awaited<ReturnType<typeof searchEvent>>
-  );
-
-  async function search(any: string) {
-    setSearchRes(await searchEvent(any));
+  async function search() {
+    setSearchRes(await searchEvent());
   }
-
-  //populate results
-  search('any');
 
   return (
     <>
@@ -50,7 +51,7 @@ export function Index() {
             </GlowSpan>
             <Text>Search for your event.</Text>
           </ColumnCenter>
-          <ScrollableListBox width={500} height={500}>
+          <ScrollableListBox width={500}>
             {searchRes.map((event, i) => (
               <ScrollableListBox.ItemClickable
                 key={i}

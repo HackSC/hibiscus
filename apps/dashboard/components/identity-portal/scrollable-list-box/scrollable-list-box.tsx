@@ -68,6 +68,10 @@ const Container = styled.div`
 const Clickable = styled.div`
   cursor: pointer;
 
+  &:not(:last-child) {
+    border-bottom: thin solid ${Colors2023.GRAY.MEDIUM};
+  }
+
   &:hover {
     background-color: ${Colors2023.GRAY.MEDIUM};
     padding: 0 1.5em;
