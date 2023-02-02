@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 import Image from 'next/image';
 import { Colors2023 } from '@hibiscus/styles';
-import { H1 } from '@hibiscus/ui';
+import { BoldText, H1 } from '@hibiscus/ui';
 import Clock from 'react-live-clock';
 import { Text } from '@hibiscus/ui';
 import { HackerTab } from '../../components/sponsor-portal/hacker-tab';
@@ -38,7 +38,7 @@ const Index = () => {
             console.log(error);
             setAttendees([]);
           }
-
+          console.log(data.data);
           setAttendees(data.data as Attendee[]);
         })
         .catch((error) => {
@@ -362,7 +362,7 @@ const Index = () => {
               setCurrentAttendee(null);
             }}
           >
-            <Text
+            <BoldText
               style={{
                 fontSize: '20px',
                 color: Colors2023.GREEN.STANDARD,
@@ -370,7 +370,7 @@ const Index = () => {
               }}
             >
               HACKER
-            </Text>
+            </BoldText>
             <Image
               width="20"
               height="20"

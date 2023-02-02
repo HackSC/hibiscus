@@ -49,14 +49,14 @@ export function HackerProfile({ hacker, note, onClick }: Props) {
         </StyledButton>
       </div>
       <NoteContainer>
-        <Text>{note !== '' ? note : 'No note added'}</Text>
+        <Text>{note !== '' ? note : 'No note found'}</Text>
       </NoteContainer>
       <div
         style={{
           width: '100%',
           display: 'flex',
           justifyContent: 'space-between',
-          marginTop: '1rem',
+          marginTop: '2rem',
         }}
       >
         <TitleText>RESUME</TitleText>
@@ -75,6 +75,39 @@ export function HackerProfile({ hacker, note, onClick }: Props) {
             />
           </StyledButton>
         </div>
+      </div>
+      <NoteContainer>
+        {hacker.resume ? (
+          <Link href={hacker.portfolio_link}>
+            <BoldText style={{ textDecoration: 'underline' }}>
+              {hacker.portfolio_link}
+            </BoldText>
+          </Link>
+        ) : (
+          <Text>No resume found</Text>
+        )}
+      </NoteContainer>
+
+      <div
+        style={{
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          marginTop: '2rem',
+        }}
+      >
+        <TitleText>PORTFOLIO</TitleText>
+        <NoteContainer>
+          {hacker.portfolio_link ? (
+            <Link href={hacker.portfolio_link}>
+              <BoldText style={{ textDecoration: 'underline' }}>
+                {hacker.portfolio_link}
+              </BoldText>
+            </Link>
+          ) : (
+            <Text>No portfolio found</Text>
+          )}
+        </NoteContainer>
       </div>
     </Container>
   );

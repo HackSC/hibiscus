@@ -35,22 +35,28 @@ const Index = () => {
   const EVENT_ID = '1'; // Will change later
 
   useEffect(() => {
-    async function fetchData() {
-      SponsorServiceAPI.getCheckInAttendee(COMPANY_ID, EVENT_ID)
+    async function getFilteredAttendee() {
+      SponsorServiceAPI.getFilteredAttendee(
+        COMPANY_ID,
+        EVENT_ID,
+        chosenMajorOption?.value,
+        chosenYearOption?.value,
+        chosenSchoolOption?.value
+      )
         .then(({ data, error }) => {
           if (error) {
             console.log(error);
-            setAttendees([]);
           }
 
+          console.log(data.data);
           setAttendees(data.data as Attendee[]);
         })
         .catch((error) => {
           console.log(error);
         });
     }
-    fetchData();
-  }, []);
+    getFilteredAttendee();
+  }, [chosenMajorOption, chosenYearOption, chosenSchoolOption]);
 
   const { user } = useHibiscusUser();
   if (user == null) {
@@ -87,7 +93,7 @@ const Index = () => {
 
   const majorOptionsList: Option[] = [
     {
-      value: 'computer science',
+      value: 'CS',
       displayName: 'Computer science/computer engineering',
     },
     {

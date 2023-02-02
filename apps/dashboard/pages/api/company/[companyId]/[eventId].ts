@@ -125,20 +125,20 @@ function processAttendeesList(array: any[], companyId) {
     //hardcoded since we are processing participants anyway
     const participantData = element['participants'];
 
-    const notes: any[] = participantData['notes'] as any[];
+    // const notes: any[] = participantData['notes'] as any[];
     //there never should be a case where there are more than one note from the same company for the same user
     //if notes is undefined/null, just set to null. else filter
 
-    let userNotes: any;
-    if (notes.length) {
-      userNotes = notes
-        .filter((ele) => {
-          return ele['company_id'] === companyId;
-        })
-        .at(0);
-    } else {
-      userNotes = '';
-    }
+    // let userNotes: any;
+    // if (notes.length) {
+    //   userNotes = notes
+    //     .filter((ele) => {
+    //       return ele['company_id'] === companyId;
+    //     })
+    //     .at(0);
+    // } else {
+    //   userNotes = '';
+    // }
 
     const attendee = new Attendee(
       participantData['id'],
@@ -150,7 +150,8 @@ function processAttendeesList(array: any[], companyId) {
       participantData['graduation_year'],
       participantData['portfolio_link'],
       participantData['school'],
-      userNotes ? userNotes['note'] : ''
+      // userNotes ? userNotes['note'] : ''
+      ''
     );
     attendeesData.push(attendee);
   });

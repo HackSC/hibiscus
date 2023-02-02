@@ -215,14 +215,17 @@ export class SponsorServiceAPI {
 
   static async getFilteredAttendee(
     companyId: string,
-    saved?: boolean,
+    eventId: string,
     major?: string,
     year?: string,
-    school?: string
-  ): Promise<SponsorServiceResponse> {
-    const res = await axios.get(
-      `/api/${companyId}/participants?saved=${saved}&major=${major}&year=${year}&school=${school}`
-    );
+    school?: string,
+    saved?: boolean
+  ) {
+    const res = await axios.post(`/api/company/${companyId}/${eventId}`, {
+      year,
+      major,
+      school,
+    });
     if (res.status >= 400) {
       return { error: { message: res.data.message }, status: res.status };
     }

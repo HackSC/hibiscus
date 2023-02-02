@@ -6,9 +6,9 @@ export type Attendee = {
   full_name: string;
   school: string;
   major: string;
-  resume: string; //WILL BE CHANGED SOON, STRING FOR NOW
+  resume?: string; //WILL BE CHANGED SOON, STRING FOR NOW
   graduation_year: string;
-  portfolio_link: string;
+  portfolio_link?: string;
   quickNotes?: string | null;
 };
 
