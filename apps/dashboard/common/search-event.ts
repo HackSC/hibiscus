@@ -7,17 +7,14 @@ export default async function searchEvent(query: string): Promise<any[]> {
   const supabase = container.resolve(HibiscusSupabaseClient);
   await supabase.setSessionClientSide();
 
-  const eventnameMatches = await supabase
-    .getClient()
-    .from('events')
-    .select()
-    .textSearch('name', `'${query}'`);
+  const eventnameMatches = await supabase.getClient().from('events').select();
   const locMatches = await supabase
     .getClient()
     .from('events')
     .select()
     .textSearch('location', `'${query}'`);
 
+  console.log(eventnameMatches);
   // Merge the results of both queries
   const uniqueMatchIds = new Set(
     eventnameMatches.data.map((match) => match.id)
