@@ -3,4 +3,5 @@ export interface BonusPointItem {
   title: string;
   description: string;
   status: 'PENDING' | 'COMPLETED' | 'VERIFY';
+  link: string;
 }

@@ -6,9 +6,10 @@ import { BonusPointItem } from './types';
 
 interface Props {
   data: BonusPointItem;
+  handleClick?: () => void;
 }
 
-function BonusPointsItem({ data }: Props) {
+function BonusPointsItem({ data, handleClick }: Props) {
   return (
     <Container>
       <div>
@@ -16,7 +17,11 @@ function BonusPointsItem({ data }: Props) {
         <H4>{data.title}</H4>
       </div>
       <div>
-        <Button color="black" disabled={data.status === 'PENDING'}>
+        <Button
+          color="black"
+          disabled={data.status === 'PENDING'}
+          onClick={handleClick}
+        >
           {data.status}
         </Button>
       </div>
