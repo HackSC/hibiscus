@@ -1,14 +1,9 @@
-import {
-  HibiscusSupabaseClient,
-  UserProfileRow,
-} from '@hibiscus/hibiscus-supabase-client';
-import { Database } from '@hibiscus/types';
-import { container } from 'tsyringe';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 
-export default async function searchUser(query: string): Promise<any[]> {
-  const supabase = container.resolve(HibiscusSupabaseClient);
-  await supabase.setSessionClientSide();
-
+export default async function searchUser(
+  query: string,
+  supabase: HibiscusSupabaseClient
+): Promise<any[]> {
   const firstnameMatches = await supabase
     .getClient()
     .from('user_profiles')

@@ -1,14 +1,11 @@
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { PostgrestError } from '@supabase/supabase-js';
-import { container } from 'tsyringe';
 
 export default async function addEventUserId(
   event_id: number,
-  user_id: string
+  user_id: string,
+  supabase: HibiscusSupabaseClient
 ): Promise<PostgrestError | true> {
-  const supabase = container.resolve(HibiscusSupabaseClient);
-  await supabase.setSessionClientSide();
-
   const eventnameMatches = await supabase
     .getClient()
     .from('events')

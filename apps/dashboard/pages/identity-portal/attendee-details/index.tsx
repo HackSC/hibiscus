@@ -1,10 +1,8 @@
 import { Colors2023 } from '@hibiscus/styles';
 import { BoldText, ItalicText, Text } from '@hibiscus/ui';
 import { Button, GlowSpan } from '@hibiscus/ui-kit-2023';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { container } from 'tsyringe';
-import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { useRouter } from 'next/router';
 import { BiCheckCircle } from 'react-icons/bi';
 import { ScrollableListBox } from '../../../components/identity-portal/scrollable-list-box/scrollable-list-box';
@@ -16,6 +14,7 @@ import { formatTimestamp } from '../../../common/format-timestamp';
 import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
 import { HibiscusRole } from '@hibiscus/types';
 import { calculateBattlepassProgress } from '../../../common/calculate-battlepass-progress';
+import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
 
 const COLUMN_WIDTH = 510;
 const TEAM_MEMBER_ICONS = [
@@ -37,11 +36,10 @@ export function Index() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [battlepassProgress, setBattlepassProgress] = useState(null);
   const router = useRouter();
+  const { supabase } = useContext(SupabaseContext);
 
   useEffect(() => {
     async function getUserProfile(id: string, wristband = true): Promise<any> {
-      const supabase = container.resolve(HibiscusSupabaseClient);
-
       const participantRes = await supabase
         .getClient()
         .from('participants')

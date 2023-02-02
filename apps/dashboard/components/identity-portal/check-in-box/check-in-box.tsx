@@ -1,10 +1,9 @@
-import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
 import { Colors2023 } from '@hibiscus/styles';
 import { Modal } from '@hibiscus/ui';
 import { Button, Checkbox, OneLineText } from '@hibiscus/ui-kit-2023';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import styled from 'styled-components';
-import { container } from 'tsyringe';
 
 interface CheckInBoxProps {
   isModalOpen: boolean;
@@ -25,6 +24,7 @@ export function CheckInBox(props: CheckInBoxProps) {
   const [age, setAge] = useState(false);
   const [status, setStatus] = useState(user?.email?.endsWith('edu') ?? false);
   const [errorMessage, setErrorMessage] = useState(null);
+  const { supabase } = useContext(SupabaseContext);
 
   const handleClick = (setter: (value: boolean) => void) => (value: boolean) =>
     setter(value);
@@ -36,7 +36,6 @@ export function CheckInBox(props: CheckInBoxProps) {
   }
 
   async function handleConfirm() {
-    const supabase = container.resolve(HibiscusSupabaseClient);
     let { error } = await supabase
       .getClient()
       .from('participants')

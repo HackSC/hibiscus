@@ -8,11 +8,14 @@ import { HibiscusRole } from '@hibiscus/types';
 import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
 import router from 'next/router';
 import { ScrollableListBox } from '../../../components/identity-portal/scrollable-list-box/scrollable-list-box';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import searchEvent from '../../../common/search-event';
+import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
 
 export function Index() {
   const { user: authUser } = useHibiscusUser();
+  const { supabase } = useContext(SupabaseContext);
+
   //search for all events in supabase table
   const [searchRes, setSearchRes] = useState(
     [] as Awaited<ReturnType<typeof searchEvent>>
@@ -32,7 +35,7 @@ export function Index() {
   }
 
   async function search() {
-    setSearchRes(await searchEvent());
+    setSearchRes(await searchEvent(supabase));
   }
 
   return (

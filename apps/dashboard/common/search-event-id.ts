@@ -1,10 +1,9 @@
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
-import { container } from 'tsyringe';
 
-export default async function searchEventId(query: number): Promise<string> {
-  const supabase = container.resolve(HibiscusSupabaseClient);
-  await supabase.setSessionClientSide();
-
+export default async function searchEventId(
+  query: number,
+  supabase: HibiscusSupabaseClient
+): Promise<string> {
   const eventnameMatches = await supabase
     .getClient()
     .from('events')

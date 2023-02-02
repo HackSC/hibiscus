@@ -1,6 +1,7 @@
+import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
 import { Text, BoldText, Modal } from '@hibiscus/ui';
 import { Search } from '@hibiscus/ui-kit-2023';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import searchUser from '../../../common/search-user';
 import { ScrollableListBox } from '../scrollable-list-box/scrollable-list-box';
 
@@ -14,8 +15,10 @@ export function SearchUserBox({ onClick }: SearchUserBoxProps) {
     [] as Awaited<ReturnType<typeof searchUser>>
   );
 
+  const { supabase } = useContext(SupabaseContext);
+
   async function search(name: string) {
-    setSearchRes(await searchUser(name));
+    setSearchRes(await searchUser(name, supabase));
 
     setModalOpen(true);
   }
