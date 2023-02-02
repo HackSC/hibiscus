@@ -24,6 +24,9 @@ function Attendee(
   this.quick_notes = quickNotes;
 }
 
+//one day this will need to handle duplicate attendees showing up in getAttendees from same users going to same company's events
+//also one day will need to handle getEvents returning more than one event
+//that's next year's problem
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -34,24 +37,28 @@ export default async function handler(
 
   try {
     const { companyId, eventId } = req.query;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const stringifyCompanyId = companyId.toString();
     const stringifyEventId = eventId.toString();
     const repo = container.resolve(AttendeeRepository);
 
+    const currentEventInfo = await repo.getEventInfo(stringifyEventId);
+    if (currentEventInfo.data['company_id'] !== stringifyCompanyId) {
+      return res.status(404).json({ message: 'Requested resource not found' });
+    }
+
     //get all attendees related to eventId
-    const eventResult = await repo.getUsersByEvent(stringifyEventId);
+    const eventResult = await repo.getAttendeesByEventId(stringifyEventId);
     const attendeesData: any[] = [];
     eventResult.data.map((element) => {
       const participantData = element['participants'];
       const notes: any[] = participantData['notes'];
-      const userNotes = notes.filter((ele) => {
-        if (ele['company_id'] == companyId) {
-          return ele['note'];
-        }
-      });
-      console.log(userNotes);
-      console.log(notes);
+      //there never should be a case where there are more than one note from the same company for the same user
+      const userNotes = notes
+        .filter((ele) => {
+          return ele['company_id'] === stringifyCompanyId;
+        })
+        .at(0);
+
       const attendee = new Attendee(
         participantData['id'],
         participantData['user_profiles']['first_name'] +
@@ -62,7 +69,7 @@ export default async function handler(
         participantData['graduation_year'],
         participantData['portfolio_link'],
         participantData['school'],
-        participantData['notes']
+        userNotes ? userNotes['note'] : null
       );
       attendeesData.push(attendee);
     });
