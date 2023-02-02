@@ -9,7 +9,7 @@ import { Text } from '@hibiscus/ui';
 import { HackerTab } from '../../components/sponsor-portal/hacker-tab';
 import HackerProfile from '../../components/sponsor-portal/hacker-profile';
 import { useRouter } from 'next/router';
-import { SponsorAPI, Attendee } from '../../common/mock-sponsor';
+import { Attendee } from '../../common/mock-sponsor';
 import { container } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { HibiscusRole } from '@hibiscus/types';
@@ -23,6 +23,7 @@ const Index = () => {
   const [modalActive, setModalActive] = useState(false);
   const [attendeeName, setAttendeeName] = useState('');
   const [textInput, setInput] = useState('');
+  const [currentNote, setNote] = useState('');
 
   const router = useRouter();
   const supabase = container.resolve(HibiscusSupabaseClient).getClient();
@@ -87,6 +88,7 @@ const Index = () => {
       <HackerTabContainer
         key={index}
         onClick={() => {
+          getAttendeeNote(COMPANY_ID, attendee.id);
           setCurrentAttendee(attendee);
         }}
       >
@@ -99,6 +101,39 @@ const Index = () => {
       </HackerTabContainer>
     ));
   };
+
+  async function getAttendeeNote(companyId: string, attendeeId: string) {
+    SponsorServiceAPI.getAttendeeNote(companyId, attendeeId)
+      .then(({ data, error }) => {
+        if (error) {
+          console.log(error);
+        }
+
+        console.log(data.data.note);
+        setNote(data.data.note as string);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  async function setAttendeeNote(
+    companyId: string,
+    attendeeId: string,
+    note: string
+  ) {
+    SponsorServiceAPI.setAttendeeNote(companyId, attendeeId, note)
+      .then(({ data, error }) => {
+        if (error) {
+          console.log(error);
+        }
+        console.log(data);
+        setNote(data.data.note as string);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   return (
     <Wrapper style={{ position: 'relative' }}>
@@ -257,6 +292,7 @@ const Index = () => {
                   style={{ justifyContent: 'flex-end' }}
                   onClick={() => {
                     setModalActive(false);
+                    setInput('');
                   }}
                 >
                   <Image
@@ -295,7 +331,18 @@ const Index = () => {
                     CANCEL
                   </Button>
                   <div style={{ marginLeft: '0.5rem' }}>
-                    <Button color={'black'}>SAVE</Button>
+                    <Button
+                      color={'black'}
+                      onClick={() =>
+                        setAttendeeNote(
+                          COMPANY_ID,
+                          currentAttendee.id,
+                          textInput
+                        )
+                      }
+                    >
+                      SAVE
+                    </Button>
                   </div>
                 </div>
               </QuickNoteContainer>
@@ -333,6 +380,7 @@ const Index = () => {
             <div style={{ marginTop: '1.5rem' }}>
               <HackerProfile
                 hacker={currentAttendee}
+                note={currentNote as string}
                 onClick={() => openQuickNote(currentAttendee)}
               />
             </div>

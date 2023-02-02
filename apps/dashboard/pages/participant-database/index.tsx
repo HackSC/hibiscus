@@ -28,6 +28,7 @@ const Index = () => {
   const [currentAttendee, setCurrentAttendee] = useState<Attendee>(null);
   const [modalActive, setModalActive] = useState(false);
   const [attendeeName, setAttendeeName] = useState('');
+  const [currentNote, setNote] = useState('');
 
   const router = useRouter();
   const COMPANY_ID = 'a8ca6c2e-6b68-400f-9c3a-a01415ed90c3'; // Will change later
@@ -133,6 +134,7 @@ const Index = () => {
         key={index}
         onClick={() => {
           setCurrentAttendee(attendee);
+          getAttendeeNote(COMPANY_ID, attendee.id);
         }}
       >
         <HackerTab
@@ -153,6 +155,39 @@ const Index = () => {
     setModalActive(true);
     setAttendeeName(`${attendee.full_name}`);
   };
+
+  async function getAttendeeNote(companyId: string, attendeeId: string) {
+    SponsorServiceAPI.getAttendeeNote(companyId, attendeeId)
+      .then(({ data, error }) => {
+        if (error) {
+          console.log(error);
+        }
+
+        console.log(data.data.note);
+        setNote(data.data.note as string);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  async function setAttendeeNote(
+    companyId: string,
+    attendeeId: string,
+    note: string
+  ) {
+    SponsorServiceAPI.setAttendeeNote(companyId, attendeeId, note)
+      .then(({ data, error }) => {
+        if (error) {
+          console.log(error);
+        }
+        console.log(data);
+        setNote(data.data.note as string);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   return (
     <Wrapper>
@@ -316,6 +351,7 @@ const Index = () => {
             <div style={{ marginTop: '1.5rem' }}>
               <HackerProfile
                 hacker={currentAttendee}
+                note={currentNote}
                 onClick={() => openQuickNote(currentAttendee)}
               />
             </div>
@@ -332,6 +368,7 @@ const Index = () => {
               style={{ justifyContent: 'flex-end' }}
               onClick={() => {
                 setModalActive(false);
+                setInput('');
               }}
             >
               <Image
@@ -370,7 +407,14 @@ const Index = () => {
                 CANCEL
               </Button>
               <div style={{ marginLeft: '0.5rem' }}>
-                <Button color={'black'}>SAVE</Button>
+                <Button
+                  color={'black'}
+                  onClick={() =>
+                    setAttendeeNote(COMPANY_ID, currentAttendee.id, textInput)
+                  }
+                >
+                  SAVE
+                </Button>
               </div>
             </div>
           </QuickNoteContainer>

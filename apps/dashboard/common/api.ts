@@ -265,7 +265,7 @@ export class SponsorServiceAPI {
     note: string
   ) {
     const res = await axios.put(
-      `/api/notes?companyId=${companyId}&participant_id=${attendeeId}`,
+      `/api/notes?company_id=${companyId}&participant_id=${attendeeId}`,
       { note }
     );
     if (res.status >= 400) {

@@ -10,10 +10,11 @@ import { Attendee } from '../../common/mock-sponsor';
 
 interface Props {
   hacker: Attendee;
+  note?: string;
   onClick;
 }
 
-export function HackerProfile({ hacker, onClick }: Props) {
+export function HackerProfile({ hacker, note, onClick }: Props) {
   return (
     <Container>
       <div
@@ -48,7 +49,7 @@ export function HackerProfile({ hacker, onClick }: Props) {
         </StyledButton>
       </div>
       <NoteContainer>
-        <Text>No note added</Text>
+        <Text>{note !== '' ? note : 'No note added'}</Text>
       </NoteContainer>
       <div
         style={{
