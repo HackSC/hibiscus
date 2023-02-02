@@ -1,5 +1,3 @@
-import React from 'react';
-
 // a generic option interface for multiple/single choice questions
 export interface Option {
   value?: string;
@@ -8,20 +6,20 @@ export interface Option {
 
 export interface HackformMetadata {
   entry: {
-    title: React.ReactNode;
-    subtitle?: React.ReactNode;
+    title: any;
+    subtitle?: any;
     estTimeInMinutes?: number;
   };
   questions: HackformQuestion[];
   end: {
-    title: React.ReactNode;
-    subtitle?: React.ReactNode;
+    title: any;
+    subtitle?: any;
   };
 }
 
 export interface HackformQuestion {
-  title: string | React.ReactNode;
-  subtitle?: string | React.ReactNode;
+  title: any;
+  subtitle?: any;
   type: HackformQuestionType;
   placeholder?: string;
   required?: boolean;
