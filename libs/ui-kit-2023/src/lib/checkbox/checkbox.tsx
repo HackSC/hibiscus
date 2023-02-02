@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import styled from 'styled-components';
 
 export interface CheckboxProps {
-  label: string;
+  label: React.ReactNode;
   checked?: boolean;
   disabled?: boolean;
   onInput: (value: boolean) => void;
@@ -39,9 +39,7 @@ const StyledCheckbox = styled.label`
   display: block;
   position: relative;
   padding-left: 35px;
-  margin-bottom: 12px;
   cursor: pointer;
-  font-size: 22px;
   font-family: 'Inter';
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -118,5 +116,6 @@ const StyledCheckbox = styled.label`
 `;
 
 const TextWrap = styled(Text)<{ disabled?: boolean }>`
+  text-align: left;
   color: ${(props) => (props.disabled ? Colors2023.GRAY.MEDIUM : 'white')};
 `;

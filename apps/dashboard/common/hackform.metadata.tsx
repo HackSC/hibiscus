@@ -3,36 +3,14 @@ import {
   HackformQuestionType,
   Option,
 } from '@hibiscus/types';
-import { getAge, isAbove, isUnder } from './utils';
+import { getAge, getMLHMajors, isAbove, isUnder } from './utils';
 import APIService from './api';
 import { Link } from '@hibiscus/ui';
-import { hackformLinks } from './constants';
-
-const generateOptionsGradyear = (): Option[] => {
-  const opts: string[] = [];
-  for (const inc of [...Array(5).keys()]) {
-    for (const season of ['Spring', 'Fall']) {
-      opts.push(`${season} 202${3 + inc}`);
-    }
-  }
-
-  return opts.map((w) => ({
-    value: w.toLowerCase().split(' ').join('-'),
-    displayName: w,
-  }));
-};
-
-const startDateJobOptions: Option[] = [
-  'Summer 2023',
-  'Fall 2023',
-  'Spring 2024',
-  'Summer 2024',
-  'Fall 2024',
-  'Spring 2025 or later',
-].map((w) => ({
-  value: w.toLowerCase().split(' ').join('-'),
-  displayName: w,
-}));
+import {
+  getOptionsGraduationYear,
+  getStartDateJobOptions,
+  hackformLinks,
+} from './constants';
 
 export const formMetadata2023HackerApps: HackformMetadata = {
   entry: {
@@ -88,12 +66,12 @@ export const formMetadata2023HackerApps: HackformMetadata = {
       title: 'What school do you go to?',
       type: HackformQuestionType.SingleOptionDropdown,
       required: true,
+      limitOptions: 10,
       validationFunction: (input) => {
         if (input.text === '')
           return { valid: false, errorDescription: 'This field is required' };
         return { valid: true };
       },
-      limitOptions: 6,
       options: async () => {
         const schools = await APIService.getSchools();
         const opts: Option[] = schools.map((str, i) => ({
@@ -125,9 +103,8 @@ export const formMetadata2023HackerApps: HackformMetadata = {
       title: 'Expected graduation date:',
       placeholder: 'e.g Summer 2023',
       type: HackformQuestionType.SingleOptionDropdown,
-      limitOptions: 6,
       required: true,
-      options: generateOptionsGradyear(),
+      options: getOptionsGraduationYear(),
       validationFunction: (input) => {
         if (input.text === '') {
           return {
@@ -143,50 +120,8 @@ export const formMetadata2023HackerApps: HackformMetadata = {
         'What is your major/primary area of study? If you already graduated, what was your major/primary area of study?',
       type: HackformQuestionType.SingleOptionDropdown,
       hasOtherField: true,
-      limitOptions: 6,
       options: [
-        {
-          value: 'cs',
-          displayName:
-            'Computer science, computer engineering, or software engineering',
-        },
-        {
-          value: 'eng',
-          displayName: `Another engineering discipline (such as civil, electrical, mechanical, etc.)`,
-        },
-        {
-          value: 'natural',
-          displayName: `A natural science (such as biology, chemistry, physics, etc.)`,
-        },
-        {
-          value: 'math',
-          displayName: `Mathematics or statistics`,
-        },
-        {
-          value: 'web',
-          displayName: `Web development or web design`,
-        },
-        {
-          value: 'business',
-          displayName: `Business discipline (such as accounting, finance, marketing, etc.)`,
-        },
-        {
-          value: 'human',
-          displayName:
-            'Humanities discipline (such as literature, history, philosophy, etc.)',
-        },
-        {
-          value: 'arts',
-          displayName: `Fine arts or performing arts (such as graphic design, music, studio art, etc.)`,
-        },
-        {
-          value: 'health',
-          displayName: `Health science (such as nursing, pharmacy, radiology, etc.)`,
-        },
-        {
-          value: 'undecided',
-          displayName: `Undecided / No Declared Major`,
-        },
+        ...getMLHMajors(),
         {
           value: 'no-offer',
           displayName: `My school does not offer majors / primary areas of study`,
@@ -446,7 +381,7 @@ export const formMetadata2023HackerApps: HackformMetadata = {
       type: HackformQuestionType.SingleOptionDropdown,
       placeholder: 'e.g Summer 2023, Fall 2024',
       limitOptions: 6,
-      options: startDateJobOptions,
+      options: getStartDateJobOptions(),
     },
     {
       title: 'How did you hear about HackSC?',
