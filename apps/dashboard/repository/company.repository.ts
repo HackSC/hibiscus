@@ -41,4 +41,28 @@ export class CompanyRepository {
       .eq('participant_id', participantId);
     return res;
   }
+
+  async getCompanyById(companyId: string) {
+    const { data, error } = await this.client
+      .from('companies')
+      .select(
+        `
+      id,
+      name,
+      description,
+      website,
+      profile_photo,
+      target_graduations (
+        graduation_year
+      ),
+      target_majors (
+        major
+      )
+    `
+      )
+      .eq('id', companyId)
+      .single();
+
+    return { data, error };
+  }
 }
