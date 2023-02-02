@@ -333,13 +333,15 @@ const Index = () => {
                   <div style={{ marginLeft: '0.5rem' }}>
                     <Button
                       color={'black'}
-                      onClick={() =>
+                      onClick={() => {
                         setAttendeeNote(
                           COMPANY_ID,
                           currentAttendee.id,
                           textInput
-                        )
-                      }
+                        );
+                        setModalActive(false);
+                        setInput('');
+                      }}
                     >
                       SAVE
                     </Button>

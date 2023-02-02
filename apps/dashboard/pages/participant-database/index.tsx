@@ -73,10 +73,16 @@ const Index = () => {
   };
 
   const yearOptionsList: Option[] = [
-    { value: '2023', displayName: '2023' },
-    { value: '2024', displayName: '2024' },
-    { value: '2025', displayName: '2025' },
-    { value: '2026', displayName: '2026' },
+    { value: 'S23', displayName: 'Spring 2023' },
+    { value: 'F23', displayName: 'Fall 2023' },
+    { value: 'S24', displayName: 'Spring 2024' },
+    { value: 'F24', displayName: 'Fall 2024' },
+    { value: 'S25', displayName: 'Spring 2025' },
+    { value: 'F25', displayName: 'Fall 2025' },
+    { value: 'S26', displayName: 'Spring 2026' },
+    { value: 'F26', displayName: 'Fall 2026' },
+    { value: 'S27', displayName: 'Spring 2027' },
+    { value: 'F27', displayName: 'Fall 2027' },
   ];
 
   const majorOptionsList: Option[] = [
@@ -118,7 +124,6 @@ const Index = () => {
   const participantOptionsList: Option[] = [
     { displayName: 'All', value: 'all' },
     { displayName: 'Saved', value: 'saved' },
-    { displayName: 'Attended booth', value: 'attended' },
   ];
 
   const clearAllFilter = () => {
@@ -191,8 +196,16 @@ const Index = () => {
 
   return (
     <Wrapper>
+      <StyledButton
+        onClick={() => {
+          router.replace('/sponsor-booth');
+        }}
+      >
+        <Image width="30" height="30" src={'/arrow.svg'} alt="Illustration" />
+      </StyledButton>
       <BoldText
         style={{
+          marginTop: '1rem',
           fontSize: '35px',
           color: Colors2023.GREEN.STANDARD,
           textShadow: `0px 0px 10px ${Colors2023.GREEN.DARK}`,
@@ -304,7 +317,7 @@ const Index = () => {
           )}
         </ChosenFilterContainer>
 
-        <FilterContainer style={{ marginTop: '2rem' }}>
+        {/* <FilterContainer style={{ marginTop: '2rem' }}>
           <StyledTitle>Search</StyledTitle>
           <OneLineText
             style={{ marginLeft: '3rem' }}
@@ -314,7 +327,7 @@ const Index = () => {
               setInput(e.target.value);
             }}
           />
-        </FilterContainer>
+        </FilterContainer> */}
       </Container>
 
       <DatabaseContainer>
@@ -409,9 +422,11 @@ const Index = () => {
               <div style={{ marginLeft: '0.5rem' }}>
                 <Button
                   color={'black'}
-                  onClick={() =>
-                    setAttendeeNote(COMPANY_ID, currentAttendee.id, textInput)
-                  }
+                  onClick={() => {
+                    setAttendeeNote(COMPANY_ID, currentAttendee.id, textInput);
+                    setModalActive(false);
+                    setInput('');
+                  }}
                 >
                   SAVE
                 </Button>
@@ -426,6 +441,27 @@ const Index = () => {
 
 export default Index;
 
+const StyledButton = styled.button`
+  width: 60px;
+  height: 60px;
+  padding-top: 12px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: ${Colors2023.GRAY.STANDARD};
+  border-radius: 15px;
+  border: 4px solid ${Colors2023.GRAY.MEDIUM};
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 1px 2px 15px ${Colors2023.GRAY.MEDIUM};
+
+  &:hover {
+    background-color: ${Colors2023.GRAY.SHLIGHT};
+    transition: all 0.3s;
+  }
+`;
+
 const DatabaseContainer = styled.div`
   width: 100%;
   display: flex;
@@ -438,8 +474,8 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-left: 4rem;
-  padding: 30px;
+  padding-left: 6rem;
+  padding-bottom: 30px;
 `;
 
 const Container = styled.div`
@@ -614,7 +650,7 @@ const StyledScrollBar = styled.div`
   flex-direction: column;
   width: 100%;
   height: 560px;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   &::-webkit-scrollbar {
     width: 8px;
