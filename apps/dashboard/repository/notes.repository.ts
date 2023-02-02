@@ -1,6 +1,8 @@
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { SupabaseClient } from '@supabase/supabase-js';
+import { injectable } from 'tsyringe';
 
+@injectable()
 export class NotesRepository {
   private client: SupabaseClient;
 

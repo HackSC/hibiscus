@@ -13,7 +13,7 @@ export default async function notesHandler(
 
   try {
     const repo = container.resolve(NotesRepository);
-    let getNoteInfo = await repo.getNoteByCompanyAndParticipantId(
+    const getNoteInfo = await repo.getNoteByCompanyAndParticipantId(
       stringifyCompanyId,
       stringifyParticipantId
     );
