@@ -53,32 +53,35 @@ export default class APIService {
    *
    * @param submission HackformSubmission
    * @param hackerId hacker ID
-   * @returns whatever it returns
+   * @returns whatever it returns; if hacker already submitted an app before, returns null
    */
   static async submitHackform(
     hackerId: string,
     submission: HackformSubmission
   ) {
-    const res = await axios.post('/api/hackform', { submission });
-    const data = res.data as LocalAPIResponses['/hackform'];
+    // check if user already submitted and abort submission if so
     const supabase = container.resolve(HibiscusSupabaseClient);
-    // assoc current hacker with this form
     const env = getEnv();
     const user = await supabase.getUserProfile(
       getCookie(env.Hibiscus.Cookies.accessTokenName) as string,
       getCookie(env.Hibiscus.Cookies.refreshTokenName) as string
     );
-    if (user.app_id) {
-      console.error('User already has an app');
+    if (user.application_status === 3 || user.app_id !== null) {
       return null;
     }
+
+    // submits the form
+    const res = await axios.post('/api/hackform', { submission });
+    const data = res.data as LocalAPIResponses['/hackform'];
+
+    // assoc current hacker with this form
     const err = await supabase.updateUserProfile(hackerId, {
       app_id: data.formId,
     });
     if (err) {
       throw err;
     }
-    return res.data;
+    return { formId: data.formId, data: res.data };
   }
 
   static async getHackformSubmission(id: string) {
@@ -188,5 +191,85 @@ export class TeamServiceAPI {
 
   static async removeInvite(inviteId: string) {
     // TODO
+  }
+}
+
+// -- SponsorServiceAPI -- //
+type SponsorServiceResponse = {
+  data?: any;
+  error?: { message: string };
+  status: string | number;
+};
+
+export class SponsorServiceAPI {
+  static async getCheckInAttendee(
+    companyId: string
+  ): Promise<SponsorServiceResponse> {
+    const res = await axios.get(`/api/${companyId}/participants`);
+    if (res.status >= 400) {
+      return { error: { message: res.data.message }, status: res.status };
+    }
+    return { data: res.data, status: res.status };
+  }
+
+  static async getFilteredAttendee(
+    companyId: string,
+    saved?: boolean,
+    major?: string,
+    year?: string,
+    school?: string
+  ): Promise<SponsorServiceResponse> {
+    const res = await axios.get(
+      `/api/${companyId}/participants?saved=${saved}&major=${major}&year=${year}&school=${school}`
+    );
+    if (res.status >= 400) {
+      return { error: { message: res.data.message }, status: res.status };
+    }
+    return { data: res.data, status: res.status };
+  }
+
+  static async saveAttendee(companyId: string, attendeeId: string) {
+    const res = await axios.put(
+      `/api/${companyId}/participants/${attendeeId}/save`
+    );
+    if (res.status >= 400) {
+      return { error: { message: res.data.message }, status: res.status };
+    }
+    return { data: res.data, status: res.status };
+  }
+
+  static async unsaveAttendee(companyId: string, attendeeId: string) {
+    const res = await axios.put(
+      `/api/${companyId}/participants/${attendeeId}/unsave`
+    );
+    if (res.status >= 400) {
+      return { error: { message: res.data.message }, status: res.status };
+    }
+    return { data: res.data, status: res.status };
+  }
+
+  static async getAttendeeNote(companyId: string, attendeeId: string) {
+    const res = await axios.get(
+      `/api/notes?companyId=${companyId}&participant_id=${attendeeId}`
+    );
+    if (res.status >= 400) {
+      return { error: { message: res.data.message }, status: res.status };
+    }
+    return { data: res.data, status: res.status };
+  }
+
+  static async setAttendeeNote(
+    companyId: string,
+    attendeeId: string,
+    note: string
+  ) {
+    const res = await axios.put(
+      `/api/notes?companyId=${companyId}&participant_id=${attendeeId}`,
+      { note }
+    );
+    if (res.status >= 400) {
+      return { error: { message: res.data.message }, status: res.status };
+    }
+    return { data: res.data, status: res.status };
   }
 }

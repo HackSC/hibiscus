@@ -1,5 +1,5 @@
 import { Colors2023 } from '@hibiscus/styles';
-import { HackformMetadata } from '@hibiscus/types';
+import { ApplicationStatus, HackformMetadata } from '@hibiscus/types';
 import { H1, H3 } from '@hibiscus/ui';
 import { Button, GlowSpan } from '@hibiscus/ui-kit-2023';
 import { useHackform } from '../../../hooks/use-hackform/use-hackform';
@@ -10,8 +10,10 @@ import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user'
 import { container } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 import * as Sentry from '@sentry/browser';
 import { toast } from 'react-hot-toast';
+import { MutatingDots } from 'react-loader-spinner';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface HackformEndingProps {
@@ -20,19 +22,17 @@ export interface HackformEndingProps {
 
 export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
   const hackformUtils = useHackform();
-  const { user } = useHibiscusUser();
-  const TIME_BEFORE_FORMSTATE_RESET = 2000; // wait this much ms before we do reset
+  const { user, updateUser } = useHibiscusUser();
   const router = useRouter();
+  const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async () => {
+    setSubmitting(true); // can't clickjack
     const submission = hackformUtils.getSubmission();
     try {
-      await APIService.submitHackform(user.id, submission);
+      const { formId } = await APIService.submitHackform(user.id, submission);
 
-      setTimeout(() => {
-        hackformUtils.reset();
-      }, TIME_BEFORE_FORMSTATE_RESET);
-
+      // update user app status to IN_REVIEW
       const supabase = container.resolve(HibiscusSupabaseClient);
       const client = supabase.getClient();
       const { error } = await client
@@ -43,12 +43,25 @@ export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
       if (error) {
         throw error;
       }
+      // update user status
+      updateUser({
+        applicationStatus: ApplicationStatus.IN_REVIEW,
+        applicationId: formId,
+      });
+      // return user
+      toast.success(
+        'Application submitted successfully! We will let you know as soon as possible about your status. Keep an eye out for your email inbox!',
+        { duration: 5000 }
+      );
       router.replace('/');
+      hackformUtils.reset();
     } catch (e) {
       toast.error(
         'Oops! Something went wrong with submitting your application; please try again'
       );
       Sentry.captureException(e);
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -69,9 +82,19 @@ export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
         height={200}
         alt="Earth-like character wearing shades pulling baggage and a moon"
       />
-      <Button color="blue" onClick={handleSubmit}>
-        SUBMIT YOUR APPLICATION
+      <Button color="blue" onClick={handleSubmit} disabled={submitting}>
+        {submitting ? 'SUBMITTING...' : 'SUBMIT YOUR APPLICATION'}
       </Button>
+      {submitting && (
+        <MutatingDots
+          height="100"
+          width="100"
+          color={Colors2023.BLUE.LIGHT}
+          secondaryColor={Colors2023.BLUE.LIGHT}
+          radius="12.5"
+          ariaLabel="mutating-dots-loading"
+        />
+      )}
     </Wrapper>
   );
 };

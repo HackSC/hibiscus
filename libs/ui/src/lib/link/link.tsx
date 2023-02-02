@@ -15,14 +15,14 @@ export function Link(props: LinkProps) {
   return (
     <NextLink
       {...props}
-      style={{
-        textDecoration: props.underline ? 'underline' : 'none',
-        ...props.anchortagpropsoverride?.style,
-      }}
       passHref
       target={'_blank'}
       rel="noreferrer"
       {...props.anchortagpropsoverride}
+      style={{
+        textDecoration: props.underline ? 'underline' : 'none',
+        ...props.anchortagpropsoverride?.style,
+      }}
     >
       {props.children}
     </NextLink>
