@@ -7,8 +7,9 @@ function AppsClosedPlaceholder() {
     <div>
       <Image
         src="/hackform-illustrations/postcard-plane.svg"
-        width={100}
-        height={100}
+        width={200}
+        height={200}
+        priority
         alt="Postcard plane"
       />
       <H2>Apps for HackSC 2023 has closed!</H2>
