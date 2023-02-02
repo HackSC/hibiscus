@@ -50,22 +50,6 @@ export function CompanyConfig(props) {
   // edit image modal
   const [uploadImage, setUploadImage] = useState(false);
 
-  // // edit website
-  // function handleWebsite(e) {
-  //   setMockCompany({
-  //     ...MockCompany,
-  //     website: e.target.value,
-  //   });
-  // }
-
-  // // edit description
-  // function handleDescription(e) {
-  //   setMockCompany({
-  //     ...MockCompany,
-  //     description: e.target.value,
-  //   });
-  // }
-
   useEffect(() => {
     console.log('Updating target graduation terms and graduation');
   }, [preferences]);
