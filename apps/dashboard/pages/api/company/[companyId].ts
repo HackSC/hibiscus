@@ -2,7 +2,7 @@
 import 'reflect-metadata';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { container } from 'tsyringe';
-import { CompanyRepository } from 'apps/dashboard/repository/company.repository';
+import { CompanyRepository } from '../../../repository/company.repository';
 
 function Company(
   id: string,
