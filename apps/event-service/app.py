@@ -41,10 +41,12 @@ def get_sorted_events_by_day(user_id: str, day: int):
   # sort pinned events by start time
   pinned_events.sort(key = lambda x: datetime.strptime(x["events"]["start"], "%Y-%m-%dT%H:%M:%S%z"))
 
-  # gather id of all pinned events 
   pinned_events_id = set()
-  for e in pinned_events:
-    pinned_events_id.add(e["events"]["id"])
+  for event in pinned_events:
+    # set each "pinned" label to true
+    event["events"]["pinned"] = True
+    # gather id of all pinned events 
+    pinned_events_id.add(event["events"]["id"])
   
   # fetch all events sorted by day
   all_events = get_events_by_day(day)
@@ -53,6 +55,7 @@ def get_sorted_events_by_day(user_id: str, day: int):
   non_pinned_events = []
   for event in all_events:
     if event["id"] not in pinned_events_id:
+      event["pinned"] = False
       non_pinned_events.append(event)
     
   return pinned_events + non_pinned_events 
