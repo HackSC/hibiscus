@@ -32,6 +32,7 @@ export const getEnv = () => {
       },
       FeatureFlag: {
         RedisURL: process.env.HIBISCUS_FEATURE_FLAG_REDIS_URL,
+        MongoURI: process.env.HIBISCUS_FEATURE_FLAG_MONGO_URI,
       },
     },
   };
