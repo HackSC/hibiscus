@@ -1,6 +1,8 @@
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { SupabaseClient } from '@supabase/supabase-js';
+import { injectable } from 'tsyringe';
 
+@injectable()
 export class AttendeeRepository {
   private client: SupabaseClient;
 
@@ -12,7 +14,28 @@ export class AttendeeRepository {
     return this.client;
   }
 
-  async getUsersByEvent(eventId: string) {
+  async getEventsByCompanyId(companyId: string) {
+    const { data, error } = await this.client
+      .from('events')
+      .select()
+      .eq('company_id', companyId);
+
+    if (error) throw new Error(error.message);
+    return { data, error };
+  }
+
+  async getEventInfo(eventId: string) {
+    const { data, error } = await this.client
+      .from('events')
+      .select()
+      .eq('id', eventId)
+      .single();
+
+    if (error) throw new Error(error.message);
+    return { data, error };
+  }
+
+  async getAttendeesByEventId(eventId: string) {
     const { data, error } = await this.client
       .from('event_log')
       .select(
@@ -22,6 +45,10 @@ export class AttendeeRepository {
           user_profiles(
             first_name,
             last_name
+          ),
+          notes(
+            note,
+            company_id
           ),
           major,
           resume,
