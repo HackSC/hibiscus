@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import { H2, Text } from '@hibiscus/ui';
 import { GrayBox } from '../gray-box/gray-box';
@@ -9,7 +9,7 @@ import {
   DatePicker,
   OneLineText,
 } from '@hibiscus/ui-kit-2023';
-import { FormikProvider, useFormik } from 'formik';
+import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import {
   ALLOWED_RESUME_FORMATS,
@@ -20,7 +20,7 @@ import { getMLHMajors } from '../../common/utils';
 import { Option } from '@hibiscus/types';
 import { SpanRed } from '../red-span';
 import { container } from 'tsyringe';
-import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 import { toast } from 'react-hot-toast';
 import { getEnv } from '@hibiscus/env';
@@ -35,6 +35,7 @@ interface Props {
 function RSVPForm({ closeModal }: Props) {
   const { user, updateUser } = useHibiscusUser();
   const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const { supabase } = useContext(SupabaseContext);
   const formik = useFormik({
     initialValues: {
       school: '',
@@ -72,7 +73,6 @@ function RSVPForm({ closeModal }: Props) {
       formikHelpers.setSubmitting(true);
       closeModal();
       try {
-        const supabase = container.resolve(HibiscusSupabaseClient);
         const client = supabase.getClient();
         // upload resume
         let resumeStoragePath: string | null = null;

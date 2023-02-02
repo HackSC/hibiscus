@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 import Image from 'next/image';
@@ -10,8 +10,7 @@ import { HackerTab } from '../../components/sponsor-portal/hacker-tab';
 import HackerProfile from '../../components/sponsor-portal/hacker-profile';
 import { useRouter } from 'next/router';
 import { SponsorAPI, Attendee } from '../../common/mock-sponsor';
-import { container } from 'tsyringe';
-import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
 import { HibiscusRole } from '@hibiscus/types';
 import { Button, ParagraphText } from '@hibiscus/ui-kit-2023';
 import { getWordCount } from '../../common/utils';
@@ -24,7 +23,7 @@ const Index = () => {
   const [textInput, setInput] = useState('');
 
   const router = useRouter();
-  const supabase = container.resolve(HibiscusSupabaseClient).getClient();
+  const supabase = useContext(SupabaseContext).supabase.getClient();
 
   useEffect(() => {
     async function fetchData() {
