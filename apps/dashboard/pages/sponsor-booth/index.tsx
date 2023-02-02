@@ -354,7 +354,10 @@ const Index = () => {
 
         <RightContainer
           style={
-            currentAttendee !== null ? { display: 'flex' } : { display: 'none' }
+            // currentAttendee !== null ? { display: 'flex' } : { display: 'none' }
+            currentAttendee !== null
+              ? { visibility: 'visible', maxWidth: '35%' }
+              : { visibility: 'hidden', maxWidth: '0%' }
           }
         >
           <CloseButton
@@ -435,7 +438,7 @@ const MainContainer = styled.div`
 const LeftContainer = styled.div`
   display: flex;
   flex-grow: 2;
-  width: 24%;
+  /* width: 24%; */
   flex-direction: column;
   justify-content: flex-start;
   padding: 30px;
@@ -492,11 +495,7 @@ const SavedAttendeeContainer = styled.div`
 `;
 
 const MiddleContainer = styled.div`
-  display: flex;
-  width: 20%;
-  flex-grow: 5;
-  flex-direction: column;
-  justify-content: space-between;
+  flex-grow: 2;
   padding: 30px;
   margin-top: -4rem;
 `;
@@ -541,7 +540,7 @@ const StyledParagraphText = styled(ParagraphText)`
 
 const RightContainer = styled.div`
   display: flex;
-  width: 30%;
+  width: 35%;
   padding: 30px;
   flex-direction: column;
   justify-content: flex-start;
@@ -550,6 +549,7 @@ const RightContainer = styled.div`
   border: 4px solid ${Colors2023.GRAY.MEDIUM};
   box-shadow: 1px 2px 15px ${Colors2023.GRAY.MEDIUM};
   margin-top: -3rem;
+  transition: max-width 0.5s;
 `;
 
 const CloseButton = styled.button`
@@ -567,7 +567,6 @@ const CloseButton = styled.button`
 `;
 
 const ViewAllButton = styled.button`
-  width: 70%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -578,7 +577,7 @@ const ViewAllButton = styled.button`
   border: 3px solid ${Colors2023.GREEN.STANDARD};
   gap: 10px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.5s;
 
   &:hover {
     background-color: ${Colors2023.GREEN.DARK};

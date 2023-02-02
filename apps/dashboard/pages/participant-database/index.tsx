@@ -350,7 +350,7 @@ const Index = () => {
               setCurrentAttendee(null);
             }}
           >
-            <Text
+            <BoldText
               style={{
                 fontSize: '20px',
                 color: Colors2023.GREEN.STANDARD,
@@ -358,7 +358,7 @@ const Index = () => {
               }}
             >
               HACKER
-            </Text>
+            </BoldText>
             <Image
               width="20"
               height="20"
@@ -601,7 +601,6 @@ const CloseButton = styled.button`
 const RightContainer = styled.div`
   display: flex;
   flex: 1;
-  /* width: 30%; */
   margin-top: 2rem;
   margin-left: 1rem;
   padding: 30px;
@@ -611,6 +610,7 @@ const RightContainer = styled.div`
   border-radius: 10px;
   border: 4px solid ${Colors2023.GRAY.MEDIUM};
   box-shadow: 1px 2px 15px ${Colors2023.GRAY.MEDIUM};
+  transition: max-width 0.5s;
 `;
 
 const TextWrapper = styled.div`
