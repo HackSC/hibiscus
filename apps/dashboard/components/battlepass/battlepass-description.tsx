@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { AiFillInfoCircle } from 'react-icons/ai';
 import { GrayBox } from '../gray-box/gray-box';
 
-function ComingSoonBattlepassPlaceholder() {
+function BattlepassDescription() {
   const { user } = useHibiscusUser();
   const [isModalOpen, setModalOpen] = useState(false);
 
@@ -90,7 +90,7 @@ function ComingSoonBattlepassPlaceholder() {
   );
 }
 
-export default ComingSoonBattlepassPlaceholder;
+export default BattlepassDescription;
 
 const InfoDiv = styled.div`
   width: max-content;

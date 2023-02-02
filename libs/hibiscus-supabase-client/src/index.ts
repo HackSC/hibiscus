@@ -25,9 +25,23 @@ export class HibiscusSupabaseClient {
   private client: SupabaseClient;
 
   constructor() {
+    const apiUrl = getEnv().Hibiscus.Supabase.apiUrl;
+    const anonKey = getEnv().Hibiscus.Supabase.anonKey;
+
+    if (!apiUrl) {
+      console.error(
+        'Supabase API URL not provided. Placeholder values will be used. The app will not be able to access Supabase.'
+      );
+    }
+
+    if (!anonKey) {
+      console.error(
+        'Supabase anon key not provided. Placeholder values will be used. The app will not be able to access Supabase.'
+      );
+    }
     this.client = createClient(
-      process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_API_URL,
-      process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_ANON_KEY,
+      getEnv().Hibiscus.Supabase.apiUrl ?? 'http://placeholder',
+      getEnv().Hibiscus.Supabase.anonKey ?? 'placeholder',
       {
         auth: {
           autoRefreshToken: false,
