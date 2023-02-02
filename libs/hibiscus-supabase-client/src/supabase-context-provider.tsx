@@ -19,7 +19,7 @@ function getSupabase(): HibiscusSupabaseClient {
 }
 
 export const SupabaseContext = createContext({
-  supabase: null,
+  supabase: getSupabase(),
 });
 
 export function SupabaseContextProvider(props: PropsWithChildren) {

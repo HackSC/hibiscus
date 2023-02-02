@@ -1,4 +1,3 @@
-import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { HibiscusRole, HibiscusUser } from '@hibiscus/types';
 import { getCookie } from 'cookies-next';
 import {
@@ -8,7 +7,6 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { container } from 'tsyringe';
 import { getEnv } from '@hibiscus/env';
 import { useAppDispatch } from '../redux/hooks';
 import { removeTabRoute } from '../../store/menu-slice';
@@ -16,6 +14,10 @@ import { removeTabRoute } from '../../store/menu-slice';
 import { ApplicationStatus } from 'libs/types/src/lib/application-status';
 import { isHackerPostAppStatus } from '../../common/utils';
 import React from 'react';
+import {
+  HibiscusSupabaseClient,
+  SupabaseContext,
+} from '@hibiscus/hibiscus-supabase-client';
 
 const HibiscusUserContext = React.createContext<{
   user: HibiscusUser | null;
@@ -27,11 +29,11 @@ const HibiscusUserContext = React.createContext<{
 
 const getUserProfile = async (
   accessToken: string,
-  refreshToken: string
+  refreshToken: string,
+  supabase: HibiscusSupabaseClient
 ): Promise<HibiscusUser> => {
   // Get user profile from db
   // uses cookie set from SSO
-  const supabase = container.resolve(HibiscusSupabaseClient);
   const profile = await supabase.getUserProfile(accessToken, refreshToken);
 
   if (profile != null) {
@@ -65,6 +67,7 @@ const getUserProfile = async (
 
 export const HibiscusUserProvider = (props: React.PropsWithChildren) => {
   const [user, setUser] = useState<HibiscusUser | null>(null);
+  const { supabase } = useContext(SupabaseContext);
 
   const accessToken = getCookie(
     getEnv().Hibiscus.Cookies.accessTokenName
@@ -75,7 +78,7 @@ export const HibiscusUserProvider = (props: React.PropsWithChildren) => {
 
   // fetch it on initial load in
   useEffect(() => {
-    getUserProfile(accessToken, refreshToken).then((u) => {
+    getUserProfile(accessToken, refreshToken, supabase).then((u) => {
       setUser(u);
     });
   }, [accessToken, refreshToken]);
