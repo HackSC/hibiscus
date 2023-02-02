@@ -23,7 +23,7 @@ export function CheckInBox(props: CheckInBoxProps) {
   const [wristbandId, setWristbandId] = useState(null);
   const [admitted, setAdmitted] = useState(false);
   const [age, setAge] = useState(false);
-  const [status, setStatus] = useState(false);
+  const [status, setStatus] = useState(user?.email?.endsWith('edu') ?? false);
   const [errorMessage, setErrorMessage] = useState(null);
 
   const handleClick = (setter: (value: boolean) => void) => (value: boolean) =>
@@ -101,6 +101,7 @@ export function CheckInBox(props: CheckInBoxProps) {
                   color="yellow"
                   label="Education Status"
                   onInput={handleClick(setStatus)}
+                  checked={status}
                 />
               </VerificationBox>
             </LowerLeft>

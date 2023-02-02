@@ -113,7 +113,7 @@ export function Index() {
       getUserProfile(wristbandId).then((user) => {
         setBattlepassProgress(
           calculateBattlepassProgress(
-            user.bonus_points ?? 0 + user.event_points ?? 0
+            (user.bonus_points ?? 0) + (user.event_points ?? 0)
           )
         );
         setUser(user);
@@ -124,14 +124,10 @@ export function Index() {
         getUserProfile(userId, false).then((user) => {
           setBattlepassProgress(
             calculateBattlepassProgress(
-              user.bonus_points ?? 0 + user.event_points ?? 0
+              (user.bonus_points ?? 0) + (user.event_points ?? 0)
             )
           );
-          console.log(
-            calculateBattlepassProgress(
-              user.bonus_points ?? 0 + user.event_points ?? 0
-            )
-          );
+
           setUser(user);
         });
       } else {

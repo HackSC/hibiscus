@@ -25,7 +25,7 @@ export function calculateBattlepassProgress(
   } else {
     return {
       level: 0,
-      progress: points / (BattlepassLevels[1] - BattlepassLevels[0]),
+      progress: points / BattlepassLevels[1],
       nextLevel: BattlepassLevels[1],
     };
   }
