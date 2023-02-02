@@ -32,17 +32,11 @@ export function Sponsors(props: SponsorsProps) {
             />
           </a>
         </Sponsor>
-
         <Sponsor>
           <a href="https://www.carc.usc.edu/" target="_blank" rel="noreferrer">
-            <img src="/img/logos/carc.png" alt="Elastic Logo" loading="lazy" />
-          </a>
-        </Sponsor>
-        <Sponsor>
-          <a href="https://www.soylent.com/" target="_blank" rel="noreferrer">
             <img
-              src="/img/logos/soylent.png"
-              alt="Stickermule Logo"
+              src="/img/logos/carc.png"
+              alt="USC Center of Advanced Research Computing Logo"
               loading="lazy"
             />
           </a>
@@ -56,6 +50,20 @@ export function Sponsors(props: SponsorsProps) {
             <img
               src="/img/logos/stickermule.png"
               alt="Stickermule Logo"
+              loading="lazy"
+            />
+          </a>
+        </Sponsor>
+        <Sponsor>
+          <a href="https://careers.2k.com/" target="_blank" rel="noreferrer">
+            <img src="/img/logos/2k.png" alt="2K Logo" loading="lazy" />
+          </a>
+        </Sponsor>
+        <Sponsor>
+          <a href="https://www.soylent.com/" target="_blank" rel="noreferrer">
+            <img
+              src="/img/logos/soylent.png"
+              alt="Soylent Logo"
               loading="lazy"
             />
           </a>
@@ -83,7 +91,7 @@ const SponsorsContainer = styled.div`
     column-count: 2;
   }
   @media (max-width: 768px) {
-    column-count: 1;
+    column-count: 2;
   }
 `;
 
@@ -113,6 +121,7 @@ const Sponsor = styled.div`
       max-height: 150px;
       object-fit: contain;
       display: block;
+      margin: auto;
     }
   }
 `;

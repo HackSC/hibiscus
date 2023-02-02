@@ -26,6 +26,7 @@ const Input = styled.input`
   border: 1.5px solid ${Colors2023.GRAY.LIGHT};
   border-radius: 11px;
   padding: 0 20px;
+  text-align: left;
 
   // font
   font-family: 'Inter';

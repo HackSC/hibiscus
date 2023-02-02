@@ -39,10 +39,9 @@ export class HibiscusSupabaseClient {
         'Supabase anon key not provided. Placeholder values will be used. The app will not be able to access Supabase.'
       );
     }
-
     this.client = createClient(
-      apiUrl ?? 'http://placeholder',
-      anonKey ?? 'placeholder'
+      getEnv().Hibiscus.Supabase.apiUrl ?? 'http://placeholder',
+      getEnv().Hibiscus.Supabase.anonKey ?? 'placeholder'
     );
   }
 

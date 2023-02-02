@@ -23,24 +23,25 @@ export interface OptionSelectProps
     option: Option
   ) => void;
 }
-const fuse = new Fuse<Option>([], { keys: ['displayName'] });
 
-export function SearchableOptionSelectInput(props: OptionSelectProps) {
+export function Combobox(props: OptionSelectProps) {
   const [displayedOptions, setDisplayedOptions] = useState<Option[] | null>(
     null
   );
+  const [fuse, setFuse] = useState<Fuse<Option> | null>(null);
   const [showOptions, setShowOptions] = useState(false);
   const [textInput, setTextInput] = useState(props.value ?? '');
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   // loading in options depending on whether given loader fn or static array
   useEffect(() => {
+    const f = new Fuse<Option>([], { keys: ['displayName'] });
     if (typeof props.options === 'function') {
       props
         .options()
         .then((opts) => {
           const limited = opts.slice(0, props.limitDropdownItems);
-          fuse.setCollection(opts ?? []);
+          f.setCollection(opts ?? []);
           setDisplayedOptions(limited);
         })
         .catch((e) => {
@@ -48,9 +49,10 @@ export function SearchableOptionSelectInput(props: OptionSelectProps) {
         });
     } else if (Array.isArray(props.options)) {
       const limited = props.options.slice(0, props.limitDropdownItems);
-      fuse.setCollection(props.options ?? []);
+      f.setCollection(props.options ?? []);
       setDisplayedOptions(limited);
     }
+    setFuse(f);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -94,12 +96,13 @@ export function SearchableOptionSelectInput(props: OptionSelectProps) {
     if (searchText.length === 0) {
       return;
     }
+    if (fuse === null) return;
     const res = fuse.search(searchText);
     const items = res
       .map(({ item }) => item)
       .slice(0, props.limitDropdownItems);
     setDisplayedOptions(items);
-  }, [props.options, showOptions, textInput, props.limitDropdownItems]);
+  }, [props.options, showOptions, textInput, props.limitDropdownItems, fuse]);
 
   const OptionsDropdown = () => (
     <Dropdown>
@@ -123,35 +126,43 @@ export function SearchableOptionSelectInput(props: OptionSelectProps) {
   );
 }
 
-export default SearchableOptionSelectInput;
+export default Combobox;
 
 const Wrapper = styled.div`
   position: relative;
   width: max-content;
+  z-index: 1;
 `;
 
 const Dropdown = styled.div`
   position: absolute;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-top: 10px;
+  overflow-y: scroll;
+  max-height: 15rem;
+  gap: 3px;
+  border-radius: 0 0 5px 5px;
+  margin-top: -10px;
+  padding: 15px 0 5px;
   width: 100%;
-  z-index: 100;
+  z-index: -1;
+  background-color: ${Colors2023.GRAY.MEDIUM};
+  border: 1px solid ${Colors2023.GRAY.SCHEMDIUM};
 `;
 
 const DropdownItem = styled.button`
   font-family: 'Inter';
   cursor: pointer;
-  background-color: ${Colors2023.GRAY.SCHEMDIUM};
+  background: none;
   text-align: left;
   padding: 11px;
+  margin: 0 3px;
   border: none;
   border-radius: 5px;
   color: ${Colors2023.GRAY.LIGHT};
-  z-index: 100;
+  transition: 0.1s;
   :hover {
-    background-color: ${Colors2023.GRAY.SHLIGHT};
+    background-color: #bff0ff51;
   }
   :focus {
     background: ${Colors2023.GRAY.MEDIUM};

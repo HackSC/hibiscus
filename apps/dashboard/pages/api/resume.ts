@@ -13,6 +13,7 @@ import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 export const config = {
   api: {
     bodyParser: false,
+    externalResolver: true,
   },
 };
 

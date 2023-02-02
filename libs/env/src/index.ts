@@ -28,6 +28,12 @@ export const getEnv = () => {
         HackerAppResponsesTable:
           process.env.HIBISCUS_HACKER_APP_RESPONSES_TABLENAME,
       },
+      RSVPForm: {
+        ResumeStorageBucketName: 'rsvp-resume-hacker-2023',
+      },
+      FeatureFlag: {
+        RedisURL: process.env.HIBISCUS_FEATURE_FLAG_REDIS_URL,
+      },
     },
   };
 };

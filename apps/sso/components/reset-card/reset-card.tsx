@@ -1,9 +1,10 @@
 import { useContext, useState } from 'react';
 import styled from 'styled-components';
-import { GradientSpan, Text } from '@hibiscus/ui';
-import { TrademarkColors } from '@hibiscus/styles';
+import { H3, Text } from '@hibiscus/ui';
 import { useRouter } from 'next/router';
 import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
+import { Colors2023 } from '@hibiscus/styles';
+import { Button, ColorSpanBold, OneLinePassword } from '@hibiscus/ui-kit-2023';
 
 /* eslint-disable-next-line */
 export interface ResetCardProps {}
@@ -44,18 +45,21 @@ export function ResetCard(props: ResetCardProps) {
 
   return (
     <StyledResetCard>
-      <img src="/static/images/Logo.svg" alt="HackSC Logo" width="100px" />
-      <StyledText>
-        Reset your <GradientSpan>HackSC Account</GradientSpan>
-      </StyledText>
+      <img src="/static/images/logo-2023.svg" alt="HackSC Logo" width="100px" />
+      <H3>
+        Reset your{' '}
+        <ColorSpanBold color={Colors2023.BLUE.STANDARD}>
+          HackSC Account
+        </ColorSpanBold>
+      </H3>
       <StyledForm onSubmit={handleSubmit}>
-        <Input
+        <OneLinePassword
           placeholder="new password"
           type="password"
           name="password"
           required
         />
-        <Input
+        <OneLinePassword
           placeholder="re-enter password"
           type="password"
           name="confirmPassword"
@@ -66,7 +70,7 @@ export function ResetCard(props: ResetCardProps) {
         >
           {errorMessage}
         </StyledErrorText>
-        <GradientButton type="submit">SUBMIT</GradientButton>
+        <Button color="blue">SUBMIT</Button>
       </StyledForm>
     </StyledResetCard>
   );
@@ -96,53 +100,8 @@ const StyledForm = styled.form`
   padding: 10px 20px;
 `;
 
-const StyledText = styled(Text)`
-  font-size: 24px;
-  padding-top: 1rem;
-  @media (max-width: 400px) {
-    font-size: 20px;
-  }
-`;
-
 const StyledErrorText = styled(Text)`
   font-size: 20px;
   padding-top: 1rem;
   color: red;
-`;
-
-const Input = styled.input`
-  border: solid 0.1rem #bcbcbc;
-  background-color: #f8f8f8;
-  border-radius: 0.3rem;
-  padding: 10px;
-  padding-left: 15px;
-  font-family: InterVariable, sans-serif;
-  font-size: 1.1rem;
-  color: #676767;
-  width: 120%;
-  margin-top: 1rem;
-  ::placeholder {
-    color: #bcbcbc;
-  }
-  ::-ms-input-placeholder {
-    /* Microsoft Edge */
-    color: #bcbcbc;
-  }
-`;
-
-const GradientButton = styled.button`
-  background: linear-gradient(
-    90deg,
-    ${TrademarkColors.LIGHT_BLUE} 0%,
-    ${TrademarkColors.LIGHT_PURPLE} 100%
-  );
-  color: white;
-  border-radius: 0.3rem;
-  font-family: Intervariable, sans-serif;
-  padding: 10px 15px;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  width: 50%;
-  font-size: 1.1rem;
-  font-weight: bold;
 `;
