@@ -31,50 +31,129 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== 'GET') {
-    return res.status(401).json({ message: 'Request not supported.' });
-  }
-
   try {
     const { companyId, eventId } = req.query;
     const stringifyCompanyId = companyId.toString();
     const stringifyEventId = eventId.toString();
     const repo = container.resolve(AttendeeRepository);
 
-    const currentEventInfo = await repo.getEventInfo(stringifyEventId);
-    if (currentEventInfo.data['company_id'] !== stringifyCompanyId) {
-      return res.status(404).json({ message: 'Requested resource not found' });
-    }
+    if (req.method === 'GET') {
+      const currentEventInfo = await repo.getEventInfo(stringifyEventId);
+      if (currentEventInfo.data['company_id'] !== stringifyCompanyId) {
+        return res
+          .status(404)
+          .json({ message: 'Requested resource not found' });
+      }
 
-    //get all attendees related to eventId
-    const eventResult = await repo.getAttendeesByEventId(stringifyEventId);
-    const attendeesData: any[] = [];
-    eventResult.data.map((element) => {
-      const participantData = element['participants'];
-      const notes: any[] = participantData['notes'];
-      //there never should be a case where there are more than one note from the same company for the same user
-      const userNotes = notes
-        .filter((ele) => {
-          return ele['company_id'] === stringifyCompanyId;
-        })
-        .at(0);
-
-      const attendee = new Attendee(
-        participantData['id'],
-        participantData['user_profiles']['first_name'] +
-          ' ' +
-          participantData['user_profiles']['last_name'],
-        participantData['major'],
-        participantData['resume'],
-        participantData['graduation_year'],
-        participantData['portfolio_link'],
-        participantData['school'],
-        userNotes ? userNotes['note'] : null
+      //get all attendees related to eventId
+      const eventResult = await repo.getAttendeesByEventId(stringifyEventId);
+      if (!eventResult.data) {
+        return res
+          .status(404)
+          .json({ message: 'Requested resource not found' });
+      }
+      const attendeesData: any[] = processAttendeesList(
+        eventResult.data,
+        stringifyCompanyId
       );
-      attendeesData.push(attendee);
-    });
-    return res.status(200).json({ data: attendeesData });
+      return res.status(200).json({ data: attendeesData });
+    } else if (req.method === 'POST') {
+      const yearFilter = req.body.year;
+      const majorFilter = req.body.major;
+      const schoolFilter = req.body.school;
+      const savedFilter = req.body.saved;
+
+      const currentEventInfo = await repo.getEventInfo(stringifyEventId);
+      if (currentEventInfo.data['company_id'] !== stringifyCompanyId) {
+        return res
+          .status(404)
+          .json({ message: 'Requested resource not found' });
+      }
+
+      //check if savedFilter is on or not
+      //if is, use different repo call to grab all saved members info
+      //if not, use getAllParticipants
+      let eventResult: any;
+      if (savedFilter) {
+        eventResult = await repo.getAllSavedAttendees(stringifyCompanyId);
+      } else {
+        eventResult = await repo.getAttendeesByEventId(stringifyEventId);
+      }
+
+      if (!eventResult.data) {
+        return res
+          .status(404)
+          .json({ message: 'Requested resource not found' });
+      }
+
+      let filteringArray: any[] = eventResult.data;
+      console.log(filteringArray);
+      const filterParams = ['graduation_year', 'major', 'school'];
+      const filterValues = [yearFilter, majorFilter, schoolFilter];
+      for (let i = 0; i < 3; i++) {
+        if (!filteringArray.length) {
+          break;
+        }
+        if (!filterValues[i]) {
+          continue;
+        }
+        filteringArray = repo.filterAttendees(
+          filterParams[i],
+          filterValues[i],
+          filteringArray
+        );
+        console.log(filteringArray);
+      }
+
+      const attendeesData: any[] = processAttendeesList(
+        filteringArray,
+        stringifyCompanyId
+      );
+
+      return res.status(200).json({ data: attendeesData });
+    }
+    return res.status(405).json({ message: 'Request not supported.' });
   } catch (e) {
     return res.status(500).json({ message: e.message });
   }
+}
+
+function processAttendeesList(array: any[], companyId) {
+  const attendeesData: any[] = [];
+
+  array.map((element) => {
+    //hardcoded since we are processing participants anyway
+    const participantData = element['participants'];
+
+    const notes: any[] = participantData['notes'] as any[];
+    //there never should be a case where there are more than one note from the same company for the same user
+    //if notes is undefined/null, just set to null. else filter
+
+    let userNotes: any;
+    if (notes.length) {
+      userNotes = notes
+        .filter((ele) => {
+          return ele['company_id'] === companyId;
+        })
+        .at(0);
+    } else {
+      userNotes = '';
+    }
+
+    const attendee = new Attendee(
+      participantData['id'],
+      participantData['user_profiles']['first_name'] +
+        ' ' +
+        participantData['user_profiles']['last_name'],
+      participantData['major'],
+      participantData['resume'],
+      participantData['graduation_year'],
+      participantData['portfolio_link'],
+      participantData['school'],
+      userNotes ? userNotes['note'] : ''
+    );
+    attendeesData.push(attendee);
+  });
+
+  return attendeesData;
 }

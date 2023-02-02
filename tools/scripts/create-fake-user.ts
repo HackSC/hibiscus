@@ -5,8 +5,8 @@ import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
 import { getEnv } from '../../libs/env/src';
 import { HibiscusRole } from '../../libs/types/src';
 
-const FAKE_USER_EMAIL = 'example@hacksc.com';
-const FAKE_USER_PASSWORD = 'hacksc';
+const FAKE_USER_EMAIL = process.argv[2] ?? 'example@hacksc.com';
+const FAKE_USER_PASSWORD = process.argv[3] ?? 'hacksc';
 
 async function createFakeUser(): Promise<User | null> {
   const supabase = createSupabaseServiceClient();
@@ -22,8 +22,8 @@ async function createFakeUser(): Promise<User | null> {
     await supabase.from('user_profiles').insert({
       user_id: user.id,
       email: user.email,
-      first_name: 'Hack',
-      last_name: 'SC',
+      first_name: process.argv[4] ?? 'Hack',
+      last_name: process.argv[5] ?? 'SC',
       // Default role = HACKER
       role: Object.keys(HibiscusRole).indexOf(HibiscusRole.HACKER) + 1,
     });
@@ -57,4 +57,5 @@ function createSupabaseServiceClient(): SupabaseClient {
   } else {
     console.error('Failed to create fake user; check if user already exists');
   }
+  process.exit();
 })();

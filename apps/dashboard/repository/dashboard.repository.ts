@@ -155,6 +155,7 @@ export class DashboardRepository {
   }
 
   async checkInviteDoesNotExist(teamId: string, invitedId: string) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { data, error } = await this.client
       .from('invitations')
       .select()

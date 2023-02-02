@@ -4,6 +4,7 @@ import 'reflect-metadata';
 import {
   createClient,
   EmailOtpType,
+  PostgrestError,
   SupabaseClient,
 } from '@supabase/supabase-js';
 import { injectable } from 'tsyringe';
@@ -200,7 +201,7 @@ export class HibiscusSupabaseClient {
       .select()
       .eq('user_id', user.id);
 
-    if (dbRes.data.length !== 1) {
+    if (dbRes.data?.length !== 1) {
       // User either not found or duplicates found == DB corrupted
       return null;
     }
@@ -268,6 +269,58 @@ export class HibiscusSupabaseClient {
     }
     const applied = data[0].app_id !== null;
     return { data: { applied } };
+  }
+
+  async addEvent(
+    user_id: string,
+    event_id: number
+  ): Promise<PostgrestError | null> {
+    const selectRes = await this.client
+      .from('event_log')
+      .select()
+      .eq('user_id', user_id)
+      .eq('event_id', event_id);
+    if (selectRes.data.length > 0) {
+      return {
+        message: 'Already checked in',
+        hint: '',
+        code: '400',
+        details: '',
+      };
+    }
+
+    const res = await this.client.from('event_log').insert({
+      user_id: user_id,
+      event_id: event_id,
+    });
+    return res.error;
+  }
+
+  async addtoLeaderboard(
+    user_id: string,
+    event_points: number
+  ): Promise<PostgrestError | null> {
+    const userLeaderboardMatches = await this.client
+      .from('leaderboard')
+      .select()
+      .eq('user_id', `${user_id}`);
+
+    if (userLeaderboardMatches.data.length == 0) {
+      const res = await this.client.from('leaderboard').insert({
+        user_id: user_id,
+        event_points: event_points,
+      });
+      return res.error;
+    } else {
+      const res = await this.client
+        .from('leaderboard')
+        .update({
+          event_points:
+            event_points + userLeaderboardMatches.data[0].event_points,
+        })
+        .eq('user_id', user_id);
+      return res.error;
+    }
   }
 
   static setTokenCookieClientSide(access_token: string, refresh_token: string) {
@@ -339,7 +392,8 @@ export class HibiscusSupabaseClient {
   }
 }
 
-type UserProfileRow = Database['public']['Tables']['user_profiles']['Row'];
+export type UserProfileRow =
+  Database['public']['Tables']['user_profiles']['Row'];
 type UserProfileInsert =
   Database['public']['Tables']['user_profiles']['Insert'];
 type UserProfileUpdate =
