@@ -1,13 +1,12 @@
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 export class NotesRepository {
-  private readonly client: SupabaseClient;
+  private client: SupabaseClient;
 
-  constructor() {
-    this.client = createClient(
-      process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_API_URL,
-      process.env.HIBISCUS_SUPABASE_SERVICE_KEY
-    );
+  constructor(private readonly hbc: HibiscusSupabaseClient) {
+    hbc.setOptions({ useServiceKey: true });
+    this.client = hbc.getClient();
   }
 
   getClient() {

@@ -11,10 +11,6 @@ export default async function notesHandler(
   const stringifyParticipantId = participant_id.toString();
   const updatedNote: string | null = req.body.note;
 
-  console.log(
-    `${stringifyCompanyId} + ${stringifyParticipantId} + ${updatedNote}`
-  );
-
   try {
     const repo = container.resolve(NotesRepository);
     let getNoteInfo = await repo.getNoteByCompanyAndParticipantId(
@@ -33,7 +29,6 @@ export default async function notesHandler(
           stringifyParticipantId,
           updatedNote
         );
-        console.log(result);
         return res.status(201).json({ data: { note: result.data['note'] } });
       }
 
