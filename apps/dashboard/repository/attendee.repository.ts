@@ -35,13 +35,7 @@ export class AttendeeRepository {
     return { data, error };
   }
 
-  async getAttendeesByEventId(
-    eventId: string,
-    yearFilter?: string,
-    majorFilter?: string,
-    schoolFilter?: string,
-    savedFilter?: number
-  ) {
+  async getAttendeesByEventId(eventId: string) {
     const { data, error } = await this.client
       .from('event_log')
       .select(
@@ -72,28 +66,32 @@ export class AttendeeRepository {
 
   async getAllSavedAttendees(companyId: string) {
     const { data, error } = await this.client
-      .from('company_saved_user_profiles')
+      .from('company_saved_participants')
       .select(
         `
        participants(
-          id,
-          user_profiles(
-            first_name,
-            last_name
-          ),
-          notes(
-            note,
-            company_id
-          ),
-          major,
-          resume,
-          graduation_year,
-          portfolio_link,
-          school
+        id,
+        user_profiles(
+          first_name,
+          last_name
+        ),
+        notes(
+          note,
+          company_id
+        ),
+        major,
+        resume,
+        graduation_year,
+        portfolio_link,
+        school
+      )
        `
       )
       .eq('company_id', companyId)
       .eq('saved', true);
+
+    if (error) throw new Error(error.message);
+    return { data, error };
   }
 
   //utility function for filtering
@@ -106,7 +104,6 @@ export class AttendeeRepository {
       return ele['participants'][filterParameter] === filterValue;
     });
 
-    console.log(returnArray);
     return returnArray;
   }
 }
