@@ -1,9 +1,26 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import 'reflect-metadata';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { container } from 'tsyringe';
-import { DashboardRepository } from '../../../repository/dashboard.repository';
-import { PostgrestError } from '@supabase/supabase-js';
-import e from 'express';
+import { CompanyRepository } from 'apps/dashboard/repository/company.repository';
+
+function Company(
+  id: string,
+  name: string,
+  description: string | null,
+  website: string | null,
+  profilePhoto: string | null,
+  targetGraduations: string[],
+  targetMajors: string[]
+) {
+  this.id = id;
+  this.name = name;
+  this.description = description;
+  this.website = website;
+  this.profilePhoto = profilePhoto;
+  this.targetGraduations = targetGraduations;
+  this.targetMajors = targetMajors;
+}
 
 /**
  * Creates a team in the teams table
@@ -16,11 +33,12 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const repo = container.resolve(DashboardRepository);
+  const repo = container.resolve(CompanyRepository);
   const { companyId } = req.query;
   const stringifyId = companyId.toString();
-  const targetMajors: string[] | null = req.body.target_majors;
-  const targetGraduations: string[] | null = req.body.target_graduations;
+  //needed for update, might cut if cannot complete
+  // const targetGraduations: string[] | null = req.body.target_graduations;
+  // const targetMajors: string[] | null = req.body.target_majors;
 
   try {
     //Get logic
@@ -30,41 +48,48 @@ export default async function handler(
         throw new Error(result.error.message);
       }
 
+      if (!result.data || !result) {
+        return res.status(404).json({ message: 'Resource not found.' });
+      }
+      const flattenedGraduations = deconstructNestedArray(
+        result.data['target_graduations'] as any[],
+        'graduation_year'
+      );
+      const flattenedMajors = deconstructNestedArray(
+        result.data['target_majors'] as any[],
+        'major'
+      );
+      const returnCompany = new Company(
+        result.data['id'],
+        result.data['name'],
+        result.data['description'],
+        result.data['website'],
+        result.data['profile_photo'],
+        flattenedGraduations,
+        flattenedMajors
+      );
       //must get majors and target graduations terms as well
-      return res.status(200).json({ data: result.data });
+      return res.status(200).json({ data: returnCompany });
     }
-    // else if (req.method === 'PUT') {
-    //   console.log(resume);
-    //   console.log(portfolioLink);
-    //   //Put logic
-    //   if (!participantId || (!resume && !portfolioLink)) {
-    //     throw new Error('One or more required parameters are missing.');
-    //   }
-
-    //   let result: { error: PostgrestError; data: unknown[] };
-    //   if (resume) {
-    //     result = await repo.updateParticipantResume(stringifyId, resume);
-    //     if (result.error) {
-    //       throw new Error(result.error.message);
-    //     }
-    //   }
-
-    //   if (portfolioLink) {
-    //     result = await repo.updateParticipantPortfolioLink(
-    //       stringifyId,
-    //       portfolioLink
-    //     );
-    //     if (result.error) {
-    //       throw new Error(result.error.message);
-    //     }
-    //   }
-
-    //   //returns row of updated participant
-    //   return res.status(200).json({ data: result.data });
-    // }
-
-    return res.status(400).json({ message: 'Invalid request type.' });
+    return res.status(405).json({ message: 'Invalid request type.' });
   } catch (e) {
     return res.status(500).json({ message: e.message });
+  }
+}
+
+function deconstructNestedArray(
+  nestedObjectArray: any[],
+  parameterName: string
+) {
+  //only operate if not empty
+  const returnArray: string[] = [];
+  if (nestedObjectArray.length) {
+    nestedObjectArray.forEach((ele) => {
+      returnArray.push(ele[parameterName]);
+    });
+
+    return returnArray;
+  } else {
+    return [];
   }
 }
