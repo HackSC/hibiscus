@@ -203,9 +203,10 @@ type SponsorServiceResponse = {
 
 export class SponsorServiceAPI {
   static async getCheckInAttendee(
-    companyId: string
+    companyId: string,
+    eventId: string
   ): Promise<SponsorServiceResponse> {
-    const res = await axios.get(`/api/${companyId}/participants`);
+    const res = await axios.get(`/api/company/${companyId}/${eventId}`);
     if (res.status >= 400) {
       return { error: { message: res.data.message }, status: res.status };
     }

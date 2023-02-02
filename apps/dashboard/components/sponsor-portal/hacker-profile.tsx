@@ -24,9 +24,7 @@ export function HackerProfile({ hacker, onClick }: Props) {
           justifyContent: 'space-between',
         }}
       >
-        <BoldText style={{ fontSize: '30px' }}>
-          {hacker.first_name} {hacker.last_name}
-        </BoldText>
+        <BoldText style={{ fontSize: '30px' }}>{hacker.full_name}</BoldText>
         <StyledButton>
           <Image width="30" height="30" src={'/save.svg'} alt="save-button" />
         </StyledButton>

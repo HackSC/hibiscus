@@ -37,7 +37,7 @@ export function HackerTab({
       >
         <Circle />
         <Text style={{ paddingLeft: '20px', fontSize: '20px' }}>
-          {user.first_name} {user.last_name}
+          {user.full_name}
         </Text>
       </div>
       {showYear && (

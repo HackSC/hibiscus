@@ -15,6 +15,7 @@ import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { HibiscusRole } from '@hibiscus/types';
 import { Button, ParagraphText } from '@hibiscus/ui-kit-2023';
 import { getWordCount } from '../../common/utils';
+import { SponsorServiceAPI } from '../../common/api';
 
 const Index = () => {
   const [attendees, setAttendees] = useState<Attendee[]>([]);
@@ -25,6 +26,8 @@ const Index = () => {
 
   const router = useRouter();
   const supabase = container.resolve(HibiscusSupabaseClient).getClient();
+  const COMPANY_ID = '70f7dcf9-d0d9-493f-b8b4-be986a92adb3'; // Will change later
+  const EVENT_ID = '1'; // Will change later
 
   useEffect(() => {
     async function fetchData() {
@@ -34,7 +37,6 @@ const Index = () => {
     }
     fetchData();
 
-    const COMPANY_ID = 'a8e21c21-948c-4a04-b231-015434aacc0b'; // Will change later
     const events = supabase
       .channel('custom-insert-channel')
       .on(
@@ -43,10 +45,10 @@ const Index = () => {
           event: 'INSERT',
           schema: 'public',
           table: 'event_log',
-          // filter: `company_id=eq.${COMPANY_ID}`,
+          filter: `event_id=eq.${EVENT_ID}`,
         },
         (payload) => {
-          console.log('Change received!', payload);
+          fetchData();
         }
       )
       .subscribe();
@@ -68,7 +70,7 @@ const Index = () => {
 
   const openQuickNote = (attendee: Attendee) => {
     setModalActive(true);
-    setAttendeeName(`${attendee.first_name} ${attendee.last_name}`);
+    setAttendeeName(`${attendee.full_name}`);
   };
 
   const getAttendees = () => {
@@ -545,10 +547,10 @@ const StyledScrollBar = styled.div`
   flex-direction: column;
   width: 100%;
   height: 560px;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   &::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
     background-color: ${Colors2023.GRAY.MEDIUM};
     border-radius: 50px;
   }

@@ -139,7 +139,7 @@ const Index = () => {
 
   const openQuickNote = (attendee: Attendee) => {
     setModalActive(true);
-    setAttendeeName(`${attendee.first_name} ${attendee.last_name}`);
+    setAttendeeName(`${attendee.full_name}`);
   };
 
   return (

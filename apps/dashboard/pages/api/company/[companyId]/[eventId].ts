@@ -44,14 +44,14 @@ export default async function handler(
     const attendeesData: any[] = [];
     eventResult.data.map((element) => {
       const participantData = element['participants'];
-      const notes: any[] = participantData['notes'];
-      const userNotes = notes.filter((ele) => {
-        if (ele['company_id'] == companyId) {
-          return ele['note'];
-        }
-      });
-      console.log(userNotes);
-      console.log(notes);
+      // const notes: any[] = participantData['notes'];
+      // const userNotes = notes.filter((ele) => {
+      //   if (ele['company_id'] == companyId) {
+      //     return ele['note'];
+      //   }
+      // });
+      // console.log(userNotes);
+      // console.log(notes);
       const attendee = new Attendee(
         participantData['id'],
         participantData['user_profiles']['first_name'] +
@@ -66,6 +66,7 @@ export default async function handler(
       );
       attendeesData.push(attendee);
     });
+    console.log(attendeesData);
     return res.status(200).json({ data: attendeesData });
   } catch (e) {
     return res.status(500).json({ message: e.message });
