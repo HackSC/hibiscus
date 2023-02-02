@@ -1,21 +1,24 @@
 import { injectable } from 'tsyringe';
-import { Redis } from 'ioredis';
 import { getEnv } from '@hibiscus/env';
+import { MongoClient } from 'mongodb';
 
 @injectable()
 export class FeatureFlagRepository {
-  private readonly redis: Redis;
+  private readonly mongo: MongoClient;
   constructor() {
-    this.redis = new Redis(getEnv().Hibiscus.FeatureFlag.RedisURL);
+    this.mongo = new MongoClient(getEnv().Hibiscus.FeatureFlag.MongoURI);
   }
 
   async getAll(): Promise<Record<string, boolean>> {
-    const keys = await this.redis.keys('*');
+    const client = await this.mongo.connect();
     const vals = {};
-    for (const key of keys) {
-      const val = await this.redis.get(key);
-      vals[key] = val === 'true';
-    }
+    await client
+      .db('hibiscus')
+      .collection('feature-flags')
+      .find()
+      .forEach((item) => {
+        vals[item['key']] = item['value'];
+      });
     return vals;
   }
 }
