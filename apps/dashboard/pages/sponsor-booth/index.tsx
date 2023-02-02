@@ -26,14 +26,23 @@ const Index = () => {
 
   const router = useRouter();
   const supabase = container.resolve(HibiscusSupabaseClient).getClient();
-  const COMPANY_ID = '70f7dcf9-d0d9-493f-b8b4-be986a92adb3'; // Will change later
+  const COMPANY_ID = 'a8ca6c2e-6b68-400f-9c3a-a01415ed90c3'; // Will change later
   const EVENT_ID = '1'; // Will change later
 
   useEffect(() => {
     async function fetchData() {
-      const mockAPI = new SponsorAPI(true);
-      const response = (await mockAPI.getAttendees()).data;
-      setAttendees(response);
+      SponsorServiceAPI.getCheckInAttendee(COMPANY_ID, EVENT_ID)
+        .then(({ data, error }) => {
+          if (error) {
+            console.log(error);
+            setAttendees([]);
+          }
+
+          setAttendees(data.data as Attendee[]);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
     fetchData();
 

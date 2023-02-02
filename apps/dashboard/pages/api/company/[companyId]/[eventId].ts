@@ -51,13 +51,13 @@ export default async function handler(
     const attendeesData: any[] = [];
     eventResult.data.map((element) => {
       const participantData = element['participants'];
-      const notes: any[] = participantData['notes'];
-      //there never should be a case where there are more than one note from the same company for the same user
-      const userNotes = notes
-        .filter((ele) => {
-          return ele['company_id'] === stringifyCompanyId;
-        })
-        .at(0);
+      // const notes: any[] = participantData['notes'];
+      // //there never should be a case where there are more than one note from the same company for the same user
+      // const userNotes = notes
+      //   .filter((ele) => {
+      //     return ele['company_id'] === stringifyCompanyId;
+      //   })
+      //   .at(0);
 
       const attendee = new Attendee(
         participantData['id'],
@@ -69,7 +69,8 @@ export default async function handler(
         participantData['graduation_year'],
         participantData['portfolio_link'],
         participantData['school'],
-        userNotes ? userNotes['note'] : null
+        // userNotes ? userNotes['note'] : null
+        null
       );
       attendeesData.push(attendee);
     });

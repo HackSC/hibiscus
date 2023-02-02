@@ -251,7 +251,7 @@ export class SponsorServiceAPI {
 
   static async getAttendeeNote(companyId: string, attendeeId: string) {
     const res = await axios.get(
-      `/api/notes?companyId=${companyId}&participant_id=${attendeeId}`
+      `/api/notes?company_id=${companyId}&participant_id=${attendeeId}`
     );
     if (res.status >= 400) {
       return { error: { message: res.data.message }, status: res.status };

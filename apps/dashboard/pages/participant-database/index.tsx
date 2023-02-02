@@ -11,10 +11,11 @@ import { HibiscusRole } from '@hibiscus/types';
 import { useRouter } from 'next/router';
 import { OneLineText } from '@hibiscus/ui-kit-2023';
 import { HackerTab } from '../../components/sponsor-portal/hacker-tab';
-import { SponsorAPI, Attendee } from '../../common/mock-sponsor';
+import { Attendee } from '../../common/mock-sponsor';
 import { Button, ParagraphText } from '@hibiscus/ui-kit-2023';
 import { getWordCount } from '../../common/utils';
 import HackerProfile from '../../components/sponsor-portal/hacker-profile';
+import { SponsorServiceAPI } from '../../common/api';
 
 const Index = () => {
   const [textInput, setInput] = useState('');
@@ -29,12 +30,23 @@ const Index = () => {
   const [attendeeName, setAttendeeName] = useState('');
 
   const router = useRouter();
+  const COMPANY_ID = 'a8ca6c2e-6b68-400f-9c3a-a01415ed90c3'; // Will change later
+  const EVENT_ID = '1'; // Will change later
 
   useEffect(() => {
     async function fetchData() {
-      const mockAPI = new SponsorAPI(true);
-      const response = (await mockAPI.getAttendees()).data;
-      setAttendees(response);
+      SponsorServiceAPI.getCheckInAttendee(COMPANY_ID, EVENT_ID)
+        .then(({ data, error }) => {
+          if (error) {
+            console.log(error);
+            setAttendees([]);
+          }
+
+          setAttendees(data.data as Attendee[]);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
     fetchData();
   }, []);
