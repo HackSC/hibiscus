@@ -3,7 +3,6 @@ import 'reflect-metadata';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { container } from 'tsyringe';
 import { AttendeeRepository } from '../../../../repository/attendee.repository';
-import e from 'express';
 
 function Attendee(
   id: string,
