@@ -75,15 +75,11 @@ const LayoutContainer = styled.div`
   flex-direction: column;
 `;
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  const ffr = container.resolve(FeatureFlagRepository);
-  const configs = await ffr.getAll();
-  const appsOpen = configs['APPS_OPEN'] ?? false;
-  const rsvpFormOpen = configs['RSVP_FORM_OPEN'] ?? false;
-  return {
-    props: {
-      appsOpen,
-      rsvpFormOpen,
-    } as ServerSideProps,
-  };
-};
+// export const getServerSideProps: GetServerSideProps = async (ctx) => {
+//   const appsOpen = await get('appsOpen');
+//   return {
+//     props: {
+//       appsOpen,
+//     } as ServerSideProps,
+//   };
+// };

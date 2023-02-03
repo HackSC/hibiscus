@@ -48,7 +48,10 @@ export default async function handler(
       }
 
       //get all attendees related to eventId
-      const eventResult = await repo.getAttendeesByEventId(stringifyEventId);
+      const eventResult = await repo.getAttendeesByEventId(
+        stringifyEventId,
+        null
+      );
       if (!eventResult.data) {
         return res
           .status(404)
@@ -83,7 +86,7 @@ export default async function handler(
           limit
         );
       } else {
-        eventResult = await repo.getAttendeesByEventId(stringifyEventId);
+        eventResult = await repo.getAttendeesByEventId(stringifyEventId, limit);
       }
 
       if (!eventResult.data) {
@@ -122,7 +125,11 @@ export default async function handler(
   }
 }
 
-function processAttendeesList(array: any[], companyId: string) {
+export function processAttendeesList(
+  array: any[],
+  companyId: string,
+  newlySaved?: boolean
+) {
   const attendeesData: any[] = [];
 
   array.map((element) => {
@@ -148,14 +155,18 @@ function processAttendeesList(array: any[], companyId: string) {
     }
 
     let saveState: any;
-    if (savedArray.length) {
-      saveState = savedArray
-        .filter((ele) => {
-          return ele['company_id'] === companyId;
-        })
-        .at(0);
+    if (newlySaved) {
+      saveState = true;
     } else {
-      saveState = false;
+      if (savedArray.length) {
+        saveState = savedArray
+          .filter((ele) => {
+            return ele['company_id'] === companyId;
+          })
+          .at(0);
+      } else {
+        saveState = false;
+      }
     }
 
     const attendee = new Attendee(

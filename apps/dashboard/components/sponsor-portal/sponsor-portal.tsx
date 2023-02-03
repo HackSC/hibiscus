@@ -49,7 +49,7 @@ export function SponsorPortal({ user }: Props) {
           </Link>
         </StyledButton>
         <StyledButton color={'black'}>
-          <Link href="/">
+          <Link href="https://docs.google.com/document/d/1uDLBfm1hC7OTe9hNyTBbp2Gdje-GSuRK8KeRz7JOOaw/edit#">
             <H1
               style={{
                 color: Colors2023.GRAY.LIGHT,
