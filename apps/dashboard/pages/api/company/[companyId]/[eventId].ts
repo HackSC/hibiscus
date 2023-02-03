@@ -87,7 +87,6 @@ export default async function handler(
       }
 
       let filteringArray: any[] = eventResult.data;
-      console.log(filteringArray);
       const filterParams = ['graduation_year', 'major', 'school'];
       const filterValues = [yearFilter, majorFilter, schoolFilter];
       for (let i = 0; i < 3; i++) {
@@ -99,10 +98,9 @@ export default async function handler(
         }
         filteringArray = repo.filterAttendees(
           filterParams[i],
-          filterValues[i],
+          filterValues[i].toLowerCase(),
           filteringArray
         );
-        console.log(filteringArray);
       }
 
       const attendeesData: any[] = processAttendeesList(
