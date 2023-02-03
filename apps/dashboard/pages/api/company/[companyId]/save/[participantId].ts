@@ -50,9 +50,14 @@ export default async function handler(
           'Either company_id or participant_id is null and invalid.'
         );
       }
-      const returnData = processAttendeesList(result.data, company_id, true);
+      const returnData = await processAttendeesList(
+        result.data,
+        company_id,
+        true
+      );
       return res.status(201).json({ data: returnData });
     } else if (req.method === 'DELETE') {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const result = await repo.deleteAttendeeFromSaved(
         participant_id,
         company_id
