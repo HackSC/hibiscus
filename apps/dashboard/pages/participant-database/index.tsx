@@ -30,8 +30,13 @@ const Index = () => {
   const [currentNote, setNote] = useState('');
 
   const router = useRouter();
-  const COMPANY_ID = '06874651-22cf-4b39-8427-018990cc4fdb'; // Will change later
+  const COMPANY_ID = '24a42c02-34d0-4ac4-a0b2-6051af8d323b'; // Will change later
   const EVENT_ID = '1'; // Will change later
+
+  const getSaveFilterState = () => {
+    if (chosenParicipantOption) return chosenParicipantOption.value === 'saved';
+    return false;
+  };
 
   useEffect(() => {
     async function getFilteredAttendee() {
@@ -40,7 +45,11 @@ const Index = () => {
         EVENT_ID,
         chosenMajorOption?.value,
         chosenYearOption?.value,
-        chosenSchoolOption?.value
+        chosenSchoolOption?.value,
+        chosenParicipantOption
+          ? chosenParicipantOption.value === 'saved'
+          : false,
+        1
       )
         .then(({ data, error }) => {
           if (error) {
@@ -55,7 +64,12 @@ const Index = () => {
         });
     }
     getFilteredAttendee();
-  }, [chosenMajorOption, chosenYearOption, chosenSchoolOption]);
+  }, [
+    chosenMajorOption,
+    chosenYearOption,
+    chosenSchoolOption,
+    chosenParicipantOption,
+  ]);
 
   const { user } = useHibiscusUser();
   if (user == null) {
@@ -71,7 +85,7 @@ const Index = () => {
     const schools = await APIService.getSchools();
     const opts: Option[] = schools.map((str, i) => ({
       displayName: str,
-      value: i.toString(),
+      value: str.toString(),
     }));
 
     return opts;
@@ -156,7 +170,7 @@ const Index = () => {
           onNoteClick={() => {
             setCurrentAttendee(attendee);
           }}
-          onSaveClick={toggleSaveAttendee(COMPANY_ID, attendee)}
+          onSaveClick={() => toggleSaveAttendee(COMPANY_ID, attendee)}
         />
       </HackerTabContainer>
     ));
@@ -348,18 +362,6 @@ const Index = () => {
             </FilterPill>
           )}
         </ChosenFilterContainer>
-
-        {/* <FilterContainer style={{ marginTop: '2rem' }}>
-          <StyledTitle>Search</StyledTitle>
-          <OneLineText
-            style={{ marginLeft: '3rem' }}
-            value={textInput}
-            placeholder={'Name'}
-            onChange={(e) => {
-              setInput(e.target.value);
-            }}
-          />
-        </FilterContainer> */}
       </Container>
 
       <DatabaseContainer>
@@ -398,7 +400,6 @@ const Index = () => {
                 hacker={currentAttendee}
                 note={currentNote}
                 noteOnClick={() => openQuickNote(currentAttendee)}
-                saveOnClick={{}}
               />
             </div>
           ) : (

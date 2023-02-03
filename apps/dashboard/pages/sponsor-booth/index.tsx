@@ -27,8 +27,8 @@ const Index = () => {
 
   const router = useRouter();
   const supabase = container.resolve(HibiscusSupabaseClient).getClient();
-  const COMPANY_ID = 'df7dfb37-9354-4023-9970-06ad86ca78aa'; // Will change later
-  const EVENT_ID = '2'; // Will change later
+  const COMPANY_ID = '24a42c02-34d0-4ac4-a0b2-6051af8d323b'; // Will change later
+  const EVENT_ID = '1'; // Will change later
 
   useEffect(() => {
     async function fetchData() {
@@ -414,9 +414,6 @@ const Index = () => {
                 hacker={currentAttendee}
                 note={currentNote as string}
                 noteOnClick={() => openQuickNote(currentAttendee)}
-                saveOnClick={() =>
-                  toggleSaveAttendee(COMPANY_ID, currentAttendee)
-                }
               />
             </div>
           ) : (

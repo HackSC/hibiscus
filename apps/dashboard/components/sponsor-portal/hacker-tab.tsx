@@ -85,14 +85,14 @@ export function HackerTab({
             }}
           >
             {isSaved ? (
-              <Image width="35" height="35" src={'/save.svg'} alt="save.svg" />
-            ) : (
               <Image
                 width="35"
                 height="35"
                 src={'/save-green.svg'}
-                alt="save-green.svg"
+                alt="save.svg"
               />
+            ) : (
+              <Image width="35" height="35" src={'/save.svg'} alt="save.svg" />
             )}
           </StyledButton>
         )}
