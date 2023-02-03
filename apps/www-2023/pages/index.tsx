@@ -10,7 +10,7 @@ import Speakers from '../components/speakers/speakers';
 import Sponsors from '../components/sponsors/sponsors';
 import FAQs from '../components/faqs/faqs';
 import Footer from '../components/footer/footer';
-import Events from '../components/events/events';
+import Events from '../../dashboard/components/events/events';
 
 export function Index() {
   return (
