@@ -33,12 +33,8 @@ export function Sponsors(props: SponsorsProps) {
           </a>
         </Sponsor>
         <Sponsor>
-          <a href="https://www.carc.usc.edu/" target="_blank" rel="noreferrer">
-            <img
-              src="/img/logos/carc.png"
-              alt="USC Center of Advanced Research Computing Logo"
-              loading="lazy"
-            />
+          <a href="https://www.arrcus.com/" target="_blank" rel="noreferrer">
+            <img src="/img/logos/arrcus.png" alt="Arrcus Logo" loading="lazy" />
           </a>
         </Sponsor>
         <Sponsor>
@@ -57,6 +53,15 @@ export function Sponsors(props: SponsorsProps) {
         <Sponsor>
           <a href="https://careers.2k.com/" target="_blank" rel="noreferrer">
             <img src="/img/logos/2k.png" alt="2K Logo" loading="lazy" />
+          </a>
+        </Sponsor>
+        <Sponsor>
+          <a href="https://www.carc.usc.edu/" target="_blank" rel="noreferrer">
+            <img
+              src="/img/logos/carc.png"
+              alt="USC Center of Advanced Research Computing Logo"
+              loading="lazy"
+            />
           </a>
         </Sponsor>
         <Sponsor>
