@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import useHibiscusUser from '../hooks/use-hibiscus-user/use-hibiscus-user';
 import { ApplicationStatus, HibiscusRole } from '@hibiscus/types';
 import HackerPortal from '../components/hacker-portal/hacker-portal';
+import IdentityPortal from '../components/identity-portal/identity-portal';
+import SponsorPortal from '../components/sponsor-portal/sponsor-portal';
 import { GetServerSideProps } from 'next';
 import AppsClosedPlaceholder from '../components/hacker-portal/apps-closed-placeholder';
 import { isHackerPostAppStatus } from '../common/utils';
@@ -43,7 +45,9 @@ export function Index({ appsOpen, rsvpFormOpen }: ServerSideProps) {
         return <RSVPClosedPlaceholder />;
       }
       return <HackerPortal />;
-    }
+    } else if (user.role === HibiscusRole.SPONSOR)
+      return <SponsorPortal user={user} />;
+    else if (user.role === HibiscusRole.VOLUNTEER) return <IdentityPortal />;
   };
 
   return (

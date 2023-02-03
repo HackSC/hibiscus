@@ -31,6 +31,7 @@ alter table "public"."notes" add constraint "notes_pkey" PRIMARY KEY using index
 
 alter table "public"."participants" add constraint "participants_pkey" PRIMARY KEY using index "participants_pkey";
 
+
 alter table "public"."notes" add constraint "notes_participant_id_fkey" FOREIGN KEY (participant_id) REFERENCES participants(id) not valid;
 
 alter table "public"."notes" validate constraint "notes_participant_id_fkey";

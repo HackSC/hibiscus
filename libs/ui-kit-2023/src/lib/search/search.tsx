@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { BiSearch } from 'react-icons/bi';
-import { useRef } from 'react';
+import { FormEvent, useRef } from 'react';
 
 /* eslint-disable-next-line */
 export interface searchProps {
@@ -10,23 +10,26 @@ export interface searchProps {
 
 export function Search({ placeholder, onInput }: searchProps) {
   const ref = useRef<HTMLInputElement>(null);
-  function handleSubmit() {
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
     if (!ref.current) return;
     onInput(ref.current.value);
   }
   return (
-    <OuterDiv>
-      <BiSearch
-        style={{
-          color: 'gray',
-          position: 'relative',
-          top: '6px',
-          right: '8px',
-          fontSize: '1.5em',
-        }}
-      />
-      <Input ref={ref} onSubmit={handleSubmit} placeholder={placeholder} />
-    </OuterDiv>
+    <form onSubmit={handleSubmit}>
+      <OuterDiv>
+        <BiSearch
+          style={{
+            color: 'gray',
+            position: 'relative',
+            top: '6px',
+            right: '8px',
+            fontSize: '1.5em',
+          }}
+        />
+        <Input ref={ref} placeholder={placeholder} />
+      </OuterDiv>
+    </form>
   );
 }
 
