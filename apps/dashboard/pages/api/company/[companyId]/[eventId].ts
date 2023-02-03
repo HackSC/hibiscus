@@ -3,6 +3,7 @@ import 'reflect-metadata';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { container } from 'tsyringe';
 import { AttendeeRepository } from '../../../../repository/attendee.repository';
+import e from 'express';
 
 function Attendee(
   id: string,
@@ -12,7 +13,8 @@ function Attendee(
   graduation_year: string,
   portfolio_link: string,
   school: string,
-  quickNotes: string
+  quickNotes: string,
+  saved: boolean
 ) {
   this.id = id;
   this.full_name = fullName;
@@ -22,6 +24,7 @@ function Attendee(
   this.portfolio_link = portfolio_link;
   this.school = school;
   this.quick_notes = quickNotes;
+  this.saved = saved;
 }
 
 //one day this will need to handle duplicate attendees showing up in getAttendees from same users going to same company's events
@@ -62,6 +65,7 @@ export default async function handler(
       const majorFilter = req.body.major;
       const schoolFilter = req.body.school;
       const savedFilter = req.body.saved;
+      const limit: number | null = req.body.limit;
 
       const currentEventInfo = await repo.getEventInfo(stringifyEventId);
       if (currentEventInfo.data['company_id'] !== stringifyCompanyId) {
@@ -75,7 +79,10 @@ export default async function handler(
       //if not, use getAllParticipants
       let eventResult: any;
       if (savedFilter) {
-        eventResult = await repo.getAllSavedAttendees(stringifyCompanyId);
+        eventResult = await repo.getAllSavedAttendees(
+          stringifyCompanyId,
+          limit
+        );
       } else {
         eventResult = await repo.getAttendeesByEventId(stringifyEventId);
       }
@@ -116,7 +123,7 @@ export default async function handler(
   }
 }
 
-function processAttendeesList(array: any[], companyId) {
+function processAttendeesList(array: any[], companyId: string) {
   const attendeesData: any[] = [];
 
   array.map((element) => {
@@ -124,6 +131,9 @@ function processAttendeesList(array: any[], companyId) {
     const participantData = element['participants'];
 
     const notes: any[] = participantData['notes'] as any[];
+    const savedArray: any[] = participantData[
+      'company_saved_participants'
+    ] as any[];
     //there never should be a case where there are more than one note from the same company for the same user
     //if notes is undefined/null, just set to null. else filter
 
@@ -138,6 +148,17 @@ function processAttendeesList(array: any[], companyId) {
       userNotes = '';
     }
 
+    let saveState: any;
+    if (savedArray.length) {
+      saveState = savedArray
+        .filter((ele) => {
+          return ele['company_id'] === companyId;
+        })
+        .at(0);
+    } else {
+      saveState = false;
+    }
+
     const attendee = new Attendee(
       participantData['id'],
       participantData['user_profiles']['first_name'] +
@@ -148,7 +169,8 @@ function processAttendeesList(array: any[], companyId) {
       participantData['graduation_year'],
       participantData['portfolio_link'],
       participantData['school'],
-      userNotes ? userNotes['note'] : ''
+      userNotes ? userNotes['note'] : '',
+      saveState ? true : false
     );
     attendeesData.push(attendee);
   });
