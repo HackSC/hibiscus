@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 import { BoldText, Link, Text } from '@hibiscus/ui';
 import { Colors2023 } from '@hibiscus/styles';
@@ -10,17 +9,9 @@ interface Props {
   hacker: Attendee;
   note?: string;
   noteOnClick;
-  saveOnClick;
 }
 
-export function HackerProfile({
-  hacker,
-  note,
-  noteOnClick,
-  saveOnClick,
-}: Props) {
-  const [isSaved, setSave] = useState(hacker.saved);
-
+export function HackerProfile({ hacker, note, noteOnClick }: Props) {
   return (
     <Container>
       <div
@@ -32,23 +23,6 @@ export function HackerProfile({
         }}
       >
         <BoldText style={{ fontSize: '30px' }}>{hacker.full_name}</BoldText>
-        <StyledButton
-          onClick={() => {
-            isSaved ? setSave(false) : setSave(true);
-            saveOnClick();
-          }}
-        >
-          {isSaved ? (
-            <Image
-              width="30"
-              height="30"
-              src={'/save-green.svg'}
-              alt="save-button"
-            />
-          ) : (
-            <Image width="30" height="30" src={'/save.svg'} alt="save-button" />
-          )}
-        </StyledButton>
       </div>
       <Text style={{ fontSize: '15px' }}>School: {hacker.school}</Text>
       <Text style={{ fontSize: '15px' }}>Major: {hacker.major}</Text>

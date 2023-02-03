@@ -219,13 +219,15 @@ export class SponsorServiceAPI {
     major?: string,
     year?: string,
     school?: string,
-    saved?: boolean
+    saved?: boolean,
+    limit?: number
   ) {
     const res = await axios.post(`/api/company/${companyId}/${eventId}`, {
       year,
       major,
       school,
       saved,
+      limit,
     });
     if (res.status >= 400) {
       return { error: { message: res.data.message }, status: res.status };
