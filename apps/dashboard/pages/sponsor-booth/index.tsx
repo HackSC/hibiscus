@@ -32,19 +32,6 @@ const Index = () => {
   const EVENT_ID = '1'; // Will change later
 
   useEffect(() => {
-    async function fetchData() {
-      SponsorServiceAPI.getCheckInAttendee(COMPANY_ID, EVENT_ID)
-        .then(({ data, error }) => {
-          if (error) {
-            console.log(error);
-          }
-          console.log(data.data);
-          setAttendees(data.data as Attendee[]);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
     fetchData();
 
     getSavedAttendees(COMPANY_ID, EVENT_ID);
@@ -85,6 +72,20 @@ const Index = () => {
     setAttendeeName(`${attendee.full_name}`);
   };
 
+  async function fetchData() {
+    SponsorServiceAPI.getCheckInAttendee(COMPANY_ID, EVENT_ID)
+      .then(({ data, error }) => {
+        if (error) {
+          console.log(error);
+        }
+        console.log(data.data);
+        setAttendees(data.data as Attendee[]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   const getAttendees = () => {
     return attendees.map((attendee, index) => (
       <HackerTabContainer
@@ -118,9 +119,7 @@ const Index = () => {
           <HackerTab
             user={savedAttendee}
             showNoteButton={true}
-            showSaveButton={true}
             onNoteClick={() => openQuickNote(savedAttendee)}
-            onSaveClick={() => toggleSaveAttendee(COMPANY_ID, savedAttendee)}
           />
         </SavedAttendeeContainer>
       ));
@@ -145,6 +144,7 @@ const Index = () => {
         }
         console.log(data.data);
         setSavedAttendees(data.data as Attendee[]);
+        fetchData();
       })
       .catch((error) => {
         console.log(error);
@@ -192,11 +192,12 @@ const Index = () => {
             console.log(error);
           }
           console.log(data);
+          getSavedAttendees(COMPANY_ID, EVENT_ID);
+          fetchData();
         })
         .catch((error) => {
           console.log(error);
         });
-      getSavedAttendees(COMPANY_ID, EVENT_ID);
     } else {
       SponsorServiceAPI.unsaveAttendee(companyId, attendee.id)
         .then(({ data, error }) => {
@@ -204,11 +205,12 @@ const Index = () => {
             console.log(error);
           }
           console.log(data);
+          getSavedAttendees(COMPANY_ID, EVENT_ID);
+          fetchData();
         })
         .catch((error) => {
           console.log(error);
         });
-      getSavedAttendees(COMPANY_ID, EVENT_ID);
     }
   }
 
@@ -324,6 +326,12 @@ const Index = () => {
           <ViewAllButton
             style={
               currentAttendee !== null ? { width: '100%' } : { width: '70%' }
+            }
+            onClick={() =>
+              router.push({
+                pathname: '/participant-database',
+                query: { viewSaved: true },
+              })
             }
           >
             <H1
@@ -684,7 +692,7 @@ const StyledScrollBar = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 560px;
+  height: 602px;
   overflow-y: auto;
 
   &::-webkit-scrollbar {

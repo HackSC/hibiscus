@@ -236,7 +236,9 @@ export class SponsorServiceAPI {
   }
 
   static async saveAttendee(companyId: string, attendeeId: string) {
-    const res = await axios.post(`/api/company/${companyId}/${attendeeId}`);
+    const res = await axios.post(
+      `/api/company/${companyId}/save/${attendeeId}`
+    );
     if (res.status >= 400) {
       return { error: { message: res.data.message }, status: res.status };
     }
@@ -244,7 +246,9 @@ export class SponsorServiceAPI {
   }
 
   static async unsaveAttendee(companyId: string, attendeeId: string) {
-    const res = await axios.delete(`/api/company/${companyId}/${attendeeId}`);
+    const res = await axios.delete(
+      `/api/company/${companyId}/save/${attendeeId}`
+    );
     if (res.status >= 400) {
       return { error: { message: res.data.message }, status: res.status };
     }

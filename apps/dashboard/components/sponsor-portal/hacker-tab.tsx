@@ -12,8 +12,8 @@ interface Props {
   showSchool?: boolean;
   showNoteButton?: boolean;
   showSaveButton?: boolean;
-  onNoteClick;
-  onSaveClick;
+  onNoteClick?;
+  onSaveClick?;
 }
 
 export function HackerTab({

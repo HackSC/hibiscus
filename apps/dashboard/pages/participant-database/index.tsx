@@ -17,26 +17,27 @@ import HackerProfile from '../../components/sponsor-portal/hacker-profile';
 import { SponsorServiceAPI } from '../../common/api';
 
 const Index = () => {
+  const router = useRouter();
+  const getViewSaved = () => {
+    if (router.query?.viewSaved)
+      return { value: 'saved', displayName: 'Saved' } as Option;
+    return null;
+  };
+
   const [textInput, setInput] = useState('');
   const [chosenYearOption, setYearOption] = useState<Option | null>(null);
   const [chosenMajorOption, setMajorOption] = useState<Option | null>(null);
   const [chosenSchoolOption, setSchoolOption] = useState<Option | null>(null);
   const [chosenParicipantOption, setParticipantOption] =
-    useState<Option | null>(null);
+    useState<Option | null>(getViewSaved());
   const [attendees, setAttendees] = useState<Attendee[]>([]);
   const [currentAttendee, setCurrentAttendee] = useState<Attendee>(null);
   const [modalActive, setModalActive] = useState(false);
   const [attendeeName, setAttendeeName] = useState('');
   const [currentNote, setNote] = useState('');
 
-  const router = useRouter();
   const COMPANY_ID = '24a42c02-34d0-4ac4-a0b2-6051af8d323b'; // Will change later
   const EVENT_ID = '1'; // Will change later
-
-  const getSaveFilterState = () => {
-    if (chosenParicipantOption) return chosenParicipantOption.value === 'saved';
-    return false;
-  };
 
   useEffect(() => {
     async function getFilteredAttendee() {

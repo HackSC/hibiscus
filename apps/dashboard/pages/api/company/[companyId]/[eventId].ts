@@ -133,7 +133,6 @@ export function processAttendeesList(
   const attendeesData: any[] = [];
 
   array.map((element) => {
-    console.log(element);
     //hardcoded since we are processing participants anyway
     const participantData = element['participants'];
 
