@@ -54,8 +54,6 @@ const Index = () => {
           if (error) {
             console.log(error);
           }
-
-          console.log(data.data);
           setAttendees(data.data as Attendee[]);
         })
         .catch((error) => {
@@ -196,6 +194,26 @@ const Index = () => {
       });
   }
 
+  async function fetchData() {
+    SponsorServiceAPI.getFilteredAttendee(
+      COMPANY_ID,
+      EVENT_ID,
+      chosenMajorOption?.value,
+      chosenYearOption?.value,
+      chosenSchoolOption?.value,
+      chosenParicipantOption ? chosenParicipantOption.value === 'saved' : false
+    )
+      .then(({ data, error }) => {
+        if (error) {
+          console.log(error);
+        }
+        setAttendees(data.data as Attendee[]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   async function toggleSaveAttendee(companyId: string, attendee: Attendee) {
     if (!attendee.saved) {
       SponsorServiceAPI.saveAttendee(companyId, attendee.id)
@@ -203,7 +221,7 @@ const Index = () => {
           if (error) {
             console.log(error);
           }
-          console.log(data);
+          fetchData();
         })
         .catch((error) => {
           console.log(error);
@@ -214,7 +232,7 @@ const Index = () => {
           if (error) {
             console.log(error);
           }
-          console.log(data);
+          fetchData();
         })
         .catch((error) => {
           console.log(error);

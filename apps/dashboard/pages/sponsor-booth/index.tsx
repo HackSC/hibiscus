@@ -16,6 +16,7 @@ import { HibiscusRole } from '@hibiscus/types';
 import { Button, ParagraphText } from '@hibiscus/ui-kit-2023';
 import { getWordCount } from '../../common/utils';
 import { SponsorServiceAPI } from '../../common/api';
+import { MutatingDots } from 'react-loader-spinner';
 
 const Index = () => {
   const [attendees, setAttendees] = useState<Attendee[]>([]);
@@ -24,6 +25,8 @@ const Index = () => {
   const [modalActive, setModalActive] = useState(false);
   const [attendeeName, setAttendeeName] = useState('');
   const [textInput, setInput] = useState('');
+  const [savedSpinner, setSavedSpinner] = useState(false);
+  const [checkInSpinner, setCheckInSpinner] = useState(false);
 
   const router = useRouter();
   const supabase = container.resolve(HibiscusSupabaseClient).getClient();
@@ -72,6 +75,7 @@ const Index = () => {
   };
 
   async function fetchData() {
+    setCheckInSpinner(true);
     SponsorServiceAPI.getCheckInAttendee(COMPANY_ID, EVENT_ID)
       .then(({ data, error }) => {
         if (error) {
@@ -81,49 +85,119 @@ const Index = () => {
       })
       .catch((error) => {
         console.log(error);
-      });
+      })
+      .finally(() => setCheckInSpinner(false));
   }
 
   const getAttendees = () => {
-    return attendees.map((attendee, index) => (
-      <HackerTabContainer
-        key={index}
-        onClick={() => {
-          setCurrentAttendee(attendee);
+    if (attendees.length) {
+      return attendees.map((attendee, index) => (
+        <HackerTabContainer
+          key={index}
+          onClick={() => {
+            setCurrentAttendee(attendee);
+          }}
+        >
+          <HackerTab
+            user={attendee}
+            showNoteButton={true}
+            showSaveButton={true}
+            onNoteClick={() => openQuickNote(attendee)}
+            onSaveClick={() => toggleSaveAttendee(COMPANY_ID, attendee)}
+          />
+        </HackerTabContainer>
+      ));
+    }
+    return checkInSpinner ? (
+      <div
+        style={{
+          marginTop: '2rem',
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
-        <HackerTab
-          user={attendee}
-          showNoteButton={true}
-          showSaveButton={true}
-          onNoteClick={() => openQuickNote(attendee)}
-          onSaveClick={() => toggleSaveAttendee(COMPANY_ID, attendee)}
+        <MutatingDots
+          height="100"
+          width="100"
+          color={Colors2023.BLUE.LIGHT}
+          secondaryColor={Colors2023.BLUE.LIGHT}
+          radius="12.5"
+          ariaLabel="mutating-dots-loading"
         />
-      </HackerTabContainer>
-    ));
+      </div>
+    ) : (
+      <SavedAttendeeContainer>
+        <Text
+          style={{
+            width: '100%',
+            textAlign: 'center',
+            marginTop: '3rem',
+            fontSize: '20px',
+          }}
+        >
+          No recently saved
+        </Text>
+      </SavedAttendeeContainer>
+    );
   };
 
   const showSavedAttendees = () => {
     if (savedAttendees) {
-      return savedAttendees.map((savedAttendee, index) => (
-        <SavedAttendeeContainer
-          key={index}
-          onClick={() => {
-            setCurrentAttendee(savedAttendee);
+      if (savedAttendees.length)
+        return savedAttendees.map((savedAttendee, index) => (
+          <SavedAttendeeContainer
+            key={index}
+            onClick={() => {
+              setCurrentAttendee(savedAttendee);
+            }}
+          >
+            <HackerTab
+              user={savedAttendee}
+              showNoteButton={true}
+              onNoteClick={() => openQuickNote(savedAttendee)}
+            />
+          </SavedAttendeeContainer>
+        ));
+    }
+    return savedSpinner ? (
+      <div
+        style={{
+          marginTop: '2rem',
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <MutatingDots
+          height="100"
+          width="100"
+          color={Colors2023.BLUE.LIGHT}
+          secondaryColor={Colors2023.BLUE.LIGHT}
+          radius="12.5"
+          ariaLabel="mutating-dots-loading"
+        />
+      </div>
+    ) : (
+      <SavedAttendeeContainer>
+        <Text
+          style={{
+            width: '100%',
+            textAlign: 'center',
+            marginTop: '3rem',
+            fontSize: '20px',
           }}
         >
-          <HackerTab
-            user={savedAttendee}
-            showNoteButton={true}
-            onNoteClick={() => openQuickNote(savedAttendee)}
-          />
-        </SavedAttendeeContainer>
-      ));
-    }
-    return <></>;
+          No recently saved
+        </Text>
+      </SavedAttendeeContainer>
+    );
   };
 
   async function getSavedAttendees(companyId: string, eventId: string) {
+    setSavedSpinner(true);
     SponsorServiceAPI.getFilteredAttendee(
       companyId,
       eventId,
@@ -143,7 +217,8 @@ const Index = () => {
       })
       .catch((error) => {
         console.log(error);
-      });
+      })
+      .finally(() => setSavedSpinner(false));
   }
 
   async function setAttendeeNote(
@@ -171,7 +246,6 @@ const Index = () => {
             console.log(error);
           }
           getSavedAttendees(COMPANY_ID, EVENT_ID);
-          fetchData();
         })
         .catch((error) => {
           console.log(error);
@@ -183,7 +257,6 @@ const Index = () => {
             console.log(error);
           }
           getSavedAttendees(COMPANY_ID, EVENT_ID);
-          fetchData();
         })
         .catch((error) => {
           console.log(error);
