@@ -194,7 +194,6 @@ export class HibiscusSupabaseClient {
     access_token: string,
     refresh_token: string
   ): Promise<UserProfileRow | null> {
-    console.log('Test');
     const authRes = await this.verifyToken(access_token, refresh_token);
     if ('session' in authRes.data && authRes.data.session != null) {
       // Access token was refreshed, update cookies
