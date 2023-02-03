@@ -30,7 +30,7 @@ const Index = () => {
   const [currentNote, setNote] = useState('');
 
   const router = useRouter();
-  const COMPANY_ID = 'a8ca6c2e-6b68-400f-9c3a-a01415ed90c3'; // Will change later
+  const COMPANY_ID = '06874651-22cf-4b39-8427-018990cc4fdb'; // Will change later
   const EVENT_ID = '1'; // Will change later
 
   useEffect(() => {
