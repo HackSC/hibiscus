@@ -48,8 +48,7 @@ const Index = () => {
         chosenSchoolOption?.value,
         chosenParicipantOption
           ? chosenParicipantOption.value === 'saved'
-          : false,
-        1
+          : false
       )
         .then(({ data, error }) => {
           if (error) {

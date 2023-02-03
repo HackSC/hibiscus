@@ -26,7 +26,7 @@ export function HackerTab({
   onNoteClick,
   onSaveClick,
 }: Props) {
-  const [isSaved, setSave] = useState(user.saved);
+  const [isSaved, setSave] = useState(user?.saved);
 
   return (
     <Container>

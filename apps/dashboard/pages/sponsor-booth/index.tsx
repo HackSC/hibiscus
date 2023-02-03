@@ -19,6 +19,7 @@ import { SponsorServiceAPI } from '../../common/api';
 
 const Index = () => {
   const [attendees, setAttendees] = useState<Attendee[]>([]);
+  const [savedAttendees, setSavedAttendees] = useState<Attendee[] | null>(null);
   const [currentAttendee, setCurrentAttendee] = useState<Attendee>(null);
   const [modalActive, setModalActive] = useState(false);
   const [attendeeName, setAttendeeName] = useState('');
@@ -36,7 +37,6 @@ const Index = () => {
         .then(({ data, error }) => {
           if (error) {
             console.log(error);
-            setAttendees([]);
           }
           console.log(data.data);
           setAttendees(data.data as Attendee[]);
@@ -46,6 +46,8 @@ const Index = () => {
         });
     }
     fetchData();
+
+    getSavedAttendees(COMPANY_ID, EVENT_ID);
 
     const events = supabase
       .channel('custom-insert-channel')
@@ -103,6 +105,52 @@ const Index = () => {
     ));
   };
 
+  const showSavedAttendees = () => {
+    if (savedAttendees) {
+      return savedAttendees.map((savedAttendee, index) => (
+        <SavedAttendeeContainer
+          key={index}
+          onClick={() => {
+            getAttendeeNote(COMPANY_ID, savedAttendee.id);
+            setCurrentAttendee(savedAttendee);
+          }}
+        >
+          <HackerTab
+            user={savedAttendee}
+            showNoteButton={true}
+            showSaveButton={true}
+            onNoteClick={() => openQuickNote(savedAttendee)}
+            onSaveClick={() => toggleSaveAttendee(COMPANY_ID, savedAttendee)}
+          />
+        </SavedAttendeeContainer>
+      ));
+    }
+    return <></>;
+  };
+
+  async function getSavedAttendees(companyId: string, eventId: string) {
+    SponsorServiceAPI.getFilteredAttendee(
+      companyId,
+      eventId,
+      null,
+      null,
+      null,
+      true,
+      2
+    )
+      .then(({ data, error }) => {
+        if (error) {
+          setSavedAttendees([]);
+          console.log(error);
+        }
+        console.log(data.data);
+        setSavedAttendees(data.data as Attendee[]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   async function getAttendeeNote(companyId: string, attendeeId: string) {
     SponsorServiceAPI.getAttendeeNote(companyId, attendeeId)
       .then(({ data, error }) => {
@@ -148,6 +196,7 @@ const Index = () => {
         .catch((error) => {
           console.log(error);
         });
+      getSavedAttendees(COMPANY_ID, EVENT_ID);
     } else {
       SponsorServiceAPI.unsaveAttendee(companyId, attendee.id)
         .then(({ data, error }) => {
@@ -159,6 +208,7 @@ const Index = () => {
         .catch((error) => {
           console.log(error);
         });
+      getSavedAttendees(COMPANY_ID, EVENT_ID);
     }
   }
 
@@ -257,17 +307,19 @@ const Index = () => {
             </Text>
           </SupportSection>
           <SavedSection>
-            <H1
-              style={{
-                color: Colors2023.GRAY.LIGHT,
-                fontSize: '25px',
-                textAlign: 'left',
-                letterSpacing: '0.3rem',
-              }}
-            >
-              RECENTLY SAVED
-            </H1>
-            <SavedAttendeeContainer></SavedAttendeeContainer>
+            <>
+              <H1
+                style={{
+                  color: Colors2023.GRAY.LIGHT,
+                  fontSize: '25px',
+                  textAlign: 'left',
+                  letterSpacing: '0.3rem',
+                }}
+              >
+                RECENTLY SAVED
+              </H1>
+              {showSavedAttendees()}
+            </>
           </SavedSection>
           <ViewAllButton
             style={
@@ -504,7 +556,7 @@ const SupportSection = styled.div`
 
 const SavedSection = styled.div`
   display: 'flex';
-  height: 190px;
+  height: 230px;
   margin-top: 1.5rem;
   padding: 30px 15px;
   flex-direction: column;
@@ -518,7 +570,8 @@ const SavedSection = styled.div`
 const SavedAttendeeContainer = styled.div`
   width: 100%;
   display: flex;
-  border-bottom: solid 2px ${Colors2023.GRAY.SHLIGHT};
+  border-bottom: solid 1px ${Colors2023.GRAY.SHLIGHT};
+  cursor: pointer;
 `;
 
 const MiddleContainer = styled.div`

@@ -1,5 +1,4 @@
 import { faker } from '@faker-js/faker';
-import { SponsorServiceAPI } from './api';
 
 export type Attendee = {
   id: string;
@@ -41,10 +40,5 @@ export class SponsorAPI implements SponsorAPIInterface {
         })),
       };
     }
-
-    const apiResponse = (
-      await SponsorServiceAPI.getCheckInAttendee(companyId, eventId)
-    ).data;
-    return apiResponse;
   }
 }
