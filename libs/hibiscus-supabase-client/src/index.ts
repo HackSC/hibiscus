@@ -4,6 +4,7 @@ import 'reflect-metadata';
 import {
   createClient,
   EmailOtpType,
+  PostgrestError,
   SupabaseClient,
 } from '@supabase/supabase-js';
 import { injectable } from 'tsyringe';
@@ -17,17 +18,32 @@ import {
   SSOApiVerifyOtp,
   SSOApiVerifyToken,
 } from '@hibiscus/types';
-import { deleteCookie, setCookie } from 'cookies-next';
+import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import { getEnv } from '@hibiscus/env';
+import { container } from 'tsyringe';
 
 @injectable()
 export class HibiscusSupabaseClient {
   private client: SupabaseClient;
 
   constructor() {
+    const apiUrl = getEnv().Hibiscus.Supabase.apiUrl;
+    const anonKey = getEnv().Hibiscus.Supabase.anonKey;
+
+    if (!apiUrl) {
+      console.error(
+        'Supabase API URL not provided. Placeholder values will be used. The app will not be able to access Supabase.'
+      );
+    }
+
+    if (!anonKey) {
+      console.error(
+        'Supabase anon key not provided. Placeholder values will be used. The app will not be able to access Supabase.'
+      );
+    }
     this.client = createClient(
-      process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_API_URL,
-      process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_ANON_KEY,
+      getEnv().Hibiscus.Supabase.apiUrl ?? 'http://placeholder',
+      getEnv().Hibiscus.Supabase.anonKey ?? 'placeholder',
       {
         auth: {
           autoRefreshToken: false,
@@ -198,7 +214,7 @@ export class HibiscusSupabaseClient {
       .select()
       .eq('user_id', user.id);
 
-    if (dbRes.data.length !== 1) {
+    if (dbRes.data?.length !== 1) {
       // User either not found or duplicates found == DB corrupted
       return null;
     }
@@ -276,6 +292,62 @@ export class HibiscusSupabaseClient {
     return { data: { applied } };
   }
 
+  async addEvent(
+    user_id: string,
+    event_id: number
+  ): Promise<PostgrestError | null> {
+    const selectRes = await this.client
+      .from('event_log')
+      .select()
+      .eq('user_id', user_id)
+      .eq('event_id', event_id);
+    if (selectRes.data.length > 0) {
+      return {
+        message: 'Already checked in',
+        hint: '',
+        code: '400',
+        details: '',
+      };
+    }
+
+    const res = await this.client.from('event_log').insert({
+      user_id: user_id,
+      event_id: event_id,
+    });
+    return res.error;
+  }
+
+  async addtoLeaderboard(
+    user_id: string,
+    event_points: number
+  ): Promise<PostgrestError | null> {
+    const supabase = container.resolve(HibiscusSupabaseClient);
+    await supabase.setSessionClientSide();
+
+    const userLeaderboardMatches = await supabase
+      .getClient()
+      .from('leaderboard')
+      .select()
+      .eq('user_id', `${user_id}`);
+
+    if (userLeaderboardMatches.data.length == 0) {
+      const res = await this.client.from('leaderboard').insert({
+        user_id: user_id,
+        event_points: event_points,
+      });
+      return res.error;
+    } else {
+      const res = await this.client
+        .from('leaderboard')
+        .update({
+          event_points:
+            event_points + userLeaderboardMatches.data[0].event_points,
+        })
+        .eq('user_id', user_id);
+      return res.error;
+    }
+  }
+
   static setTokenCookieClientSide(access_token: string, refresh_token: string) {
     setCookie(
       process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME,
@@ -302,9 +374,42 @@ export class HibiscusSupabaseClient {
       }
     );
   }
+
+  /**
+   * Sets the Supabase auth session on client side for situations that require it
+   * e.g. adhere to RLS during database access, reset password
+   *
+   * @param access_token optional
+   * @param refresh_token optional
+   */
+  async setSessionClientSide(
+    access_token: string = getCookie(
+      getEnv().Hibiscus.Cookies.accessTokenName
+    ) as string,
+    refresh_token: string = getCookie(
+      getEnv().Hibiscus.Cookies.refreshTokenName
+    ) as string
+  ) {
+    const userRes = await this.client.auth.getUser();
+    if (userRes.data.user != null) {
+      // Valid session detected
+      return;
+    }
+
+    // No valid session, proceed to set session
+    const authRes = await this.verifyToken(access_token, refresh_token);
+    if ('session' in authRes.data && authRes.data.session != null) {
+      // Update cookies in case session was refreshed
+      HibiscusSupabaseClient.setTokenCookieClientSide(
+        authRes.data.session.access_token,
+        authRes.data.session.refresh_token
+      );
+    }
+  }
 }
 
-type UserProfileRow = Database['public']['Tables']['user_profiles']['Row'];
+export type UserProfileRow =
+  Database['public']['Tables']['user_profiles']['Row'];
 type UserProfileInsert =
   Database['public']['Tables']['user_profiles']['Insert'];
 type UserProfileUpdate =

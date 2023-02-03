@@ -30,3 +30,19 @@ create policy "Allow volunteers to access and modify all rows"
     with check (auth.uid() in (
         select get_volunteers()
     ));
+
+create policy "Allow volunteers to access all rows"
+    on public.events
+    for select 
+    to authenticated
+    using (auth.uid() in (
+        select get_volunteers()
+    ));
+
+create policy "Allow volunteers to access all rows"
+    on public.bonus_points
+    for select 
+    to authenticated
+    using (auth.uid() in (
+        select get_volunteers()
+    ));
