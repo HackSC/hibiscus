@@ -79,21 +79,21 @@ const Index = () => {
   };
 
   const yearOptionsList: Option[] = [
-    { value: 'S23', displayName: 'Spring 2023' },
-    { value: 'F23', displayName: 'Fall 2023' },
-    { value: 'S24', displayName: 'Spring 2024' },
-    { value: 'F24', displayName: 'Fall 2024' },
-    { value: 'S25', displayName: 'Spring 2025' },
-    { value: 'F25', displayName: 'Fall 2025' },
-    { value: 'S26', displayName: 'Spring 2026' },
-    { value: 'F26', displayName: 'Fall 2026' },
-    { value: 'S27', displayName: 'Spring 2027' },
-    { value: 'F27', displayName: 'Fall 2027' },
+    { value: 'Spring 2023', displayName: 'Spring 2023' },
+    { value: 'Fall 2023', displayName: 'Fall 2023' },
+    { value: 'Spring 2024', displayName: 'Spring 2024' },
+    { value: 'Fall 2024', displayName: 'Fall 2024' },
+    { value: 'Spring 2025', displayName: 'Spring 2025' },
+    { value: 'Fall 2025', displayName: 'Fall 2025' },
+    { value: 'Spring 2026', displayName: 'Spring 2026' },
+    { value: 'Fall 2026', displayName: 'Fall 2026' },
+    { value: 'Spring 2027', displayName: 'Spring 2027' },
+    { value: 'Fall 2027', displayName: 'Fall 2027' },
   ];
 
   const majorOptionsList: Option[] = [
     {
-      value: 'CS',
+      value: 'Computer Science',
       displayName: 'Computer science/computer engineering',
     },
     {

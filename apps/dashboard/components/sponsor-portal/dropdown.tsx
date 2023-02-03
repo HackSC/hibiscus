@@ -105,7 +105,7 @@ export function DropDown({
         <SearchContainer>
           <Combobox
             onChange={handleInputChange}
-            limitDropdownItems={5}
+            limitDropdownItems={8}
             onClickChooseOption={handleChooseOptionFromDropdown}
             placeholder={placeholder}
             options={options}
