@@ -35,7 +35,7 @@ export class AttendeeRepository {
     return { data, error };
   }
 
-  async getAttendeesByEventId(eventId: string) {
+  async getAttendeesByEventId(eventId: string, limit: number | null) {
     const { data, error } = await this.client
       .from('event_log')
       .select(
@@ -50,6 +50,10 @@ export class AttendeeRepository {
             note,
             company_id
           ),
+          company_saved_participants(
+            saved,
+            company_id
+          ),
           major,
           resume,
           graduation_year,
@@ -58,13 +62,15 @@ export class AttendeeRepository {
         )
       `
       )
-      .eq('event_id', eventId);
+      .eq('event_id', eventId)
+      .limit(limit)
+      .order('check_in_time', { ascending: false });
 
     if (error) console.log(`Supabase Error: ${error.message}`);
     return { data, error };
   }
 
-  async getAllSavedAttendees(companyId: string) {
+  async getAllSavedAttendees(companyId: string, limit: number | null) {
     const { data, error } = await this.client
       .from('company_saved_participants')
       .select(
@@ -79,6 +85,10 @@ export class AttendeeRepository {
           note,
           company_id
         ),
+        company_saved_participants(
+            saved,
+            company_id
+          ),
         major,
         resume,
         graduation_year,
@@ -88,7 +98,12 @@ export class AttendeeRepository {
        `
       )
       .eq('company_id', companyId)
-      .eq('saved', true);
+      .eq('saved', true)
+      .limit(limit)
+      .order('created_at', { ascending: false });
+
+    if (error) throw new Error(error.message);
+    return { data, error };
 
     if (error) throw new Error(error.message);
     return { data, error };
