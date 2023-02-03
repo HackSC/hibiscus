@@ -86,7 +86,6 @@ function BattlepassDescription() {
         }}
       >
         <ComingSoonBattlepass />
-        <Events />
       </div>
     </div>
   );
