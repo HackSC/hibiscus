@@ -7,6 +7,7 @@ import Image from 'next/image';
 import styled from 'styled-components';
 import { AiFillInfoCircle } from 'react-icons/ai';
 import { GrayBox } from '../gray-box/gray-box';
+import Events from '../events/events';
 
 function BattlepassDescription() {
   const { user } = useHibiscusUser();
@@ -85,6 +86,7 @@ function BattlepassDescription() {
         }}
       >
         <ComingSoonBattlepass />
+        <Events />
       </div>
     </div>
   );

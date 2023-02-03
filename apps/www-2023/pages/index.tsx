@@ -10,6 +10,7 @@ import Speakers from '../components/speakers/speakers';
 import Sponsors from '../components/sponsors/sponsors';
 import FAQs from '../components/faqs/faqs';
 import Footer from '../components/footer/footer';
+import Events from '../components/events/events';
 
 export function Index() {
   return (
@@ -33,6 +34,9 @@ export function Index() {
       <SponsorSection>
         <Sponsors />
       </SponsorSection>
+      <EventsSection>
+        <Events />
+      </EventsSection>
       <FAQSection>
         <FAQs />
       </FAQSection>
@@ -79,6 +83,7 @@ const SponsorSection = styled.div`
 `;
 
 const FAQSection = styled.div``;
+const EventsSection = styled.div``;
 
 const FooterWrapper = styled.div`
   width: 100%;
