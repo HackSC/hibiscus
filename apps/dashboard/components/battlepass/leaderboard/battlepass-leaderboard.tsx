@@ -8,10 +8,11 @@ import { Colors2023 } from '@hibiscus/styles';
 import { BATTLEPASS_LEADERBOARD_PAGE_SIZE } from '../../../common/constants';
 import { useBattlepassAPI } from '../../../hooks/use-battlepass-api/use-battlepass-api';
 import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
+import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
 
 function BattlepassLeaderboard() {
   const battlepassAPI = useBattlepassAPI();
-  const { user, updateUser } = useHibiscusUser();
+  const { user } = useHibiscusUser();
   const [leaderboardResults, setLeaderboardResults] = useState<{
     data: LeaderboardEntry[];
     loading: boolean;
@@ -71,7 +72,6 @@ function BattlepassLeaderboard() {
         },
         loading: false,
       });
-      // updateUser({ points: resUserTotPoints.data.points });
     })();
   }, []);
 
@@ -162,7 +162,9 @@ const LeaderboardPageTabs = (props: LeaderboardPageTabsProps) => {
         }}
         onClick={handleClickPrev}
       >
-        <Text>{'<'}</Text>
+        <Text>
+          <AiFillCaretLeft />
+        </Text>
       </button>
       <Text>{currentPageIndex + 1}</Text>
       <button
@@ -174,7 +176,9 @@ const LeaderboardPageTabs = (props: LeaderboardPageTabsProps) => {
         }}
         onClick={handleClickNext}
       >
-        <Text>{'>'}</Text>
+        <Text>
+          <AiFillCaretRight />
+        </Text>
       </button>
     </LeaderboardTabContainer>
   );

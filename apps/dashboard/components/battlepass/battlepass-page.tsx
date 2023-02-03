@@ -7,6 +7,7 @@ import { BattlepassWelcomeHeader } from './battlepass-welcome-header';
 import BattlepassLeaderboard from './leaderboard/battlepass-leaderboard';
 import { BonusPointItem } from './bonus-points/types';
 import BattlepassBonusPointsList from './bonus-points/bonus-points-list';
+import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 
 const LEVEL_POINTS = [425, 750, 1150];
 
@@ -16,6 +17,7 @@ function BattlepassPage() {
     data: BonusPointItem[];
     loading: boolean;
   }>({ data: [], loading: true });
+  const { user, setUser } = useHibiscusUser();
 
   useEffect(() => {
     // MOCK
@@ -31,6 +33,10 @@ function BattlepassPage() {
         loading: false,
       });
     });
+  }, []);
+
+  useEffect(() => {
+    battlepassAPI.getUserTotalPoints(user.id).then((res) => {});
   }, []);
 
   return (
