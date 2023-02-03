@@ -27,8 +27,8 @@ const Index = () => {
 
   const router = useRouter();
   const supabase = container.resolve(HibiscusSupabaseClient).getClient();
-  const COMPANY_ID = 'a8ca6c2e-6b68-400f-9c3a-a01415ed90c3'; // Will change later
-  const EVENT_ID = '1'; // Will change later
+  const COMPANY_ID = 'df7dfb37-9354-4023-9970-06ad86ca78aa'; // Will change later
+  const EVENT_ID = '2'; // Will change later
 
   useEffect(() => {
     async function fetchData() {
