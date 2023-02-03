@@ -9,7 +9,6 @@ import DropDown from '../../components/sponsor-portal/dropdown';
 import APIService from '../../common/api';
 import { HibiscusRole } from '@hibiscus/types';
 import { useRouter } from 'next/router';
-import { OneLineText } from '@hibiscus/ui-kit-2023';
 import { HackerTab } from '../../components/sponsor-portal/hacker-tab';
 import { Attendee } from '../../common/mock-sponsor';
 import { Button, ParagraphText } from '@hibiscus/ui-kit-2023';
@@ -154,9 +153,10 @@ const Index = () => {
           showMajor={true}
           showSchool={true}
           showSaveButton={true}
-          onClick={() => {
+          onNoteClick={() => {
             setCurrentAttendee(attendee);
           }}
+          onSaveClick={toggleSaveAttendee(COMPANY_ID, attendee)}
         />
       </HackerTabContainer>
     ));
@@ -198,6 +198,32 @@ const Index = () => {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  async function toggleSaveAttendee(companyId: string, attendee: Attendee) {
+    if (!attendee.saved) {
+      SponsorServiceAPI.saveAttendee(companyId, attendee.id)
+        .then(({ data, error }) => {
+          if (error) {
+            console.log(error);
+          }
+          console.log(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      SponsorServiceAPI.unsaveAttendee(companyId, attendee.id)
+        .then(({ data, error }) => {
+          if (error) {
+            console.log(error);
+          }
+          console.log(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }
 
   return (
@@ -371,7 +397,8 @@ const Index = () => {
               <HackerProfile
                 hacker={currentAttendee}
                 note={currentNote}
-                onClick={() => openQuickNote(currentAttendee)}
+                noteOnClick={() => openQuickNote(currentAttendee)}
+                saveOnClick={{}}
               />
             </div>
           ) : (

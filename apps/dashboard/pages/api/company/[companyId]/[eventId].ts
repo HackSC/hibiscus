@@ -124,8 +124,8 @@ function processAttendeesList(array: any[], companyId) {
     const participantData = element['participants'];
 
     // const notes: any[] = participantData['notes'] as any[];
-    //there never should be a case where there are more than one note from the same company for the same user
-    //if notes is undefined/null, just set to null. else filter
+    // there never should be a case where there are more than one note from the same company for the same user
+    // if notes is undefined/null, just set to null. else filter
 
     // let userNotes: any;
     // if (notes.length) {

@@ -96,7 +96,8 @@ const Index = () => {
           user={attendee}
           showNoteButton={true}
           showSaveButton={true}
-          onClick={() => openQuickNote(attendee)}
+          onNoteClick={() => openQuickNote(attendee)}
+          onSaveClick={() => toggleSaveAttendee(COMPANY_ID, attendee)}
         />
       </HackerTabContainer>
     ));
@@ -133,6 +134,32 @@ const Index = () => {
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  async function toggleSaveAttendee(companyId: string, attendee: Attendee) {
+    if (!attendee.saved) {
+      SponsorServiceAPI.saveAttendee(companyId, attendee.id)
+        .then(({ data, error }) => {
+          if (error) {
+            console.log(error);
+          }
+          console.log(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      SponsorServiceAPI.unsaveAttendee(companyId, attendee.id)
+        .then(({ data, error }) => {
+          if (error) {
+            console.log(error);
+          }
+          console.log(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }
 
   return (
@@ -386,7 +413,10 @@ const Index = () => {
               <HackerProfile
                 hacker={currentAttendee}
                 note={currentNote as string}
-                onClick={() => openQuickNote(currentAttendee)}
+                noteOnClick={() => openQuickNote(currentAttendee)}
+                saveOnClick={() =>
+                  toggleSaveAttendee(COMPANY_ID, currentAttendee)
+                }
               />
             </div>
           ) : (
