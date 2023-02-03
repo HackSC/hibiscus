@@ -1,6 +1,9 @@
 export const getEnv = () => {
   return {
     Hibiscus: {
+      Battlepass: {
+        ApiUrl: process.env.NEXT_PUBLIC_HIBISCUS_BATTLEPASS_API_URL,
+      },
       Supabase: {
         apiUrl: process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_API_URL,
         anonKey: process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_ANON_KEY,

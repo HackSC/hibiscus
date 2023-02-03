@@ -189,7 +189,7 @@ export function HackerPortal() {
 
   if (user.attendanceConfirmed === true) {
     return (
-      <BattlepassAPIProvider mock={true}>
+      <BattlepassAPIProvider mock={false}>
         <BattlepassPage />
       </BattlepassAPIProvider>
     );

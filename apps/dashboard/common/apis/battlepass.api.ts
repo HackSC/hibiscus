@@ -1,4 +1,6 @@
 import { faker } from '@faker-js/faker';
+import { getEnv } from '@hibiscus/env';
+import axios from 'axios';
 
 export interface BattlepassAPIInterface {
   getLeaderboard: (
@@ -34,6 +36,7 @@ export interface BattlepassAPIInterface {
 }
 
 export class BattlepassAPI implements BattlepassAPIInterface {
+  private readonly serverUrl = getEnv().Hibiscus.Battlepass.ApiUrl;
   constructor(private mock: boolean) {}
 
   async getLeaderboard(
@@ -74,15 +77,19 @@ export class BattlepassAPI implements BattlepassAPIInterface {
         },
       };
     }
-    // TODO: implement for real API
-    return null;
+    const res = await axios.get(
+      `${this.serverUrl}/leaderboard/${pageNumber}/${pageSize}`
+    );
+    console.log(res.data);
+    return res.data;
   }
 
   async getUserRankLeaderboard(
     userId: string
   ): Promise<{ data: { place: number } }> {
     if (this.mock) return { data: { place: faker.datatype.number() } };
-    return null;
+    const res = await axios.get(`${this.serverUrl}/user/${userId}/rank`);
+    return res.data;
   }
 
   async getBonusPointEvents(): Promise<{
@@ -142,7 +149,7 @@ export class BattlepassAPI implements BattlepassAPIInterface {
       //   })),
       // };
     }
-    return null;
+    return { data: [] };
   }
 
   async getUserTotalPoints(
@@ -153,6 +160,7 @@ export class BattlepassAPI implements BattlepassAPIInterface {
         data: { points: faker.datatype.number() },
       };
     }
-    return null;
+    const res = await axios.get(`${this.serverUrl}/user/${userId}/points`);
+    return res.data;
   }
 }
