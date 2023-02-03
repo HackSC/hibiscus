@@ -49,7 +49,10 @@ export default async function handler(
       }
 
       //get all attendees related to eventId
-      const eventResult = await repo.getAttendeesByEventId(stringifyEventId);
+      const eventResult = await repo.getAttendeesByEventId(
+        stringifyEventId,
+        null
+      );
       if (!eventResult.data) {
         return res
           .status(404)
@@ -85,7 +88,7 @@ export default async function handler(
           limit
         );
       } else {
-        eventResult = await repo.getAttendeesByEventId(stringifyEventId);
+        eventResult = await repo.getAttendeesByEventId(stringifyEventId, limit);
       }
 
       if (!eventResult.data) {
