@@ -60,10 +60,19 @@ export class CompanyRepository {
     return { data, error };
   }
 
-  async getCompanyId(userId: string) {
+  async getCompanyandEventId(userId: string) {
     const { data, error } = await this.client
       .from('sponsor_user_bridge_company')
-      .select('company_id')
+      .select(
+        `
+        company_id,
+        companies(
+          events(
+            id
+          )
+        )
+      `
+      )
       .eq('user_id', userId)
       .single();
 
