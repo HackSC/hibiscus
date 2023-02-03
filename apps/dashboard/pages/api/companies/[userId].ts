@@ -26,8 +26,15 @@ export default async function handler(
         if (!companyData.data)
           throw new Error('User id does not map to anything.');
 
+        console.log(companyData);
+
         //we know companies can't be null. This indexes down the object tree to get event_id. ASSUMED THAT NOTHING IS NULL OR ANYTHING
-        const eventId = companyData.data['companies']['events'].at(0)['id'];
+        const event = companyData.data['companies']['events'] as any[];
+        let eventId: number | null;
+        console.log(event);
+        if (event.length) {
+          eventId = event.at(0)['id'];
+        }
         const companyId = companyData.data['company_id'];
 
         return res
