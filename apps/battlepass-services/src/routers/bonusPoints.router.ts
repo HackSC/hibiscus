@@ -4,8 +4,10 @@ import { BonusPointsController } from '../controller/bonusPoints.controller';
 
 const router = express.Router();
 
-router.get('/getBonusPointEvents', async (req, res) =>
+router.get('/', async (req, res) =>
   container.resolve(BonusPointsController).getBonusPointEvents(req, res)
 );
+
+router.put('/');
 
 export { router as BonusPointsRouter };
