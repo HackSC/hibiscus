@@ -62,6 +62,7 @@ export default async function handler(
       const majorFilter = req.body.major;
       const schoolFilter = req.body.school;
       const savedFilter = req.body.saved;
+      const limit: number | null = req.body.limit;
 
       const currentEventInfo = await repo.getEventInfo(stringifyEventId);
       if (currentEventInfo.data['company_id'] !== stringifyCompanyId) {
@@ -75,7 +76,10 @@ export default async function handler(
       //if not, use getAllParticipants
       let eventResult: any;
       if (savedFilter) {
-        eventResult = await repo.getAllSavedAttendees(stringifyCompanyId);
+        eventResult = await repo.getAllSavedAttendees(
+          stringifyCompanyId,
+          limit
+        );
       } else {
         eventResult = await repo.getAttendeesByEventId(stringifyEventId);
       }

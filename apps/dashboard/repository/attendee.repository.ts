@@ -64,7 +64,7 @@ export class AttendeeRepository {
     return { data, error };
   }
 
-  async getAllSavedAttendees(companyId: string) {
+  async getAllSavedAttendees(companyId: string, limit: number) {
     const { data, error } = await this.client
       .from('company_saved_participants')
       .select(
@@ -88,7 +88,9 @@ export class AttendeeRepository {
        `
       )
       .eq('company_id', companyId)
-      .eq('saved', true);
+      .eq('saved', true)
+      .limit(limit)
+      .order('created_at', { ascending: false });
 
     if (error) throw new Error(error.message);
     return { data, error };
