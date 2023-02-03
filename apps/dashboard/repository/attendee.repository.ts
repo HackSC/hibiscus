@@ -50,6 +50,10 @@ export class AttendeeRepository {
             note,
             company_id
           ),
+          company_saved_participants(
+            saved,
+            company_id
+          ),
           major,
           resume,
           graduation_year,
@@ -58,7 +62,8 @@ export class AttendeeRepository {
         )
       `
       )
-      .eq('event_id', eventId);
+      .eq('event_id', eventId)
+      .order('check_in_time', { ascending: false });
 
     if (error) console.log(`Supabase Error: ${error.message}`);
     return { data, error };
@@ -79,6 +84,10 @@ export class AttendeeRepository {
           note,
           company_id
         ),
+        company_saved_participants(
+            saved,
+            company_id
+          ),
         major,
         resume,
         graduation_year,
