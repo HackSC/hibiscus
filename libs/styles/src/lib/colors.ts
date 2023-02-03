@@ -59,5 +59,9 @@ export namespace Colors2023 {
       light: GREEN.LIGHT,
       standard: GREEN.STANDARD,
     },
+    [HibiscusRole.VOLUNTEER]: {
+      light: YELLOW.LIGHT,
+      standard: YELLOW.STANDARD,
+    },
   };
 }

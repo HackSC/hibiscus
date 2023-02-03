@@ -95,13 +95,12 @@ export class AttendeeRepository {
   }
 
   //utility function for filtering
-  filterAttendees(
-    filterParameter: string,
-    filterValue: string | number,
-    array: any[]
-  ) {
+  filterAttendees(filterParameter: string, filterValue: string, array: any[]) {
     const returnArray = array.filter((ele) => {
-      return ele['participants'][filterParameter] === filterValue;
+      const testContains: string = (
+        ele['participants'][filterParameter] as string
+      ).toLowerCase();
+      return testContains.includes(filterValue);
     });
 
     return returnArray;

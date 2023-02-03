@@ -98,7 +98,7 @@ export default async function handler(
         }
         filteringArray = repo.filterAttendees(
           filterParams[i],
-          filterValues[i],
+          filterValues[i].toLowerCase(),
           filteringArray
         );
       }
