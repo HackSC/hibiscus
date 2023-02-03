@@ -1,4 +1,5 @@
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { parseDoB } from './parse-dob';
 
 export default async function searchUser(
   query: string,
@@ -37,7 +38,7 @@ export default async function searchUser(
       .select()
       .eq('id', userId);
     if (res.data.length > 0) {
-      uniqueMatches[i].dob = res.data[0].dob;
+      uniqueMatches[i].dob = parseDoB(res.data[0].dob);
     }
   }
 
