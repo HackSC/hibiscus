@@ -3,6 +3,7 @@ import 'reflect-metadata';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { container } from 'tsyringe';
 import { AttendeeRepository } from '../../../../repository/attendee.repository';
+import { createSignedResumeUrl } from '../../../../../dashboard/common/utils';
 
 function Attendee(
   id: string,
@@ -57,10 +58,11 @@ export default async function handler(
           .status(404)
           .json({ message: 'Requested resource not found' });
       }
-      const attendeesData: any[] = processAttendeesList(
+      const attendeesData: any[] = await processAttendeesList(
         eventResult.data,
         stringifyCompanyId
       );
+
       return res.status(200).json({ data: attendeesData });
     } else if (req.method === 'POST') {
       const yearFilter = req.body.year;
@@ -112,7 +114,7 @@ export default async function handler(
         );
       }
 
-      const attendeesData: any[] = processAttendeesList(
+      const attendeesData: any[] = await processAttendeesList(
         filteringArray,
         stringifyCompanyId
       );
@@ -125,14 +127,12 @@ export default async function handler(
   }
 }
 
-export function processAttendeesList(
+export async function processAttendeesList(
   array: any[],
   companyId: string,
   newlySaved?: boolean
 ) {
-  const attendeesData: any[] = [];
-
-  array.map((element) => {
+  const attendeesData = array.map(async (element) => {
     //hardcoded since we are processing participants anyway
     const participantData = element['participants'];
 
@@ -142,7 +142,6 @@ export function processAttendeesList(
     ] as any[];
     //there never should be a case where there are more than one note from the same company for the same user
     //if notes is undefined/null, just set to null. else filter
-
     let userNotes: any;
     if (notes.length) {
       userNotes = notes
@@ -169,21 +168,30 @@ export function processAttendeesList(
       }
     }
 
-    const attendee = new Attendee(
+    let signedResumeUrl: any;
+    if (participantData['resume']) {
+      signedResumeUrl = (await createSignedResumeUrl(participantData['resume']))
+        .data['signedUrl'];
+    } else {
+      signedResumeUrl = null;
+    }
+
+    const attendee = await new Attendee(
       participantData['id'],
       participantData['user_profiles']['first_name'] +
         ' ' +
         participantData['user_profiles']['last_name'],
       participantData['major'],
-      participantData['resume'],
+      signedResumeUrl,
       participantData['graduation_year'],
       participantData['portfolio_link'],
       participantData['school'],
       userNotes ? userNotes['note'] : '',
       saveState ? true : false
     );
-    attendeesData.push(attendee);
+
+    return attendee;
   });
 
-  return attendeesData;
+  return Promise.all(attendeesData);
 }
