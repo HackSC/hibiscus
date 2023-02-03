@@ -103,6 +103,9 @@ export class AttendeeRepository {
 
     if (error) throw new Error(error.message);
     return { data, error };
+
+    if (error) throw new Error(error.message);
+    return { data, error };
   }
 
   //utility function for filtering
