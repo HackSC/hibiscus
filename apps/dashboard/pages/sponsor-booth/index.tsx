@@ -19,6 +19,9 @@ import { SponsorServiceAPI } from '../../common/api';
 import { MutatingDots } from 'react-loader-spinner';
 
 const Index = () => {
+  const { user } = useHibiscusUser();
+  const [COMPANY_ID, setCompnayId] = useState('');
+  const [EVENT_ID, setEventId] = useState('');
   const [attendees, setAttendees] = useState<Attendee[]>([]);
   const [savedAttendees, setSavedAttendees] = useState<Attendee[] | null>(null);
   const [currentAttendee, setCurrentAttendee] = useState<Attendee>(null);
@@ -30,10 +33,20 @@ const Index = () => {
 
   const router = useRouter();
   const supabase = container.resolve(HibiscusSupabaseClient).getClient();
-  const COMPANY_ID = '24a42c02-34d0-4ac4-a0b2-6051af8d323b'; // Will change later
-  const EVENT_ID = '1'; // Will change later
 
   useEffect(() => {
+    SponsorServiceAPI.getCompanyIdAndEventId(user.id)
+      .then(({ data, error }) => {
+        if (error) {
+          console.log(error);
+        }
+        setCompnayId(data.data.company_id);
+        setEventId(data.data.event_id);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
     fetchData();
 
     getSavedAttendees(COMPANY_ID, EVENT_ID);
@@ -57,9 +70,8 @@ const Index = () => {
     return () => {
       supabase.removeChannel(events);
     };
-  }, []);
+  }, [COMPANY_ID, EVENT_ID]);
 
-  const { user } = useHibiscusUser();
   if (user == null) {
     return <>Loading</>;
   }
@@ -380,7 +392,11 @@ const Index = () => {
             onClick={() =>
               router.push({
                 pathname: '/participant-database',
-                query: { viewSaved: true },
+                query: {
+                  viewSaved: true,
+                  companyId: COMPANY_ID,
+                  eventId: EVENT_ID,
+                },
               })
             }
           >
@@ -410,7 +426,15 @@ const Index = () => {
             style={
               currentAttendee !== null ? { width: '100%' } : { width: '70%' }
             }
-            onClick={() => router.push('participant-database')}
+            onClick={() =>
+              router.push({
+                pathname: '/participant-database',
+                query: {
+                  companyId: COMPANY_ID,
+                  eventId: EVENT_ID,
+                },
+              })
+            }
           >
             <H1
               style={{

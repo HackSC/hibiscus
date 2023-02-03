@@ -279,4 +279,12 @@ export class SponsorServiceAPI {
     }
     return { data: res.data, status: res.status };
   }
+
+  static async getCompanyIdAndEventId(userId: string) {
+    const res = await axios.get(`/api/companies/${userId}`);
+    if (res.status >= 400) {
+      return { error: { message: res.data.message }, status: res.status };
+    }
+    return { data: res.data, status: res.status };
+  }
 }

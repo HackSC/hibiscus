@@ -24,6 +24,8 @@ const Index = () => {
     return null;
   };
 
+  const COMPANY_ID = router.query.companyId as string;
+  const EVENT_ID = router.query.eventId as string;
   const [textInput, setInput] = useState('');
   const [chosenYearOption, setYearOption] = useState<Option | null>(null);
   const [chosenMajorOption, setMajorOption] = useState<Option | null>(null);
@@ -34,9 +36,6 @@ const Index = () => {
   const [currentAttendee, setCurrentAttendee] = useState<Attendee>(null);
   const [modalActive, setModalActive] = useState(false);
   const [attendeeName, setAttendeeName] = useState('');
-
-  const COMPANY_ID = '24a42c02-34d0-4ac4-a0b2-6051af8d323b'; // Will change later
-  const EVENT_ID = '1'; // Will change later
 
   useEffect(() => {
     async function getFilteredAttendee() {
@@ -66,6 +65,8 @@ const Index = () => {
     chosenYearOption,
     chosenSchoolOption,
     chosenParicipantOption,
+    COMPANY_ID,
+    EVENT_ID,
   ]);
 
   const { user } = useHibiscusUser();
