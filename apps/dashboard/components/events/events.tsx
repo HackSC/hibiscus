@@ -1,7 +1,11 @@
 /* eslint-disable react/jsx-key */
 import { Colors2023 } from '@hibiscus/styles';
 import { H3, Label, Text, H4 } from '@hibiscus/ui';
+import { EventsAPI } from '../../common/api/events.api';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { container } from 'tsyringe';
+import { HackSCEvent } from './types';
 
 /* eslint-disable-next-line */
 export interface EventsProps {}
@@ -112,33 +116,69 @@ const events = [
     },
   ],
 ];
+
+const eventApi = container.resolve(EventsAPI);
+
+const getAMPMTime = (date: Date) => {
+  return date.toLocaleString('en-US', {
+    hour: 'numeric',
+    minute: 'numeric',
+    hour12: true,
+  });
+};
+
 export function Events(props: EventsProps) {
+  const [events, setEvents] = useState<{
+    data: HackSCEvent[];
+    loading: boolean;
+  }>({ data: [], loading: true });
+
+  useEffect(() => {
+    (async () => {
+      const { data, error } = await eventApi.getAllEvents(1);
+      setEvents({
+        data: data.map((item) => ({
+          id: item.id,
+          name: item.name,
+          description: null,
+          start: new Date(item.start),
+          end: new Date(item.end),
+          points: item.points,
+          location: item.location,
+        })),
+        loading: false,
+      });
+    })();
+  }, []);
+
+  if (events.loading) return <>Loading</>;
+
   return (
     <StyledEvents>
-      {events.map(function (day, index) {
-        return (
-          <>
-            <EventsHeader>Events</EventsHeader>
-            <EventsContainer>
+      <EventsContainer>
+        {events.data.map((item, index) => {
+          return (
+            <>
               <EventContainer>
-                <Date>
-                  0{index + 3}
+                <DateDiv>
+                  0{item.start.getDate()}
                   <br />
                   Feb
-                </Date>
+                </DateDiv>
 
                 <Information>
-                  <Title>{day[0].name}</Title>
+                  <Title>{item.name}</Title>
                   <GrayText>
-                    {day[0].venue} | {day[0].startTime} - {day[0].endTime}
+                    {item.location} | {getAMPMTime(item.start)} -{' '}
+                    {getAMPMTime(item.end)}
                   </GrayText>
                 </Information>
-                <Points>{day[0].bpPoints} PTS</Points>
+                <Points>{item.points} PTS</Points>
               </EventContainer>
-            </EventsContainer>
-          </>
-        );
-      })}
+            </>
+          );
+        })}
+      </EventsContainer>
     </StyledEvents>
   );
 }
@@ -148,6 +188,9 @@ export default Events;
 const EventsContainer = styled.div`
   width: 52vw;
   padding: 10px;
+  display: flex;
+  flex-direction: column;
+  background-color: ${Colors2023.GRAY.STANDARD};
   @media screen and (max-width: 820px) {
     width: 70vw;
   }
@@ -159,20 +202,17 @@ const EventsContainer = styled.div`
   max-height: 40vh;
   overflow-y: auto;
 `;
-const EventsHeader = styled.div`
-  margin: 10px;
-`;
+
 const StyledEvents = styled.div``;
 const EventContainer = styled.div`
   padding: 1rem;
   display: flex;
-  flex-direction: row;
   align-items: center;
   height: 100px;
   justify-content: space-between;
   border-bottom: 1px solid ${Colors2023.GRAY.MEDIUM};
 `;
-const Date = styled(H3)`
+const DateDiv = styled(H3)`
   padding: 0px 1rem;
   @media screen and (max-width: 900px) {
     padding: 0px 0.5rem;
@@ -195,9 +235,9 @@ const Points = styled(Label)`
   text-align: right;
   padding: 0px 10px;
 `;
-const Title = styled(H4)``;
+const Title = styled(H3)``;
 const GrayText = styled(Text)`
   font-size: 12px;
-  color: ${Colors2023.GRAY.MEDIUM};
+  color: ${Colors2023.GRAY.SCHEMDIUM};
   text-align: center;
 `;
