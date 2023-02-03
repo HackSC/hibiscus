@@ -29,7 +29,7 @@ export function SupabaseContextProvider(props: PropsWithChildren) {
 
   useEffect(() => {
     async function setSession() {
-      supabase.setSessionClientSide();
+      await supabase.setSessionClientSide();
 
       // We assume the user must be logged in or else they would have been
       // redirected by the middleware

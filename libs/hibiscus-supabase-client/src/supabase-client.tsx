@@ -167,11 +167,11 @@ export class HibiscusSupabaseClient {
   async logout() {
     deleteCookie(process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME, {
       path: '/',
-      domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
+      domain: `.${process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN}`,
     });
     deleteCookie(process.env.NEXT_PUBLIC_HIBISCUS_REFRESH_COOKIE_NAME, {
       path: '/',
-      domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
+      domain: `.${process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN}`,
     });
 
     await this.client.auth.signOut();
@@ -365,17 +365,6 @@ export class HibiscusSupabaseClient {
       getEnv().Hibiscus.Cookies.refreshTokenName
     ) as string
   ): Promise<boolean> {
-    const sessionRes = await this.client.auth.getSession();
-    if (sessionRes.data.session != null) {
-      // Valid session detected
-      // Update cookies in case session was refreshed
-      HibiscusSupabaseClient.setTokenCookieClientSide(
-        sessionRes.data.session.access_token,
-        sessionRes.data.session.refresh_token
-      );
-      return true;
-    }
-
     // No valid session, proceed to set session
     const authRes = await this.verifyToken(access_token, refresh_token);
     if ('session' in authRes.data && authRes.data.session != null) {
