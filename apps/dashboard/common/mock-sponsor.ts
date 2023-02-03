@@ -8,7 +8,7 @@ export type Attendee = {
   resume?: string; //WILL BE CHANGED SOON, STRING FOR NOW
   graduation_year: string;
   portfolio_link?: string;
-  quickNotes?: string | null;
+  quick_notes: string;
   saved?: boolean;
 };
 
@@ -36,7 +36,7 @@ export class SponsorAPI implements SponsorAPIInterface {
           resume: faker.name.jobDescriptor(),
           graduation_year: faker.name.jobArea(),
           portfolio_link: faker.name.firstName(),
-          quickNotes: faker.name.firstName(),
+          quick_notes: faker.name.firstName(),
         })),
       };
     }

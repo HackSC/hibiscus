@@ -4,14 +4,59 @@ import { Colors2023 } from '@hibiscus/styles';
 import { H1 } from '@hibiscus/ui';
 import Image from 'next/image';
 import { Attendee } from '../../common/mock-sponsor';
+import { useEffect, useState } from 'react';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { container } from 'tsyringe';
+import { SponsorServiceAPI } from '../../common/api';
 
 interface Props {
   hacker: Attendee;
-  note?: string;
+  companyId?: string;
   noteOnClick;
 }
 
-export function HackerProfile({ hacker, note, noteOnClick }: Props) {
+export function HackerProfile({ hacker, companyId, noteOnClick }: Props) {
+  const [quickNote, setQuickNote] = useState('');
+  const supabase = container.resolve(HibiscusSupabaseClient).getClient();
+
+  useEffect(() => {
+    setQuickNote(hacker.quick_notes);
+    const events = supabase
+      .channel('note-insert-channel')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'notes',
+          filter: `participant_id=eq.${hacker.id}`,
+        },
+        (payload) => {
+          getAttendeeNote(companyId, hacker.id);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(events);
+    };
+  }, [companyId, hacker]);
+
+  async function getAttendeeNote(companyId: string, attendeeId: string) {
+    SponsorServiceAPI.getAttendeeNote(companyId, attendeeId)
+      .then(({ data, error }) => {
+        if (error) {
+          console.log(error);
+        }
+
+        console.log(data.data.note);
+        setQuickNote(data.data.note as string);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   return (
     <Container>
       <div
@@ -43,7 +88,7 @@ export function HackerProfile({ hacker, note, noteOnClick }: Props) {
         </StyledButton>
       </div>
       <NoteContainer>
-        <Text>{note !== '' ? note : 'No note found'}</Text>
+        <Text>{quickNote !== '' ? quickNote : 'No note found'}</Text>
       </NoteContainer>
       <div
         style={{

@@ -34,7 +34,6 @@ const Index = () => {
   const [currentAttendee, setCurrentAttendee] = useState<Attendee>(null);
   const [modalActive, setModalActive] = useState(false);
   const [attendeeName, setAttendeeName] = useState('');
-  const [currentNote, setNote] = useState('');
 
   const COMPANY_ID = '24a42c02-34d0-4ac4-a0b2-6051af8d323b'; // Will change later
   const EVENT_ID = '1'; // Will change later
@@ -158,7 +157,6 @@ const Index = () => {
         key={index}
         onClick={() => {
           setCurrentAttendee(attendee);
-          getAttendeeNote(COMPANY_ID, attendee.id);
         }}
       >
         <HackerTab
@@ -181,21 +179,6 @@ const Index = () => {
     setAttendeeName(`${attendee.full_name}`);
   };
 
-  async function getAttendeeNote(companyId: string, attendeeId: string) {
-    SponsorServiceAPI.getAttendeeNote(companyId, attendeeId)
-      .then(({ data, error }) => {
-        if (error) {
-          console.log(error);
-        }
-
-        console.log(data.data.note);
-        setNote(data.data.note as string);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
   async function setAttendeeNote(
     companyId: string,
     attendeeId: string,
@@ -206,8 +189,7 @@ const Index = () => {
         if (error) {
           console.log(error);
         }
-        console.log(data);
-        setNote(data.data.note as string);
+        console.log(`Updated note: ${data.data.note}`);
       })
       .catch((error) => {
         console.log(error);
@@ -398,7 +380,7 @@ const Index = () => {
             <div style={{ marginTop: '1.5rem' }}>
               <HackerProfile
                 hacker={currentAttendee}
-                note={currentNote}
+                companyId={COMPANY_ID}
                 noteOnClick={() => openQuickNote(currentAttendee)}
               />
             </div>

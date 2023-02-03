@@ -24,7 +24,6 @@ const Index = () => {
   const [modalActive, setModalActive] = useState(false);
   const [attendeeName, setAttendeeName] = useState('');
   const [textInput, setInput] = useState('');
-  const [currentNote, setNote] = useState('');
 
   const router = useRouter();
   const supabase = container.resolve(HibiscusSupabaseClient).getClient();
@@ -78,7 +77,6 @@ const Index = () => {
         if (error) {
           console.log(error);
         }
-        console.log(data.data);
         setAttendees(data.data as Attendee[]);
       })
       .catch((error) => {
@@ -91,7 +89,6 @@ const Index = () => {
       <HackerTabContainer
         key={index}
         onClick={() => {
-          getAttendeeNote(COMPANY_ID, attendee.id);
           setCurrentAttendee(attendee);
         }}
       >
@@ -112,7 +109,6 @@ const Index = () => {
         <SavedAttendeeContainer
           key={index}
           onClick={() => {
-            getAttendeeNote(COMPANY_ID, savedAttendee.id);
             setCurrentAttendee(savedAttendee);
           }}
         >
@@ -142,24 +138,8 @@ const Index = () => {
           setSavedAttendees([]);
           console.log(error);
         }
-        console.log(data.data);
         setSavedAttendees(data.data as Attendee[]);
         fetchData();
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  async function getAttendeeNote(companyId: string, attendeeId: string) {
-    SponsorServiceAPI.getAttendeeNote(companyId, attendeeId)
-      .then(({ data, error }) => {
-        if (error) {
-          console.log(error);
-        }
-
-        console.log(data.data.note);
-        setNote(data.data.note as string);
       })
       .catch((error) => {
         console.log(error);
@@ -176,8 +156,7 @@ const Index = () => {
         if (error) {
           console.log(error);
         }
-        console.log(data);
-        setNote(data.data.note as string);
+        console.log(`Updated note: ${data.data.note}`);
       })
       .catch((error) => {
         console.log(error);
@@ -191,7 +170,6 @@ const Index = () => {
           if (error) {
             console.log(error);
           }
-          console.log(data);
           getSavedAttendees(COMPANY_ID, EVENT_ID);
           fetchData();
         })
@@ -204,7 +182,6 @@ const Index = () => {
           if (error) {
             console.log(error);
           }
-          console.log(data);
           getSavedAttendees(COMPANY_ID, EVENT_ID);
           fetchData();
         })
@@ -472,7 +449,7 @@ const Index = () => {
             <div style={{ marginTop: '1.5rem' }}>
               <HackerProfile
                 hacker={currentAttendee}
-                note={currentNote as string}
+                companyId={COMPANY_ID}
                 noteOnClick={() => openQuickNote(currentAttendee)}
               />
             </div>
