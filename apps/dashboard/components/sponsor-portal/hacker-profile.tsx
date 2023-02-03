@@ -1,20 +1,26 @@
-/* eslint-disable @nrwl/nx/enforce-module-boundaries */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+import { useState } from 'react';
 import styled from 'styled-components';
 import { BoldText, Link, Text } from '@hibiscus/ui';
 import { Colors2023 } from '@hibiscus/styles';
-import { HibiscusUser } from '@hibiscus/types';
-import { H1, H2, H3 } from '@hibiscus/ui';
+import { H1 } from '@hibiscus/ui';
 import Image from 'next/image';
 import { Attendee } from '../../common/mock-sponsor';
 
 interface Props {
   hacker: Attendee;
   note?: string;
-  onClick;
+  noteOnClick;
+  saveOnClick;
 }
 
-export function HackerProfile({ hacker, note, onClick }: Props) {
+export function HackerProfile({
+  hacker,
+  note,
+  noteOnClick,
+  saveOnClick,
+}: Props) {
+  const [isSaved, setSave] = useState(hacker.saved);
+
   return (
     <Container>
       <div
@@ -26,8 +32,22 @@ export function HackerProfile({ hacker, note, onClick }: Props) {
         }}
       >
         <BoldText style={{ fontSize: '30px' }}>{hacker.full_name}</BoldText>
-        <StyledButton>
-          <Image width="30" height="30" src={'/save.svg'} alt="save-button" />
+        <StyledButton
+          onClick={() => {
+            isSaved ? setSave(false) : setSave(true);
+            saveOnClick();
+          }}
+        >
+          {isSaved ? (
+            <Image
+              width="30"
+              height="30"
+              src={'/save-green.svg'}
+              alt="save-button"
+            />
+          ) : (
+            <Image width="30" height="30" src={'/save.svg'} alt="save-button" />
+          )}
         </StyledButton>
       </div>
       <Text style={{ fontSize: '15px' }}>School: {hacker.school}</Text>
@@ -44,7 +64,7 @@ export function HackerProfile({ hacker, note, onClick }: Props) {
         }}
       >
         <TitleText style={{ marginTop: '1rem' }}>QUICK NOTES</TitleText>
-        <StyledButton style={{ marginTop: '0.5rem' }} onClick={onClick}>
+        <StyledButton style={{ marginTop: '0.5rem' }} onClick={noteOnClick}>
           <Image width="30" height="30" src={'/note.svg'} alt="note-button" />
         </StyledButton>
       </div>

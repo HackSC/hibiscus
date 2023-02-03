@@ -10,6 +10,7 @@ export type Attendee = {
   graduation_year: string;
   portfolio_link?: string;
   quickNotes?: string | null;
+  saved?: boolean;
 };
 
 export interface SponsorAPIInterface {
