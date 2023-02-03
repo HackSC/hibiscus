@@ -95,17 +95,52 @@ export class BattlepassAPI implements BattlepassAPIInterface {
       link: string;
     }[];
   }> {
+    const BONUS_POINTS = [
+      {
+        name: 'Follow us on Instagram!',
+        description: '',
+        points: 25,
+        id: faker.datatype.uuid(),
+        created_at: faker.date.soon().toDateString(),
+        link: faker.internet.url(),
+      },
+      {
+        name: 'Follow us on Facebook!',
+        description: '',
+        points: 25,
+        id: faker.datatype.uuid(),
+        created_at: faker.date.soon().toDateString(),
+        link: faker.internet.url(),
+      },
+      {
+        name: 'Follow us on Twitter!',
+        description: '',
+        points: 25,
+        id: faker.datatype.uuid(),
+        created_at: faker.date.soon().toDateString(),
+        link: faker.internet.url(),
+      },
+      {
+        name: 'Post on social media with the hashtag #hacksc23',
+        description: '',
+        points: 25,
+        id: faker.datatype.uuid(),
+        created_at: faker.date.soon().toDateString(),
+        link: faker.internet.url(),
+      },
+    ];
     if (this.mock) {
-      return {
-        data: Array.from(Array(5).keys()).map(() => ({
-          id: faker.datatype.uuid(),
-          name: faker.lorem.words(5),
-          description: faker.lorem.lines(5),
-          created_at: faker.date.soon().toDateString(),
-          points: faker.datatype.number(),
-          link: faker.internet.url(),
-        })),
-      };
+      return { data: BONUS_POINTS };
+      // return {
+      //   data: Array.from(Array(5).keys()).map(() => ({
+      //     id: faker.datatype.uuid(),
+      //     name: faker.lorem.words(5),
+      //     description: faker.lorem.lines(5),
+      //     created_at: faker.date.soon().toDateString(),
+      //     points: faker.datatype.number(),
+      //     link: faker.internet.url(),
+      //   })),
+      // };
     }
     return null;
   }

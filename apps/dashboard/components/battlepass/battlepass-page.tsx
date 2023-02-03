@@ -8,6 +8,8 @@ import BattlepassLeaderboard from './leaderboard/battlepass-leaderboard';
 import { BonusPointItem } from './bonus-points/types';
 import BattlepassBonusPointsList from './bonus-points/bonus-points-list';
 
+const LEVEL_POINTS = [425, 750, 1150];
+
 function BattlepassPage() {
   const battlepassAPI = useBattlepassAPI();
   const [bonusPointItems, setBPItems] = useState<{
@@ -40,6 +42,8 @@ function BattlepassPage() {
           rangeMinPoint={100}
           rangeMaxPoint={300}
           currentPoint={200}
+          minLabel={'Min pojtn'}
+          maxLabel={'max pojtn'}
         />
       </WidgetContainer>
       <SecondSection>

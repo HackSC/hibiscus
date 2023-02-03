@@ -11,7 +11,7 @@ import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user'
 
 function BattlepassLeaderboard() {
   const battlepassAPI = useBattlepassAPI();
-  const { user } = useHibiscusUser();
+  const { user, updateUser } = useHibiscusUser();
   const [leaderboardResults, setLeaderboardResults] = useState<{
     data: LeaderboardEntry[];
     loading: boolean;
@@ -71,6 +71,7 @@ function BattlepassLeaderboard() {
         },
         loading: false,
       });
+      // updateUser({ points: resUserTotPoints.data.points });
     })();
   }, []);
 
