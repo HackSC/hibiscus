@@ -225,6 +225,7 @@ export class SponsorServiceAPI {
       year,
       major,
       school,
+      saved,
     });
     if (res.status >= 400) {
       return { error: { message: res.data.message }, status: res.status };
