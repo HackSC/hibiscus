@@ -44,6 +44,13 @@ const cards = [
   />,
   <Card
     key={4}
+    name="Neil Davé"
+    title="Founder and CEO of Tidal"
+    description="Neil is the Founder and CEO of Tidal, an AI and robotics company within Google X that is building a platform to sustainably use the ocean to solve some of humanity's biggest challenges - from regenerative food production, to renewable energy, to decarbonization and climate change. Prior to Tidal, Neil led strategic partnerships, product and go-to-market strategy for Wing, Alphabet’s autonomous delivery drone company and is responsible for starting OpenSky, Wing's air traffic management platform. Before joining X, Neil held a number of leadership roles in Finance, Consumer Hardware, Product Management, Strategy and Operations at Google over the course of 8 years. During that time, Neil also built and launched start-ups external to Alphabet focused on next-gen communications, ecommerce, and the gig economy, all aimed at using advanced technology and systems thinking to solve complex, multifactorial problems. In addition to his work at X, Neil advises start-ups and mentors founders for First Round Capital and Sustainable Ocean Alliance."
+    photo="./img/speakers/neil.png"
+  />,
+  <Card
+    key={5}
     name="Mark Hull"
     title="Chief Product Officer at GoodRX"
     description="Mark Hull is the Chief Product Officer at GoodRx where he leads the product strategy and management of the company’s products and services. Throughout his career, Mark has focused on making the world more open and connected through the creation of social products that bring people together. Before joining GoodRx, Mark was the Senior Director of Product Management for Facebook’s Creation team, leading the production experience of News Feed, Stories and Reels, the primary online destination for more than 2 billion people. Prior to Facebook, Mark was the Senior Director of Product Management for LinkedIn, leading its Messaging products. Mark started his career at Yahoo, creating the company’s first community and social networking products. Mark has an MBA from UC Berkeley’s Haas School of Business and a BA Journalism from Pepperdine University. GoodRx is a leading consumer-focused digital healthcare platform. Our technology delivers strong savings, trusted information and access to care to make healthcare affordable and convenient for all Americans. Since 2011, we have helped consumers save over $40 billion and are one of the most downloaded medical apps over the past decade."
