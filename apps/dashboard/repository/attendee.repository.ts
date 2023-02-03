@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { injectable } from 'tsyringe';
