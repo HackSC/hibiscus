@@ -3,18 +3,29 @@ dotenv.config();
 
 import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
 import { getEnv } from '../../libs/env/src';
-import { HibiscusRole } from '../../libs/types/src';
 
-const FAKE_USER_EMAIL = process.argv[2] ?? 'example@hacksc.com';
-const FAKE_USER_PASSWORD = process.argv[3] ?? 'hacksc';
+const INSTRUCTIONS = `
+  Usage:
+  npx ts-node path/to/script.ts email password firstname lastname [role as int]
+`;
 
-async function createFakeUser(): Promise<User | null> {
+if (process.argv.length < 6) {
+  console.log(INSTRUCTIONS);
+}
+
+const email = process.argv[2];
+const password = process.argv[3];
+const first_name = process.argv[4];
+const last_name = process.argv[5];
+const role = process.argv[6] ?? 5; // Default: HACKER
+
+async function createUser(): Promise<User | null> {
   const supabase = createSupabaseServiceClient();
   const {
     data: { user },
   } = await supabase.auth.admin.createUser({
-    email: FAKE_USER_EMAIL,
-    password: FAKE_USER_PASSWORD,
+    email: email,
+    password: password,
     email_confirm: true,
   });
 
@@ -22,10 +33,9 @@ async function createFakeUser(): Promise<User | null> {
     await supabase.from('user_profiles').insert({
       user_id: user.id,
       email: user.email,
-      first_name: process.argv[4] ?? 'Hack',
-      last_name: process.argv[5] ?? 'SC',
-      // Default role = HACKER
-      role: Object.keys(HibiscusRole).indexOf(HibiscusRole.HACKER) + 1,
+      first_name,
+      last_name,
+      role,
     });
   }
 
@@ -50,12 +60,12 @@ function createSupabaseServiceClient(): SupabaseClient {
 }
 
 (async () => {
-  const user = await createFakeUser();
+  const user = await createUser();
   if (user != null) {
-    console.log('Fake user created:');
+    console.log('User created:');
     console.log(user);
   } else {
-    console.error('Failed to create fake user; check if user already exists');
+    console.error('Failed to create user; check if user already exists');
   }
   process.exit();
 })();

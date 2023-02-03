@@ -51,13 +51,7 @@ export class CompanyRepository {
       name,
       description,
       website,
-      profile_photo,
-      target_graduations (
-        graduation_year
-      ),
-      target_majors (
-        major
-      )
+      profile_photo
     `
       )
       .eq('id', companyId)
@@ -129,5 +123,25 @@ export class CompanyRepository {
     } else {
       return false;
     }
+  }
+
+  async getCompanyandEventId(userId: string) {
+    const { data, error } = await this.client
+      .from('sponsor_user_bridge_company')
+      .select(
+        `
+        company_id,
+        companies(
+          events(
+            id
+          )
+        )
+      `
+      )
+      .eq('user_id', userId)
+      .single();
+
+    if (error) console.log(`CompanyRepoError getCompanyId: ${error.message}`);
+    return { data, error };
   }
 }
