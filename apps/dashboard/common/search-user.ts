@@ -2,8 +2,8 @@ import {
   HibiscusSupabaseClient,
   UserProfileRow,
 } from '@hibiscus/hibiscus-supabase-client';
-import { Database } from '@hibiscus/types';
 import { container } from 'tsyringe';
+import { parseDoB } from './parse-dob';
 
 export default async function searchUser(query: string): Promise<any[]> {
   const supabase = container.resolve(HibiscusSupabaseClient);
@@ -42,7 +42,7 @@ export default async function searchUser(query: string): Promise<any[]> {
       .select()
       .eq('id', userId);
     if (res.data.length > 0) {
-      uniqueMatches[i].dob = res.data[0].dob;
+      uniqueMatches[i].dob = parseDoB(res.data[0].dob);
     }
   }
 
