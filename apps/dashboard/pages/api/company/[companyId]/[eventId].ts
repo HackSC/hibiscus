@@ -125,10 +125,15 @@ export default async function handler(
   }
 }
 
-function processAttendeesList(array: any[], companyId: string) {
+export function processAttendeesList(
+  array: any[],
+  companyId: string,
+  newlySaved?: boolean
+) {
   const attendeesData: any[] = [];
 
   array.map((element) => {
+    console.log(element);
     //hardcoded since we are processing participants anyway
     const participantData = element['participants'];
 
@@ -136,8 +141,8 @@ function processAttendeesList(array: any[], companyId: string) {
     const savedArray: any[] = participantData[
       'company_saved_participants'
     ] as any[];
-    // there never should be a case where there are more than one note from the same company for the same user
-    // if notes is undefined/null, just set to null. else filter
+    //there never should be a case where there are more than one note from the same company for the same user
+    //if notes is undefined/null, just set to null. else filter
 
     let userNotes: any;
     if (notes.length) {
@@ -151,14 +156,18 @@ function processAttendeesList(array: any[], companyId: string) {
     }
 
     let saveState: any;
-    if (savedArray.length) {
-      saveState = savedArray
-        .filter((ele) => {
-          return ele['company_id'] === companyId;
-        })
-        .at(0);
+    if (newlySaved) {
+      saveState = true;
     } else {
-      saveState = false;
+      if (savedArray.length) {
+        saveState = savedArray
+          .filter((ele) => {
+            return ele['company_id'] === companyId;
+          })
+          .at(0);
+      } else {
+        saveState = false;
+      }
     }
 
     const attendee = new Attendee(

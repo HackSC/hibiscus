@@ -2,8 +2,8 @@
 import 'reflect-metadata';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { container } from 'tsyringe';
-import { AttendeeRepository } from '../../../../../repository/attendee.repository';
-import { region } from 'libs/hackform-client/src/lib/aws';
+import { CompanyRepository } from '../../../../../repository/company.repository';
+import { processAttendeesList } from '../[eventId]';
 
 function Attendee(
   id: string,
@@ -35,23 +35,34 @@ export default async function handler(
   try {
     const { companyId, participantId } = req.query;
     const company_id = companyId.toString();
-    const user_id = userId.toString();
-    const repo = container.resolve(AttendeeRepository);
+    const participant_id = participantId.toString();
+    console.log(`Company id ${company_id} + ${participant_id}`);
+    const repo = container.resolve(CompanyRepository);
 
-    //insert into the checkin list
-    // const { error } = await repo
-    //   .from('company_saved_participant')
-    //   .insert({
-    //     user_id: user_id,
-    //     companyId: company_id,
-    //     saved: true,
-    //     created_at: new Date().toISOString(),
-    //   });
+    if (req.method === 'POST') {
+      const result = await repo.insertAttendeeIntoSaved(
+        participant_id,
+        company_id
+      );
+      console.log(result.data);
+      if (!result.data) {
+        throw new Error(
+          'Either company_id or participant_id is null and invalid.'
+        );
+      }
+      const returnData = processAttendeesList(result.data, company_id, true);
+      return res.status(201).json({ data: returnData });
+    } else if (req.method === 'DELETE') {
+      const result = await repo.deleteAttendeeFromSaved(
+        participant_id,
+        company_id
+      );
 
-    if (error.status != 201) {
-      return res.status(500).json({ message: error.statusText });
+      //even if the user or company is null and thus nothing was deleted, should just do nothing and return 200
+      return res.status(200).json({ data: [] });
     }
-    return res.status(200).json({});
+
+    return res.status(405).json({ message: 'Request not supported.' });
   } catch (e) {
     return res.status(500).json({ message: e.message });
   }
