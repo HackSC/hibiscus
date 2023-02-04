@@ -1,3 +1,7 @@
+alter table "public"."bonus_points" add column "description" character varying;
+
+alter table "public"."bonus_points" add column "link" character varying;
+
 alter table "public"."company_saved_participants" drop constraint "company_saved_participants_company_id_fkey";
 
 alter table "public"."company_saved_participants" drop constraint "company_saved_participants_user_id_fkey";
@@ -19,10 +23,6 @@ alter table "public"."bonus_points" alter column "id" set default uuid_generate_
 alter table "public"."bonus_points" alter column "link" set data type text using "link"::text;
 
 alter table "public"."bonus_points_log" alter column "log_id" set default uuid_generate_v4();
-
-alter table "public"."leaderboard" drop column "first_name";
-
-alter table "public"."leaderboard" drop column "last_name";
 
 alter table "public"."event_log" add constraint "event_log_user_id_fkey" FOREIGN KEY (user_id) REFERENCES auth.users(id) ON UPDATE CASCADE not valid;
 
