@@ -1,4 +1,8 @@
 export function parseDoB(dob: string): string {
+  if (dob == null) {
+    return '';
+  }
+
   if (dob.match(/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/)) {
     return dob;
   }

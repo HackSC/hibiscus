@@ -72,6 +72,84 @@ export function Index() {
     }
   }
 
+  async function fetchDataInit() {
+    const res = await supabase
+      .from('event_log')
+      .select()
+      .eq('event_id', eventId)
+      .order('check_in_time', { ascending: false })
+      .limit(20);
+
+    if (res.error) {
+      setResponse(res.error);
+      return;
+    }
+
+    const logs = res.data;
+    const mappedLogs = await Promise.all(
+      logs.map(async (log) => {
+        const {
+          data: [{ first_name, last_name }],
+        } = await supabase
+          .from('user_profiles')
+          .select()
+          .eq('user_id', log.user_id);
+
+        return {
+          ...log,
+          check_in_time_display: formatTimestamp(log.check_in_time),
+          first_name,
+          last_name,
+        };
+      })
+    );
+    setAttendees(mappedLogs);
+  }
+
+  async function updateData() {
+    const res = await supabase
+      .from('event_log')
+      .select()
+      .eq('event_id', eventId)
+      .gt('check_in_time', attendees[0].check_in_time)
+      .order('check_in_time', { ascending: false });
+
+    if (res.error) {
+      setResponse(res.error);
+      return;
+    }
+
+    const logs = res.data;
+    const mappedLogs = await Promise.all(
+      logs.map(async (log) => {
+        const {
+          data: [{ first_name, last_name }],
+        } = await supabase
+          .from('user_profiles')
+          .select()
+          .eq('user_id', log.user_id);
+
+        return {
+          ...log,
+          check_in_time_display: formatTimestamp(log.check_in_time),
+          first_name,
+          last_name,
+        };
+      })
+    );
+
+    const updatedAttendees = [...mappedLogs, ...attendees].slice(0, 20);
+    setAttendees(updatedAttendees);
+  }
+
+  function fetchData() {
+    if (attendees.length === 0) {
+      fetchDataInit();
+    } else {
+      updateData();
+    }
+  }
+
   useEffect(() => {
     const id = router.query['id']?.toString();
     if (id != null) {
@@ -94,78 +172,16 @@ export function Index() {
   }, [response]);
 
   useEffect(() => {
-    async function fetchDataInit() {
-      const res = await supabase
-        .from('event_log')
-        .select()
-        .eq('event_id', eventId)
-        .order('check_in_time', { ascending: false })
-        .limit(20);
-
-      const logs = res.data;
-      const mappedLogs = await Promise.all(
-        logs.map(async (log) => {
-          const {
-            data: [{ first_name, last_name }],
-          } = await supabase
-            .from('user_profiles')
-            .select()
-            .eq('user_id', log.user_id);
-
-          return {
-            ...log,
-            check_in_time_display: formatTimestamp(log.check_in_time),
-            first_name,
-            last_name,
-          };
-        })
-      );
-      setAttendees(mappedLogs);
-    }
-
-    async function updateData() {
-      const res = await supabase
-        .from('event_log')
-        .select()
-        .eq('event_id', eventId)
-        .gt('check_in_time', attendees[0].check_in_time)
-        .order('check_in_time', { ascending: false });
-
-      const logs = res.data;
-      const mappedLogs = await Promise.all(
-        logs.map(async (log) => {
-          const {
-            data: [{ first_name, last_name }],
-          } = await supabase
-            .from('user_profiles')
-            .select()
-            .eq('user_id', log.user_id);
-
-          return {
-            ...log,
-            check_in_time_display: formatTimestamp(log.check_in_time),
-            first_name,
-            last_name,
-          };
-        })
-      );
-
-      const updatedAttendees = [...mappedLogs, ...attendees].slice(0, 20);
-      setAttendees(updatedAttendees);
-    }
-
     if (eventId != null) {
       fetchDataInit();
-
-      setInterval(() => {
-        if (attendees.length === 0) {
-          fetchDataInit();
-        } else {
-          updateData();
-        }
-      }, 5000);
     }
   }, [eventId]);
+
+  useEffect(() => {
+    const timer = setInterval(fetchData, 5000);
+
+    return () => clearInterval(timer);
+  }, [attendees]);
 
   const { user: authUser } = useHibiscusUser();
   if (authUser == null) {
