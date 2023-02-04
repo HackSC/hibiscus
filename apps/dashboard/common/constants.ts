@@ -99,4 +99,5 @@ export const MLH_MAJORS_OPTIONS_LIST: Option[] = [
   },
 ];
 
-export const BATTLEPASS_LEADERBOARD_PAGE_SIZE = 11;
+export const BATTLEPASS_LEADERBOARD_PAGE_SIZE = 10;
+export const MAX_BATTLEPASS_PAGES = 50;

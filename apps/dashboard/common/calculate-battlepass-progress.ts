@@ -1,43 +1,45 @@
 export function calculateBattlepassProgress(
   points: number
 ): BattlepassProgress {
-  if (points >= BattlepassLevels[3]) {
+  if (points >= BATTLEPASS_LEVEL_POINTS[3]) {
     return {
       level: 3,
       progress: 1,
+      nextLevel: BATTLEPASS_LEVEL_POINTS[3],
     };
-  } else if (points >= BattlepassLevels[2]) {
+  } else if (points >= BATTLEPASS_LEVEL_POINTS[2]) {
     return {
       level: 2,
       progress:
-        (points - BattlepassLevels[2]) /
-        (BattlepassLevels[3] - BattlepassLevels[2]),
-      nextLevel: BattlepassLevels[3],
+        (points - BATTLEPASS_LEVEL_POINTS[2]) /
+        (BATTLEPASS_LEVEL_POINTS[3] - BATTLEPASS_LEVEL_POINTS[2]),
+      nextLevel: BATTLEPASS_LEVEL_POINTS[3],
     };
-  } else if (points >= BattlepassLevels[1]) {
+  } else if (points >= BATTLEPASS_LEVEL_POINTS[1]) {
     return {
       level: 1,
       progress:
-        (points - BattlepassLevels[1]) /
-        (BattlepassLevels[2] - BattlepassLevels[1]),
-      nextLevel: BattlepassLevels[2],
+        (points - BATTLEPASS_LEVEL_POINTS[1]) /
+        (BATTLEPASS_LEVEL_POINTS[2] - BATTLEPASS_LEVEL_POINTS[1]),
+      nextLevel: BATTLEPASS_LEVEL_POINTS[2],
     };
   } else {
     return {
       level: 0,
-      progress: points / BattlepassLevels[1],
-      nextLevel: BattlepassLevels[1],
+      progress: points / BATTLEPASS_LEVEL_POINTS[1],
+      nextLevel: BATTLEPASS_LEVEL_POINTS[1],
     };
   }
 }
 
-const BattlepassLevels = {
+export const BATTLEPASS_LEVEL_POINTS = {
+  0: 0,
   1: 425,
   2: 750,
   3: 1125,
 };
 
-interface BattlepassProgress {
+export interface BattlepassProgress {
   level: number;
   progress: number;
   nextLevel?: number;

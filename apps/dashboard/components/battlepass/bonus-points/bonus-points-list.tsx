@@ -2,6 +2,9 @@ import { H3, Modal, Text, Link } from '@hibiscus/ui';
 import { Button } from '@hibiscus/ui-kit-2023';
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { BonusPointsStatus } from '../../../common/apis/battlepass/types';
+import { useBattlepassAPI } from '../../../hooks/use-battlepass-api/use-battlepass-api';
+import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
 import { GrayBox } from '../../gray-box/gray-box';
 import BonusPointsItem from './bonus-points-item';
 import { BonusPointItem } from './types';
@@ -13,6 +16,8 @@ interface Props {
 function BattlepassBonusPointsList({ items }: Props) {
   const [chosenBP, setChosenBP] = useState<BonusPointItem | null>(null);
   const [open, setOpen] = useState(false);
+  const battlepassApi = useBattlepassAPI();
+  const { user } = useHibiscusUser();
 
   return (
     <Div>
@@ -42,9 +47,14 @@ function BattlepassBonusPointsList({ items }: Props) {
         <BonusPointsItem
           data={item}
           key={i}
-          handleClick={() => {
+          handleClick={async () => {
             setChosenBP(item);
             setOpen(true);
+            await battlepassApi.updateUserBonusPointStatus(
+              user.id,
+              item.id,
+              BonusPointsStatus.PENDING
+            );
           }}
         />
       ))}

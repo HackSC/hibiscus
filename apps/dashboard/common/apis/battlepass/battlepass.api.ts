@@ -1,9 +1,6 @@
 import { faker } from '@faker-js/faker';
-import { getEnv } from '@hibiscus/env';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { SupabaseClient } from '@supabase/supabase-js';
-import axios from 'axios';
-import PagesManifestPlugin from 'next/dist/build/webpack/plugins/pages-manifest-plugin';
 import { container } from 'tsyringe';
 import { BonusPointsStatus } from './types';
 
@@ -60,6 +57,11 @@ export interface BattlepassAPIInterface {
       status: BonusPointsStatus;
     }[];
   }>;
+  updateUserBonusPointStatus: (
+    userId: string,
+    bonusPointsId: string,
+    status: BonusPointsStatus
+  ) => Promise<void>;
 }
 
 export class BattlepassAPI implements BattlepassAPIInterface {
@@ -111,14 +113,15 @@ export class BattlepassAPI implements BattlepassAPIInterface {
       `user_profiles(user_id,first_name,last_name), 
         bonus_points, event_points`
     );
+    if (!res.data) res.data = [];
     const leaderboard = res.data
       .sort((a, b) => {
         return (
-          b.bonus_points + b.event_points - (a.bonus_points + a.bonus_points)
+          b.bonus_points + b.event_points - (a.bonus_points + a.event_points)
         );
       })
       .slice(pageNum * pageSize - pageSize, pageNum * pageSize);
-    return {
+    const returnData = {
       data: {
         page_number: pageNum,
         page_count: pageSize,
@@ -134,13 +137,18 @@ export class BattlepassAPI implements BattlepassAPIInterface {
         }),
       },
     };
+    return returnData;
   }
 
   async getUserRankLeaderboard(
     userId: string
   ): Promise<{ data: { place: number } }> {
     if (this.mock) return { data: { place: faker.datatype.number() } };
-    return { data: { place: 0 } };
+    const leaderboardRes = await this.getLeaderboard(10000, 1);
+    const userFoundIndex = leaderboardRes.data.leaderboard.findIndex(
+      (user) => user.user_id == userId
+    );
+    return { data: { place: userFoundIndex + 1 } };
   }
 
   async getBonusPointEventsUserStatus(userId: string): Promise<{
@@ -198,7 +206,6 @@ export class BattlepassAPI implements BattlepassAPIInterface {
       .from('bonus_points_log')
       .select('bonus_points(id,name,description,points,link), status')
       .eq('user_id', userId);
-    console.log(resBPUserLog);
 
     const bonusPointsRes = await this.client
       .from('bonus_points')
@@ -209,7 +216,7 @@ export class BattlepassAPI implements BattlepassAPIInterface {
     }
     const copyBonusPoints = bonusPointsRes.data.map((item) => ({
       ...item,
-      status: BonusPointsStatus.PENDING,
+      status: BonusPointsStatus.VERIFY,
     }));
     // go through each bonus points and check user log
     for (const [i, item] of bonusPointsRes.data.entries()) {
@@ -217,13 +224,11 @@ export class BattlepassAPI implements BattlepassAPIInterface {
         (fnd) => (fnd.bonus_points as any).id === item.id
       );
       if (foundLogIndex !== -1) {
-        console.log('foundlogs', foundLogIndex);
         copyBonusPoints[i]['status'] = getBonusPointNumberStatus(
           resBPUserLog.data[foundLogIndex].status
         );
       }
     }
-    console.log(copyBonusPoints);
     return {
       data: copyBonusPoints.map((item) => {
         return item;

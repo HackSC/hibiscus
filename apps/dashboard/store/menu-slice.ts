@@ -10,8 +10,6 @@ interface TabRoute {
 const tabRoutes: TabRoute[] = [
   { displayName: 'Home', url: '/' },
   { displayName: 'Apply as a hacker', url: '/apply-2023' },
-  { displayName: 'Battlepass', url: '/battlepass' },
-  // { displayName: 'Team', url: '/team' },
 ];
 
 const sponsorRoutes: TabRoute[] = [

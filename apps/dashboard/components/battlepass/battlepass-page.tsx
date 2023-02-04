@@ -8,6 +8,13 @@ import BattlepassLeaderboard from './leaderboard/battlepass-leaderboard';
 import { BonusPointItem } from './bonus-points/types';
 import BattlepassBonusPointsList from './bonus-points/bonus-points-list';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
+import {
+  BattlepassProgress,
+  BATTLEPASS_LEVEL_POINTS,
+  calculateBattlepassProgress,
+} from '../../common/calculate-battlepass-progress';
+import { GlowSpan } from '@hibiscus/ui-kit-2023';
+import { Colors2023 } from '@hibiscus/styles';
 
 function BattlepassPage() {
   const battlepassAPI = useBattlepassAPI();
@@ -16,13 +23,17 @@ function BattlepassPage() {
     loading: boolean;
   }>({ data: [], loading: true });
   const { user } = useHibiscusUser();
+  const [bpProg, setBattlepassProgress] = useState<BattlepassProgress | null>(
+    null
+  );
+  const [userPoints, setUserPoints] = useState<number | null>(null);
 
   useEffect(() => {
-    // MOCK
     battlepassAPI.getBonusPointEventsUserStatus(user.id).then((res) => {
       setBPItems({
         data: res.data.map((item) => ({
-          status: 'VERIFY',
+          id: item.id,
+          status: item.status,
           title: item.name,
           description: item.description,
           points: item.points,
@@ -33,18 +44,42 @@ function BattlepassPage() {
     });
   }, []);
 
+  useEffect(() => {
+    battlepassAPI.getUserTotalPoints(user.id).then((res) => {
+      const bpp = calculateBattlepassProgress(res.data.points);
+      setUserPoints(res.data.points);
+      setBattlepassProgress(bpp);
+    });
+  }, []);
+
   return (
     <Wrapper>
       <BattlepassWelcomeHeader />
       <WidgetContainer>
         <WidgetHeader>Your Points</WidgetHeader>
-        <BattlepassPointsBar
-          rangeMinPoint={100}
-          rangeMaxPoint={300}
-          currentPoint={200}
-          minLabel={'Min pojtn'}
-          maxLabel={'max pojtn'}
-        />
+        {bpProg !== null && (
+          <BattlepassPointsBar
+            rangeMinPoint={bpProg.level}
+            rangeMaxPoint={bpProg.nextLevel}
+            currentPoint={userPoints}
+            minLabel={
+              <Text>
+                Current points: <GlowSpan>{userPoints}</GlowSpan>
+              </Text>
+            }
+            maxLabel={
+              BATTLEPASS_LEVEL_POINTS[bpProg.level] <
+              BATTLEPASS_LEVEL_POINTS[3] ? (
+                <Text>
+                  Next level points:{' '}
+                  <GlowSpan color={Colors2023.BLUE.STANDARD}>
+                    {bpProg.nextLevel}
+                  </GlowSpan>
+                </Text>
+              ) : null
+            }
+          />
+        )}
       </WidgetContainer>
       <SecondSection>
         <LeftColumnSecondSection>

@@ -11,9 +11,14 @@ interface Props {
 }
 
 function BattlepassPointsBar(props: Props) {
-  const progress =
-    (props.currentPoint - props.rangeMinPoint) /
-    (props.rangeMaxPoint - props.rangeMinPoint);
+  const progress = Math.min(
+    Math.max(
+      (props.currentPoint - props.rangeMinPoint) /
+        (props.rangeMaxPoint - props.rangeMinPoint),
+      0
+    ),
+    1
+  );
 
   return (
     <Container>

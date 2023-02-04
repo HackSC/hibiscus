@@ -5,7 +5,10 @@ import { GrayBox } from '../../gray-box/gray-box';
 import { LeaderboardEntry } from './types';
 import { TfiCrown } from 'react-icons/tfi';
 import { Colors2023 } from '@hibiscus/styles';
-import { BATTLEPASS_LEADERBOARD_PAGE_SIZE } from '../../../common/constants';
+import {
+  BATTLEPASS_LEADERBOARD_PAGE_SIZE,
+  MAX_BATTLEPASS_PAGES,
+} from '../../../common/constants';
 import { useBattlepassAPI } from '../../../hooks/use-battlepass-api/use-battlepass-api';
 import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
 import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
@@ -97,8 +100,24 @@ function BattlepassLeaderboard() {
             {userRankLeaderboard.data.rank}
           </Text>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-            <Text style={{ fontWeight: 'bold' }}>
+            <Text
+              style={{
+                fontWeight: 'bold',
+                gap: '10px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
               {user.firstName} {user.lastName}
+              {userRankLeaderboard.data.rank === 1 && (
+                <TfiCrown color="yellow" />
+              )}
+              {userRankLeaderboard.data.rank === 2 && (
+                <TfiCrown color="silver" />
+              )}
+              {userRankLeaderboard.data.rank === 3 && (
+                <TfiCrown color="#FFD23C" />
+              )}
             </Text>
           </div>
           <Text style={{ fontWeight: 'bold' }}>
@@ -107,7 +126,7 @@ function BattlepassLeaderboard() {
         </CurrentUserEntry>
       )}
       <LeaderboardPageTabs
-        totalPages={10}
+        totalPages={MAX_BATTLEPASS_PAGES}
         onClickNext={(num) => {
           setLeaderboardResults((prev) => ({
             ...prev,
