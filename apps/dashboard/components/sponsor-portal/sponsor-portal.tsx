@@ -67,25 +67,6 @@ export function SponsorPortal({ user }: Props) {
             />
           </Link>
         </StyledButton>
-        <StyledButton color={'black'}>
-          <Link href="/">
-            <H1
-              style={{
-                color: Colors2023.GRAY.LIGHT,
-                fontSize: '25px',
-                padding: '10px',
-              }}
-            >
-              Company Configurations
-            </H1>
-            <Image
-              width="220"
-              height="200"
-              src={'/hackform-illustrations/heart-flying.svg'}
-              alt="Illustration"
-            />
-          </Link>
-        </StyledButton>
       </MenuContainer>
     </Wrapper>
   );
@@ -111,7 +92,7 @@ const MenuContainer = styled.div`
   margin-top: 4rem;
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
 `;
 
