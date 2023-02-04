@@ -1,10 +1,9 @@
-/* eslint-disable @nrwl/nx/enforce-module-boundaries */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import styled from 'styled-components';
 import { Text } from '@hibiscus/ui';
 import { Colors2023 } from '@hibiscus/styles';
 import Image from 'next/image';
 import { Attendee } from '../../common/mock-sponsor';
+import { useState } from 'react';
 
 interface Props {
   user: Attendee;
@@ -13,7 +12,8 @@ interface Props {
   showSchool?: boolean;
   showNoteButton?: boolean;
   showSaveButton?: boolean;
-  onClick;
+  onNoteClick?;
+  onSaveClick?;
 }
 
 export function HackerTab({
@@ -23,8 +23,11 @@ export function HackerTab({
   showSchool,
   showNoteButton,
   showSaveButton,
-  onClick,
+  onNoteClick,
+  onSaveClick,
 }: Props) {
+  const [isSaved, setSave] = useState(user?.saved);
+
   return (
     <Container>
       <div
@@ -37,7 +40,7 @@ export function HackerTab({
       >
         <Circle />
         <Text style={{ paddingLeft: '20px', fontSize: '20px' }}>
-          {user.first_name} {user.last_name}
+          {user.full_name}
         </Text>
       </div>
       {showYear && (
@@ -70,23 +73,27 @@ export function HackerTab({
         }}
       >
         {showNoteButton && (
-          <StyledButton style={{ marginRight: '1rem' }} onClick={onClick}>
-            <Image
-              width="35"
-              height="35"
-              src={'/note.svg'}
-              alt="Illustration"
-            />
+          <StyledButton style={{ marginRight: '1rem' }} onClick={onNoteClick}>
+            <Image width="35" height="35" src={'/note.svg'} alt="note.svg" />
           </StyledButton>
         )}
         {showSaveButton && (
-          <StyledButton>
-            <Image
-              width="35"
-              height="35"
-              src={'/save.svg'}
-              alt="Illustration"
-            />
+          <StyledButton
+            onClick={() => {
+              isSaved ? setSave(false) : setSave(true);
+              onSaveClick();
+            }}
+          >
+            {isSaved ? (
+              <Image
+                width="35"
+                height="35"
+                src={'/save-green.svg'}
+                alt="save.svg"
+              />
+            ) : (
+              <Image width="35" height="35" src={'/save.svg'} alt="save.svg" />
+            )}
           </StyledButton>
         )}
       </div>
