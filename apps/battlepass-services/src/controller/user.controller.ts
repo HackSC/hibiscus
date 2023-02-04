@@ -33,12 +33,6 @@ export class UserController {
     }
   }
 
-  async updateBonusPoints(req: Request, res: Response) {
-    try {
-      const;
-    } catch (e) {}
-  }
-
   async updateBonusPoint(req, res) {
     try {
       const points = await this.repository.getBonusPoints(req.param.user_id);
