@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { injectable } from 'tsyringe';
@@ -35,7 +36,7 @@ export class AttendeeRepository {
     return { data, error };
   }
 
-  async getAttendeesByEventId(eventId: string) {
+  async getAttendeesByEventId(eventId: string, limit: number | null) {
     const { data, error } = await this.client
       .from('event_log')
       .select(
@@ -63,13 +64,14 @@ export class AttendeeRepository {
       `
       )
       .eq('event_id', eventId)
+      .limit(limit)
       .order('check_in_time', { ascending: false });
 
     if (error) console.log(`Supabase Error: ${error.message}`);
     return { data, error };
   }
 
-  async getAllSavedAttendees(companyId: string, limit: number) {
+  async getAllSavedAttendees(companyId: string, limit: number | null) {
     const { data, error } = await this.client
       .from('company_saved_participants')
       .select(

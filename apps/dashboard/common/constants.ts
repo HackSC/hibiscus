@@ -98,3 +98,6 @@ export const MLH_MAJORS_OPTIONS_LIST: Option[] = [
     displayName: `Undecided / No Declared Major`,
   },
 ];
+
+export const BATTLEPASS_LEADERBOARD_PAGE_SIZE = 10;
+export const MAX_BATTLEPASS_PAGES = 50;

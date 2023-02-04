@@ -1,19 +1,62 @@
-/* eslint-disable @nrwl/nx/enforce-module-boundaries */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import styled from 'styled-components';
 import { BoldText, Link, Text } from '@hibiscus/ui';
 import { Colors2023 } from '@hibiscus/styles';
-import { HibiscusUser } from '@hibiscus/types';
-import { H1, H2, H3 } from '@hibiscus/ui';
+import { H1 } from '@hibiscus/ui';
 import Image from 'next/image';
 import { Attendee } from '../../common/mock-sponsor';
+import { useEffect, useState } from 'react';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { container } from 'tsyringe';
+import { SponsorServiceAPI } from '../../common/api';
 
 interface Props {
   hacker: Attendee;
-  onClick;
+  companyId?: string;
+  noteOnClick;
 }
 
-export function HackerProfile({ hacker, onClick }: Props) {
+export function HackerProfile({ hacker, companyId, noteOnClick }: Props) {
+  const [quickNote, setQuickNote] = useState('');
+  const supabase = container.resolve(HibiscusSupabaseClient).getClient();
+
+  useEffect(() => {
+    setQuickNote(hacker.quick_notes);
+    const events = supabase
+      .channel('note-insert-channel')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'notes',
+          filter: `participant_id=eq.${hacker.id}`,
+        },
+        (payload) => {
+          getAttendeeNote(companyId, hacker.id);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(events);
+    };
+  }, [companyId, hacker]);
+
+  async function getAttendeeNote(companyId: string, attendeeId: string) {
+    SponsorServiceAPI.getAttendeeNote(companyId, attendeeId)
+      .then(({ data, error }) => {
+        if (error) {
+          console.log(error);
+        }
+
+        console.log(data.data.note);
+        setQuickNote(data.data.note as string);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   return (
     <Container>
       <div
@@ -24,12 +67,7 @@ export function HackerProfile({ hacker, onClick }: Props) {
           justifyContent: 'space-between',
         }}
       >
-        <BoldText style={{ fontSize: '30px' }}>
-          {hacker.first_name} {hacker.last_name}
-        </BoldText>
-        <StyledButton>
-          <Image width="30" height="30" src={'/save.svg'} alt="save-button" />
-        </StyledButton>
+        <BoldText style={{ fontSize: '30px' }}>{hacker.full_name}</BoldText>
       </div>
       <Text style={{ fontSize: '15px' }}>School: {hacker.school}</Text>
       <Text style={{ fontSize: '15px' }}>Major: {hacker.major}</Text>
@@ -45,19 +83,19 @@ export function HackerProfile({ hacker, onClick }: Props) {
         }}
       >
         <TitleText style={{ marginTop: '1rem' }}>QUICK NOTES</TitleText>
-        <StyledButton style={{ marginTop: '0.5rem' }} onClick={onClick}>
+        <StyledButton style={{ marginTop: '0.5rem' }} onClick={noteOnClick}>
           <Image width="30" height="30" src={'/note.svg'} alt="note-button" />
         </StyledButton>
       </div>
       <NoteContainer>
-        <Text>No note added</Text>
+        <Text>{quickNote !== '' ? quickNote : 'No note found'}</Text>
       </NoteContainer>
       <div
         style={{
           width: '100%',
           display: 'flex',
           justifyContent: 'space-between',
-          marginTop: '1rem',
+          marginTop: '2rem',
         }}
       >
         <TitleText>RESUME</TitleText>
@@ -76,6 +114,39 @@ export function HackerProfile({ hacker, onClick }: Props) {
             />
           </StyledButton>
         </div>
+      </div>
+      <NoteContainer>
+        {hacker.resume ? (
+          <Link href={hacker.resume}>
+            <BoldText style={{ textDecoration: 'underline' }}>
+              {hacker.resume}
+            </BoldText>
+          </Link>
+        ) : (
+          <Text>No resume found</Text>
+        )}
+      </NoteContainer>
+
+      <div
+        style={{
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          marginTop: '2rem',
+        }}
+      >
+        <TitleText>PORTFOLIO</TitleText>
+        <NoteContainer>
+          {hacker.portfolio_link ? (
+            <Link href={hacker.portfolio_link}>
+              <BoldText style={{ textDecoration: 'underline' }}>
+                {hacker.portfolio_link}
+              </BoldText>
+            </Link>
+          ) : (
+            <Text>No portfolio found</Text>
+          )}
+        </NoteContainer>
       </div>
     </Container>
   );

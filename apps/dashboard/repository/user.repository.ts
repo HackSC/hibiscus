@@ -17,4 +17,23 @@ export class UserRepository {
       .eq('email', email)
       .maybeSingle();
   }
+
+  async getBareUserInfoById(userId: string) {
+    const { data, error } = await this.client
+      .from('user_profiles')
+      .select(
+        `
+        user_id,
+        first_name,
+        last_name,
+        role,
+        email
+        `
+      )
+      .eq('user_id', userId)
+      .single();
+
+    if (error) console.log(`User repo error: ${error.message}`);
+    return { data, error };
+  }
 }
