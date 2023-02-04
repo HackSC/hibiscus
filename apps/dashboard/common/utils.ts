@@ -119,6 +119,7 @@ export const getMLHMajors = () => MLH_MAJORS_OPTIONS_LIST;
 
 export async function createSignedResumeUrl(resumeFilePath: string) {
   const repo = container.resolve(HibiscusSupabaseClient);
+  repo.setOptions({ useServiceKey: true });
   const { data, error } = await repo
     .getClient()
     .storage.from('rsvp-resume-hacker-2023')
