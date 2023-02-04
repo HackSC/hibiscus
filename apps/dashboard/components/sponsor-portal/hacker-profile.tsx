@@ -105,21 +105,21 @@ export function HackerProfile({ hacker, companyId, noteOnClick }: Props) {
             alignItems: 'center',
           }}
         >
-          <StyledButton>
+          {/* <StyledButton>
             <Image
               width="30"
               height="30"
               src={'/download-button.svg'}
               alt="download-button"
             />
-          </StyledButton>
+          </StyledButton> */}
         </div>
       </div>
       <NoteContainer>
         {hacker.resume ? (
           <Link href={hacker.resume}>
             <BoldText style={{ textDecoration: 'underline' }}>
-              {hacker.resume}
+              Resume link
             </BoldText>
           </Link>
         ) : (
@@ -140,7 +140,7 @@ export function HackerProfile({ hacker, companyId, noteOnClick }: Props) {
           {hacker.portfolio_link ? (
             <Link href={hacker.portfolio_link}>
               <BoldText style={{ textDecoration: 'underline' }}>
-                {hacker.portfolio_link}
+                Portfolio Link
               </BoldText>
             </Link>
           ) : (
