@@ -49,7 +49,7 @@ export function SponsorPortal({ user }: Props) {
           </Link>
         </StyledButton>
         <StyledButton color={'black'}>
-          <Link href="/">
+          <Link href="https://docs.google.com/document/d/1uDLBfm1hC7OTe9hNyTBbp2Gdje-GSuRK8KeRz7JOOaw/edit#">
             <H1
               style={{
                 color: Colors2023.GRAY.LIGHT,
@@ -63,25 +63,6 @@ export function SponsorPortal({ user }: Props) {
               width="220"
               height="200"
               src={'/hackform-illustrations/detective-curious.svg'}
-              alt="Illustration"
-            />
-          </Link>
-        </StyledButton>
-        <StyledButton color={'black'}>
-          <Link href="/">
-            <H1
-              style={{
-                color: Colors2023.GRAY.LIGHT,
-                fontSize: '25px',
-                padding: '10px',
-              }}
-            >
-              Company Configurations
-            </H1>
-            <Image
-              width="220"
-              height="200"
-              src={'/hackform-illustrations/heart-flying.svg'}
               alt="Illustration"
             />
           </Link>
@@ -111,7 +92,7 @@ const MenuContainer = styled.div`
   margin-top: 4rem;
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
 `;
 

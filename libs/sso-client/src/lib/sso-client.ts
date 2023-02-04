@@ -326,6 +326,8 @@ async function initializeFakeUser(request: NextRequest) {
         email_confirm: true,
       }));
 
+      console.log(user);
+
       if (user != null) {
         ({
           data: { user, session },

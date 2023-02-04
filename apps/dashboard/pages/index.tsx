@@ -77,9 +77,12 @@ const LayoutContainer = styled.div`
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const ffr = container.resolve(FeatureFlagRepository);
-  const configs = await ffr.getAll();
-  const appsOpen = configs['APPS_OPEN'] ?? false;
-  const rsvpFormOpen = configs['RSVP_FORM_OPEN'] ?? false;
+  const configs = (await ffr.getAll()) ?? {
+    APPS_OPEN: false,
+    RSVP_FORM_OPEN: false,
+  };
+  const appsOpen = configs['APPS_OPEN'];
+  const rsvpFormOpen = configs['RSVP_FORM_OPEN'];
   return {
     props: {
       appsOpen,

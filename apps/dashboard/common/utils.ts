@@ -6,6 +6,8 @@ import rateLimit from 'express-rate-limit';
 import { getEnv } from '@hibiscus/env';
 import { ApplicationStatus } from '@hibiscus/types';
 import { HACKER_POSTAPP_STATUSES, MLH_MAJORS_OPTIONS_LIST } from './constants';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { container } from 'tsyringe';
 
 export const getWordCount = (text: string) =>
   text.trim().length !== 0 ? text.trim().split(/\s+/).length : 0;
@@ -114,3 +116,15 @@ export const isHackerPostAppStatus = (status: ApplicationStatus) => {
 };
 
 export const getMLHMajors = () => MLH_MAJORS_OPTIONS_LIST;
+
+export async function createSignedResumeUrl(resumeFilePath: string) {
+  const repo = container.resolve(HibiscusSupabaseClient);
+  repo.setOptions({ useServiceKey: true });
+  const { data, error } = await repo
+    .getClient()
+    .storage.from('rsvp-resume-hacker-2023')
+    .createSignedUrl(resumeFilePath, 300);
+
+  if (error) console.log(`Resume storage error: ${error.message}`);
+  return { data, error };
+}
