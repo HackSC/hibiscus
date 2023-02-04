@@ -288,12 +288,4 @@ export class SponsorServiceAPI {
     }
     return { data: res.data, status: res.status };
   }
-
-  static async getCompanyProfile(companyId: string) {
-    const res = await axios.get(`/api/company/${companyId}`);
-    if (res.status >= 400) {
-      return { error: { message: res.data.message }, status: res.status };
-    }
-    return { data: res.data, status: res.status };
-  }
 }

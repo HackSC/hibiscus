@@ -16,6 +16,7 @@ const tabRoutes: TabRoute[] = [
 const sponsorRoutes: TabRoute[] = [
   { displayName: 'Home', url: '/' },
   { displayName: 'My Booth', url: '/sponsor-booth' },
+  { displayName: 'Configure', url: '/' }, // Have to change later
 ];
 
 export interface MenuState {

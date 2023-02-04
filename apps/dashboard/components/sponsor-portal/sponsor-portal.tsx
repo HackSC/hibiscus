@@ -67,11 +67,8 @@ export function SponsorPortal({ user }: Props) {
             />
           </Link>
         </StyledButton>
-        {/* <StyledButton color={'black'}>
-          <Link
-            href="/company-config"
-            anchortagpropsoverride={{ target: '_self' }}
-          >
+        <StyledButton color={'black'}>
+          <Link href="/">
             <H1
               style={{
                 color: Colors2023.GRAY.LIGHT,
@@ -88,7 +85,7 @@ export function SponsorPortal({ user }: Props) {
               alt="Illustration"
             />
           </Link>
-        </StyledButton> */}
+        </StyledButton>
       </MenuContainer>
     </Wrapper>
   );
@@ -114,7 +111,7 @@ const MenuContainer = styled.div`
   margin-top: 4rem;
   width: 100%;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   align-items: center;
 `;
 

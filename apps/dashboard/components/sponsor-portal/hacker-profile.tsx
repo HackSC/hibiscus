@@ -117,9 +117,9 @@ export function HackerProfile({ hacker, companyId, noteOnClick }: Props) {
       </div>
       <NoteContainer>
         {hacker.resume ? (
-          <Link href={hacker.resume}>
+          <Link href={hacker.portfolio_link}>
             <BoldText style={{ textDecoration: 'underline' }}>
-              {hacker.resume}
+              {hacker.portfolio_link}
             </BoldText>
           </Link>
         ) : (
