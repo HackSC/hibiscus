@@ -26,10 +26,17 @@ export class UserController {
 
   async getUserBonusPointStatuses(req: Request, res: Response) {
     try {
+      const statuses = await this.repository;
       res.status(200).json({});
     } catch (e) {
       res.status(400).json();
     }
+  }
+
+  async updateBonusPoints(req: Request, res: Response) {
+    try {
+      const;
+    } catch (e) {}
   }
 
   async updateBonusPoint(req, res) {

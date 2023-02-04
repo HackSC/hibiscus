@@ -8,6 +8,4 @@ router.get('/', async (req, res) =>
   container.resolve(BonusPointsController).getBonusPointEvents(req, res)
 );
 
-router.put('/');
-
 export { router as BonusPointsRouter };

@@ -24,7 +24,7 @@ function BattlepassLeaderboard() {
     loading: true,
     fetch: true,
     pageSize: BATTLEPASS_LEADERBOARD_PAGE_SIZE,
-    pageNumber: 0,
+    pageNumber: 1,
   });
   const [userRankLeaderboard, setUserRankLeaderboard] = useState<{
     data: LeaderboardEntry;
@@ -45,7 +45,7 @@ function BattlepassLeaderboard() {
               firstName: item.first_name,
               lastName: item.last_name,
               points: item.bonus_points + item.event_points,
-              rank: res.data.page_number * res.data.page_count + i + 1,
+              rank: (res.data.page_number - 1) * res.data.page_count + i + 1,
             })),
             loading: false,
             fetch: false,
@@ -136,19 +136,19 @@ interface LeaderboardPageTabsProps {
 }
 
 const LeaderboardPageTabs = (props: LeaderboardPageTabsProps) => {
-  const [currentPageIndex, setCPI] = useState(0);
-  const minPageIndex = 0;
+  const [currentPageNum, setCPN] = useState(1);
+  const minPageNumber = 1;
 
   const handleClickPrev = () => {
-    if (currentPageIndex === minPageIndex) return;
-    setCPI((prev) => prev - 1);
-    props.onClickPrev(currentPageIndex - 1);
+    if (currentPageNum === minPageNumber) return;
+    setCPN((prev) => prev - 1);
+    props.onClickPrev(currentPageNum - 1);
   };
 
   const handleClickNext = () => {
-    if (currentPageIndex >= props.totalPages - 1) return;
-    setCPI((prev) => prev + 1);
-    props.onClickNext(currentPageIndex + 1);
+    if (currentPageNum >= props.totalPages - 1) return;
+    setCPN((prev) => prev + 1);
+    props.onClickNext(currentPageNum + 1);
   };
 
   return (
@@ -166,7 +166,7 @@ const LeaderboardPageTabs = (props: LeaderboardPageTabsProps) => {
           <AiFillCaretLeft />
         </Text>
       </button>
-      <Text>{currentPageIndex + 1}</Text>
+      <Text>{currentPageNum}</Text>
       <button
         style={{
           appearance: 'none',

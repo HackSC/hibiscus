@@ -2,7 +2,7 @@ import React from 'react';
 import {
   BattlepassAPI,
   BattlepassAPIInterface,
-} from '../../common/apis/battlepass.api';
+} from '../../common/apis/battlepass/battlepass.api';
 
 export const BattlepassAPIContext =
   React.createContext<BattlepassAPIInterface>(null);

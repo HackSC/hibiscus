@@ -9,19 +9,17 @@ import { BonusPointItem } from './bonus-points/types';
 import BattlepassBonusPointsList from './bonus-points/bonus-points-list';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 
-const LEVEL_POINTS = [425, 750, 1150];
-
 function BattlepassPage() {
   const battlepassAPI = useBattlepassAPI();
   const [bonusPointItems, setBPItems] = useState<{
     data: BonusPointItem[];
     loading: boolean;
   }>({ data: [], loading: true });
-  const { user, setUser } = useHibiscusUser();
+  const { user } = useHibiscusUser();
 
   useEffect(() => {
     // MOCK
-    battlepassAPI.getBonusPointEvents().then((res) => {
+    battlepassAPI.getBonusPointEventsUserStatus(user.id).then((res) => {
       setBPItems({
         data: res.data.map((item) => ({
           status: 'VERIFY',
@@ -33,10 +31,6 @@ function BattlepassPage() {
         loading: false,
       });
     });
-  }, []);
-
-  useEffect(() => {
-    battlepassAPI.getUserTotalPoints(user.id).then((res) => {});
   }, []);
 
   return (
