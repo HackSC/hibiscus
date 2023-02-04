@@ -18,6 +18,8 @@ const password = process.argv[3];
 const first_name = process.argv[4];
 const last_name = process.argv[5];
 const role = process.argv[6] ?? 5; // Default: HACKER
+const bonus_points = process.argv[7];
+const event_points = process.argv[7];
 
 async function createUser(): Promise<User | null> {
   const supabase = createSupabaseServiceClient();
@@ -36,6 +38,11 @@ async function createUser(): Promise<User | null> {
       first_name,
       last_name,
       role,
+    });
+    await supabase.from('leaderboard').insert({
+      user_id: user.id,
+      bonus_points: bonus_points,
+      event_points: event_points,
     });
   }
 

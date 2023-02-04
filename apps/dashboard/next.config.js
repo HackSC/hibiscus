@@ -3,7 +3,7 @@ const withNx = require('@nrwl/next/plugins/with-nx');
 const { withSentryConfig } = require('@sentry/nextjs');
 
 /**
- * @type {import('@nrwl/next/plugins/with-nx.js').WithNxOptions}
+ * @type {import('./with-nx.js.js').WithNxOptions}
  **/
 const nextConfig = {
   nx: {
