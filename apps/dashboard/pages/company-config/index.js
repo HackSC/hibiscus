@@ -9,6 +9,9 @@ import { useEffect } from 'react';
 import { Modal } from '@hibiscus/ui';
 import EditForm from './EditForm';
 import UploadImage from '../UploadImage';
+import axios from 'axios';
+import useHibiscusUser from 'apps/dashboard/hooks/use-hibiscus-user/use-hibiscus-user';
+import { useRouter } from 'next/router';
 
 const graduation = [
   'Spring 2024',
@@ -36,7 +39,10 @@ export function CompanyConfig(props) {
     grad: [],
   });
 
+  const { user, updateUser } = useHibiscusUser();
+
   const [MockCompany, setMockCompany] = useState({
+    id: '',
     image: '../img/memories/photo1.png',
     name: 'Company Name',
     website: 'https://www.google.com/',
@@ -47,12 +53,35 @@ export function CompanyConfig(props) {
   // edit company description, website modal
   const [modal, setModal] = useState(false);
 
-  // edit image modal
-  const [uploadImage, setUploadImage] = useState(false);
-
   useEffect(() => {
-    console.log('Updating target graduation terms and graduation');
-  }, [preferences]);
+    async function fetchData() {
+      console.log('user id', user.id);
+      const res = await axios.get(`/api/companies/${user.id}`);
+      console.log('RES', res);
+
+      const companyId = '7f66108f-8df4-484a-921d-a88ee9fb1c1f';
+      const res2 = await axios.get(`/api/company/${companyId}`);
+      const data = res2.data.data;
+      console.log('Company', data);
+      setMockCompany({
+        name: data.name,
+        description: data.description,
+        image: data.profilePhoto,
+        website: data.website,
+        id: data.id,
+      });
+    }
+    fetchData();
+  }, []);
+
+  async function changeData() {
+    const res = await axios.put(`/api/company/${MockCompany.id}`, {
+      description: MockCompany.description,
+      profile_photo: '',
+      target_graduation_terms: [],
+      target_majors: [],
+    });
+  }
 
   return (
     <MainContainer>
@@ -71,16 +100,6 @@ export function CompanyConfig(props) {
           MockCompay={MockCompany}
           setModal={setModal}
         />
-      </Modal>
-
-      {/* Modal for editing image */}
-      <Modal
-        isOpen={uploadImage}
-        closeModal={() => {
-          setUploadImage(false);
-        }}
-      >
-        <UploadImage setUploadImage={setUploadImage} />
       </Modal>
 
       <Top>

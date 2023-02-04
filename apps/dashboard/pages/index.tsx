@@ -78,6 +78,7 @@ const LayoutContainer = styled.div`
 export const getServerSideProps: GetServerSideProps = async () => {
   const ffr = container.resolve(FeatureFlagRepository);
   const configs = await ffr.getAll();
+  console.log('configs', configs);
   const appsOpen = configs['APPS_OPEN'] ?? false;
   const rsvpFormOpen = configs['RSVP_FORM_OPEN'] ?? false;
   return {
