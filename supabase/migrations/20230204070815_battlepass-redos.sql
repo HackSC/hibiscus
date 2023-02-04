@@ -2,19 +2,9 @@ alter table "public"."bonus_points" add column "description" character varying;
 
 alter table "public"."bonus_points" add column "link" character varying;
 
-alter table "public"."company_saved_participants" drop constraint "company_saved_participants_company_id_fkey";
-
-alter table "public"."company_saved_participants" drop constraint "company_saved_participants_user_id_fkey";
-
 alter table "public"."event_log" drop constraint "event_log_user_id_fkey";
 
 alter table "public"."leaderboard" drop constraint "leaderboard_user_id_fkey";
-
-alter table "public"."company_saved_participants" drop constraint "company_saved_participants_pkey";
-
-drop index if exists "public"."company_saved_participants_pkey";
-
-drop table "public"."company_saved_participants";
 
 alter table "public"."bonus_points" alter column "description" set data type text using "description"::text;
 
