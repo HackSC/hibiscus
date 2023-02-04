@@ -9,35 +9,65 @@ import DropDown from '../../components/sponsor-portal/dropdown';
 import APIService from '../../common/api';
 import { HibiscusRole } from '@hibiscus/types';
 import { useRouter } from 'next/router';
-import { OneLineText } from '@hibiscus/ui-kit-2023';
 import { HackerTab } from '../../components/sponsor-portal/hacker-tab';
-import { SponsorAPI, Attendee } from '../../common/mock-sponsor';
+import { Attendee } from '../../common/mock-sponsor';
 import { Button, ParagraphText } from '@hibiscus/ui-kit-2023';
 import { getWordCount } from '../../common/utils';
 import HackerProfile from '../../components/sponsor-portal/hacker-profile';
+import { SponsorServiceAPI } from '../../common/api';
 
 const Index = () => {
+  const router = useRouter();
+  const getViewSaved = () => {
+    if (router.query?.viewSaved)
+      return { value: 'saved', displayName: 'Saved' } as Option;
+    return null;
+  };
+
+  const COMPANY_ID = router.query.companyId as string;
+  const EVENT_ID = router.query.eventId as string;
   const [textInput, setInput] = useState('');
   const [chosenYearOption, setYearOption] = useState<Option | null>(null);
   const [chosenMajorOption, setMajorOption] = useState<Option | null>(null);
   const [chosenSchoolOption, setSchoolOption] = useState<Option | null>(null);
   const [chosenParicipantOption, setParticipantOption] =
-    useState<Option | null>(null);
+    useState<Option | null>(getViewSaved());
   const [attendees, setAttendees] = useState<Attendee[]>([]);
   const [currentAttendee, setCurrentAttendee] = useState<Attendee>(null);
   const [modalActive, setModalActive] = useState(false);
   const [attendeeName, setAttendeeName] = useState('');
 
-  const router = useRouter();
-
   useEffect(() => {
-    async function fetchData() {
-      const mockAPI = new SponsorAPI(true);
-      const response = (await mockAPI.getAttendees()).data;
-      setAttendees(response);
+    async function getFilteredAttendee() {
+      SponsorServiceAPI.getFilteredAttendee(
+        COMPANY_ID,
+        EVENT_ID,
+        chosenMajorOption?.value,
+        chosenYearOption?.value,
+        chosenSchoolOption?.value,
+        chosenParicipantOption
+          ? chosenParicipantOption.value === 'saved'
+          : false
+      )
+        .then(({ data, error }) => {
+          if (error) {
+            console.log(error);
+          }
+          setAttendees(data.data as Attendee[]);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
-    fetchData();
-  }, []);
+    getFilteredAttendee();
+  }, [
+    chosenMajorOption,
+    chosenYearOption,
+    chosenSchoolOption,
+    chosenParicipantOption,
+    COMPANY_ID,
+    EVENT_ID,
+  ]);
 
   const { user } = useHibiscusUser();
   if (user == null) {
@@ -53,22 +83,28 @@ const Index = () => {
     const schools = await APIService.getSchools();
     const opts: Option[] = schools.map((str, i) => ({
       displayName: str,
-      value: i.toString(),
+      value: str.toString(),
     }));
 
     return opts;
   };
 
   const yearOptionsList: Option[] = [
-    { value: '2023', displayName: '2023' },
-    { value: '2024', displayName: '2024' },
-    { value: '2025', displayName: '2025' },
-    { value: '2026', displayName: '2026' },
+    { value: 'Spring 2023', displayName: 'Spring 2023' },
+    { value: 'Fall 2023', displayName: 'Fall 2023' },
+    { value: 'Spring 2024', displayName: 'Spring 2024' },
+    { value: 'Fall 2024', displayName: 'Fall 2024' },
+    { value: 'Spring 2025', displayName: 'Spring 2025' },
+    { value: 'Fall 2025', displayName: 'Fall 2025' },
+    { value: 'Spring 2026', displayName: 'Spring 2026' },
+    { value: 'Fall 2026', displayName: 'Fall 2026' },
+    { value: 'Spring 2027', displayName: 'Spring 2027' },
+    { value: 'Fall 2027', displayName: 'Fall 2027' },
   ];
 
   const majorOptionsList: Option[] = [
     {
-      value: 'computer science',
+      value: 'Computer Science',
       displayName: 'Computer science/computer engineering',
     },
     {
@@ -105,7 +141,6 @@ const Index = () => {
   const participantOptionsList: Option[] = [
     { displayName: 'All', value: 'all' },
     { displayName: 'Saved', value: 'saved' },
-    { displayName: 'Attended booth', value: 'attended' },
   ];
 
   const clearAllFilter = () => {
@@ -129,9 +164,10 @@ const Index = () => {
           showMajor={true}
           showSchool={true}
           showSaveButton={true}
-          onClick={() => {
+          onNoteClick={() => {
             setCurrentAttendee(attendee);
           }}
+          onSaveClick={() => toggleSaveAttendee(COMPANY_ID, attendee)}
         />
       </HackerTabContainer>
     ));
@@ -139,13 +175,84 @@ const Index = () => {
 
   const openQuickNote = (attendee: Attendee) => {
     setModalActive(true);
-    setAttendeeName(`${attendee.first_name} ${attendee.last_name}`);
+    setAttendeeName(`${attendee.full_name}`);
   };
+
+  async function setAttendeeNote(
+    companyId: string,
+    attendeeId: string,
+    note: string
+  ) {
+    SponsorServiceAPI.setAttendeeNote(companyId, attendeeId, note)
+      .then(({ data, error }) => {
+        if (error) {
+          console.log(error);
+        }
+        console.log(`Updated note: ${data.data.note}`);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  async function fetchData() {
+    SponsorServiceAPI.getFilteredAttendee(
+      COMPANY_ID,
+      EVENT_ID,
+      chosenMajorOption?.value,
+      chosenYearOption?.value,
+      chosenSchoolOption?.value,
+      chosenParicipantOption ? chosenParicipantOption.value === 'saved' : false
+    )
+      .then(({ data, error }) => {
+        if (error) {
+          console.log(error);
+        }
+        setAttendees(data.data as Attendee[]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  async function toggleSaveAttendee(companyId: string, attendee: Attendee) {
+    if (!attendee.saved) {
+      SponsorServiceAPI.saveAttendee(companyId, attendee.id)
+        .then(({ data, error }) => {
+          if (error) {
+            console.log(error);
+          }
+          fetchData();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      SponsorServiceAPI.unsaveAttendee(companyId, attendee.id)
+        .then(({ data, error }) => {
+          if (error) {
+            console.log(error);
+          }
+          fetchData();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }
 
   return (
     <Wrapper>
+      <StyledButton
+        onClick={() => {
+          router.replace('/sponsor-booth');
+        }}
+      >
+        <Image width="30" height="30" src={'/arrow.svg'} alt="Illustration" />
+      </StyledButton>
       <BoldText
         style={{
+          marginTop: '1rem',
           fontSize: '35px',
           color: Colors2023.GREEN.STANDARD,
           textShadow: `0px 0px 10px ${Colors2023.GREEN.DARK}`,
@@ -256,18 +363,6 @@ const Index = () => {
             </FilterPill>
           )}
         </ChosenFilterContainer>
-
-        <FilterContainer style={{ marginTop: '2rem' }}>
-          <StyledTitle>Search</StyledTitle>
-          <OneLineText
-            style={{ marginLeft: '3rem' }}
-            value={textInput}
-            placeholder={'Name'}
-            onChange={(e) => {
-              setInput(e.target.value);
-            }}
-          />
-        </FilterContainer>
       </Container>
 
       <DatabaseContainer>
@@ -284,7 +379,7 @@ const Index = () => {
               setCurrentAttendee(null);
             }}
           >
-            <Text
+            <BoldText
               style={{
                 fontSize: '20px',
                 color: Colors2023.GREEN.STANDARD,
@@ -292,7 +387,7 @@ const Index = () => {
               }}
             >
               HACKER
-            </Text>
+            </BoldText>
             <Image
               width="20"
               height="20"
@@ -304,7 +399,8 @@ const Index = () => {
             <div style={{ marginTop: '1.5rem' }}>
               <HackerProfile
                 hacker={currentAttendee}
-                onClick={() => openQuickNote(currentAttendee)}
+                companyId={COMPANY_ID}
+                noteOnClick={() => openQuickNote(currentAttendee)}
               />
             </div>
           ) : (
@@ -320,6 +416,7 @@ const Index = () => {
               style={{ justifyContent: 'flex-end' }}
               onClick={() => {
                 setModalActive(false);
+                setInput('');
               }}
             >
               <Image
@@ -358,7 +455,16 @@ const Index = () => {
                 CANCEL
               </Button>
               <div style={{ marginLeft: '0.5rem' }}>
-                <Button color={'black'}>SAVE</Button>
+                <Button
+                  color={'black'}
+                  onClick={() => {
+                    setAttendeeNote(COMPANY_ID, currentAttendee.id, textInput);
+                    setModalActive(false);
+                    setInput('');
+                  }}
+                >
+                  SAVE
+                </Button>
               </div>
             </div>
           </QuickNoteContainer>
@@ -369,6 +475,27 @@ const Index = () => {
 };
 
 export default Index;
+
+const StyledButton = styled.button`
+  width: 60px;
+  height: 60px;
+  padding-top: 12px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: ${Colors2023.GRAY.STANDARD};
+  border-radius: 15px;
+  border: 4px solid ${Colors2023.GRAY.MEDIUM};
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 1px 2px 15px ${Colors2023.GRAY.MEDIUM};
+
+  &:hover {
+    background-color: ${Colors2023.GRAY.SHLIGHT};
+    transition: all 0.3s;
+  }
+`;
 
 const DatabaseContainer = styled.div`
   width: 100%;
@@ -382,8 +509,8 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-left: 4rem;
-  padding: 30px;
+  padding-left: 6rem;
+  padding-bottom: 30px;
 `;
 
 const Container = styled.div`
@@ -503,7 +630,6 @@ const CloseButton = styled.button`
 const RightContainer = styled.div`
   display: flex;
   flex: 1;
-  /* width: 30%; */
   margin-top: 2rem;
   margin-left: 1rem;
   padding: 30px;
@@ -513,6 +639,7 @@ const RightContainer = styled.div`
   border-radius: 10px;
   border: 4px solid ${Colors2023.GRAY.MEDIUM};
   box-shadow: 1px 2px 15px ${Colors2023.GRAY.MEDIUM};
+  transition: max-width 0.5s;
 `;
 
 const TextWrapper = styled.div`
@@ -558,7 +685,7 @@ const StyledScrollBar = styled.div`
   flex-direction: column;
   width: 100%;
   height: 560px;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   &::-webkit-scrollbar {
     width: 8px;
