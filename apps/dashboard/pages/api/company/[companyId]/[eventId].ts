@@ -168,13 +168,13 @@ export async function processAttendeesList(
       }
     }
 
-    let signedResumeUrl: any;
-    if (participantData['resume']) {
-      signedResumeUrl = (await createSignedResumeUrl(participantData['resume']))
-        .data['signedUrl'];
-    } else {
-      signedResumeUrl = null;
-    }
+    // let signedResumeUrl: any;
+    // if (participantData['resume']) {
+    //   signedResumeUrl = (await createSignedResumeUrl(participantData['resume']))
+    //     .data['signedUrl'];
+    // } else {
+    //   signedResumeUrl = null;
+    // }
 
     const attendee = await new Attendee(
       participantData['id'],
@@ -182,7 +182,7 @@ export async function processAttendeesList(
         ' ' +
         participantData['user_profiles']['last_name'],
       participantData['major'],
-      signedResumeUrl,
+      '',
       participantData['graduation_year'],
       participantData['portfolio_link'],
       participantData['school'],
