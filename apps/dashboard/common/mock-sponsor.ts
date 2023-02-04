@@ -12,6 +12,14 @@ export type Attendee = {
   saved?: boolean;
 };
 
+export type Company = {
+  id: string;
+  name: string;
+  description?: string | null;
+  website?: string | null;
+  profile_photo?: string | null;
+};
+
 export interface SponsorAPIInterface {
   getAttendees: (
     companyId?: string,

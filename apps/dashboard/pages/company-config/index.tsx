@@ -1,3 +1,4 @@
+/* eslint-disable @nrwl/nx/enforce-module-boundaries */
 /* eslint-disable @next/next/no-img-element */
 import styles from './index.module.css';
 import styled from 'styled-components';
@@ -12,6 +13,8 @@ import UploadImage from '../UploadImage';
 import axios from 'axios';
 import useHibiscusUser from 'apps/dashboard/hooks/use-hibiscus-user/use-hibiscus-user';
 import { useRouter } from 'next/router';
+import { SponsorServiceAPI } from '../../common/api';
+import { Company } from '../../common/mock-sponsor';
 
 const graduation = [
   'Spring 2024',
@@ -38,8 +41,10 @@ export function CompanyConfig(props) {
     majors: [],
     grad: [],
   });
+  const [companyId, setCompanyId] = useState('');
+  const [companyProfile, setCompanyProfile] = useState<Company | null>(null);
 
-  const { user, updateUser } = useHibiscusUser();
+  const { user } = useHibiscusUser();
 
   const [MockCompany, setMockCompany] = useState({
     id: '',
@@ -55,23 +60,33 @@ export function CompanyConfig(props) {
 
   useEffect(() => {
     async function fetchData() {
-      console.log('user id', user.id);
-      const res = await axios.get(`/api/companies/${user.id}`);
-      console.log('RES', res);
-
-      const companyId = '7f66108f-8df4-484a-921d-a88ee9fb1c1f';
-      const res2 = await axios.get(`/api/company/${companyId}`);
-      const data = res2.data.data;
-      console.log('Company', data);
-      setMockCompany({
-        name: data.name,
-        description: data.description,
-        image: data.profilePhoto,
-        website: data.website,
-        id: data.id,
-      });
+      SponsorServiceAPI.getCompanyIdAndEventId(user.id)
+        .then(({ data, error }) => {
+          if (error) {
+            console.log(error);
+          }
+          setCompanyId(data.data.company_id);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
+    async function fetchCompany() {
+      SponsorServiceAPI.getCompanyProfile(companyId)
+        .then(({ data, error }) => {
+          if (error) {
+            console.log(error);
+          }
+          console.log(data.data);
+          setCompanyProfile(data.data as Company);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
     fetchData();
+    fetchCompany();
   }, []);
 
   async function changeData() {
@@ -85,21 +100,20 @@ export function CompanyConfig(props) {
 
   return (
     <MainContainer>
-      {/* Modal for editing company  */}
       <Modal
         isOpen={modal}
         closeModal={() => {
           setModal(false);
         }}
       >
-        <EditForm
-          companyName={MockCompany.name}
-          companyWebsite={MockCompany.website}
-          companyDescription={MockCompany.description}
+        {/* <EditForm
+          companyName={companyProfile.name}
+          companyWebsite={companyProfile.website}
+          companyDescription={companyProfile.description}
           setMockCompany={setMockCompany}
           MockCompay={MockCompany}
           setModal={setModal}
-        />
+        /> */}
       </Modal>
 
       <Top>
@@ -110,7 +124,9 @@ export function CompanyConfig(props) {
 
         {/* Company info */}
         <CompanyDescription>
-          <h1 className={styles['sponsor-font']}>{MockCompany.name}</h1>
+          <h1 className={styles['sponsor-font']}>
+            {companyProfile ? 'test' : 'failed'}
+          </h1>
           <Flex>
             <div className={styles['full-width']}>
               <RightImageContainer>
@@ -130,7 +146,6 @@ export function CompanyConfig(props) {
                     src={'/edit.svg'}
                     alt="edit"
                     className={styles['inline-block']}
-                    onClick={console.log('CLicked')}
                   />
                 </a>
               </RightImageContainer>
@@ -150,15 +165,15 @@ export function CompanyConfig(props) {
           </Flex>
         </CompanyDescription>
       </Top>
-      {/* Dropdowns */}
-      <Bottom>
+
+      {/* <Bottom>
         <Dropdown
           key={3}
           options={graduation}
           label="Target Graduation Terms"
         />
         <Dropdown key={1} options={majors} label="Target Majors" />
-      </Bottom>
+      </Bottom> */}
     </MainContainer>
   );
 }
