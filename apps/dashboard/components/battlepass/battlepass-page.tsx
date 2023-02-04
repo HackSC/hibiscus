@@ -8,6 +8,7 @@ import BattlepassLeaderboard from './leaderboard/battlepass-leaderboard';
 import { BonusPointItem } from './bonus-points/types';
 import BattlepassBonusPointsList from './bonus-points/bonus-points-list';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
+import Image from 'next/image';
 import {
   BattlepassProgress,
   BATTLEPASS_LEVEL_POINTS,
@@ -55,6 +56,17 @@ function BattlepassPage() {
   return (
     <Wrapper>
       <BattlepassWelcomeHeader />
+      <Image
+        width="100"
+        height="100"
+        src={'/hackform-illustrations/stamp-earth.svg'}
+        alt="Illustration"
+        style={{
+          position: 'absolute',
+          left: '420px',
+          top: '10px',
+        }}
+      />
       <WidgetContainer>
         <WidgetHeader>Your Points</WidgetHeader>
         {bpProg !== null && (
