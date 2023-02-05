@@ -1,7 +1,7 @@
 import { Colors2023 } from '@hibiscus/styles';
 import { BoldText, ItalicText, Text } from '@hibiscus/ui';
 import { Button, GlowSpan } from '@hibiscus/ui-kit-2023';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { BiCheckCircle } from 'react-icons/bi';
@@ -14,7 +14,7 @@ import { formatTimestamp } from '../../../common/format-timestamp';
 import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
 import { HibiscusRole } from '@hibiscus/types';
 import { calculateBattlepassProgress } from '../../../common/calculate-battlepass-progress';
-import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 
 const COLUMN_WIDTH = 510;
 const TEAM_MEMBER_ICONS = [
@@ -36,7 +36,7 @@ export function Index() {
   const [isModalOpen, setModalOpen] = useState(false);
   const [battlepassProgress, setBattlepassProgress] = useState(null);
   const router = useRouter();
-  const { supabase } = useContext(SupabaseContext);
+  const { supabase } = useHibiscusSupabase();
 
   useEffect(() => {
     async function getUserProfile(id: string, wristband = true): Promise<any> {

@@ -1,8 +1,8 @@
-import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import { Colors2023 } from '@hibiscus/styles';
 import { Modal } from '@hibiscus/ui';
 import { Button, Checkbox, OneLineText } from '@hibiscus/ui-kit-2023';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 interface CheckInBoxProps {
@@ -24,7 +24,7 @@ export function CheckInBox(props: CheckInBoxProps) {
   const [age, setAge] = useState(false);
   const [status, setStatus] = useState(user?.email?.endsWith('edu') ?? false);
   const [errorMessage, setErrorMessage] = useState(null);
-  const { supabase } = useContext(SupabaseContext);
+  const { supabase } = useHibiscusSupabase();
 
   const handleClick = (setter: (value: boolean) => void) => (value: boolean) =>
     setter(value);

@@ -1,6 +1,6 @@
 import { Colors2023 } from '@hibiscus/styles';
 import { BoldText, Text } from '@hibiscus/ui';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, GlowSpan, OneLineText } from '@hibiscus/ui-kit-2023';
 import addEvent from '../../../common/add-event';
 import styled from 'styled-components';
@@ -17,7 +17,7 @@ import { formatTimestamp } from '../../../common/format-timestamp';
 import { PostgrestError } from '@supabase/supabase-js';
 import { HibiscusRole } from '@hibiscus/types';
 import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
-import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 
 const SUCCESS_MESSAGE = 'Success';
 
@@ -47,7 +47,7 @@ export function Index() {
 
   const [attendees, setAttendees] = useState([]);
 
-  const { supabase } = useContext(SupabaseContext);
+  const { supabase } = useHibiscusSupabase();
 
   async function search(id: number) {
     setEventName(await searchEventId(id, supabase));

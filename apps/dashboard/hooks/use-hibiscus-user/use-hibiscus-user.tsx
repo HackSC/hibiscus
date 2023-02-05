@@ -14,10 +14,8 @@ import { removeTabRoute } from '../../store/menu-slice';
 import { ApplicationStatus } from 'libs/types/src/lib/application-status';
 import { isHackerPostAppStatus } from '../../common/utils';
 import React from 'react';
-import {
-  HibiscusSupabaseClient,
-  SupabaseContext,
-} from '@hibiscus/hibiscus-supabase-client';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 
 const HibiscusUserContext = React.createContext<{
   user: HibiscusUser | null;
@@ -67,7 +65,7 @@ const getUserProfile = async (
 
 export const HibiscusUserProvider = (props: React.PropsWithChildren) => {
   const [user, setUser] = useState<HibiscusUser | null>(null);
-  const { supabase } = useContext(SupabaseContext);
+  const { supabase } = useHibiscusSupabase();
 
   const accessToken = getCookie(
     getEnv().Hibiscus.Cookies.accessTokenName

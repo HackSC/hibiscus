@@ -1,10 +1,10 @@
 import { Text, BoldText, Modal } from '@hibiscus/ui';
 import { Search } from '@hibiscus/ui-kit-2023';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import searchEvent from '../../../common/search-event';
 import { ScrollableListBox } from '../scrollable-list-box/scrollable-list-box';
 import { useRouter } from 'next/router';
-import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 
 export function SearchEventBox() {
   const router = useRouter();
@@ -13,7 +13,7 @@ export function SearchEventBox() {
     [] as Awaited<ReturnType<typeof searchEvent>>
   );
 
-  const { supabase } = useContext(SupabaseContext);
+  const { supabase } = useHibiscusSupabase();
 
   async function search(name: string) {
     setSearchRes(await searchEvent(supabase));

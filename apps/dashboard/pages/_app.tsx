@@ -10,7 +10,7 @@ import { useRouter } from 'next/router';
 import { getWebTitle } from '@hibiscus/metadata';
 import { Toaster } from 'react-hot-toast';
 import { TeamProvider } from '../hooks/use-team/use-team';
-import { SupabaseContextProvider } from '@hibiscus/hibiscus-supabase-client';
+import { SupabaseContextProvider } from '@hibiscus/hibiscus-supabase-context';
 import Router from 'next/router';
 import nProgress from 'nprogress';
 

@@ -1,5 +1,5 @@
-import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
-import React, { useContext } from 'react';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
+import React from 'react';
 import {
   BattlepassAPI,
   BattlepassAPIInterface,
@@ -13,7 +13,7 @@ interface Props extends React.PropsWithChildren {
 }
 
 export const BattlepassAPIProvider = (props: Props) => {
-  const { supabase } = useContext(SupabaseContext);
+  const { supabase } = useHibiscusSupabase();
   const battlepassAPIInstance = new BattlepassAPI(props.mock, supabase);
   return (
     <BattlepassAPIContext.Provider value={battlepassAPIInstance}>

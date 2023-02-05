@@ -1,10 +1,11 @@
 import React, {
   createContext,
   PropsWithChildren,
+  useContext,
   useEffect,
   useState,
 } from 'react';
-import { HibiscusSupabaseClient } from './supabase-client';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { logout } from '@hibiscus/sso-client';
 import { container } from 'tsyringe';
 
@@ -62,4 +63,10 @@ export function SupabaseContextProvider(props: PropsWithChildren) {
       {props.children}
     </SupabaseContext.Provider>
   );
+}
+
+export function useHibiscusSupabase() {
+  const { supabase } = useContext(SupabaseContext);
+
+  return { supabase };
 }

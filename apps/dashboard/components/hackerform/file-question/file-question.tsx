@@ -1,5 +1,5 @@
 import APIService from '../../../common/api';
-import { useContext, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { GetInputResponseCb } from '../../../common/types';
 import QuestionCreator from '../question-creator/question-creator';
 import { ALLOWED_RESUME_FORMATS } from '../../../common/constants';
@@ -11,12 +11,12 @@ import styled from 'styled-components';
 import { Text } from '@hibiscus/ui';
 import { Colors2023 } from '@hibiscus/styles';
 import { ImCross } from 'react-icons/im';
-import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 
 export const FileQuestion = () => {
   const { user } = useHibiscusUser();
   const { currentQuestionIndex: cqi, ...hackformUtils } = useHackform();
-  const { supabase } = useContext(SupabaseContext);
+  const { supabase } = useHibiscusSupabase();
   const lastInput = hackformUtils.getCurrentResponse()?.input;
   const [uploaded, setUploaded] = useState<File | null>(null);
   const [response, setResponse] = useState<{

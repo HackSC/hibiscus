@@ -3,7 +3,7 @@ import { AppProps } from 'next/app';
 import './styles.css';
 import Head from 'next/head';
 import { GlobalStyles2023 } from '@hibiscus/styles';
-import { SupabaseContextProvider } from '@hibiscus/hibiscus-supabase-client';
+import { SupabaseContextProvider } from '@hibiscus/hibiscus-supabase-context';
 
 function CustomApp({ Component, pageProps }: AppProps) {
   return (

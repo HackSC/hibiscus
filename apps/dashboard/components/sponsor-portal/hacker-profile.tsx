@@ -4,8 +4,8 @@ import { Colors2023 } from '@hibiscus/styles';
 import { H1 } from '@hibiscus/ui';
 import Image from 'next/image';
 import { Attendee } from '../../common/mock-sponsor';
-import { useContext, useEffect, useState } from 'react';
-import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
+import { useEffect, useState } from 'react';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import { SponsorServiceAPI } from '../../common/api';
 
 interface Props {
@@ -16,7 +16,7 @@ interface Props {
 
 export function HackerProfile({ hacker, companyId, noteOnClick }: Props) {
   const [quickNote, setQuickNote] = useState('');
-  const supabase = useContext(SupabaseContext).supabase.getClient();
+  const supabase = useHibiscusSupabase().supabase.getClient();
 
   useEffect(() => {
     setQuickNote(hacker.quick_notes);

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { H2, Text } from '@hibiscus/ui';
 import { GrayBox } from '../gray-box/gray-box';
@@ -19,8 +19,7 @@ import APIService from '../../common/api';
 import { getMLHMajors } from '../../common/utils';
 import { Option } from '@hibiscus/types';
 import { SpanRed } from '../red-span';
-import { container } from 'tsyringe';
-import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 import { toast } from 'react-hot-toast';
 import { getEnv } from '@hibiscus/env';
@@ -35,7 +34,7 @@ interface Props {
 function RSVPForm({ closeModal }: Props) {
   const { user, updateUser } = useHibiscusUser();
   const [resumeFile, setResumeFile] = useState<File | null>(null);
-  const { supabase } = useContext(SupabaseContext);
+  const { supabase } = useHibiscusSupabase();
   const formik = useFormik({
     initialValues: {
       school: '',

@@ -7,8 +7,7 @@ import Image from 'next/image';
 import styled from 'styled-components';
 import APIService from '../../../common/api';
 import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
-import { useContext } from 'react';
-import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import * as Sentry from '@sentry/browser';
@@ -23,7 +22,7 @@ export interface HackformEndingProps {
 export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
   const hackformUtils = useHackform();
   const { user, updateUser } = useHibiscusUser();
-  const { supabase } = useContext(SupabaseContext);
+  const { supabase } = useHibiscusSupabase();
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
 

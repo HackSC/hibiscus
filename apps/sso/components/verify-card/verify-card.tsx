@@ -2,19 +2,17 @@ import styled from 'styled-components';
 import { H3, ItalicText, Text } from '@hibiscus/ui';
 import { Colors2023 } from '@hibiscus/styles';
 import OTPInput from '../otp-input/otp-input';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
-import {
-  HibiscusSupabaseClient,
-  SupabaseContext,
-} from '@hibiscus/hibiscus-supabase-client';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import Image from 'next/image';
 import { MutatingDots } from 'react-loader-spinner';
 import { Button } from '@hibiscus/ui-kit-2023';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 
 export function VerifyCard() {
   const router = useRouter();
-  const { supabase } = useContext(SupabaseContext);
+  const { supabase } = useHibiscusSupabase();
   const [verifyState, setVerifyState] = useState('');
   const [hideErrorMessage, setHideErrorMessage] = useState(false);
   const [code, setCode] = useState('');

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import HackformIntroduction from '../hackform-introduction/hackform-introduction';
 import HackformQuestionComponent from '../hackform-question/hackform-question';
@@ -7,7 +7,7 @@ import HackformEnding from '../hackform-end/hackform-end';
 import { useHackform } from '../../../hooks/use-hackform/use-hackform';
 import { getCookie } from 'cookies-next';
 import { getEnv } from '@hibiscus/env';
-import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 
 /* eslint-disable-next-line */
 export interface HackerformProps {
@@ -16,7 +16,7 @@ export interface HackerformProps {
 
 export function Hackerform({ formMetadata }: HackerformProps) {
   const { currentQuestionIndex: cqi, ...hackformUtils } = useHackform();
-  const { supabase } = useContext(SupabaseContext);
+  const { supabase } = useHibiscusSupabase();
 
   const handleClick = async () => {
     hackformUtils.goNextQuestion();

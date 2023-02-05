@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 /* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { H3, Text } from '@hibiscus/ui';
 import { Colors2023 } from '@hibiscus/styles';
 import { useRouter } from 'next/router';
@@ -14,14 +14,14 @@ import {
   ColorSpanBold,
   OneLinePassword,
 } from '@hibiscus/ui-kit-2023';
-import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 
 /* eslint-disable-next-line */
 export interface SignUpProps {}
 
 export function SignUpCard(props: SignUpProps) {
   const router = useRouter();
-  const { supabase } = useContext(SupabaseContext);
+  const { supabase } = useHibiscusSupabase();
   const [hideErrorMessage, setHideErrorMessage] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [signUpState, setSignUpState] = useState('');

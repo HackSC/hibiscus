@@ -1,12 +1,10 @@
-import { useState, useEffect, PropsWithChildren, useContext } from 'react';
-import {
-  HibiscusSupabaseClient,
-  SupabaseContext,
-} from '@hibiscus/hibiscus-supabase-client';
+import { useEffect, PropsWithChildren, useState } from 'react';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import * as SSOClient from '@hibiscus/sso-client';
 import { getCookie } from 'cookies-next';
 import { getEnv } from '@hibiscus/env';
 import { Session } from '@supabase/supabase-js';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 
 interface LoginGuardProps extends PropsWithChildren {
   callback: string;
@@ -14,7 +12,7 @@ interface LoginGuardProps extends PropsWithChildren {
 
 export function LoginGuard({ callback, children }: LoginGuardProps) {
   const [authorized, setAuthorized] = useState(false);
-  const { supabase } = useContext(SupabaseContext);
+  const { supabase } = useHibiscusSupabase();
 
   useEffect(() => {
     async function fetchData() {

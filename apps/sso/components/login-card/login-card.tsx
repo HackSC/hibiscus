@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { H3, Text } from '@hibiscus/ui';
 import { Colors2023 } from '@hibiscus/styles';
 import Image from 'next/image';
 import * as SSOClient from '@hibiscus/sso-client';
 import GrayLink from '../gray-link/gray-link';
-import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import { MutatingDots } from 'react-loader-spinner';
 import {
   Button,
@@ -18,7 +18,7 @@ export function LoginCard() {
   const [hideErrorMessage, setHideErrorMessage] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [loggedInState, setLoggedInState] = useState('');
-  const { supabase } = useContext(SupabaseContext);
+  const { supabase } = useHibiscusSupabase();
 
   async function handleSubmit(event) {
     event.preventDefault();

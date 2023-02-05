@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 import { TrademarkColors } from '@hibiscus/styles';
 import Head from 'next/head';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { getWebTitle } from '@hibiscus/metadata';
-import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 
 export function Index() {
-  const { supabase } = useContext(SupabaseContext);
+  const { supabase } = useHibiscusSupabase();
 
   useEffect(() => {
     async function logout() {

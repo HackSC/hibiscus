@@ -2,18 +2,18 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
 /* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { GradientSpan, Text } from '@hibiscus/ui';
 import { TrademarkColors } from '@hibiscus/styles';
 import GrayLink from '../gray-link/gray-link';
-import { SupabaseContext } from '@hibiscus/hibiscus-supabase-client';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 
 /* eslint-disable-next-line */
 export interface ResetCardProps {}
 
 export function ResetEmailCard(props: ResetCardProps) {
   const [hideSuccessMessage, setHideSuccessMessage] = useState(false);
-  const { supabase } = useContext(SupabaseContext);
+  const { supabase } = useHibiscusSupabase();
 
   async function handleSubmit(event) {
     event.preventDefault();
