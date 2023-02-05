@@ -1,18 +1,17 @@
 import { injectable } from 'tsyringe';
-import { getEnv } from '@hibiscus/env';
 import { MongoClient } from 'mongodb';
+import { HibiscusMongoClient } from './mongo.client';
 
 @injectable()
 export class FeatureFlagRepository {
   private readonly mongo: MongoClient;
-  constructor() {
-    this.mongo = new MongoClient(getEnv().Hibiscus.FeatureFlag.MongoURI);
+  constructor(readonly hibiscusMongoClient: HibiscusMongoClient) {
+    this.mongo = hibiscusMongoClient.getClient();
   }
 
   async getAll(): Promise<Record<string, boolean>> {
-    const client = await this.mongo.connect();
     const vals = {};
-    await client
+    await this.mongo
       .db('hibiscus')
       .collection('feature-flags')
       .find()
