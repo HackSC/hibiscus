@@ -34,7 +34,7 @@ export function SupabaseContextProvider(props: PropsWithChildren) {
       // We assume the user must be logged in or else they would have been
       // redirected by the middleware
       supabase.getClient().auth.onAuthStateChange((event, session) => {
-        if (event == 'TOKEN_REFRESHED') {
+        if (event == 'TOKEN_REFRESHED' || event == 'SIGNED_IN') {
           if (session != null) {
             HibiscusSupabaseClient.setTokenCookieClientSide(
               session.access_token,

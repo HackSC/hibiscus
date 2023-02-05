@@ -5,6 +5,7 @@ import {
   createClient,
   EmailOtpType,
   PostgrestError,
+  Session,
   SupabaseClient,
 } from '@supabase/supabase-js';
 import { injectable } from 'tsyringe';
@@ -364,7 +365,7 @@ export class HibiscusSupabaseClient {
     refresh_token: string = getCookie(
       getEnv().Hibiscus.Cookies.refreshTokenName
     ) as string
-  ): Promise<boolean> {
+  ): Promise<Session | null> {
     // No valid session, proceed to set session
     const authRes = await this.verifyToken(access_token, refresh_token);
     if ('session' in authRes.data && authRes.data.session != null) {
@@ -373,11 +374,11 @@ export class HibiscusSupabaseClient {
         authRes.data.session.access_token,
         authRes.data.session.refresh_token
       );
-      return true;
+      return authRes.data.session;
     }
 
     // Unable to set session
-    return false;
+    return null;
   }
 }
 

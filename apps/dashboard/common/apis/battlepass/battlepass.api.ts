@@ -1,7 +1,6 @@
 import { faker } from '@faker-js/faker';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { SupabaseClient } from '@supabase/supabase-js';
-import { container } from 'tsyringe';
 import { BonusPointsStatus } from './types';
 
 const getNumberStatusBonusPoint = (status: BonusPointsStatus) => {
@@ -66,8 +65,7 @@ export interface BattlepassAPIInterface {
 
 export class BattlepassAPI implements BattlepassAPIInterface {
   private readonly client: SupabaseClient;
-  constructor(private mock: boolean) {
-    const hbc = container.resolve(HibiscusSupabaseClient);
+  constructor(private mock: boolean, hbc: HibiscusSupabaseClient) {
     this.client = hbc.getClient();
   }
 
