@@ -1,3 +1,4 @@
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import { Text, BoldText, Modal } from '@hibiscus/ui';
 import { Search } from '@hibiscus/ui-kit-2023';
 import { useState } from 'react';
@@ -14,8 +15,10 @@ export function SearchUserBox({ onClick }: SearchUserBoxProps) {
     [] as Awaited<ReturnType<typeof searchUser>>
   );
 
+  const { supabase } = useHibiscusSupabase();
+
   async function search(name: string) {
-    setSearchRes(await searchUser(name));
+    setSearchRes(await searchUser(name, supabase));
 
     setModalOpen(true);
   }

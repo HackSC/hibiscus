@@ -4,6 +4,7 @@ import { useState } from 'react';
 import searchEvent from '../../../common/search-event';
 import { ScrollableListBox } from '../scrollable-list-box/scrollable-list-box';
 import { useRouter } from 'next/router';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 
 export function SearchEventBox() {
   const router = useRouter();
@@ -12,8 +13,10 @@ export function SearchEventBox() {
     [] as Awaited<ReturnType<typeof searchEvent>>
   );
 
+  const { supabase } = useHibiscusSupabase();
+
   async function search(name: string) {
-    setSearchRes(await searchEvent(name));
+    setSearchRes(await searchEvent(supabase));
 
     setModalOpen(true);
   }

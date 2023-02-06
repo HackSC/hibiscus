@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 import { getWebTitle } from '@hibiscus/metadata';
 import { Toaster } from 'react-hot-toast';
 import { TeamProvider } from '../hooks/use-team/use-team';
+import { SupabaseContextProvider } from '@hibiscus/hibiscus-supabase-context';
 import Router from 'next/router';
 import nProgress from 'nprogress';
 
@@ -44,13 +45,15 @@ function CustomApp({ Component, pageProps }: AppProps) {
       <Main>
         <Toaster />
         <GlobalStyles2023 />
-        <TeamProvider>
-          <HibiscusUserProvider>
-            <PortalLayout>
-              <Component {...pageProps} />
-            </PortalLayout>
-          </HibiscusUserProvider>
-        </TeamProvider>
+        <SupabaseContextProvider>
+          <TeamProvider>
+            <HibiscusUserProvider>
+              <PortalLayout>
+                <Component {...pageProps} />
+              </PortalLayout>
+            </HibiscusUserProvider>
+          </TeamProvider>
+        </SupabaseContextProvider>
       </Main>
     </>
   );

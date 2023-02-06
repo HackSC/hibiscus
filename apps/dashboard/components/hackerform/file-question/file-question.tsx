@@ -11,10 +11,12 @@ import styled from 'styled-components';
 import { Text } from '@hibiscus/ui';
 import { Colors2023 } from '@hibiscus/styles';
 import { ImCross } from 'react-icons/im';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 
 export const FileQuestion = () => {
   const { user } = useHibiscusUser();
   const { currentQuestionIndex: cqi, ...hackformUtils } = useHackform();
+  const { supabase } = useHibiscusSupabase();
   const lastInput = hackformUtils.getCurrentResponse()?.input;
   const [uploaded, setUploaded] = useState<File | null>(null);
   const [response, setResponse] = useState<{
@@ -58,7 +60,7 @@ export const FileQuestion = () => {
   const handleSubmit = async () => {
     // send into the store
     if (user && uploaded !== null)
-      APIService.submitResume(uploaded, response.fileKey, user.id);
+      APIService.submitResume(uploaded, response.fileKey, user.id, supabase);
     // call the function with those
     const cb = hackformUtils.createCbSubmitValidate(getInputResponse);
     cb();
@@ -67,7 +69,7 @@ export const FileQuestion = () => {
   const handleNext = async () => {
     // send into the store
     if (user && uploaded !== null)
-      APIService.submitResume(uploaded, response.fileKey, user.id);
+      APIService.submitResume(uploaded, response.fileKey, user.id, supabase);
     const cb =
       hackformUtils.createCbGoNextQuestionValidateSilently(getInputResponse);
     cb();

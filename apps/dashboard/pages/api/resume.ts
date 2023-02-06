@@ -25,14 +25,14 @@ const validateFormat = (file: formidable.File) => {
 };
 
 const hbc = container.resolve(HibiscusSupabaseClient);
+hbc.setOptions({ useServiceKey: true });
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method !== 'POST') {
     return res.status(405).send('Method not allowed');
   }
-  const { accessToken, refreshToken } = getTokensFromNextRequest(req);
-  hbc.setOptions({ useServiceKey: true });
-  const user = await hbc.getUserProfile(accessToken, refreshToken);
+  const { accessToken } = getTokensFromNextRequest(req);
+  const user = await hbc.getUserProfile(accessToken);
   if (!user) {
     return res.status(400).json({ message: 'Unauthorized' });
   }

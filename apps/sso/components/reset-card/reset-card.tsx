@@ -1,10 +1,8 @@
-/* eslint-disable @next/next/no-img-element */
 import { useState } from 'react';
 import styled from 'styled-components';
 import { H3, Text } from '@hibiscus/ui';
 import { useRouter } from 'next/router';
-import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
-import { container } from 'tsyringe';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import { Colors2023 } from '@hibiscus/styles';
 import { Button, ColorSpanBold, OneLinePassword } from '@hibiscus/ui-kit-2023';
 
@@ -15,7 +13,7 @@ export function ResetCard(props: ResetCardProps) {
   const router = useRouter();
   const [hideErrorMessage, setHideErrorMessage] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
-  const supabase = container.resolve(HibiscusSupabaseClient);
+  const { supabase } = useHibiscusSupabase();
 
   async function handleSubmit(event) {
     event.preventDefault();

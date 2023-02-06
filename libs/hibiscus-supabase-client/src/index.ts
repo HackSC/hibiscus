@@ -5,6 +5,7 @@ import {
   createClient,
   EmailOtpType,
   PostgrestError,
+  Session,
   SupabaseClient,
 } from '@supabase/supabase-js';
 import { injectable } from 'tsyringe';
@@ -20,7 +21,6 @@ import {
 } from '@hibiscus/types';
 import { deleteCookie, getCookie, setCookie } from 'cookies-next';
 import { getEnv } from '@hibiscus/env';
-import { container } from 'tsyringe';
 
 @injectable()
 export class HibiscusSupabaseClient {
@@ -43,12 +43,7 @@ export class HibiscusSupabaseClient {
     }
     this.client = createClient(
       getEnv().Hibiscus.Supabase.apiUrl ?? 'http://placeholder',
-      getEnv().Hibiscus.Supabase.anonKey ?? 'placeholder',
-      {
-        auth: {
-          autoRefreshToken: false,
-        },
-      }
+      getEnv().Hibiscus.Supabase.anonKey ?? 'placeholder'
     );
   }
 
@@ -173,11 +168,11 @@ export class HibiscusSupabaseClient {
   async logout() {
     deleteCookie(process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME, {
       path: '/',
-      domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
+      domain: `.${process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN}`,
     });
     deleteCookie(process.env.NEXT_PUBLIC_HIBISCUS_REFRESH_COOKIE_NAME, {
       path: '/',
-      domain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
+      domain: `.${process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN}`,
     });
 
     await this.client.auth.signOut();
@@ -187,23 +182,16 @@ export class HibiscusSupabaseClient {
    * Retrives the profile of the current logged-in user
    *
    * @param access_token
-   * @param refresh_token
+   * @param refresh_token (deprecated)
    * @returns nullable Promise containing UserProfile object
    */
   async getUserProfile(
     access_token: string,
-    refresh_token: string
+    refresh_token?: string
   ): Promise<UserProfileRow | null> {
-    const authRes = await this.verifyToken(access_token, refresh_token);
-    if ('session' in authRes.data && authRes.data.session != null) {
-      // Access token was refreshed, update cookies
-      HibiscusSupabaseClient.setTokenCookieClientSide(
-        authRes.data.session.access_token,
-        authRes.data.session.refresh_token
-      );
-    }
+    const { data } = await this.client.auth.getUser(access_token);
+    const user = data.user;
 
-    const user = authRes.data.user;
     if (user == null) {
       // Access token was invalid
       return null;
@@ -224,26 +212,18 @@ export class HibiscusSupabaseClient {
 
   /**
    * Creates row in the user_profiles table.
-   * This must be run immediately after the user's email is verified, and before cookies are set
    *
    * @param firstname
    * @param lastname
-   * @param access_token
-   * @param refresh_token
    */
-  async createUserProfile(
-    firstname: string,
-    lastname: string,
-    access_token: string,
-    refresh_token: string
-  ) {
-    const authRes = await this.verifyToken(access_token, refresh_token);
-    const user = authRes.data.user;
-    if (user == null) {
+  async createUserProfile(firstname: string, lastname: string) {
+    const { data } = await this.client.auth.getUser();
+    if (data.user == null) {
       // Access token was invalid
       throw Error('Invalid session');
     }
 
+    const user = data.user;
     await this.client.from('user_profiles').insert({
       user_id: user.id,
       email: user.email,
@@ -321,11 +301,7 @@ export class HibiscusSupabaseClient {
     user_id: string,
     event_points: number
   ): Promise<PostgrestError | null> {
-    const supabase = container.resolve(HibiscusSupabaseClient);
-    await supabase.setSessionClientSide();
-
-    const userLeaderboardMatches = await supabase
-      .getClient()
+    const userLeaderboardMatches = await this.client
       .from('leaderboard')
       .select()
       .eq('user_id', `${user_id}`);
@@ -389,13 +365,7 @@ export class HibiscusSupabaseClient {
     refresh_token: string = getCookie(
       getEnv().Hibiscus.Cookies.refreshTokenName
     ) as string
-  ) {
-    const userRes = await this.client.auth.getUser();
-    if (userRes.data.user != null) {
-      // Valid session detected
-      return;
-    }
-
+  ): Promise<Session | null> {
     // No valid session, proceed to set session
     const authRes = await this.verifyToken(access_token, refresh_token);
     if ('session' in authRes.data && authRes.data.session != null) {
@@ -404,7 +374,11 @@ export class HibiscusSupabaseClient {
         authRes.data.session.access_token,
         authRes.data.session.refresh_token
       );
+      return authRes.data.session;
     }
+
+    // Unable to set session
+    return null;
   }
 }
 

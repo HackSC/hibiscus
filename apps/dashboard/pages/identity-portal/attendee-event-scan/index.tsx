@@ -13,12 +13,11 @@ import addEventUserId from '../../../common/add-event-user-id';
 import searchEventId from '../../../common/search-event-id';
 import searchUser from '../../../common/search-user';
 import { ScrollableListBox } from '../../../components/identity-portal/scrollable-list-box/scrollable-list-box';
-import { container } from 'tsyringe';
-import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { formatTimestamp } from '../../../common/format-timestamp';
 import { PostgrestError } from '@supabase/supabase-js';
 import { HibiscusRole } from '@hibiscus/types';
 import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 
 const SUCCESS_MESSAGE = 'Success';
 
@@ -48,14 +47,14 @@ export function Index() {
 
   const [attendees, setAttendees] = useState([]);
 
-  const supabase = container.resolve(HibiscusSupabaseClient).getClient();
+  const { supabase } = useHibiscusSupabase();
 
   async function search(id: number) {
-    setEventName(await searchEventId(id));
+    setEventName(await searchEventId(id, supabase));
   }
 
   async function searchUserQuery(name: string) {
-    setSearchRes(await searchUser(name));
+    setSearchRes(await searchUser(name, supabase));
 
     setModalOpen(true);
   }
@@ -63,7 +62,7 @@ export function Index() {
   async function handleSubmit(e) {
     e.preventDefault();
     if (wristbandId !== '') {
-      const res = await addEvent(eventId, wristbandId);
+      const res = await addEvent(eventId, wristbandId, supabase);
       setWristbandId('');
       setResponse(res);
     } else if (searchQuery !== '') {
@@ -74,6 +73,7 @@ export function Index() {
 
   async function fetchDataInit() {
     const res = await supabase
+      .getClient()
       .from('event_log')
       .select()
       .eq('event_id', eventId)
@@ -91,6 +91,7 @@ export function Index() {
         const {
           data: [{ first_name, last_name }],
         } = await supabase
+          .getClient()
           .from('user_profiles')
           .select()
           .eq('user_id', log.user_id);
@@ -108,6 +109,7 @@ export function Index() {
 
   async function updateData() {
     const res = await supabase
+      .getClient()
       .from('event_log')
       .select()
       .eq('event_id', eventId)
@@ -125,6 +127,7 @@ export function Index() {
         const {
           data: [{ first_name, last_name }],
         } = await supabase
+          .getClient()
           .from('user_profiles')
           .select()
           .eq('user_id', log.user_id);
@@ -241,7 +244,7 @@ export function Index() {
               <LabelText>Search by Name</LabelText>
               <SearchUserEventBox
                 onClick={(value) =>
-                  addEventUserId(eventId, value).then(setResponse)
+                  addEventUserId(eventId, value, supabase).then(setResponse)
                 }
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}

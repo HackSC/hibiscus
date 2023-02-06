@@ -3,7 +3,6 @@ import { HackformSubmission } from '@hibiscus/types';
 import axios from 'axios';
 import { LocalAPIResponses } from './types';
 import mime from 'mime-types';
-import { container } from 'tsyringe';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { getCookie } from 'cookies-next';
 import { getEnv } from '@hibiscus/env';
@@ -24,9 +23,13 @@ export default class APIService {
    * @param file File object
    * @returns data from API response
    */
-  static async submitResume(file: File, key: string, hackerId: string) {
+  static async submitResume(
+    file: File,
+    key: string,
+    hackerId: string,
+    supabase: HibiscusSupabaseClient
+  ) {
     // prelim check if hacker has already submitted
-    const supabase = container.resolve(HibiscusSupabaseClient);
     const {
       data: { applied },
       error,
@@ -57,14 +60,12 @@ export default class APIService {
    */
   static async submitHackform(
     hackerId: string,
-    submission: HackformSubmission
+    submission: HackformSubmission,
+    supabase: HibiscusSupabaseClient
   ) {
-    // check if user already submitted and abort submission if so
-    const supabase = container.resolve(HibiscusSupabaseClient);
     const env = getEnv();
     const user = await supabase.getUserProfile(
-      getCookie(env.Hibiscus.Cookies.accessTokenName) as string,
-      getCookie(env.Hibiscus.Cookies.refreshTokenName) as string
+      getCookie(env.Hibiscus.Cookies.accessTokenName) as string
     );
     if (user.application_status === 3 || user.app_id !== null) {
       return null;

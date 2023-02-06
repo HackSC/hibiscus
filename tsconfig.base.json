@@ -22,6 +22,9 @@
       "@hibiscus/hibiscus-supabase-client": [
         "libs/hibiscus-supabase-client/src/index.ts"
       ],
+      "@hibiscus/hibiscus-supabase-context": [
+        "libs/hibiscus-supabase-context/src/index.ts"
+      ],
       "@hibiscus/icons": ["libs/icons/src/index.ts"],
       "@hibiscus/metadata": ["libs/metadata/src/index.ts"],
       "@hibiscus/sso-client": ["libs/sso-client/src/index.ts"],

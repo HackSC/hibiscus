@@ -5,13 +5,14 @@ import OTPInput from '../otp-input/otp-input';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
-import { container } from 'tsyringe';
 import Image from 'next/image';
 import { MutatingDots } from 'react-loader-spinner';
 import { Button } from '@hibiscus/ui-kit-2023';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 
 export function VerifyCard() {
   const router = useRouter();
+  const { supabase } = useHibiscusSupabase();
   const [verifyState, setVerifyState] = useState('');
   const [hideErrorMessage, setHideErrorMessage] = useState(false);
   const [code, setCode] = useState('');
@@ -21,7 +22,6 @@ export function VerifyCard() {
   const handleOTP = async () => {
     const email = String(router.query.email);
 
-    const supabase = container.resolve(HibiscusSupabaseClient);
     const { data, error } = await supabase.verifyOtp(email, code, 'signup');
     if (error) {
       console.log(error);
@@ -32,9 +32,7 @@ export function VerifyCard() {
       // Create user profile in database
       await supabase.createUserProfile(
         router.query.firstname.toString(),
-        router.query.lastname.toString(),
-        data.session.access_token,
-        data.session.refresh_token
+        router.query.lastname.toString()
       );
 
       HibiscusSupabaseClient.setTokenCookieClientSide(

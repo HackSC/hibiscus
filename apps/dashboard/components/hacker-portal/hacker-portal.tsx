@@ -11,8 +11,7 @@ import { ComingSoon } from './coming-soon';
 import { getColorsForRole } from '../../common/role.utils';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 import { GrayBox } from '../gray-box/gray-box';
-import { container } from 'tsyringe';
-import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import DeclinedPlaceholder from './declined-placeholder';
 import { CongratsMessage } from './congrats-message';
 import { RejectionMessage } from './rejection-message';
@@ -27,7 +26,7 @@ export function HackerPortal() {
   const closeModal = () => setModalOpen(false);
   const userColors = getColorsForRole(user?.role ?? HibiscusRole.HACKER);
   const [choice, setChoice] = useState<RSVPChoice | null>(null);
-  const hbc = container.resolve(HibiscusSupabaseClient);
+  const { supabase: hbc } = useHibiscusSupabase();
   const client = hbc.getClient();
 
   const WelcomeHeader = () => (

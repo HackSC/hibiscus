@@ -3,13 +3,13 @@ import { TrademarkColors } from '@hibiscus/styles';
 import Head from 'next/head';
 import { useEffect } from 'react';
 import { getWebTitle } from '@hibiscus/metadata';
-import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
-import { container } from 'tsyringe';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 
 export function Index() {
+  const { supabase } = useHibiscusSupabase();
+
   useEffect(() => {
     async function logout() {
-      const supabase = container.resolve(HibiscusSupabaseClient);
       await supabase.logout();
       window.location.replace(`${process.env.NEXT_PUBLIC_SSO_URL}/login`);
     }

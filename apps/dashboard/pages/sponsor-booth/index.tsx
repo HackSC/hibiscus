@@ -10,8 +10,7 @@ import { HackerTab } from '../../components/sponsor-portal/hacker-tab';
 import HackerProfile from '../../components/sponsor-portal/hacker-profile';
 import { useRouter } from 'next/router';
 import { Attendee } from '../../common/mock-sponsor';
-import { container } from 'tsyringe';
-import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import { HibiscusRole } from '@hibiscus/types';
 import { Button, ParagraphText } from '@hibiscus/ui-kit-2023';
 import { getWordCount } from '../../common/utils';
@@ -32,7 +31,7 @@ const Index = () => {
   const [checkInSpinner, setCheckInSpinner] = useState(false);
 
   const router = useRouter();
-  const supabase = container.resolve(HibiscusSupabaseClient).getClient();
+  const supabase = useHibiscusSupabase().supabase.getClient();
 
   useEffect(() => {
     SponsorServiceAPI.getCompanyIdAndEventId(user.id)

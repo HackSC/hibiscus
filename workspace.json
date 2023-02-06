@@ -13,6 +13,7 @@
     "event-service": "apps/event-service",
     "hackform-client": "libs/hackform-client",
     "hibiscus-supabase-client": "libs/hibiscus-supabase-client",
+    "hibiscus-supabase-context": "libs/hibiscus-supabase-context",
     "icons": "libs/icons",
     "interim": "apps/interim",
     "log-server": "apps/log-server",

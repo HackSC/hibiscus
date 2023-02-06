@@ -7,8 +7,7 @@ import Image from 'next/image';
 import styled from 'styled-components';
 import APIService from '../../../common/api';
 import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
-import { container } from 'tsyringe';
-import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import * as Sentry from '@sentry/browser';
@@ -23,17 +22,21 @@ export interface HackformEndingProps {
 export const HackformEnding = ({ formMetadata }: HackformEndingProps) => {
   const hackformUtils = useHackform();
   const { user, updateUser } = useHibiscusUser();
+  const { supabase } = useHibiscusSupabase();
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async () => {
     setSubmitting(true); // can't clickjack
     const submission = hackformUtils.getSubmission();
-    try {
-      const { formId } = await APIService.submitHackform(user.id, submission);
 
-      // update user app status to IN_REVIEW
-      const supabase = container.resolve(HibiscusSupabaseClient);
+    try {
+      const { formId } = await APIService.submitHackform(
+        user.id,
+        submission,
+        supabase
+      );
+
       const client = supabase.getClient();
       const { error } = await client
         .from('user_profiles')

@@ -32,6 +32,10 @@ export const middlewareHandler =
     exhaustive = true
   ) =>
   async (request: NextRequest): Promise<NextResponse | null> => {
+    const access_token_init = request.cookies.get(
+      getEnv().Hibiscus.Cookies.accessTokenName
+    );
+
     if (getEnv().Hibiscus.Cookies.disableSSO === 'true') {
       await initializeFakeUser(request);
     }
@@ -63,33 +67,36 @@ export const middlewareHandler =
           const { data } = await verifyToken(access_token, refresh_token);
 
           if ('session' in data && data.session != null) {
-            // Access token refreshed
+            // Access token might have been refreshed
             access_token = data.session.access_token;
             refresh_token = data.session.refresh_token;
           }
 
           if (data.user != null) {
             const res = NextResponse.next();
-            res.cookies.set(
-              getEnv().Hibiscus.Cookies.accessTokenName,
-              access_token,
-              {
-                path: '/',
-                domain: getEnv().Hibiscus.AppURL.baseDomain,
-                maxAge: Number.parseInt(getEnv().Hibiscus.Cookies.maxAge),
-                sameSite: 'lax',
-              }
-            );
-            res.cookies.set(
-              getEnv().Hibiscus.Cookies.refreshTokenName,
-              refresh_token,
-              {
-                path: '/',
-                domain: getEnv().Hibiscus.AppURL.baseDomain,
-                maxAge: Number.parseInt(getEnv().Hibiscus.Cookies.maxAge),
-                sameSite: 'lax',
-              }
-            );
+            if (access_token !== access_token_init) {
+              // Only set cookies if access token actually changed
+              res.cookies.set(
+                getEnv().Hibiscus.Cookies.accessTokenName,
+                access_token,
+                {
+                  path: '/',
+                  domain: getEnv().Hibiscus.AppURL.baseDomain,
+                  maxAge: Number.parseInt(getEnv().Hibiscus.Cookies.maxAge),
+                  sameSite: 'lax',
+                }
+              );
+              res.cookies.set(
+                getEnv().Hibiscus.Cookies.refreshTokenName,
+                refresh_token,
+                {
+                  path: '/',
+                  domain: getEnv().Hibiscus.AppURL.baseDomain,
+                  maxAge: Number.parseInt(getEnv().Hibiscus.Cookies.maxAge),
+                  sameSite: 'lax',
+                }
+              );
+            }
             return res;
           }
         }
