@@ -118,7 +118,7 @@
     "@types/morgan": "^1.9.4",
     "@types/node": "18.11.9",
     "@types/nprogress": "^0.2.0",
-    "@types/react": "18.0.25",
+    "@types/react": "18.0.28",
     "@types/react-calendar": "^3.9.0",
     "@types/react-dom": "18.0.9",
     "@types/react-is": "17.0.3",
