@@ -1,4 +1,5 @@
 {
+  "name": "sso",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/sso",
   "projectType": "application",

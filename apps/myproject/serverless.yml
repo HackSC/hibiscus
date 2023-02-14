@@ -1,0 +1,22 @@
+service: myproject
+plugins:
+  - serverless-python-requirements
+custom:
+  pythonRequirements:
+    usePoetry: false
+package:
+  individually: false
+  patterns:
+    - '!**'
+    - 'myproject/**'
+provider:
+  name: aws
+  runtime: python3.9
+  region: us-west-1
+functions:
+  hello:
+    handler: myproject/hello.handler
+    events:
+      - http:
+          path: hello
+          method: get

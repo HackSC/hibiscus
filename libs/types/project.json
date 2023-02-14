@@ -1,4 +1,5 @@
 {
+  "name": "types",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/types/src",
   "projectType": "library",

@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  localstack:
+    container_name: localstack-main
+    image: localstack/localstack
+    network_mode: bridge
+    ports:
+      - '127.0.0.1:4510-4559:4510-4559' # external service port range
+      - '127.0.0.1:4566:4566' # LocalStack Edge Proxy
+    environment:
+      - AWS_DEFAULT_REGION=us-west-1
+      - DEBUG=1
+      - DATA_DIR=/tmp/localstack/data
+    volumes:
+      - '/private/tmp/localstack:/var/lib/localstack'
+      - '/var/run/docker.sock:/var/run/docker.sock'

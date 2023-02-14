@@ -1,4 +1,5 @@
 {
+  "name": "hibiscus-supabase-client",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/hibiscus-supabase-client/src",
   "projectType": "library",

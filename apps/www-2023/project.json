@@ -1,4 +1,5 @@
 {
+  "name": "www-2023",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/www-2023",
   "projectType": "application",

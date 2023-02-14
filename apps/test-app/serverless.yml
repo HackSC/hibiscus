@@ -1,0 +1,25 @@
+service: test-app
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: dev
+  region: us-west-1
+
+package:
+  individually: true
+  excludeDevDependencies: false
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 3001
+
+functions:
+  app:
+    handler: handler.webApp
+    events:
+      - http: ANY /
+      - http: 'ANY {proxy+}'

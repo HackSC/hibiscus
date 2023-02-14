@@ -1,4 +1,5 @@
 {
+  "name": "sso-mock-app",
   "$schema": "..\\..\\node_modules\\nx\\schemas\\project-schema.json",
   "sourceRoot": "apps/sso-mock-app",
   "projectType": "application",
