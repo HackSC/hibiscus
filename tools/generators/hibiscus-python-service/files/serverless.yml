@@ -1,0 +1,25 @@
+org: hacksc
+app: <% name %>
+service: <% packageName %>
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
+custom:
+  wsgi:
+    app: <% packageName %>/app.app
+    packRequirements: false
+package:
+  individually: false
+  patterns:
+    - '!**'
+    - '<% packageName %>/**'
+provider:
+  name: aws
+  runtime: python3.9
+  region: us-west-1
+functions:
+  api:
+    handler: wsgi_handler.handler
+    events:
+      - http: ANY /
+      - http: ANY /{proxy+}
