@@ -26,8 +26,6 @@
     "sso-e2e": "apps/sso-e2e",
     "sso-mock-app": "apps/sso-mock-app",
     "styles": "libs/styles",
-    "test-app": "apps/test-app",
-    "test-two": "apps/test-two",
     "types": "libs/types",
     "ui": "libs/ui",
     "ui-kit-2023": "libs/ui-kit-2023",
