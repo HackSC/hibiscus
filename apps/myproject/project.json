@@ -4,6 +4,13 @@
   "projectType": "application",
   "sourceRoot": "apps/myproject/myproject",
   "targets": {
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "sls wsgi serve",
+        "cwd": "apps/myproject"
+      }
+    },
     "docs": {
       "executor": "nx:run-commands",
       "options": {

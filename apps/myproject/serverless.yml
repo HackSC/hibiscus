@@ -1,9 +1,13 @@
+org: hacksc
+app: myproject
 service: myproject
 plugins:
   - serverless-python-requirements
+  - serverless-wsgi
 custom:
-  pythonRequirements:
-    usePoetry: false
+  wsgi:
+    app: myproject/app.app
+    packRequirements: false
 package:
   individually: false
   patterns:
@@ -14,9 +18,8 @@ provider:
   runtime: python3.9
   region: us-west-1
 functions:
-  hello:
-    handler: myproject/hello.handler
+  api:
+    handler: wsgi_handler.handler
     events:
-      - http:
-          path: hello
-          method: get
+      - http: ANY /
+      - http: ANY /{proxy+}
