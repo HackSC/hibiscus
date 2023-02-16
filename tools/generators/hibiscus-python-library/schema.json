@@ -7,7 +7,7 @@
   "properties": {
     "name": {
       "type": "string",
-      "description": "Project name",
+      "description": "Library name",
       "$default": {
         "$source": "argv",
         "index": 0

@@ -23,6 +23,7 @@ include = "myproject"
 [tool.poetry.dependencies]
 python = ">=3.8,<3.10"
 flask = "2.2.2"
+python-dotenv = "^0.21.1"
 
 [build-system]
 requires = ["poetry-core==1.1.0"]

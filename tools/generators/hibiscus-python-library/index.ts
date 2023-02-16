@@ -34,7 +34,7 @@ export function normalizeOptions(
     ? options.moduleName
     : projectName.replace(new RegExp('-', 'g'), '_');
 
-  const projectRoot = `${getWorkspaceLayout(host).appsDir}/${projectDirectory}`;
+  const projectRoot = `${getWorkspaceLayout(host).libsDir}/${projectDirectory}`;
   const parsedTags = options.tags
     ? options.tags.split(',').map((s) => s.trim())
     : [];
@@ -135,7 +135,7 @@ async function generator(host: Tree, options: Schema) {
   const normalizedOptions = normalizeOptions(host, options);
   addProjectConfiguration(host, normalizedOptions.projectName, {
     root: normalizedOptions.projectRoot,
-    projectType: 'application',
+    projectType: 'library',
     sourceRoot: `${normalizedOptions.projectRoot}/${normalizedOptions.moduleName}`,
     targets: {
       docs: {
@@ -214,39 +214,10 @@ async function generator(host: Tree, options: Schema) {
           args: '',
         },
       },
-      deploy: {
-        executor: 'nx:run-commands',
-        defaultConfiguration: 'prod',
-        dependsOn: ['build'],
-        options: {
-          color: true,
-          cwd: normalizedOptions.projectRoot,
-        },
-        configurations: {
-          prod: {
-            command: 'sls deploy --org hacksc --stage prod',
-          },
-          staging: {
-            command: 'sls deploy --org hacksc --stage staging',
-          },
-        },
-      },
-      package: {
-        executor: '@nxlv/python:sls-package',
-        dependsOn: ['build'],
-        options: {},
-      },
       format: {
         executor: 'nx:run-commands',
         options: {
           command: 'poetry run black .',
-          cwd: normalizedOptions.projectRoot,
-        },
-      },
-      serve: {
-        executor: 'nx:run-commands',
-        options: {
-          command: 'poetry run sls wsgi serve',
           cwd: normalizedOptions.projectRoot,
         },
       },

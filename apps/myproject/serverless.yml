@@ -20,6 +20,7 @@ provider:
 functions:
   api:
     handler: wsgi_handler.handler
+    environment: ${file(configs/env.${opt:stage,'local'}.yml)}
     events:
       - http: ANY /
       - http: ANY /{proxy+}

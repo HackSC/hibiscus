@@ -87,9 +87,21 @@
       }
     },
     "deploy": {
-      "executor": "@nxlv/python:sls-deploy",
+      "executor": "nx:run-commands",
+      "defaultConfiguration": "prod",
       "dependsOn": ["build"],
-      "options": {}
+      "options": {
+        "color": true,
+        "cwd": "apps/myproject"
+      },
+      "configurations": {
+        "prod": {
+          "command": "sls deploy --org hacksc --stage prod"
+        },
+        "staging": {
+          "command": "sls deploy --org hacksc --stage staging"
+        }
+      }
     },
     "package": {
       "executor": "@nxlv/python:sls-package",
