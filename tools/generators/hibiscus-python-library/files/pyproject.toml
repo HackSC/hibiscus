@@ -22,7 +22,6 @@ readme = 'README.md'
 
   [tool.poetry.dependencies]
   python = ">=3.8,<3.10"
-  flask = "2.2.2"
 
   <%if (addDevDependencies) { %>
   [tool.poetry.group.dev.dependencies]

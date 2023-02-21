@@ -1,9 +1,9 @@
 [tool.coverage.run]
 branch = true
-source = ["myproject"]
+source = [ "myproject" ]
 
 [tool.coverage.report]
-exclude_lines = ['if TYPE_CHECKING:']
+exclude_lines = [ "if TYPE_CHECKING:" ]
 show_missing = true
 
 [tool.pytest.ini_options]
@@ -13,18 +13,22 @@ addopts = "--cov --cov-fail-under=100 --cov-report html:'../../coverage/apps/myp
 name = "myproject"
 version = "1.0.0"
 description = ""
-authors = []
-license = 'Proprietary'
-readme = 'README.md'
+authors = [ ]
+license = "Proprietary"
+readme = "README.md"
 
-[[tool.poetry.packages]]
-include = "myproject"
+  [[tool.poetry.packages]]
+  include = "myproject"
 
-[tool.poetry.dependencies]
-python = ">=3.8,<3.10"
-flask = "2.2.2"
-python-dotenv = "^0.21.1"
+  [tool.poetry.dependencies]
+  python = ">=3.8,<3.10"
+  flask = "2.2.2"
+  python-dotenv = "^0.21.1"
+
+    [tool.poetry.dependencies.number_module]
+    path = "../../libs/number-module"
+    develop = true
 
 [build-system]
-requires = ["poetry-core==1.1.0"]
+requires = [ "poetry-core==1.1.0" ]
 build-backend = "poetry.core.masonry.api"

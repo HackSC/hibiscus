@@ -12,12 +12,12 @@
         "$source": "argv",
         "index": 0
       },
-      "x-prompt": "What name would you like to use?"
+      "x-prompt": "Library name:"
     },
     "packageName": {
       "type": "string",
       "description": "Python package name",
-      "x-prompt": "What package name would you like to use?"
+      "x-prompt": "Package name:"
     },
     "moduleName": {
       "type": "string",

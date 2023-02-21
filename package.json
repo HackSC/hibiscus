@@ -166,6 +166,7 @@
     "react-test-renderer": "18.2.0",
     "sass": "1.43.2",
     "serverless-apigw-binary": "^0.4.4",
+    "serverless-domain-manager": "^6.4.3",
     "serverless-python-requirements": "^6.0.0",
     "serverless-wsgi": "^3.0.1",
     "storybook-addon-next": "^1.6.6",

@@ -161,6 +161,20 @@ files = [
 ]
 
 [[package]]
+name = "number-module"
+version = "1.0.0"
+description = ""
+category = "main"
+optional = false
+  python-versions = ">=3.8,<3.10"
+files = []
+develop = true
+
+[package.source]
+type = "directory"
+url = "../../libs/number-module"
+
+[[package]]
 name = "python-dotenv"
 version = "0.21.1"
 description = "Read key-value pairs from a .env file and set them as environment variables"
@@ -211,5 +225,5 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 
 [metadata]
 lock-version = "2.0"
-python-versions = ">=3.8,<3.10"
-content-hash = "0e0b16f1df65ce749628a9079d44f88aacfea4ebe08b453135147f46a9e5ba5d"
+  python-versions = ">=3.8,<3.10"
+content-hash = "680050672929c43e15c83515e2d84710429fa3e8ecb0420496a3fb79f03f7bdf"

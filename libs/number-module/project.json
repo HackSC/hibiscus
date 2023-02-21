@@ -1,0 +1,91 @@
+{
+  "name": "number-module",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/number-module/number_module",
+  "targets": {
+    "docs": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pydoc-markdown -p number_module --render-toc > docs/source/api.md",
+        "cwd": "libs/number-module"
+      }
+    },
+    "lock": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry lock --no-update",
+        "cwd": "libs/number-module"
+      }
+    },
+    "add": {
+      "executor": "@nxlv/python:add",
+      "options": {}
+    },
+    "update": {
+      "executor": "@nxlv/python:update",
+      "options": {}
+    },
+    "remove": {
+      "executor": "@nxlv/python:remove",
+      "options": {}
+    },
+    "build": {
+      "executor": "@nxlv/python:build",
+      "outputs": ["libs/number-module/dist"],
+      "options": {
+        "outputPath": "libs/number-module/dist",
+        "publish": true,
+        "lockedVersions": true,
+        "bundleLocalDependencies": true
+      }
+    },
+    "install": {
+      "executor": "@nxlv/python:install",
+      "options": {
+        "silent": false,
+        "args": "",
+        "cacheDir": ".cache/pypoetry",
+        "verbose": false,
+        "debug": false
+      }
+    },
+    "lint": {
+      "executor": "@nxlv/python:flake8",
+      "outputs": ["reports/libs/number-module/pylint.txt"],
+      "options": {
+        "outputFile": "reports/libs/number-module/pylint.txt"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "outputs": [
+        "reports/libs/number-module/unittests",
+        "coverage/libs/number-module"
+      ],
+      "options": {
+        "command": "poetry run pytest tests/",
+        "cwd": "libs/number-module"
+      }
+    },
+    "tox": {
+      "executor": "@nxlv/python:tox",
+      "outputs": [
+        "reports/libs/number-module/unittests",
+        "coverage/libs/number-module"
+      ],
+      "options": {
+        "silent": false,
+        "args": ""
+      }
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run black .",
+        "cwd": "libs/number-module"
+      }
+    }
+  },
+  "tags": []
+}

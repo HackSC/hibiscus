@@ -12,12 +12,12 @@
         "$source": "argv",
         "index": 0
       },
-      "x-prompt": "What name would you like to use?"
+      "x-prompt": "Project name:"
     },
     "packageName": {
       "type": "string",
       "description": "Python package name",
-      "x-prompt": "What package name would you like to use?"
+      "x-prompt": "Python package name (e.g apps/<project_name>/<package_name>):"
     },
     "moduleName": {
       "type": "string",

@@ -9764,6 +9764,22 @@ aws-sdk@^2.1136.0, aws-sdk@^2.1303.0, aws-sdk@^2.850.0:
     uuid "8.0.0"
     xml2js "0.4.19"
 
+aws-sdk@^2.1317.0:
+  version "2.1319.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1319.0.tgz#be1d91fcac13262fa106f0f0a15ee07c023972fd"
+  integrity sha512-/gPCVsCARitph9FmBTXZmzjX0Br8LwBfu2MTNPGjVCiZkEUSoUWAAigIWkvrjTWOXCI7TSElRwtCzlsVHdv5VA==
+  dependencies:
+    buffer "4.9.2"
+    events "1.1.1"
+    ieee754 "1.1.13"
+    jmespath "0.16.0"
+    querystring "0.2.0"
+    sax "1.2.1"
+    url "0.10.3"
+    util "^0.12.4"
+    uuid "8.0.0"
+    xml2js "0.4.19"
+
 aws-serverless-express@^3.4.0:
   version "3.4.0"
   resolved "https://registry.yarnpkg.com/aws-serverless-express/-/aws-serverless-express-3.4.0.tgz#74153b8cc80dbd2c6a32a51e6d353a325c2710d7"
@@ -23121,6 +23137,13 @@ serverless-apigw-binary@^0.4.4:
   version "0.4.4"
   resolved "https://registry.yarnpkg.com/serverless-apigw-binary/-/serverless-apigw-binary-0.4.4.tgz#f3cffd8365322a2a1d8bde5fd94b306b7a64d4fb"
   integrity sha512-2DJmQTzeXa/+8u9ekReqf7j4gQjBtzQE4MK9nlOnEz4F7MVWCQXYlLPmf2TXSoxxJZzlWvIiNzCTq6vAT9F5FQ==
+
+serverless-domain-manager@^6.4.3:
+  version "6.4.3"
+  resolved "https://registry.yarnpkg.com/serverless-domain-manager/-/serverless-domain-manager-6.4.3.tgz#9c470322924232804e7417f4043686e0b5f285d8"
+  integrity sha512-CWWwelOrsXEewk8XWdcXusTKfCqqjWbDp+TEdgyIwBpIKaZZeh+hTRL0hknSHoAD1Suvwnp0YrH4aEiXR5XugA==
+  dependencies:
+    aws-sdk "^2.1317.0"
 
 serverless-esbuild@^1.37.3:
   version "1.37.3"
