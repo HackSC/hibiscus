@@ -4,16 +4,10 @@ service: myproject
 plugins:
   - serverless-python-requirements
   - serverless-wsgi
-  - serverless-domain-manager
 custom:
   wsgi:
     app: myproject/app.app
     packRequirements: false
-  customDomain:
-    domainName: <registered_dmain_name>
-    basePath: ''
-    stage: ${self:provider.stage}
-    createRoute53Record: true
 package:
   individually: false
   patterns:
