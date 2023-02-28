@@ -1,0 +1,3 @@
+.serverless/
+dist/
+configs/.env.local.yml

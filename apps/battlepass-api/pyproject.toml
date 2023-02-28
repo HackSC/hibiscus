@@ -1,0 +1,33 @@
+[tool.coverage.run]
+branch = true
+source = [ "battlepass_api" ]
+
+[tool.coverage.report]
+exclude_lines = ['if TYPE_CHECKING:']
+show_missing = true
+
+[tool.pytest.ini_options]
+addopts = "--cov --cov-fail-under=100 --cov-report html:'../../coverage/apps/battlepass-api/html' --cov-report xml:'../../coverage/apps/battlepass-api/coverage.xml' --junitxml='../../reports/apps/battlepass-api/unittests/junit.xml' --html='../../reports/apps/battlepass-api/unittests/html/index.html'"
+
+[tool.poetry]
+name = "battlepass_api"
+version = "1.0.0"
+description = "A simple service to interact with Battlepass"
+authors = [ ]
+license = 'Proprietary'
+readme = 'README.md'
+
+  [[tool.poetry.packages]]
+  include = "battlepass_api"
+
+  [tool.poetry.dependencies]
+  python = ">=3.8,<3.10"
+  flask = "2.2.2"
+  supabase = "^1.0.1"
+  flask-cors = "^3.0.10"
+
+  
+
+[build-system]
+requires = ["poetry-core==1.1.0"]
+build-backend = "poetry.core.masonry.api"

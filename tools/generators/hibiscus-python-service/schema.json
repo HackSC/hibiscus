@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/schema",
   "cli": "nx",
-  "$id": "NxPythonProject",
+  "$id": "hibiscus-python-service",
   "title": "",
   "type": "object",
   "properties": {

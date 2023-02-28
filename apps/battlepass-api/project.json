@@ -1,0 +1,127 @@
+{
+  "name": "battlepass-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/battlepass-api/battlepass_api",
+  "targets": {
+    "docs": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pydoc-markdown -p battlepass_api --render-toc > docs/source/api.md",
+        "cwd": "apps/battlepass-api"
+      }
+    },
+    "lock": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry lock --no-update",
+        "cwd": "apps/battlepass-api"
+      }
+    },
+    "add": {
+      "executor": "@nxlv/python:add",
+      "options": {}
+    },
+    "update": {
+      "executor": "@nxlv/python:update",
+      "options": {}
+    },
+    "remove": {
+      "executor": "@nxlv/python:remove",
+      "options": {}
+    },
+    "build": {
+      "executor": "@nxlv/python:build",
+      "outputs": ["apps/battlepass-api/dist"],
+      "options": {
+        "outputPath": "apps/battlepass-api/dist",
+        "publish": true,
+        "lockedVersions": true,
+        "bundleLocalDependencies": true
+      }
+    },
+    "install": {
+      "executor": "@nxlv/python:install",
+      "options": {
+        "silent": false,
+        "args": "",
+        "cacheDir": ".cache/pypoetry",
+        "verbose": false,
+        "debug": false
+      }
+    },
+    "lint": {
+      "executor": "@nxlv/python:flake8",
+      "outputs": ["reports/apps/battlepass-api/pylint.txt"],
+      "options": {
+        "outputFile": "reports/apps/battlepass-api/pylint.txt"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "outputs": [
+        "reports/apps/battlepass-api/unittests",
+        "coverage/apps/battlepass-api"
+      ],
+      "options": {
+        "command": "poetry run pytest tests/",
+        "cwd": "apps/battlepass-api"
+      }
+    },
+    "tox": {
+      "executor": "@nxlv/python:tox",
+      "outputs": [
+        "reports/apps/battlepass-api/unittests",
+        "coverage/apps/battlepass-api"
+      ],
+      "options": {
+        "silent": false,
+        "args": ""
+      }
+    },
+    "deployment-setup": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/battlepass-api",
+        "command": "SLS_INTERACTIVE_SETUP_ENABLE=1 sls --org hacksc"
+      }
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "defaultConfiguration": "prod",
+      "dependsOn": ["build"],
+      "options": {
+        "color": true,
+        "cwd": "apps/battlepass-api"
+      },
+      "configurations": {
+        "prod": {
+          "command": "sls deploy --org hacksc --stage prod"
+        },
+        "staging": {
+          "command": "sls deploy --org hacksc --stage staging"
+        }
+      }
+    },
+    "package": {
+      "executor": "@nxlv/python:sls-package",
+      "dependsOn": ["build"],
+      "options": {}
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run black .",
+        "cwd": "apps/battlepass-api"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run sls wsgi serve",
+        "cwd": "apps/battlepass-api"
+      }
+    }
+  },
+  "tags": []
+}

@@ -1,0 +1,33 @@
+org: hacksc
+app: battlepass-api
+service: battlepass-api
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
+  # - serverless-domain-manager
+custom:
+  wsgi:
+    app: battlepass_api/app.app
+    packRequirements: false
+  # customDomain:
+  #   domainName: api.hacksc.com
+  #   basePath: 'v1'
+  #   stage: ${opt:stage,'dev'}
+  #   certificateName: hacksc.com
+  #   createRoute53Record: true
+package:
+  individually: false
+  patterns:
+    - '!**'
+    - 'battlepass_api/**'
+provider:
+  name: aws
+  runtime: python3.9
+  region: us-west-1
+functions:
+  api:
+    handler: wsgi_handler.handler
+    environment: ${file(configs/env.${opt:stage,'local'}.yml)}
+    events:
+      - http: ANY /
+      - http: ANY /{proxy+}
