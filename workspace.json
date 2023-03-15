@@ -19,7 +19,6 @@
     "interim": "apps/interim",
     "log-server": "apps/log-server",
     "metadata": "libs/metadata",
-    "myproject": "apps/myproject",
     "number-module": "libs/number-module",
     "pointr": "apps/pointr",
     "recruitment": "apps/recruitment",
