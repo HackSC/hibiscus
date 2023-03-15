@@ -39,6 +39,8 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - run: npm install -g yarn
       - run: yarn install --frozen-lockfile
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
       - run: yarn nx affected:build --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
@@ -56,6 +58,8 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - run: npm install -g yarn
       - run: yarn install --frozen-lockfile
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
       - run: yarn nx affected:test --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
@@ -73,6 +77,8 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - run: npm install -g yarn
       - run: yarn install --frozen-lockfile
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
       - run: yarn nx affected:lint --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
