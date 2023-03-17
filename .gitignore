@@ -52,6 +52,8 @@ Thumbs.db
 /**/venv
 /**/__pycache__
 /**/.cache
+/**/reports/
+/**/coverage/
 
 # Airplane
 /**/.airplane

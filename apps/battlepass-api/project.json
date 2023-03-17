@@ -31,13 +31,10 @@
       "options": {}
     },
     "build": {
-      "executor": "@nxlv/python:build",
-      "outputs": ["apps/battlepass-api/dist"],
+      "executor": "nx:run-commands",
       "options": {
-        "outputPath": "apps/battlepass-api/dist",
-        "publish": true,
-        "lockedVersions": true,
-        "bundleLocalDependencies": true
+        "cwd": "apps/battlepass-api",
+        "command": "poetry build -n -C dist"
       }
     },
     "install": {

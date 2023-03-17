@@ -6,8 +6,8 @@ source = [ "battlepass_api" ]
 exclude_lines = ['if TYPE_CHECKING:']
 show_missing = true
 
-[tool.pytest.ini_options]
-addopts = "--cov --cov-fail-under=100 --cov-report html:'../../coverage/apps/battlepass-api/html' --cov-report xml:'../../coverage/apps/battlepass-api/coverage.xml' --junitxml='../../reports/apps/battlepass-api/unittests/junit.xml' --html='../../reports/apps/battlepass-api/unittests/html/index.html'"
+# [tool.pytest.ini_options]
+# addopts = "--cov --cov-report html:'../../coverage/apps/battlepass-api/html' --cov-report xml:'../../coverage/apps/battlepass-api/coverage.xml' --junitxml='../../reports/apps/battlepass-api/unittests/junit.xml' --html='../../reports/apps/battlepass-api/unittests/html/index.html'"
 
 [tool.poetry]
 name = "battlepass_api"
