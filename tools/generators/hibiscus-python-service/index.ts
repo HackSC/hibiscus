@@ -138,13 +138,6 @@ async function generator(host: Tree, options: Schema) {
     projectType: 'application',
     sourceRoot: `${normalizedOptions.projectRoot}/${normalizedOptions.moduleName}`,
     targets: {
-      docs: {
-        executor: 'nx:run-commands',
-        options: {
-          command: `pydoc-markdown -p ${normalizedOptions.moduleName} --render-toc > docs/source/api.md`,
-          cwd: normalizedOptions.projectRoot,
-        },
-      },
       lock: {
         executor: 'nx:run-commands',
         options: {
@@ -165,14 +158,10 @@ async function generator(host: Tree, options: Schema) {
         options: {},
       },
       build: {
-        executor: '@nxlv/python:build',
-        outputs: [`${normalizedOptions.projectRoot}/dist`],
+        executor: 'nx:run-commands',
         options: {
-          outputPath: `${normalizedOptions.projectRoot}/dist`,
-          publish: normalizedOptions.publishable,
-          lockedVersions: normalizedOptions.buildLockedVersions,
-          bundleLocalDependencies:
-            normalizedOptions.buildBundleLocalDependencies,
+          cwd: normalizedOptions.projectRoot,
+          command: "poetry build -n -C dist/",
         },
       },
       install: {
@@ -186,33 +175,25 @@ async function generator(host: Tree, options: Schema) {
         },
       },
       lint: {
-        executor: '@nxlv/python:flake8',
-        outputs: [`reports/${normalizedOptions.projectRoot}/pylint.txt`],
+        executor: 'nx:run-commands',
         options: {
-          outputFile: `reports/${normalizedOptions.projectRoot}/pylint.txt`,
+          cwd: normalizedOptions.projectRoot,
+          command: `poetry run flake8`
         },
       },
       test: {
         executor: 'nx:run-commands',
-        outputs: [
-          `reports/${normalizedOptions.projectRoot}/unittests`,
-          `coverage/${normalizedOptions.projectRoot}`,
-        ],
         options: {
           command: `poetry run pytest tests/`,
           cwd: normalizedOptions.projectRoot,
         },
       },
-      tox: {
-        executor: '@nxlv/python:tox',
-        outputs: [
-          `reports/${normalizedOptions.projectRoot}/unittests`,
-          `coverage/${normalizedOptions.projectRoot}`,
-        ],
+      "deployment-setup":  {
+        executor: "nx:run-commands",
         options: {
-          silent: false,
-          args: '',
-        },
+          cwd: normalizedOptions.projectRoot,
+          command: "SLS_INTERACTIVE_SETUP_ENABLE=1 sls --org hacksc"
+        }
       },
       deploy: {
         executor: 'nx:run-commands',

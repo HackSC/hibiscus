@@ -4,13 +4,6 @@
   "projectType": "application",
   "sourceRoot": "apps/battlepass-api/battlepass_api",
   "targets": {
-    "docs": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "pydoc-markdown -p battlepass_api --render-toc > docs/source/api.md",
-        "cwd": "apps/battlepass-api"
-      }
-    },
     "lock": {
       "executor": "nx:run-commands",
       "options": {
@@ -48,32 +41,17 @@
       }
     },
     "lint": {
-      "executor": "@nxlv/python:flake8",
-      "outputs": ["reports/apps/battlepass-api/pylint.txt"],
+      "executor": "nx:run-commands",
       "options": {
-        "outputFile": "reports/apps/battlepass-api/pylint.txt"
+        "cwd": "apps/battlepass-api",
+        "command": "poetry run flake8"
       }
     },
     "test": {
       "executor": "nx:run-commands",
-      "outputs": [
-        "reports/apps/battlepass-api/unittests",
-        "coverage/apps/battlepass-api"
-      ],
       "options": {
         "command": "poetry run pytest tests/",
         "cwd": "apps/battlepass-api"
-      }
-    },
-    "tox": {
-      "executor": "@nxlv/python:tox",
-      "outputs": [
-        "reports/apps/battlepass-api/unittests",
-        "coverage/apps/battlepass-api"
-      ],
-      "options": {
-        "silent": false,
-        "args": ""
       }
     },
     "deployment-setup": {
