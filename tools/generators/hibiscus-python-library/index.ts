@@ -159,6 +159,7 @@ async function generator(host: Tree, options: Schema) {
       },
       build: {
         executor: 'nx:run-commands',
+        dependsOn: ["install"],
         options: {
           cwd: normalizedOptions.projectRoot,
           command: "poetry build -n -C dist/",
