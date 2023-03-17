@@ -9,16 +9,22 @@ on:
 
 jobs:
   prepare:
-    name: Setup yarn
+    name: Install project dependencies
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/cache@v3
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          path: |
+            '**/node_modules'
+            '**/.venv'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/poetry.lock') }}
       - run: npm install -g yarn
       - run: yarn install --frozen-lockfile
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        uses: nrwl/nx-set-shas@v3
+      - name: Install affected project dependencies
+        run: yarn nx affected:install --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
   build:
     name: Build affected apps
     runs-on: ubuntu-latest
@@ -35,8 +41,10 @@ jobs:
           fetch-depth: 0
       - uses: actions/cache@v3
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          path: |
+            '**/node_modules'
+            '**/.venv'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/poetry.lock') }}
       - run: npm install -g yarn
       - run: yarn install --frozen-lockfile
       - uses: actions/setup-python@v4
@@ -57,8 +65,10 @@ jobs:
           fetch-depth: 0
       - uses: actions/cache@v3
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          path: |
+            '**/node_modules'
+            '**/.venv'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/poetry.lock') }}
       - run: npm install -g yarn
       - run: yarn install --frozen-lockfile
       - uses: actions/setup-python@v4
@@ -79,8 +89,10 @@ jobs:
           fetch-depth: 0
       - uses: actions/cache@v3
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+          path: |
+            '**/node_modules'
+            '**/.venv'
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/poetry.lock') }}
       - run: npm install -g yarn
       - run: yarn install --frozen-lockfile
       - uses: actions/setup-python@v4
