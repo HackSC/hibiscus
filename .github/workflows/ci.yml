@@ -21,6 +21,8 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/poetry.lock') }}
       - run: npm install -g yarn
       - run: yarn install --frozen-lockfile
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
       - name: Install all Python projects' dependencies
         run: yarn nx run-many --target=install --parallel
   build:
