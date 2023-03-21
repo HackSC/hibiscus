@@ -21,10 +21,8 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/poetry.lock') }}
       - run: npm install -g yarn
       - run: yarn install --frozen-lockfile
-      - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        uses: nrwl/nx-set-shas@v3
-      - name: Install affected project dependencies
-        run: yarn nx affected:install --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+      - name: Install all Python projects' dependencies
+        run: yarn nx run-many --target=install --parallel
   build:
     name: Build affected apps
     runs-on: ubuntu-latest

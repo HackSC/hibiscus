@@ -159,10 +159,10 @@ async function generator(host: Tree, options: Schema) {
       },
       build: {
         executor: 'nx:run-commands',
-        dependsOn: ["install"],
+        dependsOn: ['install'],
         options: {
           cwd: normalizedOptions.projectRoot,
-          command: "poetry build -n -C dist/",
+          command: 'poetry build -n -C dist/',
         },
       },
       install: {
@@ -179,7 +179,7 @@ async function generator(host: Tree, options: Schema) {
         executor: 'nx:run-commands',
         options: {
           cwd: normalizedOptions.projectRoot,
-          command: `poetry run flake8`
+          command: `poetry run flake8`,
         },
       },
       test: {
@@ -189,12 +189,12 @@ async function generator(host: Tree, options: Schema) {
           cwd: normalizedOptions.projectRoot,
         },
       },
-      "deployment-setup":  {
-        executor: "nx:run-commands",
+      'deployment-setup': {
+        executor: 'nx:run-commands',
         options: {
           cwd: normalizedOptions.projectRoot,
-          command: "SLS_INTERACTIVE_SETUP_ENABLE=1 sls --org hacksc"
-        }
+          command: 'SLS_INTERACTIVE_SETUP_ENABLE=1 sls --org hacksc',
+        },
       },
       deploy: {
         executor: 'nx:run-commands',
