@@ -9,7 +9,7 @@
     "format": "prettier --write --cache --cache-strategy metadata . && nx run-many --target=format --all",
     "supabase:gen-types": "supabase gen types typescript --local > ./libs/types/src/lib/supabase.gen.ts",
     "serve:dashboard-sso": "nx run-many --target=serve --projects=dashboard,sso",
-    "prepare": "husky install"
+    "prepare": "husky install && pre-commit install"
   },
   "private": true,
   "dependencies": {

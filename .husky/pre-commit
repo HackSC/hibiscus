@@ -3,3 +3,4 @@
 
 yarn format
 git add -A
+pre-commit run --all-files

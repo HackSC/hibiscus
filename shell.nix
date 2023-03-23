@@ -12,6 +12,7 @@ pkgs.mkShell {
       ps.black
     ]))
     pkgs.python39Packages.poetry
+    pkgs.pre-commit
     pkgs.python39Packages.pre-commit-hooks
     pkgs.yarn
     pkgs.docker
