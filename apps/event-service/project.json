@@ -1,16 +1,101 @@
 {
   "name": "event-service",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/event-service",
   "projectType": "application",
+  "sourceRoot": "apps/event-service/event_service",
   "targets": {
+    "lock": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry lock --no-update",
+        "cwd": "apps/event-service"
+      }
+    },
+    "add": {
+      "executor": "@nxlv/python:add",
+      "options": {}
+    },
+    "update": {
+      "executor": "@nxlv/python:update",
+      "options": {}
+    },
+    "remove": {
+      "executor": "@nxlv/python:remove",
+      "options": {}
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["install"],
+      "options": {
+        "cwd": "apps/event-service",
+        "command": "poetry build -n -C dist/"
+      }
+    },
+    "install": {
+      "executor": "@nxlv/python:install",
+      "options": {
+        "silent": false,
+        "args": "",
+        "cacheDir": ".cache/pypoetry",
+        "verbose": false,
+        "debug": false
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/event-service",
+        "command": "poetry run flake8"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run pytest tests/",
+        "cwd": "apps/event-service"
+      }
+    },
+    "deployment-setup": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/event-service",
+        "command": "SLS_INTERACTIVE_SETUP_ENABLE=1 sls --org hacksc"
+      }
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "defaultConfiguration": "prod",
+      "dependsOn": ["build"],
+      "options": {
+        "color": true,
+        "cwd": "apps/event-service"
+      },
+      "configurations": {
+        "prod": {
+          "command": "sls deploy --org hacksc --stage prod"
+        },
+        "staging": {
+          "command": "sls deploy --org hacksc --stage staging"
+        }
+      }
+    },
+    "package": {
+      "executor": "@nxlv/python:sls-package",
+      "dependsOn": ["build"],
+      "options": {}
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run black .",
+        "cwd": "apps/event-service"
+      }
+    },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "venv/bin/python -m flask --app apps/event-service/app --debug run"
-        ],
-        "parallel": false
+        "command": "poetry run sls wsgi serve",
+        "cwd": "apps/event-service"
       }
     }
   },
