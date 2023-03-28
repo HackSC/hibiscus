@@ -1,3 +1,20 @@
+## [1.0.1]
+
+### Released
+
+[(#437)](https://github.com/HackSC/hibiscus/pull/437)
+
+- Added Nix into the mix :) using it for CI(/CD) and local development
+- Removed redundant test files that don't add value
+- Python service + library code generators!
+- Added pre-commit hook `.pre-commit-hooks.yml`
+- Prod build of battlepass-api
+- New Airplane task for getting hackers' app data in bulk
+- `build-on-some-branches.sh` script because the old script takes too long as a
+  Vercel ignore build step, eats up Vercel queue and sometimes unreliable; we will only deploy prod
+  apps
+- `activate-env.sh` for easy Python environment activation
+
 ## [1.0.0] - 2023-02-21
 
 Below is just mostly a concise and reorganized Git dump since we started developing Hibiscus in May 2022 (to which we never kept a changelog). We will start adding better changelogs from now on for everyone to have better oversight of every changes to Hibiscus.
