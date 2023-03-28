@@ -18,7 +18,7 @@ jobs:
           path: |
             '**/node_modules'
             '**/.venv'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/poetry.lock') }}
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - uses: cachix/install-nix-action@v19
         with:
           github_access_token: ${{ secrets.BOT_GITHUB_PAT }}
@@ -47,7 +47,7 @@ jobs:
           path: |
             '**/node_modules'
             '**/.venv'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/poetry.lock') }}
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - uses: cachix/install-nix-action@v19
         with:
           github_access_token: ${{ secrets.BOT_GITHUB_PAT }}
@@ -72,7 +72,7 @@ jobs:
           path: |
             '**/node_modules'
             '**/.venv'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/poetry.lock') }}
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - uses: cachix/install-nix-action@v19
         with:
           github_access_token: ${{ secrets.BOT_GITHUB_PAT }}
@@ -97,7 +97,7 @@ jobs:
           path: |
             '**/node_modules'
             '**/.venv'
-          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/poetry.lock') }}
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - uses: cachix/install-nix-action@v19
         with:
           github_access_token: ${{ secrets.BOT_GITHUB_PAT }}
