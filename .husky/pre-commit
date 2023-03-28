@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-yarn format
+nix-shell --run "yarn format && pre-commit run --all-files"
 git add -A

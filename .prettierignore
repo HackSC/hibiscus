@@ -1,6 +1,9 @@
 # Add files here to ignore them from prettier formatting
 
+/**/.vercel/
 /dist
 /coverage
 /**/.next
 /**/venv
+/**/.venv
+/**/.serverless

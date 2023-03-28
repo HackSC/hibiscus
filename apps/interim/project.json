@@ -1,4 +1,5 @@
 {
+  "name": "interim",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/interim",
   "projectType": "application",

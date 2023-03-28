@@ -1,0 +1,46 @@
+[tool.coverage.run]
+branch = true
+source = [ "<%= moduleName %>" ]
+
+[tool.coverage.report]
+exclude_lines = ['if TYPE_CHECKING:']
+show_missing = true
+
+[tool.pytest.ini_options]
+addopts = "--cov --cov-fail-under=100 --cov-report html:'<%= offsetFromRoot %>coverage/<%= projectRoot %>/html' --cov-report xml:'<%= offsetFromRoot %>coverage/<%= projectRoot %>/coverage.xml' --junitxml='<%= offsetFromRoot %>reports/<%= projectRoot %>/unittests/junit.xml' --html='<%= offsetFromRoot %>reports/<%= projectRoot %>/unittests/html/index.html'"
+
+[tool.poetry]
+name = "<%= packageName %>"
+version = "1.0.0"
+description = "<%= description %>"
+authors = [ ]
+license = 'Proprietary'
+readme = 'README.md'
+
+  [[tool.poetry.packages]]
+  include = "<%= moduleName %>"
+
+  [tool.poetry.dependencies]
+  python = ">=3.8,<3.10"
+
+  <%if (addDevDependencies) { %>
+  [tool.poetry.group.dev.dependencies]
+  flake8 = "4.0.1"
+  flake8-isort = "4.1.1"
+  flake8-print = "5.0.0"
+  flake8-pytest-style = "1.6.0"
+  flake8-docstrings = "1.6.0"
+  flake8-type-checking = "2.0.6"
+  black = "22.6.0"
+  pytest = "7.1.2"
+  pytest-env = "0.6.2"
+  pytest-cov = "3.0.0"
+  pytest-html = "3.1.1"
+  pytest-sugar = "0.9.5"
+  tomli = "1.2.2"
+  tox = "3.23.1"
+  <% } %>
+
+[build-system]
+requires = ["poetry-core==1.1.0"]
+build-backend = "poetry.core.masonry.api"

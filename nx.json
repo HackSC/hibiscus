@@ -63,9 +63,13 @@
       "inputs": ["default", "^default"]
     }
   },
+  "plugins": ["@nxlv/python"],
   "pluginsConfig": {
     "@nrwl/js": {
       "analyzeSourceFiles": true
     }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/express"
   }
 }

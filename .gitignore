@@ -51,8 +51,14 @@ Thumbs.db
 # Python
 /**/venv
 /**/__pycache__
+/**/.cache
+/**/reports/
+/**/coverage/
 
 # Airplane
 /**/.airplane
 # Sentry
 .sentryclirc
+
+# Serverless
+/**/.serverless/

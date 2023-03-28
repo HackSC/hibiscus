@@ -1,0 +1,103 @@
+{
+  "name": "battlepass-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/battlepass-api/battlepass_api",
+  "targets": {
+    "lock": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry lock --no-update",
+        "cwd": "apps/battlepass-api"
+      }
+    },
+    "add": {
+      "executor": "@nxlv/python:add",
+      "options": {}
+    },
+    "update": {
+      "executor": "@nxlv/python:update",
+      "options": {}
+    },
+    "remove": {
+      "executor": "@nxlv/python:remove",
+      "options": {}
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["install"],
+      "options": {
+        "cwd": "apps/battlepass-api",
+        "command": "poetry build"
+      }
+    },
+    "install": {
+      "executor": "@nxlv/python:install",
+      "options": {
+        "silent": false,
+        "args": "",
+        "cacheDir": ".cache/pypoetry",
+        "verbose": false,
+        "debug": false
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/battlepass-api",
+        "command": "poetry run flake8"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run pytest tests/",
+        "cwd": "apps/battlepass-api"
+      }
+    },
+    "deployment-setup": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/battlepass-api",
+        "command": "SLS_INTERACTIVE_SETUP_ENABLE=1 sls --org hacksc"
+      }
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "defaultConfiguration": "prod",
+      "dependsOn": ["build"],
+      "options": {
+        "color": true,
+        "cwd": "apps/battlepass-api"
+      },
+      "configurations": {
+        "prod": {
+          "command": "sls deploy --org hacksc --stage prod"
+        },
+        "staging": {
+          "command": "sls deploy --org hacksc --stage staging"
+        }
+      }
+    },
+    "package": {
+      "executor": "@nxlv/python:sls-package",
+      "dependsOn": ["build"],
+      "options": {}
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run black .",
+        "cwd": "apps/battlepass-api"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run sls wsgi serve",
+        "cwd": "apps/battlepass-api"
+      }
+    }
+  },
+  "tags": []
+}
