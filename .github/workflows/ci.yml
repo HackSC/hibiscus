@@ -17,7 +17,6 @@ jobs:
         with:
           path: |
             '**/node_modules'
-            '**/.venv'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - uses: cachix/install-nix-action@v19
         with:
@@ -46,7 +45,6 @@ jobs:
         with:
           path: |
             '**/node_modules'
-            '**/.venv'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - uses: cachix/install-nix-action@v19
         with:
@@ -71,7 +69,6 @@ jobs:
         with:
           path: |
             '**/node_modules'
-            '**/.venv'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - uses: cachix/install-nix-action@v19
         with:
@@ -96,7 +93,6 @@ jobs:
         with:
           path: |
             '**/node_modules'
-            '**/.venv'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
       - uses: cachix/install-nix-action@v19
         with:
