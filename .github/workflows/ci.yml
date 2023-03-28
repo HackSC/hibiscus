@@ -19,10 +19,16 @@ jobs:
             '**/node_modules'
             '**/.venv'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/poetry.lock') }}
-      - name: Yarn install
-        run: yarn install --frozen-lockfile
-      - uses: nixbuild/nix-quick-install-action@v22
-      - run: nix-shell --run "yarn nx run-many --target=install --parallel"
+      - uses: cachix/install-nix-action@v19
+        with:
+          github_access_token: ${{ secrets.BOT_GITHUB_PAT }}
+      - uses: cachix/cachix-action@v12
+        with:
+          name: hacksc
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+      - run: nix-shell
+      - run: yarn install --frozen-lockfile
+      - run: yarn nx run-many --target=install --parallel
   build:
     name: Build affected apps
     runs-on: ubuntu-latest
@@ -43,17 +49,12 @@ jobs:
             '**/node_modules'
             '**/.venv'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/poetry.lock') }}
-      - run: npm install -g yarn
-      - run: yarn install --frozen-lockfile
-      - name: Install Python3.9
-        uses: actions/setup-python@v4
+      - uses: cachix/install-nix-action@v19
         with:
-          python-version: '3.9'
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
+          github_access_token: ${{ secrets.BOT_GITHUB_PAT }}
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
-      - run: yarn nx affected:build --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+      - run: nix-shell --run "yarn nx affected:build --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}"
   test:
     name: Test affected apps
     runs-on: ubuntu-latest
@@ -68,13 +69,10 @@ jobs:
             '**/node_modules'
             '**/.venv'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/poetry.lock') }}
-      - run: npm install -g yarn
-      - run: yarn install --frozen-lockfile
-      - uses: actions/setup-python@v4
+      - uses: cachix/install-nix-action@v19
         with:
-          python-version: '3.9'
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
+          github_access_token: ${{ secrets.BOT_GITHUB_PAT }}
+      - run: nix-shell
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
       - run: yarn nx affected:test --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
@@ -92,13 +90,10 @@ jobs:
             '**/node_modules'
             '**/.venv'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/poetry.lock') }}
-      - run: npm install -g yarn
-      - run: yarn install --frozen-lockfile
-      - uses: actions/setup-python@v4
+      - uses: cachix/install-nix-action@v19
         with:
-          python-version: '3.9'
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
+          github_access_token: ${{ secrets.BOT_GITHUB_PAT }}
+      - run: nix-shell
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
       - run: yarn nx affected:lint --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}

@@ -10,6 +10,7 @@ pkgs.mkShell {
       ps.flask
       ps.flake8
       ps.black
+      ps.pytest
     ]))
     pkgs.python39Packages.poetry
     pkgs.pre-commit
