@@ -22,8 +22,8 @@ jobs:
       - name: Yarn install
         run: yarn install --frozen-lockfile
       - name: Install all Python projects' dependencies
-      - uses: nixbuild/nix-quick-install-action@v22
-      - run: nix-shell --run "yarn nx run-many --target=install --parallel"
+        uses: nixbuild/nix-quick-install-action@v22
+        run: nix-shell --run "yarn nx run-many --target=install --parallel"
   build:
     name: Build affected apps
     runs-on: ubuntu-latest

@@ -16,5 +16,6 @@ pkgs.mkShell {
     pkgs.python39Packages.pre-commit-hooks
     pkgs.yarn
     pkgs.docker
+    pkgs.yamllint
   ];
 }
