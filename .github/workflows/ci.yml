@@ -26,9 +26,8 @@ jobs:
         with:
           name: hacksc
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-      - run: nix-shell
-      - run: yarn install --frozen-lockfile
-      - run: yarn nx run-many --target=install --parallel
+      - run: nix-shell --run "yarn install --frozen-lockfile"
+      - run: nix-shell --run "yarn nx run-many --target=install --parallel"
   build:
     name: Build affected apps
     runs-on: ubuntu-latest
@@ -52,6 +51,10 @@ jobs:
       - uses: cachix/install-nix-action@v19
         with:
           github_access_token: ${{ secrets.BOT_GITHUB_PAT }}
+      - uses: cachix/cachix-action@v12
+        with:
+          name: hacksc
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
       - run: nix-shell --run "yarn nx affected:build --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}"
@@ -72,10 +75,13 @@ jobs:
       - uses: cachix/install-nix-action@v19
         with:
           github_access_token: ${{ secrets.BOT_GITHUB_PAT }}
-      - run: nix-shell
+      - uses: cachix/cachix-action@v12
+        with:
+          name: hacksc
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
-      - run: yarn nx affected:test --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+      - run: nix-shell --run "yarn nx affected:test --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}"
   lint:
     name: Lint affected apps
     runs-on: ubuntu-latest
@@ -93,7 +99,10 @@ jobs:
       - uses: cachix/install-nix-action@v19
         with:
           github_access_token: ${{ secrets.BOT_GITHUB_PAT }}
-      - run: nix-shell
+      - uses: cachix/cachix-action@v12
+        with:
+          name: hacksc
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
-      - run: yarn nx affected:lint --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
+      - run: nix-shell --run "yarn nx affected:lint --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}"
