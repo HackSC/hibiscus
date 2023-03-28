@@ -143,7 +143,7 @@
     "@vitejs/plugin-react": "^3.0.0",
     "@vitest/ui": "^0.25.8",
     "babel-jest": "28.1.1",
-    "babel-loader": "8.1.0",
+    "babel-loader": "9.1.2",
     "babel-plugin-styled-components": "^2.0.7",
     "babel-plugin-transform-typescript-metadata": "^0.3.2",
     "command-exists": "^1.2.9",
