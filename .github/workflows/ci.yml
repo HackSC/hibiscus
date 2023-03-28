@@ -19,16 +19,11 @@ jobs:
             '**/node_modules'
             '**/.venv'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}-${{ hashFiles('**/poetry.lock') }}
-      - run: npm install -g yarn
-      - run: yarn install --frozen-lockfile
-      - name: Install Python3.9
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.9'
-      - name: Install Poetry
-        uses: snok/install-poetry@v1
+      - name: Yarn install
+        run: yarn install --frozen-lockfile
       - name: Install all Python projects' dependencies
-        run: yarn nx run-many --target=install --parallel
+      - uses: nixbuild/nix-quick-install-action@v22
+      - run: nix-shell --run "yarn nx run-many --target=install --parallel"
   build:
     name: Build affected apps
     runs-on: ubuntu-latest

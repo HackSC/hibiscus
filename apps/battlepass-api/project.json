@@ -28,7 +28,7 @@
       "dependsOn": ["install"],
       "options": {
         "cwd": "apps/battlepass-api",
-        "command": "poetry build -n -C dist"
+        "command": "poetry build"
       }
     },
     "install": {
