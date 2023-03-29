@@ -27,8 +27,8 @@ jobs:
         with:
           name: hacksc
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-      - run: nix develop --command "yarn install --frozen-lockfile"
-      - run: nix develop --command "yarn nx run-many --target=install --parallel"
+      - run: nix develop --command yarn install --frozen-lockfile
+      - run: nix develop --command yarn nx run-many --target=install --parallel
   build:
     name: Build affected apps
     runs-on: ubuntu-latest
@@ -59,8 +59,8 @@ jobs:
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
-      - run: nix develop --command "yarn install --frozen-lockfile"
-      - run: nix develop --command "yarn nx affected:build --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}"
+      - run: nix develop --command yarn install --frozen-lockfile
+      - run: nix develop --command yarn nx affected:build --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
   test:
     name: Test affected apps
     runs-on: ubuntu-latest
@@ -85,8 +85,8 @@ jobs:
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
-      - run: nix develop --command "yarn install --frozen-lockfile"
-      - run: nix develop --command "yarn nx affected:test --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}"
+      - run: nix develop --command yarn install --frozen-lockfile
+      - run: nix develop --command yarn nx affected:test --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
   lint:
     name: Lint affected apps
     runs-on: ubuntu-latest
@@ -111,5 +111,5 @@ jobs:
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
-      - run: nix develop --command "yarn install --frozen-lockfile"
-      - run: nix develop --command "yarn nx affected:lint --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}"
+      - run: nix develop --command yarn install --frozen-lockfile
+      - run: nix develop --command yarn nx affected:lint --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
