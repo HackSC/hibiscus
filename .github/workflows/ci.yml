@@ -27,7 +27,7 @@ jobs:
         with:
           name: hacksc
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-      - run: nix develop --command bash -c "yarn install --frozen-lockfile"
+      - run: nix develop --command yarn install --frozen-lockfile
       - run: nix develop --command bash -c "yarn nx run-many --target=install --parallel"
   build:
     name: Build affected apps
