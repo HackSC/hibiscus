@@ -1,5 +1,5 @@
 {
-  description = "my project description";
+  description = "All-in-one hackathon management system created by HackSC";
 
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
