@@ -18,5 +18,6 @@ pkgs.mkShell {
     pkgs.yarn
     pkgs.docker
     pkgs.yamllint
+    pkgs.nodePackages.serverless
   ];
 }
