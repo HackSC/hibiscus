@@ -12,11 +12,12 @@ pkgs.mkShell {
       ps.black
       ps.pytest
     ]))
-    pkgs.python39Packages.poetry
+    pkgs.poetry
     pkgs.pre-commit
     pkgs.python39Packages.pre-commit-hooks
     pkgs.yarn
     pkgs.docker
     pkgs.yamllint
+    pkgs.nodePackages.serverless
   ];
 }

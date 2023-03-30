@@ -1,19 +1,21 @@
 ## [1.0.1]
 
-### Released
+### Unreleased
 
-[(#437)](https://github.com/HackSC/hibiscus/pull/437)
+[#437](https://github.com/HackSC/hibiscus/pull/437)
+[#443](https://github.com/HackSC/hibiscus/pull/443)
 
 - Added Nix into the mix :) using it for CI(/CD) and local development
 - Removed redundant test files that don't add value
-- Python service + library code generators!
-- Added pre-commit hook `.pre-commit-hooks.yml`
-- Prod build of battlepass-api
+- Python service + library code generators w/ Serverless Framework
+- Added pre-commit hook `.pre-commit-hooks.yml` for preventing hardcoded secrets
+- Prod build of `battlepass-api`
 - New Airplane task for getting hackers' app data in bulk
 - `build-on-some-branches.sh` script because the old script takes too long as a
   Vercel ignore build step, eats up Vercel queue and sometimes unreliable; we will only deploy prod
   apps
 - `activate-env.sh` for easy Python environment activation
+- Simple event service
 
 ## [1.0.0] - 2023-02-21
 

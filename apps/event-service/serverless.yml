@@ -1,18 +1,18 @@
 org: hacksc
-app: <%= name %>
-service: <%= name %>
+app: event-service
+service: event-service
 plugins:
   - serverless-python-requirements
   - serverless-wsgi
 custom:
   wsgi:
-    app: <%= packageName %>/app.app
+    app: event_service/app.app
     packRequirements: false
 package:
   individually: false
   patterns:
     - '!**'
-    - '<%= packageName %>/**'
+    - 'event_service/**'
 provider:
   name: aws
   runtime: python3.9
