@@ -13,6 +13,8 @@
     "env": "libs/env",
     "event-service": "apps/event-service",
     "hackform-client": "libs/hackform-client",
+    "henry-onboarding": "apps/henry-onboarding",
+    "henry-onboarding-e2e": "apps/henry-onboarding-e2e",
     "hibiscus-supabase-client": "libs/hibiscus-supabase-client",
     "hibiscus-supabase-context": "libs/hibiscus-supabase-context",
     "icons": "libs/icons",
