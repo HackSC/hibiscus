@@ -34,6 +34,11 @@ export function DesktopNavbar(props: DesktopNavbarProps) {
           </MenuOption>
           <DropdownContent>
             <DropdownContentItem>
+              <Link href="https://2023.hacksc.com">
+                <DropdownText>HackSC 2023</DropdownText>
+              </Link>
+            </DropdownContentItem>
+            <DropdownContentItem>
               <Link href="https://2022.hacksc.com">
                 <DropdownText>HackSC 2022</DropdownText>
               </Link>

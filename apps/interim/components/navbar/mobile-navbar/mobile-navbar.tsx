@@ -33,6 +33,15 @@ const TheBurger = () => {
             <DropdownContent>
               <DropdownContentItem>
                 <a
+                  href="https://2023.hacksc.com"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <DropdownLink>HackSC 2023</DropdownLink>
+                </a>
+              </DropdownContentItem>
+              <DropdownContentItem>
+                <a
                   href="https://2022.hacksc.com"
                   target="_blank"
                   rel="noreferrer"
