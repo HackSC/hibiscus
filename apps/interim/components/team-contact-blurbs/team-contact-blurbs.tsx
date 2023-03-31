@@ -18,11 +18,11 @@ export function TeamContactBlurbs(props: TeamContactBlurbsProps) {
         .
       </GrayParagraph>
       <GrayParagraph>
-        <GrayBoldedSpan>Interested in sponsoring?</GrayBoldedSpan> Email{' '}
+        <GrayBoldedSpan>Interested in partnering?</GrayBoldedSpan> Email{' '}
         <TeamEmailGradientSpan>
           <GradientSpan>
             {' '}
-            <a href="mailto:sponsor@hacksc.com">sponsor@hacksc.com</a>
+            <a href="mailto:partnerships@hacksc.com">partnerships@hacksc.com</a>
           </GradientSpan>
         </TeamEmailGradientSpan>
         !

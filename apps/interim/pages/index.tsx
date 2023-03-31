@@ -15,7 +15,7 @@ export function Index() {
       </NavbarWrapper>
       <FirstSection>
         <LogoAndSloganSection />
-        <ThankYouText nextYear={2023} />
+        <ThankYouText nextYear={2024} />
         <EmailNewsletterInputSection />
         <TeamContactBlurbs />
       </FirstSection>
