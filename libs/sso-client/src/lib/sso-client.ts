@@ -32,19 +32,27 @@ export const middlewareHandler =
     exhaustive = true
   ) =>
   async (request: NextRequest): Promise<NextResponse | null> => {
-    const access_token_init = request.cookies.get(
-      getEnv().Hibiscus.Cookies.accessTokenName
-    );
-
-    if (getEnv().Hibiscus.Cookies.disableSSO === 'true') {
-      await initializeFakeUser(request);
-    }
-
     // Handle preflight requests
     if (request.method === 'OPTIONS') {
       const res = NextResponse.next();
       res.headers.set('Access-Control-Allow-Credentials', 'true');
       return res;
+    }
+
+    let access_token = request.cookies.get(
+      getEnv().Hibiscus.Cookies.accessTokenName
+    );
+    let refresh_token = request.cookies.get(
+      getEnv().Hibiscus.Cookies.refreshTokenName
+    );
+
+    const access_token_init = access_token;
+
+    if (getEnv().Hibiscus.Cookies.disableSSO === 'true') {
+      [access_token, refresh_token] = await initializeFakeUser(
+        access_token,
+        refresh_token
+      );
     }
 
     guardPaths = guardPaths ?? [''];
@@ -57,13 +65,7 @@ export const middlewareHandler =
         guardPath.length <= path.length &&
         checkArrayContainsOrdered(guardPath, path)
       ) {
-        if (request.cookies.has(getEnv().Hibiscus.Cookies.accessTokenName)) {
-          let access_token = request.cookies.get(
-            getEnv().Hibiscus.Cookies.accessTokenName
-          );
-          let refresh_token = request.cookies.get(
-            getEnv().Hibiscus.Cookies.refreshTokenName
-          );
+        if (access_token && refresh_token) {
           const { data } = await verifyToken(access_token, refresh_token);
 
           if ('session' in data && data.session != null) {
@@ -296,13 +298,7 @@ function splitPath(path: string): string[] {
   return split;
 }
 
-async function initializeFakeUser(request: NextRequest) {
-  const access_token = request.cookies.get(
-    getEnv().Hibiscus.Cookies.accessTokenName
-  );
-  const refresh_token = request.cookies.get(
-    getEnv().Hibiscus.Cookies.refreshTokenName
-  );
+async function initializeFakeUser(access_token: string, refresh_token: string) {
   const supabase = createSupabaseServiceClient();
 
   if (
@@ -348,28 +344,31 @@ async function initializeFakeUser(request: NextRequest) {
         role: Object.keys(HibiscusRole).indexOf(HibiscusRole.HACKER) + 1,
       });
 
-      request.cookies.set(
-        getEnv().Hibiscus.Cookies.accessTokenName,
-        session.access_token,
-        {
-          path: '/',
-          domain: getEnv().Hibiscus.AppURL.baseDomain,
-          maxAge: Number.parseInt(getEnv().Hibiscus.Cookies.maxAge),
-          sameSite: 'lax',
-        }
-      );
-      request.cookies.set(
-        getEnv().Hibiscus.Cookies.refreshTokenName,
-        session.refresh_token,
-        {
-          path: '/',
-          domain: getEnv().Hibiscus.AppURL.baseDomain,
-          maxAge: Number.parseInt(getEnv().Hibiscus.Cookies.maxAge),
-          sameSite: 'lax',
-        }
-      );
+      // request.cookies.set(
+      //   getEnv().Hibiscus.Cookies.accessTokenName,
+      //   session.access_token,
+      //   {
+      //     path: '/',
+      //     domain: getEnv().Hibiscus.AppURL.baseDomain,
+      //     maxAge: Number.parseInt(getEnv().Hibiscus.Cookies.maxAge),
+      //     sameSite: 'lax',
+      //   }
+      // );
+      // request.cookies.set(
+      //   getEnv().Hibiscus.Cookies.refreshTokenName,
+      //   session.refresh_token,
+      //   {
+      //     path: '/',
+      //     domain: getEnv().Hibiscus.AppURL.baseDomain,
+      //     maxAge: Number.parseInt(getEnv().Hibiscus.Cookies.maxAge),
+      //     sameSite: 'lax',
+      //   }
+      // );
+      return [session.access_token, session.refresh_token];
     }
   }
+
+  return [access_token, refresh_token];
 }
 
 function createSupabaseServiceClient(): SupabaseClient {
