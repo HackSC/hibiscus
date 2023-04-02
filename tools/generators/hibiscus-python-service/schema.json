@@ -12,12 +12,12 @@
         "$source": "argv",
         "index": 0
       },
-      "x-prompt": "Project name:"
+      "x-prompt": "Project name (kebab-cased e.g 'python-testing-service'):"
     },
     "packageName": {
       "type": "string",
       "description": "Python package name",
-      "x-prompt": "Python package name (e.g apps/<project_name>/<package_name>):"
+      "x-prompt": "Python package name (snake-case of project name i.e if project name is 'python-testing-service' -> 'python_testing_service'):"
     },
     "moduleName": {
       "type": "string",

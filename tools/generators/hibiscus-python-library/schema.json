@@ -12,12 +12,12 @@
         "$source": "argv",
         "index": 0
       },
-      "x-prompt": "Library name:"
+      "x-prompt": "Library name (kebab-cased e.g 'test-lib'):"
     },
     "packageName": {
       "type": "string",
       "description": "Python package name",
-      "x-prompt": "Package name:"
+      "x-prompt": "Package name (snake-case of library name i.e if library name is 'test-lib' -> 'test_lib'):"
     },
     "moduleName": {
       "type": "string",
