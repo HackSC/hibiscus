@@ -6,8 +6,6 @@ source = [ "test_python_service" ]
 exclude_lines = ['if TYPE_CHECKING:']
 show_missing = true
 
-[tool.pytest.ini_options]
-addopts = "--cov --cov-fail-under=100 --cov-report html:'../../coverage/apps/test-python-service/html' --cov-report xml:'../../coverage/apps/test-python-service/coverage.xml' --junitxml='../../reports/apps/test-python-service/unittests/junit.xml' --html='../../reports/apps/test-python-service/unittests/html/index.html'"
 
 [tool.poetry]
 name = "test_python_service"
@@ -28,4 +26,5 @@ readme = 'README.md'
   
 
 [build-system]
+requires = ["poetry-core==1.1.0"]
 build-backend = "poetry.core.masonry.api"
