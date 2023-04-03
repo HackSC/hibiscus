@@ -25,6 +25,7 @@
     "sso-client": "libs/sso-client",
     "sso-e2e": "apps/sso-e2e",
     "styles": "libs/styles",
+    "test-python-service": "apps/test-python-service",
     "types": "libs/types",
     "ui": "libs/ui",
     "ui-kit-2023": "libs/ui-kit-2023",

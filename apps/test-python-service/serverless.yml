@@ -1,0 +1,26 @@
+org: hacksc
+app: test-python-service
+service: test-python-service
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
+custom:
+  wsgi:
+    app: test_python_service/app.app
+    packRequirements: false
+package:
+  individually: false
+  patterns:
+    - '!**'
+    - 'test_python_service/**'
+provider:
+  name: aws
+  runtime: python3.9
+  region: us-west-1
+functions:
+  api:
+    handler: wsgi_handler.handler
+    # environment: ${file(configs/env.${opt:stage,'local'}.yml)}
+    events:
+      - http: ANY /
+      - http: ANY /{proxy+}
