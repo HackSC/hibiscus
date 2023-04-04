@@ -1,0 +1,1 @@
+"""Supabase auth service api"""

@@ -1,0 +1,26 @@
+org: hacksc
+app: supabase-auth-service
+service: supabase-auth-service
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
+custom:
+  wsgi:
+    app: supabase_auth_service/app.app
+    packRequirements: false
+package:
+  individually: false
+  patterns:
+    - '!**'
+    - 'supabase_auth_service/**'
+provider:
+  name: aws
+  runtime: python3.9
+  region: us-west-1
+functions:
+  api:
+    handler: wsgi_handler.handler
+    # environment: ${file(configs/env.${opt:stage,'local'}.yml)}
+    events:
+      - http: ANY /
+      - http: ANY /{proxy+}
