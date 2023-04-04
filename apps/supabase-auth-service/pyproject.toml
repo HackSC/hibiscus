@@ -23,6 +23,7 @@ readme = 'README.md'
   [tool.poetry.dependencies]
   python = ">=3.8,<3.10"
   flask = "2.2.2"
+  supabase = "^1.0.3"
 
   
 
