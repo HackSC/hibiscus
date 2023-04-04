@@ -21,6 +21,12 @@ import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 
 const SUCCESS_MESSAGE = 'Success';
 
+interface Attendee {
+  checkInTimeDisplay: string;
+  firstName: string;
+  lastName: string;
+}
+
 export function Index() {
   const [eventId, setEventId] = useState<number | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -45,7 +51,7 @@ export function Index() {
     [] as unknown as Awaited<ReturnType<typeof searchEventId>>
   );
 
-  const [attendees, setAttendees] = useState([]);
+  const [attendees, setAttendees] = useState<Attendee[]>([]);
 
   const { supabase } = useHibiscusSupabase();
 
@@ -81,76 +87,62 @@ export function Index() {
       .limit(20);
 
     if (res.error) {
-      setResponse(res.error);
-      return;
+      return setResponse(res.error);
     }
 
     const logs = res.data;
-    const mappedLogs = await Promise.all(
-      logs.map(async (log) => {
-        const {
-          data: [{ first_name, last_name }],
-        } = await supabase
-          .getClient()
-          .from('user_profiles')
-          .select()
-          .eq('user_id', log.user_id);
 
+    if (logs.length > 0) {
+      // Get participant names
+      const filter = logs.map((log) => `user_id.eq.${log.user_id}`).join(',');
+      const { data: nameData, error } = await supabase
+        .getClient()
+        .from('user_profiles')
+        .select()
+        .or(filter);
+
+      if (error != null) {
+        return setResponse(error);
+      }
+
+      const newAttendees: Attendee[] = logs.map((log) => {
+        const { first_name, last_name } = nameData.find(
+          (user) => user.user_id == log.user_id
+        );
         return {
-          ...log,
-          check_in_time_display: formatTimestamp(log.check_in_time),
-          first_name,
-          last_name,
+          checkInTimeDisplay: formatTimestamp(log.check_in_time),
+          firstName: first_name,
+          lastName: last_name,
         };
-      })
-    );
-    setAttendees(mappedLogs);
+      });
+      setAttendees(newAttendees);
+    }
   }
 
-  async function updateData() {
-    const res = await supabase
+  async function updateData(userId: string, timestamp: string) {
+    const {
+      data: { first_name, last_name },
+      error,
+    } = await supabase
       .getClient()
-      .from('event_log')
+      .from('user_profiles')
       .select()
-      .eq('event_id', eventId)
-      .gt('check_in_time', attendees[0].check_in_time)
-      .order('check_in_time', { ascending: false });
+      .eq('user_id', userId)
+      .single();
 
-    if (res.error) {
-      setResponse(res.error);
-      return;
+    if (error != null) {
+      return setResponse(error);
     }
 
-    const logs = res.data;
-    const mappedLogs = await Promise.all(
-      logs.map(async (log) => {
-        const {
-          data: [{ first_name, last_name }],
-        } = await supabase
-          .getClient()
-          .from('user_profiles')
-          .select()
-          .eq('user_id', log.user_id);
+    const newAttendee: Attendee = {
+      checkInTimeDisplay: formatTimestamp(timestamp),
+      firstName: first_name,
+      lastName: last_name,
+    };
 
-        return {
-          ...log,
-          check_in_time_display: formatTimestamp(log.check_in_time),
-          first_name,
-          last_name,
-        };
-      })
+    setAttendees((prevAttendees) =>
+      [newAttendee, ...prevAttendees].slice(0, 20)
     );
-
-    const updatedAttendees = [...mappedLogs, ...attendees].slice(0, 20);
-    setAttendees(updatedAttendees);
-  }
-
-  function fetchData() {
-    if (attendees.length === 0) {
-      fetchDataInit();
-    } else {
-      updateData();
-    }
   }
 
   useEffect(() => {
@@ -181,10 +173,28 @@ export function Index() {
   }, [eventId]);
 
   useEffect(() => {
-    const timer = setInterval(fetchData, 5000);
+    if (eventId != null) {
+      const channel = supabase
+        .getClient()
+        .channel('db-changes')
+        .on(
+          'postgres_changes',
+          {
+            event: 'INSERT',
+            schema: 'public',
+            table: 'event_log',
+            filter: `event_id=eq.${eventId}`,
+          },
+          (payload) =>
+            updateData(payload.new.user_id, payload.new.check_in_time)
+        )
+        .subscribe();
 
-    return () => clearInterval(timer);
-  }, [attendees]);
+      return () => {
+        supabase.getClient().removeChannel(channel);
+      };
+    }
+  }, [eventId]);
 
   const { user: authUser } = useHibiscusUser();
   if (authUser == null) {
@@ -276,10 +286,10 @@ export function Index() {
             {attendees.map((attendee, i) => (
               <ScrollableListBox.Item key={i}>
                 <BoldText style={{ fontSize: '1em' }}>
-                  {attendee.first_name} {attendee.last_name}
+                  {attendee.firstName} {attendee.lastName}
                 </BoldText>
                 <Text style={{ fontSize: '0.75em' }}>
-                  {attendee.check_in_time_display}
+                  {attendee.checkInTimeDisplay}
                 </Text>
               </ScrollableListBox.Item>
             ))}
