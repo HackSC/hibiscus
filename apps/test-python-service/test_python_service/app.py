@@ -1,7 +1,5 @@
-from flask import Flask, request, jsonify, make_response
-import json
+from flask import Flask, request, jsonify
 import os
-from sqlalchemy import exc
 from flask_sqlalchemy import SQLAlchemy
 
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -28,10 +26,6 @@ class Todo(db.Model):
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
-    # def toJson(self):
-    # return {"id": id, "name": name, "description": description}
-    # return dict((col, getattr(self, str(col))) for col in self.__table__.columns)
-
 
 @app.route("/")
 def home():
@@ -50,8 +44,8 @@ def create_todo():
         return jsonify(
             meta={"message": "Success", "status": 200}, data=new_todo.to_dict()
         )
-    except:
-        return jsonify(meta={"message": "Success", "status": 400}, data=None)
+    except Exception as e:
+        return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}})
 
 
 @app.route("/api/todo/delete/<int:id>", methods=["POST"])
@@ -61,8 +55,8 @@ def delete_todo(id):
         db.session.delete(todo)
         db.session.commit()
         return jsonify(meta={"message": "Success", "status": 200}, data=todo.to_dict())
-    except:
-        return jsonify(meta={"message": "Success", "status": 400}, data=None)
+    except Exception as e:
+        return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}})
 
 
 @app.route("/api/todo/list", methods=["GET"])
@@ -73,8 +67,8 @@ def list_todos():
             meta={"message": "Success", "status": 200},
             data=[t.to_dict() for t in todos],
         )
-    except:
-        return jsonify(meta={"message": "Failure", "status": 400}, data=None)
+    except Exception as e:
+        return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}})
 
 
 @app.route("/api/todo/update/<int:id>", methods=["POST"])
@@ -92,8 +86,8 @@ def update_todo(id):
         db.session.commit()
 
         return jsonify(meta={"message": "Success", "status": 200}, data=todo.to_dict())
-    except:
-        return jsonify(meta={"message": "Failure", "status": 400}, data=None)
+    except Exception as e:
+        return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}})
 
 
 if __name__ == "__main__":
