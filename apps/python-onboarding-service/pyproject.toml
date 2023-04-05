@@ -1,0 +1,37 @@
+[tool.coverage.run]
+branch = true
+source = [ "python_onboarding_service" ]
+
+[tool.coverage.report]
+exclude_lines = [ "if TYPE_CHECKING:" ]
+show_missing = true
+
+[tool.pytest.ini_options]
+addopts = "--cov --cov-fail-under=100 --cov-report html:'../../coverage/apps/python-onboarding-service/html' --cov-report xml:'../../coverage/apps/python-onboarding-service/coverage.xml' --junitxml='../../reports/apps/python-onboarding-service/unittests/junit.xml' --html='../../reports/apps/python-onboarding-service/unittests/html/index.html'"
+
+[tool.poetry]
+name = "python_onboarding_service"
+version = "1.0.0"
+description = "demo service for onboarding"
+authors = [ ]
+license = "Proprietary"
+readme = "README.md"
+
+  [[tool.poetry.packages]]
+  include = "python_onboarding_service"
+
+  [tool.poetry.dependencies]
+  python = ">=3.8,<3.10"
+  flask = "2.2.2"
+  flask-sqlalchemy = "^3.0.3"
+  flask-marshmallow = "^0.14.0"
+  flask-restful = "^0.3.9"
+  marshmallow-sqlalchemy = "^0.29.0"
+
+    [tool.poetry.dependencies.python_onboarding_library]
+    path = "../../libs/python-onboarding-library"
+    develop = true
+
+[build-system]
+requires = [ "poetry-core==1.1.0" ]
+build-backend = "poetry.core.masonry.api"

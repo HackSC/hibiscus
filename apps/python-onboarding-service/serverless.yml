@@ -1,0 +1,26 @@
+org: hacksc
+app: python-onboarding-service
+service: python-onboarding-service
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
+custom:
+  wsgi:
+    app: python_onboarding_service/app.app
+    packRequirements: false
+package:
+  individually: false
+  patterns:
+    - '!**'
+    - 'python_onboarding_service/**'
+provider:
+  name: aws
+  runtime: python3.9
+  region: us-west-1
+functions:
+  api:
+    handler: wsgi_handler.handler
+    #environment: ${file(configs/env.${opt:stage,'local'}.yml)}
+    events:
+      - http: ANY /
+      - http: ANY /{proxy+}

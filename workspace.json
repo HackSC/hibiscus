@@ -20,6 +20,8 @@
     "log-server": "apps/log-server",
     "metadata": "libs/metadata",
     "pointr": "apps/pointr",
+    "python-onboarding-library": "libs/python-onboarding-library",
+    "python-onboarding-service": "apps/python-onboarding-service",
     "recruitment": "apps/recruitment",
     "sso": "apps/sso",
     "sso-client": "libs/sso-client",

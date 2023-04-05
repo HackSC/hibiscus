@@ -1,0 +1,30 @@
+[tool.coverage.run]
+branch = true
+source = [ "python_onboarding_library" ]
+
+[tool.coverage.report]
+exclude_lines = ['if TYPE_CHECKING:']
+show_missing = true
+
+[tool.pytest.ini_options]
+addopts = "--cov --cov-fail-under=100 --cov-report html:'../../coverage/libs/python-onboarding-library/html' --cov-report xml:'../../coverage/libs/python-onboarding-library/coverage.xml' --junitxml='../../reports/libs/python-onboarding-library/unittests/junit.xml' --html='../../reports/libs/python-onboarding-library/unittests/html/index.html'"
+
+[tool.poetry]
+name = "python_onboarding_library"
+version = "1.0.0"
+description = "demo library for onboarding"
+authors = [ ]
+license = 'Proprietary'
+readme = 'README.md'
+
+  [[tool.poetry.packages]]
+  include = "python_onboarding_library"
+
+  [tool.poetry.dependencies]
+  python = ">=3.8,<3.10"
+
+  
+
+[build-system]
+requires = ["poetry-core==1.1.0"]
+build-backend = "poetry.core.masonry.api"
