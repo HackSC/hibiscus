@@ -51,7 +51,7 @@
     "test": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "poetry run pytest tests/",
+        "command": "poetry run coverage run -m pytest tests/",
         "cwd": "apps/event-service"
       }
     },
@@ -95,6 +95,13 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "poetry run sls wsgi serve",
+        "cwd": "apps/event-service"
+      }
+    },
+    "coverage": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run coverage report",
         "cwd": "apps/event-service"
       }
     }
