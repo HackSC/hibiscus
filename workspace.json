@@ -19,6 +19,7 @@
     "interim": "apps/interim",
     "log-server": "apps/log-server",
     "metadata": "libs/metadata",
+    "onboarding-api": "apps/onboarding-api",
     "pointr": "apps/pointr",
     "recruitment": "apps/recruitment",
     "sso": "apps/sso",
