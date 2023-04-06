@@ -88,6 +88,18 @@ def refresh_session():
         return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}})
 
 
+@app.route("/auth/v1/reset_password", methods=["POST"])
+def reset_password():
+    try:
+        data = request.get_json()
+        supabase.auth.reset_password_email(
+            data["email"]
+        )  # doesn't return anything, so just pray i guess 🤷‍♂️
+        return jsonify({"data": None, "meta": {"status": 200}})
+    except Exception as e:
+        return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}})
+
+
 @app.route("/auth/v1/sign_out", methods=["POST"])
 def sign_out():
     try:
