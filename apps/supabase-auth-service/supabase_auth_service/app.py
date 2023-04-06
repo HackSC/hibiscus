@@ -1,4 +1,3 @@
-from flask import Flask, jsonify
 from flask import Flask, jsonify, request
 from supabase import create_client
 import os
