@@ -20,6 +20,8 @@
     "log-server": "apps/log-server",
     "metadata": "libs/metadata",
     "pointr": "apps/pointr",
+    "python-testsgk": "apps/python-testsgk",
+    "pythonlib-sgk": "libs/pythonlib-sgk",
     "recruitment": "apps/recruitment",
     "sso": "apps/sso",
     "sso-client": "libs/sso-client",

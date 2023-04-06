@@ -1,0 +1,30 @@
+[tool.coverage.run]
+branch = true
+source = [ "pythonlib_sgk" ]
+
+[tool.coverage.report]
+exclude_lines = ['if TYPE_CHECKING:']
+show_missing = true
+
+[tool.pytest.ini_options]
+addopts = "--cov --cov-fail-under=100 --cov-report html:'../../coverage/libs/pythonlib-sgk/html' --cov-report xml:'../../coverage/libs/pythonlib-sgk/coverage.xml' --junitxml='../../reports/libs/pythonlib-sgk/unittests/junit.xml' --html='../../reports/libs/pythonlib-sgk/unittests/html/index.html'"
+
+[tool.poetry]
+name = "pythonlib_sgk"
+version = "1.0.0"
+description = "python library test sgk"
+authors = [ ]
+license = 'Proprietary'
+readme = 'README.md'
+
+  [[tool.poetry.packages]]
+  include = "pythonlib_sgk"
+
+  [tool.poetry.dependencies]
+  python = ">=3.8,<3.10"
+
+  
+
+[build-system]
+requires = ["poetry-core==1.1.0"]
+build-backend = "poetry.core.masonry.api"
