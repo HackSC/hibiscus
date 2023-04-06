@@ -59,7 +59,7 @@ def health():
     return jsonify({"status": "ALIVE"})
 
 
-@app.route("/api/tasks/create", methods=["POST"])
+@app.route("/api/tasks", methods=["POST"])
 def create_task():
     try:
         # get user input json
@@ -74,7 +74,7 @@ def create_task():
     return redirect(url_for("get_task", id=id))
 
 
-@app.route("/api/tasks/get/<int:id>", methods=["GET"])
+@app.route("/api/tasks/<int:id>", methods=["GET"])
 def get_task(id):
     try:
         task = query_db("SELECT * FROM tasks WHERE id = ?", [id], one=True)
@@ -89,7 +89,7 @@ def get_task(id):
     )
 
 
-@app.route("/api/tasks/get", methods=["GET"])
+@app.route("/api/tasks", methods=["GET"])
 def get_all_tasks():
     try:
         tasks = []
@@ -106,7 +106,7 @@ def get_all_tasks():
     return jsonify({"meta": {"status": 200}, "data": tasks})
 
 
-@app.route("/api/tasks/delete/<int:id>", methods=["DELETE"])
+@app.route("/api/tasks/<int:id>", methods=["DELETE"])
 def delete_task(id):
     try:
         _ = change_db("DELETE FROM tasks WHERE id = ?", [id])
@@ -115,7 +115,7 @@ def delete_task(id):
     return jsonify({"meta": {"status": 200}})
 
 
-@app.route("/api/tasks/update/<int:id>", methods=["PUT"])
+@app.route("/api/tasks/<int:id>", methods=["PUT"])
 def update_task(id):
     try:
         # get updated data
