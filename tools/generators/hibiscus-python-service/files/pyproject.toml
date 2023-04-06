@@ -6,9 +6,6 @@ source = [ "<%= moduleName %>" ]
 exclude_lines = ['if TYPE_CHECKING:']
 show_missing = true
 
-[tool.pytest.ini_options]
-addopts = "--cov --cov-fail-under=100 --cov-report html:'<%= offsetFromRoot %>coverage/<%= projectRoot %>/html' --cov-report xml:'<%= offsetFromRoot %>coverage/<%= projectRoot %>/coverage.xml' --junitxml='<%= offsetFromRoot %>reports/<%= projectRoot %>/unittests/junit.xml' --html='<%= offsetFromRoot %>reports/<%= projectRoot %>/unittests/html/index.html'"
-
 [tool.poetry]
 name = "<%= packageName %>"
 version = "1.0.0"
@@ -23,6 +20,8 @@ readme = 'README.md'
   [tool.poetry.dependencies]
   python = ">=3.8,<3.10"
   flask = "2.2.2"
+  coverage = {extras = ["toml"], version = "^7.2.2"}
+  pytest = "^7.2.2"
 
   <%if (addDevDependencies) { %>
   [tool.poetry.group.dev.dependencies]

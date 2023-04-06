@@ -185,7 +185,7 @@ async function generator(host: Tree, options: Schema) {
       test: {
         executor: 'nx:run-commands',
         options: {
-          command: `poetry run pytest tests/`,
+          command: `poetry run coverage run -m pytest tests/`,
           cwd: normalizedOptions.projectRoot,
         },
       },
@@ -229,6 +229,13 @@ async function generator(host: Tree, options: Schema) {
         executor: 'nx:run-commands',
         options: {
           command: 'poetry run sls wsgi serve',
+          cwd: normalizedOptions.projectRoot,
+        },
+      },
+      coverage: {
+        executor: 'nx:run-commands',
+        options: {
+          command: 'poetry run coverage report',
           cwd: normalizedOptions.projectRoot,
         },
       },
