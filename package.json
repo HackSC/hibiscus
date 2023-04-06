@@ -18,7 +18,7 @@
     "@aws-sdk/client-ses": "^3.245.0",
     "@aws-sdk/util-dynamodb": "^3.241.0",
     "@fontsource/inter": "^4.5.11",
-    "@headlessui/react": "^1.7.7",
+    "@headlessui/react": "^1.7.13",
     "@reduxjs/toolkit": "^1.9.1",
     "@rive-app/react-canvas": "^3.0.35",
     "@sendgrid/mail": "^7.7.0",
