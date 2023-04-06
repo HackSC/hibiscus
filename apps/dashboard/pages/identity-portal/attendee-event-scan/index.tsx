@@ -101,7 +101,7 @@ export function Index() {
         .select()
         .or(filter);
 
-      if (error != null) {
+      if (error !== null) {
         return setResponse(error);
       }
 
@@ -119,6 +119,12 @@ export function Index() {
     }
   }
 
+  /**
+   * Adds a new attendee to the attendees list
+   *
+   * @param userId userID of attendee
+   * @param timestamp when the attendee was checked in
+   */
   async function updateData(userId: string, timestamp: string) {
     const {
       data: { first_name, last_name },
@@ -130,7 +136,7 @@ export function Index() {
       .eq('user_id', userId)
       .single();
 
-    if (error != null) {
+    if (error !== null) {
       return setResponse(error);
     }
 
@@ -174,6 +180,7 @@ export function Index() {
 
   useEffect(() => {
     if (eventId != null) {
+      // Listen to new check-ins for specific event
       const channel = supabase
         .getClient()
         .channel('db-changes')
@@ -190,6 +197,7 @@ export function Index() {
         )
         .subscribe();
 
+      // Unsubscribe when component unmounts
       return () => {
         supabase.getClient().removeChannel(channel);
       };

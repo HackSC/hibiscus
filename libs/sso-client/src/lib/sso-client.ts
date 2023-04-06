@@ -68,13 +68,13 @@ export const middlewareHandler =
         if (access_token && refresh_token) {
           const { data } = await verifyToken(access_token, refresh_token);
 
-          if ('session' in data && data.session != null) {
+          if ('session' in data && data.session !== null) {
             // Access token might have been refreshed
             access_token = data.session.access_token;
             refresh_token = data.session.refresh_token;
           }
 
-          if (data.user != null) {
+          if (data.user !== null) {
             const res = NextResponse.next();
             if (access_token !== access_token_init) {
               // Only set cookies if access token actually changed
@@ -160,7 +160,7 @@ export const callbackApiHandler =
       }
     } else if (req.method === 'POST') {
       const auth_header = req.headers.authorization;
-      if (auth_header != null && auth_header.startsWith('Bearer ')) {
+      if (auth_header !== null && auth_header.startsWith('Bearer ')) {
         const redirectPath = req.query.redirect;
 
         res.setHeader(
@@ -298,6 +298,14 @@ function splitPath(path: string): string[] {
   return split;
 }
 
+/**
+ * Log user in as a fake user if they are not already logged in
+ * Creates the fake user if required.
+ *
+ * @param access_token access token from cookies
+ * @param refresh_token refresh token from cookies
+ * @returns
+ */
 async function initializeFakeUser(access_token: string, refresh_token: string) {
   const supabase = createSupabaseServiceClient();
 
@@ -324,7 +332,7 @@ async function initializeFakeUser(access_token: string, refresh_token: string) {
 
       console.log(user);
 
-      if (user != null) {
+      if (user !== null) {
         ({
           data: { user, session },
         } = await supabase.auth.signInWithPassword({
@@ -334,7 +342,7 @@ async function initializeFakeUser(access_token: string, refresh_token: string) {
       }
     }
 
-    if (user != null && session != null) {
+    if (user !== null && session !== null) {
       await supabase.from('user_profiles').insert({
         user_id: user.id,
         email: user.email,
@@ -344,26 +352,6 @@ async function initializeFakeUser(access_token: string, refresh_token: string) {
         role: Object.keys(HibiscusRole).indexOf(HibiscusRole.HACKER) + 1,
       });
 
-      // request.cookies.set(
-      //   getEnv().Hibiscus.Cookies.accessTokenName,
-      //   session.access_token,
-      //   {
-      //     path: '/',
-      //     domain: getEnv().Hibiscus.AppURL.baseDomain,
-      //     maxAge: Number.parseInt(getEnv().Hibiscus.Cookies.maxAge),
-      //     sameSite: 'lax',
-      //   }
-      // );
-      // request.cookies.set(
-      //   getEnv().Hibiscus.Cookies.refreshTokenName,
-      //   session.refresh_token,
-      //   {
-      //     path: '/',
-      //     domain: getEnv().Hibiscus.AppURL.baseDomain,
-      //     maxAge: Number.parseInt(getEnv().Hibiscus.Cookies.maxAge),
-      //     sameSite: 'lax',
-      //   }
-      // );
       return [session.access_token, session.refresh_token];
     }
   }
