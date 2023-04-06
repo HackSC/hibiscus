@@ -1,7 +1,9 @@
-from flask import request
+from flask import Flask, request
 from flask_restful import Resource
-from config import *
-from models import *
+from config import db, init_db
+from models import TaskModel
+from flask_marshmallow import Marshmallow
+from flask_restful import Api
 
 app = Flask(__name__)
 init_db(app)

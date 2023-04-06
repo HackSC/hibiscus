@@ -1,4 +1,4 @@
-from config import *
+from config import db
 
 
 class TaskModel(db.Model):
