@@ -6,9 +6,6 @@ source = [ "python_onboarding_library" ]
 exclude_lines = ['if TYPE_CHECKING:']
 show_missing = true
 
-[tool.pytest.ini_options]
-addopts = "--cov --cov-fail-under=100 --cov-report html:'../../coverage/libs/python-onboarding-library/html' --cov-report xml:'../../coverage/libs/python-onboarding-library/coverage.xml' --junitxml='../../reports/libs/python-onboarding-library/unittests/junit.xml' --html='../../reports/libs/python-onboarding-library/unittests/html/index.html'"
-
 [tool.poetry]
 name = "python_onboarding_library"
 version = "1.0.0"
