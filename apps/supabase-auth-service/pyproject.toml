@@ -6,9 +6,6 @@ source = [ "supabase_auth_service" ]
 exclude_lines = ['if TYPE_CHECKING:']
 show_missing = true
 
-[tool.pytest.ini_options]
-addopts = "--cov --cov-fail-under=100 --cov-report html:'../../coverage/apps/supabase-auth-service/html' --cov-report xml:'../../coverage/apps/supabase-auth-service/coverage.xml' --junitxml='../../reports/apps/supabase-auth-service/unittests/junit.xml' --html='../../reports/apps/supabase-auth-service/unittests/html/index.html'"
-
 [tool.poetry]
 name = "supabase_auth_service"
 version = "1.0.0"

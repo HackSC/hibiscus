@@ -17,7 +17,7 @@ def health():
     return jsonify({"status": "ALIVE"})
 
 
-@app.route("/auth/v1/sign_up", methods=["POST"])
+@app.route("/v1/auth/sign_up", methods=["POST"])
 def sign_up():
     try:
         data = request.get_json()
@@ -26,10 +26,10 @@ def sign_up():
         )
         return jsonify({"data": {"user_id": res.user.id}, "meta": {"status": 200}})
     except Exception as e:
-        return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}})
+        return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}}), 400
 
 
-@app.route("/auth/v1/verify", methods=["POST"])
+@app.route("/v1/auth/verify", methods=["POST"])
 def verify():
     try:
         data = request.get_json()
@@ -46,10 +46,10 @@ def verify():
             }
         )
     except Exception as e:
-        return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}})
+        return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}}), 400
 
 
-@app.route("/auth/v1/sign_in", methods=["POST"])
+@app.route("/v1/auth/sign_in", methods=["POST"])
 def sign_in():
     try:
         data = request.get_json()
@@ -66,10 +66,10 @@ def sign_in():
             }
         )
     except Exception as e:
-        return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}})
+        return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}}), 400
 
 
-@app.route("/auth/v1/refresh_access_token", methods=["POST"])
+@app.route("/v1/auth/refresh_access_token", methods=["POST"])
 def refresh_session():
     try:
         data = request.get_json()
@@ -84,10 +84,10 @@ def refresh_session():
             }
         )
     except Exception as e:
-        return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}})
+        return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}}), 400
 
 
-@app.route("/auth/v1/reset_password", methods=["POST"])
+@app.route("/v1/auth/reset_password", methods=["POST"])
 def reset_password():
     try:
         data = request.get_json()
@@ -96,19 +96,19 @@ def reset_password():
         )  # doesn't return anything, so just pray i guess 🤷‍♂️
         return jsonify({"data": None, "meta": {"status": 200}})
     except Exception as e:
-        return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}})
+        return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}}), 400
 
 
-@app.route("/auth/v1/sign_out", methods=["POST"])
+@app.route("/v1/auth/sign_out", methods=["POST"])
 def sign_out():
     try:
         supabase.auth.sign_out()
         return jsonify({"data": None, "meta": {"status": 200}})
     except Exception as e:
-        return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}})
+        return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}}), 400
 
 
-@app.route("/auth/v1/users/<string:user_id>/metadata", methods=["GET"])
+@app.route("/v1/auth/users/<string:user_id>/metadata", methods=["GET"])
 def get_user(user_id):
     try:
         # Add check to see if user is admin
@@ -119,4 +119,4 @@ def get_user(user_id):
         }
         return jsonify({"data": filtered_dict, "meta": {"status": 200}})
     except Exception as e:
-        return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}})
+        return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}}), 400
