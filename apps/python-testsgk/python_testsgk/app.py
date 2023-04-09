@@ -6,19 +6,19 @@ app = Flask(__name__)
 conn = sl.connect("tasks.db")
 curs = conn.cursor()
 
-stmtCreateDB = (
+stmt_create_db = (
     "CREATE TABLE IF NOT EXISTS tasks('taskName' type UNIQUE, 'description');"
 )
-conn.execute(stmtCreateDB)
+conn.execute(stmt_create_db)
 
-initialCredentials = [
+initial_credentials = [
     ("laundry", "wash, dry, and fold clothes"),
     ("buy groceries", "kale, feta, tomato"),
 ]
-stmtInitialCred = (
+stmt_initial_cred = (
     "INSERT OR IGNORE INTO tasks (`taskName`, `description`) VALUES (?, ?);"
 )
-conn.executemany(stmtInitialCred, initialCredentials)
+conn.executemany(stmt_initial_cred, initial_credentials)
 conn.commit()
 conn.close()
 
@@ -33,27 +33,42 @@ def tasks() -> list:
     return data
 
 
-@app.route("/tasks", methods=["GET"])
-def tasksList():
+@app.route("/tasks", methods=["POST", "GET"])
+def task(name: str, desc: str):
     try:
+        if request.method == "POST":
+            # connects db
+            conn = sl.connect("tasks.db")
+            # instantiates new user
+            new_task = (name, desc)
+            stmt_add_user = "INSERT OR IGNORE INTO credentials('taskName', 'description') VALUES (?, ?)"
+            # adds user to food DB and credentials DB
+            conn.execute(stmt_add_user, new_task)
+            conn.commit()
+            conn.close()
         return jsonify(meta={"message": "Success", "status": 200}, data=tasks())
     except Exception as err:
         return jsonify({"data": None, "meta": {"status": 400, "message": str(err)}})
 
 
-@app.route("/addTask", methods=["POST"])
-def addTask(name: str, desc: str):
+@app.route("/tasks/description", methods=["PUT"])
+def description(name: str, new_desc: str):
     try:
-        # connects db
         conn = sl.connect("tasks.db")
-        curs = conn.cursor()
-        # instantiates new user
-        newTask = (name, desc)
-        stmtAddUser = (
-            "INSERT OR IGNORE INTO credentials('taskName', 'description') VALUES (?, ?)"
-        )
-        # adds user to food DB and credentials DB
-        conn.execute(stmtAddUser, newTask)
+        stmt_new_desc = "UPDATE tasks SET description = ? WHERE taskName = ?"
+        conn.execute(stmt_new_desc, (new_desc, name))
+        conn.commit()
+        conn.close()
+    except Exception as err:
+        return jsonify({"data": None, "meta": {"status": 400, "message": str(err)}})
+
+
+@app.route("/tasks/name", methods=["PUT"])
+def name(old_name: str, new_name: str):
+    try:
+        conn = sl.connect("tasks.db")
+        stmt_new_name = "UPDATE tasks SET taskName = ? WHERE taskName = ?"
+        conn.execute(stmt_new_name, (new_name, old_name))
         conn.commit()
         conn.close()
         return jsonify(meta={"message": "Success", "status": 200}, data=tasks())
@@ -61,43 +76,18 @@ def addTask(name: str, desc: str):
         return jsonify({"data": None, "meta": {"status": 400, "message": str(err)}})
 
 
-@app.route("/editDescription", methods=["POST"])
-def editDesc(name: str, newDesc: str):
-    try:
-        conn = sl.connect("tasks.db")
-        stmtNewDesc = "UPDATE tasks SET description = ? WHERE taskName = ?"
-        conn.execute(stmtNewDesc, (newDesc, name))
-        conn.commit()
-        conn.close()
-    except Exception as err:
-        return jsonify({"data": None, "meta": {"status": 400, "message": str(err)}})
-
-
-@app.route("/editName", methods=["POST"])
-def editName(oldName: str, newName: str):
-    try:
-        conn = sl.connect("tasks.db")
-        stmtNewName = "UPDATE tasks SET taskName = ? WHERE taskName = ?"
-        conn.execute(stmtNewName, (newName, oldName))
-        conn.commit()
-        conn.close()
-        return jsonify(meta={"message": "Success", "status": 200}, data=tasks())
-    except Exception as err:
-        return jsonify({"data": None, "meta": {"status": 400, "message": str(err)}})
-
-
-@app.route("/delete", methods=["POST"])
-def delete(taskName: str):
+@app.route("/tasks/delete", methods=["DELETE"])
+def delete(task_name: str):
     try:
         conn = sl.connect("tasks.db")
         curs = conn.cursor()
-        stmtDelete = "DELETE FROM credentials WHERE taskName = ?"
-        curs.execute(stmtDelete, (taskName,))
+        stmt_delete = "DELETE FROM credentials WHERE taskName = ?"
+        curs.execute(stmt_delete, (task_name,))
         conn.commit()
         conn.close()
         return jsonify(meta={"message": "Success!", "status": 200}, data=tasks())
     except Exception as err:
-        return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}})
+        return jsonify({"data": None, "meta": {"status": 400, "message": str(err)}})
 
 
 if __name__ == "__main__":

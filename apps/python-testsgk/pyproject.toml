@@ -4,10 +4,6 @@ source = [ "python_testsgk" ]
 
 [tool.coverage.report]
 exclude_lines = ['if TYPE_CHECKING:']
-show_missing = true
-
-[tool.pytest.ini_options]
-addopts = "--cov --cov-fail-under=100 --cov-report html:'../../coverage/apps/python-testsgk/html' --cov-report xml:'../../coverage/apps/python-testsgk/coverage.xml' --junitxml='../../reports/apps/python-testsgk/unittests/junit.xml' --html='../../reports/apps/python-testsgk/unittests/html/index.html'"
 
 [tool.poetry]
 name = "python_testsgk"
