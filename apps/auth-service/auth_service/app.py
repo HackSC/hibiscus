@@ -70,7 +70,7 @@ def sign_up():
             ),
             aice.status,
         )
-    except AuthUnknownError as aue:  # 520 = server returned unknown error
+    except AuthUnknownError:  # 520 = server returned unknown error
         return (
             jsonify(
                 {
@@ -142,7 +142,7 @@ def verify():
             ),
             aice.status,
         )
-    except AuthUnknownError as aue:  # 520 = server returned unknown error
+    except AuthUnknownError:  # 520 = server returned unknown error
         return (
             jsonify(
                 {
@@ -214,7 +214,7 @@ def sign_in():
             ),
             aice.status,
         )
-    except AuthUnknownError as aue:  # 520 = server returned unknown error
+    except AuthUnknownError:  # 520 = server returned unknown error
         return (
             jsonify(
                 {
@@ -284,7 +284,7 @@ def refresh_session():
             ),
             aice.status,
         )
-    except AuthUnknownError as aue:  # 520 = server returned unknown error
+    except AuthUnknownError:  # 520 = server returned unknown error
         return (
             jsonify(
                 {
@@ -348,7 +348,7 @@ def reset_password():
             ),
             aice.status,
         )
-    except AuthUnknownError as aue:  # 520 = server returned unknown error
+    except AuthUnknownError:  # 520 = server returned unknown error
         return (
             jsonify(
                 {
@@ -409,7 +409,7 @@ def sign_out():
             ),
             aice.status,
         )
-    except AuthUnknownError as aue:  # 520 = server returned unknown error
+    except AuthUnknownError:  # 520 = server returned unknown error
         return (
             jsonify(
                 {
@@ -473,7 +473,7 @@ def get_user(user_id):
             ),
             aice.status,
         )
-    except AuthUnknownError as aue:  # 520 = server returned unknown error
+    except AuthUnknownError:  # 520 = server returned unknown error
         return (
             jsonify(
                 {
