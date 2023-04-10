@@ -1,5 +1,11 @@
 from flask import Flask, jsonify, request
 from supabase import create_client
+from gotrue.errors import (
+    AuthRetryableError,
+    AuthApiError,
+    AuthUnknownError,
+    AuthInvalidCredentialsError,
+)
 import os
 
 app = Flask(__name__)
@@ -22,9 +28,61 @@ def sign_up():
     try:
         data = request.get_json()
         res = supabase.auth.sign_up(
-            {"email": data["email"], "password": data["password"]}
+            {"email": data.get("email"), "password": data.get("password")}
         )
         return jsonify({"data": {"user_id": res.user.id}, "meta": {"status": 200}})
+    except AuthRetryableError as are:
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": are.status,
+                        "message": "Something went wrong. Please try again.",
+                    },
+                }
+            ),
+            are.status,
+        )
+    except AuthApiError as ape:
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": ape.status,
+                        "message": "Something went wrong with the API. Please try again.",
+                    },
+                }
+            ),
+            ape.status,
+        )
+    except AuthInvalidCredentialsError as aice:
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": aice.status,
+                        "message": "A phone number or email must be provided. Please try again.",
+                    },
+                }
+            ),
+            aice.status,
+        )
+    except AuthUnknownError as aue:  # 520 = server returned unknown error
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": 520,
+                        "message": "An unknown error occurred. Please try again.",
+                    },
+                }
+            ),
+            520,
+        )
     except Exception as e:
         return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}}), 400
 
@@ -34,7 +92,7 @@ def verify():
     try:
         data = request.get_json()
         res = supabase.auth.verify_otp(
-            {"email": data["email"], "token": data["token"], "type": "signup"}
+            {"email": data.get("email"), "token": data.get("token"), "type": "signup"}
         )
         return jsonify(
             {
@@ -44,6 +102,58 @@ def verify():
                 },
                 "meta": {"status": 200},
             }
+        )
+    except AuthRetryableError as are:
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": are.status,
+                        "message": "Something went wrong. Please try again.",
+                    },
+                }
+            ),
+            are.status,
+        )
+    except AuthApiError as ape:
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": ape.status,
+                        "message": "Something went wrong with the API. Please try again.",
+                    },
+                }
+            ),
+            ape.status,
+        )
+    except AuthInvalidCredentialsError as aice:
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": aice.status,
+                        "message": "A phone number or email must be provided. Please try again.",
+                    },
+                }
+            ),
+            aice.status,
+        )
+    except AuthUnknownError as aue:  # 520 = server returned unknown error
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": 520,
+                        "message": "An unknown error occurred. Please try again.",
+                    },
+                }
+            ),
+            520,
         )
     except Exception as e:
         return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}}), 400
@@ -54,7 +164,7 @@ def sign_in():
     try:
         data = request.get_json()
         res = supabase.auth.sign_in_with_password(
-            {"email": data["email"], "password": data["password"]}
+            {"email": data.get("email"), "password": data.get("password")}
         )
         return jsonify(
             {
@@ -64,6 +174,58 @@ def sign_in():
                 },
                 "meta": {"status": 200},
             }
+        )
+    except AuthRetryableError as are:
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": are.status,
+                        "message": "Something went wrong. Please try again.",
+                    },
+                }
+            ),
+            are.status,
+        )
+    except AuthApiError as ape:
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": ape.status,
+                        "message": "Something went wrong with the API. Please try again.",
+                    },
+                }
+            ),
+            ape.status,
+        )
+    except AuthInvalidCredentialsError as aice:
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": aice.status,
+                        "message": "A phone number or email must be provided. Please try again.",
+                    },
+                }
+            ),
+            aice.status,
+        )
+    except AuthUnknownError as aue:  # 520 = server returned unknown error
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": 520,
+                        "message": "An unknown error occurred. Please try again.",
+                    },
+                }
+            ),
+            520,
         )
     except Exception as e:
         return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}}), 400
@@ -73,7 +235,7 @@ def sign_in():
 def refresh_session():
     try:
         data = request.get_json()
-        res = supabase.auth._refresh_access_token(data["refresh_token"])
+        res = supabase.auth._refresh_access_token(data.get("refresh_token"))
         return jsonify(
             {
                 "data": {
@@ -82,6 +244,58 @@ def refresh_session():
                 },
                 "meta": {"status": 200},
             }
+        )
+    except AuthRetryableError as are:
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": are.status,
+                        "message": "Something went wrong. Please try again.",
+                    },
+                }
+            ),
+            are.status,
+        )
+    except AuthApiError as ape:
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": ape.status,
+                        "message": "Something went wrong with the API. Please try again.",
+                    },
+                }
+            ),
+            ape.status,
+        )
+    except AuthInvalidCredentialsError as aice:
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": aice.status,
+                        "message": "A phone number or email must be provided. Please try again.",
+                    },
+                }
+            ),
+            aice.status,
+        )
+    except AuthUnknownError as aue:  # 520 = server returned unknown error
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": 520,
+                        "message": "An unknown error occurred. Please try again.",
+                    },
+                }
+            ),
+            520,
         )
     except Exception as e:
         return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}}), 400
@@ -92,9 +306,61 @@ def reset_password():
     try:
         data = request.get_json()
         supabase.auth.reset_password_email(
-            data["email"]
+            data.get("email")
         )  # doesn't return anything, so just pray i guess 🤷‍♂️
         return jsonify({"data": None, "meta": {"status": 200}})
+    except AuthRetryableError as are:
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": are.status,
+                        "message": "Something went wrong. Please try again.",
+                    },
+                }
+            ),
+            are.status,
+        )
+    except AuthApiError as ape:
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": ape.status,
+                        "message": "Something went wrong with the API. Please try again.",
+                    },
+                }
+            ),
+            ape.status,
+        )
+    except AuthInvalidCredentialsError as aice:
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": aice.status,
+                        "message": "A phone number or email must be provided. Please try again.",
+                    },
+                }
+            ),
+            aice.status,
+        )
+    except AuthUnknownError as aue:  # 520 = server returned unknown error
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": 520,
+                        "message": "An unknown error occurred. Please try again.",
+                    },
+                }
+            ),
+            520,
+        )
     except Exception as e:
         return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}}), 400
 
@@ -104,6 +370,58 @@ def sign_out():
     try:
         supabase.auth.sign_out()
         return jsonify({"data": None, "meta": {"status": 200}})
+    except AuthRetryableError as are:
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": are.status,
+                        "message": "Something went wrong. Please try again.",
+                    },
+                }
+            ),
+            are.status,
+        )
+    except AuthApiError as ape:
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": ape.status,
+                        "message": "Something went wrong with the API. Please try again.",
+                    },
+                }
+            ),
+            ape.status,
+        )
+    except AuthInvalidCredentialsError as aice:
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": aice.status,
+                        "message": "A phone number or email must be provided. Please try again.",
+                    },
+                }
+            ),
+            aice.status,
+        )
+    except AuthUnknownError as aue:  # 520 = server returned unknown error
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": 520,
+                        "message": "An unknown error occurred. Please try again.",
+                    },
+                }
+            ),
+            520,
+        )
     except Exception as e:
         return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}}), 400
 
@@ -114,9 +432,59 @@ def get_user(user_id):
         # Add check to see if user is admin
         # if user.isadmin:
         res = supabase.auth.admin.get_user_by_id(user_id)
-        filtered_dict = {
-            k: v for k, v in res.user.__dict__.items() if k != "identities"
-        }
+        filtered_dict = {k: v for k, v in res.user.dict().items() if k != "identities"}
         return jsonify({"data": filtered_dict, "meta": {"status": 200}})
+    except AuthRetryableError as are:
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": are.status,
+                        "message": "Something went wrong. Please try again.",
+                    },
+                }
+            ),
+            are.status,
+        )
+    except AuthApiError as ape:
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": ape.status,
+                        "message": "Something went wrong with the API. Please try again.",
+                    },
+                }
+            ),
+            ape.status,
+        )
+    except AuthInvalidCredentialsError as aice:
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": aice.status,
+                        "message": "A phone number or email must be provided. Please try again.",
+                    },
+                }
+            ),
+            aice.status,
+        )
+    except AuthUnknownError as aue:  # 520 = server returned unknown error
+        return (
+            jsonify(
+                {
+                    "data": None,
+                    "meta": {
+                        "status": 520,
+                        "message": "An unknown error occurred. Please try again.",
+                    },
+                }
+            ),
+            520,
+        )
     except Exception as e:
         return jsonify({"data": None, "meta": {"status": 400, "message": str(e)}}), 400
