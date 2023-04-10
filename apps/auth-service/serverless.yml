@@ -1,18 +1,18 @@
 org: hacksc
-app: supabase-auth-service
-service: supabase-auth-service
+app: auth-service
+service: auth-service
 plugins:
   - serverless-python-requirements
   - serverless-wsgi
 custom:
   wsgi:
-    app: supabase_auth_service/app.app
+    app: auth_service/app.app
     packRequirements: false
 package:
   individually: false
   patterns:
     - '!**'
-    - 'supabase_auth_service/**'
+    - 'auth_service/**'
 provider:
   name: aws
   runtime: python3.9

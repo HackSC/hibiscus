@@ -1,14 +1,14 @@
 {
-  "name": "supabase-auth-service",
+  "name": "auth-service",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "sourceRoot": "apps/supabase-auth-service/supabase_auth_service",
+  "sourceRoot": "apps/auth-service/auth_service",
   "targets": {
     "lock": {
       "executor": "nx:run-commands",
       "options": {
         "command": "poetry lock --no-update",
-        "cwd": "apps/supabase-auth-service"
+        "cwd": "apps/auth-service"
       }
     },
     "add": {
@@ -27,7 +27,7 @@
       "executor": "nx:run-commands",
       "dependsOn": ["install"],
       "options": {
-        "cwd": "apps/supabase-auth-service",
+        "cwd": "apps/auth-service",
         "command": "poetry build -n -C dist/"
       }
     },
@@ -44,7 +44,7 @@
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "cwd": "apps/supabase-auth-service",
+        "cwd": "apps/auth-service",
         "command": "poetry run flake8"
       }
     },
@@ -52,13 +52,13 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "poetry run pytest tests/",
-        "cwd": "apps/supabase-auth-service"
+        "cwd": "apps/auth-service"
       }
     },
     "deployment-setup": {
       "executor": "nx:run-commands",
       "options": {
-        "cwd": "apps/supabase-auth-service",
+        "cwd": "apps/auth-service",
         "command": "SLS_INTERACTIVE_SETUP_ENABLE=1 sls --org hacksc"
       }
     },
@@ -68,7 +68,7 @@
       "dependsOn": ["build"],
       "options": {
         "color": true,
-        "cwd": "apps/supabase-auth-service"
+        "cwd": "apps/auth-service"
       },
       "configurations": {
         "prod": {
@@ -88,14 +88,14 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "poetry run black .",
-        "cwd": "apps/supabase-auth-service"
+        "cwd": "apps/auth-service"
       }
     },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
         "command": "poetry run sls wsgi serve",
-        "cwd": "apps/supabase-auth-service"
+        "cwd": "apps/auth-service"
       }
     }
   },

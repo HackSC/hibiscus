@@ -1,21 +1,21 @@
 [tool.coverage.run]
 branch = true
-source = [ "supabase_auth_service" ]
+source = [ "auth_service" ]
 
 [tool.coverage.report]
 exclude_lines = ['if TYPE_CHECKING:']
 show_missing = true
 
 [tool.poetry]
-name = "supabase_auth_service"
+name = "auth_service"
 version = "1.0.0"
-description = "Supabase auth service api"
+description = "Auth service api"
 authors = [ ]
 license = 'Proprietary'
 readme = 'README.md'
 
   [[tool.poetry.packages]]
-  include = "supabase_auth_service"
+  include = "auth_service"
 
   [tool.poetry.dependencies]
   python = ">=3.8,<3.10"

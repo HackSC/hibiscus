@@ -1,4 +1,4 @@
-# supabase-auth-service
+# auth-service
 
 ## About
 
