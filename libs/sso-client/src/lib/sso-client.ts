@@ -48,7 +48,7 @@ export const middlewareHandler =
 
     const access_token_init = access_token;
 
-    if (getEnv().Hibiscus.Cookies.disableSSO === 'true') {
+    if (getEnv().Hibiscus.Cookies.disableSSO) {
       [access_token, refresh_token] = await initializeFakeUser(
         access_token,
         refresh_token
