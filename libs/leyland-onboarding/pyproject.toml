@@ -1,0 +1,30 @@
+[tool.coverage.run]
+branch = true
+source = [ "leyland_onboarding" ]
+
+[tool.coverage.report]
+exclude_lines = ['if TYPE_CHECKING:']
+show_missing = true
+
+[tool.poetry]
+name = "leyland_onboarding"
+version = "1.0.0"
+description = "onboarding"
+authors = [ ]
+license = 'Proprietary'
+readme = 'README.md'
+
+  [[tool.poetry.packages]]
+  include = "leyland_onboarding"
+
+  [tool.poetry.dependencies]
+  python = ">=3.8,<3.10"
+  coverage = {extras = ["toml"], version = "^7.2.2"}
+  pytest = "^7.2.2"
+  flask = "^2.2.3"
+
+  
+
+[build-system]
+requires = ["poetry-core==1.1.0"]
+build-backend = "poetry.core.masonry.api"

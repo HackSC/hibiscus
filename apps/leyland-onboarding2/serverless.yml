@@ -1,0 +1,26 @@
+org: hacksc
+app: leyland-onboarding2
+service: leyland-onboarding2
+plugins:
+  - serverless-python-requirements
+  - serverless-wsgi
+custom:
+  wsgi:
+    app: leyland_onboarding2/app.app
+    packRequirements: false
+package:
+  individually: false
+  patterns:
+    - '!**'
+    - 'leyland_onboarding2/**'
+provider:
+  name: aws
+  runtime: python3.9
+  region: us-west-1
+functions:
+  api:
+    handler: wsgi_handler.handler
+    # environment: ${file(configs/env.${opt:stage,'local'}.yml)}
+    events:
+      - http: ANY /
+      - http: ANY /{proxy+}

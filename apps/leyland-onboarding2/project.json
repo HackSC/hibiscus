@@ -1,0 +1,110 @@
+{
+  "name": "leyland-onboarding2",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/leyland-onboarding2/leyland_onboarding2",
+  "targets": {
+    "lock": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry lock --no-update",
+        "cwd": "apps/leyland-onboarding2"
+      }
+    },
+    "add": {
+      "executor": "@nxlv/python:add",
+      "options": {}
+    },
+    "update": {
+      "executor": "@nxlv/python:update",
+      "options": {}
+    },
+    "remove": {
+      "executor": "@nxlv/python:remove",
+      "options": {}
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["install"],
+      "options": {
+        "cwd": "apps/leyland-onboarding2",
+        "command": "poetry build -n -C dist/"
+      }
+    },
+    "install": {
+      "executor": "@nxlv/python:install",
+      "options": {
+        "silent": false,
+        "args": "",
+        "cacheDir": ".cache/pypoetry",
+        "verbose": false,
+        "debug": false
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/leyland-onboarding2",
+        "command": "poetry run flake8"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run coverage run -m pytest tests/",
+        "cwd": "apps/leyland-onboarding2"
+      }
+    },
+    "deployment-setup": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/leyland-onboarding2",
+        "command": "SLS_INTERACTIVE_SETUP_ENABLE=1 sls --org hacksc"
+      }
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "defaultConfiguration": "prod",
+      "dependsOn": ["build"],
+      "options": {
+        "color": true,
+        "cwd": "apps/leyland-onboarding2"
+      },
+      "configurations": {
+        "prod": {
+          "command": "sls deploy --org hacksc --stage prod"
+        },
+        "staging": {
+          "command": "sls deploy --org hacksc --stage staging"
+        }
+      }
+    },
+    "package": {
+      "executor": "@nxlv/python:sls-package",
+      "dependsOn": ["build"],
+      "options": {}
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run black .",
+        "cwd": "apps/leyland-onboarding2"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run sls wsgi serve",
+        "cwd": "apps/leyland-onboarding2"
+      }
+    },
+    "coverage": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run coverage report",
+        "cwd": "apps/leyland-onboarding2"
+      }
+    }
+  },
+  "tags": []
+}

@@ -17,6 +17,8 @@
     "hibiscus-supabase-context": "libs/hibiscus-supabase-context",
     "icons": "libs/icons",
     "interim": "apps/interim",
+    "leyland-onboarding": "libs/leyland-onboarding",
+    "leyland-onboarding2": "apps/leyland-onboarding2",
     "log-server": "apps/log-server",
     "metadata": "libs/metadata",
     "pointr": "apps/pointr",
