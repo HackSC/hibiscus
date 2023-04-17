@@ -1,0 +1,34 @@
+[tool.coverage.run]
+branch = true
+source = [ "identity_service" ]
+
+[tool.coverage.report]
+exclude_lines = ['if TYPE_CHECKING:']
+show_missing = true
+
+[tool.poetry]
+name = "identity_service"
+version = "1.0.0"
+description = "Identity and Participant Service"
+authors = [ ]
+license = 'Proprietary'
+readme = 'README.md'
+
+  [[tool.poetry.packages]]
+  include = "identity_service"
+
+  [tool.poetry.dependencies]
+  python = ">=3.8,<3.10"
+  flask = "2.2.2"
+  coverage = {extras = ["toml"], version = "^7.2.2"}
+  pytest = "^7.2.2"
+  flask-sqlalchemy = "^3.0.3"
+  supabase = "^1.0.3"
+  python-dotenv = "^1.0.0"
+  realtime = "1.0.0"
+
+  
+
+[build-system]
+requires = ["poetry-core==1.1.0"]
+build-backend = "poetry.core.masonry.api"
