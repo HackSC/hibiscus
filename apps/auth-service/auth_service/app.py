@@ -7,6 +7,7 @@ from gotrue.errors import (
     AuthInvalidCredentialsError,
 )
 import os
+from functools import wraps
 
 app = Flask(__name__)
 
@@ -16,6 +17,43 @@ key = os.getenv(
     "SUPABASE_SECRET_KEY"
 )  # need secret key to bypass RLS and use admin functions like get_user(id)
 supabase = create_client(url, key)
+
+# Define roles
+ROLES = ["SUPERADMIN", "TEAM_MEMBER", "SPONSOR", "VOLUNTEER", "HACKER", "APPLICANT"]
+
+
+# Role Based Access Control
+def roles_required(*roles):
+    def wrapper(fn):
+        @wraps(fn)
+        def decorated_view(*args, **kwargs):
+            app.logger.info("testing info log")
+            auth_header = request.headers.get("Authorization", None)
+            app.logger.info(request.headers.get("Authorization"))
+            user_info = None
+            if auth_header:
+                try:
+                    token = auth_header.split()[1]
+                    payload = supabase.auth._decode_jwt(token)
+                    user_id = payload.get("sub")
+                    user_info = (
+                        supabase.table("user_profiles")
+                        .select("user_id, role, roles(name)")
+                        .eq("user_id", user_id)
+                        .single()
+                        .execute()
+                    )
+                    user_role = user_info.data.get("roles").get("name")
+                    if user_role in roles:
+                        return fn(*args, **kwargs)
+                except Exception as e:
+                    app.logger.info("error decoding token", e)
+                    pass
+            return jsonify(message="Unauthorized"), 401
+
+        return decorated_view
+
+    return wrapper
 
 
 @app.get("/health")
@@ -427,10 +465,9 @@ def sign_out():
 
 
 @app.route("/v1/auth/users/<string:user_id>/metadata", methods=["GET"])
+@roles_required("TEAM_MEMBER", "SUPERADMIN")
 def get_user(user_id):
     try:
-        # Add check to see if user is admin
-        # if user.isadmin:
         res = supabase.auth.admin.get_user_by_id(user_id)
         filtered_dict = {k: v for k, v in res.user.dict().items() if k != "identities"}
         return jsonify({"data": filtered_dict, "meta": {"status": 200}})
