@@ -27,9 +27,7 @@ def roles_required(*roles):
     def wrapper(fn):
         @wraps(fn)
         def decorated_view(*args, **kwargs):
-            app.logger.info("testing info log")
             auth_header = request.headers.get("Authorization", None)
-            app.logger.info(request.headers.get("Authorization"))
             user_info = None
             if auth_header:
                 try:
