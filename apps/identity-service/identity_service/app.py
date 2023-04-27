@@ -1,6 +1,8 @@
 import os
+import socketio
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
+from flask_socketio import SocketIO, send
 from supabase import create_client, Client
 
 load_dotenv()
@@ -10,6 +12,7 @@ key = os.getenv("HIBISCUS_LOCAL_SUPABASE_ANON_KEY")
 supabase: Client = create_client(url, key)
 
 app = Flask(__name__)
+socketio = SocketIO(app)
 
 
 @app.get("/participants")
@@ -39,6 +42,37 @@ def get_participants():
 
     data = supabase.table("participants").select("*").execute()
     return jsonify(data.data)
+
+
+@socketio.on("get participant")
+def handle_request(data):
+    pid = data["pid"]
+    participant_data = (
+        supabase.table("participants").select("*").eq("id", pid).execute()
+    )
+    events_attended = []
+    log_data = supabase.table("event_logs").select("*").eq("user_id", pid).execute()
+    user_data = supabase.table("user_profiles").select("*").eq("id", pid).execute()
+    user_name = user_data.data["first_name"] + " " + user_data.data["last_name"]
+    for d in log_data.data:
+        event_data = (
+            supabase.table("events").select("*").eq("id", d["user_id"]).execute()
+        )
+        events_attended.append(event_data.data)
+
+    send(
+        jsonify(
+            {
+                "participant_id": pid,
+                "name": user_name,
+                "school": participant_data.data["school"],
+                "major": participant_data.data["major"],
+                "year": participant_data.data["graduation_year"],
+                "events_attended": events_attended,
+            }
+        ),
+        json=True,
+    )
 
 
 @app.get("/participants/<pid>")
@@ -144,3 +178,7 @@ def check_in(event_id):
             }
         ),
     )
+
+
+if __name__ == "__main__":
+    socketio.run(app)

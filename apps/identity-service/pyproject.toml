@@ -26,6 +26,8 @@ readme = 'README.md'
   supabase = "^1.0.3"
   python-dotenv = "^1.0.0"
   realtime = "1.0.0"
+  python-socketio = {extras = ["client"], version = "^5.8.0"}
+  flask-socketio = "^5.3.3"
 
   
 
