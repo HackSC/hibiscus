@@ -22,6 +22,9 @@ readme = 'README.md'
   flask = "2.2.2"
   coverage = {extras = ["toml"], version = "^7.2.2"}
   pytest = "^7.2.2"
+  sqlalchemy = "^2.0.13"
+  pydantic = {extras = ["dotenv"], version = "^1.10.7"}
+  psycopg2-binary = "^2.9.6"
 
   
 
