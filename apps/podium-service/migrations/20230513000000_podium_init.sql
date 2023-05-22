@@ -48,7 +48,7 @@ ALTER TABLE IF EXISTS public.projects
 CREATE TABLE IF NOT EXISTS public.ranking
 (
     project_id integer NOT NULL,
-    user_id integer NOT NULL,
+    user_id character varying NOT NULL,
     rank integer NOT NULL,
     CONSTRAINT ranking_pkey PRIMARY KEY (project_id, user_id),
     CONSTRAINT project_id FOREIGN KEY (project_id)
@@ -70,7 +70,7 @@ ALTER TABLE IF EXISTS public.ranking
 CREATE TABLE IF NOT EXISTS public.notes
 (
     project_id integer NOT NULL,
-    user_id integer NOT NULL,
+    user_id character varying NOT NULL,
     notes character varying NOT NULL,
     PRIMARY KEY (project_id, user_id),
     CONSTRAINT project_id FOREIGN KEY (project_id)

@@ -37,7 +37,7 @@ class Ranking(Base):
     project_id: Mapped[int] = mapped_column(
         ForeignKey("projects.project_id"), primary_key=True
     )
-    user_id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[str] = mapped_column(primary_key=True)
     rank: Mapped[int]
 
     project: Mapped["Project"] = relationship()
@@ -49,7 +49,28 @@ class Note(Base):
     project_id: Mapped[int] = mapped_column(
         ForeignKey("projects.project_id"), primary_key=True
     )
-    user_id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[str] = mapped_column(primary_key=True)
     notes: Mapped[str]
 
     project: Mapped["Project"] = relationship()
+
+
+class RankingFinal(Base):
+    __tablename__ = "ranking_final"
+
+    project_id: Mapped[int] = mapped_column(
+        ForeignKey("projects.project_id"), primary_key=True
+    )
+    rank: Mapped[int]
+
+    project: Mapped["Project"] = relationship()
+
+
+class RankingLock(Base):
+    __tablename__ = "ranking_locks"
+
+    vertical_id: Mapped[int] = mapped_column(
+        ForeignKey("verticals.vertical_id"), primary_key=True
+    )
+
+    vertical: Mapped["Vertical"] = relationship()
