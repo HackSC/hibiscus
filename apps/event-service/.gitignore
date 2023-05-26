@@ -1,3 +1,4 @@
 .serverless/
 dist/
 .coverage
+configs/env.local.yml
