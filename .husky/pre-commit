@@ -2,4 +2,4 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 nix develop --command bash -c "yarn format && pre-commit run --all-files"
-git add -A
+git add
