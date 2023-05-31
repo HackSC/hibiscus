@@ -26,8 +26,7 @@ def health():
 
 @app.get("/events/<int:event_id>")
 def get_event(event_id: int):
-    # Check auth role
-
+    # TODO: Check auth role
     is_admin = True
 
     try:
@@ -39,6 +38,15 @@ def get_event(event_id: int):
         return jsonify(event), 200
     except Exception as e:
         return jsonify({"error": f"Failed to get requested event: {e}"}), 400
+
+
+@app.get("/events")
+def get_events():
+    try:
+        events = repository.get_events(name=request.args.get("name"))
+        return jsonify({"page": 1, "events": events})
+    except Exception as e:
+        return jsonify({"error": f"Failed to get events: {e}"}), 400
 
 
 # Admin endpoints

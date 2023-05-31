@@ -1,5 +1,7 @@
-from sqlalchemy import select, update, delete
+from sqlalchemy import select, func
 from sqlalchemy.orm import Session
+from typing import Optional
+from datetime import date, datetime
 import data_types
 from . import models
 from .engine import engine
@@ -68,6 +70,45 @@ def get_event_admin(event_id: int) -> data_types.EventAdminGet:
                 for x in event.contacts
             ],
         )
+
+
+def get_events(
+    page: int = 1,
+    page_size: int = 20,
+    date: Optional[date] = None,
+    after: Optional[datetime] = None,
+    name: Optional[str] = None,
+    location: Optional[str] = None,
+) -> list[data_types.Event]:
+    """
+    Gets list of events with pagination, optionally filtered by date, time, name, or location
+    """
+
+    with Session(engine) as session:
+        stmt = select(models.Event)
+
+        if name is not None:
+            sml_name = func.word_similarity(models.Event.name, name).label("sml_name")
+            stmt = stmt.where(models.Event.name.op("%>")(name)).order_by(
+                sml_name.desc()
+            )
+
+        events = session.scalars(stmt)
+
+        return [
+            data_types.Event(
+                eventId=event.event_id,
+                eventName=event.name,
+                startTime=event.start_time,
+                endTime=event.end_time,
+                location=event.location,
+                description=event.description,
+                eventTags=[x.event_tag for x in event.event_tags],
+                industryTags=[x.industry_tag for x in event.industry_tags],
+                bpPoints=event.bp_points,
+            )
+            for event in events
+        ]
 
 
 def add_event(event: data_types.EventAdmin) -> int:
