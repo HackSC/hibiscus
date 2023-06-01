@@ -104,6 +104,31 @@
         "command": "poetry run coverage report",
         "cwd": "apps/podium-service"
       }
+    },
+    "db-setup": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker build -t postgres-podium .",
+        "cwd": "apps/podium-service"
+      }
+    },
+    "db-start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker run --name postgres-podium -p 5432:5432 -d postgres-podium",
+        "cwd": "apps/podium-service"
+      }
+    },
+    "db-stop": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "docker stop postgres-podium",
+          "docker rm postgres-podium"
+        ],
+        "parallel": false,
+        "cwd": "apps/podium-service"
+      }
     }
   },
   "tags": []
