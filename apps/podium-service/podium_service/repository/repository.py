@@ -515,6 +515,56 @@ def set_overall_ranking(vertical_id: int, project_id: int, rank_new: int) -> Non
         session.commit()
 
 
+def add_vertical(name: str, description: Optional[str] = None) -> int:
+    """
+    Adds a new vertical
+
+    Returns the vertical ID of the new vertical
+
+    Raises an exception if failed to add
+    """
+
+    with Session(engine) as session:
+        vertical = models.Vertical(name=name, description=description)
+        session.add(vertical)
+        session.flush()
+        vertical_id = vertical.vertical_id
+        session.commit()
+
+        return vertical_id
+
+
+def update_vertical(vertical_id: int, **kwargs) -> None:
+    """
+    Updates the given vertical\n
+    If an unknown vertical ID is provided, an exception will be raised
+
+    Params:
+    - vertical_id - Vertical ID
+
+    Additional params:
+    - name: str
+    - description: str
+    """
+
+    with Session(engine) as session:
+        new_vertical = {
+            key: value for key, value in kwargs.items() if value is not None
+        }
+
+        res = session.execute(
+            update(models.Vertical)
+            .where(models.Vertical.vertical_id == vertical_id)
+            .values(**new_vertical)
+            .returning(models.Vertical.vertical_id)
+        )
+
+        if res.first() is None:
+            raise Exception("No project found")
+
+        session.commit()
+
+
 def __get_raw_project(vertical_id: int, project_id: int) -> models.Project:
     """
     Gets the project with the corresponding project and vertical IDs

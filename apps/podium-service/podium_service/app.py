@@ -175,6 +175,37 @@ def set_overall_rankings(vertical_id: int):
         return jsonify({"error": f"Failed to change project rank: {e}"}), 400
 
 
+@app.post("/verticals")
+def add_vertical():
+    body = request.json
+
+    try:
+        vertical_id = repository.add_vertical(
+            name=body.get("name"),
+            description=body.get("description"),
+        )
+
+        return jsonify({"verticalId": vertical_id}), 200
+    except Exception as e:
+        return jsonify({"error": f"Failed to add new vertical: {e}"}), 400
+
+
+@app.put("/verticals/<int:vertical_id>")
+def edit_vertical(vertical_id: int):
+    body = request.json
+
+    try:
+        repository.update_vertical(
+            vertical_id,
+            name=body.get("name"),
+            description=body.get("description"),
+        )
+
+        return jsonify({"message": "Success"}), 200
+    except Exception as e:
+        return jsonify({"error": f"Failed to edit vertical: {e}"}), 400
+
+
 @app.post("/projects/bulk")
 def add_many_projects():
     return jsonify({"message": "Not implemented"}), 501
