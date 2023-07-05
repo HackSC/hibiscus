@@ -4,10 +4,11 @@ import { useEffect, useRef, useState, ReactNode } from 'react';
 import { Text } from '@hibiscus/ui';
 import EventCard from './event-card';
 
-const COLUMN_WIDTH = 200;
+const COLUMN_WIDTH = 210;
 const COLUMN_HEIGHT = 2000;
 const COLUMN_MILLIS = 24 * 60 * 60 * 1000;
 const COLUMN_START_MILLIS = 0; // number of millis after 00:00
+const COLUMN_MARGIN = 10;
 
 function EventsCalendar() {
   const ref = useRef(null);
@@ -28,24 +29,25 @@ function EventsCalendar() {
   const cards = [...Array(columns)].map((_, idx) => {
     const events = [
       {
+        eventName: 'Opening Ceremony',
         startTime: new Date(2023, 9, idx + 1, 5),
         endTime: new Date(2023, 9, idx + 1, 8),
+        location: 'Bovard Auditorium',
+        bpPoints: 100,
       },
       {
+        eventName: 'Event Name',
         startTime: new Date(2023, 9, idx + 1, 5, 30),
         endTime: new Date(2023, 9, idx + 1, 10),
+        location: 'THH 101',
+        bpPoints: 100,
       },
       {
-        startTime: new Date(2023, 9, idx + 1, 9),
-        endTime: new Date(2023, 9, idx + 1, 13),
-      },
-      {
+        eventName: 'Event Name',
         startTime: new Date(2023, 9, idx + 1, 11),
-        endTime: new Date(2023, 9, idx + 1, 13),
-      },
-      {
-        startTime: new Date(2023, 9, idx + 1, 12),
-        endTime: new Date(2023, 9, idx + 1, 14),
+        endTime: new Date(2023, 9, idx + 1, 12),
+        location: 'THH 101',
+        bpPoints: 100,
       },
     ];
 
@@ -102,7 +104,6 @@ const CalendarColumn = styled.div`
   position: relative;
 
   height: ${COLUMN_HEIGHT}px;
-  padding: 1rem;
 
   background-color: ${Colors2023.GRAY.STANDARD};
   border-right: 3px solid ${Colors2023.GRAY.MEDIUM};
@@ -223,12 +224,30 @@ function renderCalendarColumn(events: Event[], date: Date): ReactNode[] {
     const top =
       ((start - date.getTime() - COLUMN_START_MILLIS) / COLUMN_MILLIS) * 100;
 
+    // Adjust for "margins"
+    let widthSubtract = COLUMN_MARGIN;
+    if (earliestIdx === 0) {
+      widthSubtract += COLUMN_MARGIN / 2;
+    }
+    if (earliestIdx === cols - 1) {
+      widthSubtract += COLUMN_MARGIN / 2;
+    }
+
+    let leftAdd = COLUMN_MARGIN;
+    if (earliestIdx !== 0) {
+      leftAdd /= 2;
+    }
+
+    const widthCSS = `calc(${width}% - ${widthSubtract}px)`;
+    const leftCSS = `calc(${left}% + ${leftAdd}px)`;
+
     nodes.push(
       <EventCard
-        width={`${width}%`}
+        width={widthCSS}
         height={`${height}%`}
-        left={`${left}%`}
+        left={leftCSS}
         top={`${top}%`}
+        {...earliestEvent}
       ></EventCard>
     );
 
@@ -240,12 +259,12 @@ function renderCalendarColumn(events: Event[], date: Date): ReactNode[] {
 
 type Event = {
   eventId?: number;
-  eventName?: string;
+  eventName: string;
   startTime: Date;
   endTime: Date;
-  location?: string;
+  location: string;
   description?: string;
   eventTags?: string[];
   industryTags?: string[];
-  bpPoints?: number;
+  bpPoints: number;
 };
