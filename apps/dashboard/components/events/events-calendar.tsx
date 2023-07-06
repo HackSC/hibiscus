@@ -2,7 +2,8 @@ import { Colors2023 } from '@hibiscus/styles';
 import styled from 'styled-components';
 import { useEffect, useRef, useState, ReactNode } from 'react';
 import { Text } from '@hibiscus/ui';
-import EventCard from './event-card';
+import { Event } from '../../common/events.utils';
+import CalendarCard from './calendar-card';
 
 const COLUMN_WIDTH = 210;
 const COLUMN_HEIGHT = 2000;
@@ -10,7 +11,11 @@ const COLUMN_MILLIS = 24 * 60 * 60 * 1000;
 const COLUMN_START_MILLIS = 0; // number of millis after 00:00
 const COLUMN_MARGIN = 10;
 
-function EventsCalendar() {
+interface EventsCalendarProps {
+  openModal: (eventId: number) => void;
+}
+
+function EventsCalendar(props: EventsCalendarProps) {
   const ref = useRef(null);
   const [columns, setColumns] = useState(0);
 
@@ -29,29 +34,36 @@ function EventsCalendar() {
   const cards = [...Array(columns)].map((_, idx) => {
     const events = [
       {
+        eventId: 1,
         eventName: 'Opening Ceremony',
-        startTime: new Date(2023, 9, idx + 1, 5),
-        endTime: new Date(2023, 9, idx + 1, 8),
+        startTime: new Date(2023, 8, idx + 1, 5),
+        endTime: new Date(2023, 8, idx + 1, 8),
         location: 'Bovard Auditorium',
         bpPoints: 100,
       },
       {
+        eventId: 2,
         eventName: 'Event Name',
-        startTime: new Date(2023, 9, idx + 1, 5, 30),
-        endTime: new Date(2023, 9, idx + 1, 10),
+        startTime: new Date(2023, 8, idx + 1, 5, 30),
+        endTime: new Date(2023, 8, idx + 1, 10),
         location: 'THH 101',
         bpPoints: 100,
       },
       {
+        eventId: 3,
         eventName: 'Event Name',
-        startTime: new Date(2023, 9, idx + 1, 11),
-        endTime: new Date(2023, 9, idx + 1, 12),
+        startTime: new Date(2023, 8, idx + 1, 11),
+        endTime: new Date(2023, 8, idx + 1, 12),
         location: 'THH 101',
         bpPoints: 100,
       },
     ];
 
-    return renderCalendarColumn(events, new Date(2023, 9, idx + 1));
+    return renderCalendarColumn(
+      events,
+      new Date(2023, 8, idx + 1),
+      props.openModal
+    );
   });
 
   return (
@@ -153,7 +165,11 @@ function organizeCalendarCards(events: Event[]): Event[][] {
  * @param date Date on which events occur, with local timezone and set to 00:00
  * @returns React components which render the calendar cards
  */
-function renderCalendarColumn(events: Event[], date: Date): ReactNode[] {
+function renderCalendarColumn(
+  events: Event[],
+  date: Date,
+  openModal: (eventId: number) => void
+): ReactNode[] {
   const organized = organizeCalendarCards(events);
 
   // Reverse each array for faster popping
@@ -242,13 +258,14 @@ function renderCalendarColumn(events: Event[], date: Date): ReactNode[] {
     const leftCSS = `calc(${left}% + ${leftAdd}px)`;
 
     nodes.push(
-      <EventCard
+      <CalendarCard
+        openModal={openModal}
         width={widthCSS}
         height={`${height}%`}
         left={leftCSS}
         top={`${top}%`}
         {...earliestEvent}
-      ></EventCard>
+      ></CalendarCard>
     );
 
     idxs[earliestIdx]--;
@@ -256,15 +273,3 @@ function renderCalendarColumn(events: Event[], date: Date): ReactNode[] {
 
   return nodes;
 }
-
-type Event = {
-  eventId?: number;
-  eventName: string;
-  startTime: Date;
-  endTime: Date;
-  location: string;
-  description?: string;
-  eventTags?: string[];
-  industryTags?: string[];
-  bpPoints: number;
-};
