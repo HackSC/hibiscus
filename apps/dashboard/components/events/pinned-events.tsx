@@ -8,11 +8,13 @@ interface PinnedEventsProps {
 
 export function PinnedEvents(props: PinnedEventsProps) {
   return (
-    <>
-      {props.events.map((e, i) => (
-        <EventCard key={i} openModal={props.openModal} {...e} />
-      ))}
-    </>
+    props.events && (
+      <>
+        {props.events.map((e, i) => (
+          <EventCard key={i} openModal={props.openModal} event={e} />
+        ))}
+      </>
+    )
   );
 }
 

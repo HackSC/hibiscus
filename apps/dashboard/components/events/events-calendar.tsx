@@ -2,7 +2,7 @@ import { Colors2023 } from '@hibiscus/styles';
 import styled from 'styled-components';
 import { useEffect, useRef, useState, ReactNode } from 'react';
 import { Text } from '@hibiscus/ui';
-import { Event } from '../../common/events.utils';
+import { Event, isSameDate } from '../../common/events.utils';
 import CalendarCard from './calendar-card';
 
 const COLUMN_WIDTH = 210;
@@ -12,12 +12,16 @@ const COLUMN_START_MILLIS = 0; // number of millis after 00:00
 const COLUMN_MARGIN = 10;
 
 interface EventsCalendarProps {
+  events: Event[];
   openModal: (eventId: number) => void;
 }
 
 function EventsCalendar(props: EventsCalendarProps) {
   const ref = useRef(null);
   const [columns, setColumns] = useState(0);
+  const [offset, setOffset] = useState(0);
+  const [events, setEvents] = useState<Event[][] | null>(null);
+  const [cards, setCards] = useState<ReactNode[][] | null>(null);
 
   // Queries width of component to calculate number of columns
   // Dynamically recalculates on resize
@@ -30,53 +34,82 @@ function EventsCalendar(props: EventsCalendarProps) {
     return () => window.removeEventListener('resize', getwidth);
   }, []);
 
-  // Hardcoded events
-  const cards = [...Array(columns)].map((_, idx) => {
-    const events = [
-      {
-        eventId: 1,
-        eventName: 'Opening Ceremony',
-        startTime: new Date(2023, 8, idx + 1, 5),
-        endTime: new Date(2023, 8, idx + 1, 8),
-        location: 'Bovard Auditorium',
-        bpPoints: 100,
-      },
-      {
-        eventId: 2,
-        eventName: 'Event Name',
-        startTime: new Date(2023, 8, idx + 1, 5, 30),
-        endTime: new Date(2023, 8, idx + 1, 10),
-        location: 'THH 101',
-        bpPoints: 100,
-      },
-      {
-        eventId: 3,
-        eventName: 'Event Name',
-        startTime: new Date(2023, 8, idx + 1, 11),
-        endTime: new Date(2023, 8, idx + 1, 12),
-        location: 'THH 101',
-        bpPoints: 100,
-      },
-    ];
+  // Grouop events by date
+  useEffect(() => {
+    if (props.events !== null) {
+      // Group events by date
+      const eventsByDate: Event[][] = [];
+      for (const e of props.events) {
+        if (
+          eventsByDate.length === 0 ||
+          !isSameDate(eventsByDate.at(-1)[0].startTime, e.startTime)
+        ) {
+          eventsByDate.push([e]);
+        } else {
+          eventsByDate.at(-1).push(e);
+        }
+      }
 
-    return renderCalendarColumn(
-      events,
-      new Date(2023, 8, idx + 1),
-      props.openModal
-    );
-  });
+      setEvents(eventsByDate);
+    }
+  }, [props.events]);
+
+  // Render event cards
+  useEffect(() => {
+    if (events !== null) {
+      // Show correct pagination
+      const eventsToShow = events.slice(offset, offset + columns);
+
+      // Convert events to JSX elements
+      const cards: ReactNode[][] = [];
+      for (const es of eventsToShow) {
+        const date = getDayDate(es[0].startTime);
+        const colCards = renderCalendarColumn(es, date, props.openModal);
+        cards.push(colCards);
+      }
+
+      setCards(cards);
+    }
+  }, [events, columns, offset]);
 
   return (
     <CalendarGrid ref={ref} columns={columns}>
-      {[...Array(columns)].map((_, idx) => (
-        <CalendarHeader key={idx}>
-          <Text>Sept</Text>
-          <Text>{idx + 1}</Text>
-        </CalendarHeader>
-      ))}
-      {[...Array(columns)].map((_, idx) => (
-        <CalendarColumn key={idx}>{cards[idx]}</CalendarColumn>
-      ))}
+      {cards && (
+        <>
+          {offset > 0 && (
+            <LeftArrow onClick={() => setOffset(Math.max(offset - columns, 0))}>
+              &lt;
+            </LeftArrow>
+          )}
+          {offset + columns < events.length && (
+            <RightArrow onClick={() => setOffset(offset + columns)}>
+              &gt;
+            </RightArrow>
+          )}
+
+          {[...Array(columns)].map((_, idx) => (
+            <CalendarHeader key={idx}>
+              {events[idx + offset] && (
+                <>
+                  <Text>
+                    {getDayDate(
+                      events[idx + offset][0].startTime
+                    ).toLocaleDateString('en-us', { month: 'short' })}
+                  </Text>
+                  <Text>
+                    {getDayDate(
+                      events[idx + offset][0].startTime
+                    ).toLocaleDateString('en-us', { day: '2-digit' })}
+                  </Text>
+                </>
+              )}
+            </CalendarHeader>
+          ))}
+          {[...Array(columns)].map((_, idx) => (
+            <CalendarColumn key={idx}>{cards[idx]}</CalendarColumn>
+          ))}
+        </>
+      )}
     </CalendarGrid>
   );
 }
@@ -88,6 +121,7 @@ interface CalendarGridProps {
 }
 
 const CalendarGrid = styled.div<CalendarGridProps>`
+  position: relative;
   display: grid;
   grid-template-rows: auto 1fr;
   grid-template-columns: repeat(${(props) => props.columns}, 1fr);
@@ -124,6 +158,16 @@ const CalendarColumn = styled.div`
   :nth-last-child(1) {
     border-right: none;
   }
+`;
+
+const LeftArrow = styled.a`
+  position: absolute;
+  left: 5px;
+`;
+
+const RightArrow = styled.a`
+  position: absolute;
+  right: 5px;
 `;
 
 function calcColumns(columnWidth: number, totalWidth: number): number {
@@ -272,4 +316,8 @@ function renderCalendarColumn(
   }
 
   return nodes;
+}
+
+function getDayDate(d: Date): Date {
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
 }

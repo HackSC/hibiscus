@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 from flask.json.provider import DefaultJSONProvider
 from flask_cors import CORS
 import datetime
+from dateutil.parser import isoparse
 from repository import repository
 import data_types
 
@@ -45,21 +46,29 @@ def get_events():
     try:
         date = request.args.get("date")
         if date is not None:
-            date = datetime.datetime.fromisoformat(date)
+            date = isoparse(date)
 
         after = request.args.get("after")
         if after is not None:
-            after = datetime.datetime.fromisoformat(after)
+            after = isoparse(after)
+
+        page = request.args.get("page", type=int)
+        if page is None:
+            page = 1
+
+        page_size = request.args.get("pageSize", type=int)
+        if page_size is None:
+            page_size = 20
 
         events = repository.get_events(
-            page=request.args.get("page"),
-            page_size=request.args.get("pageSize"),
+            page=page,
+            page_size=page_size,
             date=date,
             after=after,
             name=request.args.get("name"),
             location=request.args.get("location"),
         )
-        return jsonify({"page": 1, "events": events}), 200
+        return jsonify({"page": page, "events": events}), 200
     except Exception as e:
         return jsonify({"error": f"Failed to get events: {e}"}), 400
 

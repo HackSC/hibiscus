@@ -84,12 +84,6 @@ def get_events(
     Gets list of events with pagination, optionally filtered by date, time, name, or location
     """
 
-    if page is None:
-        page = 1
-
-    if page_size is None:
-        page_size = 20
-
     with Session(engine) as session:
         stmt = select(models.Event)
 
@@ -115,11 +109,10 @@ def get_events(
         if after is not None:
             stmt = stmt.where(models.Event.end_time >= after)
 
-        stmt = (
-            stmt.order_by(models.Event.start_time.asc())
-            .limit(page_size)
-            .offset((page - 1) * page_size)
-        )
+        stmt = stmt.order_by(models.Event.start_time.asc())
+
+        if page_size >= 0:
+            stmt = stmt.limit(page_size).offset((page - 1) * page_size)
 
         events = session.scalars(stmt)
 

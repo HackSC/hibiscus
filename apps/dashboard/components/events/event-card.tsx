@@ -1,50 +1,48 @@
 import { Colors2023 } from '@hibiscus/styles';
 import { BoldText, Text } from '@hibiscus/ui';
+import { Event } from '../../common/events.utils';
 import styled from 'styled-components';
 
 interface EventCardProps {
-  eventId: number;
-  eventName: string;
-  startTime: Date;
-  endTime: Date;
-  location: string;
-  bpPoints: number;
+  event: Event;
   openModal: (eventId: number) => void;
 }
 
 export function EventCard(props: EventCardProps) {
-  const date = props.startTime.toLocaleDateString('en-US', {
+  const date = props.event.startTime.toLocaleDateString('en-US', {
     month: 'short',
     day: '2-digit',
   });
 
-  const startTime = props.startTime.toLocaleTimeString([], {
+  const startTime = props.event.startTime.toLocaleTimeString([], {
     hour: '2-digit',
     minute: '2-digit',
   });
-  const endTime = props.endTime.toLocaleTimeString([], {
+  const endTime = props.event.endTime.toLocaleTimeString([], {
     hour: '2-digit',
     minute: '2-digit',
   });
 
   return (
-    <Card onClick={() => props.openModal(props.eventId)}>
+    <Card onClick={() => props.openModal(props.event.eventId)}>
       <CardLeft>
         <BoldText>{date}</BoldText>
       </CardLeft>
 
       <CardRight>
         <Row>
-          <BoldText style={{ color: '#336675' }}>{props.eventName}</BoldText>
+          <BoldText style={{ color: '#336675' }}>
+            {props.event.eventName}
+          </BoldText>
           <BoldText style={{ color: 'black', fontSize: '0.75rem' }}>
-            {props.bpPoints} PTS
+            {props.event.bpPoints} PTS
           </BoldText>
         </Row>
         <Text style={{ color: Colors2023.GRAY.MEDIUM, fontSize: '0.75rem' }}>
           {startTime} - {endTime}
         </Text>
         <Text style={{ color: Colors2023.GRAY.MEDIUM, fontSize: '0.75rem' }}>
-          {props.location}
+          {props.event.location}
         </Text>
       </CardRight>
     </Card>

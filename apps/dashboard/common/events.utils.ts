@@ -1,3 +1,8 @@
+import { getEnv } from '@hibiscus/env';
+import axios, { AxiosError } from 'axios';
+
+// Type definitions
+
 export type Event = {
   eventId: number;
   eventName: string;
@@ -9,3 +14,175 @@ export type Event = {
   industryTags?: string[];
   bpPoints: number;
 };
+
+export class EventServiceError extends Error {
+  constructor(message?: string) {
+    super(message ?? 'Unknown error occured');
+  }
+
+  static handleAxiosError(e: AxiosError): EventServiceError {
+    if (
+      e.response &&
+      typeof e.response.data === 'object' &&
+      'error' in e.response.data &&
+      typeof e.response.data.error === 'string'
+    ) {
+      return new EventServiceError(e.response.data.error);
+    } else if (e.response) {
+      return new EventServiceError('Unknown API error occured');
+    } else if (e.request) {
+      return new EventServiceError(
+        'The request was made but no response was received'
+      );
+    } else {
+      return new EventServiceError(e.message);
+    }
+  }
+}
+
+// Util functions
+export function isSameDate(date1: Date, date2: Date): boolean {
+  return (
+    date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate()
+  );
+}
+
+// Event service API client
+export async function getEvent(eventId: number): Promise<Event> {
+  const apiUrl = getEnv().Hibiscus.Events.ApiUrl;
+
+  try {
+    const res = await axios(`${apiUrl}/events/${eventId}`, { method: 'GET' });
+    const event = res.data;
+    event.startTime = new Date(event.startTime);
+    event.endTime = new Date(event.endTime);
+    return event;
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      throw EventServiceError.handleAxiosError(e);
+    } else {
+      throw new EventServiceError();
+    }
+  }
+}
+
+export async function getAllEvents(): Promise<Event[]> {
+  const apiUrl = getEnv().Hibiscus.Events.ApiUrl;
+
+  // Display all events after Sep 1 2023
+  const startDate = new Date(2023, 8, 1).toISOString();
+
+  try {
+    const res = await axios(`${apiUrl}/events?after=${startDate}&pageSize=-1`, {
+      method: 'GET',
+    });
+    const events = res.data.events;
+    for (const e of events) {
+      e.startTime = new Date(e.startTime);
+      e.endTime = new Date(e.endTime);
+    }
+    return events;
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      throw EventServiceError.handleAxiosError(e);
+    } else {
+      throw new EventServiceError();
+    }
+  }
+}
+
+export async function getPinnedEvents(userId: string): Promise<Event[]> {
+  const apiUrl = getEnv().Hibiscus.Events.ApiUrl;
+
+  try {
+    const res = await axios(`${apiUrl}/events/${userId}/pinned-events`, {
+      method: 'GET',
+    });
+    const events = res.data.pinnedEvents;
+    for (const e of events) {
+      e.startTime = new Date(e.startTime);
+      e.endTime = new Date(e.endTime);
+    }
+    return events;
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      throw EventServiceError.handleAxiosError(e);
+    } else {
+      throw new EventServiceError();
+    }
+  }
+}
+
+export async function pinEvent(
+  userId: string,
+  eventId: number
+): Promise<number> {
+  const apiUrl = getEnv().Hibiscus.Events.ApiUrl;
+
+  try {
+    const res = await axios(`${apiUrl}/events/${userId}/pinned-events`, {
+      method: 'POST',
+      data: {
+        pin_event: eventId,
+      },
+    });
+    const pinned = res.data.pinned_event;
+    return pinned;
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      throw EventServiceError.handleAxiosError(e);
+    } else {
+      throw new EventServiceError();
+    }
+  }
+}
+
+export async function unpinEvent(
+  userId: string,
+  eventId: number
+): Promise<number> {
+  const apiUrl = getEnv().Hibiscus.Events.ApiUrl;
+
+  try {
+    const res = await axios(`${apiUrl}/events/${userId}/pinned-events`, {
+      method: 'DELETE',
+      data: {
+        unpin_event: eventId,
+      },
+    });
+    const unpinned = res.data.unpinned_event;
+    return unpinned;
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      throw EventServiceError.handleAxiosError(e);
+    } else {
+      throw new EventServiceError();
+    }
+  }
+}
+
+export async function updateEvent(
+  eventId: number,
+  props: Partial<Event>
+): Promise<Event> {
+  const apiUrl = getEnv().Hibiscus.Events.ApiUrl;
+
+  try {
+    const res = await axios(`${apiUrl}/events/${eventId}`, {
+      method: 'PUT',
+      data: {
+        ...props,
+      },
+    });
+    const event = res.data;
+    return event;
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      throw EventServiceError.handleAxiosError(e);
+    } else {
+      throw new EventServiceError();
+    }
+  }
+}
