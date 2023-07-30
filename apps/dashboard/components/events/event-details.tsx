@@ -55,6 +55,15 @@ function EventDetails(props: EventDetailsProps) {
         <Text>{props.event.location}</Text>
         <Text>{props.event.description}</Text>
         <Row>
+          {props.event.eventTags?.map((tag, i) => (
+            <Tag key={i}>{tag}</Tag>
+          ))}
+          {props.event.industryTags?.map((tag, i) => (
+            <Tag key={i}>{tag}</Tag>
+          ))}
+        </Row>
+
+        <Row>
           {props.admin && (
             <Button
               color="blue"
@@ -193,6 +202,27 @@ function EventDetails(props: EventDetailsProps) {
             setEditingEvent({ ...editingEvent, description: e.target.value })
           }
         />
+
+        <OneLineText
+          value={editingEvent.eventTags?.join(',')}
+          onChange={(e) =>
+            setEditingEvent({
+              ...editingEvent,
+              eventTags: e.target.value !== '' ? e.target.value.split(',') : [],
+            })
+          }
+        />
+        <OneLineText
+          value={editingEvent.industryTags?.join(',')}
+          onChange={(e) =>
+            setEditingEvent({
+              ...editingEvent,
+              industryTags:
+                e.target.value !== '' ? e.target.value.split(',') : [],
+            })
+          }
+        />
+
         <Button
           color="blue"
           onClick={saveHandler(
@@ -228,6 +258,13 @@ const Container = styled.div`
 const Row = styled.div`
   display: flex;
   flex-direction: row;
+  gap: 0.5rem;
+`;
+
+const Tag = styled.div`
+  padding: 0.2rem 0.5rem;
+  background-color: #336675;
+  border-radius: 5px;
 `;
 
 const pinEventHandler =

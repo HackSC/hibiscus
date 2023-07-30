@@ -73,44 +73,48 @@ function EventsCalendar(props: EventsCalendarProps) {
   }, [events, columns, offset]);
 
   return (
-    <CalendarGrid ref={ref} columns={columns}>
-      {cards && (
-        <>
-          {offset > 0 && (
-            <LeftArrow onClick={() => setOffset(Math.max(offset - columns, 0))}>
-              &lt;
-            </LeftArrow>
-          )}
-          {offset + columns < events.length && (
-            <RightArrow onClick={() => setOffset(offset + columns)}>
-              &gt;
-            </RightArrow>
-          )}
+    <Container>
+      <CalendarGrid ref={ref} columns={columns}>
+        {cards && (
+          <>
+            {offset > 0 && (
+              <LeftArrow
+                onClick={() => setOffset(Math.max(offset - columns, 0))}
+              >
+                &lt;
+              </LeftArrow>
+            )}
+            {offset + columns < events.length && (
+              <RightArrow onClick={() => setOffset(offset + columns)}>
+                &gt;
+              </RightArrow>
+            )}
 
-          {[...Array(columns)].map((_, idx) => (
-            <CalendarHeader key={idx}>
-              {events[idx + offset] && (
-                <>
-                  <Text>
-                    {getDayDate(
-                      events[idx + offset][0].startTime
-                    ).toLocaleDateString('en-us', { month: 'short' })}
-                  </Text>
-                  <Text>
-                    {getDayDate(
-                      events[idx + offset][0].startTime
-                    ).toLocaleDateString('en-us', { day: '2-digit' })}
-                  </Text>
-                </>
-              )}
-            </CalendarHeader>
-          ))}
-          {[...Array(columns)].map((_, idx) => (
-            <CalendarColumn key={idx}>{cards[idx]}</CalendarColumn>
-          ))}
-        </>
-      )}
-    </CalendarGrid>
+            {[...Array(columns)].map((_, idx) => (
+              <CalendarHeader key={idx}>
+                {events[idx + offset] && (
+                  <>
+                    <Text>
+                      {getDayDate(
+                        events[idx + offset][0].startTime
+                      ).toLocaleDateString('en-us', { month: 'short' })}
+                    </Text>
+                    <Text>
+                      {getDayDate(
+                        events[idx + offset][0].startTime
+                      ).toLocaleDateString('en-us', { day: '2-digit' })}
+                    </Text>
+                  </>
+                )}
+              </CalendarHeader>
+            ))}
+            {[...Array(columns)].map((_, idx) => (
+              <CalendarColumn key={idx}>{cards[idx]}</CalendarColumn>
+            ))}
+          </>
+        )}
+      </CalendarGrid>
+    </Container>
   );
 }
 
@@ -119,6 +123,8 @@ export default EventsCalendar;
 interface CalendarGridProps {
   columns: number;
 }
+
+const Container = styled.div``;
 
 const CalendarGrid = styled.div<CalendarGridProps>`
   position: relative;
@@ -130,6 +136,16 @@ const CalendarGrid = styled.div<CalendarGridProps>`
 
   border: 3px solid ${Colors2023.GRAY.MEDIUM};
   border-radius: 5px;
+
+  height: 75vh;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
 `;
 
 const CalendarHeader = styled.div`

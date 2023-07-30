@@ -140,6 +140,8 @@ def update_event(event_id: int):
             bp_points=body.get("bpPoints"),
             capacity=body.get("capacity"),
             organizer_details=body.get("organizerDetails"),
+            event_tags=body.get("eventTags"),
+            industry_tags=body.get("industryTags"),
         )
         return jsonify(new_event), 200
     except Exception as e:

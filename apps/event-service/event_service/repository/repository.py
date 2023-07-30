@@ -185,7 +185,12 @@ def add_event(event: data_types.EventAdmin) -> int:
         return event_id
 
 
-def update_event(event_id: int, **kwargs) -> data_types.EventAdmin:
+def update_event(
+    event_id: int,
+    event_tags: Optional[list[str]],
+    industry_tags: Optional[list[str]],
+    **kwargs
+) -> data_types.EventAdmin:
     """
     Update event details
 
@@ -196,19 +201,63 @@ def update_event(event_id: int, **kwargs) -> data_types.EventAdmin:
     new_event = {key: value for key, value in kwargs.items() if value is not None}
 
     with Session(engine) as session:
-        res = session.execute(
-            update(models.Event)
-            .values(**new_event)
-            .where(models.Event.event_id == event_id)
-            .returning(models.Event)
-        ).one_or_none()
+        if new_event:
+            res = session.execute(
+                update(models.Event)
+                .values(**new_event)
+                .where(models.Event.event_id == event_id)
+                .returning(models.Event)
+            ).one_or_none()
 
-        if res is None:
-            raise Exception("Event does not exist")
+            if res is None:
+                raise Exception("Event does not exist")
+
+            event = res.tuple()[0]
+        else:
+            event = session.scalars(
+                select(models.Event).where(models.Event.event_id == event_id)
+            ).one_or_none()
+
+            if event is None:
+                raise Exception("Event does not exist")
+
+        if event_tags is not None:
+            # Add event tags
+            for event_tag in set(event_tags).difference(
+                {x.event_tag for x in event.event_tags}
+            ):
+                tag = models.EventTag(event_id=event_id, event_tag=event_tag)
+                session.add(tag)
+
+            # Remove event tags
+            for event_tag in {x.event_tag for x in event.event_tags}.difference(
+                event_tags
+            ):
+                session.execute(
+                    delete(models.EventTag)
+                    .where(models.EventTag.event_id == event_id)
+                    .where(models.EventTag.event_tag == event_tag)
+                )
+
+        if industry_tags is not None:
+            # Add industry tags
+            for industry_tag in set(industry_tags).difference(
+                {x.industry_tag for x in event.industry_tags}
+            ):
+                tag = models.IndustryTag(event_id=event_id, industry_tag=industry_tag)
+                session.add(tag)
+
+            # Remove industry tags
+            for industry_tag in {
+                x.industry_tag for x in event.industry_tags
+            }.difference(industry_tags):
+                session.execute(
+                    delete(models.IndustryTag)
+                    .where(models.IndustryTag.event_id == event_id)
+                    .where(models.IndustryTag.industry_tag == industry_tag)
+                )
 
         session.commit()
-
-        event = res.tuple()[0]
 
         return data_types.EventAdmin(
             eventId=event.event_id,

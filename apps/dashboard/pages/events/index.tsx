@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import EventsCalendar from '../../components/events/events-calendar';
-import { Button, GlowSpan } from '@hibiscus/ui-kit-2023';
+import { GlowSpan } from '@hibiscus/ui-kit-2023';
 import { Colors2023 } from '@hibiscus/styles';
 import { Modal, Text } from '@hibiscus/ui';
 import BattlepassPointsBar from '../../components/battlepass/battlepass-points-bar';
