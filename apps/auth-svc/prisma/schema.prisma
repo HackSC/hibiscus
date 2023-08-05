@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum HibiscusRole {
+  ADMIN
+  SPONSOR
+  HACKER
+  VOLUNTEER
+  JUDGE
+}
+
+model User {
+  id String @id @default(uuid())
+  email String @unique
+  emailVerified Boolean @default(false)
+  firstName String
+  lastName String
+  role HibiscusRole
+}
+
+model Key {
+  id            String     @id @default(uuid())
+  key           String     @unique
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime?
+  revokedAt     DateTime?
+  reactivatedAt DateTime?
+  meta          Json?
+  auditLogs     AuditLog[]
+}
+
+enum AuditLogAction {
+  CREATE_KEY
+  UPDATE_KEY
+  DELETE_KEY
+  REVOKE_KEY
+  REACTIVATE_KEY
+}
+
+model AuditLog {
+  id        String         @id @default(uuid())
+  action    AuditLogAction
+  createdAt DateTime       @default(now())
+  meta      Json?
+  Key       Key?           @relation(fields: [keyId], references: [id])
+  keyId     String?
+}

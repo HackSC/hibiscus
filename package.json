@@ -128,7 +128,7 @@
     "@types/jest": "28.1.1",
     "@types/mime-types": "^2.1.1",
     "@types/morgan": "^1.9.4",
-    "@types/node": "latest",
+    "@types/node": "18.7.1",
     "@types/nprogress": "^0.2.0",
     "@types/react": "18.0.25",
     "@types/react-calendar": "^3.9.0",
