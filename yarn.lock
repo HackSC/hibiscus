@@ -18775,6 +18775,11 @@ lru_map@^0.3.3:
   resolved "https://registry.yarnpkg.com/lru_map/-/lru_map-0.3.3.tgz#b5c8351b9464cbd750335a79650a0ec0e56118dd"
   integrity sha512-Pn9cox5CsMYngeDbmChANltQl+5pi6XmTrraMSzhPmMBbmgcxmqWry0U3PGapCU1yB4/LqCcom7qhHZiF/jGfQ==
 
+lucia@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/lucia/-/lucia-2.0.0.tgz#82d9d44af5405336e97e3fd5d31c9d512749ee4b"
+  integrity sha512-WRBMoZIgTHH6y2bAEHZWgWcMH6tDsQ+wf45juUgmn3ycjipn/e6OGpWki4XSjEuRm50WXghH+2EF9LCjCHUsUw==
+
 luxon@^2.4.0:
   version "2.5.2"
   resolved "https://registry.yarnpkg.com/luxon/-/luxon-2.5.2.tgz#17ed497f0277e72d58a4756d6a9abee4681457b6"

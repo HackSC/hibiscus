@@ -42,6 +42,7 @@
     "formik": "^2.2.9",
     "fuse.js": "^6.6.2",
     "jsonwebtoken": "^8.5.1",
+    "lucia": "^2.0.0",
     "meilisearch": "^0.28.0",
     "mime-types": "^2.1.35",
     "moment": "^2.29.4",
