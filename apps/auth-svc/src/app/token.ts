@@ -35,7 +35,7 @@ export const verifyToken = async (
   accessToken: string
 ): Promise<HibiscusUser | null> => {
   try {
-    const session = await auth.getSession(accessToken);
+    const session = await auth.validateSession(accessToken);
 
     return toHibiscusUser(session.user);
   } catch (e) {
