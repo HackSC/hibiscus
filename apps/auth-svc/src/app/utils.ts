@@ -7,6 +7,7 @@ export const validRole = (role: string) => {
       HibiscusRole.HACKER,
       HibiscusRole.SPONSOR,
       HibiscusRole.VOLUNTEER,
+      HibiscusRole.JUDGE,
     ] as string[]
   ).includes(role);
 };

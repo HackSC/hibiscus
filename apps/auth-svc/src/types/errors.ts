@@ -39,3 +39,15 @@ export class UnauthorizedError extends Error {
     this.cause = cause;
   }
 }
+
+export class OTPGenerationError extends Error {
+  constructor() {
+    super('Failed to generate a unique OTP');
+  }
+}
+
+export enum OTPValidationResult {
+  INVALID_OTP = 'INVALID_OTP',
+  EXPIRED_OTP = 'EXPIRED_OTP',
+  VALIDATION_SUCCESS = 'VALIDATION_SUCCESS',
+}
