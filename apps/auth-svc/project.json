@@ -12,7 +12,7 @@
         "compiler": "tsc",
         "outputPath": "dist/apps/auth-svc",
         "main": "apps/auth-svc/src/main.ts",
-        "tsConfig": "apps/auth-svc/tsconfig.app.json",
+        "tsConfig": "apps/auth-svc/tsconfig.json",
         "assets": ["apps/auth-svc/src/assets"]
       },
       "configurations": {
