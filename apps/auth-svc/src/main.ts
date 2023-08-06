@@ -11,7 +11,7 @@ import {
 import { HibiscusRole, HibiscusUser } from './types/user';
 import { createResponseBody, validRole } from './app/utils';
 import { createUser } from './app/user';
-import { verifyToken } from './app/token';
+import { issueAccessToken, verifyToken } from './app/token';
 import { auth } from './app/lucia';
 import { login } from './app/login';
 import { verifyEmail } from './app/email';
@@ -85,7 +85,7 @@ app.get('/:role/register', async (req, res, next) => {
     return next(new RoleError(400, 'Invalid role.'));
   }
   const { firstName, lastName, email, password } = req.body;
-  const accessToken = req.headers.authorization;
+  const accessToken = auth.readBearerToken(req.headers.authorization);
   // TODO: verify correct body via Zod
   // try to create the user
   try {
@@ -96,18 +96,14 @@ app.get('/:role/register', async (req, res, next) => {
       accessToken ? { accessToken } : undefined
     );
 
-    // Set session on client side
-    const session = await auth.createSession({
-      userId: user.id,
-      attributes: {},
-    });
-    const authRequest = auth.handleRequest(req, res);
-    authRequest.setSession(session);
+    // Return session ID (access token)
+    const userToken = await issueAccessToken(user.id);
 
     return res.json(
       createResponseBody({
         data: {
           id: user.id,
+          accessToken: userToken,
         },
       })
     );
@@ -145,14 +141,12 @@ app.get('/login', authorize(), async (req, res, next) => {
   // audit log this login
   const { email, password } = req.body;
   try {
-    const session = await login(email, password);
-    const authRequest = auth.handleRequest(req, res);
-    authRequest.setSession(session);
+    const accessToken = await login(email, password);
 
     return res.json(
       createResponseBody({
         data: {
-          accessToken: session.sessionId,
+          accessToken,
         },
       })
     );
@@ -226,15 +220,12 @@ app.post('/verify-email', async (req, res, next) => {
   try {
     const result = await verifyEmail(pin, user.id);
     if (result === OTPValidationResult.VALIDATION_SUCCESS) {
-      const session = await auth.createSession({
-        userId: user.id,
-        attributes: {},
-      });
+      const newToken = issueAccessToken(user.id);
 
       return res.json(
         createResponseBody({
           data: {
-            accessToken: session.sessionId,
+            accessToken: newToken,
           },
         })
       );

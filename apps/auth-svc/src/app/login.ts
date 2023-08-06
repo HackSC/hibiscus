@@ -1,19 +1,17 @@
-import { LuciaError, Session } from 'lucia';
+import { LuciaError } from 'lucia';
 import { auth } from './lucia';
 import { LoginError } from '../types/errors';
+import { issueAccessToken } from './token';
 
 export const login = async (
   email: string,
   password: string
-): Promise<Session> => {
+): Promise<string> => {
   try {
     const key = await auth.useKey('email', email.toLowerCase(), password);
-    const session = await auth.createSession({
-      userId: key.userId,
-      attributes: {},
-    });
+    const accessToken = await issueAccessToken(key.userId);
 
-    return session;
+    return accessToken;
   } catch (e) {
     if (
       e instanceof LuciaError &&

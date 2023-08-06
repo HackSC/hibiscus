@@ -1,4 +1,4 @@
-import { LuciaError, Session } from 'lucia';
+import { LuciaError } from 'lucia';
 import { UnauthorizedCause, UnauthorizedError } from '../types/errors';
 import { HibiscusUser } from '../types/user';
 import { createKey } from './keys';
@@ -14,8 +14,8 @@ import { toHibiscusUser } from './user';
  */
 export const issueAccessToken = async (userId: string): Promise<string> => {
   // name = user ID for now
-  const key = await createKey(userId);
-  return key.id;
+  const session = await auth.createSession({ userId, attributes: {} });
+  return session.sessionId;
 };
 
 /**
