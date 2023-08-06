@@ -40,7 +40,7 @@ export const verifyToken = async (
     return toHibiscusUser(session.user);
   } catch (e) {
     if (e instanceof LuciaError) {
-      if (e.name === 'AUTH_INVALID_SESSION_ID') {
+      if (e.message === 'AUTH_INVALID_SESSION_ID') {
         throw new UnauthorizedError(
           UnauthorizedCause.INVALID_ACCESS_TOKEN,
           'Invalid access token'
