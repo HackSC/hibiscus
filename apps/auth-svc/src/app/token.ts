@@ -1,9 +1,9 @@
 import { LuciaError } from 'lucia';
 import { UnauthorizedCause, UnauthorizedError } from '../types/errors';
 import { HibiscusUser } from '../types/user';
-import { createKey } from './keys';
 import { auth } from './lucia';
 import { toHibiscusUser } from './user';
+import { AuditLogAction, AuditableEntity, createAuditLog } from './audit-logs';
 
 /**
  * Issue an access token for the user, which will be used for all future logins
@@ -15,6 +15,12 @@ import { toHibiscusUser } from './user';
 export const issueAccessToken = async (userId: string): Promise<string> => {
   // name = user ID for now
   const session = await auth.createSession({ userId, attributes: {} });
+  await createAuditLog({
+    action: AuditLogAction.CREATE_KEY,
+    entity: AuditableEntity.Key,
+    entityId: session.sessionId,
+    meta: { userId },
+  });
   return session.sessionId;
 };
 
@@ -45,8 +51,3 @@ export const verifyToken = async (
     throw e;
   }
 };
-
-interface TokenValidationResult {
-  user: HibiscusUser | null;
-  newToken: string | null;
-}

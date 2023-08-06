@@ -1,6 +1,6 @@
-import { NotImplementedError } from '../types/errors';
 import { HibiscusUserId } from '../types/user';
 import { KeyId } from './keys';
+import { prismaClient } from './prisma';
 
 export type AuditLogId = string;
 
@@ -17,13 +17,14 @@ export enum AuditLogAction {
   REACTIVATE_KEY = 'REACTIVATE_KEY',
   CREATE_USER = 'CREATE_USER',
   UPDATE_USER = 'UPDATE_USER',
+  VERIFY_USER = 'VERIFY_USER',
 }
 
 export interface AuditLog {
   id: AuditLogId;
   action: AuditLogAction;
-  entity: AuditableEntity;
-  entityId: KeyId | HibiscusUserId;
+  // entity: AuditableEntity;
+  entityId?: KeyId | HibiscusUserId;
   createdAt: Date;
   meta?: Record<string, string>;
 }
@@ -41,5 +42,21 @@ export const createAuditLog = async (details: {
   entityId: KeyId | HibiscusUserId;
   meta?: Record<string, string>;
 }): Promise<AuditLog> => {
-  throw new NotImplementedError();
+  const auditLog = await prismaClient.auditLog.create({
+    data: {
+      action: details.action,
+      keyId: details.entityId,
+      meta: details.meta,
+    },
+  });
+
+  const auditLogConverted = {
+    id: auditLog.id,
+    action: auditLog.action as AuditLogAction,
+    createdAt: auditLog.createdAt,
+    entityId: auditLog.keyId ?? undefined,
+    meta: auditLog.meta ? JSON.parse(auditLog.meta.toString()) : undefined,
+  };
+
+  return auditLogConverted;
 };

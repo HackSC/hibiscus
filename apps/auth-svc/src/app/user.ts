@@ -92,7 +92,7 @@ export const createUser = async (
     throw e;
   }
 
-  const log = await createAuditLog({
+  await createAuditLog({
     action: AuditLogAction.CREATE_USER,
     entity: AuditableEntity.HibiscusUser,
     entityId: user.userId,

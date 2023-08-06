@@ -8,6 +8,7 @@ import {
   OTPValidationResult,
 } from '../types/errors';
 import { auth } from './lucia';
+import { AuditLogAction, AuditableEntity, createAuditLog } from './audit-logs';
 
 const MAX_REPEATS_OTP = 5;
 
@@ -81,6 +82,12 @@ export const verifyEmail = async (
   const user = await auth.getUser(targetUserId);
   await auth.invalidateAllUserSessions(user.userId);
   await auth.updateUserAttributes(user.userId, { emailVerified: true });
+
+  await createAuditLog({
+    action: AuditLogAction.VERIFY_USER,
+    entity: AuditableEntity.HibiscusUser,
+    entityId: user.userId,
+  });
 
   return OTPValidationResult.VALIDATION_SUCCESS;
 };
