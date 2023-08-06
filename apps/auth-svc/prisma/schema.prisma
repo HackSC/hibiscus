@@ -25,32 +25,34 @@ model User {
   firstName String
   lastName String
   role HibiscusRole
+
+  auth_session Session[]
+  auth_key     Key[]
+}
+
+model Session {
+  id             String @id @unique
+  user_id        String
+  active_expires BigInt
+  idle_expires   BigInt
+  user           User   @relation(references: [id], fields: [user_id], onDelete: Cascade)
+
+  @@index([user_id])
 }
 
 model Key {
-  id            String     @id @default(uuid())
-  key           String     @unique
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime?
-  revokedAt     DateTime?
-  reactivatedAt DateTime?
-  meta          Json?
-  auditLogs     AuditLog[]
-}
+  id              String  @id @unique
+  hashed_password String?
+  user_id         String
+  user            User    @relation(references: [id], fields: [user_id], onDelete: Cascade)
 
-enum AuditLogAction {
-  CREATE_KEY
-  UPDATE_KEY
-  DELETE_KEY
-  REVOKE_KEY
-  REACTIVATE_KEY
+  @@index([user_id])
 }
 
 model AuditLog {
   id        String         @id @default(uuid())
-  action    AuditLogAction
+  action    String
   createdAt DateTime       @default(now())
   meta      Json?
-  Key       Key?           @relation(fields: [keyId], references: [id])
   keyId     String?
 }
