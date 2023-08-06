@@ -38,7 +38,7 @@ export const verifyEmail = async (
   // check if there's an unexpired verification record in the database
   // compare PIN
   const token = await prismaClient.emailVerificationToken.findFirst({
-    where: { id: pin, userId: targetUserId },
+    where: { id: pin, user_id: targetUserId },
   });
 
   if (token === null) {
@@ -53,7 +53,7 @@ export const verifyEmail = async (
 
   // Delete all OTPs associated with user
   await prismaClient.emailVerificationToken.deleteMany({
-    where: { userId: targetUserId },
+    where: { user_id: targetUserId },
   });
 
   // Update DB verification status
@@ -82,14 +82,14 @@ const generateEmailVerificationToken = async (
   maxRepeats: 5
 ): Promise<string> => {
   const storedUserTokens = await prismaClient.emailVerificationToken.findMany({
-    where: { userId },
+    where: { user_id: userId },
   });
 
   if (storedUserTokens.length > 0) {
     // Clear expired tokens
-    const expiredTokens = storedUserTokens.find(
-      (token) => !isWithinExpiration(Number(token.expires))
-    );
+    const expiredTokens = storedUserTokens
+      .filter((token) => !isWithinExpiration(Number(token.expires)))
+      .map((token) => token.user_id);
     await prismaClient.emailVerificationToken.deleteMany({
       where: { id: { in: expiredTokens } },
     });
@@ -109,7 +109,9 @@ const generateEmailVerificationToken = async (
       // Expiry time in milliseconds
       const expires = new Date().getTime() + expirationMins * 60 * 1000;
 
-      await prismaClient.user.create({ data: { id: token, userId, expires } });
+      await prismaClient.emailVerificationToken.create({
+        data: { id: token, user_id: userId, expires },
+      });
 
       return token;
     } catch (e) {
