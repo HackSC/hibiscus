@@ -1,20 +1,26 @@
 import express, { NextFunction, Request, Response } from 'express';
 import {
+  DuplicateEmailError,
+  InvalidEmailError,
+  LoginError,
+  OTPValidationResult,
   RoleError,
   UnauthorizedCause,
   UnauthorizedError,
 } from './types/errors';
-import { HibiscusRole } from './types/user';
+import { HibiscusRole, HibiscusUser } from './types/user';
 import { createResponseBody, validRole } from './app/utils';
 import { createUser } from './app/user';
-import { issueAccessToken, verifyToken } from './app/token';
-import { access } from 'fs';
+import { verifyToken } from './app/token';
+import { auth } from './app/lucia';
+import { login } from './app/login';
+import { verifyEmail } from './app/email';
 
 const authorize =
   (roles?: HibiscusRole[]) =>
   async (req: Request, res: Response, next: NextFunction) => {
-    const token = req.headers.authorization;
-    if (token === undefined) {
+    const token = auth.readBearerToken(req.headers.authorization);
+    if (token === null) {
       return res.status(401).json(
         createResponseBody({
           meta: {
@@ -74,21 +80,30 @@ const authorize =
 const app = express();
 
 app.get('/:role/register', async (req, res, next) => {
-  // each route should issue a JWT token with the role in the claims
   const role = req.params.role.toUpperCase() as HibiscusRole;
   if (!validRole(role)) {
     return next(new RoleError(400, 'Invalid role.'));
   }
-  const { firstName, lastName, email } = req.body;
+  const { firstName, lastName, email, password } = req.body;
   const accessToken = req.headers.authorization;
   // TODO: verify correct body via Zod
   // try to create the user
   try {
+    // Create user and send verification email
     const user = await createUser(
       { firstName, lastName, email, role },
-      undefined,
+      password,
       accessToken ? { accessToken } : undefined
     );
+
+    // Set session on client side
+    const session = await auth.createSession({
+      userId: user.id,
+      attributes: {},
+    });
+    const authRequest = auth.handleRequest(req, res);
+    authRequest.setSession(session);
+
     return res.json(
       createResponseBody({
         data: {
@@ -107,20 +122,144 @@ app.get('/:role/register', async (req, res, next) => {
           },
         })
       );
+    } else if (
+      error instanceof InvalidEmailError ||
+      error instanceof DuplicateEmailError
+    ) {
+      return res.status(400).json(
+        createResponseBody({
+          meta: {
+            statusCode: 400,
+            message: error.message,
+          },
+        })
+      );
     } else {
       return next(error);
     }
   }
 });
 
-app.get('/login', authorize(), (req, res, next) => {
+app.get('/login', authorize(), async (req, res, next) => {
   // each route should issue a JWT token with enough scopes according to the role
   // audit log this login
-  return;
+  const { email, password } = req.body;
+  try {
+    const session = await login(email, password);
+    const authRequest = auth.handleRequest(req, res);
+    authRequest.setSession(session);
+
+    return res.json(
+      createResponseBody({
+        data: {
+          accessToken: session.sessionId,
+        },
+      })
+    );
+  } catch (error) {
+    if (error instanceof LoginError) {
+      return res.status(401).json(
+        createResponseBody({
+          meta: {
+            statusCode: 401,
+            message: error.message,
+          },
+        })
+      );
+    } else {
+      return next(error);
+    }
+  }
 });
 
 app.get('/logout', async (req, res) => {
   //
+});
+
+app.post('/verify-email', async (req, res, next) => {
+  const { pin } = req.body;
+  const accessToken = auth.readBearerToken(req.headers.authorization);
+
+  if (accessToken === null) {
+    return res.status(401).json(
+      createResponseBody({
+        meta: {
+          statusCode: 401,
+          message: 'No active session',
+          code: UnauthorizedCause.NO_ACCESS_TOKEN,
+        },
+      })
+    );
+  }
+
+  let user: HibiscusUser | null;
+  try {
+    user = await verifyToken(accessToken);
+  } catch (error) {
+    if (error instanceof UnauthorizedError) {
+      return res.status(401).json(
+        createResponseBody({
+          meta: {
+            statusCode: 401,
+            message: 'User is not authorized',
+            code: error.cause,
+          },
+        })
+      );
+    } else {
+      return next(error);
+    }
+  }
+
+  if (user === null) {
+    return res.status(401).json(
+      createResponseBody({
+        meta: {
+          statusCode: 401,
+          message: 'Invalid session',
+          code: UnauthorizedCause.INVALID_ACCESS_TOKEN,
+        },
+      })
+    );
+  }
+
+  try {
+    const result = await verifyEmail(pin, user.id);
+    if (result === OTPValidationResult.VALIDATION_SUCCESS) {
+      const session = await auth.createSession({
+        userId: user.id,
+        attributes: {},
+      });
+
+      return res.json(
+        createResponseBody({
+          data: {
+            accessToken: session.sessionId,
+          },
+        })
+      );
+    } else if (result === OTPValidationResult.INVALID_OTP) {
+      return res.status(400).json(
+        createResponseBody({
+          meta: {
+            statusCode: 400,
+            message: 'Invalid OTP',
+          },
+        })
+      );
+    } else if (result === OTPValidationResult.EXPIRED_OTP) {
+      return res.status(400).json(
+        createResponseBody({
+          meta: {
+            statusCode: 400,
+            message: 'Expired OTP',
+          },
+        })
+      );
+    }
+  } catch (error) {
+    return next(error);
+  }
 });
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

@@ -2,7 +2,6 @@ import { Prisma } from '@prisma/client';
 import {
   DuplicateEmailError,
   InvalidEmailError,
-  NotImplementedError,
   UnauthorizedCause,
   UnauthorizedError,
 } from '../types/errors';
@@ -72,7 +71,7 @@ export const createUser = async (
   try {
     // Create user
     // Throws error if email is already in use
-    user = await auth.createUser({
+    user = (await auth.createUser({
       key,
       attributes: {
         email: details.email.toLowerCase(),
@@ -81,7 +80,7 @@ export const createUser = async (
         firstName: details.firstName,
         lastName: details.lastName,
       },
-    });
+    })) as User;
   } catch (e) {
     if (e instanceof Prisma.PrismaClientKnownRequestError) {
       if (e.code === 'P2002') {
@@ -111,4 +110,21 @@ export const createUser = async (
 const isValidEmail = (maybeEmail: string): boolean => {
   const emailRegexp = /^.+@.+$/; // [one or more character]@[one or more character]
   return emailRegexp.test(maybeEmail);
+};
+
+/**
+ * Converts a Lucia User object to a HibiscusUser object
+ *
+ * @param authUser Lucia auth user object
+ * @returns a HibiscusUser object
+ */
+export const toHibiscusUser = (authUser: User): HibiscusUser => {
+  return {
+    id: authUser.userId,
+    email: authUser.email,
+    emailVerified: authUser.emailVerified,
+    firstName: authUser.firstName,
+    lastName: authUser.lastName,
+    role: authUser.role,
+  };
 };
