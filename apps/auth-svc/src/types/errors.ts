@@ -51,3 +51,21 @@ export enum OTPValidationResult {
   EXPIRED_OTP = 'EXPIRED_OTP',
   VALIDATION_SUCCESS = 'VALIDATION_SUCCESS',
 }
+
+export class InvalidEmailError extends Error {
+  constructor() {
+    super('Email provided is invalid');
+  }
+}
+
+export class DuplicateEmailError extends Error {
+  constructor() {
+    super('This email is already registered with another user');
+  }
+}
+
+export class LoginError extends Error {
+  constructor() {
+    super('Incorrect email or password');
+  }
+}

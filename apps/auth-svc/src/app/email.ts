@@ -2,17 +2,38 @@ import { HibiscusUserId } from '../types/user';
 import { generateRandomString, isWithinExpiration } from 'lucia/utils';
 import { prismaClient } from './prisma';
 import { Prisma } from '@prisma/client';
-import { OTPGenerationError, OTPValidationResult } from '../types/errors';
+import {
+  NotImplementedError,
+  OTPGenerationError,
+  OTPValidationResult,
+} from '../types/errors';
 import { auth } from './lucia';
 
+const MAX_REPEATS_OTP = 5;
+
+/**
+ * Creates a PIN and a verification record and send it to user email
+ *
+ * @param to email address to send the OTP to
+ * @param userId user ID
+ * @param pinLength number of digits in the OTP
+ * @param expirationMins number of minutes by which the OTP would expire
+ */
 export const sendEmailVerificationViaPIN = async (
   to: string,
   userId: HibiscusUserId,
   pinLength: number,
   expirationMins = 30
 ) => {
-  // create a PIN and a verification record `expirationMins`
-  // send it to user email
+  const otp = await generateEmailVerificationToken(
+    userId,
+    pinLength,
+    expirationMins,
+    MAX_REPEATS_OTP
+  );
+
+  // TODO: Send email through email service
+  throw new NotImplementedError();
 };
 
 export const resendEmailVerificationViaPIN = async (

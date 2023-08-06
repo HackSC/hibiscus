@@ -86,6 +86,7 @@ app.get('/:role/register', async (req, res, next) => {
   try {
     const user = await createUser(
       { firstName, lastName, email, role },
+      undefined,
       accessToken ? { accessToken } : undefined
     );
     return res.json(
