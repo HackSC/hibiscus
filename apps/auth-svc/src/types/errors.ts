@@ -69,3 +69,11 @@ export class LoginError extends Error {
     super('Incorrect email or password');
   }
 }
+
+export class MissingEnvError extends Error {
+  constructor(missingEnv: string) {
+    super(`Environment variable not defined: ${missingEnv}`);
+  }
+}
+
+export class ResendError extends Error {}

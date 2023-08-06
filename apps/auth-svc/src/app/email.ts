@@ -2,10 +2,13 @@ import { HibiscusUserId } from '../types/user';
 import { generateRandomString, isWithinExpiration } from 'lucia/utils';
 import { prismaClient } from './prisma';
 import { Prisma } from '@prisma/client';
+import { Resend } from 'resend';
+// import { getEnv } from '@hibiscus/env'; <-- TODO broken import
 import {
-  NotImplementedError,
+  MissingEnvError,
   OTPGenerationError,
   OTPValidationResult,
+  ResendError,
 } from '../types/errors';
 import { auth } from './lucia';
 import { AuditLogAction, AuditableEntity, createAuditLog } from './audit-logs';
@@ -33,8 +36,35 @@ export const sendEmailVerificationViaPIN = async (
     MAX_REPEATS_OTP
   );
 
-  // TODO: Send email through email service
-  throw new NotImplementedError();
+  // Send email through Resend
+  const apiKey = process.env.RESEND_API_KEY;
+  const emailFrom = process.env.RESEND_EMAIL_FROM;
+
+  if (apiKey === undefined) {
+    throw new MissingEnvError('RESEND_API_KEY');
+  }
+
+  if (emailFrom === undefined) {
+    throw new MissingEnvError('RESEND_EMAIL_FROM');
+  }
+
+  let resend: Resend;
+  try {
+    resend = new Resend(apiKey);
+  } catch (e) {
+    throw new ResendError('Failed to initialize email service');
+  }
+
+  try {
+    await resend.emails.send({
+      from: emailFrom,
+      to: [to],
+      subject: 'HackSC OTP',
+      html: `${otp}`,
+    });
+  } catch (e) {
+    throw new ResendError('Failed to send verification email');
+  }
 };
 
 export const resendEmailVerificationViaPIN = async (
