@@ -77,6 +77,58 @@ export const resendEmailVerificationViaPIN = async (
 };
 
 /**
+ * Creates a PIN and a verification record and send it to user email
+ *
+ * @param to email address to send the OTP to
+ * @param userId user ID
+ * @param pinLength number of digits in the OTP
+ * @param expirationMins number of minutes by which the OTP would expire
+ */
+export const sendEmailInvite = async (
+  to: string,
+  userId: HibiscusUserId,
+  pinLength: number,
+  expirationMins = 30
+) => {
+  const otp = await generateEmailVerificationToken(
+    userId,
+    pinLength,
+    expirationMins,
+    MAX_REPEATS_OTP
+  );
+
+  // Send email through Resend
+  const apiKey = process.env.RESEND_API_KEY;
+  const emailFrom = process.env.RESEND_EMAIL_FROM;
+
+  if (apiKey === undefined) {
+    throw new MissingEnvError('RESEND_API_KEY');
+  }
+
+  if (emailFrom === undefined) {
+    throw new MissingEnvError('RESEND_EMAIL_FROM');
+  }
+
+  let resend: Resend;
+  try {
+    resend = new Resend(apiKey);
+  } catch (e) {
+    throw new ResendError('Failed to initialize email service');
+  }
+
+  try {
+    await resend.emails.send({
+      from: emailFrom,
+      to: [to],
+      subject: 'HackSC Invitation',
+      html: `sso.hacksc.com/invite/${otp}`,
+    });
+  } catch (e) {
+    throw new ResendError('Failed to send invitation email');
+  }
+};
+
+/**
  * Validates the provided email verification token
  *
  * @param pin OTP
@@ -168,7 +220,11 @@ const generateEmailVerificationToken = async (
       const expires = new Date().getTime() + expirationMins * 60 * 1000;
 
       await prismaClient.emailVerificationToken.create({
-        data: { id: token, user_id: userId, expires },
+        data: {
+          id: token,
+          user_id: userId,
+          expires,
+        },
       });
 
       return token;

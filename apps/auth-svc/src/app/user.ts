@@ -5,7 +5,7 @@ import {
   UnauthorizedCause,
   UnauthorizedError,
 } from '../types/errors';
-import { HibiscusRole, HibiscusUser } from '../types/user';
+import { HibiscusRole, HibiscusUser, HibiscusUserId } from '../types/user';
 import { AuditLogAction, AuditableEntity, createAuditLog } from './audit-logs';
 import { auth } from './lucia';
 import { User } from 'lucia';
@@ -98,7 +98,20 @@ export const createUser = async (
     entityId: user.userId,
   });
 
-  return user;
+  return toHibiscusUser(user);
+};
+
+export const updatePassword = async (password: string, accessToken: string) => {
+  const user = await verifyToken(accessToken);
+
+  if (user === null) {
+    throw new UnauthorizedError(
+      UnauthorizedCause.INVALID_ACCESS_TOKEN,
+      UnauthorizedCause.INVALID_ACCESS_TOKEN
+    );
+  }
+
+  await auth.updateKeyPassword('email', user.id, password);
 };
 
 /**

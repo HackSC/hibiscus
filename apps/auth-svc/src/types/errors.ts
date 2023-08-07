@@ -77,3 +77,5 @@ export class MissingEnvError extends Error {
 }
 
 export class ResendError extends Error {}
+
+export class DatabaseSchemaError extends Error {}

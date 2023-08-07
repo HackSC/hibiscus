@@ -10,11 +10,11 @@ import {
 } from './types/errors';
 import { HibiscusRole, HibiscusUser } from './types/user';
 import { createResponseBody, validRole } from './app/utils';
-import { createUser } from './app/user';
 import { issueAccessToken, verifyToken } from './app/token';
 import { auth } from './app/lucia';
 import { login } from './app/login';
 import { verifyEmail } from './app/email';
+import { invite, signup } from './app/signup';
 
 const authorize =
   (roles?: HibiscusRole[]) =>
@@ -79,7 +79,9 @@ const authorize =
 
 const app = express();
 
-app.get('/:role/register', async (req, res, next) => {
+app.use(express.json());
+
+app.post('/:role/register', async (req, res, next) => {
   const role = req.params.role.toUpperCase() as HibiscusRole;
   if (!validRole(role)) {
     return next(new RoleError(400, 'Invalid role.'));
@@ -90,11 +92,16 @@ app.get('/:role/register', async (req, res, next) => {
   // try to create the user
   try {
     // Create user and send verification email
-    const user = await createUser(
-      { firstName, lastName, email, role },
-      password,
-      accessToken ? { accessToken } : undefined
-    );
+    let user: HibiscusUser;
+    if (role === HibiscusRole.HACKER) {
+      user = await signup({ firstName, lastName, email, role }, password);
+    } else {
+      // Creating any other role requires admin access
+      user = await invite(
+        { firstName, lastName, email, role },
+        accessToken ? { accessToken } : undefined
+      );
+    }
 
     // Return session ID (access token)
     const userToken = await issueAccessToken(user.id);
@@ -136,7 +143,7 @@ app.get('/:role/register', async (req, res, next) => {
   }
 });
 
-app.get('/login', authorize(), async (req, res, next) => {
+app.post('/login', async (req, res, next) => {
   // each route should issue a JWT token with enough scopes according to the role
   // audit log this login
   const { email, password } = req.body;
@@ -166,7 +173,7 @@ app.get('/login', authorize(), async (req, res, next) => {
   }
 });
 
-app.get('/logout', async (req, res) => {
+app.post('/logout', async (req, res) => {
   //
 });
 
@@ -220,7 +227,7 @@ app.post('/verify-email', async (req, res, next) => {
   try {
     const result = await verifyEmail(pin, user.id);
     if (result === OTPValidationResult.VALIDATION_SUCCESS) {
-      const newToken = issueAccessToken(user.id);
+      const newToken = await issueAccessToken(user.id);
 
       return res.json(
         createResponseBody({

@@ -1,6 +1,7 @@
 import { HibiscusUserId } from '../types/user';
 import { KeyId } from './keys';
 import { prismaClient } from './prisma';
+import { DatabaseSchemaError } from '../types/errors';
 
 export type AuditLogId = string;
 
@@ -50,13 +51,33 @@ export const createAuditLog = async (details: {
     },
   });
 
+  if (auditLog.meta !== null && !isRecord(auditLog.meta)) {
+    const message =
+      'Failed to create audit log: meta field is not a JSON object';
+    throw new DatabaseSchemaError(message);
+  }
+
   const auditLogConverted = {
     id: auditLog.id,
     action: auditLog.action as AuditLogAction,
     createdAt: auditLog.createdAt,
     entityId: auditLog.keyId ?? undefined,
-    meta: auditLog.meta ? JSON.parse(auditLog.meta.toString()) : undefined,
+    meta: auditLog.meta ?? undefined,
   };
 
   return auditLogConverted;
 };
+
+function isRecord(obj: unknown): obj is Record<string, string> {
+  if (obj === null) return false;
+
+  if (typeof obj !== 'object') return false;
+
+  if (Array.isArray(obj)) return false;
+
+  if (Object.getOwnPropertySymbols(obj).length > 0) return false;
+
+  return Object.getOwnPropertyNames(obj).every(
+    (prop) => typeof (obj as Record<string, unknown>)[prop] === 'string'
+  );
+}
