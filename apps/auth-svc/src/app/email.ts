@@ -185,7 +185,7 @@ export const verifyEmail = async (
  * @param maxRepeats number of times to retry generating OTP if collisions occur
  * @returns the OTP
  */
-const generateEmailVerificationToken = async (
+export const generateEmailVerificationToken = async (
   userId: HibiscusUserId,
   pinLength: number,
   expirationMins: number,

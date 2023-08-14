@@ -1,16 +1,18 @@
 /* eslint-disable */
 export default {
   displayName: 'auth-svc',
-  preset: '../../jest.preset.js',
-  globals: {
-    'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.spec.json',
-    },
-  },
+  // preset: 'ts-jest/presets/js-with-ts',
   testEnvironment: 'node',
   transform: {
-    '^.+\\.[tj]s$': 'ts-jest',
+    // '^.+\\.[tj]s$': 'babel-jest',
+    '^.+\\.[tj]s$': [
+      'ts-jest',
+      {
+        tsconfig: 'tsconfig.spec.json',
+      },
+    ],
   },
+  // transformIgnorePatterns: ['/node_modules/(?!lucia/)'],
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/apps/auth-svc',
+  coverageDirectory: '../../coverage/apps/auth-svc/dist',
 };
