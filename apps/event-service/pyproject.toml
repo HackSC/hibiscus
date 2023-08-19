@@ -26,6 +26,7 @@ coverage = {extras = ["toml"], version = "^7.2.2"}
 pytest = "^7.2.2"
 sqlalchemy = "^2.0.15"
 psycopg2-binary = "^2.9.6"
+chalice = "^1.29.0"
 
 
 [build-system]

@@ -1,107 +1,101 @@
-from flask import Flask, jsonify, request
-from flask.json.provider import DefaultJSONProvider
-from flask_cors import CORS
+from chalice import Chalice, BadRequestError
 import datetime
 from dateutil.parser import isoparse
 from repository import repository
-import data_types
 
 
-class CustomJSONProvider(DefaultJSONProvider):
-    def default(self, o):
-        if isinstance(o, datetime.date) or isinstance(o, datetime.datetime):
-            return o.isoformat()
-        return super().default(o)
+# class CustomJSONProvider(DefaultJSONProvider):
+#     def default(self, o):
+#         if isinstance(o, datetime.date) or isinstance(o, datetime.datetime):
+#             return o.isoformat()
+#         return super().default(o)
 
 
-app = Flask(__name__)
-app.json = CustomJSONProvider(app)
-
-CORS(app)
+app = Chalice(app_name="event-service")
+app.api.cors = True
 
 
-@app.get("/health")
+@app.route("/health")
 def health():
-    return jsonify({"status": "ALIVE"})
+    return {"status": "ALIVE"}
 
 
-@app.get("/events/<int:event_id>")
-def get_event(event_id: int):
+@app.route("/events/{event_id}")
+def get_event(event_id: str):
     # TODO: Check auth role
-    is_admin = True
+    is_admin = False
 
     try:
+        event_id = int(event_id)
+
         if is_admin:
             event = repository.get_event_admin(event_id)
         else:
             event = repository.get_event(event_id)
 
-        return jsonify(event), 200
-    except Exception as e:
-        return jsonify({"error": f"Failed to get requested event: {e}"}), 400
-
-
-@app.get("/events")
-def get_events():
-    try:
-        date = request.args.get("date")
-        if date is not None:
-            date = isoparse(date)
-
-        after = request.args.get("after")
-        if after is not None:
-            after = isoparse(after)
-
-        page = request.args.get("page", type=int)
-        if page is None:
-            page = 1
-
-        page_size = request.args.get("pageSize", type=int)
-        if page_size is None:
-            page_size = 20
-
-        events = repository.get_events(
-            page=page,
-            page_size=page_size,
-            date=date,
-            after=after,
-            name=request.args.get("name"),
-            location=request.args.get("location"),
+        return event
+    except ValueError:
+        raise BadRequestError(
+            "Failed to get requested event: event_id should be an integer"
         )
-        return jsonify({"page": page, "events": events}), 200
     except Exception as e:
-        return jsonify({"error": f"Failed to get events: {e}"}), 400
+        raise BadRequestError(f"Failed to get requested event: {e}")
 
 
-@app.get("/events/<user_id>/pinned-events")
+@app.route("/events")
+def get_events():
+    body = app.current_request.json_body
+
+    date = body.get("date")
+    if date is not None:
+        date = isoparse(date)
+
+    after = body.get("after")
+    if after is not None:
+        after = isoparse(after)
+
+    page = body.get("page", type=int)
+    if page is None:
+        page = 1
+
+    page_size = body.get("pageSize", type=int)
+    if page_size is None:
+        page_size = 20
+
+    events = repository.get_events(
+        page=page,
+        page_size=page_size,
+        date=date,
+        after=after,
+        name=body.get("name"),
+        location=body.get("location"),
+    )
+    return {"page": page, "events": events}
+
+
+@app.route("/events/{user_id}/pinned-events")
 def get_pinned_events(user_id: str):
-    try:
-        events = repository.get_pinned_events(user_id)
-        return jsonify({"pinnedEvents": events}), 200
-    except Exception as e:
-        return jsonify({"error": f"Failed to get pinned events: {e}"}), 400
+    # try:
+    events = repository.get_pinned_events(user_id)
+    return {"pinnedEvents": events}
 
 
-@app.post("/events/<user_id>/pinned-events")
+@app.route("/events/{user_id}/pinned-events", methods=["POST"])
 def add_pinned_event(user_id: str):
-    body = request.json
+    body = app.current_request.json_body
 
-    try:
-        repository.add_pinned_event(user_id, body.get("pin_event"))
-        return jsonify({"pinned_event": body.get("pin_event")}), 200
-    except Exception as e:
-        return jsonify({"error": f"Failed to pin event: {e}"}), 400
+    # try:
+    repository.add_pinned_event(user_id, body.get("pin_event"))
+    return {"pinned_event": body.get("pin_event")}
 
 
-@app.delete("/events/<user_id>/pinned-events")
+@app.route("/events/<user_id>/pinned-events", methods=["DELETE"])
 def remove_pinned_event(user_id: str):
-    body = request.json
+    body = app.current_request.json_body
 
-    try:
-        repository.remove_pinned_event(user_id, body.get("unpin_event"))
-        return jsonify({"unpinned_event": body.get("unpin_event")}), 200
-    except Exception as e:
-        return jsonify({"error": f"Failed to unpin event: {e}"}), 400
+    # try:
+    repository.remove_pinned_event(user_id, body.get("unpin_event"))
+    return {"unpinned_event": body.get("unpin_event")}
 
 
 # Admin endpoints
