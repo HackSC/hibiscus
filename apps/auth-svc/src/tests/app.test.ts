@@ -4,9 +4,10 @@ import { prismaClient } from '../app/prisma';
 import { auth } from '../app/lucia';
 import { HibiscusRole } from '../types/user';
 import { generateEmailVerificationToken } from '../app/email';
+import { LuciaError } from 'lucia';
 
 let adminAccessToken = '';
-let hackerAccessToken = '';
+let accessToken = '';
 
 beforeAll(async () => {
   // Clear all tables
@@ -65,7 +66,7 @@ beforeAll(async () => {
     userId: hacker.userId,
     attributes: {},
   });
-  hackerAccessToken = hackerSession.sessionId;
+  accessToken = hackerSession.sessionId;
 });
 
 describe('/:role/register', () => {
@@ -122,7 +123,7 @@ describe('/:role/register', () => {
         password: 'abc123',
       })
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${hackerAccessToken}`);
+      .set('Authorization', `Bearer ${accessToken}`);
 
     expect(res.headers['content-type']).toMatch(/json/);
     expect(res.status).toEqual(401);
@@ -176,7 +177,50 @@ describe('/login', () => {
   });
 });
 
-// describe('/logout', () => {})
+describe('/logout', () => {
+  test('invalidates access token upon logging out', async () => {
+    // Set up hacker account
+    const hacker = await auth.createUser({
+      key: {
+        providerId: 'email',
+        providerUserId: 'delivered+hacker1@resend.dev',
+        password: 'hackerabc123',
+      },
+      attributes: {
+        email: 'delivered+hacker1@resend.dev',
+        emailVerified: true,
+        role: HibiscusRole.HACKER,
+        firstName: 'Hack',
+        lastName: 'SC',
+      },
+    });
+
+    const hackerSession = await auth.createSession({
+      userId: hacker.userId,
+      attributes: {},
+    });
+    accessToken = hackerSession.sessionId;
+
+    // Logout
+    const res = await request(app)
+      .post('/logout')
+      .set('Authorization', `Bearer ${accessToken}`);
+
+    expect(res.status).toEqual(200);
+
+    // Test access token validity
+    await expect(auth.getSession(accessToken)).rejects.toThrow(LuciaError);
+  });
+
+  test('returns error when invalid access token is provided', async () => {
+    const res = await request(app)
+      .post('/logout')
+      .set('Authorization', `Bearer abcdef`);
+
+    expect(res.headers['content-type']).toMatch(/json/);
+    expect(res.status).toEqual(401);
+  });
+});
 
 describe('/verify-email', () => {
   let unverifiedAccessToken = '';

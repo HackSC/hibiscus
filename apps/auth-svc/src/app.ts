@@ -15,6 +15,7 @@ import { auth } from './app/lucia';
 import { login } from './app/login';
 import { verifyEmail } from './app/email';
 import { invite, signup } from './app/signup';
+import { logout } from './app/logout';
 
 const authorize =
   (roles?: HibiscusRole[]) =>
@@ -173,8 +174,40 @@ app.post('/login', async (req, res, next) => {
   }
 });
 
-app.post('/logout', async (req, res) => {
-  //
+app.post('/logout', async (req, res, next) => {
+  const accessToken = auth.readBearerToken(req.headers.authorization);
+
+  if (accessToken === null) {
+    return res.status(401).json(
+      createResponseBody({
+        meta: {
+          statusCode: 401,
+          message: 'No active session',
+          code: UnauthorizedCause.NO_ACCESS_TOKEN,
+        },
+      })
+    );
+  }
+
+  try {
+    await logout(accessToken);
+
+    return res.json(createResponseBody());
+  } catch (error) {
+    if (error instanceof UnauthorizedError) {
+      return res.status(401).json(
+        createResponseBody({
+          meta: {
+            statusCode: 401,
+            message: 'User is not authorized',
+            code: error.cause,
+          },
+        })
+      );
+    } else {
+      return next(error);
+    }
+  }
 });
 
 app.post('/verify-email', async (req, res, next) => {
