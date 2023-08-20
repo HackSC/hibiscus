@@ -2,3 +2,5 @@
 dist/
 .coverage
 configs/env.local.yml
+.chalice/config.json
+.chalice/deployments

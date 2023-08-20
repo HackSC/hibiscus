@@ -1,0 +1,16 @@
+{
+  "version": "2.0",
+  "app_name": "event-service",
+  "stages": {
+    "dev": {
+      "api_gateway_stage": "api",
+      "environment_variables": {
+        "DB_USERNAME": "PLACEHOLDER",
+        "DB_PASSWORD": "PLACEHOLDER",
+        "DB_URL": "PLACEHOLDER",
+        "DB_PORT": "PLACEHOLDER",
+        "DB_NAME": "PLACEHOLDER"
+      }
+    }
+  }
+}

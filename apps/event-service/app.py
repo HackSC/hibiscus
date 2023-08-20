@@ -1,7 +1,6 @@
 from chalice import Chalice, BadRequestError
-import datetime
 from dateutil.parser import isoparse
-from repository import repository
+from chalicelib.repository import repository
 
 
 # class CustomJSONProvider(DefaultJSONProvider):
@@ -73,14 +72,14 @@ def get_events():
     return {"page": page, "events": events}
 
 
-@app.route("/events/{user_id}/pinned-events")
+@app.route("/events/pinned-events/{user_id}")
 def get_pinned_events(user_id: str):
     # try:
     events = repository.get_pinned_events(user_id)
     return {"pinnedEvents": events}
 
 
-@app.route("/events/{user_id}/pinned-events", methods=["POST"])
+@app.route("/events/pinned-events/{user_id}", methods=["POST"])
 def add_pinned_event(user_id: str):
     body = app.current_request.json_body
 
@@ -89,7 +88,7 @@ def add_pinned_event(user_id: str):
     return {"pinned_event": body.get("pin_event")}
 
 
-@app.route("/events/<user_id>/pinned-events", methods=["DELETE"])
+@app.route("/events/pinned-events/{user_id}", methods=["DELETE"])
 def remove_pinned_event(user_id: str):
     body = app.current_request.json_body
 

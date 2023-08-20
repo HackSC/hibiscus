@@ -2,7 +2,7 @@ from sqlalchemy import select, delete, update, func
 from sqlalchemy.orm import Session
 from typing import Optional
 from datetime import datetime, timedelta
-import data_types
+from .. import data_types
 from . import models
 from .engine import engine
 
