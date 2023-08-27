@@ -33,7 +33,7 @@ export const issueAccessToken = async (userId: string): Promise<string> => {
  */
 export const verifyToken = async (
   accessToken: string
-): Promise<HibiscusUser | null> => {
+): Promise<HibiscusUser> => {
   try {
     const session = await auth.validateSession(accessToken);
 

@@ -79,3 +79,9 @@ export class MissingEnvError extends Error {
 export class ResendError extends Error {}
 
 export class DatabaseSchemaError extends Error {}
+
+export class MissingParameterError extends Error {
+  constructor(missingParam: string) {
+    super(`Missing parameter in request body: ${missingParam}`);
+  }
+}

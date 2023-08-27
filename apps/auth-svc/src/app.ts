@@ -3,6 +3,7 @@ import {
   DuplicateEmailError,
   InvalidEmailError,
   LoginError,
+  MissingParameterError,
   OTPValidationResult,
   RoleError,
   UnauthorizedCause,
@@ -290,6 +291,40 @@ app.post('/verify-email', async (req, res, next) => {
     }
   } catch (error) {
     return next(error);
+  }
+});
+
+app.post('/verify-token', async (req, res, next) => {
+  const { accessToken } = req.body;
+
+  try {
+    if (accessToken === null) {
+      throw new MissingParameterError('accessToken');
+    }
+
+    const user = await verifyToken(accessToken);
+
+    return res.json(
+      createResponseBody({
+        data: {
+          user,
+        },
+      })
+    );
+  } catch (e) {
+    if (e instanceof MissingParameterError || e instanceof UnauthorizedError) {
+      console.log(e.message);
+      return res.status(400).json(
+        createResponseBody({
+          meta: {
+            statusCode: 400,
+            message: e.message,
+          },
+        })
+      );
+    } else {
+      return next(e);
+    }
   }
 });
 

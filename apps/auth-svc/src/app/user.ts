@@ -5,7 +5,7 @@ import {
   UnauthorizedCause,
   UnauthorizedError,
 } from '../types/errors';
-import { HibiscusRole, HibiscusUser, HibiscusUserId } from '../types/user';
+import { HibiscusRole, HibiscusUser } from '../types/user';
 import { AuditLogAction, AuditableEntity, createAuditLog } from './audit-logs';
 import { auth } from './lucia';
 import { User } from 'lucia';

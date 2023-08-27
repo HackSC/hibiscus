@@ -199,7 +199,7 @@ describe('/logout', () => {
       userId: hacker.userId,
       attributes: {},
     });
-    accessToken = hackerSession.sessionId;
+    const accessToken = hackerSession.sessionId;
 
     // Logout
     const res = await request(app)
@@ -321,5 +321,32 @@ describe('/verify-email', () => {
 
     expect(res.headers['content-type']).toMatch(/json/);
     expect(res.status).toEqual(401);
+  });
+});
+
+describe('/verify-token', () => {
+  test('verifies access token and returns user', async () => {
+    const res = await request(app)
+      .post('/verify-token')
+      .send({ accessToken })
+      .set('Accept', 'application/json');
+
+    expect(res.headers['content-type']).toMatch(/json/);
+    expect(res.status).toEqual(200);
+
+    expect(res.body).toHaveProperty('data');
+    expect(res.body.data).toHaveProperty('user');
+    expect(res.body.data.user).toHaveProperty('role');
+    expect(res.body.data.user.role).toBe(HibiscusRole.HACKER);
+  });
+
+  test('does not verify token if token is invalid', async () => {
+    const res = await request(app)
+      .post('/verify-token')
+      .send({ accessToken: 'abcdef' })
+      .set('Accept', 'application/json');
+
+    expect(res.headers['content-type']).toMatch(/json/);
+    expect(res.status).toEqual(400);
   });
 });
