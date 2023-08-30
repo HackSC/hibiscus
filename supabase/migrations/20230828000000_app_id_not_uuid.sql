@@ -1,0 +1,1 @@
+alter table "public"."user_profiles" alter column app_id type character varying;
