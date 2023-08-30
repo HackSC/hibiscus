@@ -85,7 +85,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   const rsvpFormOpen = configs['RSVP_FORM_OPEN'];
   return {
     props: {
-      appsOpen,
+      appsOpen: true,
       rsvpFormOpen,
     } as ServerSideProps,
   };

@@ -22,7 +22,7 @@ export function Index({ appsOpen }: ServerSideProps) {
 
   useEffect(() => {
     if (
-      router !== null &&
+      router.isReady &&
       user !== null &&
       !('hibiscusUserId' in router.query)
     ) {
@@ -32,7 +32,7 @@ export function Index({ appsOpen }: ServerSideProps) {
     }
   }, [router, user]);
 
-  if (user === null || router == null || !('hibiscusUserId' in router.query)) {
+  if (user === null || !('hibiscusUserId' in router.query)) {
     return (
       <Container>
         <CenterContainer>
@@ -73,7 +73,7 @@ export function Index({ appsOpen }: ServerSideProps) {
     return (
       <Container>
         <CenterContainer>
-          <H3>Apps for HackSC 2023 has closed!</H3>
+          <H3>Apps for HackSC-X have closed!</H3>
           <Link
             href={'/'}
             passHref
