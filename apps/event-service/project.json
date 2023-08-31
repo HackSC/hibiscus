@@ -94,7 +94,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "poetry run sls wsgi serve",
+        "command": "poetry run chalice local",
         "cwd": "apps/event-service"
       }
     },
