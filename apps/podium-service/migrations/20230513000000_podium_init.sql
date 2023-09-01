@@ -6,15 +6,7 @@ CREATE TABLE IF NOT EXISTS public.verticals
     name character varying NOT NULL,
     description character varying,
     CONSTRAINT verticals_pkey PRIMARY KEY (vertical_id)
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public.verticals
-    OWNER to postgres;
-
-ALTER TABLE IF EXISTS public.verticals
-    ENABLE ROW LEVEL SECURITY;
+);
 
 -- Projects
 
@@ -33,15 +25,7 @@ CREATE TABLE IF NOT EXISTS public.projects
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public.projects
-    OWNER to postgres;
-
-ALTER TABLE IF EXISTS public.projects
-    ENABLE ROW LEVEL SECURITY;
+);
 
 -- Ranking
 
@@ -55,15 +39,7 @@ CREATE TABLE IF NOT EXISTS public.ranking
         REFERENCES public.projects (project_id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public.ranking
-    OWNER to postgres;
-
-ALTER TABLE IF EXISTS public.ranking
-    ENABLE ROW LEVEL SECURITY;
+);
 
 -- Notes
 
@@ -78,13 +54,5 @@ CREATE TABLE IF NOT EXISTS public.notes
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public.notes
-    OWNER to postgres;
-
-ALTER TABLE IF EXISTS public.notes
-    ENABLE ROW LEVEL SECURITY;
+);
 

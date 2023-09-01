@@ -9,15 +9,7 @@ CREATE TABLE IF NOT EXISTS public.ranking_final
         REFERENCES public.projects (project_id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public.ranking_final
-    OWNER to postgres;
-
-ALTER TABLE IF EXISTS public.ranking_final
-    ENABLE ROW LEVEL SECURITY;
+);
 
 -- Ranking Locks
 
@@ -29,12 +21,4 @@ CREATE TABLE IF NOT EXISTS public.ranking_locks
         REFERENCES public.verticals (vertical_id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
-)
-
-TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public.ranking_locks
-    OWNER to postgres;
-
-ALTER TABLE IF EXISTS public.ranking_locks
-    ENABLE ROW LEVEL SECURITY;
+);

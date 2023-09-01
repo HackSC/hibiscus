@@ -1,12 +1,12 @@
 from sqlalchemy import Engine, create_engine
-from config import Settings
+from ..config import Settings
 
 
 def __create_engine() -> Engine:
     env = Settings()
 
     return create_engine(
-        f"postgresql+psycopg2://{env.db_username}:{env.db_password}@{env.db_url}:{env.db_port}/{env.db_name}",
+        f"cockroachdb://{env.db_username}:{env.db_password}@{env.db_url}:{env.db_port}/{env.db_name}",
         echo=True,
     )
 

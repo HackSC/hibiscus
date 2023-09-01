@@ -2,11 +2,12 @@ from typing import Optional
 from io import StringIO
 import csv
 from sqlalchemy import select, update, delete
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy_cockroachdb import run_transaction
 from . import models
 from .engine import engine
-import data_types
+from .. import data_types
 
 
 # def add_vertical():
@@ -34,25 +35,28 @@ def add_project(
     Returns: project ID of new project, or None if failed to insert
     """
 
+    def add(session: Session):
+        project_id = session.scalar(
+            insert(models.Project)
+            .values(
+                vertical_id=vertical_id,
+                name=name,
+                team=team,
+                description=description,
+                image_url=image_url,
+                devpost_url=devpost_url,
+            )
+            .returning(models.Project.project_id)
+        )
+        return project_id
+
     # Convert team from list to comma-separated string
     if team is not None:
         team = __list_to_csv(team)
 
-    with Session(engine) as session:
-        project = models.Project(
-            vertical_id=vertical_id,
-            name=name,
-            team=team,
-            description=description,
-            image_url=image_url,
-            devpost_url=devpost_url,
-        )
-        session.add(project)
-        session.flush()
-        project_id = project.project_id
-        session.commit()
+    project_id = run_transaction(sessionmaker(engine), add)
 
-        return project_id
+    return project_id
 
 
 def update_project(
@@ -74,7 +78,7 @@ def update_project(
     - devpost_url: str
     """
 
-    with Session(engine) as session:
+    def up(session: Session):
         new_project = {key: value for key, value in kwargs.items() if value is not None}
         if team is not None:
             new_project["team"] = __list_to_csv(team)
@@ -90,7 +94,7 @@ def update_project(
         if res.first() is None:
             raise Exception("No project found")
 
-        session.commit()
+    run_transaction(sessionmaker(engine), up)
 
 
 def delete_project(vertical_id: int, project_id: int) -> None:
@@ -99,7 +103,7 @@ def delete_project(vertical_id: int, project_id: int) -> None:
     Raises an exception if the project does not exist.
     """
 
-    with Session(engine) as session:
+    def remove(session: Session):
         res = session.execute(
             delete(models.Project)
             .where(models.Project.project_id == project_id)
@@ -110,7 +114,7 @@ def delete_project(vertical_id: int, project_id: int) -> None:
         if res.first() is None:
             raise Exception("No project found")
 
-        session.commit()
+    run_transaction(sessionmaker(engine), remove)
 
 
 def get_project(vertical_id: int, project_id: int) -> data_types.Project:
@@ -124,21 +128,6 @@ def get_project(vertical_id: int, project_id: int) -> data_types.Project:
     """
 
     project = __get_raw_project(vertical_id, project_id)
-    team = None
-    if project.team is not None:
-        reader = csv.reader([project.team], quoting=csv.QUOTE_NONNUMERIC)
-        for row in reader:
-            team = row
-
-    project = data_types.Project(
-        projectId=project.project_id,
-        name=project.name,
-        teamMembers=team,
-        description=project.description,
-        imageUrl=project.image_url,
-        devpostUrl=project.devpost_url,
-        # currentRank=1
-    )
 
     return project
 
@@ -148,12 +137,14 @@ def get_all_projects(vertical_id: int) -> list[data_types.ProjectOutline]:
     Gets all the projects in a given vertical and returns a list of their IDs and names
     """
 
-    with Session(engine) as session:
+    def get(session: Session) -> list[data_types.ProjectOutline]:
         res = session.scalars(
             select(models.Project).where(models.Project.vertical_id == vertical_id)
         )
 
         return [data_types.ProjectOutline(x.project_id, x.name) for x in res.all()]
+
+    return run_transaction(sessionmaker(engine), get)
 
 
 def set_ranking(vertical_id: int, project_id: int, user_id: str, rank_new: int) -> None:
@@ -164,7 +155,7 @@ def set_ranking(vertical_id: int, project_id: int, user_id: str, rank_new: int) 
     - If project's new ranking is higher, all projects between the old and new ranking are moved down
     """
 
-    with Session(engine) as session:
+    def set(session: Session):
         # Check if project exists
         project = session.scalars(
             select(models.Project)
@@ -256,7 +247,7 @@ def set_ranking(vertical_id: int, project_id: int, user_id: str, rank_new: int) 
                     .values(rank=rank_new)
                 )
 
-        session.commit()
+    run_transaction(sessionmaker(engine), set)
 
 
 def get_rankings(vertical_id: int, user_id: str) -> list[models.Ranking]:
@@ -264,7 +255,7 @@ def get_rankings(vertical_id: int, user_id: str) -> list[models.Ranking]:
     Get sorted list of ranked projects by a user in a vertical
     """
 
-    with Session(engine) as session:
+    def get(session: Session) -> list[data_types.Ranking]:
         rankings = session.execute(
             select(models.Ranking, models.Project)
             .join(models.Project)
@@ -282,6 +273,8 @@ def get_rankings(vertical_id: int, user_id: str) -> list[models.Ranking]:
             for x in rankings.all()
         ]
 
+    return run_transaction(sessionmaker(engine), get)
+
 
 def get_vertical(vertical_id: int) -> data_types.Vertical:
     """
@@ -289,7 +282,7 @@ def get_vertical(vertical_id: int) -> data_types.Vertical:
     Raises an exception if vertical does not exist
     """
 
-    with Session(engine) as session:
+    def get(session: Session) -> data_types.Vertical:
         vertical = session.scalars(
             select(models.Vertical).where(models.Vertical.vertical_id == vertical_id)
         ).one()
@@ -300,20 +293,22 @@ def get_vertical(vertical_id: int) -> data_types.Vertical:
             description=vertical.description,
         )
 
+    return run_transaction(sessionmaker(engine), get)
+
 
 def add_notes(project_id: int, user_id: str, notes: str) -> None:
     """
     Adds a new note by the user to the project, or replaces the existing note
     """
 
-    with Session(engine) as session:
+    def add(session: Session):
         session.execute(
             insert(models.Note)
             .values(project_id=project_id, user_id=user_id, notes=notes)
             .on_conflict_do_update(constraint="notes_pkey", set_={"notes": notes})
         )
 
-        session.commit()
+    run_transaction(sessionmaker(engine), add)
 
 
 def get_notes(project_id: int, user_id: str) -> Optional[str]:
@@ -321,7 +316,7 @@ def get_notes(project_id: int, user_id: str) -> Optional[str]:
     Gets the note for a project by a user, or None if none exists
     """
 
-    with Session(engine) as session:
+    def get(session: Session) -> Optional[str]:
         notes = session.scalars(
             select(models.Note)
             .where(models.Note.project_id == project_id)
@@ -333,19 +328,21 @@ def get_notes(project_id: int, user_id: str) -> Optional[str]:
         else:
             return notes.notes
 
+    return run_transaction(sessionmaker(engine), get)
+
 
 def lock_rankings(vertical_id: int) -> None:
     """
     Freezes the overall rankings at the current position for further manual adjustments
     """
 
-    with Session(engine) as session:
+    def do(session: Session):
         # Register lock
         lock = models.RankingLock(vertical_id=vertical_id)
         session.add(lock)
 
         # Set overall ranks
-        rankings = __get_overall_rankings(vertical_id)
+        rankings = __get_overall_rankings(vertical_id, session)
         session.execute(
             insert(models.RankingFinal),
             [
@@ -354,7 +351,7 @@ def lock_rankings(vertical_id: int) -> None:
             ],
         )
 
-        session.commit()
+    run_transaction(sessionmaker(engine), do)
 
 
 def get_overall_rankings(vertical_id: int) -> list[data_types.Ranking]:
@@ -370,7 +367,7 @@ def get_overall_rankings(vertical_id: int) -> list[data_types.Ranking]:
     Points from all judges are tallied up to detemine the final ranking
     """
 
-    with Session(engine) as session:
+    def get(session: Session) -> list[data_types.Ranking]:
         lock = session.scalars(
             select(models.RankingLock).where(
                 models.RankingLock.vertical_id == vertical_id
@@ -394,16 +391,18 @@ def get_overall_rankings(vertical_id: int) -> list[data_types.Ranking]:
                 for x in rankings
             ]
 
-    # Else vertical ranking has not yet been locked
-    rankings = __get_overall_rankings(vertical_id)
-    return [
-        data_types.Ranking(
-            projectId=x.project_id,
-            projectName=x.name,
-            rank=i + 1,
-        )
-        for i, x in enumerate(rankings)
-    ]
+        # Else vertical ranking has not yet been locked
+        rankings = __get_overall_rankings(vertical_id, session)
+        return [
+            data_types.Ranking(
+                projectId=x.project_id,
+                projectName=x.name,
+                rank=i + 1,
+            )
+            for i, x in enumerate(rankings)
+        ]
+
+    return run_transaction(sessionmaker(engine), get)
 
 
 def set_overall_ranking(vertical_id: int, project_id: int, rank_new: int) -> None:
@@ -411,7 +410,7 @@ def set_overall_ranking(vertical_id: int, project_id: int, rank_new: int) -> Non
     Change overall ranking of a project, works the same as set_ranking
     """
 
-    with Session(engine) as session:
+    def set(session: Session):
         # Check if ranking is locked
         lock = session.scalars(
             select(models.RankingLock).where(
@@ -512,7 +511,7 @@ def set_overall_ranking(vertical_id: int, project_id: int, rank_new: int) -> Non
                     .values(rank=rank_new)
                 )
 
-        session.commit()
+    run_transaction(sessionmaker(engine), set)
 
 
 def add_vertical(name: str, description: Optional[str] = None) -> int:
@@ -524,14 +523,17 @@ def add_vertical(name: str, description: Optional[str] = None) -> int:
     Raises an exception if failed to add
     """
 
-    with Session(engine) as session:
-        vertical = models.Vertical(name=name, description=description)
-        session.add(vertical)
-        session.flush()
-        vertical_id = vertical.vertical_id
-        session.commit()
-
+    def add(session: Session) -> int:
+        vertical_id = session.scalar(
+            insert(models.Vertical)
+            .values(name=name, description=description)
+            .returning(models.Vertical.vertical_id)
+        )
         return vertical_id
+
+    vertical_id = run_transaction(sessionmaker(engine), add)
+
+    return vertical_id
 
 
 def update_vertical(vertical_id: int, **kwargs) -> None:
@@ -547,7 +549,7 @@ def update_vertical(vertical_id: int, **kwargs) -> None:
     - description: str
     """
 
-    with Session(engine) as session:
+    def up(session: Session):
         new_vertical = {
             key: value for key, value in kwargs.items() if value is not None
         }
@@ -562,10 +564,10 @@ def update_vertical(vertical_id: int, **kwargs) -> None:
         if res.first() is None:
             raise Exception("No project found")
 
-        session.commit()
+    run_transaction(sessionmaker(engine), up)
 
 
-def __get_raw_project(vertical_id: int, project_id: int) -> models.Project:
+def __get_raw_project(vertical_id: int, project_id: int) -> data_types.Project:
     """
     Gets the project with the corresponding project and vertical IDs
     The project will be in the form of our SQLAlchemy model
@@ -575,17 +577,52 @@ def __get_raw_project(vertical_id: int, project_id: int) -> models.Project:
     Raises an exception if project does not exist
     """
 
-    with Session(engine) as session:
+    def get(session: Session) -> data_types.Project:
         project = session.scalars(
             select(models.Project)
             .where(models.Project.project_id == project_id)
             .where(models.Project.vertical_id == vertical_id)
         ).one()
 
+        team = None
+        if project.team is not None:
+            reader = csv.reader([project.team], quoting=csv.QUOTE_NONNUMERIC)
+            for row in reader:
+                team = row
+
+        project = data_types.Project(
+            projectId=project.project_id,
+            name=project.name,
+            teamMembers=team,
+            description=project.description,
+            imageUrl=project.image_url,
+            devpostUrl=project.devpost_url,
+            # currentRank=1
+        )
         return project
 
+    project = run_transaction(sessionmaker(engine), get)
 
-def __get_overall_rankings(vertical_id: int) -> list[models.Project]:
+    return project
+
+
+def get_verticals() -> list[models.Vertical]:
+    def get(session: Session):
+        res = session.scalars(select(models.Vertical))
+        return [
+            data_types.Vertical(
+                verticalId=vertical.vertical_id,
+                name=vertical.name,
+                description=vertical.description,
+            )
+            for vertical in res
+        ]
+
+    verticals = run_transaction(sessionmaker(engine), get)
+    return verticals
+
+
+def __get_overall_rankings(vertical_id: int, session: Session) -> list[models.Project]:
     """
     Gets the overall rankings of the ranked projects in a vertical
 
@@ -595,30 +632,27 @@ def __get_overall_rankings(vertical_id: int) -> list[models.Project]:
     # Points for each rank, up to rank 5
     scores = {1: 10, 2: 5, 3: 2, 4: 1, 5: 1}
 
-    with Session(engine) as session:
-        rankings = session.execute(
-            select(models.Ranking, models.Project)
-            .join(models.Project)
-            .where(models.Project.vertical_id == vertical_id)
-        )
+    rankings = session.execute(
+        select(models.Ranking, models.Project)
+        .join(models.Project)
+        .where(models.Project.vertical_id == vertical_id)
+    )
 
-        projects = {}
-        rankings_overall = {}
+    projects = {}
+    rankings_overall = {}
 
-        for row in rankings:
-            ranking, project = row.tuple()
+    for row in rankings:
+        ranking, project = row.tuple()
 
-            if project.project_id not in projects:
-                projects[project.project_id] = project
+        if project.project_id not in projects:
+            projects[project.project_id] = project
 
-            old_score = rankings_overall.setdefault(ranking.project_id, 0)
-            if ranking.rank in scores:
-                rankings_overall[ranking.project_id] = old_score + scores[ranking.rank]
+        old_score = rankings_overall.setdefault(ranking.project_id, 0)
+        if ranking.rank in scores:
+            rankings_overall[ranking.project_id] = old_score + scores[ranking.rank]
 
-        rankings_overall = sorted(
-            rankings_overall, key=rankings_overall.get, reverse=True
-        )
-        return [projects[x] for x in rankings_overall]
+    rankings_overall = sorted(rankings_overall, key=rankings_overall.get, reverse=True)
+    return [projects[x] for x in rankings_overall]
 
 
 def __list_to_csv(list: list[str]) -> str:
