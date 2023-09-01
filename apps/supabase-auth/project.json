@@ -1,0 +1,15 @@
+{
+  "name": "supabase-auth",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/supabase-auth",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "command": "wrangler dev apps/supabase-auth/src/index.ts"
+    },
+    "deploy": {
+      "command": "wrangler deploy --minify apps/supabase-auth/src/index.ts"
+    }
+  },
+  "tags": []
+}
