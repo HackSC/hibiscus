@@ -113,8 +113,7 @@ const MarginContainer = styled.div`
 `;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  // const appsOpen = await get('appsOpenHackSCX2023');
-  const appsOpen = true;
+  const appsOpen = await get('APPS_OPEN_HACKSC_X_2023');
   return {
     props: {
       appsOpen,
