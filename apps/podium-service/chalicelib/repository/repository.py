@@ -20,13 +20,13 @@ from .. import data_types
 
 
 def add_project(
-    vertical_id: int,
+    vertical_id: str,
     name: str,
     team: Optional[list[str]] = None,
     description: Optional[str] = None,
     image_url: Optional[str] = None,
     devpost_url: Optional[str] = None,
-) -> Optional[int]:
+) -> Optional[str]:
     """
     Adds a project to the specified vertical
 
@@ -35,7 +35,7 @@ def add_project(
     Returns: project ID of new project, or None if failed to insert
     """
 
-    def add(session: Session):
+    def add(session: Session) -> str:
         project_id = session.scalar(
             insert(models.Project)
             .values(
@@ -48,7 +48,7 @@ def add_project(
             )
             .returning(models.Project.project_id)
         )
-        return project_id
+        return str(project_id)
 
     # Convert team from list to comma-separated string
     if team is not None:
@@ -60,7 +60,7 @@ def add_project(
 
 
 def update_project(
-    vertical_id: int, project_id: int, team: Optional[list[str]] = None, **kwargs
+    vertical_id: str, project_id: str, team: Optional[list[str]] = None, **kwargs
 ) -> None:
     """
     Updates the given project\n
@@ -97,7 +97,7 @@ def update_project(
     run_transaction(sessionmaker(engine), up)
 
 
-def delete_project(vertical_id: int, project_id: int) -> None:
+def delete_project(vertical_id: str, project_id: str) -> None:
     """
     Deletes the given project.\n
     Raises an exception if the project does not exist.
@@ -117,7 +117,7 @@ def delete_project(vertical_id: int, project_id: int) -> None:
     run_transaction(sessionmaker(engine), remove)
 
 
-def get_project(vertical_id: int, project_id: int) -> data_types.Project:
+def get_project(vertical_id: str, project_id: str) -> data_types.Project:
     """
     Gets the project with the corresponding project and vertical IDs\n
     The project will be in the form of our defined dataclass which is ready to be sent as JSON
@@ -132,7 +132,7 @@ def get_project(vertical_id: int, project_id: int) -> data_types.Project:
     return project
 
 
-def get_all_projects(vertical_id: int) -> list[data_types.ProjectOutline]:
+def get_all_projects(vertical_id: str) -> list[data_types.ProjectOutline]:
     """
     Gets all the projects in a given vertical and returns a list of their IDs and names
     """
@@ -147,7 +147,7 @@ def get_all_projects(vertical_id: int) -> list[data_types.ProjectOutline]:
     return run_transaction(sessionmaker(engine), get)
 
 
-def set_ranking(vertical_id: int, project_id: int, user_id: str, rank_new: int) -> None:
+def set_ranking(vertical_id: str, project_id: str, user_id: str, rank_new: int) -> None:
     """
     - Change ranking of a project for a specific judge
     - Project is given the new ranking specified, and all projects below that are moved down
@@ -250,7 +250,7 @@ def set_ranking(vertical_id: int, project_id: int, user_id: str, rank_new: int) 
     run_transaction(sessionmaker(engine), set)
 
 
-def get_rankings(vertical_id: int, user_id: str) -> list[models.Ranking]:
+def get_rankings(vertical_id: str, user_id: str) -> list[models.Ranking]:
     """
     Get sorted list of ranked projects by a user in a vertical
     """
@@ -276,7 +276,7 @@ def get_rankings(vertical_id: int, user_id: str) -> list[models.Ranking]:
     return run_transaction(sessionmaker(engine), get)
 
 
-def get_vertical(vertical_id: int) -> data_types.Vertical:
+def get_vertical(vertical_id: str) -> data_types.Vertical:
     """
     Get vertical details given the vertical ID.\n
     Raises an exception if vertical does not exist
@@ -296,7 +296,7 @@ def get_vertical(vertical_id: int) -> data_types.Vertical:
     return run_transaction(sessionmaker(engine), get)
 
 
-def add_notes(project_id: int, user_id: str, notes: str) -> None:
+def add_notes(project_id: str, user_id: str, notes: str) -> None:
     """
     Adds a new note by the user to the project, or replaces the existing note
     """
@@ -311,7 +311,7 @@ def add_notes(project_id: int, user_id: str, notes: str) -> None:
     run_transaction(sessionmaker(engine), add)
 
 
-def get_notes(project_id: int, user_id: str) -> Optional[str]:
+def get_notes(project_id: str, user_id: str) -> Optional[str]:
     """
     Gets the note for a project by a user, or None if none exists
     """
@@ -331,7 +331,7 @@ def get_notes(project_id: int, user_id: str) -> Optional[str]:
     return run_transaction(sessionmaker(engine), get)
 
 
-def lock_rankings(vertical_id: int) -> None:
+def lock_rankings(vertical_id: str) -> None:
     """
     Freezes the overall rankings at the current position for further manual adjustments
     """
@@ -354,7 +354,7 @@ def lock_rankings(vertical_id: int) -> None:
     run_transaction(sessionmaker(engine), do)
 
 
-def get_overall_rankings(vertical_id: int) -> list[data_types.Ranking]:
+def get_overall_rankings(vertical_id: str) -> list[data_types.Ranking]:
     """
     Gets the sorted overall rankings of the given vertical\n
     Overall rankings are calculated as follows:
@@ -405,7 +405,7 @@ def get_overall_rankings(vertical_id: int) -> list[data_types.Ranking]:
     return run_transaction(sessionmaker(engine), get)
 
 
-def set_overall_ranking(vertical_id: int, project_id: int, rank_new: int) -> None:
+def set_overall_ranking(vertical_id: str, project_id: str, rank_new: int) -> None:
     """
     Change overall ranking of a project, works the same as set_ranking
     """
@@ -514,7 +514,7 @@ def set_overall_ranking(vertical_id: int, project_id: int, rank_new: int) -> Non
     run_transaction(sessionmaker(engine), set)
 
 
-def add_vertical(name: str, description: Optional[str] = None) -> int:
+def add_vertical(name: str, description: Optional[str] = None) -> str:
     """
     Adds a new vertical
 
@@ -523,20 +523,20 @@ def add_vertical(name: str, description: Optional[str] = None) -> int:
     Raises an exception if failed to add
     """
 
-    def add(session: Session) -> int:
+    def add(session: Session) -> str:
         vertical_id = session.scalar(
             insert(models.Vertical)
             .values(name=name, description=description)
             .returning(models.Vertical.vertical_id)
         )
-        return vertical_id
+        return str(vertical_id)
 
     vertical_id = run_transaction(sessionmaker(engine), add)
 
     return vertical_id
 
 
-def update_vertical(vertical_id: int, **kwargs) -> None:
+def update_vertical(vertical_id: str, **kwargs) -> None:
     """
     Updates the given vertical\n
     If an unknown vertical ID is provided, an exception will be raised
@@ -567,7 +567,7 @@ def update_vertical(vertical_id: int, **kwargs) -> None:
     run_transaction(sessionmaker(engine), up)
 
 
-def __get_raw_project(vertical_id: int, project_id: int) -> data_types.Project:
+def __get_raw_project(vertical_id: str, project_id: str) -> data_types.Project:
     """
     Gets the project with the corresponding project and vertical IDs
     The project will be in the form of our SQLAlchemy model
@@ -622,7 +622,7 @@ def get_verticals() -> list[models.Vertical]:
     return verticals
 
 
-def __get_overall_rankings(vertical_id: int, session: Session) -> list[models.Project]:
+def __get_overall_rankings(vertical_id: str, session: Session) -> list[models.Project]:
     """
     Gets the overall rankings of the ranked projects in a vertical
 

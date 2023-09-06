@@ -2,7 +2,7 @@
 
 CREATE TABLE IF NOT EXISTS public.verticals
 (
-    vertical_id serial,
+    vertical_id UUID NOT NULL DEFAULT gen_random_uuid(),
     name character varying NOT NULL,
     description character varying,
     CONSTRAINT verticals_pkey PRIMARY KEY (vertical_id)
@@ -12,8 +12,8 @@ CREATE TABLE IF NOT EXISTS public.verticals
 
 CREATE TABLE IF NOT EXISTS public.projects
 (
-    project_id serial,
-    vertical_id integer NOT NULL,
+    project_id UUID NOT NULL DEFAULT gen_random_uuid(),
+    vertical_id UUID NOT NULL,
     name character varying NOT NULL,
     team character varying,
     description character varying,
@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS public.projects
 
 CREATE TABLE IF NOT EXISTS public.ranking
 (
-    project_id integer NOT NULL,
+    project_id UUID NOT NULL,
     user_id character varying NOT NULL,
     rank integer NOT NULL,
     CONSTRAINT ranking_pkey PRIMARY KEY (project_id, user_id),
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS public.ranking
 
 CREATE TABLE IF NOT EXISTS public.notes
 (
-    project_id integer NOT NULL,
+    project_id UUID NOT NULL,
     user_id character varying NOT NULL,
     notes character varying NOT NULL,
     PRIMARY KEY (project_id, user_id),
