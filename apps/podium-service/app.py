@@ -29,9 +29,9 @@ def get_project(vertical_id: str, project_id: str):
 
 
 @app.route("/projects/{vertical_id}")
-def get_all_projects(vertical_id: str):
+def get_all_projects_in_vertical(vertical_id: str):
     try:
-        projects = repository.get_all_projects(vertical_id)
+        projects = repository.get_all_projects_in_vertical(vertical_id)
 
         return {"projects": [dataclasses.asdict(project) for project in projects]}
     except Exception as e:

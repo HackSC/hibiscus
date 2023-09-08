@@ -132,7 +132,7 @@ def get_project(vertical_id: str, project_id: str) -> data_types.Project:
     return project
 
 
-def get_all_projects(vertical_id: str) -> list[data_types.ProjectOutline]:
+def get_all_projects_in_vertical(vertical_id: str) -> list[data_types.ProjectOutline]:
     """
     Gets all the projects in a given vertical and returns a list of their IDs and names
     """
@@ -142,9 +142,23 @@ def get_all_projects(vertical_id: str) -> list[data_types.ProjectOutline]:
             select(models.Project).where(models.Project.vertical_id == vertical_id)
         )
 
-        return [data_types.ProjectOutline(x.project_id, x.name) for x in res.all()]
+        return [
+            data_types.ProjectOutline(
+                projectId=x.project_id,
+                projectName=x.name,
+                verticalId=x.vertical_id,
+                verticalName=x.vertical.name,
+            )
+            for x in res.all()
+        ]
 
     return run_transaction(sessionmaker(engine), get)
+
+
+def get_all_projects() -> list[data_types.ProjectOutline]:
+    """
+    Gets all the projects from all verticals
+    """
 
 
 def set_ranking(vertical_id: str, project_id: str, user_id: str, rank_new: int) -> None:
@@ -596,7 +610,8 @@ def __get_raw_project(vertical_id: str, project_id: str) -> data_types.Project:
             teamMembers=team,
             description=project.description,
             imageUrl=project.image_url,
-            devpostUrl=project.devpost_url,
+            verticalId=project.vertical_id,
+            verticalName=project.vertical.name,
             # currentRank=1
         )
         return project
