@@ -38,6 +38,16 @@ def get_all_projects_in_vertical(vertical_id: str):
         raise BadRequestError(f"Failed to get projects: {e}")
 
 
+@app.route("/projects")
+def get_all_projects():
+    try:
+        projects = repository.get_all_projects()
+
+        return {"projects": [dataclasses.asdict(project) for project in projects]}
+    except Exception as e:
+        raise BadRequestError(f"Failed to get projects: {e}")
+
+
 @app.route("/ranking/{vertical_id}/{user_id}", methods=["POST"])
 def set_rankings(vertical_id: str, user_id: str):
     body = app.current_request.json_body

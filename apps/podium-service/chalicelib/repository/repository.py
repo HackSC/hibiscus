@@ -160,6 +160,21 @@ def get_all_projects() -> list[data_types.ProjectOutline]:
     Gets all the projects from all verticals
     """
 
+    def get(session: Session) -> list[data_types.ProjectOutline]:
+        res = session.scalars(select(models.Project))
+
+        return [
+            data_types.ProjectOutline(
+                projectId=x.project_id,
+                projectName=x.name,
+                verticalId=x.vertical_id,
+                verticalName=x.vertical.name,
+            )
+            for x in res.all()
+        ]
+
+    return run_transaction(sessionmaker(engine), get)
+
 
 def set_ranking(vertical_id: str, project_id: str, user_id: str, rank_new: int) -> None:
     """
