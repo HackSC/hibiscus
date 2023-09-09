@@ -636,7 +636,7 @@ def __get_raw_project(vertical_id: str, project_id: str) -> data_types.Project:
     return project
 
 
-def get_verticals() -> list[models.Vertical]:
+def get_verticals() -> list[data_types.Vertical]:
     def get(session: Session):
         res = session.scalars(select(models.Vertical))
         return [

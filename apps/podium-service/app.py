@@ -164,6 +164,29 @@ def lock_rankings(vertical_id: str):
         raise BadRequestError(f"Failed to lock rankings: {e}")
 
 
+@app.route("/ranking")
+def get_all_overall_rankings():
+    try:
+        verticals = repository.get_verticals()
+        return {
+            "rankings": [
+                {
+                    "verticalId": vertical.verticalId,
+                    "verticalName": vertical.name,
+                    "rankings": [
+                        dataclasses.asdict(ranking)
+                        for ranking in repository.get_overall_rankings(
+                            vertical.verticalId
+                        )
+                    ],
+                }
+                for vertical in verticals
+            ]
+        }
+    except Exception as e:
+        raise BadRequestError(f"Failed to get rankings: {e}")
+
+
 @app.route("/ranking/{vertical_id}")
 def get_overall_rankings(vertical_id: str):
     try:
