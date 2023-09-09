@@ -383,6 +383,26 @@ def lock_rankings(vertical_id: str) -> None:
     run_transaction(sessionmaker(engine), do)
 
 
+def unlock_rankings(vertical_id: str) -> None:
+    """
+    “Unlock” rankings for a specified vertical.
+    This will undo all manual overrides but allow judges to individually rank projects again.
+    """
+
+    def do(session: Session):
+        # Delete lock
+        res = session.execute(
+            delete(models.RankingLock).where(
+                models.RankingLock.vertical_id == vertical_id
+            )
+        )
+
+        if res.first() is None:
+            raise Exception("Vertical was not locked")
+
+    run_transaction(sessionmaker(engine), do)
+
+
 def get_overall_rankings(vertical_id: str) -> list[data_types.Ranking]:
     """
     Gets the sorted overall rankings of the given vertical\n

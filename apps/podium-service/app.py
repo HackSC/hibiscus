@@ -164,6 +164,15 @@ def lock_rankings(vertical_id: str):
         raise BadRequestError(f"Failed to lock rankings: {e}")
 
 
+@app.route("/lock/{vertical_id}", methods=["DELETE"])
+def unlock_rankings(vertical_id: str):
+    try:
+        repository.unlock_rankings(vertical_id)
+        return {"message": "Success"}
+    except Exception as e:
+        raise BadRequestError(f"Failed to unlock rankings: {e}")
+
+
 @app.route("/ranking")
 def get_all_overall_rankings():
     try:
