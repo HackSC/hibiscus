@@ -116,6 +116,7 @@ def add_project(vertical_id: str):
             description=body.get("description"),
             image_url=body.get("imageUrl"),
             devpost_url=body.get("devpostUrl"),
+            video_url=body.get("videoUrl"),
         )
 
         if project_id is None:
@@ -139,6 +140,7 @@ def edit_project(vertical_id: str, project_id: str):
             description=body.get("description"),
             image_url=body.get("imageUrl"),
             devpost_url=body.get("devpostUrl"),
+            video_url=body.get("videoUrl"),
         )
 
         return {"message": "Success"}

@@ -26,6 +26,7 @@ def add_project(
     description: Optional[str] = None,
     image_url: Optional[str] = None,
     devpost_url: Optional[str] = None,
+    video_url: Optional[str] = None,
 ) -> Optional[str]:
     """
     Adds a project to the specified vertical
@@ -45,6 +46,7 @@ def add_project(
                 description=description,
                 image_url=image_url,
                 devpost_url=devpost_url,
+                video_url=video_url,
             )
             .returning(models.Project.project_id)
         )
@@ -645,6 +647,7 @@ def __get_raw_project(vertical_id: str, project_id: str) -> data_types.Project:
             teamMembers=team,
             description=project.description,
             imageUrl=project.image_url,
+            videoUrl=project.video_url,
             verticalId=project.vertical_id,
             verticalName=project.vertical.name,
             # currentRank=1

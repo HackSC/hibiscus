@@ -12,6 +12,7 @@ class Project:
     description: Optional[str] = None
     imageUrl: Optional[str] = None
     devpostUrl: Optional[str] = None
+    videoUrl: Optional[str] = None
     currentRank: Optional[int] = None
 
     def __post_init__(self):
