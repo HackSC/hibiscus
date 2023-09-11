@@ -62,7 +62,11 @@ def add_project(
 
 
 def update_project(
-    vertical_id: str, project_id: str, team: Optional[list[str]] = None, **kwargs
+    vertical_id: str,
+    project_id: str,
+    team: Optional[list[str]] = None,
+    vertical_new: Optional[str] = None,
+    **kwargs
 ) -> None:
     """
     Updates the given project\n
@@ -74,14 +78,20 @@ def update_project(
     - team - Team members as a list of strings
 
     Additional params:
+    - vertical_new: str
     - name: str
     - description: str
     - image_url: str
     - devpost_url: str
+    - video_url: str
     """
 
     def up(session: Session):
         new_project = {key: value for key, value in kwargs.items() if value is not None}
+
+        if vertical_new is not None:
+            new_project["vertical_id"] = vertical_new
+
         if team is not None:
             new_project["team"] = __list_to_csv(team)
 
@@ -150,6 +160,8 @@ def get_all_projects_in_vertical(vertical_id: str) -> list[data_types.ProjectOut
                 projectName=x.name,
                 verticalId=x.vertical_id,
                 verticalName=x.vertical.name,
+                description=x.description,
+                videoUrl=x.video_url,
             )
             for x in res.all()
         ]
@@ -171,6 +183,8 @@ def get_all_projects() -> list[data_types.ProjectOutline]:
                 projectName=x.name,
                 verticalId=x.vertical_id,
                 verticalName=x.vertical.name,
+                description=x.description,
+                videoUrl=x.video_url,
             )
             for x in res.all()
         ]
@@ -281,7 +295,7 @@ def set_ranking(vertical_id: str, project_id: str, user_id: str, rank_new: int) 
     run_transaction(sessionmaker(engine), set)
 
 
-def get_rankings(vertical_id: str, user_id: str) -> list[models.Ranking]:
+def get_rankings(vertical_id: str, user_id: str) -> list[data_types.Ranking]:
     """
     Get sorted list of ranked projects by a user in a vertical
     """
@@ -299,6 +313,8 @@ def get_rankings(vertical_id: str, user_id: str) -> list[models.Ranking]:
             data_types.Ranking(
                 projectId=x.Project.project_id,
                 projectName=x.Project.name,
+                verticalId=x.Project.vertical_id,
+                verticalName=x.Project.vertical.name,
                 rank=x.Ranking.rank,
             )
             for x in rankings.all()
@@ -382,27 +398,42 @@ def lock_rankings(vertical_id: str) -> None:
             ],
         )
 
-    run_transaction(sessionmaker(engine), do)
+    run_transaction(sessionmaker(engine, autoflush=False), do)
 
 
 def unlock_rankings(vertical_id: str) -> None:
     """
-    “Unlock” rankings for a specified vertical.
+    "Unlock" rankings for a specified vertical.
     This will undo all manual overrides but allow judges to individually rank projects again.
     """
 
     def do(session: Session):
         # Delete lock
         res = session.execute(
-            delete(models.RankingLock).where(
-                models.RankingLock.vertical_id == vertical_id
-            )
+            delete(models.RankingLock)
+            .where(models.RankingLock.vertical_id == vertical_id)
+            .returning(models.RankingLock.vertical_id)
         )
 
         if res.first() is None:
             raise Exception("Vertical was not locked")
 
+        # Delete ranked projects
+        session.execute(
+            delete(models.RankingFinal).where(models.Project.vertical_id == vertical_id)
+        )
+
     run_transaction(sessionmaker(engine), do)
+
+
+def is_locked(vertical_id: str) -> bool:
+    """
+    Returns whether the specified vertical is currently locked for rankings
+    """
+
+    return run_transaction(
+        sessionmaker(engine), lambda session: __is_locked(vertical_id, session)
+    )
 
 
 def get_overall_rankings(vertical_id: str) -> list[data_types.Ranking]:
@@ -419,13 +450,9 @@ def get_overall_rankings(vertical_id: str) -> list[data_types.Ranking]:
     """
 
     def get(session: Session) -> list[data_types.Ranking]:
-        lock = session.scalars(
-            select(models.RankingLock).where(
-                models.RankingLock.vertical_id == vertical_id
-            )
-        ).one_or_none()
+        is_locked = __is_locked(vertical_id, session)
 
-        if lock is not None:
+        if is_locked:
             rankings = session.execute(
                 select(models.RankingFinal, models.Project)
                 .join(models.Project)
@@ -647,10 +674,10 @@ def __get_raw_project(vertical_id: str, project_id: str) -> data_types.Project:
             teamMembers=team,
             description=project.description,
             imageUrl=project.image_url,
+            devpostUrl=project.devpost_url,
             videoUrl=project.video_url,
             verticalId=project.vertical_id,
             verticalName=project.vertical.name,
-            # currentRank=1
         )
         return project
 
@@ -706,6 +733,14 @@ def __get_overall_rankings(vertical_id: str, session: Session) -> list[models.Pr
 
     rankings_overall = sorted(rankings_overall, key=rankings_overall.get, reverse=True)
     return [projects[x] for x in rankings_overall]
+
+
+def __is_locked(vertical_id: str, session: Session) -> bool:
+    lock = session.scalars(
+        select(models.RankingLock).where(models.RankingLock.vertical_id == vertical_id)
+    ).one_or_none()
+
+    return lock is not None
 
 
 def __list_to_csv(list: list[str]) -> str:

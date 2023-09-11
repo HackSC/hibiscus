@@ -136,6 +136,7 @@ def edit_project(vertical_id: str, project_id: str):
             vertical_id,
             project_id,
             team=body.get("teamMembers"),
+            vertical_new=body.get("verticalNew"),
             name=body.get("name"),
             description=body.get("description"),
             image_url=body.get("imageUrl"),
@@ -173,6 +174,15 @@ def unlock_rankings(vertical_id: str):
         return {"message": "Success"}
     except Exception as e:
         raise BadRequestError(f"Failed to unlock rankings: {e}")
+    
+
+@app.route("/lock/{vertical_id}")
+def is_locked(vertical_id: str):
+    try:
+        locked = repository.is_locked(vertical_id)
+        return {"locked": locked}
+    except Exception as e:
+        raise BadRequestError(f"Failed to check for lock: {e}")
 
 
 @app.route("/ranking")
