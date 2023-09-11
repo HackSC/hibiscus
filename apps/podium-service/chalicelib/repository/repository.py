@@ -420,7 +420,7 @@ def lock_rankings(vertical_id: str) -> None:
             ],
         )
 
-    run_transaction(sessionmaker(engine, autoflush=False), do)
+    run_transaction(sessionmaker(engine), do)
 
 
 def unlock_rankings(vertical_id: str) -> None:
@@ -486,6 +486,8 @@ def get_overall_rankings(vertical_id: str) -> list[data_types.Ranking]:
                 data_types.Ranking(
                     projectId=x.Project.project_id,
                     projectName=x.Project.name,
+                    verticalId=x.Project.vertical_id,
+                    verticalName=x.Project.vertical.name,
                     rank=x.RankingFinal.rank,
                 )
                 for x in rankings
@@ -497,6 +499,8 @@ def get_overall_rankings(vertical_id: str) -> list[data_types.Ranking]:
             data_types.Ranking(
                 projectId=x.project_id,
                 projectName=x.name,
+                verticalId=x.vertical_id,
+                verticalName=x.vertical.name,
                 rank=i + 1,
             )
             for i, x in enumerate(rankings)
