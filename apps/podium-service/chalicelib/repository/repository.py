@@ -19,6 +19,28 @@ from .. import data_types
 #     return True
 
 
+def add_projects(projects: list[data_types.Projects]) -> Optional[str]:
+    def add(session: Session) -> str:
+        to_insert = []
+        verticals = get_verticals()
+        for project in projects:
+            to_insert.append(
+                models.Project(
+                    vertical_id=verticals[verticals.index(project.vertical)],
+                    name=project.name,
+                    team=project.teamMembers,
+                    description=project.description,
+                    image_url=project.imageUrl,
+                    devpost_url=project.devpostUrl,
+                    video_url=project.videoUrl,
+                )
+            )
+        session.add_all(to_insert)
+
+    projects_response = run_transaction(sessionmaker(engine), add)
+    return projects_response
+
+
 def add_project(
     vertical_id: str,
     name: str,

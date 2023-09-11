@@ -3,6 +3,17 @@ from dataclasses import dataclass
 
 
 @dataclass
+class Projects:
+    vertical: str
+    name: str
+    teamMembers: Optional[list[str]]
+    description: Optional[str]
+    imageUrl: Optional[str]
+    devpostUrl: Optional[str]
+    videoUrl: Optional[str]
+
+
+@dataclass
 class Project:
     verticalId: str
     verticalName: str
