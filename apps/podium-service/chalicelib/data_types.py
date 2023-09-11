@@ -39,6 +39,8 @@ class ProjectOutline:
     verticalName: str
     projectId: str
     projectName: str
+    description: str
+    videoUrl: str
 
     def __post_init__(self):
         if not isinstance(self.projectId, str):
@@ -51,11 +53,15 @@ class ProjectOutline:
 class Ranking:
     projectId: str
     projectName: str
+    verticalId: str
+    verticalName: str
     rank: int
 
     def __post_init__(self):
         if not isinstance(self.projectId, str):
             self.projectId = str(self.projectId)
+        if not isinstance(self.verticalId, str):
+            self.verticalId = str(self.verticalId)
 
 
 @dataclass
