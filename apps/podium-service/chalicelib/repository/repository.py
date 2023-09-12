@@ -442,7 +442,9 @@ def unlock_rankings(vertical_id: str) -> None:
 
         # Delete ranked projects
         session.execute(
-            delete(models.RankingFinal).where(models.Project.vertical_id == vertical_id)
+            delete(models.RankingFinal)
+            .where(models.RankingFinal.project_id == models.Project.project_id)
+            .where(models.Project.vertical_id == vertical_id)
         )
 
     run_transaction(sessionmaker(engine), do)
