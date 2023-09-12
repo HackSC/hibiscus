@@ -676,7 +676,6 @@ def update_vertical(vertical_id: str, **kwargs) -> None:
 def __get_raw_project(vertical_id: str, project_id: str) -> data_types.Project:
     """
     Gets the project with the corresponding project and vertical IDs
-    The project will be in the form of our SQLAlchemy model
 
     Params and return type as annotated
 
@@ -696,6 +695,23 @@ def __get_raw_project(vertical_id: str, project_id: str) -> data_types.Project:
             for row in reader:
                 team = row
 
+        rank = None
+        locked = __is_locked(vertical_id, session)
+        if locked:
+            ranking = session.scalars(
+                select(models.RankingFinal).where(
+                    models.RankingFinal.project_id == project_id
+                )
+            ).one_or_none()
+            rank = ranking.rank if ranking is not None else None
+        else:
+            # Get current overall rank (THIS IS AN EXPENSIVE OPERATION)
+            rankings = __get_overall_rankings(vertical_id, session)
+            for i, ranking in enumerate(rankings):
+                if ranking.project_id == project_id:
+                    rank = i + 1
+                    break
+
         project = data_types.Project(
             projectId=project.project_id,
             name=project.name,
@@ -706,6 +722,7 @@ def __get_raw_project(vertical_id: str, project_id: str) -> data_types.Project:
             videoUrl=project.video_url,
             verticalId=project.vertical_id,
             verticalName=project.vertical.name,
+            currentRank=rank,
         )
         return project
 
