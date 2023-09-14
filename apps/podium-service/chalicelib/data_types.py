@@ -1,9 +1,8 @@
-from typing import Optional
+from typing import Optional, TypedDict
 from dataclasses import dataclass
 
 
-@dataclass
-class Projects:
+class ProjectAdd(TypedDict):
     vertical: str
     name: str
     teamMembers: Optional[list[str]]

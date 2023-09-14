@@ -1,7 +1,7 @@
 from chalice import Chalice, BadRequestError, Response
 from chalicelib.repository import repository
+from chalicelib import data_types
 import dataclasses
-import json
 
 
 app = Chalice(app_name="podium-service")
@@ -17,22 +17,16 @@ def health():
 # def test():
 #     success = repository.add_vertical()
 #     return jsonify({"success": success})
-OBJECTS = {}
 
 
 @app.route("/add_projects", methods=["POST"])
-def get_projects():
-    request = app.current_request
-    l = []
-    for project in request.json_body:
-        l.append(project)
-        print(project)
-    print(l)
+def add_projects():
+    projects = app.current_request.json_body
     try:
-        project = repository.add_projects(l)
-        return project
+        project_ids = repository.add_projects(projects)
+        return {"projects": project_ids}
     except Exception as e:
-        raise BadRequestError(f"Failed to get requested project: {e}")
+        raise BadRequestError(f"Failed to add projects: {e}")
 
 
 # Regular endpoints
@@ -191,7 +185,7 @@ def unlock_rankings(vertical_id: str):
         return {"message": "Success"}
     except Exception as e:
         raise BadRequestError(f"Failed to unlock rankings: {e}")
-    
+
 
 @app.route("/lock/{vertical_id}")
 def is_locked(vertical_id: str):
