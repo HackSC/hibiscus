@@ -1,6 +1,7 @@
 from chalice import Chalice, BadRequestError, Response
 from chalicelib.repository import repository
 import dataclasses
+import json
 
 
 app = Chalice(app_name="podium-service")
@@ -16,6 +17,22 @@ def health():
 # def test():
 #     success = repository.add_vertical()
 #     return jsonify({"success": success})
+OBJECTS = {}
+
+
+@app.route("/add_projects", methods=["POST"])
+def get_projects():
+    request = app.current_request
+    l = []
+    for project in request.json_body:
+        l.append(project)
+        print(project)
+    print(l)
+    try:
+        project = repository.add_projects(l)
+        return project
+    except Exception as e:
+        raise BadRequestError(f"Failed to get requested project: {e}")
 
 
 # Regular endpoints
