@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional, TypedDict
 from dataclasses import dataclass
 
@@ -72,3 +73,11 @@ class Vertical:
     def __post_init__(self):
         if not isinstance(self.verticalId, str):
             self.verticalId = str(self.verticalId)
+
+
+@dataclass
+class Comment:
+    comment: str
+    name: str
+    profilePicUrl: str
+    createdAt: str

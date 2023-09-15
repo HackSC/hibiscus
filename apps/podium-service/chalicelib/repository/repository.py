@@ -684,6 +684,48 @@ def update_vertical(vertical_id: str, **kwargs) -> None:
     run_transaction(sessionmaker(engine), up)
 
 
+def add_comment(project_id: str, user_id: str, comment: str):
+    """
+    Adds or updates a comment
+    """
+
+    def add(session: Session):
+        session.execute(
+            insert(models.Comment)
+            .values(project_id=project_id, user_id=user_id, comment=comment)
+            .on_conflict_do_update(
+                constraint="comments_pkey", set_={"comment": comment}
+            )
+        )
+
+    run_transaction(sessionmaker(engine), add)
+
+
+def get_comments(project_id: str) -> list[data_types.Comment]:
+    """
+    Gets all the comments for a project, sorted by descending timestamp
+    """
+
+    def get(session: Session):
+        comments = session.scalars(
+            select(models.Comment)
+            .where(models.Comment.project_id == project_id)
+            .order_by(models.Comment.created_at.desc())
+        )
+
+        return [
+            data_types.Comment(
+                comment=comment.comment,
+                name=comment.user_id,
+                profilePicUrl="www.example.com",
+                createdAt=str(comment.created_at),
+            )
+            for comment in comments
+        ]
+
+    return run_transaction(sessionmaker(engine), get)
+
+
 def __get_raw_project(vertical_id: str, project_id: str) -> data_types.Project:
     """
     Gets the project with the corresponding project and vertical IDs

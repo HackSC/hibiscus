@@ -1,6 +1,5 @@
 from chalice import Chalice, BadRequestError, Response
 from chalicelib.repository import repository
-from chalicelib import data_types
 import dataclasses
 
 
@@ -289,13 +288,31 @@ def edit_vertical(vertical_id: str):
         raise BadRequestError(f"Failed to edit vertical: {e}")
 
 
-@app.route("/projects/bulk", methods=["POST"])
-def add_many_projects():
-    return Response(
-        '{"message": "Not implemented"}',
-        status_code=501,
-        headers={"Content-Type": "application/json"},
-    )
+@app.route("/comments/{project_id}/user/{user_id}", methods=["POST", "PUT"])
+def add_comment(project_id: str, user_id: str):
+    body = app.current_request.json_body
+
+    try:
+        if body.get("comment") is None:
+            raise Exception("Property 'comment' not found in request body")
+
+        repository.add_comment(
+            project_id=project_id, user_id=user_id, comment=body.get("comment")
+        )
+
+        return {"message": "Success"}
+    except Exception as e:
+        raise BadRequestError(f"Failed to add comment: {e}")
+
+
+@app.route("/comments/{project_id}")
+def get_comments(project_id: str):
+    try:
+        comments = repository.get_comments(project_id)
+
+        return {"comments": [dataclasses.asdict(comment) for comment in comments]}
+    except Exception as e:
+        raise BadRequestError(f"Failed to get comments: {e}")
 
 
 @app.route("/judges", methods=["POST"])
