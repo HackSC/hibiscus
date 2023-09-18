@@ -2,18 +2,22 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { createClient } from '@supabase/supabase-js';
 
-type Bindings = {
+export type Bindings = {
   SUPABASE_SERVICE_KEY: string;
   SUPABASE_URL: string;
 };
 
 const HTTP_BAD_REQUEST = 400;
+const INTERNAL_SERVER_ERROR = 500;
 
 const app = new Hono<{ Bindings: Bindings }>();
+
 app.use('/api/*', cors());
-app.get('api/verify_token/:access_token', async (c) => {
+
+app.get('/api/verify-token/:access_token', async (c) => {
   try {
-    const supabase = await createClient(
+    console.log(c.env);
+    const supabase = createClient(
       c.env.SUPABASE_URL,
       c.env.SUPABASE_SERVICE_KEY
     );
@@ -25,7 +29,7 @@ app.get('api/verify_token/:access_token', async (c) => {
           error: 'INVALID_TOKEN',
           message: 'Invalid access token: ' + user.error.message,
         },
-        user.error.status as number
+        HTTP_BAD_REQUEST
       );
     }
     const user_id = user.data.user?.id;
@@ -50,7 +54,7 @@ app.get('api/verify_token/:access_token', async (c) => {
             'User data could not be retrieved from Supabase: ' +
             userError?.message,
         },
-        HTTP_BAD_REQUEST
+        INTERNAL_SERVER_ERROR
       );
     }
     if (userData?.length === 0) {
@@ -63,13 +67,14 @@ app.get('api/verify_token/:access_token', async (c) => {
       );
     }
     return c.json(userData[0], 200);
-  } catch {
+  } catch (e) {
+    console.log(e);
     return c.json(
       {
         error: 'UNKNOWN_ERROR',
         message: 'An unknown error occurred.',
       },
-      HTTP_BAD_REQUEST
+      INTERNAL_SERVER_ERROR
     );
   }
 });
