@@ -16,7 +16,6 @@ app.use('/api/*', cors());
 
 app.get('/api/verify-token/:access_token', async (c) => {
   try {
-    console.log(c.env);
     const supabase = createClient(
       c.env.SUPABASE_URL,
       c.env.SUPABASE_SERVICE_KEY
@@ -44,7 +43,7 @@ app.get('/api/verify-token/:access_token', async (c) => {
     }
     const { data: userData, error: userError } = await supabase
       .from('user_profiles')
-      .select()
+      .select('*, role (name)')
       .eq('user_id', user_id);
     if (userError) {
       return c.json(
@@ -66,9 +65,9 @@ app.get('/api/verify-token/:access_token', async (c) => {
         HTTP_BAD_REQUEST
       );
     }
-    return c.json(userData[0], 200);
+
+    return c.json({ ...userData[0], role: userData[0].role.name }, 200);
   } catch (e) {
-    console.log(e);
     return c.json(
       {
         error: 'UNKNOWN_ERROR',

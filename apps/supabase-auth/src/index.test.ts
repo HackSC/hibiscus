@@ -32,7 +32,7 @@ describe('GET /api/verify-token', () => {
     // Get user profile
     const { data: userData, error: userError } = await supabase
       .from('user_profiles')
-      .select('*')
+      .select('*, role (name)')
       .eq('user_id', authData.user.id);
     expect(userError).toBeNull();
     expect(userData).not.toBeNull();
@@ -40,6 +40,7 @@ describe('GET /api/verify-token', () => {
     expect(userData.length === 1);
 
     const user = userData[0];
+    user.role = user.role.name;
 
     // Call endpoint
     const env: Bindings = {
