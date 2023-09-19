@@ -1,6 +1,7 @@
 from chalice import Chalice, BadRequestError
 from dateutil.parser import isoparse
 from chalicelib.repository import repository
+import dataclasses
 
 
 # class CustomJSONProvider(DefaultJSONProvider):
@@ -25,18 +26,12 @@ def get_event(event_id: str):
     is_admin = False
 
     try:
-        event_id = int(event_id)
-
         if is_admin:
             event = repository.get_event_admin(event_id)
         else:
             event = repository.get_event(event_id)
 
-        return event
-    except ValueError:
-        raise BadRequestError(
-            "Failed to get requested event: event_id should be an integer"
-        )
+        return dataclasses.asdict(event)
     except Exception as e:
         raise BadRequestError(f"Failed to get requested event: {e}")
 
@@ -69,14 +64,14 @@ def get_events():
         name=body.get("name"),
         location=body.get("location"),
     )
-    return {"page": page, "events": events}
+    return {"page": page, "events": [dataclasses.asdict(event) for event in events]}
 
 
 @app.route("/events/pinned-events/{user_id}")
 def get_pinned_events(user_id: str):
     # try:
     events = repository.get_pinned_events(user_id)
-    return {"pinnedEvents": events}
+    return {"pinnedEvents": [dataclasses.asdict(event) for event in events]}
 
 
 @app.route("/events/pinned-events/{user_id}", methods=["POST"])

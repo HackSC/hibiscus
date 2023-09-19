@@ -5,7 +5,7 @@ from typing import Optional
 
 @dataclass
 class _EventBase:
-    eventId: int
+    eventId: str
     eventName: str
     startTime: datetime
     endTime: datetime
@@ -13,6 +13,10 @@ class _EventBase:
     eventTags: list[str]
     industryTags: list[str]
     bpPoints: int
+
+    def __post_init__(self):
+        if not isinstance(self.eventId, str):
+            self.eventId = str(self.eventId)
 
 
 @dataclass

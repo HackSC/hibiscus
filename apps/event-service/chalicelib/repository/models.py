@@ -11,7 +11,7 @@ class Base(DeclarativeBase):
 class Event(Base):
     __tablename__ = "events"
 
-    event_id: Mapped[int] = mapped_column(primary_key=True)
+    event_id: Mapped[UUID] = mapped_column(primary_key=True)
     name: Mapped[str]
     start_time: Mapped[TIMESTAMP] = mapped_column(TIMESTAMP(timezone=True))
     end_time: Mapped[TIMESTAMP] = mapped_column(TIMESTAMP(timezone=True))
@@ -30,7 +30,7 @@ class Event(Base):
 class EventTag(Base):
     __tablename__ = "event_tags"
 
-    event_id: Mapped[int] = mapped_column(
+    event_id: Mapped[UUID] = mapped_column(
         ForeignKey("events.event_id"), primary_key=True
     )
     event_tag: Mapped[str] = mapped_column(primary_key=True)
@@ -41,7 +41,7 @@ class EventTag(Base):
 class IndustryTag(Base):
     __tablename__ = "industry_tags"
 
-    event_id: Mapped[int] = mapped_column(
+    event_id: Mapped[UUID] = mapped_column(
         ForeignKey("events.event_id"), primary_key=True
     )
     industry_tag: Mapped[str] = mapped_column(primary_key=True)
@@ -52,8 +52,8 @@ class IndustryTag(Base):
 class Contact(Base):
     __tablename__ = "contacts"
 
-    contact_id: Mapped[int] = mapped_column(primary_key=True)
-    event_id: Mapped[int] = mapped_column(ForeignKey("events.event_id"))
+    contact_id: Mapped[UUID] = mapped_column(primary_key=True)
+    event_id: Mapped[UUID] = mapped_column(ForeignKey("events.event_id"))
     name: Mapped[str]
     role: Mapped[Optional[str]]
     phone: Mapped[Optional[str]]
@@ -66,7 +66,7 @@ class EventPin(Base):
     __tablename__ = "pinned_events"
 
     user_id: Mapped[UUID] = mapped_column(primary_key=True)
-    event_id: Mapped[int] = mapped_column(
+    event_id: Mapped[UUID] = mapped_column(
         ForeignKey("events.event_id"), primary_key=True
     )
 

@@ -7,7 +7,7 @@ from . import models
 from .engine import engine
 
 
-def get_event(event_id: int) -> data_types.Event:
+def get_event(event_id: str) -> data_types.Event:
     """
     Gets event details for the given event (user-facing)
 
@@ -35,7 +35,7 @@ def get_event(event_id: int) -> data_types.Event:
         )
 
 
-def get_event_admin(event_id: int) -> data_types.EventAdminGet:
+def get_event_admin(event_id: str) -> data_types.EventAdminGet:
     """
     Gets event details for the given event (admin-facing)
 
@@ -132,7 +132,7 @@ def get_events(
         ]
 
 
-def add_event(event: data_types.EventAdmin) -> int:
+def add_event(event: data_types.EventAdmin) -> str:
     """
     Adds a new event
 
@@ -182,11 +182,11 @@ def add_event(event: data_types.EventAdmin) -> int:
 
         session.commit()
 
-        return event_id
+        return str(event_id)
 
 
 def update_event(
-    event_id: int,
+    event_id: str,
     event_tags: Optional[list[str]],
     industry_tags: Optional[list[str]],
     **kwargs
@@ -309,7 +309,7 @@ def get_pinned_events(user_id: str) -> list[data_types.Event]:
         return events
 
 
-def add_pinned_event(user_id: str, event_id: int) -> None:
+def add_pinned_event(user_id: str, event_id: str) -> None:
     """
     RSVP to an event
 
@@ -322,7 +322,7 @@ def add_pinned_event(user_id: str, event_id: int) -> None:
         session.commit()
 
 
-def remove_pinned_event(user_id: str, event_id: int) -> None:
+def remove_pinned_event(user_id: str, event_id: str) -> None:
     """
     Un-RSVP to an event
 
@@ -343,7 +343,7 @@ def remove_pinned_event(user_id: str, event_id: int) -> None:
         session.commit()
 
 
-def get_rsvp_users(event_id: int, page: int = None, page_size: int = None) -> list[str]:
+def get_rsvp_users(event_id: str, page: int = None, page_size: int = None) -> list[str]:
     """
     Gets the list of users who has an RSVP to the event
 
@@ -373,7 +373,7 @@ def get_rsvp_users(event_id: int, page: int = None, page_size: int = None) -> li
         return [pin.user_id for pin in pins]
 
 
-def add_event_tag(event_id: int, event_tag: str) -> None:
+def add_event_tag(event_id: str, event_tag: str) -> None:
     """
     Adds a new event tag to the specified event
     """
@@ -385,7 +385,7 @@ def add_event_tag(event_id: int, event_tag: str) -> None:
         session.commit()
 
 
-def remove_event_tag(event_id: int, event_tag: str) -> None:
+def remove_event_tag(event_id: str, event_tag: str) -> None:
     """
     Removes an event tag, or raises an exception if it does not exist
     """
@@ -404,7 +404,7 @@ def remove_event_tag(event_id: int, event_tag: str) -> None:
         session.commit()
 
 
-def add_industry_tag(event_id: int, industry_tag: str) -> None:
+def add_industry_tag(event_id: str, industry_tag: str) -> None:
     """
     Adds a new industry tag to the specified event
     """
@@ -416,7 +416,7 @@ def add_industry_tag(event_id: int, industry_tag: str) -> None:
         session.commit()
 
 
-def remove_industry_tag(event_id: int, industry_tag: str) -> None:
+def remove_industry_tag(event_id: str, industry_tag: str) -> None:
     """
     Removes an industry tag, or raises an exception if it does not exist
     """
@@ -436,12 +436,12 @@ def remove_industry_tag(event_id: int, industry_tag: str) -> None:
 
 
 def add_contact(
-    event_id: int,
+    event_id: str,
     name: str,
     role: Optional[str],
     phone: Optional[str],
     email: Optional[str],
-) -> int:
+) -> str:
     """
     Adds a contact to the specified event
 
@@ -459,10 +459,10 @@ def add_contact(
 
         session.commit()
 
-        return id
+        return str(id)
 
 
-def remove_contact(contact_id: int) -> None:
+def remove_contact(contact_id: str) -> None:
     """
     Removes a specified contact
     """
