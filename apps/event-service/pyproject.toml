@@ -14,9 +14,6 @@ authors = []
 license = 'Proprietary'
 readme = 'README.md'
 
-[[tool.poetry.packages]]
-include = "event_service"
-
 [tool.poetry.dependencies]
 python = ">=3.8,<3.10"
 sqlalchemy = "^2.0.15"
