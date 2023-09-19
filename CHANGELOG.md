@@ -1,6 +1,14 @@
-## [1.0.1]
+## [1.0.2]
 
 ### Unreleased
+
+[#458](https://github.com/HackSC/hibiscus/pull/458)
+
+- Implement Supabase database listener for new check-ins in Identity Portal
+- Optimize database calls when initially fetching check-in data in Identity Portal
+- Fix "Disable SSO" option crashing in dev
+
+## [1.0.1] - 2023-03-30
 
 [#437](https://github.com/HackSC/hibiscus/pull/437)
 [#443](https://github.com/HackSC/hibiscus/pull/443)

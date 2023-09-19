@@ -18,7 +18,8 @@ export const getEnv = () => {
         accessTokenName: process.env.NEXT_PUBLIC_HIBISCUS_ACCESS_COOKIE_NAME,
         refreshTokenName: process.env.NEXT_PUBLIC_HIBISCUS_REFRESH_COOKIE_NAME,
         maxAge: process.env.NEXT_PUBLIC_HIBISCUS_COOKIE_MAX_AGE,
-        disableSSO: process.env.NEXT_PUBLIC_DISABLE_SSO,
+        disableSSO:
+          process.env.NEXT_PUBLIC_DISABLE_SSO?.toLowerCase() === 'true',
       },
       AppURL: {
         baseDomain: process.env.NEXT_PUBLIC_HIBISCUS_DOMAIN,
