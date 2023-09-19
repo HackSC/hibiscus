@@ -64,19 +64,14 @@
     },
     "deploy": {
       "executor": "nx:run-commands",
-      "defaultConfiguration": "prod",
-      "dependsOn": ["build"],
       "options": {
+        "commands": [
+          "poetry export -f requirements.txt --output requirements.txt",
+          "poetry run chalice deploy"
+        ],
         "color": true,
-        "cwd": "apps/event-service"
-      },
-      "configurations": {
-        "prod": {
-          "command": "sls deploy --org hacksc --stage prod"
-        },
-        "staging": {
-          "command": "sls deploy --org hacksc --stage staging"
-        }
+        "cwd": "apps/event-service",
+        "parallel": false
       }
     },
     "package": {
