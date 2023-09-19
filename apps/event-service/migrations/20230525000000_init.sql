@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS public.events
     capacity integer,
     organizer_details character varying,
     CONSTRAINT events_pkey PRIMARY KEY (event_id)
-)
+);
 
 -- Event tags
 
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS public.event_tags
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID
-)
+);
 
 -- Event industry tags
 
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS public.industry_tags
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID
-)
+);
 
 -- Event contact info
 
@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS public.contacts
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID
-)
+);
 
 -- RSVP/Pinned events
 
@@ -72,4 +72,4 @@ CREATE TABLE IF NOT EXISTS public.pinned_events
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
         NOT VALID
-)
+);
