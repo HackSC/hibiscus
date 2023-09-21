@@ -23,6 +23,8 @@ import {
 } from '../../common/events.utils';
 import EventDetails from '../../components/events/event-details';
 import { HibiscusRole } from '@hibiscus/types';
+import { useMediaQuery } from 'react-responsive';
+import EventList from '../../components/events/event-list';
 
 export function Index() {
   return (
@@ -48,6 +50,9 @@ function EventPage() {
     null
   );
   const [userPoints, setUserPoints] = useState<number | null>(null);
+
+  // Media query hook
+  const isSmallScreen = useMediaQuery({ query: '(max-width: 600px)' });
 
   function refresh() {
     setRefresh(!shouldRefresh);
@@ -92,73 +97,81 @@ function EventPage() {
     fetchPinnedEvents();
   }, [user.id, shouldRefresh]);
 
-  return (
-    <>
-      <Container>
-        <GlowSpan color={Colors2023.BLUE.LIGHT} style={{ fontSize: '3rem' }}>
-          Events
-        </GlowSpan>
-        <Text style={{ color: Colors2023.GRAY.SCHEMDIUM }}>
-          Let&apos;s build your HackSC schedule!
-        </Text>
+  if (isSmallScreen) {
+    return (
+      <>
+        <EventList />
+      </>
+    );
+  } else {
+    return (
+      <>
+        <Container>
+          <GlowSpan color={Colors2023.BLUE.LIGHT} style={{ fontSize: '3rem' }}>
+            Events
+          </GlowSpan>
+          <Text style={{ color: Colors2023.GRAY.SCHEMDIUM }}>
+            Let&apos;s build your HackSC schedule!
+          </Text>
 
-        <EventsContainer>
-          <EventsCalendar
-            events={events}
-            openModal={(eventId) => setActiveEvent(eventId)}
-          />
-          <EventsColumn>
-            <Text style={{ fontSize: '1.5rem' }}>Your Points</Text>
-            {bpProg && (
-              <BattlepassPointsBar
-                rangeMinPoint={bpProg.level}
-                rangeMaxPoint={bpProg.nextLevel}
-                currentPoint={userPoints}
-                minLabel={
-                  <Text>
-                    Current points: <GlowSpan>{userPoints}</GlowSpan>
-                  </Text>
-                }
-                maxLabel={
-                  BATTLEPASS_LEVEL_POINTS[bpProg.level] <
-                  BATTLEPASS_LEVEL_POINTS[3] ? (
-                    <Text>
-                      Next level points:{' '}
-                      <GlowSpan color={Colors2023.BLUE.STANDARD}>
-                        {bpProg.nextLevel}
-                      </GlowSpan>
-                    </Text>
-                  ) : null
-                }
-              />
-            )}
-            <Text style={{ fontSize: '1.5rem' }}>Your Events</Text>
-            <PinnedEvents
-              events={pinnedEvents}
+          <EventsContainer>
+            <EventsCalendar
+              events={events}
               openModal={(eventId) => setActiveEvent(eventId)}
             />
-          </EventsColumn>
-        </EventsContainer>
-      </Container>
+            <EventsColumn>
+              <Text style={{ fontSize: '1.5rem' }}>Your Points</Text>
+              {bpProg && (
+                <BattlepassPointsBar
+                  rangeMinPoint={bpProg.level}
+                  rangeMaxPoint={bpProg.nextLevel}
+                  currentPoint={userPoints}
+                  minLabel={
+                    <Text>
+                      Current points: <GlowSpan>{userPoints}</GlowSpan>
+                    </Text>
+                  }
+                  maxLabel={
+                    BATTLEPASS_LEVEL_POINTS[bpProg.level] <
+                    BATTLEPASS_LEVEL_POINTS[3] ? (
+                      <Text>
+                        Next level points:{' '}
+                        <GlowSpan color={Colors2023.BLUE.STANDARD}>
+                          {bpProg.nextLevel}
+                        </GlowSpan>
+                      </Text>
+                    ) : null
+                  }
+                />
+              )}
+              <Text style={{ fontSize: '1.5rem' }}>Your Events</Text>
+              <PinnedEvents
+                events={pinnedEvents}
+                openModal={(eventId) => setActiveEvent(eventId)}
+              />
+            </EventsColumn>
+          </EventsContainer>
+        </Container>
 
-      <Modal
-        isOpen={activeEvent !== null && activeEvent !== undefined}
-        closeModal={() => setActiveEvent(null)}
-      >
-        {activeEvent !== null && activeEvent !== undefined && (
-          <EventDetails
-            event={events.find((e) => e.eventId === activeEvent)}
-            userId={user.id}
-            pinnedEvents={pinnedEvents}
-            setError={setError}
-            setPinnedEvents={setPinnedEvents}
-            refresh={refresh}
-            admin={user.role === HibiscusRole.ADMIN}
-          />
-        )}
-      </Modal>
-    </>
-  );
+        <Modal
+          isOpen={activeEvent !== null && activeEvent !== undefined}
+          closeModal={() => setActiveEvent(null)}
+        >
+          {activeEvent !== null && activeEvent !== undefined && (
+            <EventDetails
+              event={events.find((e) => e.eventId === activeEvent)}
+              userId={user.id}
+              pinnedEvents={pinnedEvents}
+              setError={setError}
+              setPinnedEvents={setPinnedEvents}
+              refresh={refresh}
+              admin={user.role === HibiscusRole.ADMIN}
+            />
+          )}
+        </Modal>
+      </>
+    );
+  }
 }
 
 export default Index;
