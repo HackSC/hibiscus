@@ -331,3 +331,28 @@ def add_many_judges():
         status_code=501,
         headers={"Content-Type": "application/json"},
     )
+
+
+@app.route("/judges")
+def get_judges():
+    try:
+        judges = repository.get_judges()
+
+        return {"judges": [dataclasses.asdict(judge) for judge in judges]}
+    except Exception as e:
+        raise BadRequestError(f"Failed to get judges: {e}")
+
+
+@app.route("/judges/{judge_id}", methods=["POST"])
+def set_judge_vertical(judge_id: str):
+    body = app.current_request.json_body
+
+    try:
+        if body.get("verticalId") is None:
+            raise Exception("Property 'verticalId' not found in request body")
+
+        repository.set_judge_vertical(judge_id, body.get("verticalId"))
+
+        return {"message": "Success"}
+    except Exception as e:
+        raise BadRequestError(f"Failed to assign judge vertical: {e}")

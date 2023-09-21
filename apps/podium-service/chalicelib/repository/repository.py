@@ -5,9 +5,11 @@ from sqlalchemy import select, update, delete
 from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy.dialects.postgresql import insert
 from sqlalchemy_cockroachdb import run_transaction
+from supabase import create_client
 from . import models
 from .engine import engine
 from .. import data_types
+from ..config import Settings
 
 
 # def add_vertical():
@@ -99,7 +101,7 @@ def update_project(
     project_id: str,
     team: Optional[list[str]] = None,
     vertical_new: Optional[str] = None,
-    **kwargs
+    **kwargs,
 ) -> None:
     """
     Updates the given project\n
@@ -724,6 +726,70 @@ def get_comments(project_id: str) -> list[data_types.Comment]:
         ]
 
     return run_transaction(sessionmaker(engine), get)
+
+
+def get_judges() -> list[data_types.Judge]:
+    """
+    Gets all the judges and their associated vertical
+    """
+
+    def get_judge_verticals(session: Session) -> list[data_types.JudgeInternal]:
+        judge_verticals = session.scalars(select(models.Judge))
+        return [
+            data_types.JudgeInternal(
+                id=judge.user_id,
+                verticalId=judge.vertical_id,
+                verticalName=judge.vertical.name
+                if judge.vertical is not None
+                else None,
+            )
+            for judge in judge_verticals
+        ]
+
+    # Get judges from Supabase
+    env = Settings()
+    supabase = create_client(env.supabase_url, env.supabase_key)
+
+    res = supabase.table("user_profiles").select("*").eq("role", 7).execute()
+
+    judges = [
+        data_types.Judge(
+            id=judge.get("user_id"),
+            name=f"{judge.get('first_name')} {judge.get('last_name')}",
+            email=judge.get("email"),
+            verticalId=None,
+            verticalName=None,
+        )
+        for judge in res.data
+    ]
+
+    judge_verticals = run_transaction(sessionmaker(engine), get_judge_verticals)
+
+    for judge_vertical in judge_verticals:
+        for judge in judges:
+            if judge.id == judge_vertical.id and judge_vertical.verticalId is not None:
+                judge.verticalId = str(judge_vertical.verticalId)
+                judge.verticalName = judge_vertical.verticalName
+                break
+
+    return judges
+
+
+def set_judge_vertical(judge_id: str, vertical_id: str):
+    """
+    Sets or updates the assigned vertical for the specified judge
+    """
+
+    def add(session: Session):
+        session.execute(
+            insert(models.Judge)
+            .values(user_id=judge_id, vertical_id=vertical_id)
+            .on_conflict_do_update(
+                constraint="judges_pkey", set_={"vertical_id": vertical_id}
+            )
+        )
+
+    run_transaction(sessionmaker(engine), add)
 
 
 def __get_raw_project(vertical_id: str, project_id: str) -> data_types.Project:
