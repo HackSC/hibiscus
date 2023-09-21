@@ -76,7 +76,7 @@ const RowThree = styled.div`
 const Name = styled.p`
   color: #9d9d9d;
   font-family: SF Pro Text;
-  font-size: 17px;
+  font-size: 1rem;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -85,7 +85,7 @@ const Name = styled.p`
 const Body = styled.p`
   color: #fff;
   font-family: SF Pro Text;
-  font-size: 17px;
+  font-size: 1rem;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
