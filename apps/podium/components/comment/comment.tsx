@@ -2,30 +2,47 @@ import styles from './comment.module.scss';
 import styled from 'styled-components';
 
 /* eslint-disable-next-line */
-export interface CommentProps {}
+export interface CommentProps {
+  name: string;
+  profilepicurl: string;
+  comment: string;
+  timestamp: string;
+}
+function timeSince(dateString) {
+  const now = new Date();
+  const past = new Date(dateString);
+  const diffMs = now.getTime() - past.getTime();
 
-export function Comment(props: CommentProps) {
+  const seconds = Math.floor(diffMs / 1000);
+  const minutes = Math.floor(seconds / 60);
+  const hours = Math.floor(minutes / 60);
+  const days = Math.floor(hours / 24);
+
+  if (days) return `${days} days ago`;
+  if (hours) return `${hours} hours ago`;
+  if (minutes) return `${minutes} minutes ago`;
+  return `${seconds} seconds ago`;
+}
+export function Comment({
+  name,
+  profilepicurl,
+  comment,
+  timestamp,
+}: CommentProps) {
   return (
     <OuterContainer>
       <RowOne>
-        <Circle
-          src={
-            'https://st3.depositphotos.com/9998432/13335/v/450/depositphotos_133352062-stock-illustration-default-placeholder-profile-icon.jpg'
-          }
-          alt={'profile pic'}
-        />
+        <Circle src={profilepicurl} alt={'profile pic'} />
         <NameandReply>
-          <Name>Leyland Yang</Name>
+          <Name>{name}</Name>
           <Reply>reply</Reply>
         </NameandReply>
       </RowOne>
       <RowTwo>
-        <Body>
-          This is a comment from the judge, and everyone can see the comment
-        </Body>
+        <Body>{comment}</Body>
       </RowTwo>
       <RowThree>
-        <TimeStamp>3 mins ago</TimeStamp>
+        <TimeStamp>{timeSince(timestamp)}</TimeStamp>
       </RowThree>
     </OuterContainer>
   );
