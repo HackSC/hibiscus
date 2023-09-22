@@ -108,7 +108,7 @@ export function HackerPortal() {
             shadowColor={Colors2023.BLUE.STANDARD}
             style={{ fontSize: 20 }}
           >
-            You have not applied to HackSC-X yet!
+            You have not applied to HackSC X yet!
           </GlowSpan>
           <ApplyButton>
             <Link

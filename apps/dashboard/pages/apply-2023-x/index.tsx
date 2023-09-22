@@ -73,7 +73,7 @@ export function Index({ appsOpen }: ServerSideProps) {
     return (
       <Container>
         <CenterContainer>
-          <H3>Apps for HackSC-X have closed!</H3>
+          <H3>Apps for HackSC X have closed!</H3>
           <Link
             href={'/'}
             passHref
