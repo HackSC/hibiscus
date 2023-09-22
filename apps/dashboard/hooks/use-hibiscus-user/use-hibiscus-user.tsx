@@ -102,7 +102,7 @@ export function useHibiscusUser() {
   // remove hackform from menu if applied
   useEffect(() => {
     if (isHackerPostAppStatus(user?.applicationStatus)) {
-      dispatch(removeTabRoute('/apply-2023'));
+      dispatch(removeTabRoute('/apply-2023-x'));
     }
   }, [dispatch, user?.applicationStatus]);
 

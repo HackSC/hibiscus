@@ -24,7 +24,7 @@ export function Index({ appsOpen, rsvpFormOpen }: ServerSideProps) {
 
   useEffect(() => {
     if (!appsOpen) {
-      dispatch(removeTabRoute('/apply-2023'));
+      dispatch(removeTabRoute('/apply-2023-x'));
     }
   }, [appsOpen, dispatch]);
 
