@@ -31,6 +31,7 @@ export const getEnv = () => {
       Hackform: {
         HackerAppResponsesTable:
           process.env.HIBISCUS_HACKER_APP_RESPONSES_TABLENAME,
+        TallyApps2023XUrl: process.env.NEXT_PUBLIC_TALLY_APPS_2023_X,
       },
       RSVPForm: {
         ResumeStorageBucketName: 'rsvp-resume-hacker-2023',

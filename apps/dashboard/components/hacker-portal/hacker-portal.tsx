@@ -108,11 +108,11 @@ export function HackerPortal() {
             shadowColor={Colors2023.BLUE.STANDARD}
             style={{ fontSize: 20 }}
           >
-            You have not applied to HackSC 2023 yet!
+            You have not applied to HackSC X yet!
           </GlowSpan>
           <ApplyButton>
             <Link
-              href="/apply-2023"
+              href="/apply-2023-x"
               anchortagpropsoverride={{ target: '_self' }}
             >
               Apply now
