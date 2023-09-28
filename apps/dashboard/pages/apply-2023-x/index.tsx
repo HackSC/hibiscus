@@ -10,6 +10,16 @@ import { get } from '@vercel/edge-config';
 import { HackformTally } from '../../components/hackform-tally/hackform-tally';
 import { useRouter } from 'next/router';
 import { getEnv } from '@hibiscus/env';
+import { ParsedUrlQuery } from 'querystring';
+
+function isQueryComplete(query: ParsedUrlQuery): boolean {
+  return (
+    'hibiscusUserId' in query &&
+    'hibiscusUserNameFirst' in query &&
+    'hibiscusUserNameLast' in query &&
+    'hibiscusUserEmail' in query
+  );
+}
 
 interface ServerSideProps {
   appsOpen: boolean;
@@ -21,18 +31,20 @@ export function Index({ appsOpen }: ServerSideProps) {
   const router = useRouter();
 
   useEffect(() => {
-    if (
-      router.isReady &&
-      user !== null &&
-      !('hibiscusUserId' in router.query)
-    ) {
+    if (router.isReady && user !== null && !isQueryComplete(router.query)) {
       router.replace({
-        query: { ...router.query, hibiscusUserId: user?.id },
+        query: {
+          ...router.query,
+          hibiscusUserId: user?.id,
+          hibiscusUserNameFirst: user?.firstName,
+          hibiscusUserNameLast: user?.lastName,
+          hibiscusUserEmail: user?.email,
+        },
       });
     }
   }, [router, user]);
 
-  if (user === null || !('hibiscusUserId' in router.query)) {
+  if (user === null || !isQueryComplete(router.query)) {
     return (
       <Container>
         <CenterContainer>

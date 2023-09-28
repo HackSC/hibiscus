@@ -46,6 +46,7 @@ const getUserProfile = async (
         Object.values(ApplicationStatus)[profile.application_status - 1],
       teamId: profile.team_id,
       attendanceConfirmed: profile.attendance_confirmed,
+      email: profile.email,
     };
   } else {
     // Set user's name and tag to be their email as temporary placeholder
@@ -59,6 +60,7 @@ const getUserProfile = async (
       lastName: null,
       applicationId: null,
       applicationStatus: null,
+      email: user.data.user.email,
     };
   }
 };
