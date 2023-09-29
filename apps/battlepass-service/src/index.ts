@@ -1,7 +1,64 @@
 import { Hono } from 'hono';
+import { cors } from 'hono/cors';
+import { createClient } from '@supabase/supabase-js';
 
-const app = new Hono();
+export type Bindings = {
+    HIBISCUS_SUPABASE_SERVICE_KEY: string;
+    NEXT_PUBLIC_HIBISCUS_SUPABASE_API_URL: string;
+};
 
-app.get('/', (c) => c.text('Hello Hono!'));
+const HTTP_BAD_REQUEST = 400;
+const INTERNAL_SERVER_ERROR = 500;
+
+const app = new Hono<{ Bindings: Bindings }>();
+
+app.use('/api/*', cors());
+
+app.get('/api/leaderboard', async (c) => {
+    console.log(c.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_API_URL);
+    console.log(c.env.HIBISCUS_SUPABASE_SERVICE_KEY);
+    try {
+        const supabase = createClient(
+            c.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_API_URL,
+            c.env.HIBISCUS_SUPABASE_SERVICE_KEY
+        );      
+
+        const pageNumber = parseInt(c.req.query("pageNumber"));
+        const pageSize = parseInt(c.req.query("pageSize"));
+
+        if (isNaN(pageNumber) || isNaN(pageSize) || pageNumber < 1 || pageSize < 1) {
+            return c.json({
+                error: 'INVALID_QUERY_PARAMS',
+                message: 'Please provide valid pageNumber and pageSize.',
+            }, HTTP_BAD_REQUEST);
+        }
+
+        const { data, error } = await supabase
+            .from('leaderboard')
+            .select('*')
+            .range((pageNumber - 1) * pageSize, pageNumber * pageSize - 1);
+
+        if (error) {
+            return c.json({ error: error.message }, INTERNAL_SERVER_ERROR);
+        }
+
+        return c.json({
+            data: {
+                pageNumber: pageNumber,
+                pageCount: Math.ceil(data.length / pageSize),
+                leaderboard: data
+            }
+        });
+    } catch (e) {
+        console.error("Error:", e.message); // Extract and log the error message.
+        return c.json(
+            {
+                error: 'UNKNOWN_ERROR',
+                message: 'An unknown error occurred.',
+            },
+            INTERNAL_SERVER_ERROR
+        );
+    }
+});
 
 export default app;
