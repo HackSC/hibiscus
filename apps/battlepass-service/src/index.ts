@@ -15,16 +15,14 @@ const app = new Hono<{ Bindings: Bindings }>();
 app.use('/api/*', cors());
 
 app.get('/api/leaderboard', async (c) => {
-    console.log(c.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_API_URL);
-    console.log(c.env.HIBISCUS_SUPABASE_SERVICE_KEY);
     try {
         const supabase = createClient(
             c.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_API_URL,
             c.env.HIBISCUS_SUPABASE_SERVICE_KEY
         );      
 
-        const pageNumber = parseInt(c.req.query("pageNumber"));
-        const pageSize = parseInt(c.req.query("pageSize"));
+        const pageNumber = parseInt(c.req.query("pageNumber") ?? "");
+        const pageSize = parseInt(c.req.query("pageSize") ?? "");
 
         if (isNaN(pageNumber) || isNaN(pageSize) || pageNumber < 1 || pageSize < 1) {
             return c.json({
@@ -45,12 +43,14 @@ app.get('/api/leaderboard', async (c) => {
         return c.json({
             data: {
                 pageNumber: pageNumber,
-                pageCount: Math.ceil(data.length / pageSize),
+                pageCount: pageSize,
                 leaderboard: data
             }
         });
     } catch (e) {
-        console.error("Error:", e.message); // Extract and log the error message.
+        if(e instanceof Error){
+            console.error("Error:", e.message); // Extract and log the error message.
+        }
         return c.json(
             {
                 error: 'UNKNOWN_ERROR',
