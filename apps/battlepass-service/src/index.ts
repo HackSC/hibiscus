@@ -33,8 +33,17 @@ app.get('/api/leaderboard', async (c) => {
 
         const { data, error } = await supabase
             .from('leaderboard')
-            .select('*')
-            .range((pageNumber - 1) * pageSize, pageNumber * pageSize - 1);
+            .select(`
+                bonus_points,
+                event_points,
+                total_points,
+                user_profiles(
+                    first_name,
+                    last_name
+                )
+                `)
+                .order('total_points', {ascending: false})
+                .range((pageNumber - 1) * pageSize, pageNumber * pageSize - 1)
 
         if (error) {
             return c.json({ error: error.message }, INTERNAL_SERVER_ERROR);
