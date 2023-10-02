@@ -88,31 +88,21 @@ export function SignUpCard(props: SignUpProps) {
         </ColorSpanBold>
       </H3>
       <StyledForm onSubmit={handleSubmit}>
-        <OneLineText
-          placeholder="first name"
-          type="text"
-          name="firstname"
-          required
-        />
-        <OneLineText
-          placeholder="last name"
-          type="text"
-          name="lastname"
-          required
-        />
-        <OneLineText
+        <Input placeholder="first name" type="text" name="firstname" required />
+        <Input placeholder="last name" type="text" name="lastname" required />
+        <Input
           placeholder="sample@email.edu"
           type="email"
           name="email"
           required
         />
-        <OneLinePassword
+        <Input
           placeholder="password"
           type="password"
           name="password"
           required
         />
-        <OneLinePassword
+        <Input
           placeholder="re-enter password"
           type="password"
           name="confirmPassword"
@@ -175,6 +165,26 @@ const StyledForm = styled.form`
   align-items: center;
   padding: 20px;
   gap: 15px;
+`;
+
+const Input = styled.input`
+  border: solid 0.1rem #bcbcbc;
+  background-color: #f8f8f8;
+  border-radius: 0.3rem;
+  padding: 10px;
+  padding-left: 15px;
+  font-family: InterVariable, sans-serif;
+  font-size: 1.1rem;
+  color: #676767;
+  width: 55%;
+  margin-top: 0.1rem;
+  ::placeholder {
+    color: #bcbcbc;
+  }
+  ::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: #bcbcbc;
+  }
 `;
 
 const StyledErrorText = styled(Text)`

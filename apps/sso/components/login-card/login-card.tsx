@@ -58,20 +58,20 @@ export function LoginCard() {
         height={100}
       />
       <H3>
-        Login to your{' '}
+        Log in to your{' '}
         <ColorSpanBold color={Colors2023.BLUE.STANDARD}>
           HackSC Account
         </ColorSpanBold>
       </H3>
       <StyledForm onSubmit={handleSubmit}>
-        <OneLineText
-          placeholder="enter your email"
+        <Input
+          placeholder="sample@email.edu"
           type="email"
           name="email"
           required
         />
-        <OneLinePassword
-          placeholder="enter your password"
+        <Input
+          placeholder="password"
           type="password"
           name="password"
           required
@@ -105,8 +105,8 @@ export function LoginCard() {
 export default LoginCard;
 
 const StyledLoginCard = styled.div`
-  min-width: 55vw;
-  max-width: 90vw;
+  width: 35vw;
+  height: 73vh;
   padding: 5rem 2rem;
   display: flex;
   flex-direction: column;
@@ -136,4 +136,23 @@ const StyledErrorText = styled(Text)`
   font-size: 20px;
   padding-top: 1rem;
   color: red;
+`;
+const Input = styled.input`
+  border: solid 0.1rem #bcbcbc;
+  background-color: #f8f8f8;
+  border-radius: 0.3rem;
+  padding: 10px;
+  padding-left: 15px;
+  font-family: InterVariable, sans-serif;
+  font-size: 1.1rem;
+  color: #676767;
+  width: 75%;
+  margin-top: 0.1rem;
+  ::placeholder {
+    color: #bcbcbc;
+  }
+  ::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: #bcbcbc;
+  }
 `;
