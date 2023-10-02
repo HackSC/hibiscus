@@ -61,7 +61,9 @@ export function Index() {
           </H3>
           <H3>
             If your application status remains the same after several minutes,
-            feel free to contact HackSC support for further assistance.
+            feel free to contact HackSC support at{' '}
+            <a href="mailto:team@hacksc.com">team@hacksc.com</a> for further
+            assistance.
           </H3>
           <Link
             href={'/'}
