@@ -6,6 +6,7 @@
     "analytics": "libs/analytics",
     "api-interfaces": "libs/api-interfaces",
     "battlepass-api": "apps/battlepass-api",
+    "battlepass-service": "apps/battlepass-service",
     "battlepass-services": "apps/battlepass-services",
     "dashboard": "apps/dashboard",
     "dashboard-e2e": "apps/dashboard-e2e",
