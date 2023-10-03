@@ -1,12 +1,3 @@
-.animations-swipeable-list__container {
-  width: 100%;
-  margin: 24px 0;
-  outline-color: gray;
-  outline-style: solid;
-  outline-width: 1px 0;
-  color: black;
-}
-
 .animations__switcher {
   align-self: auto;
 }
@@ -34,38 +25,4 @@
   opacity: 1;
   max-height: 1000px;
   transition: max-height 4000ms, opacity 1500ms;
-}
-
-.basic-swipeable-list__item {
-  border-bottom: 1px solid #c4c4c4;
-  height: 32px;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  padding: 4px 8px;
-  user-select: none;
-  cursor: pointer;
-}
-
-.basic-swipeable-list__item-content-left {
-  background-color: red;
-  box-sizing: border-box;
-  color: white;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  padding: 4px 8px;
-}
-
-.basic-swipeable-list__item-content-right {
-  background-color: green;
-  box-sizing: border-box;
-  color: white;
-  height: 100%;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  padding: 4px 8px;
-  justify-content: flex-end;
 }
