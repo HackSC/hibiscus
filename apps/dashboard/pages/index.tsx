@@ -11,8 +11,7 @@ import { useEffect } from 'react';
 import { useAppDispatch } from '../hooks/redux/hooks';
 import { removeTabRoute } from '../store/menu-slice';
 import RSVPClosedPlaceholder from '../components/hacker-portal/rsvp-closed-placeholder';
-import { container } from 'tsyringe';
-import { FeatureFlagRepository } from '../repository/feature-flag.repository';
+import { get } from '@vercel/edge-config';
 
 interface ServerSideProps {
   appsOpen: boolean;
@@ -25,7 +24,7 @@ export function Index({ appsOpen, rsvpFormOpen }: ServerSideProps) {
 
   useEffect(() => {
     if (!appsOpen) {
-      dispatch(removeTabRoute('/apply-2023'));
+      dispatch(removeTabRoute('/apply-2023-x'));
     }
   }, [appsOpen, dispatch]);
 
@@ -76,13 +75,8 @@ const LayoutContainer = styled.div`
 `;
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const ffr = container.resolve(FeatureFlagRepository);
-  const configs = (await ffr.getAll()) ?? {
-    APPS_OPEN: false,
-    RSVP_FORM_OPEN: false,
-  };
-  const appsOpen = configs['APPS_OPEN'];
-  const rsvpFormOpen = configs['RSVP_FORM_OPEN'];
+  const appsOpen = await get('APPS_OPEN_HACKSC_X_2023');
+  const rsvpFormOpen = await get('RSVP_FORM_OPEN_HACKSC_X_2023');
   return {
     props: {
       appsOpen,

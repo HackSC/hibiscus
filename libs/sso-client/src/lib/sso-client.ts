@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { NextApiRequest, NextApiResponse } from 'next/types';
 import axios from 'axios';
+import { faker } from '@faker-js/faker';
 import { getEnv } from '@hibiscus/env';
 import {
   AuthResponse,
@@ -10,9 +11,6 @@ import {
   UserResponse,
 } from '@supabase/supabase-js';
 import { HibiscusRole } from '@hibiscus/types';
-
-const FAKE_USER_EMAIL = 'example@hacksc.com';
-const FAKE_USER_PASSWORD = 'hacksc';
 
 /**
  * Generates the NextJS middleware needed to integrate with the Hibiscus SSO system
@@ -314,30 +312,27 @@ async function initializeFakeUser(access_token: string, refresh_token: string) {
     refresh_token == null ||
     (await supabase.auth.getUser(access_token)).data.user == null
   ) {
-    let {
-      data: { user, session },
-    } = await supabase.auth.signInWithPassword({
-      email: FAKE_USER_EMAIL,
-      password: FAKE_USER_PASSWORD,
-    });
+    let user = null;
+    let session = null;
+
+    const email = faker.internet.email();
+    const password = faker.internet.password();
 
     if (user == null || session == null) {
       ({
         data: { user },
       } = await supabase.auth.admin.createUser({
-        email: FAKE_USER_EMAIL,
-        password: FAKE_USER_PASSWORD,
+        email,
+        password,
         email_confirm: true,
       }));
-
-      console.log(user);
 
       if (user !== null) {
         ({
           data: { user, session },
         } = await supabase.auth.signInWithPassword({
-          email: FAKE_USER_EMAIL,
-          password: FAKE_USER_PASSWORD,
+          email,
+          password,
         }));
       }
     }
@@ -346,8 +341,8 @@ async function initializeFakeUser(access_token: string, refresh_token: string) {
       await supabase.from('user_profiles').insert({
         user_id: user.id,
         email: user.email,
-        first_name: 'Hack',
-        last_name: 'SC',
+        first_name: faker.name.firstName(),
+        last_name: faker.name.lastName(),
         // Default role = HACKER
         role: Object.keys(HibiscusRole).indexOf(HibiscusRole.HACKER) + 1,
       });

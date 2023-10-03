@@ -4,6 +4,7 @@
 /dist
 /tmp
 /out-tsc
+/**/dist
 
 # dependencies
 node_modules
@@ -62,3 +63,7 @@ Thumbs.db
 
 # Serverless
 /**/.serverless/
+
+# Chalice
+/**/.chalice/deployments
+/**/.chalice/config.json
