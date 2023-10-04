@@ -1,5 +1,6 @@
 from chalice import Chalice, BadRequestError
 from dateutil.parser import isoparse
+from chalicelib import data_types
 from chalicelib.repository import repository
 import dataclasses
 
@@ -31,7 +32,7 @@ def get_event(event_id: str):
         else:
             event = repository.get_event(event_id)
 
-        return dataclasses.asdict(event)
+        return data_types.event_to_dict(event)
     except Exception as e:
         raise BadRequestError(f"Failed to get requested event: {e}")
 
@@ -48,11 +49,11 @@ def get_events():
     if after is not None:
         after = isoparse(after)
 
-    page = body.get("page", type=int)
+    page = body.get("page")
     if page is None:
         page = 1
 
-    page_size = body.get("pageSize", type=int)
+    page_size = body.get("pageSize")
     if page_size is None:
         page_size = 20
 
@@ -64,7 +65,10 @@ def get_events():
         name=body.get("name"),
         location=body.get("location"),
     )
-    return {"page": page, "events": [dataclasses.asdict(event) for event in events]}
+    return {
+        "page": page,
+        "events": [data_types.event_to_dict(event) for event in events],
+    }
 
 
 @app.route("/events/pinned-events/{user_id}")
@@ -93,24 +97,24 @@ def remove_pinned_event(user_id: str):
 
 
 # Admin endpoints
-# @app.post("/events")
-# def add_event():
-#     body = request.json
+@app.route("/events", methods=["POST"])
+def add_event():
+    body = app.current_request.json_body
 
-#     try:
-#         # Convert dict to object
-#         contact_info = body.pop("contactInfo", None)
-#         event = data_types.EventAdmin(
-#             eventId=None,
-#             **body,
-#             contactInfo=[data_types.Contact(**x) for x in contact_info],
-#         )
+    try:
+        # Convert dict to object
+        contact_info = body.pop("contactInfo", None)
+        event = data_types.EventAdmin(
+            eventId=None,
+            **body,
+            contactInfo=[data_types.Contact(**x) for x in contact_info],
+        )
 
-#         event_id = repository.add_event(event)
-#         event.eventId = event_id
-#         return jsonify(event), 200
-#     except Exception as e:
-#         return jsonify({"error": f"Failed to add event: {e}"}), 400
+        event_id = repository.add_event(event)
+        event.eventId = event_id
+        return dataclasses.asdict(event)
+    except Exception as e:
+        raise BadRequestError(f"Failed to add event: {e}")
 
 
 # @app.put("/events/<int:event_id>")

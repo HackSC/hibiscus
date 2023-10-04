@@ -586,6 +586,21 @@ pymysql = ["pymysql"]
 sqlcipher = ["sqlcipher3-binary"]
 
 [[package]]
+name = "sqlalchemy-cockroachdb"
+version = "2.0.1"
+description = "CockroachDB dialect for SQLAlchemy"
+category = "main"
+optional = false
+python-versions = "*"
+files = [
+    {file = "sqlalchemy-cockroachdb-2.0.1.tar.gz", hash = "sha256:ddb46e2da53d812bf7b8ef21c3cafb918004747f815a283f374796bf57a9497a"},
+    {file = "sqlalchemy_cockroachdb-2.0.1-py3-none-any.whl", hash = "sha256:b7b9de727cb662d63c654be04202e3b55c4e4cf18a642d16a783dc151a7152f8"},
+]
+
+[package.dependencies]
+SQLAlchemy = "*"
+
+[[package]]
 name = "tomli"
 version = "2.0.1"
 description = "A lil' TOML parser"
@@ -656,4 +671,4 @@ test = ["pytest (>=6.0.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8,<3.10"
-content-hash = "8c77b656644d26df2caf27bd76c4bbc3cd88047cfe5b738a7d7b42b160235f9a"
+content-hash = "7f5b5b2ee065a58ba3ec2d6cc19a1d5fcb3a0f552b4328f55d343585abe3f9d1"

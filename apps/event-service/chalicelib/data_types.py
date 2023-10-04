@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, asdict
 from datetime import datetime
 from typing import Optional
 
@@ -69,3 +69,11 @@ class Contact:
     role: Optional[str] = None
     phone: Optional[str] = None
     email: Optional[str] = None
+
+
+def event_to_dict(event: _EventBase) -> dict:
+    d = asdict(event)
+    d["startTime"] = event.startTime.isoformat()
+    d["endTime"] = event.endTime.isoformat()
+
+    return d

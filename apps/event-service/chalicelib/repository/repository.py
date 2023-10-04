@@ -1,5 +1,7 @@
 from sqlalchemy import select, delete, update, func
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy_cockroachdb import run_transaction
 from typing import Optional
 from datetime import datetime, timedelta
 from .. import data_types
@@ -14,7 +16,7 @@ def get_event(event_id: str) -> data_types.Event:
     Raises an exception if the event does not exist
     """
 
-    with Session(engine) as session:
+    def get(session) -> data_types.Event:
         event = session.scalars(
             select(models.Event).where(models.Event.event_id == event_id)
         ).one_or_none()
@@ -34,6 +36,8 @@ def get_event(event_id: str) -> data_types.Event:
             bpPoints=event.bp_points,
         )
 
+    return run_transaction(sessionmaker(engine), get)
+
 
 def get_event_admin(event_id: str) -> data_types.EventAdminGet:
     """
@@ -42,7 +46,7 @@ def get_event_admin(event_id: str) -> data_types.EventAdminGet:
     Raises an exception if the event does not exist
     """
 
-    with Session(engine) as session:
+    def get(session) -> data_types.EventAdminGet:
         event = session.scalars(
             select(models.Event).where(models.Event.event_id == event_id)
         ).one_or_none()
@@ -71,6 +75,8 @@ def get_event_admin(event_id: str) -> data_types.EventAdminGet:
             ],
         )
 
+    return run_transaction(sessionmaker(engine), get)
+
 
 def get_events(
     page: int = None,
@@ -84,7 +90,7 @@ def get_events(
     Gets list of events with pagination, optionally filtered by date, time, name, or location
     """
 
-    with Session(engine) as session:
+    def get(session) -> list[data_types.Event]:
         stmt = select(models.Event)
 
         if name is not None:
@@ -131,6 +137,8 @@ def get_events(
             for event in events
         ]
 
+    return run_transaction(sessionmaker(engine), get)
+
 
 def add_event(event: data_types.EventAdmin) -> str:
     """
@@ -141,48 +149,45 @@ def add_event(event: data_types.EventAdmin) -> str:
     Raises an exception if the event failed to add
     """
 
-    with Session(engine) as session:
-        eventModel = models.Event(
-            name=event.eventName,
-            start_time=event.startTime,
-            end_time=event.endTime,
-            location=event.location,
-            description=event.description,
-            bp_points=event.bpPoints,
-            capacity=event.capacity,
-            organizer_details=event.organizerDetails,
+    def add(session: Session) -> str:
+        event_id = session.scalar(
+            insert(models.Event)
+            .values(
+                name=event.eventName,
+                start_time=event.startTime,
+                end_time=event.endTime,
+                location=event.location,
+                description=event.description,
+                bp_points=event.bpPoints,
+                capacity=event.capacity,
+                organizer_details=event.organizerDetails,
+            )
+            .returning(models.Event.event_id)
         )
 
-        session.add(eventModel)
-        session.flush()
-
-        event_id = eventModel.event_id
-
-        event_tags = [
-            models.EventTag(event_id=event_id, event_tag=x) for x in event.eventTags
-        ]
+        event_tags = [{"event_id": event_id, "event_tag": x} for x in event.eventTags]
         industry_tags = [
-            models.IndustryTag(event_id=event_id, industry_tag=x)
+            {"event_id": event_id, "industry_tag": x}
             for x in event.industryTags
         ]
         contacts = [
-            models.Contact(
-                event_id=event_id,
-                name=x.name,
-                role=x.role,
-                phone=x.phone,
-                email=x.email,
-            )
+            {
+                "event_id": event_id,
+                "name": x.name,
+                "role": x.role,
+                "phone": x.phone,
+                "email": x.email,
+            }
             for x in event.contactInfo
         ]
 
-        session.add_all(event_tags)
-        session.add_all(industry_tags)
-        session.add_all(contacts)
-
-        session.commit()
+        session.execute(insert(models.EventTag), event_tags)
+        session.execute(insert(models.IndustryTag), industry_tags)
+        session.execute(insert(models.Contact), contacts)
 
         return str(event_id)
+
+    return run_transaction(sessionmaker(engine), add)
 
 
 def update_event(
@@ -285,7 +290,7 @@ def get_pinned_events(user_id: str) -> list[data_types.Event]:
     Returns a list of all pinned events for a user
     """
 
-    with Session(engine) as session:
+    def get(session: Session) -> list[data_types.Event]:
         events = session.scalars(
             select(models.EventPin).where(models.EventPin.user_id == user_id)
         )
@@ -308,6 +313,8 @@ def get_pinned_events(user_id: str) -> list[data_types.Event]:
 
         return events
 
+    return run_transaction(sessionmaker(engine), get)
+
 
 def add_pinned_event(user_id: str, event_id: str) -> None:
     """
@@ -316,10 +323,11 @@ def add_pinned_event(user_id: str, event_id: str) -> None:
     Raises an exception if the user already has an RSVP to the event, or if the event does not exist
     """
 
-    with Session(engine) as session:
+    def add(session: Session):
         pin = models.EventPin(user_id=user_id, event_id=event_id)
         session.add(pin)
-        session.commit()
+
+    run_transaction(sessionmaker(engine), add)
 
 
 def remove_pinned_event(user_id: str, event_id: str) -> None:
@@ -329,7 +337,7 @@ def remove_pinned_event(user_id: str, event_id: str) -> None:
     Raises an exception if the user does not have an existing RSVP to the event
     """
 
-    with Session(engine) as session:
+    def remove(session: Session):
         res = session.execute(
             delete(models.EventPin)
             .where(models.EventPin.user_id == user_id)
@@ -340,7 +348,7 @@ def remove_pinned_event(user_id: str, event_id: str) -> None:
         if res.first() is None:
             raise Exception("User does not have an RSVP to this event")
 
-        session.commit()
+    run_transaction(sessionmaker(engine), remove)
 
 
 def get_rsvp_users(event_id: str, page: int = None, page_size: int = None) -> list[str]:
