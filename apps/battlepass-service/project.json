@@ -1,0 +1,24 @@
+{
+  "name": "battlepass-service",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/battlepass-service",
+  "projectType": "application",
+  "targets": {
+    "serve": {
+      "command": "wrangler dev apps/battlepass-service/src/index.ts"
+    },
+    "deploy": {
+      "command": "wrangler deploy --minify apps/battlepass-service/src/index.ts"
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/battlepass-service/jest.config.ts",
+        "passWithNoTests": true,
+        "silent": false
+      }
+    }
+  },
+  "tags": []
+}
