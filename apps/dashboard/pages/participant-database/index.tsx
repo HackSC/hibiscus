@@ -15,6 +15,8 @@ import { Button, ParagraphText } from '@hibiscus/ui-kit-2023';
 import { getWordCount } from '../../common/utils';
 import HackerProfile from '../../components/sponsor-portal/hacker-profile';
 import { SponsorServiceAPI } from '../../common/api';
+import { CSVLink } from 'react-csv';
+import JSZip from 'jszip';
 
 const Index = () => {
   const router = useRouter();
@@ -36,6 +38,8 @@ const Index = () => {
   const [currentAttendee, setCurrentAttendee] = useState<Attendee>(null);
   const [modalActive, setModalActive] = useState(false);
   const [attendeeName, setAttendeeName] = useState('');
+  const [baseAttendeeData, setBaseAttendeeData] = useState();
+  const zip = new JSZip();
 
   useEffect(() => {
     async function getFilteredAttendee() {
@@ -243,6 +247,50 @@ const Index = () => {
 
   return (
     <Wrapper>
+      <StyledButton
+        style={{
+          width: '100px',
+          color: 'pink', // Idk what styling we want, it can be styled to something better later lol
+        }}
+        onClick={async () => {
+          for (const attendee of attendees) {
+            if (attendee.resume) {
+              const response = await fetch(attendee.resume);
+              const resumeBlob = await response.blob();
+              const attendeeName = attendee.full_name.replace(' ', ''); // Remove whitespaces from name
+              zip.file(attendeeName + '_Resume', resumeBlob);
+            }
+          }
+          // Generate the zip file asynchronously
+          zip
+            .generateAsync({ type: 'blob' })
+            .then((content) => {
+              // 'content' is a Blob containing the zip file data
+              // Example: Create a download link for the zip file
+              // Could use something like FileSaver.js (https://github.com/eligrey/FileSaver.js), but didn't want to add extra dependencies
+              const downloadLink = document.createElement('a');
+              downloadLink.href = URL.createObjectURL(content);
+              downloadLink.download = 'participant_resumes.zip';
+              downloadLink.click();
+              downloadLink.remove();
+            })
+            .catch((error) => {
+              console.error('Error generating zip file:', error);
+            });
+        }}
+      >
+        Download participant resumes
+      </StyledButton>
+      <CSVLink
+        filename="participant_data.csv"
+        data={
+          attendees.map(
+            ({ resume, ...item }) => item
+          ) /* Supplying attendees without resume field */
+        }
+      >
+        Export participant data to CSV
+      </CSVLink>
       <StyledButton
         onClick={() => {
           router.replace('/sponsor-booth');
