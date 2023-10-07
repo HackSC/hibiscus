@@ -4,7 +4,7 @@ import axios, { AxiosError } from 'axios';
 // Type definitions
 
 export type Event = {
-  eventId: number;
+  eventId: string;
   eventName: string;
   startTime: Date;
   endTime: Date;
@@ -50,7 +50,7 @@ export function isSameDate(date1: Date, date2: Date): boolean {
 }
 
 // Event service API client
-export async function getEvent(eventId: number): Promise<Event> {
+export async function getEvent(eventId: string): Promise<Event> {
   const apiUrl = getEnv().Hibiscus.Events.ApiUrl;
 
   try {
@@ -117,7 +117,7 @@ export async function getPinnedEvents(userId: string): Promise<Event[]> {
 
 export async function pinEvent(
   userId: string,
-  eventId: number
+  eventId: string
 ): Promise<number> {
   const apiUrl = getEnv().Hibiscus.Events.ApiUrl;
 
@@ -141,7 +141,7 @@ export async function pinEvent(
 
 export async function unpinEvent(
   userId: string,
-  eventId: number
+  eventId: string
 ): Promise<number> {
   const apiUrl = getEnv().Hibiscus.Events.ApiUrl;
 
@@ -164,7 +164,7 @@ export async function unpinEvent(
 }
 
 export async function updateEvent(
-  eventId: number,
+  eventId: string,
   props: Partial<Event>
 ): Promise<Event> {
   const apiUrl = getEnv().Hibiscus.Events.ApiUrl;

@@ -39,7 +39,7 @@ def get_event(event_id: str):
 
 @app.route("/events")
 def get_events():
-    body = app.current_request.json_body
+    body = app.current_request.query_params
 
     date = body.get("date")
     if date is not None:
@@ -52,10 +52,14 @@ def get_events():
     page = body.get("page")
     if page is None:
         page = 1
+    else:
+        page = int(page)
 
     page_size = body.get("pageSize")
     if page_size is None:
         page_size = 20
+    else:
+        page_size = int(page_size)
 
     events = repository.get_events(
         page=page,
@@ -75,7 +79,7 @@ def get_events():
 def get_pinned_events(user_id: str):
     # try:
     events = repository.get_pinned_events(user_id)
-    return {"pinnedEvents": [dataclasses.asdict(event) for event in events]}
+    return {"pinnedEvents": [data_types.event_to_dict(event) for event in events]}
 
 
 @app.route("/events/pinned-events/{user_id}", methods=["POST"])

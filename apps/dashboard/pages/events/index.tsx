@@ -84,23 +84,22 @@ function EventPage() {
 
   // Get pinned events
   useEffect(() => {
-    async function fetchPinnedEvents() {
-      try {
-        const pinnedEvents = await getPinnedEvents(user.id);
-        setPinnedEvents(pinnedEvents);
-      } catch (e) {
-        console.log(e);
-        setError(e.message);
-      }
-    }
-
-    fetchPinnedEvents();
+    // async function fetchPinnedEvents() {
+    //   try {
+    //     const pinnedEvents = await getPinnedEvents(user.id);
+    //     setPinnedEvents(pinnedEvents);
+    //   } catch (e) {
+    //     console.log(e);
+    //     setError(e.message);
+    //   }
+    // }
+    // fetchPinnedEvents();
   }, [user.id, shouldRefresh]);
 
   if (isSmallScreen) {
     return (
       <>
-        <EventList />
+        <EventList events={events} />
       </>
     );
   } else {
