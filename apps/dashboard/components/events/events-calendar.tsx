@@ -2,7 +2,7 @@ import { Colors2023 } from '@hibiscus/styles';
 import styled from 'styled-components';
 import { useEffect, useRef, useState, ReactNode } from 'react';
 import { Text } from '@hibiscus/ui';
-import { Event, isSameDate } from '../../common/events.utils';
+import { Event, getDayDate } from '../../common/events.utils';
 import CalendarCard from './calendar-card';
 
 const COLUMN_WIDTH = 210;
@@ -12,16 +12,17 @@ const COLUMN_START_MILLIS = 0; // number of millis after 00:00
 const COLUMN_MARGIN = 10;
 
 interface EventsCalendarProps {
-  events: Event[];
-  openModal: (eventId: number) => void;
+  events: Event[][];
+  openModal: (eventId: string) => void;
 }
 
 function EventsCalendar(props: EventsCalendarProps) {
   const ref = useRef(null);
   const [columns, setColumns] = useState(0);
   const [offset, setOffset] = useState(0);
-  const [events, setEvents] = useState<Event[][] | null>(null);
   const [cards, setCards] = useState<ReactNode[][] | null>(null);
+
+  const events = props.events;
 
   // Queries width of component to calculate number of columns
   // Dynamically recalculates on resize
@@ -33,26 +34,6 @@ function EventsCalendar(props: EventsCalendarProps) {
     window.addEventListener('resize', getwidth);
     return () => window.removeEventListener('resize', getwidth);
   }, []);
-
-  // Grouop events by date
-  useEffect(() => {
-    if (props.events !== null) {
-      // Group events by date
-      const eventsByDate: Event[][] = [];
-      for (const e of props.events) {
-        if (
-          eventsByDate.length === 0 ||
-          !isSameDate(eventsByDate.at(-1)[0].startTime, e.startTime)
-        ) {
-          eventsByDate.push([e]);
-        } else {
-          eventsByDate.at(-1).push(e);
-        }
-      }
-
-      setEvents(eventsByDate);
-    }
-  }, [props.events]);
 
   // Render event cards
   useEffect(() => {
@@ -228,7 +209,7 @@ function organizeCalendarCards(events: Event[]): Event[][] {
 function renderCalendarColumn(
   events: Event[],
   date: Date,
-  openModal: (eventId: number) => void
+  openModal: (eventId: string) => void
 ): ReactNode[] {
   const organized = organizeCalendarCards(events);
 
@@ -332,8 +313,4 @@ function renderCalendarColumn(
   }
 
   return nodes;
-}
-
-function getDayDate(d: Date): Date {
-  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
 }

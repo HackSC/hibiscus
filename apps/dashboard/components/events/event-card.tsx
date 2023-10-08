@@ -5,7 +5,7 @@ import styled from 'styled-components';
 
 interface EventCardProps {
   event: Event;
-  openModal: (eventId: number) => void;
+  openModal: (eventId: string) => void;
 }
 
 export function EventCard(props: EventCardProps) {

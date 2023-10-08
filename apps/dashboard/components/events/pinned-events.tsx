@@ -4,7 +4,7 @@ import EventCard from './event-card';
 
 interface PinnedEventsProps {
   events: Event[];
-  openModal: (eventId: number) => void;
+  openModal: (eventId: string) => void;
 }
 
 export function PinnedEvents(props: PinnedEventsProps) {

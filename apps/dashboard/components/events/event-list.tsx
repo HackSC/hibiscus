@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   ActionAnimations,
   ISwipeActionProps,
@@ -12,24 +12,40 @@ import styled from 'styled-components';
 import { Colors2023 } from '@hibiscus/styles';
 import { BoldText, Text } from '@hibiscus/ui';
 import { ImCross } from 'react-icons/im';
-import { Event, getAllEvents } from '../../common/events.utils';
+import { Event, getDayDate } from '../../common/events.utils';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface EventListProps {
-  events: Event[];
+  events: Event[][];
 }
 
 // Code adapted from animation example in react-swipeable-list
 function EventList(props: EventListProps) {
   const contentAnimation = ActionAnimations.REMOVE;
-  const listAnimations = true;
 
-  const [items, setItems] = useState<Event[]>(props.events);
+  const events = props.events.map((events) => [...events]);
+  const columns = props.events.map(
+    (events) =>
+      `${getDayDate(events[0].startTime).toLocaleDateString('en-us', {
+        month: 'short',
+      })} ${getDayDate(events[0].startTime).toLocaleDateString('en-us', {
+        day: '2-digit',
+      })}`
+  );
+
+  const [column, setColumn] = useState<number>(0);
+  const [items, setItems] = useState<Event[][]>(events);
 
   const [expandedEvent, setExpandedEvent] = useState<string | null>(null);
 
-  const deleteItemById = (id: string) =>
-    setItems((items) => items.filter((item) => item.eventId !== id));
+  const deleteItemById = (id: string) => {
+    const newItems = [...items];
+    newItems[column].splice(
+      newItems[column].findIndex((it) => it.eventId === id),
+      1
+    );
+    setItems(newItems);
+  };
 
   const swipeLeftOptions = (id: string): ISwipeActionProps => ({
     content: (
@@ -44,18 +60,18 @@ function EventList(props: EventListProps) {
   const threshold = 0.33;
   const transitionTimeout = 2500;
 
-  useEffect(() => {
-    async function fetchData() {
-      const events = await getAllEvents();
-      setItems(events);
-    }
-
-    fetchData();
-  }, []);
-
   return (
     items && (
-      <>
+      <Calendar>
+        <CalendarHead>
+          {column > 0 && (
+            <LeftArrow onClick={() => setColumn(column - 1)}>&lt;</LeftArrow>
+          )}
+          {column < events.length - 1 && (
+            <RightArrow onClick={() => setColumn(column + 1)}>&gt;</RightArrow>
+          )}
+          <BoldText>{columns[column]}</BoldText>
+        </CalendarHead>
         <SwipeableListContainer>
           <SwipeableList threshold={threshold}>
             {({
@@ -66,15 +82,15 @@ function EventList(props: EventListProps) {
             }) => (
               <TransitionGroup
                 className={className}
-                enter={listAnimations}
-                exit={listAnimations}
+                enter={true}
+                exit={true}
                 style={{
                   display: 'flex',
                   flexDirection: 'column',
-                  gap: '1rem',
                 }}
+                key={column}
               >
-                {items.map((event) => (
+                {items[column].map((event) => (
                   <CSSTransition
                     classNames={{
                       enter: styles['my-node-enter'],
@@ -92,12 +108,14 @@ function EventList(props: EventListProps) {
                       swipeStartThreshold={swipeStartThreshold}
                       threshold={threshold}
                     >
-                      <EventCard
-                        event={event}
-                        isExpanded={expandedEvent === event.eventId}
-                        onClick={() => setExpandedEvent(event.eventId)}
-                        openModal={() => {}}
-                      />
+                      <EventCardWrapper>
+                        <EventCard
+                          event={event}
+                          isExpanded={expandedEvent === event.eventId}
+                          onClick={() => setExpandedEvent(event.eventId)}
+                          openModal={() => {}}
+                        />
+                      </EventCardWrapper>
                     </SwipeableListItem>
                   </CSSTransition>
                 ))}
@@ -105,24 +123,49 @@ function EventList(props: EventListProps) {
             )}
           </SwipeableList>
         </SwipeableListContainer>
-      </>
+      </Calendar>
     )
   );
 }
 
 export default EventList;
 
+const Calendar = styled.div`
+  border-radius: 20px;
+  overflow: hidden;
+`;
+
+const CalendarHead = styled.div`
+  position: relative;
+
+  text-align: center;
+  font-size: 1.5rem;
+  background-color: #336675;
+  padding: 1rem;
+`;
+
+const LeftArrow = styled.a`
+  position: absolute;
+  left: 15px;
+`;
+
+const RightArrow = styled.a`
+  position: absolute;
+  right: 15px;
+`;
+
 const SwipeableListContainer = styled.div`
   width: 100%;
-  margin: 24px 0;
   color: #336675;
+  background-color: ${Colors2023.GRAY.STANDARD};
+  padding: 0.5rem 1rem;
 `;
 
 const BasicSwipeContent = styled.div<{ $position: 'left' | 'right' }>`
   background-color: ${Colors2023.RED.DARK};
   box-sizing: border-box;
   color: white;
-  height: 100%;
+  height: calc(100% - 1rem);
   display: flex;
   align-items: center;
   padding: 1.5rem;
@@ -131,6 +174,11 @@ const BasicSwipeContent = styled.div<{ $position: 'left' | 'right' }>`
 
   justify-content: ${(props) =>
     props.$position === 'left' ? 'flex-start' : 'flex-end'};
+`;
+
+const EventCardWrapper = styled.div`
+  width: 100%;
+  padding: 0.5rem 0;
 `;
 
 interface EventCardProps {
@@ -196,7 +244,7 @@ const CardClosed = styled.div`
 
   border-radius: 15px;
 
-  padding: 1rem 2rem;
+  padding: 1rem;
 `;
 
 const CardOpen = styled.div`

@@ -9,7 +9,7 @@ interface EventCardProps {
   left: string;
 
   // Event details
-  eventId: number;
+  eventId: string;
   eventName: string;
   startTime: Date;
   endTime: Date;
@@ -17,7 +17,7 @@ interface EventCardProps {
   bpPoints: number;
 
   // Click events
-  openModal: (eventId: number) => void;
+  openModal: (eventId: string) => void;
 }
 
 function CalendarCard(props: EventCardProps) {

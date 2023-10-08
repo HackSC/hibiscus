@@ -20,6 +20,7 @@ import {
   Event,
   getAllEvents,
   getPinnedEvents,
+  isSameDate,
 } from '../../common/events.utils';
 import EventDetails from '../../components/events/event-details';
 import { HibiscusRole } from '@hibiscus/types';
@@ -36,12 +37,13 @@ export function Index() {
 
 function EventPage() {
   const [events, setEvents] = useState<Event[] | null>(null);
+  const [eventsGrouped, setEventsGrouped] = useState<Event[][] | null>(null);
   const [pinnedEvents, setPinnedEvents] = useState<Event[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [shouldRefresh, setRefresh] = useState(false);
 
   // Modal state
-  const [activeEvent, setActiveEvent] = useState<number | null>(null);
+  const [activeEvent, setActiveEvent] = useState<string | null>(null);
 
   // Battlepass React hooks
   const battlepassAPI = useBattlepassAPI();
@@ -73,6 +75,21 @@ function EventPage() {
       try {
         const events = await getAllEvents();
         setEvents(events);
+
+        // Group events by date
+        const eventsByDate: Event[][] = [];
+        for (const e of events) {
+          if (
+            eventsByDate.length === 0 ||
+            !isSameDate(eventsByDate.at(-1)[0].startTime, e.startTime)
+          ) {
+            eventsByDate.push([e]);
+          } else {
+            eventsByDate.at(-1).push(e);
+          }
+        }
+        setEventsGrouped(eventsByDate);
+        console.log(eventsByDate);
       } catch (e) {
         console.log(e);
         setError(e.message);
@@ -98,9 +115,11 @@ function EventPage() {
 
   if (isSmallScreen) {
     return (
-      <>
-        <EventList events={events} />
-      </>
+      eventsGrouped && (
+        <>
+          <EventList events={eventsGrouped} />
+        </>
+      )
     );
   } else {
     return (
@@ -115,7 +134,7 @@ function EventPage() {
 
           <EventsContainer>
             <EventsCalendar
-              events={events}
+              events={eventsGrouped}
               openModal={(eventId) => setActiveEvent(eventId)}
             />
             <EventsColumn>

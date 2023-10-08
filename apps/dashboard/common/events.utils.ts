@@ -49,6 +49,10 @@ export function isSameDate(date1: Date, date2: Date): boolean {
   );
 }
 
+export function getDayDate(d: Date): Date {
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+}
+
 // Event service API client
 export async function getEvent(eventId: string): Promise<Event> {
   const apiUrl = getEnv().Hibiscus.Events.ApiUrl;
