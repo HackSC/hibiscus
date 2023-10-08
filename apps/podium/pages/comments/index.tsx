@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 
-const backgroundColor = '#161616';
+const backgroundColor = 'white';
 
 export function Index() {
   /*
@@ -18,24 +18,23 @@ export function Index() {
   );
   const [data, setData] = useState(null);
 
-  useEffect(() => {
-    // Define an async function
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          'https://iegz97vdvi.execute-api.us-west-1.amazonaws.com/api/comments/' +
-            projectId
-        );
-        setData(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        'https://iegz97vdvi.execute-api.us-west-1.amazonaws.com/api/comments/' +
+          projectId
+      );
+      setData(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
-    // Call the async function
+  // Call fetchData inside useEffect for initial fetch
+  useEffect(() => {
     fetchData();
-  }, []);
+  }, []); // Only on component mount
 
   return (
     <Background>
@@ -44,6 +43,7 @@ export function Index() {
           placeholder="Enter text..."
           buttonText="Go"
           onButtonClick={() => console.log('Button clicked!')}
+          fetchData={fetchData}
         />
         {data &&
           data.comments &&

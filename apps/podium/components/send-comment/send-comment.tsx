@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 import { FiSend } from 'react-icons/fi'; // Import the send icon
 
 const InputWrapper = styled.div`
   position: relative;
   width: 350px;
   height: 93px;
-  background: #161616;
+  background: white;
 `;
 
 const StyledInput = styled.textarea`
-  background: #161616;
+  background: white;
   border-radius: 15px;
   border: 1px solid #757575;
   width: 100%;
@@ -44,11 +45,35 @@ const StyledButton = styled.button`
   justify-content: center;
 `;
 
-const SendComment = ({ buttonText, onButtonClick, ...inputProps }) => {
+const SendComment = ({
+  buttonText,
+  onButtonClick,
+  fetchData,
+  ...inputProps
+}) => {
+  const userId = '566a7ced-02c7-4715-8342-bafd4af289b7';
+  const projectId = '1f6e3db9-1976-4f33-bf04-7df9d1e03a71';
+  const [commentText, setCommentText] = useState('');
+  const handleSubmit = async () => {
+    console.log(commentText);
+    const endpoint = `https://iegz97vdvi.execute-api.us-west-1.amazonaws.com/api/comments/${projectId}/user/${userId}`;
+    try {
+      const response = await axios.post(endpoint, { comment: commentText });
+      console.log(response.data);
+      //refresh page
+      fetchData();
+      setCommentText('');
+    } catch (error) {
+      console.error('There was an error submitting the comment:', error);
+    }
+  };
   return (
     <InputWrapper>
-      <StyledInput {...inputProps} />
-      <StyledButton onClick={onButtonClick}>
+      <StyledInput
+        value={commentText}
+        onChange={(e) => setCommentText(e.target.value)}
+      />
+      <StyledButton onClick={handleSubmit}>
         <FiSend />
       </StyledButton>
     </InputWrapper>

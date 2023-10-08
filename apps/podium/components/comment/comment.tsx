@@ -35,15 +35,13 @@ export function Comment({
         <Circle src={profilepicurl} alt={'profile pic'} />
         <NameandReply>
           <Name>{name}</Name>
-          <Reply>reply</Reply>
+          <TimeStamp>{timeSince(timestamp)}</TimeStamp>
         </NameandReply>
       </RowOne>
       <RowTwo>
         <Body>{comment}</Body>
       </RowTwo>
-      <RowThree>
-        <TimeStamp>{timeSince(timestamp)}</TimeStamp>
-      </RowThree>
+      <RowThree></RowThree>
     </OuterContainer>
   );
 }
@@ -56,7 +54,7 @@ const NameandReply = styled.div`
 `;
 const OuterContainer = styled.div`
   width: 355px;
-  background: #161616;
+  background: white;
 `;
 const RowOne = styled.div`
   width: 100%;
@@ -74,7 +72,7 @@ const RowThree = styled.div`
   height: 20px;
 `;
 const Name = styled.p`
-  color: #9d9d9d;
+  color: var(--black, #000);
   font-family: SF Pro Text;
   font-size: 1rem;
   font-style: normal;
@@ -83,7 +81,7 @@ const Name = styled.p`
   letter-spacing: -0.4px;
 `;
 const Body = styled.p`
-  color: #fff;
+  color: var(--black, #000);
   font-family: SF Pro Text;
   font-size: 1rem;
   font-style: normal;
@@ -92,9 +90,9 @@ const Body = styled.p`
   letter-spacing: -0.4px;
 `;
 const TimeStamp = styled.p`
-  color: #9d9d9d;
+  color: var(--black, #000);
   font-family: SF Pro Text;
-  font-size: 17px;
+  font-size: 13px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
