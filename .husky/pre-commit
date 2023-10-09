@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-nix develop --command bash -c "yarn format && pre-commit run --all-files"
+export NIXPKGS_ALLOW_INSECURE=1
+nix develop --impure --command bash -c "yarn format && pre-commit run --all-files"
 git add -A
