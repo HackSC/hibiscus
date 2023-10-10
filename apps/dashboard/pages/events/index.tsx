@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import EventsCalendar from '../../components/events/events-calendar';
-import { GlowSpan } from '@hibiscus/ui-kit-2023';
+import { Button, GlowSpan } from '@hibiscus/ui-kit-2023';
 import { Colors2023 } from '@hibiscus/styles';
 import { Modal, Text } from '@hibiscus/ui';
 import BattlepassPointsBar from '../../components/battlepass/battlepass-points-bar';
@@ -25,7 +25,7 @@ import {
 import EventDetails from '../../components/events/event-details';
 import { HibiscusRole } from '@hibiscus/types';
 import { useMediaQuery } from 'react-responsive';
-import EventList from '../../components/events/event-list';
+import EventList, { EventListType } from '../../components/events/event-list';
 
 export function Index() {
   return (
@@ -39,6 +39,10 @@ function EventPage() {
   const [events, setEvents] = useState<Event[] | null>(null);
   const [eventsGrouped, setEventsGrouped] = useState<Event[][] | null>(null);
   const [pinnedEvents, setPinnedEvents] = useState<Event[] | null>(null);
+  const [pinnedEventsGrouped, setPinnedEventsGrouped] = useState<
+    Event[][] | null
+  >(null);
+  const [mobileView, setMobileView] = useState(EventListType.ALL_EVENTS);
   const [error, setError] = useState<string | null>(null);
   const [shouldRefresh, setRefresh] = useState(false);
 
@@ -58,6 +62,14 @@ function EventPage() {
 
   function refresh() {
     setRefresh(!shouldRefresh);
+  }
+
+  function toggleMobileView() {
+    if (mobileView === EventListType.ALL_EVENTS) {
+      setMobileView(EventListType.PINNED_EVENTS);
+    } else {
+      setMobileView(EventListType.ALL_EVENTS);
+    }
   }
 
   // Battlepass calculations
@@ -89,7 +101,6 @@ function EventPage() {
           }
         }
         setEventsGrouped(eventsByDate);
-        console.log(eventsByDate);
       } catch (e) {
         console.log(e);
         setError(e.message);
@@ -101,37 +112,83 @@ function EventPage() {
 
   // Get pinned events
   useEffect(() => {
-    // async function fetchPinnedEvents() {
-    //   try {
-    //     const pinnedEvents = await getPinnedEvents(user.id);
-    //     setPinnedEvents(pinnedEvents);
-    //   } catch (e) {
-    //     console.log(e);
-    //     setError(e.message);
-    //   }
-    // }
-    // fetchPinnedEvents();
+    async function fetchPinnedEvents() {
+      try {
+        const pinnedEvents = await getPinnedEvents(user.id);
+        setPinnedEvents(pinnedEvents);
+      } catch (e) {
+        console.log(e);
+        setError(e.message);
+      }
+    }
+    fetchPinnedEvents();
   }, [user.id, shouldRefresh]);
 
-  if (isSmallScreen) {
-    return (
-      eventsGrouped && (
-        <>
-          <EventList events={eventsGrouped} />
-        </>
-      )
-    );
-  } else {
-    return (
-      <>
-        <Container>
-          <GlowSpan color={Colors2023.BLUE.LIGHT} style={{ fontSize: '3rem' }}>
-            Events
-          </GlowSpan>
-          <Text style={{ color: Colors2023.GRAY.SCHEMDIUM }}>
-            Let&apos;s build your HackSC schedule!
-          </Text>
+  useEffect(() => {
+    if (pinnedEvents && eventsGrouped) {
+      // Group events by date
+      const eventsByDate: Event[][] = [];
+      let column = 0;
+      for (const e of pinnedEvents) {
+        while (!isSameDate(e.startTime, eventsGrouped[column][0].startTime)) {
+          if (eventsByDate.length <= column) {
+            eventsByDate.push([]);
+          }
+          column++;
+        }
 
+        if (eventsByDate.length <= column) {
+          eventsByDate.push([e]);
+        } else {
+          eventsByDate.at(-1).push(e);
+        }
+      }
+      setPinnedEventsGrouped(eventsByDate);
+    }
+  }, [pinnedEvents, eventsGrouped]);
+
+  return (
+    <>
+      <Container>
+        <GlowSpan color={Colors2023.BLUE.LIGHT} style={{ fontSize: '3rem' }}>
+          Events
+        </GlowSpan>
+        <Text style={{ color: Colors2023.GRAY.SCHEMDIUM }}>
+          Let&apos;s build your HackSC schedule!
+        </Text>
+      </Container>
+
+      {isSmallScreen ? (
+        <>
+          <Button
+            color="black"
+            onClick={toggleMobileView}
+            style={{ margin: '1rem 0' }}
+          >
+            Toggle View
+          </Button>
+          {mobileView === EventListType.ALL_EVENTS
+            ? eventsGrouped && (
+                <EventList
+                  allEvents={eventsGrouped}
+                  pinnedEvents={pinnedEventsGrouped}
+                  type={EventListType.ALL_EVENTS}
+                  setActiveEvent={(eventId) => setActiveEvent(eventId)}
+                  setPinnedEvents={setPinnedEvents}
+                />
+              )
+            : pinnedEventsGrouped && (
+                <EventList
+                  allEvents={eventsGrouped}
+                  pinnedEvents={pinnedEventsGrouped}
+                  type={EventListType.PINNED_EVENTS}
+                  setActiveEvent={(eventId) => setActiveEvent(eventId)}
+                  setPinnedEvents={setPinnedEvents}
+                />
+              )}
+        </>
+      ) : (
+        <>
           <EventsContainer>
             <EventsCalendar
               events={eventsGrouped}
@@ -169,27 +226,27 @@ function EventPage() {
               />
             </EventsColumn>
           </EventsContainer>
-        </Container>
+        </>
+      )}
 
-        <Modal
-          isOpen={activeEvent !== null && activeEvent !== undefined}
-          closeModal={() => setActiveEvent(null)}
-        >
-          {activeEvent !== null && activeEvent !== undefined && (
-            <EventDetails
-              event={events.find((e) => e.eventId === activeEvent)}
-              userId={user.id}
-              pinnedEvents={pinnedEvents}
-              setError={setError}
-              setPinnedEvents={setPinnedEvents}
-              refresh={refresh}
-              admin={user.role === HibiscusRole.ADMIN}
-            />
-          )}
-        </Modal>
-      </>
-    );
-  }
+      <Modal
+        isOpen={activeEvent !== null && activeEvent !== undefined}
+        closeModal={() => setActiveEvent(null)}
+      >
+        {activeEvent !== null && activeEvent !== undefined && (
+          <EventDetails
+            event={events.find((e) => e.eventId === activeEvent)}
+            userId={user.id}
+            pinnedEvents={pinnedEvents}
+            setError={setError}
+            setPinnedEvents={setPinnedEvents}
+            refresh={refresh}
+            admin={user.role === HibiscusRole.ADMIN}
+          />
+        )}
+      </Modal>
+    </>
+  );
 }
 
 export default Index;

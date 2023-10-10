@@ -12,19 +12,33 @@ import styled from 'styled-components';
 import { Colors2023 } from '@hibiscus/styles';
 import { BoldText, Text } from '@hibiscus/ui';
 import { ImCross } from 'react-icons/im';
-import { Event, getDayDate } from '../../common/events.utils';
+import { Event, getDayDate, unpinEvent } from '../../common/events.utils';
+import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
+
+export enum EventListType {
+  ALL_EVENTS,
+  PINNED_EVENTS,
+}
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface EventListProps {
-  events: Event[][];
+  allEvents: Event[][];
+  pinnedEvents: Event[][];
+  type: EventListType;
+  setActiveEvent: (eventId: string) => void;
+  setPinnedEvents: (events: Event[]) => void;
 }
 
 // Code adapted from animation example in react-swipeable-list
 function EventList(props: EventListProps) {
   const contentAnimation = ActionAnimations.REMOVE;
+  const hasAnimations = props.type === EventListType.PINNED_EVENTS;
 
-  const events = props.events.map((events) => [...events]);
-  const columns = props.events.map(
+  const items =
+    props.type === EventListType.ALL_EVENTS
+      ? props.allEvents
+      : props.pinnedEvents;
+  const columns = props.allEvents.map(
     (events) =>
       `${getDayDate(events[0].startTime).toLocaleDateString('en-us', {
         month: 'short',
@@ -34,17 +48,19 @@ function EventList(props: EventListProps) {
   );
 
   const [column, setColumn] = useState<number>(0);
-  const [items, setItems] = useState<Event[][]>(events);
-
   const [expandedEvent, setExpandedEvent] = useState<string | null>(null);
 
+  const { user } = useHibiscusUser();
+
   const deleteItemById = (id: string) => {
-    const newItems = [...items];
-    newItems[column].splice(
-      newItems[column].findIndex((it) => it.eventId === id),
+    unpinEvent(user.id, id);
+
+    const newItems = items.flat();
+    newItems.splice(
+      newItems.findIndex((it) => it.eventId === id),
       1
     );
-    setItems(newItems);
+    props.setPinnedEvents(newItems);
   };
 
   const swipeLeftOptions = (id: string): ISwipeActionProps => ({
@@ -62,68 +78,76 @@ function EventList(props: EventListProps) {
 
   return (
     items && (
-      <Calendar>
-        <CalendarHead>
-          {column > 0 && (
-            <LeftArrow onClick={() => setColumn(column - 1)}>&lt;</LeftArrow>
-          )}
-          {column < events.length - 1 && (
-            <RightArrow onClick={() => setColumn(column + 1)}>&gt;</RightArrow>
-          )}
-          <BoldText>{columns[column]}</BoldText>
-        </CalendarHead>
-        <SwipeableListContainer>
-          <SwipeableList threshold={threshold}>
-            {({
-              className,
-              scrollStartThreshold,
-              swipeStartThreshold,
-              threshold,
-            }) => (
-              <TransitionGroup
-                className={className}
-                enter={true}
-                exit={true}
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                }}
-                key={column}
-              >
-                {items[column].map((event) => (
-                  <CSSTransition
-                    classNames={{
-                      enter: styles['my-node-enter'],
-                      enterActive: styles['my-node-enter-active'],
-                      exit: styles['my-node-exit'],
-                      exitActive: styles['my-node-exit-active'],
-                    }}
-                    key={event.eventId}
-                    timeout={transitionTimeout}
-                  >
-                    <SwipeableListItem
-                      key={event.eventId}
-                      scrollStartThreshold={scrollStartThreshold}
-                      swipeLeft={swipeLeftOptions(event.eventId)}
-                      swipeStartThreshold={swipeStartThreshold}
-                      threshold={threshold}
-                    >
-                      <EventCardWrapper>
-                        <EventCard
-                          event={event}
-                          isExpanded={expandedEvent === event.eventId}
-                          onClick={() => setExpandedEvent(event.eventId)}
-                          openModal={() => {}}
-                        />
-                      </EventCardWrapper>
-                    </SwipeableListItem>
-                  </CSSTransition>
-                ))}
-              </TransitionGroup>
+      <>
+        <Calendar>
+          <CalendarHead>
+            {column > 0 && (
+              <LeftArrow onClick={() => setColumn(column - 1)}>&lt;</LeftArrow>
             )}
-          </SwipeableList>
-        </SwipeableListContainer>
-      </Calendar>
+            {column < columns.length - 1 && (
+              <RightArrow onClick={() => setColumn(column + 1)}>
+                &gt;
+              </RightArrow>
+            )}
+            <BoldText>{columns[column]}</BoldText>
+          </CalendarHead>
+          <SwipeableListContainer>
+            <SwipeableList threshold={threshold}>
+              {({
+                className,
+                scrollStartThreshold,
+                swipeStartThreshold,
+                threshold,
+              }) => (
+                <TransitionGroup
+                  className={className}
+                  exit={hasAnimations}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}
+                  key={`${props.type} ${column}`} // To disable transition animations when changing columns and views
+                >
+                  {items[column]?.map((event) => (
+                    <CSSTransition
+                      classNames={{
+                        exit: styles['my-node-exit'],
+                        exitActive: styles['my-node-exit-active'],
+                      }}
+                      key={event.eventId}
+                      timeout={transitionTimeout}
+                    >
+                      <SwipeableListItem
+                        key={event.eventId}
+                        scrollStartThreshold={scrollStartThreshold}
+                        swipeLeft={
+                          hasAnimations
+                            ? swipeLeftOptions(event.eventId)
+                            : undefined
+                        }
+                        swipeStartThreshold={swipeStartThreshold}
+                        threshold={threshold}
+                      >
+                        <EventCardWrapper>
+                          <EventCard
+                            event={event}
+                            isExpanded={expandedEvent === event.eventId}
+                            onClick={() => setExpandedEvent(event.eventId)}
+                            openModal={(eventId) => {
+                              console.log(eventId);
+                              props.setActiveEvent(eventId);
+                            }}
+                          />
+                        </EventCardWrapper>
+                      </SwipeableListItem>
+                    </CSSTransition>
+                  ))}
+                </TransitionGroup>
+              )}
+            </SwipeableList>
+          </SwipeableListContainer>
+        </Calendar>
+      </>
     )
   );
 }

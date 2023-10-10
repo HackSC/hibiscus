@@ -21,7 +21,7 @@ interface EventDetailsProps {
   userId: string;
   pinnedEvents: Event[];
   setError: Dispatch<SetStateAction<string>>;
-  setPinnedEvents: Dispatch<SetStateAction<Event[]>>;
+  setPinnedEvents: (events: Event[]) => void;
   refresh: () => void;
   admin: boolean;
 }
@@ -253,11 +253,13 @@ const Container = styled.div`
   gap: 1rem;
 
   width: 600px;
+  max-width: 90vw;
 `;
 
 const Row = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   gap: 0.5rem;
 `;
 
@@ -270,7 +272,7 @@ const Tag = styled.div`
 const pinEventHandler =
   (
     userId: string,
-    eventId: number,
+    eventId: string,
     setError: Dispatch<SetStateAction<string>>,
     setPinnedEvents: Dispatch<SetStateAction<Event[]>>
   ) =>
@@ -287,7 +289,7 @@ const pinEventHandler =
 const unpinEventHandler =
   (
     userId: string,
-    eventId: number,
+    eventId: string,
     setError: Dispatch<SetStateAction<string>>,
     setPinnedEvents: Dispatch<SetStateAction<Event[]>>
   ) =>

@@ -101,7 +101,7 @@ export async function getPinnedEvents(userId: string): Promise<Event[]> {
   const apiUrl = getEnv().Hibiscus.Events.ApiUrl;
 
   try {
-    const res = await axios(`${apiUrl}/events/${userId}/pinned-events`, {
+    const res = await axios(`${apiUrl}/events/pinned-events/${userId}`, {
       method: 'GET',
     });
     const events = res.data.pinnedEvents;
@@ -126,7 +126,7 @@ export async function pinEvent(
   const apiUrl = getEnv().Hibiscus.Events.ApiUrl;
 
   try {
-    const res = await axios(`${apiUrl}/events/${userId}/pinned-events`, {
+    const res = await axios(`${apiUrl}/events/pinned-events/${userId}`, {
       method: 'POST',
       data: {
         pin_event: eventId,
@@ -150,7 +150,7 @@ export async function unpinEvent(
   const apiUrl = getEnv().Hibiscus.Events.ApiUrl;
 
   try {
-    const res = await axios(`${apiUrl}/events/${userId}/pinned-events`, {
+    const res = await axios(`${apiUrl}/events/pinned-events/${userId}`, {
       method: 'DELETE',
       data: {
         unpin_event: eventId,
