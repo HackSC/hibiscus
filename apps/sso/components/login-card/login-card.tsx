@@ -7,6 +7,8 @@ import * as SSOClient from '@hibiscus/sso-client';
 import GrayLink from '../gray-link/gray-link';
 import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import { MutatingDots } from 'react-loader-spinner';
+import { StyledAuthCard } from '../auth-components/styled-card';
+import { Input } from '../auth-components/styled-input';
 import {
   Button,
   ColorSpanBold,
@@ -50,7 +52,7 @@ export function LoginCard() {
   }
 
   return (
-    <StyledLoginCard>
+    <StyledAuthCard>
       <Image
         src="/static/images/logo-2023.svg"
         alt="HackSC Logo"
@@ -65,13 +67,13 @@ export function LoginCard() {
       </H3>
       <StyledForm onSubmit={handleSubmit}>
         <Input
-          placeholder="sample@email.edu"
+          placeholder="enter your email"
           type="email"
           name="email"
           required
         />
         <Input
-          placeholder="password"
+          placeholder="enter your password"
           type="password"
           name="password"
           required
@@ -98,29 +100,11 @@ export function LoginCard() {
       ) : (
         ''
       )}
-    </StyledLoginCard>
+    </StyledAuthCard>
   );
 }
 
 export default LoginCard;
-
-const StyledLoginCard = styled.div`
-  width: 35vw;
-  height: 73vh;
-  padding: 5rem 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  margin: auto;
-  align-items: center;
-  border-radius: 20px;
-  min-height: 55vh;
-  > h3 {
-    text-align: center;
-  }
-  border: 4px solid ${Colors2023.BLUE.STANDARD};
-  box-shadow: 0px 0px 10px ${Colors2023.BLUE.LIGHT};
-`;
 
 const StyledForm = styled.form`
   width: 100%;
@@ -136,23 +120,4 @@ const StyledErrorText = styled(Text)`
   font-size: 20px;
   padding-top: 1rem;
   color: red;
-`;
-const Input = styled.input`
-  border: solid 0.1rem #bcbcbc;
-  background-color: #f8f8f8;
-  border-radius: 0.3rem;
-  padding: 10px;
-  padding-left: 15px;
-  font-family: InterVariable, sans-serif;
-  font-size: 1.1rem;
-  color: #676767;
-  width: 75%;
-  margin-top: 0.1rem;
-  ::placeholder {
-    color: #bcbcbc;
-  }
-  ::-ms-input-placeholder {
-    /* Microsoft Edge */
-    color: #bcbcbc;
-  }
 `;
