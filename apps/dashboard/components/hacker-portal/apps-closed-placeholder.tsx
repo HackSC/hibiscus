@@ -12,10 +12,10 @@ function AppsClosedPlaceholder() {
         priority
         alt="Postcard plane"
       />
-      <H2>Apps for HackSC 2023 has closed!</H2>
+      <H2>Apps for HackSC X has closed!</H2>
       <H3>
-        We have closed our apps for HackSC 2023, and will send emails to people
-        who have applied soon! If you missed this year{"'"}s apps, we still have
+        We have closed our apps for HackSC X, and will send emails to people who
+        have applied soon! If you missed this event{"'"}s apps, we still have
         many more cool upcoming events. Make sure to stay up to date with HackSC
         through our{' '}
         <Link href="https://instagram.com/hackscofficial/" passHref underline>
