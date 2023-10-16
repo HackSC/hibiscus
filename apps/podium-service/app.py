@@ -1,6 +1,7 @@
-from chalice import Chalice, BadRequestError, Response
+from chalice import Chalice, BadRequestError, Response, ChaliceViewError
 from chalicelib.repository import repository
 import dataclasses
+import requests
 
 
 app = Chalice(app_name="podium-service")
@@ -17,15 +18,89 @@ def health():
 #     success = repository.add_vertical()
 #     return jsonify({"success": success})
 
+# middleware endpoints
+@app.middleware('all')
+# @app.route("/verify/{access_token}")
+def check_auth(event, get_response):
 
-@app.route("/add_projects", methods=["POST"])
-def add_projects():
-    projects = app.current_request.json_body
-    try:
-        project_ids = repository.add_projects(projects)
-        return {"projects": project_ids}
-    except Exception as e:
-        raise BadRequestError(f"Failed to add projects: {e}")
+    
+    headers = app.current_request.headers
+    access_token = headers.get("Authorization")
+
+    # access_token is in the format "Bearer access_token"
+    # splice it 
+    access_token = access_token.replace("Bearer ", "")
+
+    app.log.info("here" + access_token)
+    
+
+    api_url = "https://my-app.engineering-113.workers.dev/api/verify-token/"
+    api_url += access_token
+
+
+    response = requests.get(api_url)
+    
+    # if valid access token
+    if response.status_code == 200:
+        try:
+            data = response.json()
+            role = data["role"]
+
+            # if user is admin, allow access  
+            if role == "SUPERADMIN":
+                return
+
+
+            # elif user is judge
+            elif role == "JUDGE":
+                # if event is a judge endpoint, allow access
+                judge_eps = ["/projects/{vertical_id}/{project_id}", "/projects/{vertical_id}", "/projects"]
+                
+                check_judge_eps = ["/ranking/{vertical_id}/{user_id}", "/notes/{vertical_id}/{project_id}/{user_id}", 
+                                   "/notes/{vertical_id}/{project_id}/{user_id}"]
+
+                # write code that gets the path from the event
+                path = event.path
+                
+                if path in judge_eps:
+
+                    return
+                
+                elif path in check_judge_eps:
+                    # check if judge is allowed to access this endpoint
+                    # if yes, allow access
+                    # else, disallow access
+                    user_id = event.get('pathParameters').get('user_id')
+                    if user_id == data["user_id"]:
+                        return
+                    else:
+                        raise ChaliceViewError("Access denied. Judge ID from call does not match stored judge ID", status_code = 403)
+                
+                # else, disallow access
+                else:
+                    raise ChaliceViewError("Access denied. Judge cannot access Admin endpoints", status_code = 403)
+                
+
+            # else, is a HACKER
+            else:
+                raise ChaliceViewError("Access denied. Hacker cannot access endpoints", status_code = 403)
+
+
+
+        except ValueError:
+            return "Invalid JSON response"
+
+
+    # invalid access token
+    else:
+        return Response(status_code = 401,
+                        body={"Error" : "Invalid access token"})
+    
+
+
+
+
+
 
 
 # Regular endpoints
@@ -114,6 +189,17 @@ def get_notes(vertical_id: str, project_id: str, user_id: str):
 
 
 # Admin endpoints
+@app.route("/add_projects", methods=["POST"])
+def add_projects():
+    projects = app.current_request.json_body
+    try:
+        project_ids = repository.add_projects(projects)
+        return {"projects": project_ids}
+    except Exception as e:
+        raise BadRequestError(f"Failed to add projects: {e}")
+
+
+
 @app.route("/projects/{vertical_id}", methods=["POST"])
 def add_project(vertical_id: str):
     body = app.current_request.json_body
@@ -331,3 +417,4 @@ def add_many_judges():
         status_code=501,
         headers={"Content-Type": "application/json"},
     )
+
