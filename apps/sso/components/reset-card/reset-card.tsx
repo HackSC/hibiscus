@@ -4,8 +4,9 @@ import { H3, Text } from '@hibiscus/ui';
 import { useRouter } from 'next/router';
 import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import { Colors2023 } from '@hibiscus/styles';
-import { Button, ColorSpanBold, OneLinePassword } from '@hibiscus/ui-kit-2023';
+import { Button, ColorSpanBold } from '@hibiscus/ui-kit-2023';
 import { StyledAuthCard } from '../auth-components/styled-card';
+import { Input } from '../auth-components/styled-input';
 // import { Input } from '../auth-components/styled-input';
 
 /* eslint-disable-next-line */
@@ -87,27 +88,8 @@ const StyledForm = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 10px 20px;
-`;
-
-const Input = styled.input`
-  border: solid 0.1rem #bcbcbc;
-  background-color: #f8f8f8;
-  border-radius: 0.3rem;
-  padding: 10px;
-  padding-left: 15px;
-  font-family: InterVariable, sans-serif;
-  font-size: 1.1rem;
-  color: #676767;
-  width: 100%;
-  margin-top: 1rem;
-  ::placeholder {
-    color: #bcbcbc;
-  }
-  ::-ms-input-placeholder {
-    /* Microsoft Edge */
-    color: #bcbcbc;
-  }
+  padding: 20px;
+  gap: 15px;
 `;
 
 const StyledErrorText = styled(Text)`
