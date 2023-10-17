@@ -14,9 +14,6 @@ authors = [ ]
 license = 'Proprietary'
 readme = 'README.md'
 
-  [[tool.poetry.packages]]
-  include = "podium_service"
-
   [tool.poetry.dependencies]
   python = ">=3.8,<3.10"
   flask = "2.2.2"
@@ -26,6 +23,8 @@ readme = 'README.md'
   psycopg2-binary = "^2.9.6"
   chalice = "^1.29.0"
   sqlalchemy-cockroachdb = "^2.0.1"
+  supabase = "1.0.4"
+  typing-extensions = "^4.8.0"
 
   
 

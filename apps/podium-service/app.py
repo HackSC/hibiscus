@@ -18,6 +18,16 @@ def health():
 #     return jsonify({"success": success})
 
 
+@app.route("/add_projects", methods=["POST"])
+def add_projects():
+    projects = app.current_request.json_body
+    try:
+        project_ids = repository.add_projects(projects)
+        return {"projects": project_ids}
+    except Exception as e:
+        raise BadRequestError(f"Failed to add projects: {e}")
+
+
 # Regular endpoints
 @app.route("/projects/{vertical_id}/{project_id}")
 def get_project(vertical_id: str, project_id: str):
@@ -29,9 +39,19 @@ def get_project(vertical_id: str, project_id: str):
 
 
 @app.route("/projects/{vertical_id}")
-def get_all_projects(vertical_id: str):
+def get_all_projects_in_vertical(vertical_id: str):
     try:
-        projects = repository.get_all_projects(vertical_id)
+        projects = repository.get_all_projects_in_vertical(vertical_id)
+
+        return {"projects": [dataclasses.asdict(project) for project in projects]}
+    except Exception as e:
+        raise BadRequestError(f"Failed to get projects: {e}")
+
+
+@app.route("/projects")
+def get_all_projects():
+    try:
+        projects = repository.get_all_projects()
 
         return {"projects": [dataclasses.asdict(project) for project in projects]}
     except Exception as e:
@@ -106,6 +126,7 @@ def add_project(vertical_id: str):
             description=body.get("description"),
             image_url=body.get("imageUrl"),
             devpost_url=body.get("devpostUrl"),
+            video_url=body.get("videoUrl"),
         )
 
         if project_id is None:
@@ -125,10 +146,12 @@ def edit_project(vertical_id: str, project_id: str):
             vertical_id,
             project_id,
             team=body.get("teamMembers"),
+            vertical_new=body.get("verticalNew"),
             name=body.get("name"),
             description=body.get("description"),
             image_url=body.get("imageUrl"),
             devpost_url=body.get("devpostUrl"),
+            video_url=body.get("videoUrl"),
         )
 
         return {"message": "Success"}
@@ -152,6 +175,47 @@ def lock_rankings(vertical_id: str):
         return {"message": "Success"}
     except Exception as e:
         raise BadRequestError(f"Failed to lock rankings: {e}")
+
+
+@app.route("/lock/{vertical_id}", methods=["DELETE"])
+def unlock_rankings(vertical_id: str):
+    try:
+        repository.unlock_rankings(vertical_id)
+        return {"message": "Success"}
+    except Exception as e:
+        raise BadRequestError(f"Failed to unlock rankings: {e}")
+
+
+@app.route("/lock/{vertical_id}")
+def is_locked(vertical_id: str):
+    try:
+        locked = repository.is_locked(vertical_id)
+        return {"locked": locked}
+    except Exception as e:
+        raise BadRequestError(f"Failed to check for lock: {e}")
+
+
+@app.route("/ranking")
+def get_all_overall_rankings():
+    try:
+        verticals = repository.get_verticals()
+        return {
+            "rankings": [
+                {
+                    "verticalId": vertical.verticalId,
+                    "verticalName": vertical.name,
+                    "rankings": [
+                        dataclasses.asdict(ranking)
+                        for ranking in repository.get_overall_rankings(
+                            vertical.verticalId
+                        )
+                    ],
+                }
+                for vertical in verticals
+            ]
+        }
+    except Exception as e:
+        raise BadRequestError(f"Failed to get rankings: {e}")
 
 
 @app.route("/ranking/{vertical_id}")
@@ -224,13 +288,31 @@ def edit_vertical(vertical_id: str):
         raise BadRequestError(f"Failed to edit vertical: {e}")
 
 
-@app.route("/projects/bulk", methods=["POST"])
-def add_many_projects():
-    return Response(
-        '{"message": "Not implemented"}',
-        status_code=501,
-        headers={"Content-Type": "application/json"},
-    )
+@app.route("/comments/{project_id}/user/{user_id}", methods=["POST", "PUT"])
+def add_comment(project_id: str, user_id: str):
+    body = app.current_request.json_body
+
+    try:
+        if body.get("comment") is None:
+            raise Exception("Property 'comment' not found in request body")
+
+        repository.add_comment(
+            project_id=project_id, user_id=user_id, comment=body.get("comment")
+        )
+
+        return {"message": "Success"}
+    except Exception as e:
+        raise BadRequestError(f"Failed to add comment: {e}")
+
+
+@app.route("/comments/{project_id}")
+def get_comments(project_id: str):
+    try:
+        comments = repository.get_comments(project_id)
+
+        return {"comments": [dataclasses.asdict(comment) for comment in comments]}
+    except Exception as e:
+        raise BadRequestError(f"Failed to get comments: {e}")
 
 
 @app.route("/judges", methods=["POST"])
@@ -249,3 +331,28 @@ def add_many_judges():
         status_code=501,
         headers={"Content-Type": "application/json"},
     )
+
+
+@app.route("/judges")
+def get_judges():
+    try:
+        judges = repository.get_judges()
+
+        return {"judges": [dataclasses.asdict(judge) for judge in judges]}
+    except Exception as e:
+        raise BadRequestError(f"Failed to get judges: {e}")
+
+
+@app.route("/judges/{judge_id}", methods=["POST"])
+def set_judge_vertical(judge_id: str):
+    body = app.current_request.json_body
+
+    try:
+        if body.get("verticalId") is None:
+            raise Exception("Property 'verticalId' not found in request body")
+
+        repository.set_judge_vertical(judge_id, body.get("verticalId"))
+
+        return {"message": "Success"}
+    except Exception as e:
+        raise BadRequestError(f"Failed to assign judge vertical: {e}")

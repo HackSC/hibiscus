@@ -1,6 +1,6 @@
 from typing import Optional
 from uuid import UUID
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, TIMESTAMP
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
 
@@ -28,6 +28,7 @@ class Project(Base):
     description: Mapped[Optional[str]]
     image_url: Mapped[Optional[str]]
     devpost_url: Mapped[Optional[str]]
+    video_url: Mapped[Optional[str]]
 
     vertical: Mapped["Vertical"] = relationship(back_populates="projects")
 
@@ -54,6 +55,30 @@ class Note(Base):
     notes: Mapped[str]
 
     project: Mapped["Project"] = relationship()
+
+
+class Comment(Base):
+    __tablename__ = "comments"
+
+    project_id: Mapped[UUID] = mapped_column(
+        ForeignKey("projects.project_id"), primary_key=True
+    )
+    user_id: Mapped[str] = mapped_column(primary_key=True)
+    comment: Mapped[str]
+    created_at: Mapped[TIMESTAMP] = mapped_column(TIMESTAMP(timezone=True))
+
+    project: Mapped["Project"] = relationship()
+
+
+class Judge(Base):
+    __tablename__ = "judges"
+
+    user_id: Mapped[str] = mapped_column(primary_key=True)
+    vertical_id: Mapped[Optional[UUID]] = mapped_column(
+        ForeignKey("verticals.vertical_id")
+    )
+
+    vertical: Mapped["Vertical"] = relationship()
 
 
 class RankingFinal(Base):
