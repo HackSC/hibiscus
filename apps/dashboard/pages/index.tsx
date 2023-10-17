@@ -16,9 +16,14 @@ import { get } from '@vercel/edge-config';
 interface ServerSideProps {
   appsOpen: boolean;
   rsvpFormOpen: boolean;
+  hackerPortalOpen: boolean;
 }
 
-export function Index({ appsOpen, rsvpFormOpen }: ServerSideProps) {
+export function Index({
+  appsOpen,
+  rsvpFormOpen,
+  hackerPortalOpen,
+}: ServerSideProps) {
   const dispatch = useAppDispatch();
   const { user } = useHibiscusUser();
 
@@ -43,7 +48,7 @@ export function Index({ appsOpen, rsvpFormOpen }: ServerSideProps) {
       ) {
         return <RSVPClosedPlaceholder />;
       }
-      return <HackerPortal />;
+      return <HackerPortal isEventOpen={hackerPortalOpen} />;
     } else if (user.role === HibiscusRole.SPONSOR)
       return <SponsorPortal user={user} />;
     else if (user.role === HibiscusRole.VOLUNTEER) return <IdentityPortal />;
@@ -77,10 +82,12 @@ const LayoutContainer = styled.div`
 export const getServerSideProps: GetServerSideProps = async () => {
   const appsOpen = await get('APPS_OPEN_HACKSC_X_2023');
   const rsvpFormOpen = await get('RSVP_FORM_OPEN_HACKSC_X_2023');
+  const hackerPortalOpen = await get('HACKER_PORTAL_OPEN_HACKSC_X_2023');
   return {
     props: {
       appsOpen,
-      rsvpFormOpen,
+      rsvpFormOpen: true,
+      hackerPortalOpen,
     } as ServerSideProps,
   };
 };
