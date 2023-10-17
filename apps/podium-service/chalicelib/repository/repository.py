@@ -725,7 +725,21 @@ def get_comments(project_id: str) -> list[data_types.Comment]:
             for comment in comments
         ]
 
-    return run_transaction(sessionmaker(engine), get)
+    env = Settings()
+    supabase = create_client(env.supabase_url, env.supabase_key)
+
+    comments = run_transaction(sessionmaker(engine), get)
+
+    # Get judge data from Supabase
+    res = supabase.table("user_profiles").select("user_id, first_name, last_name").in_("user_id", [comment.name for comment in comments]).execute()
+
+    for comment in comments:
+        for judge in res.data:
+            if judge.get("user_id") == comment.name:
+                comment.name = f"{judge.get('first_name')} {judge.get('last_name')}"
+                break
+
+    return comments
 
 
 def get_judges() -> list[data_types.Judge]:
