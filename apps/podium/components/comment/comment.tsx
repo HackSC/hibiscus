@@ -53,7 +53,7 @@ const NameandReply = styled.div`
   padding: 0 20px;
 `;
 const OuterContainer = styled.div`
-  width: 355px;
+  max-width: 355px;
   background: white;
 `;
 const RowOne = styled.div`

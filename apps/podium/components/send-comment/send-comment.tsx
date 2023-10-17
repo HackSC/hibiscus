@@ -5,13 +5,11 @@ import { FiSend } from 'react-icons/fi'; // Import the send icon
 
 const InputWrapper = styled.div`
   position: relative;
-  width: 350px;
+  max-width: 350px;
   height: 93px;
-  background: white;
 `;
 
 const StyledInput = styled.textarea`
-  background: white;
   border-radius: 15px;
   border: 1px solid #757575;
   width: 100%;
@@ -63,6 +61,7 @@ const SendComment = ({
       //refresh page
       fetchData();
       setCommentText('');
+      onButtonClick();
     } catch (error) {
       console.error('There was an error submitting the comment:', error);
     }
