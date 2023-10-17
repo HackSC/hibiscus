@@ -247,57 +247,56 @@ const Index = () => {
 
   return (
     <Wrapper>
-      <StyledButton
-        style={{
-          width: '100px',
-          color: 'pink', // Idk what styling we want, it can be styled to something better later lol
-        }}
-        onClick={async () => {
-          for (const attendee of attendees) {
-            if (attendee.resume) {
-              const response = await fetch(attendee.resume);
-              const resumeBlob = await response.blob();
-              const attendeeName = attendee.full_name.replace(' ', ''); // Remove whitespaces from name
-              zip.file(attendeeName + '_Resume', resumeBlob);
+      <MenuBar>
+        <StyledButton
+          onClick={() => {
+            router.replace('/sponsor-booth');
+          }}
+        >
+          <Image width="30" height="30" src={'/arrow.svg'} alt="Illustration" />
+        </StyledButton>
+        <DownloadButton
+          onClick={async () => {
+            for (const attendee of attendees) {
+              if (attendee.resume) {
+                const response = await fetch(attendee.resume);
+                const resumeBlob = await response.blob();
+                const attendeeName = attendee.full_name.replace(' ', ''); // Remove whitespaces from name
+                zip.file(attendeeName + '_Resume', resumeBlob);
+              }
             }
+            // Generate the zip file asynchronously
+            zip
+              .generateAsync({ type: 'blob' })
+              .then((content) => {
+                // 'content' is a Blob containing the zip file data
+                // Example: Create a download link for the zip file
+                // Could use something like FileSaver.js (https://github.com/eligrey/FileSaver.js), but didn't want to add extra dependencies
+                const downloadLink = document.createElement('a');
+                downloadLink.href = URL.createObjectURL(content);
+                downloadLink.download = 'participant_resumes.zip';
+                downloadLink.click();
+                downloadLink.remove();
+              })
+              .catch((error) => {
+                console.error('Error generating zip file:', error);
+              });
+          }}
+        >
+          Download participant resumes
+        </DownloadButton>
+        <CSVLink
+          filename="participant_data.csv"
+          data={
+            attendees.map(
+              ({ resume, ...item }) => item
+            ) /* Supplying attendees without resume field */
           }
-          // Generate the zip file asynchronously
-          zip
-            .generateAsync({ type: 'blob' })
-            .then((content) => {
-              // 'content' is a Blob containing the zip file data
-              // Example: Create a download link for the zip file
-              // Could use something like FileSaver.js (https://github.com/eligrey/FileSaver.js), but didn't want to add extra dependencies
-              const downloadLink = document.createElement('a');
-              downloadLink.href = URL.createObjectURL(content);
-              downloadLink.download = 'participant_resumes.zip';
-              downloadLink.click();
-              downloadLink.remove();
-            })
-            .catch((error) => {
-              console.error('Error generating zip file:', error);
-            });
-        }}
-      >
-        Download participant resumes
-      </StyledButton>
-      <CSVLink
-        filename="participant_data.csv"
-        data={
-          attendees.map(
-            ({ resume, ...item }) => item
-          ) /* Supplying attendees without resume field */
-        }
-      >
-        Export participant data to CSV
-      </CSVLink>
-      <StyledButton
-        onClick={() => {
-          router.replace('/sponsor-booth');
-        }}
-      >
-        <Image width="30" height="30" src={'/arrow.svg'} alt="Illustration" />
-      </StyledButton>
+        >
+          <DownloadButton>Export participant data to CSV</DownloadButton>
+        </CSVLink>
+      </MenuBar>
+
       <BoldText
         style={{
           marginTop: '1rem',
@@ -745,4 +744,34 @@ const StyledScrollBar = styled.div`
     background-color: ${Colors2023.GREEN.DARK};
     border-radius: 50px;
   }
+`;
+
+const DownloadButton = styled.button`
+  padding: 12px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: ${Colors2023.GRAY.STANDARD};
+  border-radius: 15px;
+  border: 4px solid ${Colors2023.GRAY.MEDIUM};
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 1px 2px 15px ${Colors2023.GRAY.MEDIUM};
+  color: white;
+  width: fit-content;
+  height: fit-content;
+
+  &:hover {
+    background-color: ${Colors2023.GRAY.SHLIGHT};
+    transition: all 0.3s;
+  }
+`;
+
+const MenuBar = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
 `;
