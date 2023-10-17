@@ -103,7 +103,8 @@ function RSVPForm({ closeModal }: Props) {
         <QuestionWrap>
           <label htmlFor="dob">
             <Text>
-              Date of birth:
+              Date of birth (remember to bring your government ID to verify
+              this):
               <SpanRed>*</SpanRed>
             </Text>
           </label>
