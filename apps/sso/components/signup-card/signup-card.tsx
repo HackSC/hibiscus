@@ -15,6 +15,8 @@ import {
   OneLinePassword,
 } from '@hibiscus/ui-kit-2023';
 import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
+import { Input } from '../auth-components/styled-input';
+import { StyledAuthCard } from '../auth-components/styled-card';
 
 /* eslint-disable-next-line */
 export interface SignUpProps {}
@@ -74,7 +76,7 @@ export function SignUpCard(props: SignUpProps) {
   };
 
   return (
-    <Wrapper>
+    <StyledAuthCard>
       <Image
         src="/static/images/logo-2023.svg"
         alt="HackSC Logo"
@@ -88,31 +90,21 @@ export function SignUpCard(props: SignUpProps) {
         </ColorSpanBold>
       </H3>
       <StyledForm onSubmit={handleSubmit}>
-        <OneLineText
-          placeholder="first name"
-          type="text"
-          name="firstname"
-          required
-        />
-        <OneLineText
-          placeholder="last name"
-          type="text"
-          name="lastname"
-          required
-        />
-        <OneLineText
+        <Input placeholder="first name" type="text" name="firstname" required />
+        <Input placeholder="last name" type="text" name="lastname" required />
+        <Input
           placeholder="sample@email.edu"
           type="email"
           name="email"
           required
         />
-        <OneLinePassword
+        <Input
           placeholder="password"
           type="password"
           name="password"
           required
         />
-        <OneLinePassword
+        <Input
           placeholder="re-enter password"
           type="password"
           name="confirmPassword"
@@ -139,33 +131,11 @@ export function SignUpCard(props: SignUpProps) {
       ) : (
         ''
       )}
-    </Wrapper>
+    </StyledAuthCard>
   );
 }
 
 export default SignUpCard;
-
-const Wrapper = styled.div`
-  min-width: 55vw;
-  max-width: 90vw;
-  background-color: ${Colors2023.GRAY.DARK};
-  padding: 5rem 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  margin: auto;
-  align-items: center;
-  border-radius: 20px;
-  min-height: 70vh;
-  > h3 {
-    text-align: center;
-  }
-  border: 4px solid ${Colors2023.BLUE.STANDARD};
-  box-shadow: 0px 0px 10px ${Colors2023.BLUE.LIGHT};
-  @media (max-width: 400px) {
-    min-width: 23rem;
-  }
-`;
 
 const StyledForm = styled.form`
   width: 100%;

@@ -7,6 +7,8 @@ import * as SSOClient from '@hibiscus/sso-client';
 import GrayLink from '../gray-link/gray-link';
 import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import { MutatingDots } from 'react-loader-spinner';
+import { StyledAuthCard } from '../auth-components/styled-card';
+import { Input } from '../auth-components/styled-input';
 import {
   Button,
   ColorSpanBold,
@@ -50,7 +52,7 @@ export function LoginCard() {
   }
 
   return (
-    <StyledLoginCard>
+    <StyledAuthCard>
       <Image
         src="/static/images/logo-2023.svg"
         alt="HackSC Logo"
@@ -58,19 +60,19 @@ export function LoginCard() {
         height={100}
       />
       <H3>
-        Login to your{' '}
+        Log in to your{' '}
         <ColorSpanBold color={Colors2023.BLUE.STANDARD}>
           HackSC Account
         </ColorSpanBold>
       </H3>
       <StyledForm onSubmit={handleSubmit}>
-        <OneLineText
+        <Input
           placeholder="enter your email"
           type="email"
           name="email"
           required
         />
-        <OneLinePassword
+        <Input
           placeholder="enter your password"
           type="password"
           name="password"
@@ -98,29 +100,11 @@ export function LoginCard() {
       ) : (
         ''
       )}
-    </StyledLoginCard>
+    </StyledAuthCard>
   );
 }
 
 export default LoginCard;
-
-const StyledLoginCard = styled.div`
-  min-width: 55vw;
-  max-width: 90vw;
-  padding: 5rem 2rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  margin: auto;
-  align-items: center;
-  border-radius: 20px;
-  min-height: 55vh;
-  > h3 {
-    text-align: center;
-  }
-  border: 4px solid ${Colors2023.BLUE.STANDARD};
-  box-shadow: 0px 0px 10px ${Colors2023.BLUE.LIGHT};
-`;
 
 const StyledForm = styled.form`
   width: 100%;
