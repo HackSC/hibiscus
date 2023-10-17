@@ -10,7 +10,9 @@ export function HackformTally(props: HackformTally) {
     try {
       // @ts-expect-error Tally is loaded in the linked script
       Tally.loadEmbeds();
-    } catch {}
+    } catch {
+      console.log();
+    }
   }, []);
 
   return (
