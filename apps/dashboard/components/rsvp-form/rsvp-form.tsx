@@ -10,6 +10,8 @@ import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 import { toast } from 'react-hot-toast';
 import * as Sentry from '@sentry/browser';
+import axios from 'axios';
+import { getEnv } from '@hibiscus/env';
 
 interface Props {
   closeModal: () => void;
@@ -23,6 +25,11 @@ function RSVPForm({ closeModal }: Props) {
   useEffect(() => {
     const fetchData = async () => {
       // fetch discord invite URL
+      const res = await axios.get(
+        `${getEnv().Hibiscus.Discord.ApiUrl}/getUserInvite/${user.id}`
+      );
+
+      console.log(res.data);
 
       setDiscordInvite('PLACEHOLDER');
     };
@@ -56,7 +63,17 @@ function RSVPForm({ closeModal }: Props) {
 
     validate: async (values) => {
       // get discord status from API
-      const joinedDiscord = true;
+      const res = await axios.get(
+        `${getEnv().Hibiscus.Discord.ApiUrl}/checkUserInDiscord/${user.id}`
+      );
+      if (res.status === 500) {
+        return {
+          acknowledgementDiscord:
+            'An error occured while trying to query Discord status. If this error persists, please contact team@hacksc.com for further assistance',
+        };
+      }
+
+      const joinedDiscord = res.data.inDiscord;
       if (!joinedDiscord) {
         return {
           acknowledgementDiscord:
