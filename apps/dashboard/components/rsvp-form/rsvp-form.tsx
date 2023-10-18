@@ -13,6 +13,9 @@ import * as Sentry from '@sentry/browser';
 import axios from 'axios';
 import { getEnv } from '@hibiscus/env';
 
+const ERROR_STRING =
+  'An error occured while trying to query Discord status. If this error persists, please contact team@hacksc.com for further assistance';
+
 interface Props {
   closeModal: () => void;
 }
@@ -22,16 +25,42 @@ function RSVPForm({ closeModal }: Props) {
   const { supabase } = useHibiscusSupabase();
 
   const [discordInvite, setDiscordInvite] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
     const fetchData = async () => {
       // fetch discord invite URL
-      const res = await axios.get(
+      const resGetInvite = await fetch(
         `${getEnv().Hibiscus.Discord.ApiUrl}/getUserInvite/${user.id}`
       );
 
-      console.log(res.data);
+      if (resGetInvite.ok) {
+        const data = await resGetInvite.json();
+        setDiscordInvite(data.inviteURL);
+      } else {
+        if (resGetInvite.status === 400) {
+          const resSendInvite = await fetch(
+            `${getEnv().Hibiscus.Discord.ApiUrl}/invite/${user.id}`
+          );
 
-      setDiscordInvite('PLACEHOLDER');
+          if (resSendInvite.ok) {
+            const resGetInviteAgain = await fetch(
+              `${getEnv().Hibiscus.Discord.ApiUrl}/getUserInvite/${user.id}`
+            );
+
+            if (resSendInvite.ok) {
+              const data = await resGetInviteAgain.json();
+              setDiscordInvite(data.inviteURL);
+            } else {
+              setError(ERROR_STRING);
+            }
+          } else {
+            setError(ERROR_STRING);
+          }
+        } else {
+          setError(ERROR_STRING);
+        }
+      }
     };
     fetchData();
   }, []);
@@ -63,17 +92,16 @@ function RSVPForm({ closeModal }: Props) {
 
     validate: async (values) => {
       // get discord status from API
-      const res = await axios.get(
+      const res = await fetch(
         `${getEnv().Hibiscus.Discord.ApiUrl}/checkUserInDiscord/${user.id}`
       );
       if (res.status === 500) {
         return {
-          acknowledgementDiscord:
-            'An error occured while trying to query Discord status. If this error persists, please contact team@hacksc.com for further assistance',
+          acknowledgementDiscord: ERROR_STRING,
         };
       }
 
-      const joinedDiscord = res.data.inDiscord;
+      const joinedDiscord = (await res.json()).inDiscord;
       if (!joinedDiscord) {
         return {
           acknowledgementDiscord:
@@ -115,88 +143,107 @@ function RSVPForm({ closeModal }: Props) {
   return (
     <form>
       <OwnGrayBox>
-        <H2>Please confirm some details</H2>
+        {discordInvite ? (
+          <>
+            <H2>Please confirm some details</H2>
 
-        <QuestionWrap>
-          <label htmlFor="dob">
-            <Text>
-              Date of birth (remember to bring your government ID to verify
-              this):
-              <SpanRed>*</SpanRed>
-            </Text>
-          </label>
-          <DatePicker
-            name="dob"
-            id="dob"
-            valueOneLineText={formik.values.dob}
-            placeholder="in MM/DD/YYYY format e.g 12/22/2002"
-            onChange={formik.handleChange}
-            onClickDay={(d) => {
-              formik.setFieldValue('dob', d);
-            }}
-          />
-          {formik.touched.dob && formik.errors.dob ? (
-            <SpanRed>{formik.errors.dob}</SpanRed>
-          ) : null}
-        </QuestionWrap>
+            <QuestionWrap>
+              <label htmlFor="dob">
+                <Text>
+                  Date of birth (remember to bring your government ID to verify
+                  this):
+                  <SpanRed>*</SpanRed>
+                </Text>
+              </label>
+              <DatePicker
+                name="dob"
+                id="dob"
+                valueOneLineText={formik.values.dob}
+                placeholder="in MM/DD/YYYY format e.g 12/22/2002"
+                onChange={formik.handleChange}
+                onClickDay={(d) => {
+                  formik.setFieldValue('dob', d);
+                }}
+              />
+              {formik.touched.dob && formik.errors.dob ? (
+                <SpanRed>{formik.errors.dob}</SpanRed>
+              ) : null}
+            </QuestionWrap>
 
-        <QuestionWrap>
-          <Checkbox
-            onInput={(newVal) => {
-              formik.setFieldValue('acknowledgementInPerson', newVal);
-            }}
-            label={
+            <QuestionWrap>
+              <Checkbox
+                onInput={(newVal) => {
+                  formik.setFieldValue('acknowledgementInPerson', newVal);
+                }}
+                label={
+                  <Text>
+                    By RSVPing, I confirm that I will be attending HackSC X
+                    in-person. Below are the opening and closing ceremony times:
+                    <SpanRed>*</SpanRed>
+                  </Text>
+                }
+              />
+              {formik.touched.acknowledgementInPerson &&
+                formik.errors.acknowledgementInPerson && (
+                  <SpanRed>{formik.errors.acknowledgementInPerson}</SpanRed>
+                )}
+            </QuestionWrap>
+            <div
+              style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}
+            >
               <Text>
-                By RSVPing, I confirm that I will be attending HackSC X
-                in-person. Below are the opening and closing ceremony times:
-                <SpanRed>*</SpanRed>
+                <span style={{ fontWeight: 'bold' }}>Opening Ceremony:</span>
+                <Text>Sat, Nov 4 @ 1:00pm - MG Studio</Text>
               </Text>
-            }
-          />
-          {formik.touched.acknowledgementInPerson &&
-            formik.errors.acknowledgementInPerson && (
-              <SpanRed>{formik.errors.acknowledgementInPerson}</SpanRed>
-            )}
-        </QuestionWrap>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <Text>
-            <span style={{ fontWeight: 'bold' }}>Opening Ceremony:</span>
-            <Text>Sat, Nov 4 @ 1:00pm - MG Studio</Text>
-          </Text>
-          <Text>
-            <span style={{ fontWeight: 'bold' }}>Closing Ceremony:</span>
-            <Text>Sun, Nov 5 @ 4:00pm - MG Studio</Text>
-          </Text>
-        </div>
-
-        <QuestionWrap>
-          <Checkbox
-            onInput={(newVal) => {
-              formik.setFieldValue('acknowledgementDiscord', newVal);
-            }}
-            label={
               <Text>
-                I confirm that I have joined the official Discord server for
-                HackSC X at <a href={discordInvite}>{discordInvite}</a>
-                <SpanRed>*</SpanRed>
+                <span style={{ fontWeight: 'bold' }}>Closing Ceremony:</span>
+                <Text>Sun, Nov 5 @ 4:00pm - MG Studio</Text>
               </Text>
-            }
-          />
-          {formik.touched.acknowledgementDiscord && (
-            <SpanRed>{formik.errors.acknowledgementDiscord}</SpanRed>
-          )}
-        </QuestionWrap>
+            </div>
 
-        <Button
-          color="blue"
-          type="submit"
-          onClick={(e) => {
-            e.preventDefault();
-            formik.handleSubmit();
-          }}
-        >
-          SUBMIT AND CONFIRM YOUR SPOT!
-        </Button>
+            <QuestionWrap>
+              <Checkbox
+                onInput={(newVal) => {
+                  formik.setFieldValue('acknowledgementDiscord', newVal);
+                }}
+                label={
+                  <Text>
+                    I confirm that I have joined the official Discord server for
+                    HackSC X at{' '}
+                    <a
+                      href={`https://discord.gg/${discordInvite}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{
+                        textDecoration: 'underline',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      discord.gg/{discordInvite}
+                    </a>
+                    <SpanRed>*</SpanRed>
+                  </Text>
+                }
+              />
+              {formik.touched.acknowledgementDiscord && (
+                <SpanRed>{formik.errors.acknowledgementDiscord}</SpanRed>
+              )}
+            </QuestionWrap>
+
+            <Button
+              color="blue"
+              type="submit"
+              onClick={(e) => {
+                e.preventDefault();
+                formik.handleSubmit();
+              }}
+            >
+              SUBMIT AND CONFIRM YOUR SPOT!
+            </Button>
+          </>
+        ) : (
+          <H2>Loading...</H2>
+        )}
       </OwnGrayBox>
     </form>
   );

@@ -15,11 +15,11 @@ export const ConfirmedPlaceholder = () => {
       <H1>You have confirmed your spot for HackSC X!</H1>
       <H3>We look forward to seeing you 🌺</H3>
       <H3>Review the Hacker Packet below!</H3>
-      <a href="example.com">
+      {/* <a href="example.com">
         <Button color="black" style={{ marginTop: '10px' }}>
           Hacker Packet
         </Button>
-      </a>
+      </a> */}
     </Container>
   );
 };
