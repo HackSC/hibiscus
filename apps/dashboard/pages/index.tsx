@@ -38,14 +38,16 @@ export function Index({
   }, [appsOpen, dispatch]);
 
   useEffect(() => {
-    if (user.applicationStatusLastChanged !== undefined) {
-      setRsvpFormOpen(
-        new Date().getMilliseconds() -
-          user.applicationStatusLastChanged.getMilliseconds() <=
-          RSVP_PERIOD
-      );
-    } else {
-      setRsvpFormOpen(true);
+    if (user != null) {
+      if (user.applicationStatusLastChanged !== undefined) {
+        setRsvpFormOpen(
+          new Date().getMilliseconds() -
+            user.applicationStatusLastChanged.getMilliseconds() <=
+            RSVP_PERIOD
+        );
+      } else {
+        setRsvpFormOpen(true);
+      }
     }
   }, [user]);
 
