@@ -1,0 +1,2 @@
+alter table public.user_profiles
+add column application_status_last_changed timestamptz;
