@@ -15,6 +15,7 @@ import { get } from '@vercel/edge-config';
 
 interface ServerSideProps {
   appsOpen: boolean;
+  waitlistOpen: boolean;
   rsvpFormOpen: boolean;
   hackerPortalOpen: boolean;
 }
@@ -23,6 +24,7 @@ export function Index({
   appsOpen,
   rsvpFormOpen,
   hackerPortalOpen,
+  waitlistOpen,
 }: ServerSideProps) {
   const dispatch = useAppDispatch();
   const { user } = useHibiscusUser();
@@ -39,7 +41,11 @@ export function Index({
 
   const Dashboard = () => {
     if (user.role === HibiscusRole.HACKER) {
-      if (!appsOpen && !isHackerPostAppStatus(user.applicationStatus)) {
+      if (
+        !appsOpen &&
+        !waitlistOpen &&
+        !isHackerPostAppStatus(user.applicationStatus)
+      ) {
         return <AppsClosedPlaceholder />;
       } else if (
         user.applicationStatus === ApplicationStatus.ADMITTED &&
@@ -48,7 +54,9 @@ export function Index({
       ) {
         return <RSVPClosedPlaceholder />;
       }
-      return <HackerPortal isEventOpen={hackerPortalOpen} />;
+      return (
+        <HackerPortal isEventOpen={hackerPortalOpen} appsOpen={appsOpen} />
+      );
     } else if (user.role === HibiscusRole.SPONSOR)
       return <SponsorPortal user={user} />;
     else if (user.role === HibiscusRole.VOLUNTEER) return <IdentityPortal />;
@@ -81,6 +89,7 @@ const LayoutContainer = styled.div`
 
 export const getServerSideProps: GetServerSideProps = async () => {
   const appsOpen = await get('APPS_OPEN_HACKSC_X_2023');
+  const waitlistOpen = await get('APPS_WAITLIST_OPEN_HACKSC_X_2023');
   const rsvpFormOpen = await get('RSVP_FORM_OPEN_HACKSC_X_2023');
   const hackerPortalOpen = await get('HACKER_PORTAL_OPEN_HACKSC_X_2023');
   return {
@@ -88,6 +97,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
       appsOpen,
       rsvpFormOpen: true,
       hackerPortalOpen,
+      waitlistOpen,
     } as ServerSideProps,
   };
 };

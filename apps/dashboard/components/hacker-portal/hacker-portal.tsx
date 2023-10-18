@@ -23,9 +23,10 @@ type RSVPChoice = 'DECLINE' | 'ACCEPT';
 
 interface HackerPortalProps {
   isEventOpen: boolean;
+  appsOpen: boolean;
 }
 
-export function HackerPortal({ isEventOpen }: HackerPortalProps) {
+export function HackerPortal({ isEventOpen, appsOpen }: HackerPortalProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const { user, updateUser } = useHibiscusUser();
   const closeModal = () => setModalOpen(false);
@@ -113,14 +114,16 @@ export function HackerPortal({ isEventOpen }: HackerPortalProps) {
             shadowColor={Colors2023.BLUE.STANDARD}
             style={{ fontSize: 20 }}
           >
-            You have not applied to HackSC X yet!
+            {appsOpen
+              ? 'You have not applied to HackSC X yet!'
+              : 'Applications for HackSC X has closed'}
           </GlowSpan>
           <ApplyButton>
             <Link
               href="/apply-2023-x"
               anchortagpropsoverride={{ target: '_self' }}
             >
-              Apply now
+              {appsOpen ? 'Apply now' : 'Join the waitlist'}
             </Link>
           </ApplyButton>
         </BannerContainer>
@@ -248,7 +251,7 @@ export default HackerPortal;
 
 const ApplyButton = styled.button`
   cursor: pointer;
-  background-color: #979797;
+  background-color: ${Colors2023.GREEN.DARK};
   color: #f4f4f4;
   font-weight: 500;
   padding: 8px;
@@ -258,7 +261,7 @@ const ApplyButton = styled.button`
   margin-left: 10px;
 
   &:hover {
-    background-color: #6f9a28;
+    background-color: #026440;
     color: #e9ffc5;
     transition: all 0.3s;
   }
