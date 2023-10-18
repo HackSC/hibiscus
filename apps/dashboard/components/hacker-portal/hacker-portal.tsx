@@ -17,14 +17,16 @@ import { CongratsMessage } from './congrats-message';
 import { RejectionMessage } from './rejection-message';
 import BattlepassPage from '../battlepass/battlepass-page';
 import { BattlepassAPIProvider } from '../../hooks/use-battlepass-api/use-battlepass-api';
+import ConfirmedPlaceholder from './confirmed-placeholder';
 
 type RSVPChoice = 'DECLINE' | 'ACCEPT';
 
 interface HackerPortalProps {
+  isEventOpen: boolean;
   appsOpen: boolean;
 }
 
-export function HackerPortal({ appsOpen }: HackerPortalProps) {
+export function HackerPortal({ isEventOpen, appsOpen }: HackerPortalProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const { user, updateUser } = useHibiscusUser();
   const closeModal = () => setModalOpen(false);
@@ -170,7 +172,7 @@ export function HackerPortal({ appsOpen }: HackerPortalProps) {
         <H2>Are you sure?</H2>
         <Text>
           Once submitted, you confirm that you will not be able to join HackSC
-          2023. This action is irreversible.
+          X. This action is irreversible.
         </Text>
       </div>
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -193,11 +195,15 @@ export function HackerPortal({ appsOpen }: HackerPortalProps) {
   );
 
   if (user.attendanceConfirmed === true) {
-    return (
-      <BattlepassAPIProvider mock={false}>
-        <BattlepassPage />
-      </BattlepassAPIProvider>
-    );
+    if (isEventOpen) {
+      return (
+        <BattlepassAPIProvider mock={false}>
+          <BattlepassPage />
+        </BattlepassAPIProvider>
+      );
+    } else {
+      return <ConfirmedPlaceholder />;
+    }
   } else if (user.attendanceConfirmed === false) {
     return <DeclinedPlaceholder />;
   }
