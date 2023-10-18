@@ -38,11 +38,10 @@ export function Index({
   }, [appsOpen, dispatch]);
 
   useEffect(() => {
-    if (user != null) {
+    if (user != null && user.applicationStatus === ApplicationStatus.ADMITTED) {
       if (user.applicationStatusLastChanged !== undefined) {
         setRsvpFormOpen(
-          new Date().getMilliseconds() -
-            user.applicationStatusLastChanged.getMilliseconds() <=
+          new Date().valueOf() - user.applicationStatusLastChanged.valueOf() <=
             RSVP_PERIOD
         );
       } else {
