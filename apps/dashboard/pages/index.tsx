@@ -7,27 +7,29 @@ import SponsorPortal from '../components/sponsor-portal/sponsor-portal';
 import { GetServerSideProps } from 'next';
 import AppsClosedPlaceholder from '../components/hacker-portal/apps-closed-placeholder';
 import { isHackerPostAppStatus } from '../common/utils';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppDispatch } from '../hooks/redux/hooks';
 import { removeTabRoute } from '../store/menu-slice';
 import RSVPClosedPlaceholder from '../components/hacker-portal/rsvp-closed-placeholder';
 import { get } from '@vercel/edge-config';
 
+const RSVP_PERIOD = 4 * 24 * 60 * 60 * 1000; // 4 days in milliseconds
+
 interface ServerSideProps {
   appsOpen: boolean;
   waitlistOpen: boolean;
-  rsvpFormOpen: boolean;
   hackerPortalOpen: boolean;
 }
 
 export function Index({
   appsOpen,
-  rsvpFormOpen,
   hackerPortalOpen,
   waitlistOpen,
 }: ServerSideProps) {
   const dispatch = useAppDispatch();
   const { user } = useHibiscusUser();
+
+  const [rsvpFormOpen, setRsvpFormOpen] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (!appsOpen) {
@@ -35,7 +37,19 @@ export function Index({
     }
   }, [appsOpen, dispatch]);
 
-  if (user == null) {
+  useEffect(() => {
+    if (user.applicationStatusLastChanged !== undefined) {
+      setRsvpFormOpen(
+        new Date().getMilliseconds() -
+          user.applicationStatusLastChanged.getMilliseconds() <=
+          RSVP_PERIOD
+      );
+    } else {
+      setRsvpFormOpen(true);
+    }
+  }, [user]);
+
+  if (user == null || rsvpFormOpen === null) {
     return <>Loading</>;
   }
 
@@ -90,12 +104,11 @@ const LayoutContainer = styled.div`
 export const getServerSideProps: GetServerSideProps = async () => {
   const appsOpen = await get('APPS_OPEN_HACKSC_X_2023');
   const waitlistOpen = await get('APPS_WAITLIST_OPEN_HACKSC_X_2023');
-  const rsvpFormOpen = await get('RSVP_FORM_OPEN_HACKSC_X_2023');
   const hackerPortalOpen = await get('HACKER_PORTAL_OPEN_HACKSC_X_2023');
+
   return {
     props: {
       appsOpen,
-      rsvpFormOpen,
       hackerPortalOpen,
       waitlistOpen,
     } as ServerSideProps,
