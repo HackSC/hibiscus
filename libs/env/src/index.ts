@@ -42,6 +42,7 @@ export const getEnv = () => {
       },
       Discord: {
         ApiUrl: process.env.NEXT_PUBLIC_DISCORD_API_URL,
+        InviteUrl: process.env.NEXT_PUBLIC_DISCORD_INVITE_URL,
       },
     },
   };

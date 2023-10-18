@@ -24,46 +24,7 @@ function RSVPForm({ closeModal }: Props) {
   const { user, updateUser } = useHibiscusUser();
   const { supabase } = useHibiscusSupabase();
 
-  const [discordInvite, setDiscordInvite] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      // fetch discord invite URL
-      const resGetInvite = await fetch(
-        `${getEnv().Hibiscus.Discord.ApiUrl}/getUserInvite/${user.id}`
-      );
-
-      if (resGetInvite.ok) {
-        const data = await resGetInvite.json();
-        setDiscordInvite(data.inviteURL);
-      } else {
-        if (resGetInvite.status === 400) {
-          const resSendInvite = await fetch(
-            `${getEnv().Hibiscus.Discord.ApiUrl}/invite/${user.id}`
-          );
-
-          if (resSendInvite.ok) {
-            const resGetInviteAgain = await fetch(
-              `${getEnv().Hibiscus.Discord.ApiUrl}/getUserInvite/${user.id}`
-            );
-
-            if (resSendInvite.ok) {
-              const data = await resGetInviteAgain.json();
-              setDiscordInvite(data.inviteURL);
-            } else {
-              setError(ERROR_STRING);
-            }
-          } else {
-            setError(ERROR_STRING);
-          }
-        } else {
-          setError(ERROR_STRING);
-        }
-      }
-    };
-    fetchData();
-  }, []);
+  const discordInvite = getEnv().Hibiscus.Discord.InviteUrl;
 
   const formik = useFormik({
     initialValues: {
@@ -89,28 +50,6 @@ function RSVPForm({ closeModal }: Props) {
         .isTrue('This field is required')
         .required('This field is required'),
     }),
-
-    validate: async (values) => {
-      // get discord status from API
-      const res = await fetch(
-        `${getEnv().Hibiscus.Discord.ApiUrl}/checkUserInDiscord/${user.id}`
-      );
-      if (res.status === 500) {
-        return {
-          acknowledgementDiscord: ERROR_STRING,
-        };
-      }
-
-      const joinedDiscord = (await res.json()).inDiscord;
-      if (!joinedDiscord) {
-        return {
-          acknowledgementDiscord:
-            'We could not detect your account in the HackSC X Discord server',
-        };
-      }
-
-      return {};
-    },
 
     onSubmit: async (values, formikHelpers) => {
       formikHelpers.setSubmitting(true);
