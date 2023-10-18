@@ -77,10 +77,15 @@ class Vertical:
 
 @dataclass
 class Comment:
+    commentId: str
     comment: str
     name: str
     profilePicUrl: str
     createdAt: str
+
+    def __post_init__(self):
+        if self.commentId is not None and not isinstance(self.commentId, str):
+            self.commentId = str(self.commentId)
 
 
 @dataclass

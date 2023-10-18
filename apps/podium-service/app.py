@@ -288,7 +288,7 @@ def edit_vertical(vertical_id: str):
         raise BadRequestError(f"Failed to edit vertical: {e}")
 
 
-@app.route("/comments/{project_id}/user/{user_id}", methods=["POST", "PUT"])
+@app.route("/comments/{project_id}/user/{user_id}", methods=["POST"])
 def add_comment(project_id: str, user_id: str):
     body = app.current_request.json_body
 
@@ -303,6 +303,23 @@ def add_comment(project_id: str, user_id: str):
         return {"message": "Success"}
     except Exception as e:
         raise BadRequestError(f"Failed to add comment: {e}")
+    
+
+@app.route("/comments/id/{comment_id}", methods=["PUT"])
+def edit_comment(comment_id: str):
+    body = app.current_request.json_body
+
+    try:
+        if body.get("comment") is None:
+            raise Exception("Property 'comment' not found in request body")
+
+        repository.edit_comment(
+            comment_id=comment_id, comment=body.get("comment")
+        )
+
+        return {"message": "Success"}
+    except Exception as e:
+        raise BadRequestError(f"Failed to edit comment: {e}")
 
 
 @app.route("/comments/{project_id}")
