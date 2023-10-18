@@ -38,7 +38,7 @@ export function Index({
   }, [appsOpen, dispatch]);
 
   useEffect(() => {
-    if (user != null && user.applicationStatus === ApplicationStatus.ADMITTED) {
+    if (user != null) {
       if (user.applicationStatusLastChanged !== undefined) {
         setRsvpFormOpen(
           new Date().valueOf() - user.applicationStatusLastChanged.valueOf() <=
