@@ -20,9 +20,9 @@ export const CongratsMessage = () => {
         plenty of workshops, speakers, games, and of course, project building!
       </Text>
       <Text>
-        Please complete this RSVP form by{' '}
+        Please complete this RSVP form{' '}
         <GlowSpan style={{ fontWeight: 'bold' }}>
-          November 1st, 2023 at 11:59pm
+          within 4 days of your acceptance notification
         </GlowSpan>{' '}
         to secure your spot at HackSC X. By submitting, you are committing to
         attending the event. If you do not submit this form by the posted
