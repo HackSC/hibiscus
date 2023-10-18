@@ -6,7 +6,7 @@ import { getEnv } from '../../libs/env/src';
 import { MongoClient } from 'mongodb';
 
 const USERS = ['REDACTED'];
-const STATUS = 4;
+const STATUS = 5;
 
 async function setApplicationStatus(
   userIds: string[],
@@ -20,12 +20,13 @@ async function setApplicationStatus(
       application_status: applicationStatus,
       application_status_last_changed: new Date(),
     })
-    .in('user_id', userIds);
+    .in('user_id', userIds)
+    .select();
 
   if (res.error) {
     console.log(res.error.message);
   } else {
-    console.log(`Supabase success! ${res.count} entries updated`);
+    console.log(`Supabase success! ${res.data.length} entries updated`);
   }
 
   const mongo = new MongoClient(getEnv().Hibiscus.FeatureFlag.MongoURI ?? '');
