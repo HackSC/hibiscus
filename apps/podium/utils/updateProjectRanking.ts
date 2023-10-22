@@ -1,0 +1,22 @@
+import axios from 'axios';
+
+const HIBISCUS_API_URL = process.env.NEXT_PUBLIC_HIBISCUS_API_URL;
+
+export const updateProjectRanking = async (
+  projectId: string,
+  verticalId: string,
+  userId: string,
+  rank: number
+): Promise<boolean> => {
+  try {
+    await axios.post(`${HIBISCUS_API_URL}/ranking/${verticalId}/${userId}`, {
+      projectId,
+      newRanking: rank,
+    });
+
+    return true;
+  } catch (error) {
+    console.error('Error: ', error);
+    return false;
+  }
+};

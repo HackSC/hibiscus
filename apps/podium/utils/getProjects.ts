@@ -24,12 +24,12 @@ const test = async () => {
   } catch (error) {
     console.error('Error: ', error);
   }
-}
+};
 
-const getVerticalProjects = async () => {
+const getVerticalProjects = async (verticalId: string) => {
   try {
     const response = await axios.get(
-      `${HIBISCUS_API_URL}/projects/${TEST_VERTICAL_ID}`
+      `${HIBISCUS_API_URL}/projects/${verticalId}`
     );
 
     const jsonString = JSON.stringify(response.data);
@@ -39,12 +39,12 @@ const getVerticalProjects = async () => {
   } catch (error) {
     console.error('Error: ', error);
   }
-}
+};
 
-const getRanked = async () => {
+const getRanked = async (userId: string, verticalId: string) => {
   try {
     const response = await axios.get(
-      `${HIBISCUS_API_URL}/ranking/${TEST_VERTICAL_ID}`
+      `${HIBISCUS_API_URL}/ranking/${verticalId}/${userId}`
     );
 
     const jsonString = JSON.stringify(response.data);
@@ -54,12 +54,12 @@ const getRanked = async () => {
   } catch (error) {
     console.error('Error: ', error);
   }
-}
+};
 
-const getProjectDetails = async ( id ) => {
+const getProjectDetails = async (projectId: string, verticalId: string) => {
   try {
     const response = await axios.get(
-      `${HIBISCUS_API_URL}/projects/${TEST_VERTICAL_ID}/${id}`
+      `${HIBISCUS_API_URL}/projects/${verticalId}/${projectId}`
     );
 
     const jsonString = JSON.stringify(response.data);
@@ -75,29 +75,31 @@ const getProjectDetails = async ( id ) => {
   } catch (error) {
     console.error('Error: ', error);
   }
-}
+};
 
-const getProjects = async () => {
+const getProjects = async (userId: string, verticalId: string) => {
   test();
 
   let unranked = [];
   let ranked = [];
 
-  const allProjects = await getVerticalProjects();
-  const rankedBasic = await getRanked();
+  const allProjects = await getVerticalProjects(verticalId);
+  const rankedBasic = await getRanked(userId, verticalId);
 
   const rankedIds = rankedBasic.map((p) => p.projectId);
-  const unrankedBasic = allProjects.filter((p) => !rankedIds.includes(p.projectId));
+  const unrankedBasic = allProjects.filter(
+    (p) => !rankedIds.includes(p.projectId)
+  );
 
   unranked = unrankedBasic.map((p) => {
-    return getProjectDetails(p.projectId);
+    return getProjectDetails(p.projectId, verticalId);
   });
 
   ranked = rankedBasic.map((p) => {
-    return getProjectDetails(p.projectId);
+    return getProjectDetails(p.projectId, verticalId);
   });
 
-  return [ unranked, ranked ];
-}
+  return [unranked, ranked];
+};
 
 export default getProjects;
