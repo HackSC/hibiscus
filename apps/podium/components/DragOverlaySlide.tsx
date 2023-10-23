@@ -8,8 +8,7 @@ interface DragOverlaySlideProps {
 
 const DragOverlaySlide: FC<DragOverlaySlideProps> = ({ project }) => {
   const imgStyle = {
-    // backgroundImage: `url(${project.imageUrl})`,
-    backgroundImage: 'url(chuubear.jpeg)',
+    backgroundImage: `url(${project.imageUrl})`,
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',

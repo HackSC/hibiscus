@@ -30,8 +30,7 @@ const SlideroomSpotlight: FC<SlideroomSpotlightProps> = ({ project }) => {
   }
 
   const imgStyle = {
-    // backgroundImage: `url(${project.imageUrl})`,
-    backgroundImage: 'url(chuubear.jpeg)',
+    backgroundImage: `url(${project.imageUrl})`,
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
@@ -39,7 +38,7 @@ const SlideroomSpotlight: FC<SlideroomSpotlightProps> = ({ project }) => {
 
   return (
     <div
-      className= {`${styles.spotlight} ${styles.roundCorners}`}
+      className={`${styles.spotlight} ${styles.roundCorners}`}
       ref={setNodeRef}
       {...attributes}
       {...listeners}

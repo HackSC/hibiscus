@@ -728,6 +728,28 @@ def get_comments(project_id: str) -> list[data_types.Comment]:
     return run_transaction(sessionmaker(engine), get)
 
 
+def get_judge_details(judge_id: str) -> data_types.JudgeInternal:
+    """
+    Gets the details of a judge related to the judging portal (i.e. vertical)
+    """
+
+    def get(session: Session) -> data_types.JudgeInternal:
+        judge = session.scalars(
+            select(models.Judge)
+            .where(models.Judge.user_id == judge_id)
+        ).one()
+
+        return data_types.JudgeInternal(
+            id=judge.user_id,
+            verticalId=judge.vertical_id,
+            verticalName=judge.vertical.name
+            if judge.vertical is not None
+            else None,
+        )
+
+    return run_transaction(sessionmaker(engine), get)
+
+
 def get_judges() -> list[data_types.Judge]:
     """
     Gets all the judges and their associated vertical

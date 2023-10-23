@@ -16,6 +16,11 @@ globalStyle(`${containerMain} h1`, {
   marginLeft: '12px',
 })
 
+export const header = style({
+  backgroundColor: '#002990',
+  padding: '8px',
+})
+
 export const projectPreview = style({
   backgroundColor: 'darkgray',
   color: 'white',
