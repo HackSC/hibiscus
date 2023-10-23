@@ -1,9 +1,9 @@
 import { useSortable } from '@dnd-kit/sortable';
-import { FC, useContext, useState } from 'react'
+import { FC } from 'react';
 import { CSS } from '@dnd-kit/utilities';
 import { CSSProperties } from 'react';
 import * as styles from '../pages/index.css';
-import ProjectContext from '../ProjectContext';
+import { useProjectContext } from '../ProjectContext';
 import RankIcon from './RankIcon';
 
 interface SlideroomRankProjectProps {
@@ -12,7 +12,11 @@ interface SlideroomRankProjectProps {
   type: Container;
 }
 
-const SlideroomRankProject: FC<SlideroomRankProjectProps> = ({ project, ranking, type }) => {
+const SlideroomRankProject: FC<SlideroomRankProjectProps> = ({
+  project,
+  ranking,
+  type,
+}) => {
   const {
     setNodeRef,
     attributes,
@@ -24,20 +28,19 @@ const SlideroomRankProject: FC<SlideroomRankProjectProps> = ({ project, ranking,
     id: project.projectId,
     data: { type },
     disabled: true,
-  })
+  });
 
   const style: CSSProperties = {
     opacity: isDragging ? 0.4 : 1.0,
     transform: CSS.Translate.toString(transform),
     transition,
-    // backgroundImage: `url(${project.imageUrl})`,
-    backgroundImage: 'url(chuubear.jpeg)',
+    backgroundImage: `url(${project.imageUrl})`,
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
-  }
+  };
 
-  const { ranked, onHold, spotlight } = useContext(ProjectContext);
+  const { ranked, onHold, spotlight } = useProjectContext();
   const [rankedProjects, setRankedProjects] = ranked;
   const [onHoldProjects, setOnHoldProjects] = onHold;
   const [spotlightProject, setSpotlightProject] = spotlight;
@@ -48,19 +51,22 @@ const SlideroomRankProject: FC<SlideroomRankProjectProps> = ({ project, ranking,
   const switchSpotlight = (project: Project) => {
     console.log('spotlight', project);
 
-    const rankedIndex = rankedProjects.findIndex(({ projectId }) => projectId === spotlightProject.projectId);
+    const rankedIndex = rankedProjects.findIndex(
+      ({ projectId }) => projectId === spotlightProject.projectId
+    );
 
-    console.log(rankedIndex)
-    console.log(rankedProjects)
+    console.log(rankedIndex);
+    console.log(rankedProjects);
 
-    if(rankedIndex === -1) {
-      setOnHoldProjects((prev) => [...prev, spotlightProject]);
-    }
+    // HANDLE ON HOLD
+    // if (rankedIndex === -1) {
+    //   setOnHoldProjects((prev) => [...prev, spotlightProject]);
+    // }
 
     setSpotlightProject(project);
-  }
+  };
 
-  console.log(ranking)
+  console.log(ranking);
 
   return (
     <li
@@ -69,10 +75,11 @@ const SlideroomRankProject: FC<SlideroomRankProjectProps> = ({ project, ranking,
       {...listeners}
       style={style}
       className={styles.projectSlide}
-      onClick={() => switchSpotlight(project)}>
-        <RankIcon rank={ranking} />
+      onClick={() => switchSpotlight(project)}
+    >
+      <RankIcon rank={ranking} />
     </li>
-  )
-}
+  );
+};
 
 export default SlideroomRankProject;

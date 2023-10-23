@@ -188,6 +188,16 @@ def get_notes(vertical_id: str, project_id: str, user_id: str):
         raise BadRequestError(f"Failed to get requested notes: {e}")
 
 
+@app.route("/judges/{judge_id}")
+def get_judge_details(judge_id: str):
+    try:
+        judge = repository.get_judge_details(judge_id)
+
+        return dataclasses.asdict(judge)
+    except Exception as e:
+        raise BadRequestError(f"Failed to get judge: {e}")
+
+
 # Admin endpoints
 @app.route("/add_projects", methods=["POST"])
 def add_projects():
