@@ -20,10 +20,5 @@ CREATE TABLE IF NOT EXISTS public.judges
 (
     user_id character varying NOT NULL,
     vertical_id UUID,
-    PRIMARY KEY (user_id),
-    CONSTRAINT vertical_id FOREIGN KEY (vertical_id)
-        REFERENCES public.verticals (vertical_id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION
-        NOT VALID
+    PRIMARY KEY (user_id)
 );

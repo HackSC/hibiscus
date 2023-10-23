@@ -81,20 +81,3 @@ class Comment:
     name: str
     profilePicUrl: str
     createdAt: str
-
-
-@dataclass
-class JudgeInternal:
-    id: str
-    verticalId: Optional[str]
-    verticalName: Optional[str]
-
-    def __post_init__(self):
-        if self.verticalId is not None and not isinstance(self.verticalId, str):
-            self.verticalId = str(self.verticalId)
-
-
-@dataclass
-class Judge(JudgeInternal):
-    name: str
-    email: str

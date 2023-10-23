@@ -9,9 +9,7 @@
         "DB_PASSWORD": "REDACTED",
         "DB_URL": "REDACTED",
         "DB_PORT": "REDACTED",
-        "DB_NAME": "podium",
-        "SUPABASE_URL": "REDACTED",
-        "SUPABASE_KEY": "REDACTED"
+        "DB_NAME": "podium"
       }
     }
   }
