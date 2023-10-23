@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { createClient } from '@supabase/supabase-js';
+import { Interface } from 'readline';
 
 export type Bindings = {
   SUPABASE_SERVICE_KEY: string;
@@ -13,6 +14,61 @@ const INTERNAL_SERVER_ERROR = 500;
 const app = new Hono<{ Bindings: Bindings }>();
 
 app.use('/api/*', cors());
+
+app.get('/api/invite/:role/:email', async (c) => {
+  try {
+    console.log('20');
+    const supabase = createClient(
+      c.env.SUPABASE_URL,
+      c.env.SUPABASE_SERVICE_KEY
+    );
+    const role = parseInt(c.req.param('role'));
+    console.log('25');
+    const email = c.req.param('email');
+    console.log('26');
+    console.log(role);
+    console.log(email);
+    if (role === null || email === null || email === '') {
+      return c.json(
+        {
+          error: 'PARAM_ERROR',
+          message: 'missing required parameters',
+        },
+        INTERNAL_SERVER_ERROR
+      );
+    }
+    //role should be between 1 and 7
+    if (role > 0 && role < 8) {
+      const result = await supabase.from('user_invites').insert({
+        role: role,
+        email: email,
+      });
+      console.log(result);
+      const { data, error } = await supabase.auth.admin.inviteUserByEmail(
+        email,
+        { redirectTo: 'sso.hacksc.com/signup' }
+      );
+      return c.json(200);
+    } else {
+      return c.json(
+        {
+          error: 'PARAMETER_ERROR',
+          message: 'Role number not recognized should be between 1 and 7',
+        },
+        INTERNAL_SERVER_ERROR
+      );
+    }
+  } catch (e) {
+    console.log(e);
+    return c.json(
+      {
+        error: 'UNKNOWN_ERROR',
+        message: 'An unknown error occurred.',
+      },
+      INTERNAL_SERVER_ERROR
+    );
+  }
+});
 
 app.get('/api/verify-token/:access_token', async (c) => {
   try {
