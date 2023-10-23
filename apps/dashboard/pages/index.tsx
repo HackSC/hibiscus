@@ -29,7 +29,7 @@ export function Index({
   const dispatch = useAppDispatch();
   const { user } = useHibiscusUser();
 
-  const [rsvpFormOpen, setRsvpFormOpen] = useState<boolean | null>(null);
+  const [rsvpFormOpen, setRsvpFormOpen] = useState<boolean | null>(true);
 
   useEffect(() => {
     if (!appsOpen) {
@@ -37,18 +37,18 @@ export function Index({
     }
   }, [appsOpen, dispatch]);
 
-  useEffect(() => {
-    if (user != null) {
-      if (user.applicationStatusLastChanged !== undefined) {
-        setRsvpFormOpen(
-          new Date().valueOf() - user.applicationStatusLastChanged.valueOf() <=
-            RSVP_PERIOD
-        );
-      } else {
-        setRsvpFormOpen(true);
-      }
-    }
-  }, [user]);
+  // useEffect(() => {
+  //   if (user != null) {
+  //     if (user.applicationStatusLastChanged !== undefined) {
+  //       setRsvpFormOpen(
+  //         new Date().valueOf() - user.applicationStatusLastChanged.valueOf() <=
+  //           RSVP_PERIOD
+  //       );
+  //     } else {
+  //       setRsvpFormOpen(true);
+  //     }
+  //   }
+  // }, [user]);
 
   if (user == null || rsvpFormOpen === null) {
     return <>Loading</>;
