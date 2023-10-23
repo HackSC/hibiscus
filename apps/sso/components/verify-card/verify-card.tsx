@@ -23,6 +23,7 @@ export function VerifyCard() {
     const email = String(router.query.email);
 
     const { data, error } = await supabase.verifyOtp(email, code, 'signup');
+
     if (error) {
       console.log(error);
       setHideErrorMessage(true);
@@ -35,6 +36,22 @@ export function VerifyCard() {
         router.query.lastname.toString()
       );
 
+      const role = await supabase
+        .getClient()
+        .from('user_invites')
+        .select('role')
+        .eq('email', email);
+      console.log(data);
+      console.log(role);
+      if (role !== null) {
+        console.log('adding judge status');
+        const { error } = await supabase
+          .getClient()
+          .from('user_profiles')
+          .update({ role: '7' })
+          .eq('user_id', data.user.id)
+          .select();
+      }
       HibiscusSupabaseClient.setTokenCookieClientSide(
         data.session.access_token,
         data.session.refresh_token
