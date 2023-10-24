@@ -15,12 +15,12 @@ function PortalLayout({ children }: PortalLayoutProps) {
 
   return (
     <MainPageWrapper>
-      <TopBar userTag={user.tag} role={user.role} />
       <MenuLayoutWrapper>
+        <PortalMenu />
         <MenuWrapper>
-          <PortalMenu />
+          <TopBar userTag={user.tag} role={user.role} />
+          <ChildrenWrapper>{children}</ChildrenWrapper>
         </MenuWrapper>
-        <ChildrenWrapper>{children}</ChildrenWrapper>
       </MenuLayoutWrapper>
     </MainPageWrapper>
   );
@@ -37,13 +37,14 @@ const MainPageWrapper = styled.div`
 
 const MenuLayoutWrapper = styled.div`
   position: relative;
-  padding: 20px;
+  display: flex;
+
   height: 100%;
 `;
 
 const MenuWrapper = styled.div`
-  position: absolute;
   z-index: 999; // always on top
+  background: var(--Arthurs-Sweater, #ecb400);
 `;
 
 const ChildrenWrapper = styled.div`

@@ -1,5 +1,6 @@
 import { Colors2023 } from '@hibiscus/styles';
 import { H1, Text } from '@hibiscus/ui';
+
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 
 export const BattlepassWelcomeHeader = () => {
@@ -16,14 +17,14 @@ export const BattlepassWelcomeHeader = () => {
       <div>
         <H1
           style={{
-            color: Colors2023.BLUE.STANDARD,
+            color: 'black',
             fontSize: '30px',
           }}
         >
-          Welcome, {user.firstName}
+          Your Leaderboard
         </H1>
         <Text style={{ color: '#989898' }}>
-          What would you like to do today?
+          Check your ranking on the leaderboard and win prizes!
         </Text>
       </div>
     </div>

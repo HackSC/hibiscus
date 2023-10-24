@@ -10,6 +10,7 @@ import React, { useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import { HibiscusRole } from '@hibiscus/types';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
+import Image from 'next/image';
 
 /* eslint-disable-next-line */
 export interface PortalMenuProps {}
@@ -17,14 +18,14 @@ export interface PortalMenuProps {}
 export function PortalMenu() {
   const { user } = useHibiscusUser();
   const router = useRouter();
-  const { tabRoutes, cti, isOpen } = useAppSelector((state) => ({
+  const { tabRoutes, cti } = useAppSelector((state) => ({
     tabRoutes:
       (user?.role === HibiscusRole.HACKER && state.menu.tabRoutes) ||
       (user?.role === HibiscusRole.SPONSOR && state.menu.sponsorRoutes) ||
       [],
     cti: state.menu.currentTabIndex,
-    isOpen: state.menu.isOpen,
   }));
+  const isOpen = true;
   const dispatch = useAppDispatch();
   const colors = getColorsForRole(user?.role ?? HibiscusRole.HACKER);
 
@@ -49,23 +50,25 @@ export function PortalMenu() {
   const LeftBarWhenActive = () => (
     <div
       style={{
-        backgroundColor: colors.standard,
+        backgroundColor: 'white',
         filter: 'brightness(140%)',
-        boxShadow: `-1px 0px 15px ${colors.standard}`,
         height: 'max-height',
-        width: '4px',
-        borderRadius: '5px',
+        width: '7px',
       }}
     />
   );
 
   const Menu = () => (
-    <>
-      <ZoomBackContainer>
-        <IconButton onClick={handleMinimize}>
-          <MinimizeTwoArrowIcon />
-        </IconButton>
-      </ZoomBackContainer>
+    <MenuWrap>
+      <Link href="/" anchortagpropsoverride={{ target: '_self' }}>
+        <Image
+          style={{ margin: '5px 0 0 20px' }}
+          width="200"
+          height="100"
+          src="/hacksc-logo.svg"
+          alt="HackSC logo"
+        />
+      </Link>
       <ItemsWrapper>
         {tabRoutes.map((item, i) => {
           const active = cti === i;
@@ -77,36 +80,15 @@ export function PortalMenu() {
                   href={item.url}
                   anchortagpropsoverride={{ target: '_self' }}
                 >
-                  {active ? (
-                    <GlowSpan
-                      color={colors.light}
-                      shadowColor={colors.standard}
-                      style={{ fontWeight: 600 }}
-                    >
-                      {item.displayName}
-                    </GlowSpan>
-                  ) : (
-                    <>{item.displayName}</>
-                  )}
+                  <>{item.displayName}</>
                 </Link>
               </LinkText>
             </TabItemContainer>
           );
         })}
       </ItemsWrapper>
-    </>
+    </MenuWrap>
   );
-
-  if (!isOpen) {
-    return (
-      <Wrapper isOpen={isOpen}>
-        <IconButton onClick={handleMaximize}>
-          <MaximizeTwoArrowIcon />
-        </IconButton>
-      </Wrapper>
-    );
-  }
-
   return (
     <Wrapper isOpen={isOpen}>
       <Menu />
@@ -119,35 +101,30 @@ export default PortalMenu;
 const Wrapper = styled.nav<{ isOpen?: boolean }>`
   font-family: 'Inter';
   color: white;
-  max-height: 30rem;
+  height: 100%;
   display: flex;
   flex-direction: column;
   background-color: ${Colors2023.GRAY.STANDARD};
-  border: 4px solid ${Colors2023.GRAY.MEDIUM};
-  box-shadow: 1px 2px 15px ${Colors2023.GRAY.MEDIUM};
-  padding: ${(props) => (props.isOpen ? '7px 5px 25px' : '10px 7px')};
-  border-radius: 10px;
+  background: var(--Arthurs-Sweater, #ecb400);
 `;
 
-const ZoomBackContainer = styled.div`
+const MenuWrap = styled.div`
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
 `;
 
 const ItemsWrapper = styled.div`
   display: flex;
   overflow-y: auto;
   flex-direction: column;
-  gap: 10px;
-  max-width: max-content;
-  margin: 5px 40px 0 20px;
 `;
 
 const TabItemContainer = styled.div<{ active?: boolean; color: string }>`
   height: 100%;
+  width: 100%;
   display: flex;
   gap: 10px;
-  padding-left: 10px;
+  background-color: ${(props) => (props.active ? '#CEA00D' : 'none')};
 `;
 
 const IconButton = styled.button`
@@ -156,8 +133,17 @@ const IconButton = styled.button`
   cursor: pointer;
 `;
 
-const LinkText = styled(Text)`
+const LinkText = styled.p`
   :hover {
     text-decoration: underline;
   }
+  height: 50px;
+  display: flex;
+  align-items: center;
+  color: #fff;
+  font-family: Neue Haas Unica;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 `;

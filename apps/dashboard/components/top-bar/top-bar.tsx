@@ -16,19 +16,10 @@ export function TopBar(props: TopBarProps) {
   const userColors = Colors2023.roleColors[props.role ?? HibiscusRole.HACKER];
   return (
     <StyledTopBar>
-      <Link href="/" anchortagpropsoverride={{ target: '_self' }}>
-        <Image
-          style={{ margin: '5px 0 0 20px' }}
-          width="200"
-          height="100"
-          src="/hacksc-logo.svg"
-          alt="HackSC logo"
-        />
-      </Link>
       <RightUtilityContainer>
-        <UserText>{props.userTag}</UserText>
+        <UserText>@{props.userTag}</UserText>
         <RoleText>
-          <GlowSpan color={userColors.light} shadowColor={userColors.standard}>
+          <GlowSpan color={'#DCAB0F'} shadowColor={'#DCAB0F'}>
             {props.role}
           </GlowSpan>
         </RoleText>
@@ -50,9 +41,13 @@ export default TopBar;
 
 const StyledTopBar = styled.div`
   width: 100%;
+  height: 100px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding-right: 3rem;
+  color: black;
+  background-color: white;
+  border-top-left-radius: 50px;
 `;
 
 const UserText = styled(Text)``;

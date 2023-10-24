@@ -1,5 +1,6 @@
 import { H3, H4, Text } from '@hibiscus/ui';
-import { Button } from '@hibiscus/ui-kit-2023';
+// import { Button } from '@hibiscus/ui-kit-2023';
+import { Button } from '@hacksc/sctw-ui-kit';
 import React from 'react';
 import styled from 'styled-components';
 import { BonusPointsStatus } from '../../../common/apis/battlepass/types';
@@ -14,12 +15,12 @@ function BonusPointsItem({ data, handleClick }: Props) {
   return (
     <Container>
       <div>
-        <Text style={{ color: 'gray' }}>{data.points} pts</Text>
+        <Text style={{ color: 'white' }}>{data.points} pts</Text>
         <H4>{data.title}</H4>
       </div>
       <div>
         <Button
-          color="black"
+          color="yellow"
           disabled={data.status !== BonusPointsStatus.VERIFY}
           onClick={handleClick}
         >

@@ -56,17 +56,6 @@ function BattlepassPage() {
   return (
     <Wrapper>
       <BattlepassWelcomeHeader />
-      <Image
-        width="100"
-        height="100"
-        src={'/hackform-illustrations/stamp-earth.svg'}
-        alt="Illustration"
-        style={{
-          position: 'absolute',
-          left: '420px',
-          top: '10px',
-        }}
-      />
       <WidgetContainer>
         <WidgetHeader>Your Points</WidgetHeader>
         {bpProg !== null && (
@@ -121,6 +110,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  background-color: white;
 `;
 
 const WidgetContainer = styled.div`
@@ -148,4 +138,12 @@ const SecondSection = styled.div`
 
 const WidgetHeader = styled(H3)`
   font-size: 120%;
+  color: var(--Redward, #ff514f);
+  font-feature-settings: 'cv05' on;
+  font-family: Filson Pro;
+  font-size: 25px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  letter-spacing: -1.25px;
 `;

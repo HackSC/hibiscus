@@ -69,9 +69,7 @@ export function Index({
       ) {
         return <RSVPClosedPlaceholder />;
       }
-      return (
-        <HackerPortal isEventOpen={hackerPortalOpen} appsOpen={appsOpen} />
-      );
+      return <HackerPortal isEventOpen={true} appsOpen={appsOpen} />;
     } else if (user.role === HibiscusRole.SPONSOR)
       return <SponsorPortal user={user} />;
     else if (user.role === HibiscusRole.VOLUNTEER) return <IdentityPortal />;
@@ -94,6 +92,7 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  background-color: white;
 `;
 
 const LayoutContainer = styled.div`
