@@ -38,7 +38,6 @@ const Index = () => {
   const [currentAttendee, setCurrentAttendee] = useState<Attendee>(null);
   const [modalActive, setModalActive] = useState(false);
   const [attendeeName, setAttendeeName] = useState('');
-  const [baseAttendeeData, setBaseAttendeeData] = useState();
   const zip = new JSZip();
 
   useEffect(() => {
@@ -245,6 +244,36 @@ const Index = () => {
     }
   }
 
+  async function downloadResumePdfs() {
+    for (const attendee of attendees) {
+      if (attendee.resume) {
+        const response = await fetch(attendee.resume);
+        const resumeBlob = await response.blob();
+        const attendeeName = attendee.full_name.replace(' ', ''); // Remove whitespaces from name
+        // eslint-disable-next-line
+        const regExp = '[^/]+$';
+        const fileType = resumeBlob.type.match(regExp)[0];
+        zip.file(attendeeName + '_Resume.' + fileType, resumeBlob);
+      }
+    }
+    // Generate the zip file asynchronously
+    zip
+      .generateAsync({ type: 'blob' })
+      .then((content) => {
+        // 'content' is a Blob containing the zip file data
+        // Example: Create a download link for the zip file
+        // Could use something like FileSaver.js (https://github.com/eligrey/FileSaver.js), but didn't want to add extra dependencies
+        const downloadLink = document.createElement('a');
+        downloadLink.href = URL.createObjectURL(content);
+        downloadLink.download = 'participant_resumes.zip';
+        downloadLink.click();
+        downloadLink.remove();
+      })
+      .catch((error) => {
+        console.error('Error generating zip file:', error);
+      });
+  }
+
   return (
     <Wrapper>
       <MenuBar>
@@ -255,34 +284,7 @@ const Index = () => {
         >
           <Image width="30" height="30" src={'/arrow.svg'} alt="Illustration" />
         </StyledButton>
-        <DownloadButton
-          onClick={async () => {
-            for (const attendee of attendees) {
-              if (attendee.resume) {
-                const response = await fetch(attendee.resume);
-                const resumeBlob = await response.blob();
-                const attendeeName = attendee.full_name.replace(' ', ''); // Remove whitespaces from name
-                zip.file(attendeeName + '_Resume', resumeBlob);
-              }
-            }
-            // Generate the zip file asynchronously
-            zip
-              .generateAsync({ type: 'blob' })
-              .then((content) => {
-                // 'content' is a Blob containing the zip file data
-                // Example: Create a download link for the zip file
-                // Could use something like FileSaver.js (https://github.com/eligrey/FileSaver.js), but didn't want to add extra dependencies
-                const downloadLink = document.createElement('a');
-                downloadLink.href = URL.createObjectURL(content);
-                downloadLink.download = 'participant_resumes.zip';
-                downloadLink.click();
-                downloadLink.remove();
-              })
-              .catch((error) => {
-                console.error('Error generating zip file:', error);
-              });
-          }}
-        >
+        <DownloadButton onClick={downloadResumePdfs}>
           Download participant resumes
         </DownloadButton>
         <CSVLink

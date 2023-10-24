@@ -17,7 +17,6 @@
     "@aws-sdk/client-s3": "^3.241.0",
     "@aws-sdk/client-ses": "^3.245.0",
     "@aws-sdk/util-dynamodb": "^3.241.0",
-    "@babel/helper-remap-async-to-generator": "^7.22.20",
     "@fontsource/inter": "^4.5.11",
     "@headlessui/react": "^1.7.7",
     "@reduxjs/toolkit": "^1.9.1",
