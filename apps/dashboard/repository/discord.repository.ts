@@ -10,21 +10,31 @@ export class DiscordRepository {
     this.client = hbc.getClient();
   }
 
-  async getDiscordToken(userId: string): Promise<string | null> {
+  async getDiscordToken(userId: string): Promise<string> {
     const { data, error } = await this.client
       .from('discord_tokens')
-      .select()
-      .eq('user_id', userId)
-      .maybeSingle();
+      .select('discord_verification_token')
+      .eq('user_id', userId);
 
     if (error != null) {
       throw new Error(error.message);
     }
 
-    if (data == null) {
-      return null;
+    if (data.length === 0) {
+      // Generate new token
+      const { data, error } = await this.client
+        .from('discord_tokens')
+        .insert({ user_id: userId })
+        .select('discord_verification_token')
+        .single();
+
+      if (error != null) {
+        throw new Error(error.message);
+      }
+
+      return data.discord_verification_token;
     }
 
-    return data.discord_verification_token;
+    return data[0].discord_verification_token;
   }
 }

@@ -4,10 +4,13 @@ import axios from 'axios';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { getEnv } from '@hibiscus/env';
 
 export const ConfirmedPlaceholder = () => {
   const [discordToken, setDiscordToken] = useState<string | null>(null);
   const { user } = useHibiscusUser();
+
+  const discordInvite = getEnv().Hibiscus.Discord.InviteUrl;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,8 +39,23 @@ export const ConfirmedPlaceholder = () => {
       <H3>We look forward to seeing you 🌺</H3>
 
       <H3>
-        Your Discord verification token for our official HackSC X Discord server
-        is {discordToken ? discordToken : '...Loading...'}
+        If you haven&apos;t already, join our official HackSC X Discord server
+        at{' '}
+        <a
+          href={`https://discord.gg/${discordInvite}`}
+          target="_blank"
+          rel="noreferrer"
+          style={{
+            textDecoration: 'underline',
+            cursor: 'pointer',
+          }}
+        >
+          discord.gg/{discordInvite}
+        </a>
+      </H3>
+      <H3>
+        Your Discord verification token is{' '}
+        {discordToken ? discordToken : '...Loading...'}
       </H3>
       {/* <H3>Review the Hacker Packet below!</H3> */}
       {/* <a href="example.com">
