@@ -1,5 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Active, DndContext, DragOverlay, MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core';
+import {
+  Active,
+  DndContext,
+  DragOverlay,
+  MouseSensor,
+  TouchSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
 import { SortableContext, arrayMove } from '@dnd-kit/sortable';
 import SlideroomSpotlight from '../components/SlideroomSpotlight';
 import SlideroomOnHold from '../components/SlideroomOnHold';
@@ -21,7 +29,7 @@ const Slideroom: FC<slideroomProps> = () => {
   const [unrankedProjects, setUnrankedProjects] = unranked;
   const [rankedProjects, setRankedProjects] = ranked;
   const [allProjects, setAllProjects] = projects;
-  const [onHoldProjects, \Projects] = onHold;
+  const [onHoldProjects, setOnHoldProjects] = onHold;
   const [spotlightProject, setSpotlightProject] = spotlight;
   const [isLoading, setIsLoading] = useState(true);
 
@@ -87,8 +95,8 @@ const Slideroom: FC<slideroomProps> = () => {
                     activeProject.projectId,
                     activeProject.verticalId,
                     user.id,
-                    newIndex + 1,
-                  )
+                    newIndex + 1
+                  );
 
                   return arrayMove(updatedRanking, oldIndex, newIndex);
                 }
@@ -119,8 +127,8 @@ const Slideroom: FC<slideroomProps> = () => {
                     activeProject.projectId,
                     activeProject.verticalId,
                     user.id,
-                    newIndex + 1,
-                  )
+                    newIndex + 1
+                  );
 
                   return arrayMove(prev, oldIndex, newIndex);
                 }
@@ -143,7 +151,7 @@ const Slideroom: FC<slideroomProps> = () => {
     }
 
     setActive(null);
-  }
+  };
 
   return (
     <div className={styles.containerSlideroom}>
