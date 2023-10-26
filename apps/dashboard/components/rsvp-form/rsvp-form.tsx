@@ -21,10 +21,26 @@ interface Props {
 }
 
 function RSVPForm({ closeModal }: Props) {
+  const [discordToken, setDiscordToken] = useState<string | null>(null);
   const { user, updateUser } = useHibiscusUser();
   const { supabase } = useHibiscusSupabase();
 
   const discordInvite = getEnv().Hibiscus.Discord.InviteUrl;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (user != null) {
+        try {
+          const token = await axios.get(`/api/discord/${user.id}`);
+          setDiscordToken(token.data.token);
+        } catch {
+          setDiscordToken('ERROR');
+        }
+      }
+    };
+
+    fetchData();
+  }, [user]);
 
   const formik = useFormik({
     initialValues: {
@@ -164,6 +180,10 @@ function RSVPForm({ closeModal }: Props) {
                   </Text>
                 }
               />
+              <Text>
+                Your Discord verification token is{' '}
+                {discordToken ? discordToken : '...Loading...'}
+              </Text>
               {formik.touched.acknowledgementDiscord && (
                 <SpanRed>{formik.errors.acknowledgementDiscord}</SpanRed>
               )}
