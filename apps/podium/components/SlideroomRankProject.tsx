@@ -40,7 +40,7 @@ const SlideroomRankProject: FC<SlideroomRankProjectProps> = ({
     backgroundPosition: 'center',
   };
 
-  const { ranked, onHold, spotlight } = useProjectContext();
+  const { ranked, unranked, onHold, spotlight } = useProjectContext();
   const [rankedProjects, setRankedProjects] = ranked;
   const [onHoldProjects, setOnHoldProjects] = onHold;
   const [spotlightProject, setSpotlightProject] = spotlight;
@@ -52,11 +52,8 @@ const SlideroomRankProject: FC<SlideroomRankProjectProps> = ({
     console.log('spotlight', project);
 
     const rankedIndex = rankedProjects.findIndex(
-      ({ projectId }) => projectId === spotlightProject.projectId
+      ({ projectId }) => projectId === project.projectId
     );
-
-    console.log(rankedIndex);
-    console.log(rankedProjects);
 
     // HANDLE ON HOLD
     // if (rankedIndex === -1) {
@@ -64,9 +61,11 @@ const SlideroomRankProject: FC<SlideroomRankProjectProps> = ({
     // }
 
     setSpotlightProject(project);
-  };
 
-  console.log(ranking);
+    // Refresh local ranked/unranked projects so that the spotlight project "returns" to the project bar
+    // setRankedProjects((prev) => prev);
+    // setUnrankedProjects((prev) => prev);
+  };
 
   return (
     <li

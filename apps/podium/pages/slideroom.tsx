@@ -1,10 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
-  Active,
   DndContext,
+  DragCancelEvent,
+  DragEndEvent,
+  DragOverEvent,
   DragOverlay,
+  DragStartEvent,
   MouseSensor,
   TouchSensor,
+  closestCorners,
+  useDroppable,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
@@ -33,12 +38,70 @@ const Slideroom: FC<slideroomProps> = () => {
   const [spotlightProject, setSpotlightProject] = spotlight;
   const [isLoading, setIsLoading] = useState(true);
 
+  // const [localSpotlightProject, setLocalSpotlightProject] =
+  //   useState<Project>(null);
+  const [localRankedProjects, setLocalRankedProjects] =
+    useState<Project[]>(null);
+  const [localUnrankedProjects, setLocalUnrankedProjects] =
+    useState<Project[]>(null);
+
+  // useEffect(() => {
+  //   setLocalSpotlightProject(spotlightProject);
+  // }, [spotlightProject]);
+
+  useEffect(() => {
+    setLocalRankedProjects(rankedProjects);
+  }, [rankedProjects]);
+
+  useEffect(() => {
+    setLocalUnrankedProjects(unrankedProjects);
+  }, [unrankedProjects]);
+
   const { user } = useHibiscusUser();
 
-  const allProjectIds = useMemo(
-    () => allProjects.map((p) => p.projectId),
-    [allProjects]
-  );
+  const { setNodeRef } = useDroppable({ id: 'slideroom-project-bar' });
+
+  const allProjectIds = useMemo(() => {
+    if (localRankedProjects && localUnrankedProjects) {
+      return [...localRankedProjects, ...localUnrankedProjects]
+        .map((p) => p?.projectId)
+        .filter((p) => p != null);
+    } else {
+      return [];
+    }
+  }, [localRankedProjects, localUnrankedProjects]);
+
+  useEffect(() => {
+    if (rankedProjects && unrankedProjects && spotlightProject) {
+      // Remove active project from list of ranked/unranked projects
+      const rankedIndex = rankedProjects.findIndex(
+        ({ projectId }) => projectId === spotlightProject.projectId
+      );
+
+      if (rankedIndex >= 0) {
+        // Spotlight project is ranked
+        setLocalRankedProjects([
+          ...rankedProjects.slice(0, rankedIndex),
+          ...rankedProjects.slice(rankedIndex + 1),
+        ]);
+      } else {
+        setLocalRankedProjects(rankedProjects);
+      }
+
+      const unrankedIndex = unrankedProjects.findIndex(
+        ({ projectId }) => projectId === spotlightProject.projectId
+      );
+      if (unrankedIndex >= 0) {
+        // Active project is unranked
+        setLocalUnrankedProjects([
+          ...unrankedProjects.slice(0, unrankedIndex),
+          ...unrankedProjects.slice(unrankedIndex + 1),
+        ]);
+      } else {
+        setLocalUnrankedProjects(unrankedProjects);
+      }
+    }
+  }, [spotlightProject, rankedProjects, unrankedProjects]);
 
   const router = useRouter();
 
@@ -50,11 +113,7 @@ const Slideroom: FC<slideroomProps> = () => {
     setIsLoading(false);
   }, []);
 
-  const [active, setActive] = useState<Active | null>(null);
-  const activeProject = useMemo(
-    () => allProjects.find((p) => p.projectId === active?.id),
-    [active, allProjects]
-  );
+  const [activeProject, setActiveProject] = useState<Project | null>(null);
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
@@ -70,87 +129,186 @@ const Slideroom: FC<slideroomProps> = () => {
     })
   );
 
-  const handleDragEnd = ({ active, over }) => {
+  const handleDragStart = ({ active }: DragStartEvent) => {
+    if (active.data?.current?.type === 'Spotlight') {
+      setActiveProject(spotlightProject);
+    }
+  };
+
+  const handleDragOver = ({ active, over, delta }: DragOverEvent) => {
+    if (active == null || over == null) {
+      return null;
+    }
+
+    if (active.id === over.id) {
+      return null;
+    }
+
+    const activeIndex = localRankedProjects.findIndex(
+      (p) => p.projectId === active.id
+    );
+    if (activeIndex >= 0) {
+      // Active item is already in the project bar, skip
+      return;
+    }
+
+    if (over.data?.current?.type === 'Ranked') {
+      // setLocalSpotlightProject(null);
+
+      setLocalRankedProjects((prev) => {
+        let newRankedProjects = prev;
+
+        const overIndex = newRankedProjects.findIndex(
+          (p) => p.projectId === over.id
+        );
+
+        const newIndex = (() => {
+          const putOnAfterLastItem =
+            overIndex === newRankedProjects.length - 1 && delta.x > 0;
+          const modifier = putOnAfterLastItem ? 1 : 0;
+          return overIndex >= 0
+            ? overIndex + modifier
+            : newRankedProjects.length + 1;
+        })();
+
+        newRankedProjects = [
+          ...newRankedProjects.slice(0, newIndex),
+          activeProject,
+          ...newRankedProjects.slice(newIndex),
+        ];
+        return newRankedProjects;
+      });
+    } else if (over.data?.current?.type === 'Unranked') {
+      setLocalRankedProjects((prev) => {
+        let newRankedProjects = prev;
+
+        const overIndex = newRankedProjects.findIndex(
+          (p) => p.projectId === over.id
+        );
+
+        const newIndex = (() => {
+          const putOnAfterLastItem =
+            overIndex === newRankedProjects.length - 1 && delta.x > 0;
+          const modifier = putOnAfterLastItem ? 1 : 0;
+          return overIndex >= 0
+            ? overIndex + modifier
+            : newRankedProjects.length + 1;
+        })();
+
+        newRankedProjects = [
+          ...newRankedProjects.slice(0, newIndex),
+          activeProject,
+          ...newRankedProjects.slice(newIndex),
+        ];
+        return newRankedProjects;
+      });
+    }
+  };
+
+  const handleDragEnd = ({ active, over }: DragEndEvent) => {
     if (over && over.data) {
-      if (active.data.current?.type === 'Spotlight') {
-        switch (over.data.current?.type) {
-          case 'Ranked': {
-            const rankedIndex = rankedProjects.findIndex(
+      if (over.data.current?.type === 'Ranked') {
+        const rankedIndex = rankedProjects.findIndex(
+          ({ projectId }) => projectId === active.id
+        );
+
+        if (rankedIndex === -1) {
+          setRankedProjects((prev) => {
+            const updatedRanking = [...prev, activeProject];
+
+            const oldIndex = updatedRanking.findIndex(
               ({ projectId }) => projectId === active.id
             );
+            const newIndex = updatedRanking.findIndex(
+              ({ projectId }) => projectId === over.id
+            );
 
-            if (rankedIndex === -1) {
-              setRankedProjects((prev) => {
-                const updatedRanking = [...prev, activeProject];
+            if (active.id !== over.id) {
+              updateProjectRanking(
+                activeProject.projectId,
+                activeProject.verticalId,
+                user.id,
+                newIndex + 1
+              );
 
-                if (active.id !== over.id) {
-                  const oldIndex = prev.findIndex(
-                    ({ projectId }) => projectId === active.id
-                  );
-                  const newIndex = prev.findIndex(
-                    ({ projectId }) => projectId === over.id
-                  );
-
-                  updateProjectRanking(
-                    activeProject.projectId,
-                    activeProject.verticalId,
-                    user.id,
-                    newIndex + 1
-                  );
-
-                  return arrayMove(updatedRanking, oldIndex, newIndex);
-                }
-              });
-
-              setUnrankedProjects((prev) => {
-                const updatedRanking = prev.filter((p) => {
-                  return p.projectId !== active.id;
-                });
-
-                return updatedRanking;
-              });
-
-              unrankedProjects[0]
-                ? setSpotlightProject(unrankedProjects[0])
-                : setSpotlightProject(null);
+              return arrayMove(updatedRanking, oldIndex, newIndex);
             } else {
-              setRankedProjects((prev) => {
-                if (active.id !== over.id) {
-                  const oldIndex = prev.findIndex(
-                    ({ projectId }) => projectId === active.id
-                  );
-                  const newIndex = prev.findIndex(
-                    ({ projectId }) => projectId === over.id
-                  );
+              const index = localRankedProjects.findIndex(
+                ({ projectId }) => projectId === over.id
+              );
+              updateProjectRanking(
+                activeProject.projectId,
+                activeProject.verticalId,
+                user.id,
+                index + 1
+              );
 
-                  updateProjectRanking(
-                    activeProject.projectId,
-                    activeProject.verticalId,
-                    user.id,
-                    newIndex + 1
-                  );
+              console.log(localRankedProjects);
 
-                  return arrayMove(prev, oldIndex, newIndex);
-                }
-              });
-
-              unrankedProjects[0]
-                ? setSpotlightProject(unrankedProjects[0])
-                : setSpotlightProject(null);
+              return localRankedProjects;
             }
+          });
 
-            break;
-          }
-          case 'OnHold':
-            console.log('dragging into onhold');
-            // unranks if ranked
-            // update onhold
-            break;
+          setUnrankedProjects((prev) => {
+            const updatedRanking = prev.filter((p) => {
+              return p.projectId !== active.id;
+            });
+
+            return updatedRanking;
+          });
+
+          localUnrankedProjects[0]
+            ? setSpotlightProject(localUnrankedProjects[0])
+            : setSpotlightProject(null);
+        } else {
+          setRankedProjects((prev) => {
+            const oldIndex = prev.findIndex(
+              ({ projectId }) => projectId === active.id
+            );
+            const newIndex = prev.findIndex(
+              ({ projectId }) => projectId === over.id
+            );
+
+            if (active.id !== over.id) {
+              updateProjectRanking(
+                activeProject.projectId,
+                activeProject.verticalId,
+                user.id,
+                newIndex + 1
+              );
+
+              return arrayMove(prev, oldIndex, newIndex);
+            } else {
+              const index = localRankedProjects.findIndex(
+                ({ projectId }) => projectId === over.id
+              );
+              updateProjectRanking(
+                activeProject.projectId,
+                activeProject.verticalId,
+                user.id,
+                index + 1
+              );
+
+              return localRankedProjects;
+            }
+          });
+
+          localUnrankedProjects[0]
+            ? setSpotlightProject(localUnrankedProjects[0])
+            : setSpotlightProject(null);
         }
+      } else if (over.data.current?.type === 'OnHold') {
+        console.log('dragging into onhold');
+        // unranks if ranked
+        // update onhold
       }
     }
 
-    setActive(null);
+    setActiveProject(null);
+  };
+
+  const handleDragCancel = ({ active }: DragCancelEvent) => {
+    setActiveProject(null);
   };
 
   return (
@@ -162,20 +320,22 @@ const Slideroom: FC<slideroomProps> = () => {
       </div>
       <DndContext
         sensors={sensors}
-        onDragStart={({ active }) => {
-          setActive(active);
-        }}
+        collisionDetection={closestCorners}
+        onDragStart={handleDragStart}
+        onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}
-        onDragCancel={() => {
-          setActive(null);
-        }}
+        onDragCancel={handleDragCancel}
       >
         <div className={styles.spotlightContainer}>
-          {spotlightProject ? (
-            <SlideroomSpotlight project={spotlightProject} />
-          ) : (
-            "You're all caught up!"
-          )}
+          <SortableContext
+            items={spotlightProject ? [spotlightProject.projectId] : []}
+          >
+            {spotlightProject ? (
+              <SlideroomSpotlight project={spotlightProject} />
+            ) : (
+              "You're all caught up!"
+            )}
+          </SortableContext>
         </div>
         <div className={styles.slideroomProjectBar}>
           <div>
@@ -193,36 +353,32 @@ const Slideroom: FC<slideroomProps> = () => {
           </div>
           <div>
             <SortableContext items={allProjectIds}>
-              <ul>
-                {rankedProjects.map((project) =>
-                  spotlightProject &&
-                  spotlightProject.projectId === project.projectId ? (
-                    <></>
-                  ) : (
-                    <SlideroomRankProject
-                      key={project.projectId}
-                      project={project}
-                      ranking={
-                        rankedProjects.findIndex(
-                          (p) => p.projectId === project.projectId
-                        ) + 1
-                      }
-                      type={'Ranked'}
-                    />
-                  )
+              <ul ref={setNodeRef}>
+                {localRankedProjects?.map(
+                  (project) =>
+                    project && (
+                      <SlideroomRankProject
+                        key={project.projectId}
+                        project={project}
+                        ranking={
+                          rankedProjects.findIndex(
+                            (p) => p.projectId === project.projectId
+                          ) + 1
+                        }
+                        type={'Ranked'}
+                      />
+                    )
                 )}
-                {unrankedProjects.map((project) =>
-                  spotlightProject &&
-                  spotlightProject.projectId === project.projectId ? (
-                    <></>
-                  ) : (
-                    <SlideroomRankProject
-                      key={project.projectId}
-                      project={project}
-                      ranking={null}
-                      type={'Unranked'}
-                    />
-                  )
+                {localUnrankedProjects?.map(
+                  (project) =>
+                    project && (
+                      <SlideroomRankProject
+                        key={project.projectId}
+                        project={project}
+                        ranking={null}
+                        type={'Unranked'}
+                      />
+                    )
                 )}
               </ul>
             </SortableContext>
