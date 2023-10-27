@@ -688,19 +688,35 @@ def update_vertical(vertical_id: str, **kwargs) -> None:
 
 def add_comment(project_id: str, user_id: str, comment: str):
     """
-    Adds or updates a comment
+    Adds a comment
     """
 
     def add(session: Session):
         session.execute(
             insert(models.Comment)
             .values(project_id=project_id, user_id=user_id, comment=comment)
-            .on_conflict_do_update(
-                constraint="comments_pkey", set_={"comment": comment}
-            )
         )
 
     run_transaction(sessionmaker(engine), add)
+
+
+def edit_comment(comment_id: str, comment: str):
+    """
+    Edit an existing comment
+    """
+
+    def edit(session: Session):
+        res = session.execute(
+            update(models.Comment)
+            .where(models.Comment.comment_id == comment_id)
+            .values(comment=comment)
+            .returning(models.Comment.comment_id)
+        )
+
+        if res.first() is None:
+            raise Exception("No comment found")
+        
+    run_transaction(sessionmaker(engine), edit)
 
 
 def get_comments(project_id: str) -> list[data_types.Comment]:
@@ -717,15 +733,30 @@ def get_comments(project_id: str) -> list[data_types.Comment]:
 
         return [
             data_types.Comment(
+                commentId=comment.comment_id,
                 comment=comment.comment,
                 name=comment.user_id,
-                profilePicUrl="www.example.com",
+                profilePicUrl="https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg",
                 createdAt=str(comment.created_at),
             )
             for comment in comments
         ]
 
-    return run_transaction(sessionmaker(engine), get)
+    env = Settings()
+    supabase = create_client(env.supabase_url, env.supabase_key)
+
+    comments = run_transaction(sessionmaker(engine), get)
+
+    # Get judge data from Supabase
+    res = supabase.table("user_profiles").select("user_id, first_name, last_name").in_("user_id", [comment.name for comment in comments]).execute()
+
+    for comment in comments:
+        for judge in res.data:
+            if judge.get("user_id") == comment.name:
+                comment.name = f"{judge.get('first_name')} {judge.get('last_name')}"
+                break
+
+    return comments
 
 
 def get_judge_details(judge_id: str) -> data_types.JudgeInternal:

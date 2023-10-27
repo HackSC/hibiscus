@@ -60,10 +60,9 @@ class Note(Base):
 class Comment(Base):
     __tablename__ = "comments"
 
-    project_id: Mapped[UUID] = mapped_column(
-        ForeignKey("projects.project_id"), primary_key=True
-    )
-    user_id: Mapped[str] = mapped_column(primary_key=True)
+    comment_id: Mapped[UUID] = mapped_column(primary_key=True)
+    project_id: Mapped[UUID] = mapped_column(ForeignKey("projects.project_id"))
+    user_id: Mapped[str]
     comment: Mapped[str]
     created_at: Mapped[TIMESTAMP] = mapped_column(TIMESTAMP(timezone=True))
 
