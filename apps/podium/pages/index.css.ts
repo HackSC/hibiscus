@@ -136,6 +136,13 @@ export const spotlight = style({
   color: 'black',
 });
 
+export const spotlightDrag = style({
+  width: '250px',
+  height: '150px',
+  backgroundColor: 'white',
+  color: 'black',
+});
+
 export const spotlightInfo = style({
   padding: '20px',
 });

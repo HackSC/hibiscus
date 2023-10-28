@@ -1,32 +1,32 @@
-import styles from '../index.module.scss';
 import Comment from '../../components/comment/comment';
 import SendComment from '../../components/send-comment/send-comment';
 import styled from 'styled-components';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Modal } from '@hibiscus/ui';
 import { FiEdit3 } from 'react-icons/fi';
+import { useRouter } from 'next/router';
 
 const backgroundColor = 'white';
 const BlueIvy = '#002990';
 
+const HIBISCUS_PODIUM_API_URL = process.env.NEXT_PUBLIC_HIBISCUS_PODIUM_API_URL;
+
 export function Index() {
-  /*
-   * Replace the elements below with your own.
-   *
-   * Note: The corresponding styles are in the ./index.scss file.
-   */
-  const [projectId, setProjectId] = useState(
-    '1f6e3db9-1976-4f33-bf04-7df9d1e03a71'
-  );
+  const router = useRouter();
+
   const [data, setData] = useState(null);
   const [inputOpen, setInputOpen] = useState(false);
 
-  const fetchData = async () => {
+  const projectId = useMemo(
+    () => router.query?.projectId?.toString(),
+    [router.query]
+  );
+
+  const fetchData = async (projectId: string) => {
     try {
       const response = await axios.get(
-        'https://iegz97vdvi.execute-api.us-west-1.amazonaws.com/api/comments/' +
-          projectId
+        `${HIBISCUS_PODIUM_API_URL}/comments/${projectId}`
       );
       setData(response.data);
       console.log(response.data);
@@ -37,8 +37,10 @@ export function Index() {
 
   // Call fetchData inside useEffect for initial fetch
   useEffect(() => {
-    fetchData();
-  }, []); // Only on component mount
+    if (projectId != null) {
+      fetchData(projectId);
+    }
+  }, [projectId]);
 
   return (
     <>
@@ -88,6 +90,7 @@ export function Index() {
           buttonText="Go"
           onButtonClick={() => setInputOpen(false)}
           fetchData={fetchData}
+          projectId={projectId}
         />
       </Modal>
     </>

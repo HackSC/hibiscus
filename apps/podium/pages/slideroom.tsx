@@ -316,7 +316,13 @@ const Slideroom: FC<slideroomProps> = () => {
       <div className={`${styles.slideroomHeader} ${styles.flexBetween}`}>
         <a href="/">&lt; Home</a>
         <h1>{spotlightProject ? spotlightProject.name : 'HackSC'}</h1>
-        <button>CMT</button>
+        <button
+          onClick={() => {
+            router.push(`/comments/${spotlightProject.projectId}`);
+          }}
+        >
+          CMT
+        </button>
       </div>
       <DndContext
         sensors={sensors}

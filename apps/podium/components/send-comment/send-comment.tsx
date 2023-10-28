@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { FiSend } from 'react-icons/fi'; // Import the send icon
+import { useHibiscusUser } from '@hibiscus/hibiscus-user-context';
 
 const InputWrapper = styled.div`
   position: relative;
@@ -43,23 +44,26 @@ const StyledButton = styled.button`
   justify-content: center;
 `;
 
+const HIBISCUS_PODIUM_API_URL = process.env.NEXT_PUBLIC_HIBISCUS_PODIUM_API_URL;
+
 const SendComment = ({
   buttonText,
   onButtonClick,
   fetchData,
+  projectId, // check if null!
   ...inputProps
 }) => {
-  const userId = '566a7ced-02c7-4715-8342-bafd4af289b7';
-  const projectId = '1f6e3db9-1976-4f33-bf04-7df9d1e03a71';
+  const { user } = useHibiscusUser();
+
   const [commentText, setCommentText] = useState('');
   const handleSubmit = async () => {
     console.log(commentText);
-    const endpoint = `https://iegz97vdvi.execute-api.us-west-1.amazonaws.com/api/comments/${projectId}/user/${userId}`;
+    const endpoint = `${HIBISCUS_PODIUM_API_URL}/comments/${projectId}/user/${user.id}`;
     try {
       const response = await axios.post(endpoint, { comment: commentText });
       console.log(response.data);
       //refresh page
-      fetchData();
+      fetchData(projectId);
       setCommentText('');
       onButtonClick();
     } catch (error) {
@@ -67,14 +71,16 @@ const SendComment = ({
     }
   };
   return (
-    <InputWrapper>
+    <InputWrapper {...inputProps}>
       <StyledInput
         value={commentText}
         onChange={(e) => setCommentText(e.target.value)}
       />
-      <StyledButton onClick={handleSubmit}>
-        <FiSend />
-      </StyledButton>
+      {projectId && user && (
+        <StyledButton onClick={handleSubmit}>
+          <FiSend />
+        </StyledButton>
+      )}
     </InputWrapper>
   );
 };

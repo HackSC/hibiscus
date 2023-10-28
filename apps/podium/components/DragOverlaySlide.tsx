@@ -16,7 +16,7 @@ const DragOverlaySlide: FC<DragOverlaySlideProps> = ({ project }) => {
   };
 
   return (
-    <div className={`${styles.spotlight} ${styles.roundCorners}`}>
+    <div className={`${styles.spotlightDrag} ${styles.roundCorners}`}>
       <motion.div
         style={imgStyle}
         className={styles.spotlightImg}
