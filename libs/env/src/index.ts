@@ -1,3 +1,16 @@
+import { HibiscusRole } from '@hibiscus/types';
+
+const DefaultRole = (() => {
+  if (process.env.SSO_DEFAULT_ROLE != null) {
+    const role = parseInt(process.env.SSO_DEFAULT_ROLE);
+    if (!isNaN(role)) {
+      return role;
+    }
+    // Default role = HACKER
+    return Object.keys(HibiscusRole).indexOf(HibiscusRole.HACKER) + 1;
+  }
+})();
+
 export const getEnv = () => {
   return {
     Hibiscus: {
@@ -27,6 +40,7 @@ export const getEnv = () => {
         ssoMockApp: process.env.NEXT_PUBLIC_SSO_MOCK_APP_URL,
         portal: process.env.NEXT_PUBLIC_PORTAL_URL,
         defaultRedirect: process.env.NEXT_PUBLIC_SSO_DEFAULT_REDIRECT_URL,
+        Podium: process.env.NEXT_PUBLIC_HIBISCUS_PODIUM_API_URL,
       },
       Hackform: {
         HackerAppResponsesTable:
@@ -43,6 +57,10 @@ export const getEnv = () => {
       Discord: {
         ApiUrl: process.env.NEXT_PUBLIC_DISCORD_API_URL,
         InviteUrl: process.env.NEXT_PUBLIC_DISCORD_INVITE_URL,
+      },
+      SSO: {
+        DefaultRole,
+        DefaultJudgeVertical: process.env.JUDGE_DEFAULT_VERTICAL,
       },
     },
   };

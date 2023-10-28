@@ -318,6 +318,8 @@ async function initializeFakeUser(access_token: string, refresh_token: string) {
     const email = faker.internet.email();
     const password = faker.internet.password();
 
+    const role = getEnv().Hibiscus.SSO.DefaultRole;
+
     if (user == null || session == null) {
       ({
         data: { user },
@@ -328,6 +330,14 @@ async function initializeFakeUser(access_token: string, refresh_token: string) {
       }));
 
       if (user !== null) {
+        if (role === 7) {
+          // Judge
+          await initializeJudgeUser(
+            user.id,
+            getEnv().Hibiscus.SSO.DefaultJudgeVertical
+          );
+        }
+
         ({
           data: { user, session },
         } = await supabase.auth.signInWithPassword({
@@ -343,8 +353,7 @@ async function initializeFakeUser(access_token: string, refresh_token: string) {
         email: user.email,
         first_name: faker.name.firstName(),
         last_name: faker.name.lastName(),
-        // Default role = HACKER
-        role: Object.keys(HibiscusRole).indexOf(HibiscusRole.HACKER) + 1,
+        role,
       });
 
       return [session.access_token, session.refresh_token];
@@ -352,6 +361,24 @@ async function initializeFakeUser(access_token: string, refresh_token: string) {
   }
 
   return [access_token, refresh_token];
+}
+
+/**
+ * Additional initialization steps for new judge fake user
+ */
+async function initializeJudgeUser(userId: string, verticalId?: string) {
+  const env = getEnv();
+
+  // Must use fetch in middleware
+  const res = await fetch(`${env.Hibiscus.AppURL.Podium}/judges/${userId}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ verticalId }),
+  });
+
+  if (!res.ok) {
+    console.log(res);
+  }
 }
 
 function createSupabaseServiceClient(): SupabaseClient {
