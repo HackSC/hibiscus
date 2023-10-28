@@ -48,6 +48,7 @@ const getProjectDetails = async (projectId: string, verticalId: string) => {
       teamMembers: jsonData.teamMembers,
       description: jsonData.description,
       imageUrl: jsonData.imageUrl,
+      videoUrl: jsonData.videoUrl,
     };
   } catch (error) {
     console.error('Error: ', error);
