@@ -28,7 +28,7 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-modules-
-      - uses: cachix/install-nix-action@v19
+      - uses: cachix/install-nix-action@v22
         with:
           github_access_token: ${{ secrets.BOT_GITHUB_PAT }}
       - uses: cachix/cachix-action@v12
@@ -54,7 +54,7 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-modules-
-      - uses: cachix/install-nix-action@v19
+      - uses: cachix/install-nix-action@v22
         with:
           github_access_token: ${{ secrets.BOT_GITHUB_PAT }}
       - uses: cachix/cachix-action@v12
@@ -80,7 +80,7 @@ jobs:
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-modules-
-      - uses: cachix/install-nix-action@v19
+      - uses: cachix/install-nix-action@v22
         with:
           github_access_token: ${{ secrets.BOT_GITHUB_PAT }}
       - uses: cachix/cachix-action@v12

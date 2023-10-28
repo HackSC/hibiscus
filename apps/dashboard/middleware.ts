@@ -4,13 +4,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { TSRV_RELEASE_FLAG } from './common/constants';
 
 export async function middleware(request: NextRequest) {
-  // Intercept requests to application page and redirect to signup page if no session detected
-  const res = await middlewareHandler(
-    `${getEnv().Hibiscus.AppURL.portal}/api/callback`,
-    ['/apply-2023'],
-    `${getEnv().Hibiscus.AppURL.sso}/signup`,
-    false
-  )(request);
+  // Removed: Intercept requests to application page and redirect to signup page if no session detected
+  // const res = await middlewareHandler(
+  //   `${getEnv().Hibiscus.AppURL.portal}/api/callback`,
+  //   ['/apply-2023'],
+  //   `${getEnv().Hibiscus.AppURL.sso}/signup`,
+  //   false
+  // )(request);
 
   const regTeamAPIs = /\/api\/(team|organizer)/g;
   if (regTeamAPIs.test(request.nextUrl.pathname) && !TSRV_RELEASE_FLAG) {
@@ -19,11 +19,8 @@ export async function middleware(request: NextRequest) {
     );
   }
 
-  return (
-    res ??
-    middlewareHandler(`${getEnv().Hibiscus.AppURL.portal}/api/callback`)(
-      request
-    )
+  return middlewareHandler(`${getEnv().Hibiscus.AppURL.portal}/api/callback`)(
+    request
   );
 }
 

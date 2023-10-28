@@ -230,7 +230,7 @@ export class HibiscusSupabaseClient {
       first_name: firstname,
       last_name: lastname,
       // Default role = HACKER
-      role: Object.keys(HibiscusRole).indexOf(HibiscusRole.HACKER) + 1,
+      // role: Object.keys(HibiscusRole).indexOf(HibiscusRole.HACKER) + 1,
     });
   }
 
