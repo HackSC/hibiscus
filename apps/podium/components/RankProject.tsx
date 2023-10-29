@@ -4,6 +4,7 @@ import { CSSProperties, useMemo } from 'react';
 import * as styles from '../pages/index.css';
 import { FC } from 'react';
 import Link from 'next/link';
+import { getYoutubeThumbnail } from '../utils/getYoutubeThumbnail';
 
 interface RankProjectProps {
   project: Project;
@@ -25,11 +26,13 @@ const RankProject: FC<RankProjectProps> = ({ project, ranking, type }) => {
   });
 
   const image = useMemo(() => {
-    const regex =
-      /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/|shorts\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
-    return project.videoUrl
-      ? `https://img.youtube.com/vi/${project.videoUrl.match(regex)[1]}/0.jpg`
-      : project.imageUrl;
+    if (project?.videoUrl) {
+      const ytThumbnail = getYoutubeThumbnail(project.videoUrl);
+      if (ytThumbnail) {
+        return ytThumbnail;
+      }
+    }
+    return project?.imageUrl;
   }, [project]);
 
   const style: CSSProperties = {

@@ -1,8 +1,9 @@
 import { useSortable } from '@dnd-kit/sortable';
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { CSS } from '@dnd-kit/utilities';
 import { CSSProperties } from 'react';
 import * as styles from '../pages/index.css';
+import { getYoutubeThumbnail } from '../utils/getYoutubeThumbnail';
 
 interface SlideroomSpotlightProps {
   project: Project;
@@ -23,6 +24,16 @@ const SlideroomSpotlight: FC<SlideroomSpotlightProps> = ({ project }) => {
     },
   });
 
+  const image = useMemo(() => {
+    if (project?.videoUrl) {
+      const ytThumbnail = getYoutubeThumbnail(project.videoUrl);
+      if (ytThumbnail) {
+        return ytThumbnail;
+      }
+    }
+    return project?.imageUrl;
+  }, [project]);
+
   const style: CSSProperties = {
     opacity: isDragging ? 0.4 : 1.0,
     transform: CSS.Translate.toString(transform),
@@ -30,7 +41,7 @@ const SlideroomSpotlight: FC<SlideroomSpotlightProps> = ({ project }) => {
   };
 
   const imgStyle = {
-    backgroundImage: `url(${project.imageUrl})`,
+    backgroundImage: `url(${image})`,
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',

@@ -1,10 +1,11 @@
 import { useSortable } from '@dnd-kit/sortable';
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { CSS } from '@dnd-kit/utilities';
 import { CSSProperties } from 'react';
 import * as styles from '../pages/index.css';
 import { useProjectContext } from '../ProjectContext';
 import RankIcon from './RankIcon';
+import { getYoutubeThumbnail } from '../utils/getYoutubeThumbnail';
 
 interface SlideroomRankProjectProps {
   project: Project;
@@ -30,11 +31,21 @@ const SlideroomRankProject: FC<SlideroomRankProjectProps> = ({
     disabled: true,
   });
 
+  const image = useMemo(() => {
+    if (project?.videoUrl) {
+      const ytThumbnail = getYoutubeThumbnail(project.videoUrl);
+      if (ytThumbnail) {
+        return ytThumbnail;
+      }
+    }
+    return project?.imageUrl;
+  }, [project]);
+
   const style: CSSProperties = {
     opacity: isDragging ? 0.4 : 1.0,
     transform: CSS.Translate.toString(transform),
     transition,
-    backgroundImage: `url(${project.imageUrl})`,
+    backgroundImage: `url(${image})`,
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',

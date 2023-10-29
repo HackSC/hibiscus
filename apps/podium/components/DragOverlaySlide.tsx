@@ -1,14 +1,25 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import { motion } from 'framer-motion';
 import * as styles from '../pages/index.css';
+import { getYoutubeThumbnail } from '../utils/getYoutubeThumbnail';
 
 interface DragOverlaySlideProps {
   project: Project;
 }
 
 const DragOverlaySlide: FC<DragOverlaySlideProps> = ({ project }) => {
+  const image = useMemo(() => {
+    if (project?.videoUrl) {
+      const ytThumbnail = getYoutubeThumbnail(project.videoUrl);
+      if (ytThumbnail) {
+        return ytThumbnail;
+      }
+    }
+    return project?.imageUrl;
+  }, [project]);
+
   const imgStyle = {
-    backgroundImage: `url(${project.imageUrl})`,
+    backgroundImage: `url(${image})`,
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
