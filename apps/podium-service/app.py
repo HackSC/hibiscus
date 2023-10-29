@@ -20,7 +20,9 @@ def health():
 
 @app.route("/add_projects", methods=["POST"])
 def add_projects():
-    projects = app.current_request.json_body.data
+    body = app.current_request.json_body
+    projects = body.get("data")
+
     try:
         project_ids = repository.add_projects(projects)
         return {"projects": project_ids}

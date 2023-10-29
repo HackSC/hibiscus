@@ -30,6 +30,9 @@ def add_projects(projects: list[data_types.ProjectAdd]) -> Optional[str]:
             map[verticle.name] = verticle.verticalId
         print(map)
         for project in projects:
+            if ("vertical" not in project) or (project["vertical"] not in map):
+                continue
+
             team = None
             if project.get("teamMembers") is not None:
                 team = __list_to_csv(project.get("teamMembers"))
