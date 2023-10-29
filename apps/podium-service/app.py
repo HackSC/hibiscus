@@ -91,6 +91,17 @@ def get_rankings(vertical_id: str, user_id: str):
         raise BadRequestError(f"Failed to get requested rankings: {e}")
 
 
+@app.route("/ranking/{vertical_id}/{user_id}", methods=["DELETE"])
+def unrank_project(vertical_id: str, user_id: str):
+    body = app.current_request.json_body
+    
+    try:
+        repository.unrank_project(body.get("projectId"), user_id)
+        return {"message": "Success"}
+    except Exception as e:
+        raise BadRequestError(f"Failed to get unrank project: {e}")
+
+
 @app.route("/notes/{vertical_id}/{project_id}/{user_id}", methods=["POST"])
 def add_notes(vertical_id: str, project_id: str, user_id: str):
     body = app.current_request.json_body

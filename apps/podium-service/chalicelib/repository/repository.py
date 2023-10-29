@@ -361,6 +361,31 @@ def get_rankings(vertical_id: str, user_id: str) -> list[data_types.Ranking]:
     return run_transaction(sessionmaker(engine), get)
 
 
+def unrank_project(project_id: str, user_id: str):
+    """
+    Unrank a project for a specific judge.\n
+    All projects below this project is moved up a spot.
+    """
+
+    def unrank(session: Session):
+        rank_old = session.scalars(
+            delete(models.Ranking)
+            .where(models.Ranking.user_id == user_id)
+            .where(models.Ranking.project_id == project_id)
+            .returning(models.Ranking.rank)
+        ).one_or_none()
+
+        if rank_old is not None:
+            session.execute(
+                update(models.Ranking)
+                .where(models.Ranking.user_id == user_id)
+                .where(models.Ranking.rank > rank_old)
+                .values(rank=models.Ranking.rank - 1)
+            )
+    
+    return run_transaction(sessionmaker(engine), unrank)
+
+
 def get_vertical(vertical_id: str) -> data_types.Vertical:
     """
     Get vertical details given the vertical ID.\n
