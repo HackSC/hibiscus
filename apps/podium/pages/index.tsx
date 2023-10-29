@@ -1,9 +1,17 @@
 import { useState, useMemo } from 'react';
 import { useProjectContext } from '../ProjectContext';
-import { Active, useSensors, useSensor, MouseSensor, TouchSensor, DndContext, DragOverlay,} from '@dnd-kit/core';
+import {
+  Active,
+  useSensors,
+  useSensor,
+  MouseSensor,
+  TouchSensor,
+  DndContext,
+  DragOverlay,
+} from '@dnd-kit/core';
 import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import RankProject from '../components/RankProject';
-import * as styles from '../pages/index.css';
+import * as styles from '../styles/index.css';
 import OnHoldProject from '../components/OnHoldProject';
 import { useHibiscusUser } from '@hibiscus/hibiscus-user-context';
 import { updateProjectRanking } from '../utils/updateProjectRanking';
@@ -68,8 +76,8 @@ const Index = () => {
                   activeProject.projectId,
                   activeProject.verticalId,
                   user.id,
-                  newIndex + 1,
-                )
+                  newIndex + 1
+                );
 
                 return arrayMove(updatedRanking, oldIndex, newIndex);
               }
@@ -82,7 +90,7 @@ const Index = () => {
 
               return updatedRanking;
             });
-            
+
             break;
           }
           case 'Ranked': {
@@ -100,8 +108,8 @@ const Index = () => {
                   activeProject.projectId,
                   activeProject.verticalId,
                   user.id,
-                  newIndex + 1,
-                )
+                  newIndex + 1
+                );
 
                 return arrayMove(prev, oldIndex, newIndex);
               }
@@ -117,17 +125,19 @@ const Index = () => {
             activeProject.verticalId,
             user.id,
             1
-          )
+          );
         }
       }
     }
 
     setActive(null);
-  }
+  };
 
   return (
     <>
-      <header className={`${styles.header} ${styles.flexCenter}`}><img src='logo_word.png' alt='Hibiscus HackSC Logo' /></header>
+      <header className={`${styles.header} ${styles.flexCenter}`}>
+        <img src="logo_word.png" alt="Hibiscus HackSC Logo" />
+      </header>
       <div className={styles.containerMain}>
         {onHoldProjects[0] ? <h1>On Hold will go here</h1> : <></>}
         <div onClick={toggleOnHoldExpansion}>

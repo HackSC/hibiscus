@@ -20,11 +20,12 @@ import SlideroomRankProject from '../components/SlideroomRankProject';
 import { useProjectContext } from '../ProjectContext';
 import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
-import * as styles from '../pages/index.css';
+import * as styles from '../styles/index.css';
 import { FC } from 'react';
 import DragOverlaySlide from '../components/DragOverlaySlide';
 import { useHibiscusUser } from '@hibiscus/hibiscus-user-context';
 import { updateProjectRanking } from '../utils/updateProjectRanking';
+import { Project } from '../types';
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface slideroomProps {}

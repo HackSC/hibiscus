@@ -3,6 +3,7 @@ import { FC, useMemo } from 'react';
 import { CSS } from '@dnd-kit/utilities';
 import { CSSProperties } from 'react';
 import { getYoutubeThumbnail } from '../utils/getYoutubeThumbnail';
+import { Project } from '../types';
 
 interface SlideroomOnHoldProps {
   project: Project;

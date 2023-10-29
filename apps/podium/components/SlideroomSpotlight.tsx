@@ -2,8 +2,9 @@ import { useSortable } from '@dnd-kit/sortable';
 import { FC, useMemo } from 'react';
 import { CSS } from '@dnd-kit/utilities';
 import { CSSProperties } from 'react';
-import * as styles from '../pages/index.css';
+import * as styles from '../styles/index.css';
 import { getYoutubeThumbnail } from '../utils/getYoutubeThumbnail';
+import { Project } from '../types';
 
 interface SlideroomSpotlightProps {
   project: Project;

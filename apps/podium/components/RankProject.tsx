@@ -1,10 +1,11 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { CSSProperties, useMemo } from 'react';
-import * as styles from '../pages/index.css';
+import * as styles from '../styles/index.css';
 import { FC } from 'react';
 import Link from 'next/link';
 import { getYoutubeThumbnail } from '../utils/getYoutubeThumbnail';
+import { Container, Project } from '../types';
 
 interface RankProjectProps {
   project: Project;

@@ -1,7 +1,8 @@
 import { FC, useMemo } from 'react';
 import { motion } from 'framer-motion';
-import * as styles from '../pages/index.css';
+import * as styles from '../styles/index.css';
 import { getYoutubeThumbnail } from '../utils/getYoutubeThumbnail';
+import { Project } from '../types';
 
 interface DragOverlaySlideProps {
   project: Project;

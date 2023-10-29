@@ -2,10 +2,11 @@ import { useSortable } from '@dnd-kit/sortable';
 import { FC, useMemo } from 'react';
 import { CSS } from '@dnd-kit/utilities';
 import { CSSProperties } from 'react';
-import * as styles from '../pages/index.css';
+import * as styles from '../styles/index.css';
 import { useProjectContext } from '../ProjectContext';
 import RankIcon from './RankIcon';
 import { getYoutubeThumbnail } from '../utils/getYoutubeThumbnail';
+import { Container, Project } from '../types';
 
 interface SlideroomRankProjectProps {
   project: Project;

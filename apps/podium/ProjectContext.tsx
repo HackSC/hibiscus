@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import getProjects from './utils/getProjects';
 import { useHibiscusUser } from '@hibiscus/hibiscus-user-context';
 import { getJudgeDetails } from './utils/getJudgeDetails';
+import { Project } from './types';
 
 interface ProjectContextType {
   ranked: any[];

@@ -1,4 +1,4 @@
-interface Project {
+export interface Project {
   projectId: string;
   verticalId: string;
   name: string;
@@ -8,4 +8,4 @@ interface Project {
   videoUrl: string | null;
 }
 
-type Container = 'Spotlight' | 'OnHold' | 'Ranked' | 'Unranked';
+export type Container = 'Spotlight' | 'OnHold' | 'Ranked' | 'Unranked';
