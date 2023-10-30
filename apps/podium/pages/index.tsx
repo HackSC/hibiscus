@@ -128,12 +128,6 @@ const Index = () => {
       return null;
     }
 
-    if (active.id === over.id) {
-      setActive(null);
-      setIsDragging(false);
-      return null;
-    }
-
     if (over && over.data) {
       switch (over.data.current?.type) {
         case 'Ranked':
@@ -183,6 +177,19 @@ const Index = () => {
                   );
 
                   return arrayMove(prev, oldIndex, newIndex);
+                } else {
+                  const newIndex = rankedProjects.findIndex(
+                    ({ projectId }) => projectId === over.id
+                  );
+
+                  updateProjectRanking(
+                    activeProject.projectId,
+                    activeProject.verticalId,
+                    user.id,
+                    newIndex + 1
+                  );
+
+                  return prev;
                 }
               });
 
@@ -194,17 +201,17 @@ const Index = () => {
 
           break;
 
-        case 'OnHold':
         case 'Unranked':
-          if (rankedProjects.length === 0) {
+          const index = allProjectIds.findIndex(( projectId ) => projectId === over.id);
+          if (index === rankedProjects.length) {
             updateProjectRanking(
               activeProject.projectId,
               activeProject.verticalId,
               user.id,
-              1
+              index + 1,
             );
 
-            setRankedProjects([activeProject]);
+            setRankedProjects([...rankedProjects, activeProject]);
             setUnrankedProjects(prev => prev.filter(p => p.projectId !== active.id));
             setOnHoldProjects(prev => prev.filter(p => p.projectId !== active.id));
           }
