@@ -7,4 +7,4 @@ interface Project {
   imageUrl: string | null;
 }
 
-type Container = 'Spotlight' | 'OnHold' | 'Ranked' | 'Unranked';
+type Container = 'OnHold' | 'OnHoldAdd' | 'Ranked' | 'Unranked';
