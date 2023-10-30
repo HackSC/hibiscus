@@ -1,10 +1,101 @@
-from chalice import Chalice, BadRequestError, Response
+from chalice import Chalice, BadRequestError, Response, ChaliceViewError
+from chalicelib.config import Settings
 from chalicelib.repository import repository
 import dataclasses
+import requests
 
 
 app = Chalice(app_name="podium-service")
 app.api.cors = True
+
+
+# middleware
+@app.middleware("all")
+def check_auth(event, get_response):
+    env = Settings()
+
+    headers = app.current_request.headers
+    access_token = headers.get("Authorization")
+
+    if access_token is None:
+        return Response(status_code=401, body={"Error": "No access token provided"})
+
+    # access_token is in the format "Bearer access_token"
+    # splice it
+    access_token = access_token.replace("Bearer ", "")
+
+    api_url = f"{env.auth_service_url}/verify-token/"
+    api_url += access_token
+
+    response = requests.get(api_url)
+
+    # if valid access token
+    if response.status_code == 200:
+        try:
+            data = response.json()
+            role = data["role"]
+
+            # if user is admin, allow access
+            if role == "SUPERADMIN":
+                return
+
+            # elif user is judge
+            elif role == "JUDGE":
+                # if event is a judge endpoint, allow access
+                judge_eps = [
+                    "/projects/{vertical_id}/{project_id}",
+                    "/projects/{vertical_id}",
+                    "/projects",
+                ]
+
+                check_judge_eps = [
+                    "/ranking/{vertical_id}/{user_id}",
+                    "/notes/{vertical_id}/{project_id}/{user_id}",
+                    "/notes/{vertical_id}/{project_id}/{user_id}",
+                ]
+
+                # write code that gets the path from the event
+                path = event.path
+                print(path)
+
+                if path in judge_eps:
+                    return get_response(event)
+
+                elif path in check_judge_eps:
+                    # check if judge is allowed to access this endpoint
+                    # if yes, allow access
+                    # else, disallow access
+                    user_id = event.uri_params.get("user_id")
+                    if user_id == data["user_id"]:
+                        return get_response(event)
+                    else:
+                        return Response(
+                            {
+                                "error": "Access denied. Judge ID from call does not match stored judge ID"
+                            },
+                            status_code=403,
+                        )
+
+                # else, disallow access
+                else:
+                    return Response(
+                        {"error": "Access denied. Judge cannot access Admin endpoints"},
+                        status_code=403,
+                    )
+
+            # else, is a HACKER
+            else:
+                return Response(
+                    {"error": "Access denied. Cannot access endpoints"},
+                    status_code=403,
+                )
+
+        except ValueError:
+            raise ChaliceViewError("Invalid JSON response")
+
+    # invalid access token
+    else:
+        return Response(status_code=401, body={"Error": "Invalid access token"})
 
 
 @app.route("/health")
@@ -94,7 +185,7 @@ def get_rankings(vertical_id: str, user_id: str):
 @app.route("/ranking/{vertical_id}/{user_id}", methods=["DELETE"])
 def unrank_project(vertical_id: str, user_id: str):
     body = app.current_request.json_body
-    
+
     try:
         repository.unrank_project(body.get("projectId"), user_id)
         return {"message": "Success"}
@@ -326,7 +417,7 @@ def add_comment(project_id: str, user_id: str):
         return {"message": "Success"}
     except Exception as e:
         raise BadRequestError(f"Failed to add comment: {e}")
-    
+
 
 @app.route("/comments/id/{comment_id}", methods=["PUT"])
 def edit_comment(comment_id: str):
@@ -336,9 +427,7 @@ def edit_comment(comment_id: str):
         if body.get("comment") is None:
             raise Exception("Property 'comment' not found in request body")
 
-        repository.edit_comment(
-            comment_id=comment_id, comment=body.get("comment")
-        )
+        repository.edit_comment(comment_id=comment_id, comment=body.get("comment"))
 
         return {"message": "Success"}
     except Exception as e:

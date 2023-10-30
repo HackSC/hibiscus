@@ -10,3 +10,5 @@ class Settings:
 
     supabase_url: str = os.getenv("SUPABASE_URL")
     supabase_key: str = os.getenv("SUPABASE_KEY")
+
+    auth_service_url: str = os.getenv("AUTH_SERVICE_URL")

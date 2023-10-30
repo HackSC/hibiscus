@@ -11,7 +11,8 @@
         "DB_PORT": "REDACTED",
         "DB_NAME": "podium",
         "SUPABASE_URL": "REDACTED",
-        "SUPABASE_KEY": "REDACTED"
+        "SUPABASE_KEY": "REDACTED",
+        "AUTH_SERVICE_URL": "REDACTED"
       }
     }
   }

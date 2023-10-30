@@ -25,6 +25,7 @@ readme = 'README.md'
   sqlalchemy-cockroachdb = "^2.0.1"
   supabase = "1.0.4"
   typing-extensions = "^4.8.0"
+  requests = "^2.31.0"
 
   
 
