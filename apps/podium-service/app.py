@@ -43,9 +43,11 @@ def check_auth(event, get_response):
             elif role == "JUDGE":
                 # if event is a judge endpoint, allow access
                 judge_eps = [
-                    "/projects/{vertical_id}/{project_id}",
-                    "/projects/{vertical_id}",
-                    "/projects",
+                    {"path": "/projects/{vertical_id}/{project_id}", "method": "GET"},
+                    {"path": "/projects/{vertical_id}", "method": "GET"},
+                    {"path": "/projects", "method": "GET"},
+                    {"path": "/comments/{project_id}", "method": "GET"},
+                    {"path": "/judges/{judge_id}", "method": "GET"},
                 ]
 
                 check_judge_eps = [
@@ -56,12 +58,14 @@ def check_auth(event, get_response):
 
                 # write code that gets the path from the event
                 path = event.path
-                print(path)
 
-                if path in judge_eps:
+                if any(
+                    d.get("path") == path and d.get("method") == event.method
+                    for d in judge_eps
+                ):
                     return get_response(event)
 
-                elif path in check_judge_eps:
+                elif "{user_id}" in path:
                     # check if judge is allowed to access this endpoint
                     # if yes, allow access
                     # else, disallow access
@@ -107,18 +111,6 @@ def health():
 # def test():
 #     success = repository.add_vertical()
 #     return jsonify({"success": success})
-
-
-@app.route("/add_projects", methods=["POST"])
-def add_projects():
-    body = app.current_request.json_body
-    projects = body.get("data")
-
-    try:
-        project_ids = repository.add_projects(projects)
-        return {"projects": project_ids}
-    except Exception as e:
-        raise BadRequestError(f"Failed to add projects: {e}")
 
 
 # Regular endpoints
@@ -215,6 +207,48 @@ def get_notes(vertical_id: str, project_id: str, user_id: str):
         return {"notes": notes}
     except Exception as e:
         raise BadRequestError(f"Failed to get requested notes: {e}")
+
+
+@app.route("/comments/{project_id}/user/{user_id}", methods=["POST"])
+def add_comment(project_id: str, user_id: str):
+    body = app.current_request.json_body
+
+    try:
+        if body.get("comment") is None:
+            raise Exception("Property 'comment' not found in request body")
+
+        repository.add_comment(
+            project_id=project_id, user_id=user_id, comment=body.get("comment")
+        )
+
+        return {"message": "Success"}
+    except Exception as e:
+        raise BadRequestError(f"Failed to add comment: {e}")
+
+
+@app.route("/comments/id/{comment_id}", methods=["PUT"])
+def edit_comment(comment_id: str):
+    body = app.current_request.json_body
+
+    try:
+        if body.get("comment") is None:
+            raise Exception("Property 'comment' not found in request body")
+
+        repository.edit_comment(comment_id=comment_id, comment=body.get("comment"))
+
+        return {"message": "Success"}
+    except Exception as e:
+        raise BadRequestError(f"Failed to edit comment: {e}")
+
+
+@app.route("/comments/{project_id}")
+def get_comments(project_id: str):
+    try:
+        comments = repository.get_comments(project_id)
+
+        return {"comments": [dataclasses.asdict(comment) for comment in comments]}
+    except Exception as e:
+        raise BadRequestError(f"Failed to get comments: {e}")
 
 
 @app.route("/judges/{judge_id}")
@@ -402,48 +436,6 @@ def edit_vertical(vertical_id: str):
         raise BadRequestError(f"Failed to edit vertical: {e}")
 
 
-@app.route("/comments/{project_id}/user/{user_id}", methods=["POST"])
-def add_comment(project_id: str, user_id: str):
-    body = app.current_request.json_body
-
-    try:
-        if body.get("comment") is None:
-            raise Exception("Property 'comment' not found in request body")
-
-        repository.add_comment(
-            project_id=project_id, user_id=user_id, comment=body.get("comment")
-        )
-
-        return {"message": "Success"}
-    except Exception as e:
-        raise BadRequestError(f"Failed to add comment: {e}")
-
-
-@app.route("/comments/id/{comment_id}", methods=["PUT"])
-def edit_comment(comment_id: str):
-    body = app.current_request.json_body
-
-    try:
-        if body.get("comment") is None:
-            raise Exception("Property 'comment' not found in request body")
-
-        repository.edit_comment(comment_id=comment_id, comment=body.get("comment"))
-
-        return {"message": "Success"}
-    except Exception as e:
-        raise BadRequestError(f"Failed to edit comment: {e}")
-
-
-@app.route("/comments/{project_id}")
-def get_comments(project_id: str):
-    try:
-        comments = repository.get_comments(project_id)
-
-        return {"comments": [dataclasses.asdict(comment) for comment in comments]}
-    except Exception as e:
-        raise BadRequestError(f"Failed to get comments: {e}")
-
-
 @app.route("/judges", methods=["POST"])
 def add_judge():
     return Response(
@@ -485,3 +477,15 @@ def set_judge_vertical(judge_id: str):
         return {"message": "Success"}
     except Exception as e:
         raise BadRequestError(f"Failed to assign judge vertical: {e}")
+
+
+@app.route("/add_projects", methods=["POST"])
+def add_projects():
+    body = app.current_request.json_body
+    projects = body.get("data")
+
+    try:
+        project_ids = repository.add_projects(projects)
+        return {"projects": project_ids}
+    except Exception as e:
+        raise BadRequestError(f"Failed to add projects: {e}")
