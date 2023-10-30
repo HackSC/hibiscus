@@ -1,6 +1,18 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useProjectContext } from '../ProjectContext';
-import { Active, useSensors, useSensor, MouseSensor, TouchSensor, DndContext, DragOverlay, DragCancelEvent, DragEndEvent, DragStartEvent, DragOverEvent,} from '@dnd-kit/core';
+import {
+  Active,
+  useSensors,
+  useSensor,
+  MouseSensor,
+  TouchSensor,
+  DndContext,
+  DragOverlay,
+  DragCancelEvent,
+  DragEndEvent,
+  DragStartEvent,
+  DragOverEvent,
+} from '@dnd-kit/core';
 import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import * as styles from '../pages/index.css';
 import { useHibiscusUser } from '@hibiscus/hibiscus-user-context';
@@ -19,34 +31,36 @@ const Index = () => {
   const [onHoldProjects, setOnHoldProjects] = onHold;
   const [isDragging, setIsDragging] = useState(false);
 
-  const [localRanked, setLocalRanked] =
-    useState<Project[]>(null);
+  const [localRanked, setLocalRanked] = useState<Project[]>(null);
   useEffect(() => {
     setLocalRanked(rankedProjects);
   }, [rankedProjects]);
-  
-  const [localUnranked, setLocalUnranked] = useState<Project[]>(unrankedProjects);
+
+  const [localUnranked, setLocalUnranked] =
+    useState<Project[]>(unrankedProjects);
   useEffect(() => {
-    setLocalUnranked(unrankedProjects.filter((p) => {
-      return !onHoldProjects.some((onHoldProj) => p.projectId === onHoldProj.projectId);
-    }));
+    setLocalUnranked(
+      unrankedProjects.filter((p) => {
+        return !onHoldProjects.some(
+          (onHoldProj) => p.projectId === onHoldProj.projectId
+        );
+      })
+    );
   }, [unrankedProjects, onHoldProjects]);
 
   const { user } = useHibiscusUser();
 
-  // const allProjectIds = useMemo(() => {
-  //   if (localRanked && localUnranked) {
-  //     return [...localRanked, ...localUnranked]
-  //       .map((p) => p.projectId)
-  //       .filter((p) => p != null);
-  //   } else {
-  //     return [];
-  //   }
-  // }, [localUnranked, localRanked])
-  const allProjectIds = useMemo(
-    () => allProjects.map((p) => p.projectId),
-    [allProjects]
-  )
+  const allProjectIds = useMemo(() => {
+    if (localRanked && localUnranked) {
+      return [...localRanked, ...localUnranked].map((p) => p.projectId);
+    } else {
+      return [];
+    }
+  }, [localUnranked, localRanked]);
+  // const allProjectIds = useMemo(
+  //   () => allProjects.map((p) => p.projectId),
+  //   [allProjects]
+  // );
 
   const onHoldProjectIds = useMemo(
     () => onHoldProjects.map((p) => p.projectId),
@@ -88,7 +102,7 @@ const Index = () => {
     if (active.data.current?.type !== 'OnHold') {
       setIsDragging(true);
     }
-  }
+  };
 
   const handleDragOver = ({ active, over }: DragOverEvent) => {
     if (active === null || over === null) {
@@ -99,7 +113,14 @@ const Index = () => {
       return null;
     }
 
-    if (active.data.current?.type === 'OnHold' && over.data.current?.type === 'Ranked') {
+    if (active.id in allProjectIds) {
+      return null;
+    }
+
+    if (
+      active.data.current?.type === 'OnHold' &&
+      over.data.current?.type === 'Ranked'
+    ) {
       setRankedProjects((prev) => {
         const updatedRanking = [...prev, activeProject];
 
@@ -114,9 +135,9 @@ const Index = () => {
 
           return arrayMove(updatedRanking, oldIndex, newIndex);
         }
-      })
+      });
     }
-  }
+  };
 
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
     if (active === null || over === null) {
@@ -128,10 +149,11 @@ const Index = () => {
     }
 
     if (over && over.data) {
-      switch(over.data.current?.type) {
+      switch (over.data.current?.type) {
         case 'Ranked':
           switch (active.data.current?.type) {
             case 'Unranked':
+              console.log('Hello from unranked');
               setRankedProjects((prev) => {
                 const updatedRanking = [...prev, activeProject];
 
@@ -148,7 +170,7 @@ const Index = () => {
                     activeProject.projectId,
                     activeProject.verticalId,
                     user.id,
-                    newIndex + 1,
+                    newIndex + 1
                   );
 
                   return arrayMove(updatedRanking, oldIndex, newIndex);
@@ -162,10 +184,11 @@ const Index = () => {
 
                 return updatedRanking;
               });
-              
+
               break;
 
             case 'Ranked':
+              console.log('Hello from ranked');
               setRankedProjects((prev) => {
                 if (active.id !== over.id) {
                   const newIndex = rankedProjects.findIndex(
@@ -180,12 +203,16 @@ const Index = () => {
                     activeProject.projectId,
                     activeProject.verticalId,
                     user.id,
-                    newIndex + 1,
+                    newIndex + 1
                   );
 
                   return arrayMove(prev, oldIndex, newIndex);
                 }
               });
+
+              setUnrankedProjects((prev) =>
+                prev.filter((p) => p.projectId !== active.id)
+              );
 
               break;
           }
@@ -220,7 +247,7 @@ const Index = () => {
             unrankProject(
               activeProject.projectId,
               activeProject.verticalId,
-              user.id,
+              user.id
             );
 
             setRankedProjects((prev) => {
@@ -238,12 +265,12 @@ const Index = () => {
 
     setActive(null);
     setIsDragging(false);
-  }
+  };
 
   const handleDragCancel = ({ active }: DragCancelEvent) => {
     setActive(null);
     setIsDragging(false);
-  }
+  };
 
   return (
     <DndContext
@@ -253,91 +280,109 @@ const Index = () => {
       onDragEnd={handleDragEnd}
       onDragCancel={handleDragCancel}
     >
-      {expandedDetails ?
-        <ProjectDetails 
+      {expandedDetails ? (
+        <ProjectDetails
           project={expandedDetails}
-          expandProject={expandProject} />
-      : <></>}
-      {isDragging ? 
-        <OnHoldDroppable type={'OnHoldAdd'} />
-      : <></>}
-      <header className={`${styles.header} ${styles.flexCenter}`}><img src='logo_word.png' alt='Hibiscus HackSC Logo' /></header>
+          expandProject={expandProject}
+        />
+      ) : (
+        <></>
+      )}
+      {isDragging ? <OnHoldDroppable type={'OnHoldAdd'} /> : <></>}
+      <header className={`${styles.header} ${styles.flexCenter}`}>
+        <img src="logo_word.png" alt="Hibiscus HackSC Logo" />
+      </header>
       <div className={styles.containerMain}>
-        {onHoldProjects[0] ? 
+        {onHoldProjects[0] ? (
           <div>
             <div className={styles.flexBetween}>
               <h1>On Hold</h1>
-              <button onClick={toggleOnHoldExpansion}>{isOnHoldExpanded ? 'Collapse' : 'Expand'}</button>
-            </div> <br />
+              <button onClick={toggleOnHoldExpansion}>
+                {isOnHoldExpanded ? 'Collapse' : 'Expand'}
+              </button>
+            </div>{' '}
+            <br />
             <div>
-              {isOnHoldExpanded
-                ? <SortableContext items={onHoldProjectIds}>
-                    <ul className={styles.onHoldStackExpanded}>
-                      {onHoldProjects.map((project, index) => (
-                        <ProjectDraggable
-                          key={project.projectId}
-                          project={onHoldProjects[onHoldProjects.length - 1 - index]}
-                          ranking={null}
-                          type={'OnHold'}
-                          expandProject={expandProject}
-                        />))}
-                    </ul>
-                  </SortableContext>
-                : <ul className={styles.onHoldStack}>
-                    {onHoldProjects
-                      .slice(0, 3)
-                      .reverse()
-                      .map((project, index) => (
-                        <OnHoldPreview
-                          key={project.projectId}
-                          project={project}
-                          type={'OnHold'}
-                        />))}
+              {isOnHoldExpanded ? (
+                <SortableContext items={onHoldProjectIds}>
+                  <ul className={styles.onHoldStackExpanded}>
+                    {onHoldProjects.map((project, index) => (
+                      <ProjectDraggable
+                        key={project.projectId}
+                        project={
+                          onHoldProjects[onHoldProjects.length - 1 - index]
+                        }
+                        ranking={null}
+                        type={'OnHold'}
+                        expandProject={expandProject}
+                      />
+                    ))}
                   </ul>
-              }
+                </SortableContext>
+              ) : (
+                <ul className={styles.onHoldStack}>
+                  {onHoldProjects
+                    .slice(0, 3)
+                    .reverse()
+                    .map((project, index) => (
+                      <OnHoldPreview
+                        key={project.projectId}
+                        project={project}
+                        type={'OnHold'}
+                      />
+                    ))}
+                </ul>
+              )}
             </div>
             <br />
           </div>
-        : <></>}
+        ) : (
+          <></>
+        )}
         <h1>Rank</h1> <br />
         {!allProjects[0] ? <p>Loading...</p> : <></>}
-          <SortableContext items={allProjectIds}>
-            <ul>
-              {rankedProjects.map((project) => (
-                project && (<ProjectDraggable
-                  key={project.projectId}
-                  project={project}
-                  ranking={rankedProjects.findIndex(
-                    (p) => p.projectId === project.projectId
-                  )}
-                  type={'Ranked'}
-                  expandProject={expandProject}
-                />)
-              ))}
-              {localUnranked?.map((project) => (
-                project && (<ProjectDraggable
-                  key={project.projectId}
-                  project={project}
-                  ranking={null}
-                  type={'Unranked'}
-                  expandProject={expandProject}
-                />)
-              ))}
-            </ul>
-          </SortableContext>
-
-          <DragOverlay>
-            {activeProject && (
-              <ProjectDraggable
-                project={activeProject}
-                ranking={null}
-                type={'Ranked'}
-                expandProject={expandProject}
-              />
+        <SortableContext items={allProjectIds}>
+          <ul>
+            {rankedProjects.map(
+              (project) =>
+                project && (
+                  <ProjectDraggable
+                    key={project.projectId}
+                    project={project}
+                    ranking={rankedProjects.findIndex(
+                      (p) => p.projectId === project.projectId
+                    )}
+                    type={'Ranked'}
+                    expandProject={expandProject}
+                  />
+                )
             )}
-          </DragOverlay>
+            {localUnranked?.map(
+              (project) =>
+                project && (
+                  <ProjectDraggable
+                    key={project.projectId}
+                    project={project}
+                    ranking={null}
+                    type={'Unranked'}
+                    expandProject={expandProject}
+                  />
+                )
+            )}
+          </ul>
+        </SortableContext>
+        <DragOverlay>
+          {activeProject && (
+            <ProjectDraggable
+              project={activeProject}
+              ranking={null}
+              type={'Ranked'}
+              expandProject={expandProject}
+            />
+          )}
+        </DragOverlay>
       </div>
-    </DndContext >
+    </DndContext>
   );
 };
 
