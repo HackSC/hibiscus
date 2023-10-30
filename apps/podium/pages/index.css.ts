@@ -10,6 +10,7 @@ globalStyle('body', {
 
 export const containerMain = style({
   padding: '12px',
+  paddingTop: '28px'
 });
 
 globalStyle(`${containerMain} h1`, {
@@ -38,6 +39,10 @@ globalStyle(`${projectPreview} h3`, {
   margin: 0,
   marginBottom: '8px',
   width: 'fit-content',
+});
+
+export const rankBasic = style({
+  marginRight: '20px',
 });
 
 export const backgroundDim = style({
@@ -94,10 +99,6 @@ export const backgroundBlur = style({
   height: '100%',
 });
 
-export const rankBasic = style({
-  marginRight: '20px',
-});
-
 export const dragToOnHold = style({
   position: 'fixed',
   top: 0,
@@ -109,25 +110,21 @@ export const dragToOnHold = style({
   color: '#FFFFFF'
 });
 
-export const onHoldPreview = style({
-  width: '370px',
-  height: '92px',
-});
-
-export const onHoldPreviewFull = style({
-  width: '370px',
-  height: '192px',
-});
-
 export const onHoldStack = style({
-  display: 'grid',
-  justifyContent: 'center',
-  gridTemplateRows: 'repeat(3, 27px)',
+  paddingTop: '71px',
+});
+
+export const onHoldPreview = style({
+  height: '92px',
+  marginTop: '-71px',
+  backgroundColor: 'darkgray',
+  color: 'white',
+  listStyle: 'none',
+  position: 'relative',
 });
 
 export const onHoldStackExpanded = style({
   display: 'grid',
-  justifyContent: 'center',
   gridTemplateRows: 'auto 1fr auto',
 });
 
@@ -194,4 +191,14 @@ globalStyle('a', {
 globalStyle('ul', {
   padding: 0,
   listStyle: 'none',
+});
+
+globalStyle('button', {
+  border: 'none',
+  font: 'inherit',
+  cursor: 'pointer',
+  backgroundColor: '#002990',
+  color: '#FFFFFF',
+  padding: '8px 16px',
+  borderRadius: '8px',
 });
