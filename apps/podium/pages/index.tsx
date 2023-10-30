@@ -144,10 +144,6 @@ const Index = () => {
       return null;
     }
 
-    if (active.id === over.id) {
-      return null;
-    }
-
     if (over && over.data) {
       switch (over.data.current?.type) {
         case 'Ranked':
@@ -174,7 +170,7 @@ const Index = () => {
                   );
 
                   return arrayMove(updatedRanking, oldIndex, newIndex);
-                }
+                } // Do we need something here?
               });
 
               setUnrankedProjects((prev) => {
@@ -207,6 +203,19 @@ const Index = () => {
                   );
 
                   return arrayMove(prev, oldIndex, newIndex);
+                } else {
+                  const newIndex = rankedProjects.findIndex(
+                    ({ projectId }) => projectId === over.id
+                  );
+
+                  updateProjectRanking(
+                    activeProject.projectId,
+                    activeProject.verticalId,
+                    user.id,
+                    newIndex + 1
+                  );
+
+                  return prev;
                 }
               });
 
