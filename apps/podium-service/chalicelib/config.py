@@ -12,3 +12,4 @@ class Settings:
     supabase_key: str = os.getenv("SUPABASE_KEY")
 
     auth_service_url: str = os.getenv("AUTH_SERVICE_URL")
+    master_token: str = os.getenv("MASTER_TOKEN")

@@ -20,9 +20,18 @@ def check_auth(event, get_response):
     if access_token is None:
         return Response(status_code=401, body={"Error": "No access token provided"})
 
+    if not access_token.startswith("Bearer "):
+        return Response(
+            status_code=401, body={"Error": "Invalid authentication token format."}
+        )
+
     # access_token is in the format "Bearer access_token"
     # splice it
-    access_token = access_token.replace("Bearer ", "")
+    access_token = access_token[7:]
+
+    # Check for master API token
+    if access_token == env.master_token:
+        return get_response(event)
 
     api_url = f"{env.auth_service_url}/verify-token/"
     api_url += access_token
@@ -37,7 +46,7 @@ def check_auth(event, get_response):
 
             # if user is admin, allow access
             if role == "SUPERADMIN":
-                return
+                return get_response(event)
 
             # elif user is judge
             elif role == "JUDGE":
@@ -48,12 +57,6 @@ def check_auth(event, get_response):
                     {"path": "/projects", "method": "GET"},
                     {"path": "/comments/{project_id}", "method": "GET"},
                     {"path": "/judges/{judge_id}", "method": "GET"},
-                ]
-
-                check_judge_eps = [
-                    "/ranking/{vertical_id}/{user_id}",
-                    "/notes/{vertical_id}/{project_id}/{user_id}",
-                    "/notes/{vertical_id}/{project_id}/{user_id}",
                 ]
 
                 # write code that gets the path from the event
@@ -226,7 +229,7 @@ def add_comment(project_id: str, user_id: str):
         raise BadRequestError(f"Failed to add comment: {e}")
 
 
-@app.route("/comments/id/{comment_id}", methods=["PUT"])
+@app.route("/comments/id/{comment_id}/user/{user_id}", methods=["PUT"])
 def edit_comment(comment_id: str):
     body = app.current_request.json_body
 

@@ -12,7 +12,8 @@
         "DB_NAME": "podium",
         "SUPABASE_URL": "REDACTED",
         "SUPABASE_KEY": "REDACTED",
-        "AUTH_SERVICE_URL": "REDACTED"
+        "AUTH_SERVICE_URL": "REDACTED",
+        "MASTER_TOKEN": "REDACTED"
       }
     }
   }
