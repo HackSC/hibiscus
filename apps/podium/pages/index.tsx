@@ -1,18 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useProjectContext } from '../ProjectContext';
-import {
-  Active,
-  useSensors,
-  useSensor,
-  MouseSensor,
-  TouchSensor,
-  DndContext,
-  DragOverlay,
-  DragCancelEvent,
-  DragEndEvent,
-  DragStartEvent,
-  DragOverEvent,
-} from '@dnd-kit/core';
+import { Active, useSensors, useSensor, MouseSensor, TouchSensor, DndContext, DragOverlay, DragCancelEvent, DragEndEvent, DragStartEvent, DragOverEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import * as styles from '../pages/index.css';
 import { useHibiscusUser } from '@hibiscus/hibiscus-user-context';
@@ -57,10 +45,6 @@ const Index = () => {
       return [];
     }
   }, [localUnranked, localRanked]);
-  // const allProjectIds = useMemo(
-  //   () => allProjects.map((p) => p.projectId),
-  //   [allProjects]
-  // );
 
   const onHoldProjectIds = useMemo(
     () => onHoldProjects.map((p) => p.projectId),
@@ -145,6 +129,8 @@ const Index = () => {
     }
 
     if (active.id === over.id) {
+      setActive(null);
+      setIsDragging(false);
       return null;
     }
 
@@ -153,7 +139,6 @@ const Index = () => {
         case 'Ranked':
           switch (active.data.current?.type) {
             case 'Unranked':
-              console.log('Hello from unranked');
               setRankedProjects((prev) => {
                 const updatedRanking = [...prev, activeProject];
 
@@ -177,18 +162,9 @@ const Index = () => {
                 }
               });
 
-              setUnrankedProjects((prev) => {
-                const updatedRanking = prev.filter((p) => {
-                  return p.projectId !== active.id;
-                });
-
-                return updatedRanking;
-              });
-
               break;
 
             case 'Ranked':
-              console.log('Hello from ranked');
               setRankedProjects((prev) => {
                 if (active.id !== over.id) {
                   const newIndex = rankedProjects.findIndex(
@@ -210,31 +186,27 @@ const Index = () => {
                 }
               });
 
-              setUnrankedProjects((prev) =>
-                prev.filter((p) => p.projectId !== active.id)
-              );
-
               break;
           }
 
-          setOnHoldProjects((prev) => {
-            const updatedRanking = prev.filter((p) => {
-              return p.projectId !== active.id;
-            });
-
-            return updatedRanking;
-          });
+          setUnrankedProjects(prev => prev.filter(p => p.projectId !== active.id));
+          setOnHoldProjects(prev => prev.filter(p => p.projectId !== active.id));
 
           break;
 
+        case 'OnHold':
         case 'Unranked':
-          if (!rankedProjects.length) {
+          if (rankedProjects.length === 0) {
             updateProjectRanking(
               activeProject.projectId,
               activeProject.verticalId,
               user.id,
               1
             );
+
+            setRankedProjects([activeProject]);
+            setUnrankedProjects(prev => prev.filter(p => p.projectId !== active.id));
+            setOnHoldProjects(prev => prev.filter(p => p.projectId !== active.id));
           }
 
           break;
@@ -250,13 +222,7 @@ const Index = () => {
               user.id
             );
 
-            setRankedProjects((prev) => {
-              const updatedRanking = prev.filter((p) => {
-                return p.projectId !== active.id;
-              });
-
-              return updatedRanking;
-            });
+            setRankedProjects(prev => prev.filter(p => p.projectId !== active.id));
           }
 
           break;
