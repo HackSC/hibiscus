@@ -5,9 +5,10 @@ import { FC } from 'react'
 interface OnHoldDraggableProps {
   project: Project;
   type: Container;
+  index: number;
 }
 
-const OnHoldDraggable: FC<OnHoldDraggableProps> = ({ project, type }) => {
+const OnHoldDraggable: FC<OnHoldDraggableProps> = ({ project, type, index }) => {
   const imgStyle = {
     backgroundImage: `url(${project.imageUrl})`,
     backgroundSize: 'cover',
@@ -16,7 +17,9 @@ const OnHoldDraggable: FC<OnHoldDraggableProps> = ({ project, type }) => {
   }
 
   return (
-    <li style={imgStyle} className={`${styles.onHoldPreview} ${styles.roundCorners}`} />
+    <li 
+      style={imgStyle} 
+      className={`${styles.onHoldPreview} ${styles.roundCorners} ${index !== 0 ? styles.boxShadowY : ''}`} />
   )
 }
 

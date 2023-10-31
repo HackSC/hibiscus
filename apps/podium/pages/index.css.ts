@@ -23,7 +23,7 @@ export const header = style({
 });
 
 export const projectPreview = style({
-  backgroundColor: 'darkgray',
+  backgroundColor: '#A9A9A9',
   color: 'white',
   marginBottom: '13px',
   height: '92px',
@@ -66,14 +66,15 @@ export const detailsContainer = style({
 });
 
 export const detailsProject = style({
-  width: '100%',
-  margin: '12px',
+  width: '90%',
+  margin: '5%',
   height: 'fit-content',
-  backgroundColor: 'white',
+  backgroundColor: '#FFFFFF',
   color: 'black',
   position: 'absolute',
   zIndex: 888,
   top: '30%',
+  boxShadow: '0 0 20px rgba(0, 0, 0, 0.25)',
 });
 
 export const detailsImg = style({
@@ -81,9 +82,10 @@ export const detailsImg = style({
   width: '100%',
   height: '183px',
   position: 'relative',
+  backgroundColor: '#A9A9A9',
 });
 
-export const detailsClose = style({
+export const detailsButtons = style({
   position: 'absolute',
   top: '16px',
   right: '16px'
@@ -91,6 +93,14 @@ export const detailsClose = style({
 
 export const detailsInfo = style({
   padding: '25px',
+  position: 'relative',
+});
+
+globalStyle(`${detailsInfo} h3`, {
+  fontWeight: 400,
+  fontSize: '14px',
+  color: '#989898',
+  margin: '10px 0px',
 });
 
 export const backgroundBlur = style({
@@ -181,6 +191,10 @@ export const flexCenter = style({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
+});
+
+export const boxShadowY = style({
+  boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.2)',
 });
 
 globalStyle('a', {

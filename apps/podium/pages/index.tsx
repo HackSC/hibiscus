@@ -270,6 +270,7 @@ const Index = () => {
                         key={project.projectId}
                         project={project}
                         type={'OnHold'}
+                        index={index}
                       />
                     ))}
                 </ul>
