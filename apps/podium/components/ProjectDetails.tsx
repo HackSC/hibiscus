@@ -1,5 +1,6 @@
 import { FC } from 'react';
 import * as styles from '../pages/index.css';
+import Link from 'next/link';
 
 interface ProjectDetailsProps {
   project: Project;
@@ -24,9 +25,11 @@ const ProjectDetails: FC<ProjectDetailsProps> = ({ project, expandProject }) => 
             onClick={() => expandProject(null)} />
         </div>
         <div className={styles.detailsInfo}>
-          <img
-            src='button_comment.svg' alt='See project comments'
-            className={styles.detailsButtons} />
+          <Link href={`/comments/${project.projectId}`}>
+            <img
+              src='button_comment.svg' alt='See project comments'
+              className={styles.detailsButtons} />
+          </Link>
           <h2>{project.name}</h2>
           <h3>By:&nbsp;
             {project.teamMembers?.map((mem, i) =>
