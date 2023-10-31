@@ -1,6 +1,18 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useProjectContext } from '../ProjectContext';
-import { Active, useSensors, useSensor, MouseSensor, TouchSensor, DndContext, DragOverlay, DragCancelEvent, DragEndEvent, DragStartEvent, DragOverEvent } from '@dnd-kit/core';
+import {
+  Active,
+  useSensors,
+  useSensor,
+  MouseSensor,
+  TouchSensor,
+  DndContext,
+  DragOverlay,
+  DragCancelEvent,
+  DragEndEvent,
+  DragStartEvent,
+  DragOverEvent,
+} from '@dnd-kit/core';
 import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import * as styles from '../pages/index.css';
 import { useHibiscusUser } from '@hibiscus/hibiscus-user-context';
@@ -24,7 +36,8 @@ const Index = () => {
     setLocalRanked(rankedProjects);
   }, [rankedProjects]);
 
-  const [localUnranked, setLocalUnranked] = useState<Project[]>(unrankedProjects);
+  const [localUnranked, setLocalUnranked] =
+    useState<Project[]>(unrankedProjects);
   useEffect(() => {
     setLocalUnranked(
       unrankedProjects.filter((p) => {
@@ -118,12 +131,25 @@ const Index = () => {
         case 'Ranked':
           switch (active.data.current?.type) {
             case 'Unranked':
+              console.log('Hello from unranked (Real!)');
               setRankedProjects((prev) => {
                 const updatedRanking = [...prev, activeProject];
 
                 if (active.id !== over.id) {
-                  const oldIndex = prev.findIndex(({ projectId }) => projectId === active.id);
-                  const newIndex = rankedProjects.findIndex(({ projectId }) => projectId === over.id);
+                  console.log('Jello');
+                  const oldIndex = prev.findIndex(
+                    ({ projectId }) => projectId === active.id
+                  );
+                  const newIndex = rankedProjects.findIndex(
+                    ({ projectId }) => projectId === over.id
+                  );
+
+                  updateProjectRanking(
+                    activeProject.projectId,
+                    activeProject.verticalId,
+                    user.id,
+                    newIndex + 1
+                  );
 
                   return arrayMove(updatedRanking, oldIndex, newIndex);
                 }
@@ -134,8 +160,12 @@ const Index = () => {
             case 'Ranked':
               setRankedProjects((prev) => {
                 if (active.id !== over.id) {
-                  const oldIndex = prev.findIndex(({ projectId }) => projectId === active.id);
-                  const newIndex = rankedProjects.findIndex(({ projectId }) => projectId === over.id);
+                  const oldIndex = prev.findIndex(
+                    ({ projectId }) => projectId === active.id
+                  );
+                  const newIndex = rankedProjects.findIndex(
+                    ({ projectId }) => projectId === over.id
+                  );
 
                   updateProjectRanking(
                     activeProject.projectId,
@@ -164,27 +194,40 @@ const Index = () => {
               break;
           }
 
-          setUnrankedProjects(prev => prev.filter(p => p.projectId !== active.id));
-          setOnHoldProjects(prev => prev.filter(p => p.projectId !== active.id));
+          setUnrankedProjects((prev) =>
+            prev.filter((p) => p.projectId !== active.id)
+          );
+          setOnHoldProjects((prev) =>
+            prev.filter((p) => p.projectId !== active.id)
+          );
 
           break;
 
-        case 'Unranked':
-          const index = allProjectIds.findIndex(( projectId ) => projectId === over.id);
+        case 'Unranked': {
+          console.log('Hello from unranked!');
+          const index = allProjectIds.findIndex(
+            (projectId) => projectId === over.id
+          );
           if (index === rankedProjects.length) {
+            console.log('Hello from unranked first!');
             updateProjectRanking(
               activeProject.projectId,
               activeProject.verticalId,
               user.id,
-              index + 1,
+              index + 1
             );
 
             setRankedProjects([...rankedProjects, activeProject]);
-            setUnrankedProjects(prev => prev.filter(p => p.projectId !== active.id));
-            setOnHoldProjects(prev => prev.filter(p => p.projectId !== active.id));
+            setUnrankedProjects((prev) =>
+              prev.filter((p) => p.projectId !== active.id)
+            );
+            setOnHoldProjects((prev) =>
+              prev.filter((p) => p.projectId !== active.id)
+            );
           }
 
           break;
+        }
 
         case 'OnHoldAdd':
           setOnHoldProjects([activeProject, ...onHoldProjects]);
@@ -197,7 +240,9 @@ const Index = () => {
               user.id
             );
 
-            setRankedProjects(prev => prev.filter(p => p.projectId !== active.id));
+            setRankedProjects((prev) =>
+              prev.filter((p) => p.projectId !== active.id)
+            );
           }
 
           break;
