@@ -1,11 +1,13 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
+import { bearerAuth } from 'hono/bearer-auth';
 import { createClient } from '@supabase/supabase-js';
 
 export type Bindings = {
   SUPABASE_SERVICE_KEY: string;
   SUPABASE_URL: string;
   INVITE_REDIRECT_URL: string;
+  MASTER_TOKEN: string;
 };
 
 const HTTP_BAD_REQUEST = 400;
@@ -15,7 +17,10 @@ const app = new Hono<{ Bindings: Bindings }>();
 
 app.use('/api/*', cors());
 
-app.get('/api/invite/:role/:email', async (c) => {
+app.use('/api/invite/:role/:email', (c, next) =>
+  bearerAuth({ token: c.env.MASTER_TOKEN })(c, next)
+);
+app.post('/api/invite/:role/:email', async (c) => {
   try {
     const supabase = createClient(
       c.env.SUPABASE_URL,
@@ -42,7 +47,7 @@ app.get('/api/invite/:role/:email', async (c) => {
       await supabase.auth.admin.inviteUserByEmail(email, {
         redirectTo: c.env.INVITE_REDIRECT_URL,
       });
-      return c.json(200);
+      return c.json({ message: 'Success!' }, 200);
     } else {
       return c.json(
         {
