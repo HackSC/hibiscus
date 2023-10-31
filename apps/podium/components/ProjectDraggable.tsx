@@ -3,17 +3,22 @@ import { CSS } from '@dnd-kit/utilities';
 import { CSSProperties, useMemo } from 'react';
 import * as styles from '../styles/index.css';
 import { FC } from 'react';
-import Link from 'next/link';
 import { getYoutubeThumbnail } from '../utils/getYoutubeThumbnail';
 import { Container, Project } from '../types';
 
-interface RankProjectProps {
+interface ProjectDraggableProps {
   project: Project;
   ranking: number | null;
   type: Container;
+  expandProject;
 }
 
-const RankProject: FC<RankProjectProps> = ({ project, ranking, type }) => {
+const ProjectDraggable: FC<ProjectDraggableProps> = ({
+  project,
+  ranking,
+  type,
+  expandProject,
+}) => {
   const {
     setNodeRef,
     attributes,
@@ -60,12 +65,7 @@ const RankProject: FC<RankProjectProps> = ({ project, ranking, type }) => {
           {ranking === null ? '-' : ranking + 1}
         </span>
         <div className={styles.truncateText}>
-          <Link
-            href={`/slideroom/?spotlightId=${project.projectId}`}
-            as={'/slideroom'}
-          >
-            <h3>{project.name}</h3>
-          </Link>
+          <h3 onClick={() => expandProject(project)}>{project.name}</h3>
           <span className={styles.thinFont}>{project.description}</span>
         </div>
       </div>
@@ -73,4 +73,4 @@ const RankProject: FC<RankProjectProps> = ({ project, ranking, type }) => {
   );
 };
 
-export default RankProject;
+export default ProjectDraggable;

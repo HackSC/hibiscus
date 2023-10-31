@@ -10,6 +10,7 @@ globalStyle('body', {
 
 export const containerMain = style({
   padding: '12px',
+  paddingTop: '28px'
 });
 
 globalStyle(`${containerMain} h1`, {
@@ -18,11 +19,11 @@ globalStyle(`${containerMain} h1`, {
 
 export const header = style({
   backgroundColor: '#002990',
-  padding: '8px',
+  padding: '12px',
 });
 
 export const projectPreview = style({
-  backgroundColor: 'darkgray',
+  backgroundColor: '#A9A9A9',
   color: 'white',
   marginBottom: '13px',
   height: '92px',
@@ -40,6 +41,10 @@ globalStyle(`${projectPreview} h3`, {
   width: 'fit-content',
 });
 
+export const rankBasic = style({
+  marginRight: '20px',
+});
+
 export const backgroundDim = style({
   backdropFilter: 'blur(15px)',
   backgroundColor: 'rgba(0, 0, 0, 0.25)',
@@ -51,40 +56,86 @@ export const backgroundDim = style({
   height: '100%',
 });
 
-export const rankBasic = style({
-  marginRight: '20px',
+export const detailsContainer = style({
+  position: 'fixed',
+  top: '0',
+  bottom: '0',
+  width: '100%',
+  height: '100%',
+  zIndex: 333,
 });
 
-export const onHoldPreview = style({
-  width: '370px',
-  height: '92px',
+export const detailsProject = style({
+  width: '90%',
+  margin: '5%',
+  height: 'fit-content',
+  backgroundColor: '#FFFFFF',
+  color: 'black',
+  position: 'absolute',
+  zIndex: 888,
+  top: '30%',
+  boxShadow: '0 0 20px rgba(0, 0, 0, 0.25)',
 });
 
-export const onHoldPreviewFull = style({
-  width: '370px',
-  height: '192px',
+export const detailsImg = style({
+  display: 'block',
+  width: '100%',
+  height: '183px',
+  position: 'relative',
+  backgroundColor: '#A9A9A9',
+});
+
+export const detailsButtons = style({
+  position: 'absolute',
+  top: '16px',
+  right: '16px'
+});
+
+export const detailsInfo = style({
+  padding: '25px',
+  position: 'relative',
+});
+
+globalStyle(`${detailsInfo} h3`, {
+  fontWeight: 400,
+  fontSize: '14px',
+  color: '#989898',
+  margin: '10px 0px',
+});
+
+export const backgroundBlur = style({
+  backdropFilter: 'blur(15px)',
+  width: '100%',
+  height: '100%',
+});
+
+export const dragToOnHold = style({
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  zIndex: 10,
+  width: '100%',
+  height: '147px',
+  backgroundColor: '#002990',
+  color: '#FFFFFF'
 });
 
 export const onHoldStack = style({
-  display: 'grid',
-  justifyContent: 'center',
-  gridTemplateRows: 'repeat(3, 27px)',
+  paddingTop: '71px',
+});
+
+export const onHoldPreview = style({
+  height: '92px',
+  marginTop: '-71px',
+  backgroundColor: 'darkgray',
+  color: 'white',
+  listStyle: 'none',
+  position: 'relative',
 });
 
 export const onHoldStackExpanded = style({
   display: 'grid',
-  justifyContent: 'center',
   gridTemplateRows: 'auto 1fr auto',
-});
-
-export const onHoldItem = style({
-  width: '3em',
-  height: '3em',
-  padding: '3px',
-  margin: '2px',
-  backgroundColor: 'red',
-  borderStyle: 'solid',
-  transform: 'rotate(33deg)',
 });
 
 export const truncateText = style({
@@ -94,26 +145,6 @@ export const truncateText = style({
   width: '100%',
 });
 
-export const containerSlideroom = style({
-  backgroundColor: '#DDD8D8',
-  overflow: 'hidden',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'space-between',
-  height: '100vh',
-});
-
-export const slideroomHeader = style({
-  backgroundColor: '#FFFFFF',
-  width: '100%',
-  padding: '20px 25px',
-  boxSizing: 'border-box',
-});
-
-globalStyle(`${slideroomHeader} h1`, {
-  fontSize: '18px',
-});
-
 export const truncate = style({
   display: '-webkit-box',
   WebkitLineClamp: 'var(--line-clamp, 3)',
@@ -121,77 +152,6 @@ export const truncate = style({
   overflow: 'hidden',
   hyphens: 'auto',
   textAlign: 'left',
-});
-
-export const spotlightContainer = style({
-  width: '95%',
-  display: 'block',
-  margin: 'auto',
-});
-
-export const spotlight = style({
-  width: '100%',
-  height: '340px',
-  backgroundColor: 'white',
-  color: 'black',
-});
-
-export const spotlightDrag = style({
-  width: '250px',
-  height: '150px',
-  backgroundColor: 'white',
-  color: 'black',
-});
-
-export const spotlightInfo = style({
-  padding: '20px',
-});
-
-globalStyle(`${spotlightInfo} h3`, {
-  margin: 0,
-  fontWeight: 400,
-  fontSize: '16px',
-});
-
-globalStyle(`${spotlightInfo} p`, {
-  fontSize: '13px',
-  marginTop: '4px',
-  marginBottom: '20px',
-});
-
-export const spotlightImg = style({
-  display: 'block',
-  width: '100%',
-  height: '50%',
-});
-
-export const slideroomProjectBar = style({
-  backgroundColor: 'white',
-  minWidth: '100%',
-  overflowX: 'scroll',
-  whiteSpace: 'nowrap',
-});
-
-export const projectSlide = style({
-  width: '139px',
-  height: '75px',
-  backgroundColor: 'lightgray',
-  display: 'inline-block',
-  margin: '4px',
-  borderRadius: '10px',
-  position: 'relative',
-});
-
-export const rankIcon = style({
-  width: '25px',
-  height: '25px',
-  backgroundColor: 'gray',
-  color: 'white',
-  borderRadius: '50%',
-  display: 'inline-block',
-  position: 'absolute',
-  top: -5,
-  left: -5,
 });
 
 export const hidden = style({
@@ -207,7 +167,7 @@ export const heavyFont = style({
 });
 
 export const zTop = style({
-  zIndex: 999,
+  zIndex: 9,
 });
 
 export const roundCorners = style({
@@ -233,6 +193,10 @@ export const flexCenter = style({
   alignItems: 'center',
 });
 
+export const boxShadowY = style({
+  boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.2)',
+});
+
 globalStyle('a', {
   textDecoration: 'inherit',
   color: 'inherit',
@@ -241,4 +205,14 @@ globalStyle('a', {
 globalStyle('ul', {
   padding: 0,
   listStyle: 'none',
+});
+
+globalStyle('button', {
+  border: 'none',
+  font: 'inherit',
+  cursor: 'pointer',
+  backgroundColor: '#002990',
+  color: '#FFFFFF',
+  padding: '8px 16px',
+  borderRadius: '8px',
 });

@@ -8,4 +8,4 @@ export interface Project {
   videoUrl: string | null;
 }
 
-export type Container = 'Spotlight' | 'OnHold' | 'Ranked' | 'Unranked';
+export type Container = 'OnHold' | 'OnHoldAdd' | 'Ranked' | 'Unranked';
