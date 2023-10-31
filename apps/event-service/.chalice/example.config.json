@@ -9,7 +9,10 @@
         "DB_PASSWORD": "PLACEHOLDER",
         "DB_URL": "PLACEHOLDER",
         "DB_PORT": "PLACEHOLDER",
-        "DB_NAME": "PLACEHOLDER"
+        "DB_NAME": "PLACEHOLDER",
+
+        "AUTH_SERVICE_URL": "PLACEHOLDER",
+        "MASTER_TOKEN": "PLACEHOLDER"
       }
     }
   }

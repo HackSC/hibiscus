@@ -167,8 +167,7 @@ def add_event(event: data_types.EventAdmin) -> str:
 
         event_tags = [{"event_id": event_id, "event_tag": x} for x in event.eventTags]
         industry_tags = [
-            {"event_id": event_id, "industry_tag": x}
-            for x in event.industryTags
+            {"event_id": event_id, "industry_tag": x} for x in event.industryTags
         ]
         contacts = [
             {
@@ -205,7 +204,7 @@ def update_event(
 
     new_event = {key: value for key, value in kwargs.items() if value is not None}
 
-    with Session(engine) as session:
+    def up(session: Session) -> data_types.EventAdmin:
         if new_event:
             res = session.execute(
                 update(models.Event)
@@ -262,8 +261,6 @@ def update_event(
                     .where(models.IndustryTag.industry_tag == industry_tag)
                 )
 
-        session.commit()
-
         return data_types.EventAdmin(
             eventId=event.event_id,
             eventName=event.name,
@@ -283,6 +280,8 @@ def update_event(
                 for x in event.contacts
             ],
         )
+
+    return run_transaction(sessionmaker(engine), up)
 
 
 def get_pinned_events(user_id: str) -> list[data_types.Event]:
@@ -351,34 +350,21 @@ def remove_pinned_event(user_id: str, event_id: str) -> None:
     run_transaction(sessionmaker(engine), remove)
 
 
-def get_rsvp_users(event_id: str, page: int = None, page_size: int = None) -> list[str]:
+def get_rsvp_users(event_id: str) -> list[str]:
     """
     Gets the list of users who has an RSVP to the event
 
     Currently only returns a list of user IDs, TODO: query auth service for user details
     """
 
-    if page is None:
-        page = 1
-
-    if page_size is None:
-        page_size = 20
-
-    with Session(engine) as session:
+    def get(session: Session) -> list[str]:
         pins = session.scalars(
-            select(models.EventPin)
-            .join_from(
-                models.Event,
-                models.EventPin,
-                models.Event.event_id == models.EventPin.event_id,
-            )
-            .where(models.Event.event_id == event_id)
-            .order_by(models.EventPin.user_id)
-            .limit(page_size)
-            .offset((page - 1) * page_size)
+            select(models.EventPin).where(models.EventPin.event_id == event_id)
         )
 
-        return [pin.user_id for pin in pins]
+        return [str(pin.user_id) for pin in pins]
+
+    return run_transaction(sessionmaker(engine), get)
 
 
 def add_event_tag(event_id: str, event_tag: str) -> None:
@@ -386,11 +372,11 @@ def add_event_tag(event_id: str, event_tag: str) -> None:
     Adds a new event tag to the specified event
     """
 
-    with Session(engine) as session:
+    def add(session: Session):
         tag = models.EventTag(event_id=event_id, event_tag=event_tag)
         session.add(tag)
 
-        session.commit()
+    run_transaction(sessionmaker(engine), add)
 
 
 def remove_event_tag(event_id: str, event_tag: str) -> None:
@@ -398,7 +384,7 @@ def remove_event_tag(event_id: str, event_tag: str) -> None:
     Removes an event tag, or raises an exception if it does not exist
     """
 
-    with Session(engine) as session:
+    def remove(session: Session):
         res = session.execute(
             delete(models.EventTag)
             .where(models.EventTag.event_id == event_id)
@@ -409,7 +395,7 @@ def remove_event_tag(event_id: str, event_tag: str) -> None:
         if res.first() is None:
             raise Exception("Tag does not exist")
 
-        session.commit()
+    run_transaction(sessionmaker(engine), remove)
 
 
 def add_industry_tag(event_id: str, industry_tag: str) -> None:
