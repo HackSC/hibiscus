@@ -29,6 +29,10 @@ export const projectPreview = style({
   gap: '20px',
   listStyle: 'none',
   position: 'relative',
+  WebkitTouchCallout: 'none',
+  WebkitUserSelect: 'none',
+  msUserSelect: 'none',
+  userSelect: 'none',
 });
 
 globalStyle(`${projectPreview} h3`, {
