@@ -117,7 +117,7 @@ const Index = () => {
       active.data.current?.type === 'OnHold' &&
       over.data.current?.type === 'Ranked'
     ) {
-      setRankedProjects([...rankedProjects, activeProject]);
+      setRankedProjects((prev) => [...prev, activeProject]);
     }
   };
 
@@ -205,6 +205,8 @@ const Index = () => {
 
         case 'Unranked': {
           console.log('Hello from unranked!');
+          console.log(onHoldProjectIds);
+          console.log(active.id);
           const index = allProjectIds.findIndex(
             (projectId) => projectId === over.id
           );
@@ -217,11 +219,16 @@ const Index = () => {
               index + 1
             );
 
-            setRankedProjects([...rankedProjects, activeProject]);
+            setRankedProjects((prev) => [...prev, activeProject]);
             setUnrankedProjects((prev) =>
               prev.filter((p) => p.projectId !== active.id)
             );
             setOnHoldProjects((prev) =>
+              prev.filter((p) => p.projectId !== active.id)
+            );
+          } else if (onHoldProjectIds.includes(active.id)) {
+            console.log('Hewwo from funny things');
+            setRankedProjects((prev) =>
               prev.filter((p) => p.projectId !== active.id)
             );
           }
