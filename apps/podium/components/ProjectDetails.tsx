@@ -1,12 +1,16 @@
 import { FC } from 'react';
-import * as styles from '../pages/index.css';
+import * as styles from '../styles/index.css';
+import { Project } from '../types';
 
 interface ProjectDetailsProps {
   project: Project;
   expandProject;
 }
 
-const ProjectDetails: FC<ProjectDetailsProps> = ({ project, expandProject }) => {
+const ProjectDetails: FC<ProjectDetailsProps> = ({
+  project,
+  expandProject,
+}) => {
   const imgStyle = {
     backgroundImage: `url(${project.imageUrl})`,
     backgroundSize: 'cover',
@@ -18,17 +22,22 @@ const ProjectDetails: FC<ProjectDetailsProps> = ({ project, expandProject }) => 
     <div className={styles.detailsContainer}>
       <div className={`${styles.detailsProject} ${styles.roundCorners}`}>
         <div style={imgStyle} className={styles.detailsImg}>
-          <img 
-            src='button_close.svg' alt='Close project details'
+          <img
+            src="button_close.svg"
+            alt="Close project details"
             className={styles.detailsButtons}
-            onClick={() => expandProject(null)} />
+            onClick={() => expandProject(null)}
+          />
         </div>
         <div className={styles.detailsInfo}>
           <img
-            src='button_comment.svg' alt='See project comments'
-            className={styles.detailsButtons} />
+            src="button_comment.svg"
+            alt="See project comments"
+            className={styles.detailsButtons}
+          />
           <h2>{project.name}</h2>
-          <h3>By:&nbsp;
+          <h3>
+            By:&nbsp;
             {project.teamMembers?.map((mem, i) =>
               project.teamMembers[i + 1] ? (
                 <span>{mem}, </span>
@@ -42,7 +51,7 @@ const ProjectDetails: FC<ProjectDetailsProps> = ({ project, expandProject }) => 
       </div>
       <div className={styles.backgroundBlur}></div>
     </div>
-  )
-}
+  );
+};
 
 export default ProjectDetails;
