@@ -24,8 +24,7 @@ const Index = () => {
     setLocalRanked(rankedProjects);
   }, [rankedProjects]);
 
-  const [localUnranked, setLocalUnranked] =
-    useState<Project[]>(unrankedProjects);
+  const [localUnranked, setLocalUnranked] = useState<Project[]>(unrankedProjects);
   useEffect(() => {
     setLocalUnranked(
       unrankedProjects.filter((p) => {
@@ -105,21 +104,7 @@ const Index = () => {
       active.data.current?.type === 'OnHold' &&
       over.data.current?.type === 'Ranked'
     ) {
-      setRankedProjects((prev) => {
-        const updatedRanking = [...prev, activeProject];
-
-        if (active.id !== over.id) {
-          const newIndex = rankedProjects.findIndex(
-            ({ projectId }) => projectId === over.id
-          );
-
-          const oldIndex = prev.findIndex(
-            ({ projectId }) => projectId === active.id
-          );
-
-          return arrayMove(updatedRanking, oldIndex, newIndex);
-        }
-      });
+      setRankedProjects([...rankedProjects, activeProject]);
     }
   };
 
@@ -137,20 +122,8 @@ const Index = () => {
                 const updatedRanking = [...prev, activeProject];
 
                 if (active.id !== over.id) {
-                  const newIndex = rankedProjects.findIndex(
-                    ({ projectId }) => projectId === over.id
-                  );
-
-                  const oldIndex = prev.findIndex(
-                    ({ projectId }) => projectId === active.id
-                  );
-
-                  updateProjectRanking(
-                    activeProject.projectId,
-                    activeProject.verticalId,
-                    user.id,
-                    newIndex + 1
-                  );
+                  const oldIndex = prev.findIndex(({ projectId }) => projectId === active.id);
+                  const newIndex = rankedProjects.findIndex(({ projectId }) => projectId === over.id);
 
                   return arrayMove(updatedRanking, oldIndex, newIndex);
                 }
@@ -161,13 +134,8 @@ const Index = () => {
             case 'Ranked':
               setRankedProjects((prev) => {
                 if (active.id !== over.id) {
-                  const newIndex = rankedProjects.findIndex(
-                    ({ projectId }) => projectId === over.id
-                  );
-
-                  const oldIndex = prev.findIndex(
-                    ({ projectId }) => projectId === active.id
-                  );
+                  const oldIndex = prev.findIndex(({ projectId }) => projectId === active.id);
+                  const newIndex = rankedProjects.findIndex(({ projectId }) => projectId === over.id);
 
                   updateProjectRanking(
                     activeProject.projectId,
