@@ -5,6 +5,7 @@ import { createClient } from '@supabase/supabase-js';
 export type Bindings = {
   SUPABASE_SERVICE_KEY: string;
   SUPABASE_URL: string;
+  INVITE_REDIRECT_URL: string;
 };
 
 const HTTP_BAD_REQUEST = 400;
@@ -13,6 +14,55 @@ const INTERNAL_SERVER_ERROR = 500;
 const app = new Hono<{ Bindings: Bindings }>();
 
 app.use('/api/*', cors());
+
+app.get('/api/invite/:role/:email', async (c) => {
+  try {
+    const supabase = createClient(
+      c.env.SUPABASE_URL,
+      c.env.SUPABASE_SERVICE_KEY
+    );
+    const role = parseInt(c.req.param('role'));
+    const email = c.req.param('email');
+    if (role === null || email === null || email === '') {
+      return c.json(
+        {
+          error: 'PARAMETER_ERROR',
+          message: 'missing required parameters',
+        },
+        INTERNAL_SERVER_ERROR
+      );
+    }
+    // role should be between 1 and 7
+    // maybe we shouldn't hardcode this, but I'm not sure how to change this for now
+    if (role > 0 && role < 8) {
+      const result = await supabase.from('user_invites').insert({
+        role: role,
+        email: email,
+      });
+      await supabase.auth.admin.inviteUserByEmail(email, {
+        redirectTo: c.env.INVITE_REDIRECT_URL,
+      });
+      return c.json(200);
+    } else {
+      return c.json(
+        {
+          error: 'PARAMETER_ERROR',
+          message: 'Role number not recognized should be between 1 and 7',
+        },
+        INTERNAL_SERVER_ERROR
+      );
+    }
+  } catch (e) {
+    console.log(e);
+    return c.json(
+      {
+        error: 'UNKNOWN_ERROR',
+        message: 'An unknown error occurred.',
+      },
+      INTERNAL_SERVER_ERROR
+    );
+  }
+});
 
 app.get('/api/verify-token/:access_token', async (c) => {
   try {
