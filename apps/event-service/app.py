@@ -207,10 +207,13 @@ def add_event():
     try:
         # Convert dict to object
         contact_info = body.pop("contactInfo", None)
+        if contact_info is not None:
+            contact_info = [data_types.Contact(**x) for x in contact_info]
+
         event = data_types.EventAdmin(
             eventId=None,
             **body,
-            contactInfo=[data_types.Contact(**x) for x in contact_info],
+            contactInfo=contact_info,
         )
 
         event_id = repository.add_event(event)
@@ -239,6 +242,15 @@ def update_event(event_id: str):
             industry_tags=body.get("industryTags"),
         )
         return data_types.event_to_dict(new_event)
+    except Exception as e:
+        raise BadRequestError(f"Failed to update event: {e}")
+
+
+@app.route("/events/{event_id}", methods=["DELETE"])
+def delete_event(event_id: str):
+    try:
+        repository.delete_event(event_id)
+        return {"deleted": event_id}
     except Exception as e:
         raise BadRequestError(f"Failed to update event: {e}")
 

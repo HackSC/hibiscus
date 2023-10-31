@@ -165,24 +165,30 @@ def add_event(event: data_types.EventAdmin) -> str:
             .returning(models.Event.event_id)
         )
 
-        event_tags = [{"event_id": event_id, "event_tag": x} for x in event.eventTags]
-        industry_tags = [
-            {"event_id": event_id, "industry_tag": x} for x in event.industryTags
-        ]
-        contacts = [
-            {
-                "event_id": event_id,
-                "name": x.name,
-                "role": x.role,
-                "phone": x.phone,
-                "email": x.email,
-            }
-            for x in event.contactInfo
-        ]
+        if event.eventTags is not None:
+            event_tags = [
+                {"event_id": event_id, "event_tag": x} for x in event.eventTags
+            ]
+            session.execute(insert(models.EventTag), event_tags)
 
-        session.execute(insert(models.EventTag), event_tags)
-        session.execute(insert(models.IndustryTag), industry_tags)
-        session.execute(insert(models.Contact), contacts)
+        if event.industryTags is not None:
+            industry_tags = [
+                {"event_id": event_id, "industry_tag": x} for x in event.industryTags
+            ]
+            session.execute(insert(models.IndustryTag), industry_tags)
+
+        if event.contactInfo is not None:
+            contacts = [
+                {
+                    "event_id": event_id,
+                    "name": x.name,
+                    "role": x.role,
+                    "phone": x.phone,
+                    "email": x.email,
+                }
+                for x in event.contactInfo
+            ]
+            session.execute(insert(models.Contact), contacts)
 
         return str(event_id)
 
@@ -282,6 +288,24 @@ def update_event(
         )
 
     return run_transaction(sessionmaker(engine), up)
+
+
+def delete_event(event_id: str):
+    """
+    Deletes an event
+    """
+
+    def remove(session: Session):
+        res = session.execute(
+            delete(models.Event)
+            .where(models.Event.event_id == event_id)
+            .returning(models.Event.event_id)
+        )
+
+        if res.first() is None:
+            raise Exception("This event does not exist")
+
+    run_transaction(sessionmaker(engine), remove)
 
 
 def get_pinned_events(user_id: str) -> list[data_types.Event]:
