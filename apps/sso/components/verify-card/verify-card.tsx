@@ -9,6 +9,17 @@ import Image from 'next/image';
 import { MutatingDots } from 'react-loader-spinner';
 import { Button } from '@hibiscus/ui-kit-2023';
 import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
+import axios from 'axios';
+
+const updateRole = async (userId: string) => {
+  try {
+    await axios.put(`/api/update-role/${userId}`);
+  } catch (e) {
+    if (e.response != null) {
+      console.log(e.response.data);
+    }
+  }
+};
 
 export function VerifyCard() {
   const router = useRouter();
@@ -36,22 +47,8 @@ export function VerifyCard() {
         router.query.lastname.toString()
       );
 
-      const role = await supabase
-        .getClient()
-        .from('user_invites')
-        .select('role')
-        .eq('email', email);
-      console.log(data);
-      console.log(role);
-      if (role !== null) {
-        console.log('adding judge status');
-        const { error } = await supabase
-          .getClient()
-          .from('user_profiles')
-          .update({ role: '7' })
-          .eq('user_id', data.user.id)
-          .select();
-      }
+      await updateRole(data.user.id);
+
       HibiscusSupabaseClient.setTokenCookieClientSide(
         data.session.access_token,
         data.session.refresh_token

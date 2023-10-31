@@ -1,11 +1,11 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { createClient } from '@supabase/supabase-js';
-import { Interface } from 'readline';
 
 export type Bindings = {
   SUPABASE_SERVICE_KEY: string;
   SUPABASE_URL: string;
+  INVITE_REDIRECT_URL: string;
 };
 
 const HTTP_BAD_REQUEST = 400;
@@ -17,37 +17,31 @@ app.use('/api/*', cors());
 
 app.get('/api/invite/:role/:email', async (c) => {
   try {
-    console.log('20');
     const supabase = createClient(
       c.env.SUPABASE_URL,
       c.env.SUPABASE_SERVICE_KEY
     );
     const role = parseInt(c.req.param('role'));
-    console.log('25');
     const email = c.req.param('email');
-    console.log('26');
-    console.log(role);
-    console.log(email);
     if (role === null || email === null || email === '') {
       return c.json(
         {
-          error: 'PARAM_ERROR',
+          error: 'PARAMETER_ERROR',
           message: 'missing required parameters',
         },
         INTERNAL_SERVER_ERROR
       );
     }
-    //role should be between 1 and 7
+    // role should be between 1 and 7
+    // maybe we shouldn't hardcode this, but I'm not sure how to change this for now
     if (role > 0 && role < 8) {
       const result = await supabase.from('user_invites').insert({
         role: role,
         email: email,
       });
-      console.log(result);
-      const { data, error } = await supabase.auth.admin.inviteUserByEmail(
-        email,
-        { redirectTo: 'sso.hacksc.com/signup' }
-      );
+      await supabase.auth.admin.inviteUserByEmail(email, {
+        redirectTo: c.env.INVITE_REDIRECT_URL,
+      });
       return c.json(200);
     } else {
       return c.json(
