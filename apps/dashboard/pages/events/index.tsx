@@ -26,6 +26,8 @@ import EventDetails from '../../components/events/event-details';
 import { HibiscusRole } from '@hibiscus/types';
 import { useMediaQuery } from 'react-responsive';
 import EventList, { EventListType } from '../../components/events/event-list';
+import { getCookie } from 'cookies-next';
+import { getEnv } from '@hibiscus/env';
 
 export function Index() {
   return (
@@ -85,7 +87,9 @@ function EventPage() {
   useEffect(() => {
     async function fetchEvents() {
       try {
-        const events = await getAllEvents();
+        const events = await getAllEvents(
+          getCookie(getEnv().Hibiscus.Cookies.accessTokenName)?.toString()
+        );
         setEvents(events);
 
         // Group events by date
@@ -114,7 +118,10 @@ function EventPage() {
   useEffect(() => {
     async function fetchPinnedEvents() {
       try {
-        const pinnedEvents = await getPinnedEvents(user.id);
+        const pinnedEvents = await getPinnedEvents(
+          user.id,
+          getCookie(getEnv().Hibiscus.Cookies.accessTokenName)?.toString()
+        );
         setPinnedEvents(pinnedEvents);
       } catch (e) {
         console.log(e);
