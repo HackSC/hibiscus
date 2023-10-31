@@ -131,7 +131,6 @@ const Index = () => {
         case 'Ranked':
           switch (active.data.current?.type) {
             case 'Unranked':
-              console.log('Hello from unranked (Real!)');
               setRankedProjects((prev) => {
                 const updatedRanking = [...prev, activeProject];
 
@@ -204,14 +203,10 @@ const Index = () => {
           break;
 
         case 'Unranked': {
-          console.log('Hello from unranked!');
-          console.log(onHoldProjectIds);
-          console.log(active.id);
           const index = allProjectIds.findIndex(
             (projectId) => projectId === over.id
           );
           if (index === rankedProjects.length) {
-            console.log('Hello from unranked first!');
             updateProjectRanking(
               activeProject.projectId,
               activeProject.verticalId,
@@ -227,7 +222,6 @@ const Index = () => {
               prev.filter((p) => p.projectId !== active.id)
             );
           } else if (onHoldProjectIds.includes(active.id)) {
-            console.log('Hewwo from funny things');
             setRankedProjects((prev) =>
               prev.filter((p) => p.projectId !== active.id)
             );
@@ -289,7 +283,7 @@ const Index = () => {
         {onHoldProjects[0] ? (
           <div>
             <div className={styles.flexBetween}>
-              <h1>On Hold</h1>
+              <h1 className={styles.marginLeft12}>On Hold</h1>
               <button onClick={toggleOnHoldExpansion}>
                 {isOnHoldExpanded ? 'Collapse' : 'Expand'}
               </button>
@@ -333,8 +327,8 @@ const Index = () => {
         ) : (
           <></>
         )}
-        <h1>Rank</h1> <br />
-        {!allProjects[0] ? <p>Loading...</p> : <></>}
+        <h1 className={styles.marginLeft12}>Rank</h1> <br />
+        {!allProjects[0] ? <p className={styles.marginLeft12}>Loading...</p> : <></>}
         <SortableContext items={allProjectIds}>
           <ul>
             {rankedProjects.map(
