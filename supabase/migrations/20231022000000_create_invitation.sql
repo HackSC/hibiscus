@@ -6,4 +6,7 @@ create table
     email character varying null,
     constraint user_invites_pkey primary key (id),
     constraint user_invites_role_fkey foreign key (role) references roles (id)
-  ) tablespace pg_default;
+  );
+
+INSERT INTO public.roles(id, name) VALUES
+  (7, 'JUDGE');
