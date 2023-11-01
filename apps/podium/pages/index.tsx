@@ -222,7 +222,7 @@ const Index = () => {
           const index = allProjectIds.findIndex(
             (projectId) => projectId === over.id
           );
-          if (index === rankedProjects.length) {
+          if (active.data.current?.type === 'Unranked' && index === rankedProjects.length) {
             updateProjectRanking(
               activeProject.projectId,
               activeProject.verticalId,
