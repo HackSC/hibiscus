@@ -1,7 +1,8 @@
-import { CSSProperties } from 'react';
+import { CSSProperties, useMemo } from 'react';
 import * as styles from '../styles/index.css';
 import { FC } from 'react';
 import { Container, Project } from '../types';
+import { getYoutubeThumbnail } from '../utils/getYoutubeThumbnail';
 
 interface OnHoldDraggableProps {
   project: Project;
@@ -14,8 +15,18 @@ const OnHoldDraggable: FC<OnHoldDraggableProps> = ({
   type,
   index,
 }) => {
+  const image = useMemo(() => {
+    if (project?.videoUrl) {
+      const ytThumbnail = getYoutubeThumbnail(project.videoUrl);
+      if (ytThumbnail) {
+        return ytThumbnail;
+      }
+    }
+    return project?.imageUrl;
+  }, [project]);
+
   const imgStyle = {
-    backgroundImage: `url(${project.imageUrl})`,
+    backgroundImage: `url(${image})`,
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',

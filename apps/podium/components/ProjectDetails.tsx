@@ -1,7 +1,8 @@
-import { FC } from 'react';
+import { FC, useMemo } from 'react';
 import * as styles from '../styles/index.css';
 import { Project } from '../types';
 import Link from 'next/link';
+import { getYoutubeThumbnail } from '../utils/getYoutubeThumbnail';
 
 interface ProjectDetailsProps {
   project: Project;
@@ -12,12 +13,22 @@ const ProjectDetails: FC<ProjectDetailsProps> = ({
   project,
   expandProject,
 }) => {
+  const image = useMemo(() => {
+    if (project?.videoUrl) {
+      const ytThumbnail = getYoutubeThumbnail(project.videoUrl);
+      if (ytThumbnail) {
+        return ytThumbnail;
+      }
+    }
+    return project?.imageUrl;
+  }, [project]);
+
   if (project == null) {
     return null;
   }
 
   const imgStyle = {
-    backgroundImage: `url(${project.imageUrl})`,
+    backgroundImage: `url(${image})`,
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
