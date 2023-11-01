@@ -33,12 +33,19 @@ export const projectPreview = style({
   WebkitUserSelect: 'none',
   msUserSelect: 'none',
   userSelect: 'none',
+  cursor: 'grab',
+  selectors: {
+    '&:active': {
+      cursor: 'grabbing',
+    }
+  }
 });
 
 globalStyle(`${projectPreview} h3`, {
   margin: 0,
   marginBottom: '8px',
   width: 'fit-content',
+  cursor: 'pointer',
 });
 
 export const rankBasic = style({
@@ -138,6 +145,22 @@ export const onHoldStackExpanded = style({
   gridTemplateRows: 'auto 1fr auto',
 });
 
+export const containerComments = style({
+  padding: '36px',
+});
+
+export const commentButton = style({
+  borderRadius: '50%',
+  backgroundColor: '#002990',
+  width: '35px',
+  height: '35px',
+  padding: '15px',
+  margin: '0px 25px 50px 0px',
+  position: 'fixed',
+  bottom: 0,
+  right: 0,
+});
+
 export const truncateText = style({
   whiteSpace: 'nowrap',
   overflow: 'hidden',
@@ -155,6 +178,10 @@ export const thinFont = style({
 export const heavyFont = style({
   fontWeight: 700,
 });
+
+export const textCenter = style({
+  textAlign: 'center',
+})
 
 export const zTop = style({
   zIndex: 9,
