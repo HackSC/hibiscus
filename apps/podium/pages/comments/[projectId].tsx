@@ -6,7 +6,7 @@ import { Modal } from '@hibiscus/ui';
 import { FiEdit3 } from 'react-icons/fi';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import * as styles from '../../pages/index.css';
+import * as styles from '../../styles/index.css';
 
 const HIBISCUS_PODIUM_API_URL = process.env.NEXT_PUBLIC_HIBISCUS_PODIUM_API_URL;
 
@@ -50,15 +50,19 @@ export function Index() {
               justifyContent: 'flex-start',
               fontSize: '16px',
             }}
-          ><Link href='/'>&lt; Back</Link></p>
-          <h1 style={{fontSize: '24px'}}>Comments</h1>
-          <div style={{
-            flex: 1,
-            flexDirection: 'row',
-            justifyContent: 'flex-end',
-          }}></div>
+          >
+            <Link href="/">&lt; Back</Link>
+          </p>
+          <h1 style={{ fontSize: '24px' }}>Comments</h1>
+          <div
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'flex-end',
+            }}
+          ></div>
         </header>
-        <br /> <br /> 
+        <br /> <br />
         <div>
           {data &&
             data.comments &&
@@ -72,11 +76,11 @@ export function Index() {
               ></Comment>
             ))}
         </div>
-
-        <FiEdit3 
-          color='#FFFFFF' 
+        <FiEdit3
+          color="#FFFFFF"
           className={styles.commentButton}
-          onClick={() => setInputOpen(true)} />
+          onClick={() => setInputOpen(true)}
+        />
       </div>
 
       <Modal isOpen={inputOpen} closeModal={() => setInputOpen(false)}>
