@@ -47,6 +47,8 @@ function RSVPForm({ closeModal }: Props) {
       dob: '',
       acknowledgementInPerson: false,
       acknowledgementDiscord: false,
+      acknowledgementWaiver: false,
+      acknowledgementPacket: false,
     },
 
     validationSchema: Yup.object({
@@ -63,6 +65,14 @@ function RSVPForm({ closeModal }: Props) {
         .typeError('Invalid date provided'),
 
       acknowledgementDiscord: Yup.boolean()
+        .isTrue('This field is required')
+        .required('This field is required'),
+
+      acknowledgementWaiver: Yup.boolean()
+        .isTrue('This field is required')
+        .required('This field is required'),
+
+      acknowledgementPacket: Yup.boolean()
         .isTrue('This field is required')
         .required('This field is required'),
     }),
@@ -175,7 +185,8 @@ function RSVPForm({ closeModal }: Props) {
                       }}
                     >
                       discord.gg/{discordInvite}
-                    </a>
+                    </a>{' '}
+                    and verified my account
                     <SpanRed>*</SpanRed>
                   </Text>
                 }
@@ -186,6 +197,64 @@ function RSVPForm({ closeModal }: Props) {
               </Text>
               {formik.touched.acknowledgementDiscord && (
                 <SpanRed>{formik.errors.acknowledgementDiscord}</SpanRed>
+              )}
+            </QuestionWrap>
+
+            <QuestionWrap>
+              <Checkbox
+                onInput={(newVal) => {
+                  formik.setFieldValue('acknowledgementWaiver', newVal);
+                }}
+                label={
+                  <Text>
+                    I confirm that I have completed and signed the{' '}
+                    <a
+                      href={getEnv().Hibiscus.RSVPForm.WaiverURL}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{
+                        textDecoration: 'underline',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      HackSC waiver
+                    </a>
+                    <SpanRed>*</SpanRed>
+                  </Text>
+                }
+              />
+
+              {formik.touched.acknowledgementWaiver && (
+                <SpanRed>{formik.errors.acknowledgementWaiver}</SpanRed>
+              )}
+            </QuestionWrap>
+
+            <QuestionWrap>
+              <Checkbox
+                onInput={(newVal) => {
+                  formik.setFieldValue('acknowledgementPacket', newVal);
+                }}
+                label={
+                  <Text>
+                    I confirm that I have read the{' '}
+                    <a
+                      href={getEnv().Hibiscus.RSVPForm.HackerPacketURL}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{
+                        textDecoration: 'underline',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      Hacker Welcome Packet
+                    </a>
+                    <SpanRed>*</SpanRed>
+                  </Text>
+                }
+              />
+
+              {formik.touched.acknowledgementPacket && (
+                <SpanRed>{formik.errors.acknowledgementPacket}</SpanRed>
               )}
             </QuestionWrap>
 
