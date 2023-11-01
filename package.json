@@ -80,6 +80,7 @@
     "serverless-esbuild": "^1.37.3",
     "serverless-http": "^3.1.1",
     "serverless-offline": "^12.0.4",
+    "smoothscroll-polyfill": "^0.4.4",
     "styled-components": "5.3.6",
     "supabase": "^1.45.1",
     "tslib": "^2.3.0",

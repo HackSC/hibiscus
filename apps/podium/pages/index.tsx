@@ -1,8 +1,20 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useProjectContext } from '../ProjectContext';
-import { Active, useSensors, useSensor, MouseSensor, TouchSensor, DndContext, DragOverlay, DragCancelEvent, DragEndEvent, DragStartEvent, DragOverEvent } from '@dnd-kit/core';
+import {
+  Active,
+  useSensors,
+  useSensor,
+  MouseSensor,
+  TouchSensor,
+  DndContext,
+  DragOverlay,
+  DragCancelEvent,
+  DragEndEvent,
+  DragStartEvent,
+  DragOverEvent,
+} from '@dnd-kit/core';
 import { arrayMove, SortableContext } from '@dnd-kit/sortable';
-import * as styles from '../pages/index.css';
+import * as styles from './index.css';
 import { useHibiscusUser } from '@hibiscus/hibiscus-user-context';
 import { updateProjectRanking } from '../utils/updateProjectRanking';
 import OnHoldDroppable from '../components/OnHoldDroppable';
@@ -12,6 +24,7 @@ import ProjectDetails from '../components/ProjectDetails';
 import OnHoldPreview from '../components/OnHoldPreview';
 import { BiSearch } from 'react-icons/bi';
 import { Modal } from '../utils/modal/modal';
+import smoothscroll from 'smoothscroll-polyfill';
 
 const Index = () => {
   const { ranked, unranked, onHold, projects } = useProjectContext();
@@ -73,16 +86,20 @@ const Index = () => {
   const [searchInput, setSearchInput] = useState<string>('');
 
   useEffect(() => {
-    setTimeout(() => {
-      setSearchInput('');
-    }, 1000)
+    if (!isSearchOpen) {
+      setTimeout(() => {
+        setSearchInput('');
+      }, 1000)
+    }
   }, [isSearchOpen])
 
   const handleSearch = () => {
-    let searchQuery = (document.getElementById('searchbox') as HTMLInputElement).value;
+    let searchQuery = (document.getElementById('searchbox') as HTMLInputElement)
+      .value;
     setSearchInput(searchQuery);
   };
 
+  smoothscroll.polyfill();
   const handleScroll = (search: string) => {
     const element = document.getElementById(`project-${search}`);
 
@@ -222,7 +239,10 @@ const Index = () => {
           const index = allProjectIds.findIndex(
             (projectId) => projectId === over.id
           );
-          if (active.data.current?.type === 'Unranked' && index === rankedProjects.length) {
+          if (
+            active.data.current?.type === 'Unranked' &&
+            index === rankedProjects.length
+          ) {
             updateProjectRanking(
               activeProject.projectId,
               activeProject.verticalId,
@@ -285,44 +305,50 @@ const Index = () => {
     >
       <Modal
         isOpen={expandedDetails !== null}
-        closeModal={() => expandProject(null)}>
-          <ProjectDetails
-            project={expandedDetails}
-            expandProject={expandProject}
-          />
+        closeModal={() => expandProject(null)}
+      >
+        <ProjectDetails
+          project={expandedDetails}
+          expandProject={expandProject}
+        />
       </Modal>
       {isDragging && <OnHoldDroppable type={'OnHoldAdd'} />}
 
       <header className={`${styles.header} ${styles.flexCenter}`}>
-        <img src='logo_word.png' alt='Hibiscus HackSC Logo' />
-        <BiSearch 
-          color='#FFFFFF' 
-          size='30px'
+        <img src="logo_word.png" alt="Hibiscus HackSC Logo" />
+        <BiSearch
+          color="#FFFFFF"
+          size="30px"
           style={{ position: 'absolute', right: '20px' }}
           className={styles.cursorPointer}
           onClick={() => setIsSearchOpen(true)}
         />
       </header>
 
-      <Modal
-        isOpen={isSearchOpen}
-        closeModal={() => setIsSearchOpen(false)}>
-          <div className={`${styles.containerSearch} ${styles.roundCorners}`}>
-            <input type='text' id='searchbox'
-              className={styles.searchBar} 
-              placeholder='Search for projects'
-              onChange={() => handleSearch()} />
-            <ul>
-              {allProjects.map((p) => ( searchInput &&
-                p.name.toLowerCase().includes(searchInput.toLowerCase()) &&
-                  <li 
-                    className={styles.searchResult} 
-                    onClick={() => handleScroll(p.projectId)}>
+      <Modal isOpen={isSearchOpen} closeModal={() => setIsSearchOpen(false)}>
+        <div className={`${styles.containerSearch} ${styles.roundCorners}`}>
+          <input
+            type="text"
+            id="searchbox"
+            className={styles.searchBar}
+            placeholder="Search for projects"
+            onChange={() => handleSearch()}
+          />
+          <ul>
+            {allProjects.map(
+              (p) =>
+                searchInput &&
+                p.name.toLowerCase().includes(searchInput.toLowerCase()) && (
+                  <li
+                    className={styles.searchResult}
+                    onClick={() => handleScroll(p.projectId)}
+                  >
                     {p.name}
                   </li>
-              ))}
-            </ul>
-          </div>
+                )
+            )}
+          </ul>
+        </div>
       </Modal>
 
       <div className={styles.containerMain}>
@@ -374,7 +400,11 @@ const Index = () => {
           <></>
         )}
         <h1 className={styles.marginLeft12}>Rank</h1> <br />
-        {!allProjects[0] ? <p className={styles.marginLeft12}>Loading...</p> : <></>}
+        {!allProjects[0] ? (
+          <p className={styles.marginLeft12}>Loading...</p>
+        ) : (
+          <></>
+        )}
         <SortableContext items={allProjectIds}>
           <ul>
             {rankedProjects.map(
@@ -405,7 +435,6 @@ const Index = () => {
             )}
           </ul>
         </SortableContext>
-
         <DragOverlay>
           {activeProject && (
             <ProjectDraggable

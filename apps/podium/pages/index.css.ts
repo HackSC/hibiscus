@@ -90,7 +90,7 @@ export const detailsContainer = style({
 
 export const detailsProject = style({
   margin: 'auto',
-  marginTop: '30vh',
+  marginTop: '50px',
   height: 'fit-content',
   backgroundColor: '#FFFFFF',
   color: 'black',
@@ -116,14 +116,13 @@ export const detailsButtons = style({
 export const detailsInfo = style({
   padding: '25px',
   position: 'relative',
-  selectors: {
-    '&:h3': {
-      fontWeight: 400,
-      fontSize: '14px',
-      color: '#989898',
-      margin: '10px 0px',
-    },
-  },
+});
+
+globalStyle(`${detailsInfo} h3`, {
+  fontWeight: 400,
+  fontSize: '14px',
+  color: '#989898',
+  margin: '10px 0px 12px 0px',
 });
 
 export const backgroundBlur = style({

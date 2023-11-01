@@ -11,7 +11,7 @@ const ProjectDetails: FC<ProjectDetailsProps> = ({ project, expandProject }) => 
   if (project == null) {
     return null;
   }
-  
+
   const imgStyle = {
     backgroundImage: `url(${project.imageUrl})`,
     backgroundSize: 'cover',
@@ -23,7 +23,7 @@ const ProjectDetails: FC<ProjectDetailsProps> = ({ project, expandProject }) => 
     <div className={styles.detailsContainer}>
       <div className={`${styles.detailsProject} ${styles.roundCorners}`}>
         <div style={imgStyle} className={styles.detailsImg}>
-          <img 
+          <img
             src='button_close.svg' alt='Close project details'
             className={styles.detailsButtons}
             onClick={() => expandProject(null)} />

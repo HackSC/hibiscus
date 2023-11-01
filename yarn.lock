@@ -7887,7 +7887,7 @@
 
 "@types/jest@28.1.1":
   version "28.1.1"
-  resolved "https://registry.npmjs.org/@types/jest/-/jest-28.1.1.tgz"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-28.1.1.tgz#8c9ba63702a11f8c386ee211280e8b68cb093cd1"
   integrity sha512-C2p7yqleUKtCkVjlOur9BWVA4HgUQmEj/HWCt5WzZ5mLXrWnyIfl0wGuArc+kBXsy0ZZfLp+7dywB4HtSVYGVA==
   dependencies:
     jest-matcher-utils "^27.0.0"
@@ -23787,6 +23787,11 @@ smart-buffer@^4.2.0:
   version "4.2.0"
   resolved "https://registry.npmjs.org/smart-buffer/-/smart-buffer-4.2.0.tgz"
   integrity sha512-94hK0Hh8rPqQl2xXc3HsaBoOXKV20MToPkcXvwbISWLEs+64sBq5kFgn2kJDHb1Pry9yrP0dxrCI9RRci7RXKg==
+
+smoothscroll-polyfill@^0.4.4:
+  version "0.4.4"
+  resolved "https://registry.yarnpkg.com/smoothscroll-polyfill/-/smoothscroll-polyfill-0.4.4.tgz#3a259131dc6930e6ca80003e1cb03b603b69abf8"
+  integrity sha512-TK5ZA9U5RqCwMpfoMq/l1mrH0JAR7y7KRvOBx0n2869aLxch+gT9GhN3yUfjiw+d/DiF1mKo14+hd62JyMmoBg==
 
 snapdragon-node@^2.0.1:
   version "2.1.1"
