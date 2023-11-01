@@ -13,10 +13,6 @@ export const containerMain = style({
   paddingTop: '28px'
 });
 
-globalStyle(`${containerMain} h1`, {
-  marginLeft: '12px',
-});
-
 export const header = style({
   backgroundColor: '#002990',
   padding: '12px',
@@ -33,6 +29,10 @@ export const projectPreview = style({
   gap: '20px',
   listStyle: 'none',
   position: 'relative',
+  WebkitTouchCallout: 'none',
+  WebkitUserSelect: 'none',
+  msUserSelect: 'none',
+  userSelect: 'none',
 });
 
 globalStyle(`${projectPreview} h3`, {
@@ -66,14 +66,14 @@ export const detailsContainer = style({
 });
 
 export const detailsProject = style({
+  position: 'absolute',
+  left: 0, right: 0, top: 0, bottom: 0,
   width: '90%',
-  margin: '5%',
+  margin: 'auto',
   height: 'fit-content',
   backgroundColor: '#FFFFFF',
   color: 'black',
-  position: 'absolute',
   zIndex: 888,
-  top: '30%',
   boxShadow: '0 0 20px rgba(0, 0, 0, 0.25)',
 });
 
@@ -142,16 +142,6 @@ export const truncateText = style({
   whiteSpace: 'nowrap',
   overflow: 'hidden',
   textOverflow: 'ellipsis',
-  width: '100%',
-});
-
-export const truncate = style({
-  display: '-webkit-box',
-  WebkitLineClamp: 'var(--line-clamp, 3)',
-  WebkitBoxOrient: 'vertical',
-  overflow: 'hidden',
-  hyphens: 'auto',
-  textAlign: 'left',
 });
 
 export const hidden = style({
@@ -195,6 +185,14 @@ export const flexCenter = style({
 
 export const boxShadowY = style({
   boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.2)',
+});
+
+export const width90 = style({
+  width: '90%',
+})
+
+export const marginLeft12 = style({
+  marginLeft: '12px',
 });
 
 globalStyle('a', {

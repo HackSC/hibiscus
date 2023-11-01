@@ -60,7 +60,7 @@ const ProjectDraggable: FC<ProjectDraggableProps> = ({
       style={style}
     >
       <div className={`${styles.backgroundDim} ${styles.roundCorners}`}></div>
-      <div className={`${styles.zTop} ${styles.flexStart}`}>
+      <div className={`${styles.zTop} ${styles.flexStart} ${styles.width90}`}>
         <span className={styles.rankBasic}>
           {ranking === null ? '-' : ranking + 1}
         </span>

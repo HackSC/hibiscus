@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Modal } from '@hibiscus/ui';
 import { FiEdit3 } from 'react-icons/fi';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 const backgroundColor = 'white';
 const BlueIvy = '#002990';
@@ -29,7 +30,6 @@ export function Index() {
         `${HIBISCUS_PODIUM_API_URL}/comments/${projectId}`
       );
       setData(response.data);
-      console.log(response.data);
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -54,7 +54,7 @@ export function Index() {
                 justifyContent: 'flex-start',
               }}
             >
-              &lt; Slide
+              <Link href='/'>&lt; Back</Link>
             </p>
             <Heading>Comments</Heading>
             <div
