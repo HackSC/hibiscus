@@ -36,6 +36,7 @@ const ProjectDraggable: FC<ProjectDraggableProps> = ({ project, ranking, type, e
 
   return (
     <li
+      id={`project-${project.projectId}`}
       className={`${styles.projectPreview} ${styles.roundCorners}`}
       ref={setNodeRef}
       {...attributes}
@@ -45,7 +46,8 @@ const ProjectDraggable: FC<ProjectDraggableProps> = ({ project, ranking, type, e
         <div className={`${styles.zTop} ${styles.flexStart} ${styles.width90}`}>
           <span className={styles.rankBasic}>{ranking === null ? '-' : ranking + 1}</span>
           <div className={styles.truncateText}>
-            <h3 onClick={() => expandProject(project)}>{project.name}</h3>
+            <h3 className={styles.cursorPointer} onClick={() => expandProject(project)}>
+              {project.name}</h3>
             <span className={styles.thinFont}>{project.description}</span>
           </div>
         </div>

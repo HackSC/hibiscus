@@ -2,6 +2,7 @@ import { globalStyle, style } from '@vanilla-extract/css';
 
 globalStyle('*', {
   margin: 0,
+  outline: 'none',
 });
 
 globalStyle('body', {
@@ -35,17 +36,15 @@ export const projectPreview = style({
   userSelect: 'none',
   cursor: 'grab',
   selectors: {
+    '&:h3': {
+      margin: 0,
+      marginBottom: '8px',
+      width: 'fit-content',
+    },
     '&:active': {
       cursor: 'grabbing',
-    }
+    },
   }
-});
-
-globalStyle(`${projectPreview} h3`, {
-  margin: 0,
-  marginBottom: '8px',
-  width: 'fit-content',
-  cursor: 'pointer',
 });
 
 export const rankBasic = style({
@@ -61,6 +60,28 @@ export const backgroundDim = style({
   left: 0,
   width: '100%',
   height: '100%',
+});
+
+export const searchContainer = style({
+  backgroundColor: '#EDEDED',
+  marginTop: '70px',
+});
+
+export const searchBar = style({
+  backgroundColor: '#FFFFFF',
+  border: 'none',
+  padding: '16px',
+  width: '100%',
+});
+
+export const searchResult = style({
+  padding: '8px 16px',
+  selectors: {
+    '&:hover': {
+      backgroundColor: '#BBBBBB',
+      cursor: 'pointer',
+    },
+  },
 });
 
 export const detailsContainer = style({
@@ -95,19 +116,21 @@ export const detailsImg = style({
 export const detailsButtons = style({
   position: 'absolute',
   top: '16px',
-  right: '16px'
+  right: '16px',
+  cursor: 'pointer',
 });
 
 export const detailsInfo = style({
   padding: '25px',
   position: 'relative',
-});
-
-globalStyle(`${detailsInfo} h3`, {
-  fontWeight: 400,
-  fontSize: '14px',
-  color: '#989898',
-  margin: '10px 0px',
+  selectors: {
+    '&:h3': {
+      fontWeight: 400,
+      fontSize: '14px',
+      color: '#989898',
+      margin: '10px 0px',
+    },
+  },
 });
 
 export const backgroundBlur = style({
@@ -134,7 +157,7 @@ export const onHoldStack = style({
 export const onHoldPreview = style({
   height: '92px',
   marginTop: '-71px',
-  backgroundColor: 'darkgray',
+  backgroundColor: '#A9A9A9',
   color: 'white',
   listStyle: 'none',
   position: 'relative',
@@ -210,13 +233,17 @@ export const flexCenter = style({
   alignItems: 'center',
 });
 
+export const cursorPointer = style({
+  cursor: 'pointer',
+})
+
 export const boxShadowY = style({
   boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.2)',
 });
 
 export const width90 = style({
   width: '90%',
-})
+});
 
 export const marginLeft12 = style({
   marginLeft: '12px',

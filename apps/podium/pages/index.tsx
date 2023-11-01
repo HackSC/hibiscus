@@ -1,18 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useProjectContext } from '../ProjectContext';
-import {
-  Active,
-  useSensors,
-  useSensor,
-  MouseSensor,
-  TouchSensor,
-  DndContext,
-  DragOverlay,
-  DragCancelEvent,
-  DragEndEvent,
-  DragStartEvent,
-  DragOverEvent,
-} from '@dnd-kit/core';
+import { Active, useSensors, useSensor, MouseSensor, TouchSensor, DndContext, DragOverlay, DragCancelEvent, DragEndEvent, DragStartEvent, DragOverEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import * as styles from '../pages/index.css';
 import { useHibiscusUser } from '@hibiscus/hibiscus-user-context';
@@ -22,6 +10,8 @@ import ProjectDraggable from '../components/ProjectDraggable';
 import unrankProject from '../utils/unrankProject';
 import ProjectDetails from '../components/ProjectDetails';
 import OnHoldPreview from '../components/OnHoldPreview';
+import { BiSearch } from 'react-icons/bi';
+import { Modal } from '../utils/modal/modal';
 
 const Index = () => {
   const { ranked, unranked, onHold, projects } = useProjectContext();
@@ -74,9 +64,36 @@ const Index = () => {
     setExpandedDetails(project);
   };
 
-  const [isOnHoldExpanded, setIsOnHoldExpanded] = useState(false);
+  const [isOnHoldExpanded, setIsOnHoldExpanded] = useState<boolean>(false);
   const toggleOnHoldExpansion = () => {
     setIsOnHoldExpanded((prevExpanded) => !prevExpanded);
+  };
+
+  const [isSearchOpen, setIsSearchOpen] = useState<boolean>(false);
+  const [searchInput, setSearchInput] = useState<string>('');
+
+  useEffect(() => {
+    setTimeout(() => {
+      setSearchInput('');
+    }, 1000)
+  }, [isSearchOpen])
+
+  const handleSearch = () => {
+    let searchQuery = (document.getElementById('searchbox') as HTMLInputElement).value;
+    setSearchInput(searchQuery);
+  };
+
+  const handleScroll = (search: string) => {
+    const element = document.getElementById(`project-${search}`);
+
+    setIsSearchOpen(false);
+
+    if (element) {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+    }
   };
 
   const sensors = useSensors(
@@ -135,7 +152,6 @@ const Index = () => {
                 const updatedRanking = [...prev, activeProject];
 
                 if (active.id !== over.id) {
-                  console.log('Jello');
                   const oldIndex = prev.findIndex(
                     ({ projectId }) => projectId === active.id
                   );
@@ -267,18 +283,46 @@ const Index = () => {
       onDragEnd={handleDragEnd}
       onDragCancel={handleDragCancel}
     >
-      {expandedDetails ? (
+      {expandedDetails && (
         <ProjectDetails
           project={expandedDetails}
           expandProject={expandProject}
         />
-      ) : (
-        <></>
       )}
-      {isDragging ? <OnHoldDroppable type={'OnHoldAdd'} /> : <></>}
+      {isDragging && <OnHoldDroppable type={'OnHoldAdd'} />}
+
       <header className={`${styles.header} ${styles.flexCenter}`}>
-        <img src="logo_word.png" alt="Hibiscus HackSC Logo" />
+        <img src='logo_word.png' alt='Hibiscus HackSC Logo' />
+        <BiSearch 
+          color='#FFFFFF' 
+          size='30px'
+          style={{ position: 'absolute', right: '20px' }}
+          className={styles.cursorPointer}
+          onClick={() => setIsSearchOpen(true)}
+        />
       </header>
+
+      <Modal
+        isOpen={isSearchOpen}
+        closeModal={() => setIsSearchOpen(false)}>
+          <div className={`${styles.searchContainer} ${styles.roundCorners}`}>
+            <input type='text' id='searchbox'
+              className={styles.searchBar} 
+              placeholder='Search for projects'
+              onChange={() => handleSearch()} />
+            <ul>
+              {allProjects.map((p) => ( searchInput &&
+                p.name.toLowerCase().includes(searchInput.toLowerCase()) &&
+                  <li 
+                    className={styles.searchResult} 
+                    onClick={() => handleScroll(p.projectId)}>
+                    {p.name}
+                  </li>
+              ))}
+            </ul>
+          </div>
+      </Modal>
+
       <div className={styles.containerMain}>
         {onHoldProjects[0] ? (
           <div>
@@ -287,7 +331,7 @@ const Index = () => {
               <button onClick={toggleOnHoldExpansion}>
                 {isOnHoldExpanded ? 'Collapse' : 'Expand'}
               </button>
-            </div>{' '}
+            </div>
             <br />
             <div>
               {isOnHoldExpanded ? (
@@ -359,6 +403,7 @@ const Index = () => {
             )}
           </ul>
         </SortableContext>
+
         <DragOverlay>
           {activeProject && (
             <ProjectDraggable
