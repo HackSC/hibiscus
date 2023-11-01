@@ -187,6 +187,15 @@ def get_all_projects_in_vertical(vertical_id: str) -> list[data_types.ProjectOut
     Gets all the projects in a given vertical and returns a list of their IDs and names
     """
 
+    def split_team(team_csv: Optional[str]) -> Optional[list[str]]:
+        team = None
+        if team_csv is not None:
+            reader = csv.reader([team_csv], quoting=csv.QUOTE_NONNUMERIC)
+            for row in reader:
+                team = row
+
+        return team
+
     def get(session: Session) -> list[data_types.ProjectOutline]:
         res = session.scalars(
             select(models.Project).where(models.Project.vertical_id == vertical_id)
@@ -198,7 +207,10 @@ def get_all_projects_in_vertical(vertical_id: str) -> list[data_types.ProjectOut
                 projectName=x.name,
                 verticalId=x.vertical_id,
                 verticalName=x.vertical.name,
+                teamMembers=split_team(x.team),
                 description=x.description,
+                imageUrl=x.image_url,
+                devpostUrl=x.devpost_url,
                 videoUrl=x.video_url,
             )
             for x in res.all()
@@ -382,7 +394,7 @@ def unrank_project(project_id: str, user_id: str):
                 .where(models.Ranking.rank > rank_old)
                 .values(rank=models.Ranking.rank - 1)
             )
-    
+
     return run_transaction(sessionmaker(engine), unrank)
 
 
@@ -721,8 +733,9 @@ def add_comment(project_id: str, user_id: str, comment: str):
 
     def add(session: Session):
         session.execute(
-            insert(models.Comment)
-            .values(project_id=project_id, user_id=user_id, comment=comment)
+            insert(models.Comment).values(
+                project_id=project_id, user_id=user_id, comment=comment
+            )
         )
 
     run_transaction(sessionmaker(engine), add)
@@ -743,7 +756,7 @@ def edit_comment(comment_id: str, comment: str):
 
         if res.first() is None:
             raise Exception("No comment found")
-        
+
     run_transaction(sessionmaker(engine), edit)
 
 
@@ -776,7 +789,12 @@ def get_comments(project_id: str) -> list[data_types.Comment]:
     comments = run_transaction(sessionmaker(engine), get)
 
     # Get judge data from Supabase
-    res = supabase.table("user_profiles").select("user_id, first_name, last_name").in_("user_id", [comment.name for comment in comments]).execute()
+    res = (
+        supabase.table("user_profiles")
+        .select("user_id, first_name, last_name")
+        .in_("user_id", [comment.name for comment in comments])
+        .execute()
+    )
 
     for comment in comments:
         for judge in res.data:
@@ -794,16 +812,13 @@ def get_judge_details(judge_id: str) -> data_types.JudgeInternal:
 
     def get(session: Session) -> data_types.JudgeInternal:
         judge = session.scalars(
-            select(models.Judge)
-            .where(models.Judge.user_id == judge_id)
+            select(models.Judge).where(models.Judge.user_id == judge_id)
         ).one()
 
         return data_types.JudgeInternal(
             id=judge.user_id,
             verticalId=judge.vertical_id,
-            verticalName=judge.vertical.name
-            if judge.vertical is not None
-            else None,
+            verticalName=judge.vertical.name if judge.vertical is not None else None,
         )
 
     return run_transaction(sessionmaker(engine), get)

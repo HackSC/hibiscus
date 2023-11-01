@@ -39,8 +39,11 @@ class ProjectOutline:
     verticalName: str
     projectId: str
     projectName: str
-    description: str
-    videoUrl: str
+    teamMembers: Optional[list[str]] = None
+    description: Optional[str] = None
+    imageUrl: Optional[str] = None
+    devpostUrl: Optional[str] = None
+    videoUrl: Optional[str] = None
 
     def __post_init__(self):
         if not isinstance(self.projectId, str):
