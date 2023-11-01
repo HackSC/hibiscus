@@ -4,6 +4,7 @@ import { Colors2023 } from '@hibiscus/styles';
 import Image from 'next/image';
 import { Attendee } from '../../common/mock-sponsor';
 import { useState } from 'react';
+import { Colors as SctwColors } from '@hacksc/sctw-ui-kit';
 
 interface Props {
   user: Attendee;
@@ -14,6 +15,7 @@ interface Props {
   showSaveButton?: boolean;
   onNoteClick?;
   onSaveClick?;
+  circleColor?: string;
 }
 
 export function HackerTab({
@@ -25,6 +27,7 @@ export function HackerTab({
   showSaveButton,
   onNoteClick,
   onSaveClick,
+  circleColor,
 }: Props) {
   const [isSaved, setSave] = useState(user?.saved);
 
@@ -38,7 +41,7 @@ export function HackerTab({
           justifyContent: 'flex-start',
         }}
       >
-        <Circle />
+        <Circle style={{ backgroundColor: circleColor }} />
         <Text style={{ paddingLeft: '20px', fontSize: '20px' }}>
           {user.full_name}
         </Text>
@@ -88,11 +91,16 @@ export function HackerTab({
               <Image
                 width="35"
                 height="35"
-                src={'/save-green.svg'}
+                src={'/save-fill-alt.svg'}
                 alt="save.svg"
               />
             ) : (
-              <Image width="35" height="35" src={'/save.svg'} alt="save.svg" />
+              <Image
+                width="35"
+                height="35"
+                src={'/save-alt.svg'}
+                alt="save.svg"
+              />
             )}
           </StyledButton>
         )}
@@ -115,14 +123,13 @@ const Circle = styled.div`
   width: 12px;
   height: 12px;
   border-radius: 50px;
-  background-color: ${Colors2023.GREEN.LIGHT};
-  box-shadow: 0px 0px 10px rgba(118, 211, 239, 0.5);
+  background-color: ${SctwColors.Yellow.BabyFood}; // Default Color
 `;
 
 const StyledButton = styled.button`
   display: flex;
   cursor: pointer;
-  background-color: ${Colors2023.GRAY.STANDARD};
+  background-color: rgba(0, 0, 0, 0);
   z-index: 10;
 
   :hover {
@@ -133,3 +140,13 @@ const StyledButton = styled.button`
     opacity: 0.8;
   }
 `;
+
+const SaveIcon = (props) => (
+  <svg
+    width="35px"
+    height="35px"
+    xmlns="./save.svg"
+    fill={props.fill}
+    stroke={props.stroke}
+  ></svg>
+);

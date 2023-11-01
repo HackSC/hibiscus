@@ -15,6 +15,12 @@ import { Button, ParagraphText } from '@hibiscus/ui-kit-2023';
 import { getWordCount } from '../../common/utils';
 import HackerProfile from '../../components/sponsor-portal/hacker-profile';
 import { SponsorServiceAPI } from '../../common/api';
+import {
+  BodyText,
+  Colors as SctwColors,
+  GlobalStyle,
+  Heading,
+} from '@hacksc/sctw-ui-kit';
 
 const Index = () => {
   const router = useRouter();
@@ -168,6 +174,7 @@ const Index = () => {
             setCurrentAttendee(attendee);
           }}
           onSaveClick={() => toggleSaveAttendee(COMPANY_ID, attendee)}
+          circleColor={'#FFACAB'} // light Redward
         />
       </HackerTabContainer>
     ));
@@ -243,31 +250,16 @@ const Index = () => {
 
   return (
     <Wrapper>
-      <StyledButton
-        onClick={() => {
-          router.replace('/sponsor-booth');
-        }}
-      >
-        <Image width="30" height="30" src={'/arrow.svg'} alt="Illustration" />
-      </StyledButton>
-      <BoldText
-        style={{
-          marginTop: '1rem',
-          fontSize: '35px',
-          color: Colors2023.GREEN.STANDARD,
-          textShadow: `0px 0px 10px ${Colors2023.GREEN.DARK}`,
-        }}
-      >
-        HackSC 2023 Participants
-      </BoldText>
+      <GlobalStyle />
+      <SctwTitle>All HackSC Participants</SctwTitle>
       <Container>
         <FilterContainer>
-          <StyledTitle>Sort by</StyledTitle>
+          <SctwHeading>Sort by</SctwHeading>
           <DropDownContainer>
             <DropDown
               title={'YEAR'}
               options={yearOptionsList}
-              color={'pink'}
+              color={'red'}
               placeholder={'Enter class year'}
               chooseOption={setYearOption}
             />
@@ -276,7 +268,7 @@ const Index = () => {
             <DropDown
               title={'MAJOR'}
               options={majorOptionsList}
-              color={'purple'}
+              color={'blue'}
               placeholder={'Enter a major'}
               chooseOption={setMajorOption}
             />
@@ -294,7 +286,7 @@ const Index = () => {
             <DropDown
               title={'PARTICIPANT'}
               options={participantOptionsList}
-              color={'blue'}
+              color={'lightblue'}
               placeholder={'Enter type of participant'}
               chooseOption={setParticipantOption}
             />
@@ -379,15 +371,9 @@ const Index = () => {
               setCurrentAttendee(null);
             }}
           >
-            <BoldText
-              style={{
-                fontSize: '20px',
-                color: Colors2023.GREEN.STANDARD,
-                letterSpacing: '0.2rem',
-              }}
-            >
+            <SctwHeading style={{ color: SctwColors.Yellow.BabyFood }}>
               HACKER
-            </BoldText>
+            </SctwHeading>
             <Image
               width="20"
               height="20"
@@ -492,7 +478,7 @@ const StyledButton = styled.button`
   box-shadow: 1px 2px 15px ${Colors2023.GRAY.MEDIUM};
 
   &:hover {
-    background-color: ${Colors2023.GRAY.SHLIGHT};
+    -color: ${Colors2023.GRAY.SHLIGHT};
     transition: all 0.3s;
   }
 `;
@@ -501,6 +487,7 @@ const DatabaseContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
+  color: white;
 `;
 
 const Wrapper = styled.div`
@@ -521,9 +508,8 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: ${Colors2023.GRAY.STANDARD};
+  background-color: #ffe48e; /* lite yuhloow (Sctw Colors) */
   border-radius: 10px;
-  border: 4px solid ${Colors2023.GRAY.MEDIUM};
 `;
 
 const FilterContainer = styled.div`
@@ -554,15 +540,15 @@ const ClearAllButton = styled.button`
   color: white;
   font-size: 16px;
   letter-spacing: 0.2rem;
-  background-color: ${Colors2023.GRAY.MEDIUM};
+  background-color: ${SctwColors.Red.Redward};
   border-radius: 25px;
-  border: 2px solid ${Colors2023.GRAY.SCHEMDIUM};
+  border: 2px solid #ffacab; // Light Redward
   gap: 10px;
   cursor: pointer;
   transition: all 0.3s;
 
   &:hover {
-    background-color: ${Colors2023.GRAY.SCHEMDIUM};
+    background-color: #ffacab; // Light Redward
     transition: all 0.3s;
   }
 `;
@@ -575,15 +561,15 @@ const FilterPill = styled.div`
   color: white;
   font-size: 15px;
   letter-spacing: 0.2rem;
-  background-color: ${Colors2023.GRAY.MEDIUM};
+  background-color: ${SctwColors.Red.Redward};
   border-radius: 25px;
-  border: 2px solid ${Colors2023.GRAY.SCHEMDIUM};
+  border: 2px solid #ffacab; // Light Redward
   gap: 10px;
   margin-left: 2rem;
 `;
 
 const DeleteFilterButton = styled.button`
-  background-color: ${Colors2023.GRAY.MEDIUM};
+  background-color: ${SctwColors.Red.Redward};
 
   cursor: pointer;
   transition: all 0.3s;
@@ -603,9 +589,9 @@ const HackerTabContainer = styled.button`
   display: flex;
   padding: 5px 15px;
   margin-top: 0.5rem;
-  background-color: ${Colors2023.GRAY.STANDARD};
-  border-bottom: 1px solid ${Colors2023.GRAY.MEDIUM};
-  color: ${Colors2023.GRAY.LIGHT};
+  /* background-color: #FFE48E; lite yuhloow (Sctw Colors) */
+  border-bottom: 1px solid ${SctwColors.Red.Rash};
+  /* color: ${SctwColors.Red.Redward}; */
   cursor: pointer;
 
   :active {
@@ -617,7 +603,7 @@ const CloseButton = styled.button`
   display: flex;
   width: 100%;
   justify-content: space-between;
-  background-color: ${Colors2023.GRAY.STANDARD};
+  background-color: ${SctwColors.Blue.BlueIvy};
   cursor: pointer;
   :hover {
     opacity: 0.5;
@@ -635,10 +621,9 @@ const RightContainer = styled.div`
   padding: 30px;
   flex-direction: column;
   justify-content: flex-start;
-  background-color: ${Colors2023.GRAY.STANDARD};
+  background-color: ${SctwColors.Blue.BlueIvy};
   border-radius: 10px;
-  border: 4px solid ${Colors2023.GRAY.MEDIUM};
-  box-shadow: 1px 2px 15px ${Colors2023.GRAY.MEDIUM};
+
   transition: max-width 0.5s;
 `;
 
@@ -689,12 +674,35 @@ const StyledScrollBar = styled.div`
 
   &::-webkit-scrollbar {
     width: 8px;
-    background-color: ${Colors2023.GRAY.MEDIUM};
+    background-color: ${SctwColors.Red.DonatedBlood};
     border-radius: 50px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: ${Colors2023.GREEN.DARK};
+    background-color: ${SctwColors.Red.Redward};
     border-radius: 50px;
   }
+`;
+
+const SctwTitle = styled(Heading)`
+  color: ${SctwColors.Blue.DarkBloo};
+  font-size: 45px;
+  letter-spacing: 0.4rem;
+`;
+
+const SctwHeading = styled(Heading)`
+  font-size: 25px;
+  letter-spacing: 0.4rem;
+`;
+
+const SctwText = styled(BodyText)`
+  font-size: 20px;
+  text-align: left;
+`;
+
+const SctwUnderlinedText = styled(BodyText)`
+  font-size: 20px;
+  text-align: left;
+  text-decoration-line: underline;
+  width: fit-content;
 `;
