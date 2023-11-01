@@ -1,15 +1,12 @@
 import Comment from '../../components/comment/comment';
 import SendComment from '../../components/send-comment/send-comment';
-import styled from 'styled-components';
 import axios from 'axios';
 import { useEffect, useMemo, useState } from 'react';
 import { Modal } from '@hibiscus/ui';
 import { FiEdit3 } from 'react-icons/fi';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-
-const backgroundColor = 'white';
-const BlueIvy = '#002990';
+import * as styles from '../../pages/index.css';
 
 const HIBISCUS_PODIUM_API_URL = process.env.NEXT_PUBLIC_HIBISCUS_PODIUM_API_URL;
 
@@ -44,28 +41,25 @@ export function Index() {
 
   return (
     <>
-      <Background>
-        <PhoneScreen>
-          <HeadingRow>
-            <p
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'flex-start',
-              }}
-            >
-              <Link href='/'>&lt; Back</Link>
-            </p>
-            <Heading>Comments</Heading>
-            <div
-              style={{
-                flex: 1,
-                flexDirection: 'row',
-                justifyContent: 'flex-end',
-              }}
-            ></div>
-          </HeadingRow>
-
+      <div className={styles.containerComments}>
+        <header className={styles.flexBetween}>
+          <p
+            style={{
+              flex: 1,
+              flexDirection: 'row',
+              justifyContent: 'flex-start',
+              fontSize: '16px',
+            }}
+          ><Link href='/'>&lt; Back</Link></p>
+          <h1 style={{fontSize: '24px'}}>Comments</h1>
+          <div style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'flex-end',
+          }}></div>
+        </header>
+        <br /> <br /> 
+        <div>
           {data &&
             data.comments &&
             data.comments.map((commentObj, index) => (
@@ -77,12 +71,13 @@ export function Index() {
                 timestamp={commentObj.createdAt}
               ></Comment>
             ))}
-        </PhoneScreen>
-      </Background>
+        </div>
 
-      <StyledButton onClick={() => setInputOpen(true)}>
-        <FiEdit3 size={35} color="white" />
-      </StyledButton>
+        <FiEdit3 
+          color='#FFFFFF' 
+          className={styles.commentButton}
+          onClick={() => setInputOpen(true)} />
+      </div>
 
       <Modal isOpen={inputOpen} closeModal={() => setInputOpen(false)}>
         <SendComment
@@ -96,58 +91,5 @@ export function Index() {
     </>
   );
 }
-
-const Background = styled.div`
-  background-color: ${backgroundColor};
-`;
-
-const PhoneScreen = styled.div`
-  max-width: 393px;
-  background: ${backgroundColor};
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 30px;
-  justify-content: flex-start;
-  gap: 40px;
-  margin: 0 auto;
-`;
-
-const Heading = styled.h1`
-  font-weight: 700;
-  font-size: 24px;
-`;
-
-const HeadingRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-`;
-
-const buttonMargin = '10px';
-const buttonSize = '65px';
-
-const StyledButton = styled.button`
-  border-radius: 50%;
-  background-color: ${BlueIvy};
-  width: ${buttonSize};
-  height: ${buttonSize};
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  position: absolute;
-  right: ${buttonMargin};
-  top: calc(100vh - ${buttonSize} - ${buttonMargin});
-
-  cursor: pointer;
-
-  :hover {
-    background-color: ;
-  }
-`;
 
 export default Index;

@@ -2,6 +2,7 @@ import { globalStyle, style } from '@vanilla-extract/css';
 
 globalStyle('*', {
   margin: 0,
+  outline: 'none',
 });
 
 globalStyle('body', {
@@ -33,12 +34,17 @@ export const projectPreview = style({
   WebkitUserSelect: 'none',
   msUserSelect: 'none',
   userSelect: 'none',
-});
-
-globalStyle(`${projectPreview} h3`, {
-  margin: 0,
-  marginBottom: '8px',
-  width: 'fit-content',
+  cursor: 'grab',
+  selectors: {
+    '&:h3': {
+      margin: 0,
+      marginBottom: '8px',
+      width: 'fit-content',
+    },
+    '&:active': {
+      cursor: 'grabbing',
+    },
+  }
 });
 
 export const rankBasic = style({
@@ -56,20 +62,35 @@ export const backgroundDim = style({
   height: '100%',
 });
 
-export const detailsContainer = style({
-  position: 'fixed',
-  top: '0',
-  bottom: '0',
+export const containerSearch = style({
+  backgroundColor: '#EDEDED',
+  marginTop: '70px',
+});
+
+export const searchBar = style({
+  backgroundColor: '#FFFFFF',
+  border: 'none',
+  padding: '16px',
   width: '100%',
-  height: '100%',
+});
+
+export const searchResult = style({
+  padding: '8px 16px',
+  selectors: {
+    '&:hover': {
+      backgroundColor: '#BBBBBB',
+      cursor: 'pointer',
+    },
+  },
+});
+
+export const detailsContainer = style({
   zIndex: 333,
 });
 
 export const detailsProject = style({
-  position: 'absolute',
-  left: 0, right: 0, top: 0, bottom: 0,
-  width: '90%',
   margin: 'auto',
+  marginTop: '30vh',
   height: 'fit-content',
   backgroundColor: '#FFFFFF',
   color: 'black',
@@ -88,19 +109,21 @@ export const detailsImg = style({
 export const detailsButtons = style({
   position: 'absolute',
   top: '16px',
-  right: '16px'
+  right: '16px',
+  cursor: 'pointer',
 });
 
 export const detailsInfo = style({
   padding: '25px',
   position: 'relative',
-});
-
-globalStyle(`${detailsInfo} h3`, {
-  fontWeight: 400,
-  fontSize: '14px',
-  color: '#989898',
-  margin: '10px 0px',
+  selectors: {
+    '&:h3': {
+      fontWeight: 400,
+      fontSize: '14px',
+      color: '#989898',
+      margin: '10px 0px',
+    },
+  },
 });
 
 export const backgroundBlur = style({
@@ -127,7 +150,7 @@ export const onHoldStack = style({
 export const onHoldPreview = style({
   height: '92px',
   marginTop: '-71px',
-  backgroundColor: 'darkgray',
+  backgroundColor: '#A9A9A9',
   color: 'white',
   listStyle: 'none',
   position: 'relative',
@@ -136,6 +159,23 @@ export const onHoldPreview = style({
 export const onHoldStackExpanded = style({
   display: 'grid',
   gridTemplateRows: 'auto 1fr auto',
+});
+
+export const containerComments = style({
+  padding: '36px',
+});
+
+export const commentButton = style({
+  borderRadius: '50%',
+  backgroundColor: '#002990',
+  width: '35px',
+  height: '35px',
+  padding: '15px',
+  margin: '0px 25px 50px 0px',
+  position: 'fixed',
+  bottom: 0,
+  right: 0,
+  filter: 'drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.2))',
 });
 
 export const truncateText = style({
@@ -155,6 +195,10 @@ export const thinFont = style({
 export const heavyFont = style({
   fontWeight: 700,
 });
+
+export const textCenter = style({
+  textAlign: 'center',
+})
 
 export const zTop = style({
   zIndex: 9,
@@ -183,13 +227,17 @@ export const flexCenter = style({
   alignItems: 'center',
 });
 
+export const cursorPointer = style({
+  cursor: 'pointer',
+})
+
 export const boxShadowY = style({
   boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.2)',
 });
 
 export const width90 = style({
   width: '90%',
-})
+});
 
 export const marginLeft12 = style({
   marginLeft: '12px',

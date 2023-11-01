@@ -30,7 +30,7 @@ export function Comment({
   timestamp,
 }: CommentProps) {
   return (
-    <OuterContainer>
+    <>
       <RowOne>
         <Circle src={profilepicurl} alt={'profile pic'} />
         <NameandReply>
@@ -42,7 +42,7 @@ export function Comment({
         <Body>{comment}</Body>
       </RowTwo>
       <RowThree></RowThree>
-    </OuterContainer>
+    </>
   );
 }
 const NameandReply = styled.div`
@@ -50,11 +50,6 @@ const NameandReply = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  padding: 0 20px;
-`;
-const OuterContainer = styled.div`
-  max-width: 355px;
-  background: white;
 `;
 const RowOne = styled.div`
   width: 100%;
@@ -65,15 +60,15 @@ const RowOne = styled.div`
 `;
 const RowTwo = styled.div`
   width: 100%;
-  padding-right: 30px;
 `;
 const RowThree = styled.div`
   width: 100%;
   height: 20px;
+  margin-bottom: 12px;
 `;
 const Name = styled.p`
   color: var(--black, #000);
-  font-family: SF Pro Text;
+  margin-left: 8px;
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
@@ -82,7 +77,6 @@ const Name = styled.p`
 `;
 const Body = styled.p`
   color: var(--black, #000);
-  font-family: SF Pro Text;
   font-size: 1rem;
   font-style: normal;
   font-weight: 400;
@@ -91,7 +85,6 @@ const Body = styled.p`
 `;
 const TimeStamp = styled.p`
   color: var(--black, #000);
-  font-family: SF Pro Text;
   font-size: 13px;
   font-style: normal;
   font-weight: 400;
@@ -106,7 +99,6 @@ const Circle = styled.img`
 `;
 const Reply = styled.p`
   color: #8c8afd;
-  font-family: SF Pro Text;
   font-size: 17px;
   font-style: normal;
   font-weight: 400;

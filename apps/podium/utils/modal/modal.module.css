@@ -1,0 +1,51 @@
+.dialogTransition__enter {
+  transition: ease-out;
+  transition-duration: 300ms;
+}
+
+.dialogTransition__enterFrom {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.dialogTransition__enterTo {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.dialogTransition__leave {
+  transition: ease-in;
+  transition-duration: 200ms;
+}
+
+.dialogTransition__leaveFrom {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.dialogTransition__leaveTo {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.dialog__panel {
+  width: 80vw;
+  transition: all;
+}
+
+.dialog {
+  position: relative;
+  z-index: 10;
+}
+
+.div1 {
+  position: fixed;
+  overflow-y: auto;
+  inset: 0;
+}
+
+.div2 {
+  display: flex;
+  justify-content: center;
+  padding: 4px;
+}
