@@ -283,12 +283,14 @@ const Index = () => {
       onDragEnd={handleDragEnd}
       onDragCancel={handleDragCancel}
     >
-      {expandedDetails && (
-        <ProjectDetails
-          project={expandedDetails}
-          expandProject={expandProject}
-        />
-      )}
+      <Modal
+        isOpen={expandedDetails !== null}
+        closeModal={() => expandProject(null)}>
+          <ProjectDetails
+            project={expandedDetails}
+            expandProject={expandProject}
+          />
+      </Modal>
       {isDragging && <OnHoldDroppable type={'OnHoldAdd'} />}
 
       <header className={`${styles.header} ${styles.flexCenter}`}>
@@ -305,7 +307,7 @@ const Index = () => {
       <Modal
         isOpen={isSearchOpen}
         closeModal={() => setIsSearchOpen(false)}>
-          <div className={`${styles.searchContainer} ${styles.roundCorners}`}>
+          <div className={`${styles.containerSearch} ${styles.roundCorners}`}>
             <input type='text' id='searchbox'
               className={styles.searchBar} 
               placeholder='Search for projects'

@@ -62,7 +62,7 @@ export const backgroundDim = style({
   height: '100%',
 });
 
-export const searchContainer = style({
+export const containerSearch = style({
   backgroundColor: '#EDEDED',
   marginTop: '70px',
 });
@@ -85,19 +85,12 @@ export const searchResult = style({
 });
 
 export const detailsContainer = style({
-  position: 'fixed',
-  top: '0',
-  bottom: '0',
-  width: '100%',
-  height: '100%',
   zIndex: 333,
 });
 
 export const detailsProject = style({
-  position: 'absolute',
-  left: 0, right: 0, top: 0, bottom: 0,
-  width: '90%',
   margin: 'auto',
+  marginTop: '30vh',
   height: 'fit-content',
   backgroundColor: '#FFFFFF',
   color: 'black',
@@ -182,6 +175,7 @@ export const commentButton = style({
   position: 'fixed',
   bottom: 0,
   right: 0,
+  filter: 'drop-shadow(0px 0px 20px rgba(0, 0, 0, 0.2))',
 });
 
 export const truncateText = style({

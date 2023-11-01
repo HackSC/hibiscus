@@ -8,6 +8,10 @@ interface ProjectDetailsProps {
 }
 
 const ProjectDetails: FC<ProjectDetailsProps> = ({ project, expandProject }) => {
+  if (project == null) {
+    return null;
+  }
+  
   const imgStyle = {
     backgroundImage: `url(${project.imageUrl})`,
     backgroundSize: 'cover',
@@ -43,7 +47,6 @@ const ProjectDetails: FC<ProjectDetailsProps> = ({ project, expandProject }) => 
           <p>{project.description}</p>
         </div>
       </div>
-      <div className={styles.backgroundBlur}></div>
     </div>
   )
 }
