@@ -2,6 +2,7 @@ import { GlobalStyles2023 } from '@hibiscus/styles';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import './styles.css';
+import '../components/events/event-list.global.css';
 import { wrapper } from '../store/store';
 import styled from 'styled-components';
 import { HibiscusUserProvider } from '../hooks/use-hibiscus-user/use-hibiscus-user';
