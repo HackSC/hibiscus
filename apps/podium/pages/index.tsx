@@ -25,6 +25,7 @@ import OnHoldPreview from '../components/OnHoldPreview';
 import { Project } from '../types';
 import { BiSearch } from 'react-icons/bi';
 import { Modal } from '../utils/modal/modal';
+import smoothscroll from 'smoothscroll-polyfill';
 
 const Index = () => {
   const { ranked, unranked, onHold, projects } = useProjectContext();
@@ -86,9 +87,11 @@ const Index = () => {
   const [searchInput, setSearchInput] = useState<string>('');
 
   useEffect(() => {
-    setTimeout(() => {
-      setSearchInput('');
-    }, 1000);
+    if (!isSearchOpen) {
+      setTimeout(() => {
+        setSearchInput('');
+      }, 1000);
+    }
   }, [isSearchOpen]);
 
   const handleSearch = () => {
@@ -97,6 +100,7 @@ const Index = () => {
     setSearchInput(searchQuery);
   };
 
+  smoothscroll.polyfill();
   const handleScroll = (search: string) => {
     const element = document.getElementById(`project-${search}`);
 
