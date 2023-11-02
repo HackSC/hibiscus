@@ -109,7 +109,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {
       appsOpen,
-      hackerPortalOpen,
+      hackerPortalOpen: true,
       waitlistOpen,
     } as ServerSideProps,
   };

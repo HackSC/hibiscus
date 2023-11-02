@@ -43,7 +43,6 @@ const MenuLayoutWrapper = styled.div`
 `;
 
 const MenuWrapper = styled.div`
-  z-index: 999; // always on top
   background: var(--Arthurs-Sweater, #ecb400);
 `;
 

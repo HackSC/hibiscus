@@ -1,4 +1,4 @@
-import { BattlePassRepository } from 'apps/dashboard/repository/battlepass.repository';
+import { BattlePassRepository } from '../../../../repository/battlepass.repository';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { container } from 'tsyringe';
 
@@ -17,8 +17,6 @@ export default async function handler(
 
     // TODO: handle error??
     const data = await repo.getTotalPoints(userId);
-
-    console.log(data);
 
     return res.status(200).json(data);
   } catch (e) {

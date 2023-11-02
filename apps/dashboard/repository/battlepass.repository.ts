@@ -62,4 +62,14 @@ export class BattlePassRepository {
       return { data: { points: 0 } };
     }
   }
+
+  async setBonusPointPending(userId: string, bonusPointId: string) {
+    const res = await this.client.from('bonus_points_log').upsert({
+      user_id: userId,
+      bonus_points_id: bonusPointId,
+      status: 0,
+    });
+
+    if (res.error) throw res.error;
+  }
 }
