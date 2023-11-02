@@ -5,6 +5,7 @@ import hibiscusIcon from '../../../../images/hibiscus-platform-logo.png';
 import { BsPersonFill } from 'react-icons/bs';
 import { BsCalendarCheck } from 'react-icons/bs';
 import { HiOutlineSquares2X2 } from 'react-icons/hi2';
+import { useMediaQuery } from 'react-responsive';
 
 // #CEA00C
 
@@ -77,25 +78,37 @@ const SquaresIcon = styled(HiOutlineSquares2X2)`
 `;
 
 function StyledSideNav() {
+  // Media query hook
+  const isSmallScreen = useMediaQuery({ query: '(max-width: 600px)' });
+
   return (
-    <MainWrapper>
-      <HeadingContainer>
-        <Image src={hibiscusIcon} alt="HackSC Logo" width={40} height={40} />
-        <StyledH1> HackSC 2023 </StyledH1>
-      </HeadingContainer>
-      <ButtonContainer style={{ marginTop: '100px' }}>
-        <CalendarIcon size={25} />
-        <ButtonH1> Events </ButtonH1>
-      </ButtonContainer>
-      <ButtonContainer>
-        <SquaresIcon size={25} style={{ marginLeft: '18px' }} />
-        <ButtonH1> Leaderboard </ButtonH1>
-      </ButtonContainer>
-      <ButtonContainer>
-        <PersonIcon size={25} />
-        <ButtonH1> Profile </ButtonH1>
-      </ButtonContainer>
-    </MainWrapper>
+    <>
+      {isSmallScreen ? null : (
+        <MainWrapper>
+          <HeadingContainer>
+            <Image
+              src={hibiscusIcon}
+              alt="HackSC Logo"
+              width={40}
+              height={40}
+            />
+            <StyledH1> HackSC 2023 </StyledH1>
+          </HeadingContainer>
+          <ButtonContainer style={{ marginTop: '100px' }}>
+            <CalendarIcon size={25} />
+            <ButtonH1> Events </ButtonH1>
+          </ButtonContainer>
+          <ButtonContainer>
+            <SquaresIcon size={25} style={{ marginLeft: '18px' }} />
+            <ButtonH1> Leaderboard </ButtonH1>
+          </ButtonContainer>
+          <ButtonContainer>
+            <PersonIcon size={25} />
+            <ButtonH1> Profile </ButtonH1>
+          </ButtonContainer>
+        </MainWrapper>
+      )}
+    </>
   );
 }
 

@@ -54,11 +54,17 @@ export function getDayDate(d: Date): Date {
 }
 
 // Event service API client
-export async function getEvent(eventId: string): Promise<Event> {
+export async function getEvent(
+  eventId: string,
+  accessToken: string
+): Promise<Event> {
   const apiUrl = getEnv().Hibiscus.Events.ApiUrl;
 
   try {
-    const res = await axios(`${apiUrl}/events/${eventId}`, { method: 'GET' });
+    const res = await axios(`${apiUrl}/events/${eventId}`, {
+      method: 'GET',
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
     const event = res.data;
     event.startTime = new Date(event.startTime);
     event.endTime = new Date(event.endTime);
@@ -72,7 +78,7 @@ export async function getEvent(eventId: string): Promise<Event> {
   }
 }
 
-export async function getAllEvents(): Promise<Event[]> {
+export async function getAllEvents(accessToken: string): Promise<Event[]> {
   const apiUrl = getEnv().Hibiscus.Events.ApiUrl;
 
   // Display all events after Sep 1 2023
@@ -81,6 +87,7 @@ export async function getAllEvents(): Promise<Event[]> {
   try {
     const res = await axios(`${apiUrl}/events?after=${startDate}&pageSize=-1`, {
       method: 'GET',
+      headers: { Authorization: `Bearer ${accessToken}` },
     });
     const events = res.data.events;
     for (const e of events) {
@@ -97,12 +104,16 @@ export async function getAllEvents(): Promise<Event[]> {
   }
 }
 
-export async function getPinnedEvents(userId: string): Promise<Event[]> {
+export async function getPinnedEvents(
+  userId: string,
+  accessToken: string
+): Promise<Event[]> {
   const apiUrl = getEnv().Hibiscus.Events.ApiUrl;
 
   try {
     const res = await axios(`${apiUrl}/events/pinned-events/${userId}`, {
       method: 'GET',
+      headers: { Authorization: `Bearer ${accessToken}` },
     });
     const events = res.data.pinnedEvents;
     for (const e of events) {
@@ -121,13 +132,15 @@ export async function getPinnedEvents(userId: string): Promise<Event[]> {
 
 export async function pinEvent(
   userId: string,
-  eventId: string
+  eventId: string,
+  accessToken: string
 ): Promise<number> {
   const apiUrl = getEnv().Hibiscus.Events.ApiUrl;
 
   try {
     const res = await axios(`${apiUrl}/events/pinned-events/${userId}`, {
       method: 'POST',
+      headers: { Authorization: `Bearer ${accessToken}` },
       data: {
         pin_event: eventId,
       },
@@ -145,13 +158,15 @@ export async function pinEvent(
 
 export async function unpinEvent(
   userId: string,
-  eventId: string
+  eventId: string,
+  accessToken: string
 ): Promise<number> {
   const apiUrl = getEnv().Hibiscus.Events.ApiUrl;
 
   try {
     const res = await axios(`${apiUrl}/events/pinned-events/${userId}`, {
       method: 'DELETE',
+      headers: { Authorization: `Bearer ${accessToken}` },
       data: {
         unpin_event: eventId,
       },
@@ -169,13 +184,15 @@ export async function unpinEvent(
 
 export async function updateEvent(
   eventId: string,
-  props: Partial<Event>
+  props: Partial<Event>,
+  accessToken: string
 ): Promise<Event> {
   const apiUrl = getEnv().Hibiscus.Events.ApiUrl;
 
   try {
     const res = await axios(`${apiUrl}/events/${eventId}`, {
       method: 'PUT',
+      headers: { Authorization: `Bearer ${accessToken}` },
       data: {
         ...props,
       },

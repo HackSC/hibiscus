@@ -15,6 +15,8 @@ import {
   updateEvent,
 } from '../../common/events.utils';
 import { Dispatch, SetStateAction, useState } from 'react';
+import { getCookie } from 'cookies-next';
+import { getEnv } from '@hibiscus/env';
 
 interface EventDetailsProps {
   event: Event;
@@ -278,8 +280,15 @@ const pinEventHandler =
   ) =>
   async () => {
     try {
-      await pinEvent(userId, eventId);
-      const pinned = await getPinnedEvents(userId);
+      await pinEvent(
+        userId,
+        eventId,
+        getCookie(getEnv().Hibiscus.Cookies.accessTokenName)?.toString()
+      );
+      const pinned = await getPinnedEvents(
+        userId,
+        getCookie(getEnv().Hibiscus.Cookies.accessTokenName)?.toString()
+      );
       setPinnedEvents(pinned);
     } catch (e) {
       setError(e.message);
@@ -295,8 +304,15 @@ const unpinEventHandler =
   ) =>
   async () => {
     try {
-      await unpinEvent(userId, eventId);
-      const pinned = await getPinnedEvents(userId);
+      await unpinEvent(
+        userId,
+        eventId,
+        getCookie(getEnv().Hibiscus.Cookies.accessTokenName)?.toString()
+      );
+      const pinned = await getPinnedEvents(
+        userId,
+        getCookie(getEnv().Hibiscus.Cookies.accessTokenName)?.toString()
+      );
       setPinnedEvents(pinned);
     } catch (e) {
       setError(e.message);
@@ -318,7 +334,11 @@ const saveHandler =
   ) =>
   async () => {
     try {
-      await updateEvent(event.eventId, event);
+      await updateEvent(
+        event.eventId,
+        event,
+        getCookie(getEnv().Hibiscus.Cookies.accessTokenName)?.toString()
+      );
       setEditingEvent(null);
       refresh();
     } catch (e) {

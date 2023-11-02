@@ -14,6 +14,8 @@ import { BoldText, Text } from '@hibiscus/ui';
 import { ImCross } from 'react-icons/im';
 import { Event, getDayDate, unpinEvent } from '../../common/events.utils';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
+import { getCookie } from 'cookies-next';
+import { getEnv } from '@hibiscus/env';
 
 export enum EventListType {
   ALL_EVENTS,
@@ -53,7 +55,11 @@ function EventList(props: EventListProps) {
   const { user } = useHibiscusUser();
 
   const deleteItemById = (id: string) => {
-    unpinEvent(user.id, id);
+    unpinEvent(
+      user.id,
+      id,
+      getCookie(getEnv().Hibiscus.Cookies.accessTokenName)?.toString()
+    );
 
     const newItems = items.flat();
     newItems.splice(
