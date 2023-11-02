@@ -7,10 +7,14 @@ import { FiEdit3 } from 'react-icons/fi';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import * as styles from '../../styles/index.css';
+import { getCookie } from 'cookies-next';
+import { getEnv } from '@hibiscus/env';
 
 const HIBISCUS_PODIUM_API_URL = process.env.NEXT_PUBLIC_HIBISCUS_PODIUM_API_URL;
 
 export function Index() {
+  const env = getEnv();
+
   const router = useRouter();
 
   const [data, setData] = useState(null);
@@ -23,8 +27,13 @@ export function Index() {
 
   const fetchData = async (projectId: string) => {
     try {
+      const accessToken = getCookie(
+        env.Hibiscus.Cookies.accessTokenName
+      )?.toString();
+
       const response = await axios.get(
-        `${HIBISCUS_PODIUM_API_URL}/comments/${projectId}`
+        `${HIBISCUS_PODIUM_API_URL}/comments/${projectId}`,
+        { headers: { Authorization: `Bearer ${accessToken}` } }
       );
       setData(response.data);
     } catch (error) {

@@ -40,7 +40,6 @@ export const getEnv = () => {
         ssoMockApp: process.env.NEXT_PUBLIC_SSO_MOCK_APP_URL,
         portal: process.env.NEXT_PUBLIC_PORTAL_URL,
         defaultRedirect: process.env.NEXT_PUBLIC_SSO_DEFAULT_REDIRECT_URL,
-        Podium: process.env.NEXT_PUBLIC_HIBISCUS_PODIUM_API_URL,
       },
       Hackform: {
         HackerAppResponsesTable:
@@ -61,6 +60,10 @@ export const getEnv = () => {
       SSO: {
         DefaultRole,
         DefaultJudgeVertical: process.env.JUDGE_DEFAULT_VERTICAL,
+      },
+      Podium: {
+        ApiUrl: process.env.NEXT_PUBLIC_HIBISCUS_PODIUM_API_URL,
+        ApiMasterToken: process.env.HIBISCUS_PODIUM_API_MASTER_TOKEN,
       },
     },
   };

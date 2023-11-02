@@ -10,7 +10,6 @@ import {
   SupabaseClient,
   UserResponse,
 } from '@supabase/supabase-js';
-import { HibiscusRole } from '@hibiscus/types';
 
 /**
  * Generates the NextJS middleware needed to integrate with the Hibiscus SSO system
@@ -366,13 +365,16 @@ async function initializeFakeUser(access_token: string, refresh_token: string) {
 /**
  * Additional initialization steps for new judge fake user
  */
-async function initializeJudgeUser(userId: string, verticalId?: string) {
+async function initializeJudgeUser(userId: string, verticalId: string) {
   const env = getEnv();
 
   // Must use fetch in middleware
-  const res = await fetch(`${env.Hibiscus.AppURL.Podium}/judges/${userId}`, {
+  const res = await fetch(`${env.Hibiscus.Podium.ApiUrl}/judges/${userId}`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${env.Hibiscus.Podium.ApiMasterToken}`,
+    },
     body: JSON.stringify({ verticalId }),
   });
 

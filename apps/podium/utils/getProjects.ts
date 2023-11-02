@@ -2,10 +2,11 @@ import axios from 'axios';
 
 const HIBISCUS_PODIUM_API_URL = process.env.NEXT_PUBLIC_HIBISCUS_PODIUM_API_URL;
 
-const getVerticalProjects = async (verticalId: string) => {
+const getVerticalProjects = async (verticalId: string, accessToken: string) => {
   try {
     const response = await axios.get(
-      `${HIBISCUS_PODIUM_API_URL}/projects/${verticalId}`
+      `${HIBISCUS_PODIUM_API_URL}/projects/${verticalId}`,
+      { headers: { Authorization: `Bearer ${accessToken}` } }
     );
 
     const jsonString = JSON.stringify(response.data);
@@ -17,10 +18,15 @@ const getVerticalProjects = async (verticalId: string) => {
   }
 };
 
-const getRanked = async (userId: string, verticalId: string) => {
+const getRanked = async (
+  userId: string,
+  verticalId: string,
+  accessToken: string
+) => {
   try {
     const response = await axios.get(
-      `${HIBISCUS_PODIUM_API_URL}/ranking/${verticalId}/${userId}`
+      `${HIBISCUS_PODIUM_API_URL}/ranking/${verticalId}/${userId}`,
+      { headers: { Authorization: `Bearer ${accessToken}` } }
     );
 
     const jsonString = JSON.stringify(response.data);
@@ -32,10 +38,15 @@ const getRanked = async (userId: string, verticalId: string) => {
   }
 };
 
-const getProjectDetails = async (projectId: string, verticalId: string) => {
+const getProjectDetails = async (
+  projectId: string,
+  verticalId: string,
+  accessToken: string
+) => {
   try {
     const response = await axios.get(
-      `${HIBISCUS_PODIUM_API_URL}/projects/${verticalId}/${projectId}`
+      `${HIBISCUS_PODIUM_API_URL}/projects/${verticalId}/${projectId}`,
+      { headers: { Authorization: `Bearer ${accessToken}` } }
     );
 
     const jsonString = JSON.stringify(response.data);
@@ -55,12 +66,16 @@ const getProjectDetails = async (projectId: string, verticalId: string) => {
   }
 };
 
-const getProjects = async (userId: string, verticalId: string) => {
+const getProjects = async (
+  userId: string,
+  verticalId: string,
+  accessToken: string
+) => {
   let unranked = [];
   let ranked = [];
 
-  const allProjects = await getVerticalProjects(verticalId);
-  const rankedBasic = await getRanked(userId, verticalId);
+  const allProjects = await getVerticalProjects(verticalId, accessToken);
+  const rankedBasic = await getRanked(userId, verticalId, accessToken);
 
   const rankedIds = rankedBasic.map((p) => p.projectId);
   const unrankedBasic = allProjects.filter(
@@ -68,11 +83,11 @@ const getProjects = async (userId: string, verticalId: string) => {
   );
 
   unranked = unrankedBasic.map((p) => {
-    return getProjectDetails(p.projectId, verticalId);
+    return getProjectDetails(p.projectId, verticalId, accessToken);
   });
 
   ranked = rankedBasic.map((p) => {
-    return getProjectDetails(p.projectId, verticalId);
+    return getProjectDetails(p.projectId, verticalId, accessToken);
   });
 
   return [unranked, ranked];

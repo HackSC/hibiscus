@@ -3,6 +3,8 @@ import getProjects from './utils/getProjects';
 import { useHibiscusUser } from '@hibiscus/hibiscus-user-context';
 import { getJudgeDetails } from './utils/getJudgeDetails';
 import { Project } from './types';
+import { getCookie } from 'cookies-next';
+import { getEnv } from '@hibiscus/env';
 
 interface ProjectContextType {
   ranked: any[];
@@ -17,6 +19,8 @@ const ProjectContext = createContext<ProjectContextType>(
 );
 
 export const ProjectContextProvider = (props: React.PropsWithChildren) => {
+  const env = getEnv();
+
   const { user } = useHibiscusUser();
 
   const [rankedProjects, setRankedProjects] = useState<Project[]>([]);
@@ -31,11 +35,15 @@ export const ProjectContextProvider = (props: React.PropsWithChildren) => {
       if (user != null) {
         try {
           // Get judge associated vertical
-          const judgeDetails = await getJudgeDetails(user.id);
+          const judgeDetails = await getJudgeDetails(
+            user.id,
+            getCookie(env.Hibiscus.Cookies.accessTokenName)?.toString()
+          );
 
           const [unrankedPromises, rankedPromises] = await getProjects(
             user.id,
-            judgeDetails.verticalId
+            judgeDetails.verticalId,
+            getCookie(env.Hibiscus.Cookies.accessTokenName)?.toString()
           );
 
           const unrankedData = await Promise.all(unrankedPromises);

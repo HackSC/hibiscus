@@ -6,13 +6,18 @@ export const updateProjectRanking = async (
   projectId: string,
   verticalId: string,
   userId: string,
-  rank: number
+  rank: number,
+  accessToken: string
 ): Promise<boolean> => {
   try {
-    await axios.post(`${HIBISCUS_PODIUM_API_URL}/ranking/${verticalId}/${userId}`, {
-      projectId,
-      newRanking: rank,
-    });
+    await axios.post(
+      `${HIBISCUS_PODIUM_API_URL}/ranking/${verticalId}/${userId}`,
+      {
+        projectId,
+        newRanking: rank,
+      },
+      { headers: { Authorization: `Bearer ${accessToken}` } }
+    );
 
     return true;
   } catch (error) {

@@ -26,8 +26,12 @@ import { Project } from '../types';
 import { BiSearch } from 'react-icons/bi';
 import { Modal } from '../utils/modal/modal';
 import smoothscroll from 'smoothscroll-polyfill';
+import { getCookie } from 'cookies-next';
+import { getEnv } from '@hibiscus/env';
 
 const Index = () => {
+  const env = getEnv();
+
   const { ranked, unranked, onHold, projects } = useProjectContext();
   const [unrankedProjects, setUnrankedProjects] = unranked;
   const [rankedProjects, setRankedProjects] = ranked;
@@ -181,7 +185,8 @@ const Index = () => {
                     activeProject.projectId,
                     activeProject.verticalId,
                     user.id,
-                    newIndex + 1
+                    newIndex + 1,
+                    getCookie(env.Hibiscus.Cookies.accessTokenName)?.toString()
                   );
 
                   return arrayMove(updatedRanking, oldIndex, newIndex);
@@ -204,7 +209,8 @@ const Index = () => {
                     activeProject.projectId,
                     activeProject.verticalId,
                     user.id,
-                    newIndex + 1
+                    newIndex + 1,
+                    getCookie(env.Hibiscus.Cookies.accessTokenName)?.toString()
                   );
 
                   return arrayMove(prev, oldIndex, newIndex);
@@ -217,7 +223,8 @@ const Index = () => {
                     activeProject.projectId,
                     activeProject.verticalId,
                     user.id,
-                    newIndex + 1
+                    newIndex + 1,
+                    getCookie(env.Hibiscus.Cookies.accessTokenName)?.toString()
                   );
 
                   return prev;
@@ -248,7 +255,8 @@ const Index = () => {
               activeProject.projectId,
               activeProject.verticalId,
               user.id,
-              index + 1
+              index + 1,
+              getCookie(env.Hibiscus.Cookies.accessTokenName)?.toString()
             );
 
             setRankedProjects((prev) => [...prev, activeProject]);
@@ -275,7 +283,8 @@ const Index = () => {
             unrankProject(
               activeProject.projectId,
               activeProject.verticalId,
-              user.id
+              user.id,
+              getCookie(env.Hibiscus.Cookies.accessTokenName)?.toString()
             );
 
             setRankedProjects((prev) =>

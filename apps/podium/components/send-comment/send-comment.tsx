@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { FiSend } from 'react-icons/fi'; // Import the send icon
 import { useHibiscusUser } from '@hibiscus/hibiscus-user-context';
+import { getEnv } from '@hibiscus/env';
+import { getCookie } from 'cookies-next';
 
 const InputWrapper = styled.div`
   position: relative;
@@ -49,14 +51,23 @@ const SendComment = ({
   projectId, // check if null!
   ...inputProps
 }) => {
+  const env = getEnv();
+
   const { user } = useHibiscusUser();
 
   const [commentText, setCommentText] = useState('');
   const handleSubmit = async () => {
     console.log(commentText);
     const endpoint = `${HIBISCUS_PODIUM_API_URL}/comments/${projectId}/user/${user.id}`;
+    const accessToken = getCookie(
+      env.Hibiscus.Cookies.accessTokenName
+    )?.toString();
     try {
-      const response = await axios.post(endpoint, { comment: commentText });
+      const response = await axios.post(
+        endpoint,
+        { comment: commentText },
+        { headers: { Authorization: `Bearer ${accessToken}` } }
+      );
       console.log(response.data);
       //refresh page
       fetchData(projectId);
@@ -74,7 +85,7 @@ const SendComment = ({
       />
       {projectId && user && (
         <StyledButton onClick={handleSubmit}>
-          <FiSend color='#FFFFFF' />
+          <FiSend color="#FFFFFF" />
         </StyledButton>
       )}
     </InputWrapper>
