@@ -1,4 +1,5 @@
 import { Colors2023 } from '@hibiscus/styles';
+import { FaArrowLeft } from 'react-icons/fa';
 import { Text, BoldText } from '@hibiscus/ui';
 import {
   Button,
@@ -35,10 +36,14 @@ function EventDetails(props: EventDetailsProps) {
     // Normal mode (not in edit mode)
     return (
       <Container>
-        <BoldText style={{ fontSize: '1.5rem' }}>
+        {/* <div style={{display:"flex"}}>
+          <ArrowIcon style={{marginTop: "3px"}} />
+          <Text style={{marginLeft: "4px"}}>Back to All Events</Text>
+        </div> */}
+        <BoldText style={{ fontSize: '1.5rem', marginLeft: '20px' }}>
           {props.event.eventName}
         </BoldText>
-        <Text>
+        <Text style={{ marginLeft: '20px' }}>
           {props.event.startTime.toLocaleDateString('en-US', {
             month: 'short',
             day: '2-digit',
@@ -54,16 +59,16 @@ function EventDetails(props: EventDetailsProps) {
             minute: '2-digit',
           })}
         </Text>
-        <Text>{props.event.location}</Text>
-        <Text>{props.event.description}</Text>
-        <Row>
+        <Text style={{ marginLeft: '20px' }}>{props.event.location}</Text>
+        <Text style={{ marginLeft: '20px' }}>{props.event.description}</Text>
+        {/* <Row>
           {props.event.eventTags?.map((tag, i) => (
             <Tag key={i}>{tag}</Tag>
           ))}
           {props.event.industryTags?.map((tag, i) => (
             <Tag key={i}>{tag}</Tag>
           ))}
-        </Row>
+        </Row> */}
 
         <Row>
           {props.admin && (
@@ -247,8 +252,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 
-  background-color: ${Colors2023.GRAY.MEDIUM};
-  border: 3px solid ${Colors2023.GRAY.SCHEMDIUM};
+  background-color: #ff514f;
+  border: 3px solid #ff514f;
   border-radius: 10px;
 
   padding: 2rem;
@@ -257,6 +262,8 @@ const Container = styled.div`
   width: 600px;
   max-width: 90vw;
 `;
+
+const ArrowIcon = styled(FaArrowLeft)``;
 
 const Row = styled.div`
   display: flex;

@@ -18,7 +18,7 @@ interface EventsCalendarProps {
 
 function EventsCalendar(props: EventsCalendarProps) {
   const ref = useRef(null);
-  const [columns, setColumns] = useState(0);
+  const [columns, setColumns] = useState(2);
   const [offset, setOffset] = useState(0);
   const [cards, setCards] = useState<ReactNode[][] | null>(null);
 
@@ -27,12 +27,12 @@ function EventsCalendar(props: EventsCalendarProps) {
   // Queries width of component to calculate number of columns
   // Dynamically recalculates on resize
   useEffect(() => {
-    setColumns(calcColumns(COLUMN_WIDTH, ref.current?.offsetWidth ?? 0));
-    const getwidth = () => {
-      setColumns(calcColumns(COLUMN_WIDTH, ref.current?.offsetWidth ?? 0));
-    };
-    window.addEventListener('resize', getwidth);
-    return () => window.removeEventListener('resize', getwidth);
+    // setColumns(calcColumns(COLUMN_WIDTH, ref.current?.offsetWidth ?? 0));
+    // const getwidth = () => {
+    //   setColumns(calcColumns(COLUMN_WIDTH, ref.current?.offsetWidth ?? 0));
+    // };
+    // window.addEventListener('resize', getwidth);
+    // return () => window.removeEventListener('resize', getwidth);
   }, []);
 
   // Render event cards
