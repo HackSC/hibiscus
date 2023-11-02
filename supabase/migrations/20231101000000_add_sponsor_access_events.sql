@@ -7,7 +7,7 @@ stable
 as $$
     select user_id 
     from user_profiles
-    where user_profiles.role = 4
+    where user_profiles.role = 3
 $$;
 
 create policy "Allow sponsors to access all rows"
@@ -41,4 +41,3 @@ create policy "Allow sponsors to access all rows"
     using (auth.uid() in (
         select get_sponsors()
     ))
-    
