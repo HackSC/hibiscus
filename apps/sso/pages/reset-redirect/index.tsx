@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import ResetCard from '../../components/reset-card/reset-card';
 import Head from 'next/head';
 import { getWebTitle } from '@hibiscus/metadata';
 import { useRouter } from 'next/router';
@@ -19,11 +18,13 @@ export function Index() {
         <title>{getWebTitle('Reset your password')}</title>
       </Head>
 
-      {redirect && (
-        <a href={redirect}>
-          <Button color="blue">Click here to reset your password</Button>
-        </a>
-      )}
+      <CenterDiv>
+        {redirect && (
+          <a href={redirect}>
+            <Button color="black">Click here to reset your password</Button>
+          </a>
+        )}
+      </CenterDiv>
     </MainPageWrapper>
   );
 }
@@ -34,4 +35,8 @@ const MainPageWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   min-height: 100vh;
+`;
+
+const CenterDiv = styled.div`
+  margin: auto;
 `;
