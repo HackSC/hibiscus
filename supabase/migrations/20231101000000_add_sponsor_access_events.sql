@@ -19,12 +19,12 @@ create policy "Allow sponsors to access all rows"
     ));
 
 create policy "Allow sponsors to access all rows"
-  on public.event_log
-  for select 
-  to authenticated
-  using (auth.uid() in (
-      select get_sponsors()
-  ))
+    on public.event_log
+    for select 
+    to authenticated
+    using (auth.uid() in (
+        select get_sponsors()
+    ));
 
 create policy "Allow sponsors to access all rows"
     on public.events
@@ -40,4 +40,4 @@ create policy "Allow sponsors to access all rows"
     to authenticated
     using (auth.uid() in (
         select get_sponsors()
-    ))
+    ));
