@@ -589,9 +589,8 @@ const HackerTabContainer = styled.button`
   display: flex;
   padding: 5px 15px;
   margin-top: 0.5rem;
-  /* background-color: #FFE48E; lite yuhloow (Sctw Colors) */
+  background-color: #ffe48e; /* lite yuhloow (Sctw Colors) */
   border-bottom: 1px solid ${SctwColors.Red.Rash};
-  /* color: ${SctwColors.Red.Redward}; */
   cursor: pointer;
 
   :active {
