@@ -92,6 +92,9 @@ function EventPage() {
         const events = await getAllEvents(
           getCookie(getEnv().Hibiscus.Cookies.accessTokenName)?.toString()
         );
+        const events = await getAllEvents(
+          getCookie(getEnv().Hibiscus.Cookies.accessTokenName)?.toString()
+        );
         setEvents(events);
 
         // Group events by date
@@ -120,6 +123,10 @@ function EventPage() {
   useEffect(() => {
     async function fetchPinnedEvents() {
       try {
+        const pinnedEvents = await getPinnedEvents(
+          user.id,
+          getCookie(getEnv().Hibiscus.Cookies.accessTokenName)?.toString()
+        );
         const pinnedEvents = await getPinnedEvents(
           user.id,
           getCookie(getEnv().Hibiscus.Cookies.accessTokenName)?.toString()

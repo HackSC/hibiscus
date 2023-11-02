@@ -10,8 +10,6 @@ class _EventBase:
     startTime: datetime
     endTime: datetime
     location: str
-    eventTags: list[str]
-    industryTags: list[str]
     bpPoints: int
 
     def __post_init__(self):
@@ -22,6 +20,8 @@ class _EventBase:
 @dataclass
 class _EventOptionalBase:
     description: Optional[str] = None
+    eventTags: Optional[list[str]] = None
+    industryTags: Optional[list[str]] = None
 
 
 @dataclass
@@ -73,7 +73,11 @@ class Contact:
 
 def event_to_dict(event: _EventBase) -> dict:
     d = asdict(event)
-    d["startTime"] = event.startTime.isoformat()
-    d["endTime"] = event.endTime.isoformat()
+
+    if not isinstance(event.startTime, str):
+        d["startTime"] = event.startTime.isoformat()
+
+    if not isinstance(event.endTime, str):
+        d["endTime"] = event.endTime.isoformat()
 
     return d

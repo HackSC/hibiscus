@@ -5,6 +5,9 @@ import { BonusPointsStatus } from './types';
 import { container } from 'tsyringe';
 import { BattlePassRepository } from 'apps/dashboard/repository/battlepass.repository';
 import axios from 'axios';
+import { container } from 'tsyringe';
+import { BattlePassRepository } from 'apps/dashboard/repository/battlepass.repository';
+import axios from 'axios';
 
 const getNumberStatusBonusPoint = (status: BonusPointsStatus) => {
   switch (status) {
@@ -41,6 +44,7 @@ export interface BattlepassAPIInterface {
         last_name: string;
         bonus_points: number;
         event_points: number;
+        total_points: number;
         total_points: number;
       }[];
     };
@@ -85,6 +89,7 @@ export class BattlepassAPI implements BattlepassAPIInterface {
         bonus_points: number;
         event_points: number;
         total_points: number;
+        total_points: number;
       }[];
     };
   }> {
@@ -100,6 +105,7 @@ export class BattlepassAPI implements BattlepassAPIInterface {
               bonus_points: faker.datatype.number(),
               event_points: faker.datatype.number(),
               total_points: faker.datatype.number(),
+              total_points: faker.datatype.number(),
             }))
             .sort(
               (a, b) =>
@@ -110,6 +116,7 @@ export class BattlepassAPI implements BattlepassAPIInterface {
         },
       };
     }
+
     try {
       const res = await axios.get(
         `/api/battlepass/leaderboard?pageNumber=${pageNum}&pageSize=${pageSize}`

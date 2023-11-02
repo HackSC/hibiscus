@@ -20,6 +20,7 @@ sqlalchemy = "^2.0.15"
 psycopg2-binary = "^2.9.6"
 chalice = "^1.29.0"
 sqlalchemy-cockroachdb = "^2.0.1"
+requests = "^2.31.0"
 
 
 [tool.poetry.group.dev.dependencies]
