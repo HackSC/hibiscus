@@ -16,6 +16,7 @@ import { getWordCount } from '../../common/utils';
 import HackerProfile from '../../components/sponsor-portal/hacker-profile';
 import { SponsorServiceAPI } from '../../common/api';
 import {
+  Button as SctwButton,
   BodyText,
   Colors as SctwColors,
   GlobalStyle,
@@ -412,14 +413,12 @@ const Index = () => {
                 alt="x-button"
               />
             </CloseButton>
-            <H1 style={{ fontSize: '30px', letterSpacing: '0.2rem' }}>
-              QUICK NOTES
-            </H1>
-            <Text style={{ fontSize: '25px', marginTop: '1rem' }}>
+            <SctwHeading>QUICK NOTES</SctwHeading>
+            <BodyText style={{ fontSize: '25px', marginTop: '1rem' }}>
               {attendeeName}
-            </Text>
+            </BodyText>
             <TextWrapper>
-              <StyledParagraphText
+              <StyledInput
                 value={textInput}
                 placeholder={'Add quick note . . . '}
                 onChange={(e) => {
@@ -431,18 +430,18 @@ const Index = () => {
               </WordCountText>
             </TextWrapper>
             <div style={{ marginTop: '1rem', display: 'flex' }}>
-              <Button
-                color={'red'}
+              <SctwButton
+                color={'yellow'}
                 onClick={() => {
                   setModalActive(false);
                   setInput('');
                 }}
               >
                 CANCEL
-              </Button>
+              </SctwButton>
               <div style={{ marginLeft: '0.5rem' }}>
-                <Button
-                  color={'black'}
+                <SctwButton
+                  color={'yellow'}
                   onClick={() => {
                     setAttendeeNote(COMPANY_ID, currentAttendee.id, textInput);
                     setModalActive(false);
@@ -450,7 +449,7 @@ const Index = () => {
                   }}
                 >
                   SAVE
-                </Button>
+                </SctwButton>
               </div>
             </div>
           </QuickNoteContainer>
@@ -652,16 +651,27 @@ const ModalContainer = styled.div`
 `;
 
 const QuickNoteContainer = styled.div`
+  color: white;
   margin: auto;
   margin-top: 10rem;
-  padding: 20px;
+  padding: 20px 20px 40px 40px;
   display: flex;
   flex-direction: column;
   width: 50%;
-  background-color: ${Colors2023.GRAY.STANDARD};
+  background-color: ${SctwColors.Blue.BlueIvy};
   border-radius: 10px;
-  border: 4px solid ${Colors2023.GRAY.MEDIUM};
-  box-shadow: 1px 2px 15px ${Colors2023.GRAY.MEDIUM};
+`;
+
+const StyledInput = styled.textarea`
+  background-color: ${SctwColors.Yellow.BabyFood};
+  padding: 20px 60px 60px 20px;
+
+  border-radius: 10px;
+  width: 80%;
+
+  :focus {
+    outline: none;
+  }
 `;
 
 const StyledScrollBar = styled.div`
