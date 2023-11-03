@@ -28,6 +28,7 @@ import { Modal } from '../utils/modal/modal';
 import smoothscroll from 'smoothscroll-polyfill';
 import { getCookie } from 'cookies-next';
 import { getEnv } from '@hibiscus/env';
+import { HibiscusRole } from '@hibiscus/types';
 
 const Index = () => {
   const env = getEnv();
@@ -304,6 +305,15 @@ const Index = () => {
     setActive(null);
     setIsDragging(false);
   };
+
+  if (user == null) {
+    return <></>;
+  }
+
+  if (user?.role !== HibiscusRole.JUDGE) {
+    window.location.assign(env.Hibiscus.AppURL.portal);
+    return <></>;
+  }
 
   return (
     <DndContext
