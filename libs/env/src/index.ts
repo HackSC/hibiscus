@@ -31,9 +31,12 @@ export const getEnv = () => {
       Hackform: {
         HackerAppResponsesTable:
           process.env.HIBISCUS_HACKER_APP_RESPONSES_TABLENAME,
+        TallyApps2023XUrl: process.env.NEXT_PUBLIC_TALLY_APPS_2023_X,
       },
       RSVPForm: {
         ResumeStorageBucketName: 'rsvp-resume-hacker-2023',
+        WaiverURL: process.env.NEXT_PUBLIC_WAIVER_URL,
+        HackerPacketURL: process.env.NEXT_PUBLIC_HACKER_PACKET_URL,
       },
       FeatureFlag: {
         RedisURL: process.env.HIBISCUS_FEATURE_FLAG_REDIS_URL,
@@ -41,6 +44,10 @@ export const getEnv = () => {
       },
       Events: {
         ApiUrl: process.env.NEXT_PUBLIC_HIBISCUS_EVENTS_API_URL,
+      },
+      Discord: {
+        ApiUrl: process.env.NEXT_PUBLIC_DISCORD_API_URL,
+        InviteUrl: process.env.NEXT_PUBLIC_DISCORD_INVITE_URL,
       },
     },
   };

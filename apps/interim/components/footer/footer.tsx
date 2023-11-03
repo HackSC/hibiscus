@@ -5,7 +5,7 @@ import styled from 'styled-components';
 /* eslint-disable-next-line */
 export interface FooterProps {}
 
-export function Footer(props: FooterProps) {
+export function Footer() {
   const socialMedias: { href: string; src: string; alt: string }[] = [
     {
       src: '/img/linkedin.svg',
@@ -26,6 +26,11 @@ export function Footer(props: FooterProps) {
       src: '/img/instagram.svg',
       alt: 'Instagram',
       href: 'https://www.instagram.com/hackscofficial/',
+    },
+    {
+      src: '/img/youtube.svg',
+      alt: 'Youtube',
+      href: 'https://www.youtube.com/@hacksc',
     },
   ];
 

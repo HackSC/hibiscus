@@ -3,32 +3,10 @@ export type Json =
   | number
   | boolean
   | null
-  | { [key: string]: Json }
+  | { [key: string]: Json | undefined }
   | Json[];
 
 export interface Database {
-  graphql_public: {
-    Tables: {
-      [_ in never]: never;
-    };
-    Views: {
-      [_ in never]: never;
-    };
-    Functions: {
-      graphql: {
-        Args: {
-          operationName: string;
-          query: string;
-          variables: Json;
-          extensions: Json;
-        };
-        Returns: Json;
-      };
-    };
-    Enums: {
-      [_ in never]: never;
-    };
-  };
   public: {
     Tables: {
       application_status: {
@@ -44,6 +22,7 @@ export interface Database {
           id?: number;
           status?: string | null;
         };
+        Relationships: [];
       };
       bonus_point_status: {
         Row: {
@@ -58,26 +37,34 @@ export interface Database {
           id?: number;
           status?: string;
         };
+        Relationships: [];
       };
       bonus_points: {
         Row: {
           created_at: string | null;
+          description: string | null;
           id: string;
+          link: string | null;
           name: string;
           points: number;
         };
         Insert: {
           created_at?: string | null;
-          id: string;
+          description?: string | null;
+          id?: string;
+          link?: string | null;
           name: string;
           points: number;
         };
         Update: {
           created_at?: string | null;
+          description?: string | null;
           id?: string;
+          link?: string | null;
           name?: string;
           points?: number;
         };
+        Relationships: [];
       };
       bonus_points_log: {
         Row: {
@@ -89,7 +76,7 @@ export interface Database {
         };
         Insert: {
           bonus_points_id: string;
-          log_id: string;
+          log_id?: string;
           status?: number;
           timestamp?: string | null;
           user_id: string;
@@ -101,6 +88,26 @@ export interface Database {
           timestamp?: string | null;
           user_id?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'bonus_points_log_bonus_points_id_fkey';
+            columns: ['bonus_points_id'];
+            referencedRelation: 'bonus_points';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'bonus_points_log_status_fkey';
+            columns: ['status'];
+            referencedRelation: 'bonus_point_status';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'bonus_points_log_user_id_fkey';
+            columns: ['user_id'];
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          }
+        ];
       };
       companies: {
         Row: {
@@ -127,6 +134,7 @@ export interface Database {
           profile_photo?: string | null;
           website?: string | null;
         };
+        Relationships: [];
       };
       company_saved_participants: {
         Row: {
@@ -150,6 +158,20 @@ export interface Database {
           saved?: boolean;
           user_id?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'company_saved_participants_company_id_fkey';
+            columns: ['company_id'];
+            referencedRelation: 'companies';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'company_saved_participants_user_id_fkey';
+            columns: ['user_id'];
+            referencedRelation: 'participants';
+            referencedColumns: ['id'];
+          }
+        ];
       };
       discord_invites: {
         Row: {
@@ -173,6 +195,14 @@ export interface Database {
           time_invite_used?: string | null;
           user_profile_id?: string | null;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'discord_invites_user_profile_id_fkey';
+            columns: ['user_profile_id'];
+            referencedRelation: 'user_profiles';
+            referencedColumns: ['user_id'];
+          }
+        ];
       };
       discord_profiles: {
         Row: {
@@ -190,6 +220,7 @@ export interface Database {
           id?: number;
           user_profile_id?: string | null;
         };
+        Relationships: [];
       };
       event_log: {
         Row: {
@@ -210,6 +241,20 @@ export interface Database {
           log_id?: number;
           user_id?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'event_log_event_id_fkey';
+            columns: ['event_id'];
+            referencedRelation: 'events';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'event_log_user_id_fkey';
+            columns: ['user_id'];
+            referencedRelation: 'participants';
+            referencedColumns: ['id'];
+          }
+        ];
       };
       events: {
         Row: {
@@ -245,6 +290,14 @@ export interface Database {
           points?: number;
           start?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'events_company_id_fkey';
+            columns: ['company_id'];
+            referencedRelation: 'companies';
+            referencedColumns: ['id'];
+          }
+        ];
       };
       invitations: {
         Row: {
@@ -268,23 +321,54 @@ export interface Database {
           organizer_id?: string;
           team_id?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'invitations_invited_id_fkey';
+            columns: ['invited_id'];
+            referencedRelation: 'user_profiles';
+            referencedColumns: ['user_id'];
+          },
+          {
+            foreignKeyName: 'invitations_organizer_id_fkey';
+            columns: ['organizer_id'];
+            referencedRelation: 'user_profiles';
+            referencedColumns: ['user_id'];
+          },
+          {
+            foreignKeyName: 'invitations_team_id_fkey';
+            columns: ['team_id'];
+            referencedRelation: 'teams';
+            referencedColumns: ['team_id'];
+          }
+        ];
       };
       leaderboard: {
         Row: {
           bonus_points: number;
           event_points: number;
+          total_points: number | null;
           user_id: string;
         };
         Insert: {
           bonus_points?: number;
           event_points?: number;
+          total_points?: number | null;
           user_id: string;
         };
         Update: {
           bonus_points?: number;
           event_points?: number;
+          total_points?: number | null;
           user_id?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'leaderboard_user_id_fkey';
+            columns: ['user_id'];
+            referencedRelation: 'user_profiles';
+            referencedColumns: ['user_id'];
+          }
+        ];
       };
       notes: {
         Row: {
@@ -308,6 +392,14 @@ export interface Database {
           note?: string | null;
           participant_id?: string | null;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'notes_participant_id_fkey';
+            columns: ['participant_id'];
+            referencedRelation: 'participants';
+            referencedColumns: ['id'];
+          }
+        ];
       };
       participants: {
         Row: {
@@ -343,6 +435,14 @@ export interface Database {
           school?: string | null;
           wristband_id?: string | null;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'participants_id_fkey';
+            columns: ['id'];
+            referencedRelation: 'user_profiles';
+            referencedColumns: ['user_id'];
+          }
+        ];
       };
       pinned_events: {
         Row: {
@@ -363,6 +463,20 @@ export interface Database {
           id?: number;
           user_id?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'pinned_events_event_id_fkey';
+            columns: ['event_id'];
+            referencedRelation: 'events';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'pinned_events_user_id_fkey';
+            columns: ['user_id'];
+            referencedRelation: 'user_profiles';
+            referencedColumns: ['user_id'];
+          }
+        ];
       };
       pointr_shortlinks: {
         Row: {
@@ -383,6 +497,7 @@ export interface Database {
           path?: string;
           url?: string;
         };
+        Relationships: [];
       };
       roles: {
         Row: {
@@ -403,6 +518,41 @@ export interface Database {
           id?: number;
           name?: string;
         };
+        Relationships: [];
+      };
+      sponsor_user_bridge_company: {
+        Row: {
+          company_id: string;
+          created_at: string | null;
+          id: string;
+          user_id: string;
+        };
+        Insert: {
+          company_id: string;
+          created_at?: string | null;
+          id?: string;
+          user_id: string;
+        };
+        Update: {
+          company_id?: string;
+          created_at?: string | null;
+          id?: string;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'sponsor_user_bridge_company_company_id_fkey';
+            columns: ['company_id'];
+            referencedRelation: 'companies';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'sponsor_user_bridge_company_user_id_fkey';
+            columns: ['user_id'];
+            referencedRelation: 'user_profiles';
+            referencedColumns: ['user_id'];
+          }
+        ];
       };
       target_graduations: {
         Row: {
@@ -423,6 +573,14 @@ export interface Database {
           graduation_year?: string | null;
           id?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'target_graduations_company_id_fkey';
+            columns: ['company_id'];
+            referencedRelation: 'companies';
+            referencedColumns: ['id'];
+          }
+        ];
       };
       target_majors: {
         Row: {
@@ -443,6 +601,14 @@ export interface Database {
           id?: string;
           major?: string | null;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'target_majors_company_id_fkey';
+            columns: ['company_id'];
+            referencedRelation: 'companies';
+            referencedColumns: ['id'];
+          }
+        ];
       };
       teams: {
         Row: {
@@ -469,11 +635,20 @@ export interface Database {
           photo_key?: string | null;
           team_id?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'teams_organizer_id_fkey';
+            columns: ['organizer_id'];
+            referencedRelation: 'user_profiles';
+            referencedColumns: ['user_id'];
+          }
+        ];
       };
       user_profiles: {
         Row: {
           app_id: string | null;
           application_status: number;
+          application_status_last_changed: string | null;
           attendance_confirmed: boolean | null;
           created_at: string | null;
           email: string | null;
@@ -486,6 +661,7 @@ export interface Database {
         Insert: {
           app_id?: string | null;
           application_status?: number;
+          application_status_last_changed?: string | null;
           attendance_confirmed?: boolean | null;
           created_at?: string | null;
           email?: string | null;
@@ -498,6 +674,7 @@ export interface Database {
         Update: {
           app_id?: string | null;
           application_status?: number;
+          application_status_last_changed?: string | null;
           attendance_confirmed?: boolean | null;
           created_at?: string | null;
           email?: string | null;
@@ -507,6 +684,32 @@ export interface Database {
           team_id?: string | null;
           user_id?: string;
         };
+        Relationships: [
+          {
+            foreignKeyName: 'user_profiles_application_status_fkey';
+            columns: ['application_status'];
+            referencedRelation: 'application_status';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'user_profiles_role_fkey';
+            columns: ['role'];
+            referencedRelation: 'roles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'user_profiles_team_id_fkey';
+            columns: ['team_id'];
+            referencedRelation: 'teams';
+            referencedColumns: ['team_id'];
+          },
+          {
+            foreignKeyName: 'user_profiles_user_id_fkey';
+            columns: ['user_id'];
+            referencedRelation: 'users';
+            referencedColumns: ['id'];
+          }
+        ];
       };
     };
     Views: {
@@ -515,139 +718,13 @@ export interface Database {
     Functions: {
       get_volunteers: {
         Args: Record<PropertyKey, never>;
-        Returns: string;
-      };
-    };
-    Enums: {
-      [_ in never]: never;
-    };
-  };
-  storage: {
-    Tables: {
-      buckets: {
-        Row: {
-          created_at: string | null;
-          id: string;
-          name: string;
-          owner: string | null;
-          public: boolean | null;
-          updated_at: string | null;
-        };
-        Insert: {
-          created_at?: string | null;
-          id: string;
-          name: string;
-          owner?: string | null;
-          public?: boolean | null;
-          updated_at?: string | null;
-        };
-        Update: {
-          created_at?: string | null;
-          id?: string;
-          name?: string;
-          owner?: string | null;
-          public?: boolean | null;
-          updated_at?: string | null;
-        };
-      };
-      migrations: {
-        Row: {
-          executed_at: string | null;
-          hash: string;
-          id: number;
-          name: string;
-        };
-        Insert: {
-          executed_at?: string | null;
-          hash: string;
-          id: number;
-          name: string;
-        };
-        Update: {
-          executed_at?: string | null;
-          hash?: string;
-          id?: number;
-          name?: string;
-        };
-      };
-      objects: {
-        Row: {
-          bucket_id: string | null;
-          created_at: string | null;
-          id: string;
-          last_accessed_at: string | null;
-          metadata: Json | null;
-          name: string | null;
-          owner: string | null;
-          path_tokens: string[] | null;
-          updated_at: string | null;
-        };
-        Insert: {
-          bucket_id?: string | null;
-          created_at?: string | null;
-          id?: string;
-          last_accessed_at?: string | null;
-          metadata?: Json | null;
-          name?: string | null;
-          owner?: string | null;
-          path_tokens?: string[] | null;
-          updated_at?: string | null;
-        };
-        Update: {
-          bucket_id?: string | null;
-          created_at?: string | null;
-          id?: string;
-          last_accessed_at?: string | null;
-          metadata?: Json | null;
-          name?: string | null;
-          owner?: string | null;
-          path_tokens?: string[] | null;
-          updated_at?: string | null;
-        };
-      };
-    };
-    Views: {
-      [_ in never]: never;
-    };
-    Functions: {
-      extension: {
-        Args: { name: string };
-        Returns: string;
-      };
-      filename: {
-        Args: { name: string };
-        Returns: string;
-      };
-      foldername: {
-        Args: { name: string };
         Returns: string[];
       };
-      get_size_by_bucket: {
-        Args: Record<PropertyKey, never>;
-        Returns: { size: number; bucket_id: string }[];
-      };
-      search: {
-        Args: {
-          prefix: string;
-          bucketname: string;
-          limits: number;
-          levels: number;
-          offsets: number;
-          search: string;
-          sortcolumn: string;
-          sortorder: string;
-        };
-        Returns: {
-          name: string;
-          id: string;
-          updated_at: string;
-          created_at: string;
-          last_accessed_at: string;
-          metadata: Json;
-        }[];
-      };
     };
     Enums: {
+      [_ in never]: never;
+    };
+    CompositeTypes: {
       [_ in never]: never;
     };
   };

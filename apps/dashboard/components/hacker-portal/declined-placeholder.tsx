@@ -1,4 +1,4 @@
-import { H1, H3, H4, Link } from '@hibiscus/ui';
+import { H1, H3, Link } from '@hibiscus/ui';
 import Image from 'next/image';
 import styled from 'styled-components';
 
@@ -11,7 +11,7 @@ export const DeclinedPlaceholder = () => {
         width={200}
         height={200}
       />
-      <H1>You have declined your spot for HackSC 2023</H1>
+      <H1>You have declined your spot for HackSC X</H1>
       <H3>
         Bummer 😞 Welp, there{"'"}s always another chance to build something
         cool 😄 Make sure to stay up to date with HackSC through our{' '}

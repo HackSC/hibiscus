@@ -7,35 +7,60 @@ import SponsorPortal from '../components/sponsor-portal/sponsor-portal';
 import { GetServerSideProps } from 'next';
 import AppsClosedPlaceholder from '../components/hacker-portal/apps-closed-placeholder';
 import { isHackerPostAppStatus } from '../common/utils';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppDispatch } from '../hooks/redux/hooks';
 import { removeTabRoute } from '../store/menu-slice';
 import RSVPClosedPlaceholder from '../components/hacker-portal/rsvp-closed-placeholder';
-import { container } from 'tsyringe';
-import { FeatureFlagRepository } from '../repository/feature-flag.repository';
+import { get } from '@vercel/edge-config';
+
+const RSVP_PERIOD = 4 * 24 * 60 * 60 * 1000; // 4 days in milliseconds
 
 interface ServerSideProps {
   appsOpen: boolean;
-  rsvpFormOpen: boolean;
+  waitlistOpen: boolean;
+  hackerPortalOpen: boolean;
 }
 
-export function Index({ appsOpen, rsvpFormOpen }: ServerSideProps) {
+export function Index({
+  appsOpen,
+  hackerPortalOpen,
+  waitlistOpen,
+}: ServerSideProps) {
   const dispatch = useAppDispatch();
   const { user } = useHibiscusUser();
 
+  const [rsvpFormOpen, setRsvpFormOpen] = useState<boolean | null>(true);
+
   useEffect(() => {
     if (!appsOpen) {
-      dispatch(removeTabRoute('/apply-2023'));
+      dispatch(removeTabRoute('/apply-2023-x'));
     }
   }, [appsOpen, dispatch]);
 
-  if (user == null) {
+  // useEffect(() => {
+  //   if (user != null) {
+  //     if (user.applicationStatusLastChanged !== undefined) {
+  //       setRsvpFormOpen(
+  //         new Date().valueOf() - user.applicationStatusLastChanged.valueOf() <=
+  //           RSVP_PERIOD
+  //       );
+  //     } else {
+  //       setRsvpFormOpen(true);
+  //     }
+  //   }
+  // }, [user]);
+
+  if (user == null || rsvpFormOpen === null) {
     return <>Loading</>;
   }
 
   const Dashboard = () => {
     if (user.role === HibiscusRole.HACKER) {
-      if (!appsOpen && !isHackerPostAppStatus(user.applicationStatus)) {
+      if (
+        !appsOpen &&
+        !waitlistOpen &&
+        !isHackerPostAppStatus(user.applicationStatus)
+      ) {
         return <AppsClosedPlaceholder />;
       } else if (
         user.applicationStatus === ApplicationStatus.ADMITTED &&
@@ -44,7 +69,9 @@ export function Index({ appsOpen, rsvpFormOpen }: ServerSideProps) {
       ) {
         return <RSVPClosedPlaceholder />;
       }
-      return <HackerPortal />;
+      return (
+        <HackerPortal isEventOpen={hackerPortalOpen} appsOpen={appsOpen} />
+      );
     } else if (user.role === HibiscusRole.SPONSOR)
       return <SponsorPortal user={user} />;
     else if (user.role === HibiscusRole.VOLUNTEER) return <IdentityPortal />;
@@ -76,17 +103,15 @@ const LayoutContainer = styled.div`
 `;
 
 export const getServerSideProps: GetServerSideProps = async () => {
-  const ffr = container.resolve(FeatureFlagRepository);
-  const configs = (await ffr.getAll()) ?? {
-    APPS_OPEN: false,
-    RSVP_FORM_OPEN: false,
-  };
-  const appsOpen = configs['APPS_OPEN'];
-  const rsvpFormOpen = configs['RSVP_FORM_OPEN'];
+  const appsOpen = await get('APPS_OPEN_HACKSC_X_2023');
+  const waitlistOpen = await get('APPS_WAITLIST_OPEN_HACKSC_X_2023');
+  const hackerPortalOpen = await get('HACKER_PORTAL_OPEN_HACKSC_X_2023');
+
   return {
     props: {
       appsOpen,
-      rsvpFormOpen,
+      hackerPortalOpen,
+      waitlistOpen,
     } as ServerSideProps,
   };
 };

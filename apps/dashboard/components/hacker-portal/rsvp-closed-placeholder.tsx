@@ -13,10 +13,10 @@ function RSVPClosedPlaceholder() {
         priority
         alt="Purple planet"
       />
-      <H3>RSVP for HackSC 2023 has closed!</H3>
+      <H3>RSVP for HackSC X has closed!</H3>
       <Text>
-        We have closed RSVPs for HackSC 2023. If you think this is a mistake,
-        let us know at{' '}
+        We have closed RSVPs for HackSC X. If you think this is a mistake, let
+        us know at{' '}
         <Link
           href="mailto:team@hacksc.com"
           passHref

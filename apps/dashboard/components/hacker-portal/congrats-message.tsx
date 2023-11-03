@@ -13,18 +13,18 @@ export const CongratsMessage = () => {
         priority
         alt="Heart character"
       />
-      <H3>Congratulations on being accepted to HackSC 2023!</H3>
+      <H3>Congratulations on being accepted to HackSC X!</H3>
       <Text>
         We are so excited to welcome you to our event this year, and hope that
         you will be able to attend. It’s going to be an amazing weekend with
         plenty of workshops, speakers, games, and of course, project building!
       </Text>
       <Text>
-        Please complete this RSVP form by{' '}
+        Please complete this RSVP form{' '}
         <GlowSpan style={{ fontWeight: 'bold' }}>
-          February 1st, 2023 at 11:59pm
+          within 4 days of your acceptance notification
         </GlowSpan>{' '}
-        to secure your spot at HackSC 2023. By submitting, you are committing to
+        to secure your spot at HackSC X. By submitting, you are committing to
         attending the event. If you do not submit this form by the posted
         deadline, your spot will be given to another hacker.
       </Text>

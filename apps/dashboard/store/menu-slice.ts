@@ -9,7 +9,7 @@ interface TabRoute {
 
 const tabRoutes: TabRoute[] = [
   { displayName: 'Home', url: '/' },
-  { displayName: 'Apply as a hacker', url: '/apply-2023' },
+  { displayName: 'Apply as a hacker', url: '/apply-2023-x' },
 ];
 
 const sponsorRoutes: TabRoute[] = [
