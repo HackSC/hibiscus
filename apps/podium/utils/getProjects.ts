@@ -78,17 +78,10 @@ const getProjects = async (
   const rankedBasic = await getRanked(userId, verticalId, accessToken);
 
   const rankedIds = rankedBasic.map((p) => p.projectId);
-  const unrankedBasic = allProjects.filter(
-    (p) => !rankedIds.includes(p.projectId)
-  );
-
-  unranked = unrankedBasic.map((p) => {
-    return getProjectDetails(p.projectId, verticalId, accessToken);
-  });
-
-  ranked = rankedBasic.map((p) => {
-    return getProjectDetails(p.projectId, verticalId, accessToken);
-  });
+  
+  allProjects.forEach((p) => {
+    rankedIds.includes(p.projectId) ? ranked.push(p) : unranked.push(p);
+  })
 
   return [unranked, ranked];
 };
