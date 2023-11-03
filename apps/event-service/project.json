@@ -64,19 +64,14 @@
     },
     "deploy": {
       "executor": "nx:run-commands",
-      "defaultConfiguration": "prod",
-      "dependsOn": ["build"],
       "options": {
+        "commands": [
+          "poetry export -f requirements.txt --output requirements.txt",
+          "poetry run chalice deploy"
+        ],
         "color": true,
-        "cwd": "apps/event-service"
-      },
-      "configurations": {
-        "prod": {
-          "command": "sls deploy --org hacksc --stage prod"
-        },
-        "staging": {
-          "command": "sls deploy --org hacksc --stage staging"
-        }
+        "cwd": "apps/event-service",
+        "parallel": false
       }
     },
     "package": {
@@ -94,7 +89,7 @@
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "poetry run sls wsgi serve",
+        "command": "poetry run chalice local",
         "cwd": "apps/event-service"
       }
     },
@@ -102,6 +97,31 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "poetry run coverage report",
+        "cwd": "apps/event-service"
+      }
+    },
+    "db-setup": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker build -t postgres-events .",
+        "cwd": "apps/event-service"
+      }
+    },
+    "db-start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker run --name postgres-events -p 5432:5432 -d postgres-events",
+        "cwd": "apps/event-service"
+      }
+    },
+    "db-stop": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "docker stop postgres-events",
+          "docker rm postgres-events"
+        ],
+        "parallel": false,
         "cwd": "apps/event-service"
       }
     }

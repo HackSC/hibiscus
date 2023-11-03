@@ -35,10 +35,15 @@ export const getEnv = () => {
       },
       RSVPForm: {
         ResumeStorageBucketName: 'rsvp-resume-hacker-2023',
+        WaiverURL: process.env.NEXT_PUBLIC_WAIVER_URL,
+        HackerPacketURL: process.env.NEXT_PUBLIC_HACKER_PACKET_URL,
       },
       FeatureFlag: {
         RedisURL: process.env.HIBISCUS_FEATURE_FLAG_REDIS_URL,
         MongoURI: process.env.HIBISCUS_FEATURE_FLAG_MONGO_URI,
+      },
+      Events: {
+        ApiUrl: process.env.NEXT_PUBLIC_HIBISCUS_EVENTS_API_URL,
       },
       Discord: {
         ApiUrl: process.env.NEXT_PUBLIC_DISCORD_API_URL,

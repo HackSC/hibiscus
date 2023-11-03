@@ -26,8 +26,8 @@ function BattlepassPointsBar(props: Props) {
         <BarFront progress={progress} />
       </BarBack>
       <BottomDiv>
-        <div>{props.minLabel}</div>
-        <div>{props.maxLabel}</div>
+        <div style={{ color: '#ecb400' }}>{props.minLabel}</div>
+        <div style={{ color: '#ce0c0a' }}>{props.maxLabel}</div>
       </BottomDiv>
     </Container>
   );
@@ -36,16 +36,17 @@ function BattlepassPointsBar(props: Props) {
 export default BattlepassPointsBar;
 
 const Container = styled.div`
-  width: 30rem;
+  width: 26rem;
+  max-width: 100%;
 `;
 
 const BarBack = styled.div`
   position: relative;
   width: 100%;
-  height: 1rem;
-  border: 1px solid ${Colors2023.BLUE.STANDARD};
-  border-radius: 6px;
-  box-shadow: 0px 0px 10px -3px #ffffff;
+  height: 1.3rem;
+  border: 3px solid #ff514f;
+  border-radius: 100px;
+  box-shadow: 0px 0px 10px 0px #fe513980;
 `;
 
 const BarFront = styled.div<{ progress: number }>`
@@ -55,7 +56,7 @@ const BarFront = styled.div<{ progress: number }>`
   width: ${(props) => props.progress * 100}%;
   height: 100%;
   border-radius: inherit;
-  background-color: ${Colors2023.BLUE.STANDARD};
+  background-color: #ff514f;
   text-shadow: 0px 0px 10px #ffffff;
 `;
 
