@@ -10,6 +10,7 @@ import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import { Button, ColorSpanBold } from '@hibiscus/ui-kit-2023';
 import { StyledAuthCard } from '../auth-components/styled-card';
 import { Input } from '../auth-components/styled-input';
+import { useRouter } from 'next/router';
 
 /* eslint-disable-next-line */
 export interface ResetCardProps {}
@@ -17,6 +18,8 @@ export interface ResetCardProps {}
 export function ResetEmailCard(props: ResetCardProps) {
   const [hideSuccessMessage, setHideSuccessMessage] = useState(false);
   const { supabase } = useHibiscusSupabase();
+
+  const router = useRouter();
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -30,6 +33,7 @@ export function ResetEmailCard(props: ResetCardProps) {
       alert(error);
     } else {
       setHideSuccessMessage(true);
+      router.push(`/reset-verify?email=${email}`);
     }
   }
 
