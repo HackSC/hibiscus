@@ -91,6 +91,7 @@ export const detailsContainer = style({
 export const detailsProject = style({
   margin: 'auto',
   marginTop: '50px',
+  marginBottom: '50px',
   height: 'fit-content',
   backgroundColor: '#FFFFFF',
   color: 'black',
@@ -123,6 +124,26 @@ globalStyle(`${detailsInfo} h3`, {
   fontSize: '14px',
   color: '#989898',
   margin: '10px 0px 12px 0px',
+});
+
+export const containerInstructions = style({
+  margin: 'auto',
+  marginTop: '50px',
+  marginBottom: '50px',
+  padding: '30px',
+  height: 'fit-content',
+  backgroundColor: '#FFFFFF',
+  color: 'black',
+  zIndex: 888,
+  boxShadow: '0 0 20px rgba(0, 0, 0, 0.25)',
+});
+
+globalStyle(`${containerInstructions} h1`, {
+  fontSize: '24px',
+});
+
+globalStyle(`${containerInstructions} h3`, {
+  marginTop: '24px',
 });
 
 export const backgroundBlur = style({
@@ -236,10 +257,6 @@ export const boxShadowY = style({
 
 export const width90 = style({
   width: '90%',
-});
-
-export const marginLeft12 = style({
-  marginLeft: '12px',
 });
 
 globalStyle('a', {
