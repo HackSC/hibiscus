@@ -15,6 +15,7 @@ import { SupabaseContextProvider } from '@hibiscus/hibiscus-supabase-context';
 import Router from 'next/router';
 import nProgress from 'nprogress';
 import ThemelessLayout from '../layouts/themeless-layout';
+import { GlobalStyle } from '@hacksc/sctw-ui-kit';
 
 Router.events.on('routeChangeStart', (url) => {
   nProgress.start();
@@ -49,6 +50,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
       <Main>
         <Toaster />
         <GlobalStyles2023 />
+        <GlobalStyle />
         <SupabaseContextProvider>
           <TeamProvider>
             <HibiscusUserProvider>
