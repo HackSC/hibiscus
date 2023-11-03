@@ -10,9 +10,8 @@ import { useMediaQuery } from 'react-responsive';
 // #CEA00C
 
 const MainWrapper = styled.div`
-  height: 100%;
-  width: 250px;
-  z-index: 1;
+  height: 100px;
+  width: 100%;
 `;
 
 const StyledH1 = styled.h1`
@@ -72,13 +71,13 @@ const SquaresIcon = styled(HiOutlineSquares2X2)`
   margin-left: 20px;
 `;
 
-function StyledSideNav() {
+function StyledTopNav() {
   // Media query hook
   const isSmallScreen = useMediaQuery({ query: '(max-width: 600px)' });
 
   return (
     <>
-      {isSmallScreen ? null : (
+      {isSmallScreen ? (
         <MainWrapper>
           <HeadingContainer>
             <Image
@@ -89,22 +88,10 @@ function StyledSideNav() {
             />
             <StyledH1> HackSC 2023 </StyledH1>
           </HeadingContainer>
-          <ButtonContainer style={{ marginTop: '100px' }}>
-            <CalendarIcon size={25} />
-            <ButtonH1> Events </ButtonH1>
-          </ButtonContainer>
-          <ButtonContainer>
-            <SquaresIcon size={25} style={{ marginLeft: '18px' }} />
-            <ButtonH1> Leaderboard </ButtonH1>
-          </ButtonContainer>
-          <ButtonContainer>
-            <PersonIcon size={25} />
-            <ButtonH1> Profile </ButtonH1>
-          </ButtonContainer>
         </MainWrapper>
-      )}
+      ) : null}
     </>
   );
 }
 
-export default StyledSideNav;
+export default StyledTopNav;

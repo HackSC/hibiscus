@@ -14,12 +14,15 @@ import { TeamProvider } from '../hooks/use-team/use-team';
 import { SupabaseContextProvider } from '@hibiscus/hibiscus-supabase-context';
 import Router from 'next/router';
 import nProgress from 'nprogress';
+import ThemelessLayout from '../layouts/themeless-layout';
 
 Router.events.on('routeChangeStart', (url) => {
   nProgress.start();
 });
 Router.events.on('routeChangeComplete', () => nProgress.done());
 Router.events.on('routeChangeError', () => nProgress.done());
+
+const newLayoutRoutes = ['/events'];
 
 function CustomApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -49,9 +52,15 @@ function CustomApp({ Component, pageProps }: AppProps) {
         <SupabaseContextProvider>
           <TeamProvider>
             <HibiscusUserProvider>
-              <PortalLayout>
-                <Component {...pageProps} />
-              </PortalLayout>
+              {newLayoutRoutes.includes(router?.pathname) ? (
+                <ThemelessLayout>
+                  <Component {...pageProps} />
+                </ThemelessLayout>
+              ) : (
+                <PortalLayout>
+                  <Component {...pageProps} />
+                </PortalLayout>
+              )}
             </HibiscusUserProvider>
           </TeamProvider>
         </SupabaseContextProvider>

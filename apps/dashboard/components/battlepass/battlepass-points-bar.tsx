@@ -37,6 +37,7 @@ export default BattlepassPointsBar;
 
 const Container = styled.div`
   width: 26rem;
+  max-width: 100%;
 `;
 
 const BarBack = styled.div`

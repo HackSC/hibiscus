@@ -15,13 +15,14 @@ function PortalLayout({ children }: PortalLayoutProps) {
 
   return (
     <MainPageWrapper>
-      {/* <TopBar userTag={user.tag} role={user.role} /> */}
-      {/* <MenuLayoutWrapper> */}
-      {/* <MenuWrapper> */}
-      {/* <PortalMenu /> */}
-      {/* </MenuWrapper> */}
-      <ChildrenWrapper>{children}</ChildrenWrapper>
-      {/* </MenuLayoutWrapper> */}
+      {/* <StyledSideNav /> */}
+      <TopBar userTag={user.tag} role={user.role} />
+      <MenuLayoutWrapper>
+        <MenuWrapper>
+          <PortalMenu />
+        </MenuWrapper>
+        <ChildrenWrapper>{children}</ChildrenWrapper>
+      </MenuLayoutWrapper>
     </MainPageWrapper>
   );
 }
@@ -48,5 +49,4 @@ const MenuWrapper = styled.div`
 
 const ChildrenWrapper = styled.div`
   height: 100%;
-  background-color: white;
 `;

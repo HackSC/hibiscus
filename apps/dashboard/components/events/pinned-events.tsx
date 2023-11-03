@@ -48,8 +48,7 @@ const Container = styled.div`
   flex-direction: column;
   gap: 0.5rem;
 
-  height: 38.6vh;
-  max-width: 31vw;
+  height: 38vh;
   overflow-y: auto;
   scrollbar-width: 4px;
   -ms-overflow-style: none;

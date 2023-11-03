@@ -1,7 +1,5 @@
 import styled from 'styled-components';
 import EventsCalendar from '../../components/events/events-calendar';
-import { Button, GlowSpan } from '@hibiscus/ui-kit-2023';
-import { Colors2023 } from '@hibiscus/styles';
 import { Modal, Text } from '@hibiscus/ui';
 import BattlepassPointsBar from '../../components/battlepass/battlepass-points-bar';
 import { MdLogout } from 'react-icons/md';
@@ -29,14 +27,13 @@ import EventDetails from '../../components/events/event-details';
 import { HibiscusRole } from '@hibiscus/types';
 import { useMediaQuery } from 'react-responsive';
 import EventList, { EventListType } from '../../components/events/event-list';
-import StyledSideNav from 'apps/dashboard/components/events/side-nav';
 import { getCookie } from 'cookies-next';
 import { getEnv } from '@hibiscus/env';
+import { Subheading, Button } from '@hacksc/sctw-ui-kit';
 
 export function Index() {
   return (
     <BattlepassAPIProvider mock={false}>
-      <StyledSideNav />
       <EventPage />
     </BattlepassAPIProvider>
   );
@@ -160,17 +157,44 @@ function EventPage() {
   }, [pinnedEvents, eventsGrouped]);
 
   return (
-    <div style={{ backgroundColor: 'white' }}>
+    <div style={{ backgroundColor: 'white', height: '100%' }}>
       {isSmallScreen ? (
         <>
-          {/* <Button
-            color="black"
+          <div>
+            <PinkText>Your Events</PinkText>
+            {bpProg && (
+              <BattlepassPointsBar
+                rangeMinPoint={bpProg.level}
+                rangeMaxPoint={bpProg.nextLevel}
+                currentPoint={userPoints}
+                minLabel={
+                  <Text style={{ padding: '10px 0' }}>
+                    <MinPoints>{userPoints + ' PTS'}</MinPoints>
+                  </Text>
+                }
+                maxLabel={
+                  BATTLEPASS_LEVEL_POINTS[bpProg.level] <
+                  BATTLEPASS_LEVEL_POINTS[3] ? (
+                    <Text style={{ padding: '10px 0' }}>
+                      Next level @{' '}
+                      <MaxPoints>{bpProg.nextLevel + ' PTS'}</MaxPoints>
+                    </Text>
+                  ) : null
+                }
+              />
+            )}
+          </div>
+
+          <Button
+            color="red"
             onClick={toggleMobileView}
             style={{ margin: '1rem 0' }}
           >
-            Toggle View
-          </Button> */}
-          <div
+            {mobileView === EventListType.ALL_EVENTS
+              ? 'View your events'
+              : 'View all events'}
+          </Button>
+          {/* <div
             style={{
               width: '100%',
               height: '100%',
@@ -226,27 +250,29 @@ function EventPage() {
                 )}
               </EventsColumn>
             </MobilePage>
-          </div>
+          </div> */}
 
-          {/* {mobileView === EventListType.ALL_EVENTS
-            ? eventsGrouped && (
-                <EventList
-                  allEvents={eventsGrouped}
-                  pinnedEvents={pinnedEventsGrouped}
-                  type={EventListType.ALL_EVENTS}
-                  setActiveEvent={(eventId) => setActiveEvent(eventId)}
-                  setPinnedEvents={setPinnedEvents}
-                />
-              )
-            : pinnedEventsGrouped && (
-                <EventList
-                  allEvents={eventsGrouped}
-                  pinnedEvents={pinnedEventsGrouped}
-                  type={EventListType.PINNED_EVENTS}
-                  setActiveEvent={(eventId) => setActiveEvent(eventId)}
-                  setPinnedEvents={setPinnedEvents}
-                />
-              )} */}
+          <MobilePage>
+            {mobileView === EventListType.ALL_EVENTS
+              ? eventsGrouped && (
+                  <EventList
+                    allEvents={eventsGrouped}
+                    pinnedEvents={pinnedEventsGrouped}
+                    type={EventListType.ALL_EVENTS}
+                    setActiveEvent={(eventId) => setActiveEvent(eventId)}
+                    setPinnedEvents={setPinnedEvents}
+                  />
+                )
+              : pinnedEventsGrouped && (
+                  <EventList
+                    allEvents={eventsGrouped}
+                    pinnedEvents={pinnedEventsGrouped}
+                    type={EventListType.PINNED_EVENTS}
+                    setActiveEvent={(eventId) => setActiveEvent(eventId)}
+                    setPinnedEvents={setPinnedEvents}
+                  />
+                )}
+          </MobilePage>
         </>
       ) : (
         <>
@@ -254,17 +280,12 @@ function EventPage() {
             <Text style={{ color: '#000000B2', marginLeft: '2px' }}>
               Welcome, {user.firstName}!
             </Text>
-            <BlackH1>Events</BlackH1>
+            <Subheading style={{ color: 'black' }}>Events</Subheading>
             <Text style={{ color: '#989898', marginTop: '10px' }}>
               Let&apos;s build your HackSC schedule!
             </Text>
           </Container>
           <EventsContainer>
-            <LogoutBox>
-              <LogoutH1>{user.firstName + ' ' + user.lastName}</LogoutH1>
-              <GlowYellowH1>HACKER</GlowYellowH1>
-              <LogoutIcon size={25}></LogoutIcon>
-            </LogoutBox>
             <EventsCalendar
               events={eventsGrouped}
               openModal={(eventId) => setActiveEvent(eventId)}
@@ -277,14 +298,15 @@ function EventPage() {
                   rangeMaxPoint={bpProg.nextLevel}
                   currentPoint={userPoints}
                   minLabel={
-                    <Text>
+                    <Text style={{ padding: '10px 0' }}>
                       <MinPoints>{userPoints + ' PTS'}</MinPoints>
                     </Text>
                   }
                   maxLabel={
                     BATTLEPASS_LEVEL_POINTS[bpProg.level] <
                     BATTLEPASS_LEVEL_POINTS[3] ? (
-                      <Text>
+                      <Text style={{ padding: '10px 0' }}>
+                        Next level @{' '}
                         <MaxPoints>{bpProg.nextLevel + ' PTS'}</MaxPoints>
                       </Text>
                     ) : null
@@ -293,7 +315,7 @@ function EventPage() {
               )}
               <PinkText>Your Events</PinkText>
               {(!pinnedEvents || pinnedEvents.length == 0) && (
-                <EmptyPinnedEvents>Your Events</EmptyPinnedEvents>
+                <EmptyPinnedEvents>No Pinned Events!</EmptyPinnedEvents>
               )}
               {pinnedEvents && pinnedEvents.length !== 0 && (
                 <PinnedEvents
@@ -332,8 +354,6 @@ export default Index;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  margin-left: 230px;
-  margin-top: 70px;
   font-family: 'Filson Pro', sans-serif;
 `;
 
@@ -348,10 +368,9 @@ const LogoutBox = styled.div`
 
 const EventsContainer = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 2fr 1fr;
   gap: 1rem;
-  margin-left: 230px;
-  margin-top: 40px;
+  flex-shrink: 1;
 `;
 
 const EventsColumn = styled.div`
@@ -408,11 +427,8 @@ const MobileTopNav = styled.div`
 `;
 
 const MobilePage = styled.div`
-  background-color: white;
   width: 100%;
-  height: 85vh;
-  border-top-left-radius: 50px;
-  border-top-right-radius: 50px;
+  height: 100%;
 `;
 
 const StyledH1 = styled.h1`
@@ -431,9 +447,9 @@ const HeadingContainer = styled.div`
   top: 3vh;
 `;
 
-const MinPoints = styled.h1`
+const MinPoints = styled.span`
   font-family: Inter, sans-serif;
-  font-size: 19px;
+  font-size: 1rem;
   font-weight: 700;
   line-height: 20px;
   letter-spacing: 0.2em;
@@ -442,9 +458,9 @@ const MinPoints = styled.h1`
   text-shadow: 0px 0px 50px #ffd13c;
 `;
 
-const MaxPoints = styled.h1`
+const MaxPoints = styled.span`
   font-family: Inter, sans-serif;
-  font-size: 19px;
+  font-size: 1rem;
   font-weight: 700;
   line-height: 20px;
   letter-spacing: 0.2em;

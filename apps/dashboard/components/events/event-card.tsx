@@ -95,8 +95,8 @@ const Card = styled.div`
   overflow: hidden;
 
   cursor: pointer;
-  max-width: 30vw;
-  min-height: 20vh;
+
+  min-height: 100px;
 `;
 
 const CardLeft = styled.div`
@@ -116,7 +116,6 @@ const CardLeft = styled.div`
   line-height: 30px;
   letter-spacing: 0em;
   text-align: left;
-  min-width: 10vw;
   text-align: center;
 `;
 
