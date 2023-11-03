@@ -274,7 +274,7 @@ const Index = () => {
   }
 
   return (
-    <Wrapper style={{ position: 'relative' }}>
+    <Wrapper>
       <GlobalStyle />
       <LeftContainer>
         <LeftWrapper>
@@ -559,8 +559,6 @@ const ModalContainer = styled.div`
   left: 0;
   z-index: 999;
   background-color: rgba(0, 0, 0, 0.8);
-  border-radius: 15px;
-  border: 4px solid ${Colors2023.GRAY.MEDIUM};
 `;
 
 const QuickNoteContainer = styled.div`
