@@ -236,11 +236,28 @@ const Index = () => {
     note: string
   ) {
     SponsorServiceAPI.setAttendeeNote(companyId, attendeeId, note)
-      .then(({ data, error }) => {
+      .then(async ({ data, error }) => {
         if (error) {
           console.log(error);
         }
         console.log(`Updated note: ${data.data.note}`);
+
+        // Update note in UI in real time
+        const i = attendees.findIndex((it) => it.id === attendeeId);
+        if (i >= 0) {
+          setAttendees((prev) => {
+            const newAttendees = [...prev];
+            newAttendees[i].quick_notes = note;
+            return newAttendees;
+          });
+          setCurrentAttendee((prev) => {
+            if (prev.id === attendeeId) {
+              const newAttendee = { ...prev };
+              newAttendee.quick_notes = note;
+              return newAttendee;
+            }
+          });
+        }
       })
       .catch((error) => {
         console.log(error);

@@ -75,4 +75,5 @@ export default wrapper.withRedux(CustomApp);
 
 const Main = styled.main`
   position: absolute;
+  width: 100%;
 `;
