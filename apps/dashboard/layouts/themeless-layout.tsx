@@ -64,8 +64,7 @@ const MainPageWrapper = styled.div`
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 100vh;
-  max-height: 100vh;
+  min-height: 100vh;
   background-color: ${Colors.Yellow.ArthurSweater};
 `;
 
@@ -80,6 +79,9 @@ const Content = styled.div`
   padding: 40px;
 
   gap: 20px;
+
+  flex-grow: 1;
+  flex-shrink: 1;
 `;
 
 const UserText = styled(Text)`

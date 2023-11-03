@@ -147,7 +147,7 @@ const Index = () => {
       </div>
     ) : (
       <SavedAttendeeContainer>
-        <BodyText>No recently saved</BodyText>
+        <BodyText style={{ color: 'black' }}>No check-ins yet!</BodyText>
       </SavedAttendeeContainer>
     );
   };
@@ -289,10 +289,10 @@ const Index = () => {
               <SctwTitle style={{ color: SctwColors.Blue.DarkBloo }}>
                 Welcome {user.firstName} {user.lastName}
               </SctwTitle>
-              <SctwText>
+              <SctwTextBlack>
                 This is your booth! Search through your booth attendees and
                 review their qualifications!
-              </SctwText>
+              </SctwTextBlack>
             </CompanySection>
           </div>
           <SupportSection>
@@ -413,8 +413,8 @@ const Index = () => {
       <RightContainer
         style={
           currentAttendee !== null
-            ? { visibility: 'visible', maxWidth: '33%' }
-            : { visibility: 'hidden', maxWidth: '0%' }
+            ? { maxWidth: '33%' }
+            : { display: 'none', maxWidth: '0%', padding: 0 }
         }
       >
         <CloseButton
@@ -598,17 +598,23 @@ const StyledInput = styled.textarea`
 
 const SctwTitle = styled(Heading)`
   font-size: 45px;
-  letter-spacing: 0.4rem;
+  letter-spacing: 0.05rem;
 `;
 
 const SctwHeading = styled(Heading)`
   font-size: 25px;
-  letter-spacing: 0.4rem;
+  letter-spacing: 0.05rem;
 `;
 
 const SctwText = styled(BodyText)`
   font-size: 20px;
   text-align: left;
+`;
+
+const SctwTextBlack = styled(BodyText)`
+  font-size: 20px;
+  text-align: left;
+  color: black;
 `;
 
 const SctwUnderlinedText = styled(BodyText)`
@@ -672,7 +678,7 @@ const StyledScrollBar = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 602px;
+  height: 600px;
   overflow-y: auto;
 
   &::-webkit-scrollbar {

@@ -14,8 +14,8 @@ import { useRouter } from 'next/router';
 
 const MainWrapper = styled.div`
   height: 100%;
-  width: 250px;
-  z-index: 1;
+
+  flex: 0 0 200px;
 `;
 
 const StyledH1 = styled.h1`
@@ -78,10 +78,33 @@ const SquaresIcon = styled(HiOutlineSquares2X2)`
   margin-left: 20px;
 `;
 
+const BoothIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="24"
+    height="24"
+    viewBox="0 0 48 48"
+    style={{ marginLeft: '20px' }}
+  >
+    <path
+      fill="none"
+      stroke="white"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="4"
+      d="M4 5h40v8l-1.398.84a7 7 0 0 1-7.203 0L34 13l-1.398.84a7 7 0 0 1-7.203 0L24 13l-1.398.84a7 7 0 0 1-7.204 0L14 13l-1.399.84a7 7 0 0 1-7.202 0L4 13V5Zm2 20h36v18H6zm3-9v9m30-9v9"
+    />
+  </svg>
+);
+
 const JUDGE_NAVBAR = [
   { label: 'Events', icon: CalendarIcon, url: '/events' },
   { label: 'Leaderboard', icon: SquaresIcon, url: '/leaderboard' },
   // { label: 'Profile', icon: PersonIcon, url: '/profile' },
+];
+
+const SPONSOR_NAVBAR = [
+  { label: 'My Booth', icon: BoothIcon, url: '/sponsor-booth' },
 ];
 
 function StyledSideNav() {
@@ -94,6 +117,7 @@ function StyledSideNav() {
   const items = useMemo(() => {
     if (user == null) return [];
     if (user.role === HibiscusRole.HACKER) return JUDGE_NAVBAR;
+    if (user.role === HibiscusRole.SPONSOR) return SPONSOR_NAVBAR;
     return [];
   }, [user]);
 
