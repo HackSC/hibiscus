@@ -9,11 +9,15 @@ import Link from 'next/link';
 import * as styles from '../../styles/index.css';
 import { getCookie } from 'cookies-next';
 import { getEnv } from '@hibiscus/env';
+import { useHibiscusUser } from '@hibiscus/hibiscus-user-context';
+import { HibiscusRole } from '@hibiscus/types';
 
 const HIBISCUS_PODIUM_API_URL = process.env.NEXT_PUBLIC_HIBISCUS_PODIUM_API_URL;
 
 export function Index() {
   const env = getEnv();
+
+  const { user } = useHibiscusUser();
 
   const router = useRouter();
 
@@ -47,6 +51,15 @@ export function Index() {
       fetchData(projectId);
     }
   }, [projectId]);
+
+  if (user == null) {
+    return <></>;
+  }
+
+  if (user?.role !== HibiscusRole.JUDGE) {
+    window.location.assign(env.Hibiscus.AppURL.portal);
+    return <></>;
+  }
 
   return (
     <>
