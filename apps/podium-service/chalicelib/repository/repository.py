@@ -144,7 +144,39 @@ def update_project(
         if res.first() is None:
             raise Exception("No project found")
 
+    def find_ranked_users(session: Session) -> list[str]:
+        rankings = session.scalars(
+            select(models.Ranking).where(models.Ranking.project_id == project_id)
+        ).all()
+
+        return [ranking.user_id for ranking in rankings]
+
+    def unrank_overall(session: Session):
+        is_locked = __is_locked(vertical_id, session)
+        if is_locked:
+            rank_old = session.scalars(
+                delete(models.RankingFinal)
+                .where(models.RankingFinal.project_id == project_id)
+                .returning(models.RankingFinal.rank)
+            ).one_or_none()
+
+            if rank_old is not None:
+                session.execute(
+                    update(models.RankingFinal)
+                    .where(models.RankingFinal.rank > rank_old)
+                    .where(models.Project.vertical_id == vertical_id)
+                    .values(rank=models.RankingFinal.rank - 1)
+                )
+
     run_transaction(sessionmaker(engine), up)
+
+    if vertical_id != vertical_new:
+        # Unrank project
+        user_ids = run_transaction(sessionmaker(engine), find_ranked_users)
+        for user_id in user_ids:
+            unrank_project(project_id, user_id)
+
+        run_transaction(sessionmaker(engine), unrank_overall)
 
 
 def delete_project(vertical_id: str, project_id: str) -> None:
@@ -154,17 +186,48 @@ def delete_project(vertical_id: str, project_id: str) -> None:
     """
 
     def remove(session: Session):
-        res = session.execute(
-            delete(models.Project)
+        id = session.scalar(
+            update(models.Project)
             .where(models.Project.project_id == project_id)
             .where(models.Project.vertical_id == vertical_id)
+            .values(valid=False)
             .returning(models.Project.project_id)
         )
 
-        if res.first() is None:
+        if id is None:
             raise Exception("No project found")
 
+    def find_ranked_users(session: Session) -> list[str]:
+        rankings = session.scalars(
+            select(models.Ranking).where(models.Ranking.project_id == project_id)
+        ).all()
+
+        return [ranking.user_id for ranking in rankings]
+
+    def unrank_overall(session: Session):
+        is_locked = __is_locked(vertical_id, session)
+        if is_locked:
+            rank_old = session.scalars(
+                delete(models.RankingFinal)
+                .where(models.RankingFinal.project_id == project_id)
+                .returning(models.RankingFinal.rank)
+            ).one_or_none()
+
+            if rank_old is not None:
+                session.execute(
+                    update(models.RankingFinal)
+                    .where(models.RankingFinal.rank > rank_old)
+                    .where(models.Project.vertical_id == vertical_id)
+                    .values(rank=models.RankingFinal.rank - 1)
+                )
+
     run_transaction(sessionmaker(engine), remove)
+
+    user_ids = run_transaction(sessionmaker(engine), find_ranked_users)
+    for user_id in user_ids:
+        unrank_project(project_id, user_id)
+
+    run_transaction(sessionmaker(engine), unrank_overall)
 
 
 def get_project(vertical_id: str, project_id: str) -> data_types.Project:
@@ -198,7 +261,9 @@ def get_all_projects_in_vertical(vertical_id: str) -> list[data_types.ProjectOut
 
     def get(session: Session) -> list[data_types.ProjectOutline]:
         res = session.scalars(
-            select(models.Project).where(models.Project.vertical_id == vertical_id)
+            select(models.Project)
+            .where(models.Project.vertical_id == vertical_id)
+            .where(models.Project.valid == True)
         )
 
         return [
@@ -225,7 +290,9 @@ def get_all_projects() -> list[data_types.ProjectOutline]:
     """
 
     def get(session: Session) -> list[data_types.ProjectOutline]:
-        res = session.scalars(select(models.Project))
+        res = session.scalars(
+            select(models.Project).where(models.Project.valid == True)
+        )
 
         return [
             data_types.ProjectOutline(
@@ -256,6 +323,7 @@ def set_ranking(vertical_id: str, project_id: str, user_id: str, rank_new: int) 
             select(models.Project)
             .where(models.Project.project_id == project_id)
             .where(models.Project.vertical_id == vertical_id)
+            .where(models.Project.valid == True)
         )
 
         if project.first() is None:
@@ -356,6 +424,7 @@ def get_rankings(vertical_id: str, user_id: str) -> list[data_types.Ranking]:
             .join(models.Project)
             .where(models.Ranking.user_id == user_id)
             .where(models.Project.vertical_id == vertical_id)
+            .where(models.Project.valid == True)
             .order_by(models.Ranking.rank)
         )
 
@@ -534,6 +603,7 @@ def get_overall_rankings(vertical_id: str) -> list[data_types.Ranking]:
                 select(models.RankingFinal, models.Project)
                 .join(models.Project)
                 .where(models.Project.vertical_id == vertical_id)
+                .where(models.Project.valid == True)
                 .order_by(models.RankingFinal.rank)
             )
 
@@ -585,6 +655,7 @@ def set_overall_ranking(vertical_id: str, project_id: str, rank_new: int) -> Non
             select(models.Project)
             .where(models.Project.project_id == project_id)
             .where(models.Project.vertical_id == vertical_id)
+            .where(models.Project.valid == True)
         )
 
         if project.first() is None:
@@ -609,6 +680,7 @@ def set_overall_ranking(vertical_id: str, project_id: str, rank_new: int) -> Non
                     .join(models.Project)
                     .where(models.RankingFinal.rank == rank_new - 1)
                     .where(models.Project.vertical_id == vertical_id)
+                    .where(models.Project.valid == True)
                 )
 
                 if rank_last.first() is None:
@@ -632,6 +704,7 @@ def set_overall_ranking(vertical_id: str, project_id: str, rank_new: int) -> Non
                 select(models.RankingFinal)
                 .where(models.RankingFinal.rank == rank_new)
                 .where(models.Project.vertical_id == vertical_id)
+                .where(models.Project.valid == True)
             )
 
             if rank_last.first() is None:
@@ -902,6 +975,7 @@ def __get_raw_project(vertical_id: str, project_id: str) -> data_types.Project:
             select(models.Project)
             .where(models.Project.project_id == project_id)
             .where(models.Project.vertical_id == vertical_id)
+            .where(models.Project.valid == True)
         ).one()
 
         team = None
@@ -976,6 +1050,7 @@ def __get_overall_rankings(vertical_id: str, session: Session) -> list[models.Pr
         select(models.Ranking, models.Project)
         .join(models.Project)
         .where(models.Project.vertical_id == vertical_id)
+        .where(models.Project.valid == True)
     )
 
     projects = {}

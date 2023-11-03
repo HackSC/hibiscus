@@ -29,6 +29,7 @@ class Project(Base):
     image_url: Mapped[Optional[str]]
     devpost_url: Mapped[Optional[str]]
     video_url: Mapped[Optional[str]]
+    valid: Mapped[bool]
 
     vertical: Mapped["Vertical"] = relationship(back_populates="projects")
 
