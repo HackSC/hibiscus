@@ -37,15 +37,20 @@ export default BattlepassPointsBar;
 
 const Container = styled.div`
   width: 30rem;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const BarBack = styled.div`
   position: relative;
   width: 100%;
   height: 1rem;
-  border: 1px solid ${Colors2023.BLUE.STANDARD};
-  border-radius: 6px;
-  box-shadow: 0px 0px 10px -3px #ffffff;
+  border: 1px solid var(--Redward, #ff514f);
+
+  border-radius: 8px;
+  /* box-shadow: 0px 0px 10px -3px #ffffff; */
+  box-shadow: 0px 0px 10px 0px rgba(254, 81, 57, 0.5);
 `;
 
 const BarFront = styled.div<{ progress: number }>`
@@ -55,11 +60,15 @@ const BarFront = styled.div<{ progress: number }>`
   width: ${(props) => props.progress * 100}%;
   height: 100%;
   border-radius: inherit;
-  background-color: ${Colors2023.BLUE.STANDARD};
+  border: 3px solid var(--Redward, #ff514f);
+  /* smaller-red-glow */
+  box-shadow: 0px 0px 10px 0px rgba(254, 81, 57, 0.5);
+
   text-shadow: 0px 0px 10px #ffffff;
 `;
 
 const BottomDiv = styled.div`
+  margin-top: 8px;
   display: flex;
   justify-content: space-between;
 `;

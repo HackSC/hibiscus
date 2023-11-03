@@ -14,10 +14,10 @@ interface Props {
 function BonusPointsItem({ data, handleClick }: Props) {
   return (
     <Container>
-      <div>
+      <TextDiv>
         <Text style={{ color: 'white' }}>{data.points} pts</Text>
         <H4>{data.title}</H4>
-      </div>
+      </TextDiv>
       <div>
         <Button
           color="yellow"
@@ -33,9 +33,19 @@ function BonusPointsItem({ data, handleClick }: Props) {
 
 export default BonusPointsItem;
 
+const TextDiv = styled.div`
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`;
+
 const Container = styled.div`
   display: flex;
   justify-content: space-between;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
   padding: 10px;
   gap: 10px;
 `;
