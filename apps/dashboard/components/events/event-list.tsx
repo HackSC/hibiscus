@@ -16,6 +16,7 @@ import { Event, getDayDate, unpinEvent } from '../../common/events.utils';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 import { getCookie } from 'cookies-next';
 import { getEnv } from '@hibiscus/env';
+import { Colors } from '@hacksc/sctw-ui-kit';
 
 export enum EventListType {
   ALL_EVENTS,
@@ -170,7 +171,7 @@ const CalendarHead = styled.div`
 
   text-align: center;
   font-size: 1.5rem;
-  background-color: #336675;
+  background-color: ${Colors.Red.DonatedBlood};
   padding: 1rem;
 `;
 
@@ -187,7 +188,7 @@ const RightArrow = styled.a`
 const SwipeableListContainer = styled.div`
   width: 100%;
   color: #336675;
-  background-color: ${Colors2023.GRAY.STANDARD};
+  background-color: ${Colors.Neutral.PaleBagel};
   padding: 0.5rem 1rem;
 `;
 
@@ -231,8 +232,10 @@ function EventCard(props: EventCardProps) {
   if (!props.isExpanded) {
     return (
       <CardClosed onClick={props.onClick}>
-        <BoldText>{props.event.eventName}</BoldText>
-        <Text>
+        <BoldText style={{ color: Colors.Red.DonatedBlood }}>
+          {props.event.eventName}
+        </BoldText>
+        <Text style={{ color: Colors.Red.DonatedBlood }}>
           {startTime} - {endTime}
         </Text>
       </CardClosed>
@@ -245,17 +248,19 @@ function EventCard(props: EventCardProps) {
 
       <CardRight>
         <Row>
-          <BoldText style={{ color: '#336675' }}>
+          <BoldText style={{ color: Colors.Red.DonatedBlood }}>
             {props.event.eventName}
           </BoldText>
-          <BoldText style={{ color: 'black', fontSize: '0.75rem' }}>
+          <BoldText
+            style={{ color: Colors.Red.DonatedBlood, fontSize: '0.75rem' }}
+          >
             {props.event.bpPoints} PTS
           </BoldText>
         </Row>
-        <Text style={{ color: Colors2023.GRAY.MEDIUM, fontSize: '0.75rem' }}>
+        <Text style={{ color: Colors.Red.DonatedBlood, fontSize: '0.75rem' }}>
           {startTime} - {endTime}
         </Text>
-        <Text style={{ color: Colors2023.GRAY.MEDIUM, fontSize: '0.75rem' }}>
+        <Text style={{ color: Colors.Red.DonatedBlood, fontSize: '0.75rem' }}>
           {props.event.location}
         </Text>
       </CardRight>
@@ -270,7 +275,7 @@ const CardClosed = styled.div`
   justify-content: space-between;
   user-select: none;
   cursor: pointer;
-  background-color: ${Colors2023.GRAY.LIGHT};
+  background-color: ${Colors.Neutral.Bagel};
 
   border-radius: 15px;
 
@@ -282,7 +287,7 @@ const CardOpen = styled.div`
 
   align-items: stretch;
 
-  border: 2px solid ${Colors2023.GRAY.SCHEMDIUM};
+  border: 2px solid ${Colors.Yellow.ArthurSweater};
   border-radius: 15px;
 
   overflow: hidden;
@@ -293,7 +298,7 @@ const CardOpen = styled.div`
 `;
 
 const CardLeft = styled.div`
-  background-color: #336675;
+  background-color: ${Colors.Yellow.ArthurSweater};
 
   width: 10px;
 `;
@@ -302,7 +307,7 @@ const CardRight = styled.div`
   display: flex;
   flex-direction: column;
 
-  background-color: ${Colors2023.GRAY.LIGHT};
+  background-color: ${Colors.Neutral.Bagel};
 
   padding: 1rem;
   height: 100%;

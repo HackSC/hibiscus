@@ -1,11 +1,7 @@
 import { Colors2023 } from '@hibiscus/styles';
+import { FaArrowLeft } from 'react-icons/fa';
 import { Text, BoldText } from '@hibiscus/ui';
-import {
-  Button,
-  DatePicker,
-  OneLineText,
-  ParagraphText,
-} from '@hibiscus/ui-kit-2023';
+import { DatePicker, OneLineText, ParagraphText } from '@hibiscus/ui-kit-2023';
 import styled from 'styled-components';
 import {
   Event,
@@ -17,6 +13,7 @@ import {
 import { Dispatch, SetStateAction, useState } from 'react';
 import { getCookie } from 'cookies-next';
 import { getEnv } from '@hibiscus/env';
+import { Button, Colors } from '@hacksc/sctw-ui-kit';
 
 interface EventDetailsProps {
   event: Event;
@@ -35,9 +32,14 @@ function EventDetails(props: EventDetailsProps) {
     // Normal mode (not in edit mode)
     return (
       <Container>
+        {/* <div style={{display:"flex"}}>
+          <ArrowIcon style={{marginTop: "3px"}} />
+          <Text style={{marginLeft: "4px"}}>Back to All Events</Text>
+        </div> */}
         <BoldText style={{ fontSize: '1.5rem' }}>
           {props.event.eventName}
         </BoldText>
+        <Text style={{ fontSize: '0.75rem' }}>{props.event.bpPoints} PTS</Text>
         <Text>
           {props.event.startTime.toLocaleDateString('en-US', {
             month: 'short',
@@ -56,14 +58,14 @@ function EventDetails(props: EventDetailsProps) {
         </Text>
         <Text>{props.event.location}</Text>
         <Text>{props.event.description}</Text>
-        <Row>
+        {/* <Row>
           {props.event.eventTags?.map((tag, i) => (
             <Tag key={i}>{tag}</Tag>
           ))}
           {props.event.industryTags?.map((tag, i) => (
             <Tag key={i}>{tag}</Tag>
           ))}
-        </Row>
+        </Row> */}
 
         <Row>
           {props.admin && (
@@ -79,8 +81,12 @@ function EventDetails(props: EventDetailsProps) {
           undefined ? (
             // Event is not pinned
             <Button
-              color="blue"
-              style={{ marginLeft: 'auto' }}
+              color="red"
+              style={{
+                marginLeft: 'auto',
+                color: 'white',
+                border: `3px solid white`,
+              }}
               onClick={pinEventHandler(
                 props.userId,
                 props.event.eventId,
@@ -94,7 +100,11 @@ function EventDetails(props: EventDetailsProps) {
             // Event is pinned
             <Button
               color="red"
-              style={{ marginLeft: 'auto' }}
+              style={{
+                marginLeft: 'auto',
+                color: 'white',
+                border: `3px solid white`,
+              }}
               onClick={unpinEventHandler(
                 props.userId,
                 props.event.eventId,
@@ -247,8 +257,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 
-  background-color: ${Colors2023.GRAY.MEDIUM};
-  border: 3px solid ${Colors2023.GRAY.SCHEMDIUM};
+  background-color: #ff514f;
+  border: 3px solid #ff514f;
   border-radius: 10px;
 
   padding: 2rem;
@@ -257,6 +267,8 @@ const Container = styled.div`
   width: 600px;
   max-width: 90vw;
 `;
+
+const ArrowIcon = styled(FaArrowLeft)``;
 
 const Row = styled.div`
   display: flex;

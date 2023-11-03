@@ -18,7 +18,7 @@ interface EventsCalendarProps {
 
 function EventsCalendar(props: EventsCalendarProps) {
   const ref = useRef(null);
-  const [columns, setColumns] = useState(0);
+  const [columns, setColumns] = useState(2);
   const [offset, setOffset] = useState(0);
   const [cards, setCards] = useState<ReactNode[][] | null>(null);
 
@@ -27,12 +27,12 @@ function EventsCalendar(props: EventsCalendarProps) {
   // Queries width of component to calculate number of columns
   // Dynamically recalculates on resize
   useEffect(() => {
-    setColumns(calcColumns(COLUMN_WIDTH, ref.current?.offsetWidth ?? 0));
-    const getwidth = () => {
-      setColumns(calcColumns(COLUMN_WIDTH, ref.current?.offsetWidth ?? 0));
-    };
-    window.addEventListener('resize', getwidth);
-    return () => window.removeEventListener('resize', getwidth);
+    // setColumns(calcColumns(COLUMN_WIDTH, ref.current?.offsetWidth ?? 0));
+    // const getwidth = () => {
+    //   setColumns(calcColumns(COLUMN_WIDTH, ref.current?.offsetWidth ?? 0));
+    // };
+    // window.addEventListener('resize', getwidth);
+    // return () => window.removeEventListener('resize', getwidth);
   }, []);
 
   // Render event cards
@@ -80,11 +80,11 @@ function EventsCalendar(props: EventsCalendarProps) {
                         events[idx + offset][0].startTime
                       ).toLocaleDateString('en-us', { month: 'short' })}
                     </Text>
-                    <Text>
+                    <NumText>
                       {getDayDate(
                         events[idx + offset][0].startTime
                       ).toLocaleDateString('en-us', { day: '2-digit' })}
-                    </Text>
+                    </NumText>
                   </>
                 )}
               </CalendarHeader>
@@ -107,18 +107,22 @@ interface CalendarGridProps {
 
 const Container = styled.div``;
 
+const NumText = styled.p`
+  font-family: 'Neue Haas Unica', sans-serif;
+  font-weight: 500;
+  font-size: 31px;
+`;
+
 const CalendarGrid = styled.div<CalendarGridProps>`
   position: relative;
   display: grid;
   grid-template-rows: auto 1fr;
   grid-template-columns: repeat(${(props) => props.columns}, 1fr);
+  width: 50vw;
 
-  width: 100%;
-
-  border: 3px solid ${Colors2023.GRAY.MEDIUM};
   border-radius: 5px;
 
-  height: 75vh;
+  height: 63vh;
   overflow-y: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
@@ -129,12 +133,13 @@ const CalendarGrid = styled.div<CalendarGridProps>`
   }
 `;
 
+// #FF524E
 const CalendarHeader = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  background-color: #336675;
+  background-color: #ce0c0a;
 
   padding: 1rem;
 `;
@@ -148,9 +153,9 @@ const CalendarColumn = styled.div`
 
   height: ${COLUMN_HEIGHT}px;
 
-  background-color: ${Colors2023.GRAY.STANDARD};
-  border-right: 3px solid ${Colors2023.GRAY.MEDIUM};
-  border-top: 3px solid ${Colors2023.GRAY.MEDIUM};
+  background-color: #fef8e5;
+  border-right: 3px solid #ce0c0a;
+  border-top: 3px solid #ce0c0a;
 
   :nth-last-child(1) {
     border-right: none;

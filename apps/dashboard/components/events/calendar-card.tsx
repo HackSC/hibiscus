@@ -52,7 +52,7 @@ const Card = styled.div<EventCardProps>`
   top: ${(props) => props.top};
   left: ${(props) => props.left};
 
-  background-color: #336675;
+  background-color: #ce0c0a;
 
   padding: 0.5rem;
   margin: 0;
@@ -65,4 +65,5 @@ const Card = styled.div<EventCardProps>`
   font-size: 0.75rem;
 
   cursor: pointer;
+  margin-top: 15px;
 `;
