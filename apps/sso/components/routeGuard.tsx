@@ -31,7 +31,7 @@ export function RouteGuard({ children }) {
       '/reset',
       '/reset#',
       '/reset-email',
-      '/reset-redirect',
+      '/reset-verify',
     ];
 
     const path = url.split('?')[0];

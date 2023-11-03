@@ -5,7 +5,7 @@ const REGISTERED_PATHS = new Set([
   'login',
   'reset',
   'reset-email',
-  'reset-redirect',
+  'reset-verify',
   'signup',
   'verify',
   'logout',
