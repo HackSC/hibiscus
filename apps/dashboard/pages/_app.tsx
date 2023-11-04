@@ -23,7 +23,7 @@ Router.events.on('routeChangeStart', (url) => {
 Router.events.on('routeChangeComplete', () => nProgress.done());
 Router.events.on('routeChangeError', () => nProgress.done());
 
-const newLayoutRoutes = ['/events'];
+const newLayoutRoutes = ['/events', '/sponsor-booth', '/participant-database'];
 
 function CustomApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -76,5 +76,4 @@ export default wrapper.withRedux(CustomApp);
 const Main = styled.main`
   position: absolute;
   width: 100%;
-  height: 100%;
 `;
