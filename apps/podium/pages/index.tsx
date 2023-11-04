@@ -523,7 +523,7 @@ const Index = () => {
         </div>
         <br />
         {!allProjects[0] ? (
-          <p style={{ marginLeft: '8px' }}>Loading...</p>
+          <p style={{ marginLeft: '8px' }}>Welcome to Podium!</p>
         ) : (
           <></>
         )}

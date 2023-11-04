@@ -63,5 +63,9 @@ export namespace Colors2023 {
       light: YELLOW.LIGHT,
       standard: YELLOW.STANDARD,
     },
+    [HibiscusRole.JUDGE]: {
+      light: BLUE.LIGHT,
+      standard: BLUE.STANDARD,
+    },
   };
 }
