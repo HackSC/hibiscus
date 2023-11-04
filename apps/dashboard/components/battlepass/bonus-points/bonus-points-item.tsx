@@ -1,5 +1,6 @@
 import { H3, H4, Text } from '@hibiscus/ui';
-import { Button } from '@hibiscus/ui-kit-2023';
+// import { Button } from '@hibiscus/ui-kit-2023';
+import { Button } from '@hacksc/sctw-ui-kit';
 import React from 'react';
 import styled from 'styled-components';
 import { BonusPointsStatus } from '../../../common/apis/battlepass/types';
@@ -13,13 +14,13 @@ interface Props {
 function BonusPointsItem({ data, handleClick }: Props) {
   return (
     <Container>
-      <div>
-        <Text style={{ color: 'gray' }}>{data.points} pts</Text>
+      <TextDiv>
+        <Text style={{ color: 'white' }}>{data.points} pts</Text>
         <H4>{data.title}</H4>
-      </div>
+      </TextDiv>
       <div>
         <Button
-          color="black"
+          color="yellow"
           disabled={data.status !== BonusPointsStatus.VERIFY}
           onClick={handleClick}
         >
@@ -32,9 +33,19 @@ function BonusPointsItem({ data, handleClick }: Props) {
 
 export default BonusPointsItem;
 
+const TextDiv = styled.div`
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`;
+
 const Container = styled.div`
   display: flex;
   justify-content: space-between;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+  }
   padding: 10px;
   gap: 10px;
 `;

@@ -61,6 +61,7 @@ const BarFront = styled.div<{ progress: number }>`
 `;
 
 const BottomDiv = styled.div`
+  margin-top: 8px;
   display: flex;
   justify-content: space-between;
 `;

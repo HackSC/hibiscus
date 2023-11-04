@@ -93,7 +93,7 @@ export function Index({
 export default Index;
 
 const Wrapper = styled.div`
-  height: 100%;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;

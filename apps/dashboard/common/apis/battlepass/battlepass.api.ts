@@ -3,7 +3,7 @@ import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { BonusPointsStatus } from './types';
 import { container } from 'tsyringe';
-import { BattlePassRepository } from 'apps/dashboard/repository/battlepass.repository';
+import { BattlePassRepository } from '../../../repository/battlepass.repository';
 import axios from 'axios';
 
 const getNumberStatusBonusPoint = (status: BonusPointsStatus) => {
@@ -64,6 +64,7 @@ export interface BattlepassAPIInterface {
     bonusPointsId: string,
     status: BonusPointsStatus
   ) => Promise<void>;
+  setBonusPointPending: (userId: string, bonusPointId: string) => Promise<void>;
 }
 
 export class BattlepassAPI implements BattlepassAPIInterface {
@@ -133,6 +134,17 @@ export class BattlepassAPI implements BattlepassAPIInterface {
       return res.data;
     } catch {
       throw new Error('Failed to get user rank');
+    }
+  }
+
+  async setBonusPointPending(userId: string, bonusPointId: string) {
+    try {
+      await axios.post('/api/battlepass/bonus-points', {
+        userId,
+        bonusPointId,
+      });
+    } catch (e) {
+      throw new Error('Failed to set bonus points');
     }
   }
 

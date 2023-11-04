@@ -18,6 +18,7 @@ import { RejectionMessage } from './rejection-message';
 import BattlepassPage from '../battlepass/battlepass-page';
 import { BattlepassAPIProvider } from '../../hooks/use-battlepass-api/use-battlepass-api';
 import ConfirmedPlaceholder from './confirmed-placeholder';
+import { useRouter } from 'next/router';
 
 type RSVPChoice = 'DECLINE' | 'ACCEPT';
 
@@ -34,6 +35,8 @@ export function HackerPortal({ isEventOpen, appsOpen }: HackerPortalProps) {
   const [choice, setChoice] = useState<RSVPChoice | null>(null);
   const { supabase: hbc } = useHibiscusSupabase();
   const client = hbc.getClient();
+
+  const router = useRouter();
 
   const WelcomeHeader = () => (
     <div
@@ -196,11 +199,8 @@ export function HackerPortal({ isEventOpen, appsOpen }: HackerPortalProps) {
 
   if (user.attendanceConfirmed === true) {
     if (isEventOpen) {
-      return (
-        <BattlepassAPIProvider mock={false}>
-          <BattlepassPage />
-        </BattlepassAPIProvider>
-      );
+      router.push('/leaderboard');
+      return <></>;
     } else {
       return <ConfirmedPlaceholder />;
     }

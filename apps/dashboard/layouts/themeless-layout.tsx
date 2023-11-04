@@ -95,8 +95,8 @@ const LogoutButton = styled.button`
 `;
 
 const RoleText = styled(Text)`
-  font-weight: bold;
-  letter-spacing: 3px;
+  font-weight: bold !important;
+  letter-spacing: 3px !important;
 `;
 
 const RightUtilityContainer = styled.div`
