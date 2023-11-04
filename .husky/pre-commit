@@ -2,5 +2,6 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 staged=$(git diff --name-only --staged --diff-filter=d)
-nix develop --command bash -c "yarn format && pre-commit run --all-files"
+export NIXPKGS_ALLOW_INSECURE=1
+nix develop --impure --command bash -c "yarn format && pre-commit run --all-files"
 git add ${staged}

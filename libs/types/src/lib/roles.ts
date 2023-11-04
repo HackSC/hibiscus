@@ -5,4 +5,5 @@ export enum HibiscusRole {
   VOLUNTEER = 'VOLUNTEER',
   HACKER = 'HACKER',
   APPLICANT = 'APPLICANT',
+  JUDGE = 'JUDGE',
 }

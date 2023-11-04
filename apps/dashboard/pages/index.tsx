@@ -12,6 +12,7 @@ import { useAppDispatch } from '../hooks/redux/hooks';
 import { removeTabRoute } from '../store/menu-slice';
 import RSVPClosedPlaceholder from '../components/hacker-portal/rsvp-closed-placeholder';
 import { get } from '@vercel/edge-config';
+import { useRouter } from 'next/router';
 
 const RSVP_PERIOD = 4 * 24 * 60 * 60 * 1000; // 4 days in milliseconds
 
@@ -28,6 +29,8 @@ export function Index({
 }: ServerSideProps) {
   const dispatch = useAppDispatch();
   const { user } = useHibiscusUser();
+
+  const router = useRouter();
 
   const [rsvpFormOpen, setRsvpFormOpen] = useState<boolean | null>(true);
 
@@ -69,10 +72,13 @@ export function Index({
       ) {
         return <RSVPClosedPlaceholder />;
       }
-      return <HackerPortal isEventOpen={true} appsOpen={appsOpen} />;
-    } else if (user.role === HibiscusRole.SPONSOR)
-      return <SponsorPortal user={user} />;
-    else if (user.role === HibiscusRole.VOLUNTEER) return <IdentityPortal />;
+      return (
+        <HackerPortal isEventOpen={hackerPortalOpen} appsOpen={appsOpen} />
+      );
+    } else if (user.role === HibiscusRole.SPONSOR) {
+      router.push('/sponsor-booth');
+      return <></>;
+    } else if (user.role === HibiscusRole.VOLUNTEER) return <IdentityPortal />;
   };
 
   return (

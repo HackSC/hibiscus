@@ -15,6 +15,8 @@ function PortalLayout({ children }: PortalLayoutProps) {
 
   return (
     <MainPageWrapper>
+      {/* <StyledSideNav /> */}
+      <TopBar userTag={user.tag} role={user.role} />
       <MenuLayoutWrapper>
         <PortalMenu />
         <MenuWrapper>

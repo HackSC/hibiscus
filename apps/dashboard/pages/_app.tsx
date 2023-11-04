@@ -2,6 +2,7 @@ import { GlobalStyles2023 } from '@hibiscus/styles';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import './styles.css';
+import '../components/events/event-list.global.css';
 import { wrapper } from '../store/store';
 import styled from 'styled-components';
 import { HibiscusUserProvider } from '../hooks/use-hibiscus-user/use-hibiscus-user';
@@ -13,12 +14,16 @@ import { TeamProvider } from '../hooks/use-team/use-team';
 import { SupabaseContextProvider } from '@hibiscus/hibiscus-supabase-context';
 import Router from 'next/router';
 import nProgress from 'nprogress';
+import ThemelessLayout from '../layouts/themeless-layout';
+import { GlobalStyle } from '@hacksc/sctw-ui-kit';
 
 Router.events.on('routeChangeStart', (url) => {
   nProgress.start();
 });
 Router.events.on('routeChangeComplete', () => nProgress.done());
 Router.events.on('routeChangeError', () => nProgress.done());
+
+const newLayoutRoutes = ['/events', '/sponsor-booth', '/participant-database'];
 
 function CustomApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
@@ -45,12 +50,19 @@ function CustomApp({ Component, pageProps }: AppProps) {
       <Main>
         <Toaster />
         <GlobalStyles2023 />
+        <GlobalStyle />
         <SupabaseContextProvider>
           <TeamProvider>
             <HibiscusUserProvider>
-              <PortalLayout>
-                <Component {...pageProps} />
-              </PortalLayout>
+              {newLayoutRoutes.includes(router?.pathname) ? (
+                <ThemelessLayout>
+                  <Component {...pageProps} />
+                </ThemelessLayout>
+              ) : (
+                <PortalLayout>
+                  <Component {...pageProps} />
+                </PortalLayout>
+              )}
             </HibiscusUserProvider>
           </TeamProvider>
         </SupabaseContextProvider>
@@ -64,6 +76,4 @@ export default wrapper.withRedux(CustomApp);
 const Main = styled.main`
   position: absolute;
   width: 100%;
-  height: 100%;
-  background-color: white;
 `;
