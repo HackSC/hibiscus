@@ -41,6 +41,12 @@ const Index = () => {
   const supabase = useHibiscusSupabase().supabase.getClient();
 
   useEffect(() => {
+    if (modalActive) {
+      setInput(currentAttendee.quick_notes);
+    }
+  }, [modalActive]);
+
+  useEffect(() => {
     SponsorServiceAPI.getCompanyIdAndEventId(user.id)
       .then(({ data, error }) => {
         if (error) {
