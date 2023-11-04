@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import useHibiscusUser from '../hooks/use-hibiscus-user/use-hibiscus-user';
 import StyledSideNav from '../components/nav/side-nav';
@@ -17,27 +17,36 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
   const isSmallScreen = useMediaQuery({ query: '(max-width: 600px)' });
 
   const { user } = useHibiscusUser();
+  const color = useMemo(() => {
+    if (user == null) return Colors.Yellow.ArthurSweater;
+    if (user.role === HibiscusRole.HACKER) return Colors.Yellow.ArthurSweater;
+    if (user.role === HibiscusRole.SPONSOR) return Colors.Red.DonatedBlood;
+    return Colors.Yellow.ArthurSweater;
+  }, [user]);
+  const shadowColor = useMemo(() => {
+    if (user == null) return Colors.Yellow.Yuhlow;
+    if (user.role === HibiscusRole.HACKER) return Colors.Yellow.Yuhlow;
+    if (user.role === HibiscusRole.SPONSOR) return Colors.Red.Redward;
+    return Colors.Yellow.Yuhlow;
+  }, [user]);
 
   if (user == null) {
     return <></>;
   }
 
   return isSmallScreen ? (
-    <VerticalMainPageWrapper>
+    <VerticalMainPageWrapper style={{ backgroundColor: color }}>
       <StyledTopNav />
       <VerticalContent>{children}</VerticalContent>
     </VerticalMainPageWrapper>
   ) : (
-    <MainPageWrapper>
+    <MainPageWrapper style={{ backgroundColor: color }}>
       <StyledSideNav />
       <Content>
         <RightUtilityContainer>
           <UserText>{user.tag}</UserText>
           <RoleText>
-            <GlowSpan
-              color={Colors.Yellow.ArthurSweater}
-              shadowColor={Colors.Yellow.Yuhlow}
-            >
+            <GlowSpan color={color} shadowColor={shadowColor}>
               {user.role}
             </GlowSpan>
           </RoleText>

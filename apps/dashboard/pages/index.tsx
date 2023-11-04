@@ -78,6 +78,9 @@ export function Index({
     } else if (user.role === HibiscusRole.SPONSOR) {
       router.push('/sponsor-booth');
       return <></>;
+    } else if (user.role === HibiscusRole.JUDGE) {
+      window.location.assign('podium.hacksc.com');
+      return <></>;
     } else if (user.role === HibiscusRole.VOLUNTEER) return <IdentityPortal />;
   };
 

@@ -9,6 +9,7 @@ import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 import { useMemo } from 'react';
 import { HibiscusRole } from '@hibiscus/types';
 import { useRouter } from 'next/router';
+import { Colors } from '@hacksc/sctw-ui-kit';
 
 // #CEA00C
 
@@ -34,7 +35,7 @@ const HeadingContainer = styled.div`
   align-items: center;
 `;
 
-const ButtonContainer = styled.div`
+const ButtonContainer = styled.div<{ hoverColor: string }>`
   height: 50px;
   margin-bottom: 40px;
   display: flex;
@@ -43,7 +44,7 @@ const ButtonContainer = styled.div`
   cursor: pointer;
 
   &:hover {
-    background-color: #cea00c;
+    background-color: ${(props) => props.hoverColor};
     border-left: 8px solid white;
   }
 `;
@@ -120,6 +121,12 @@ function StyledSideNav() {
     if (user.role === HibiscusRole.SPONSOR) return SPONSOR_NAVBAR;
     return [];
   }, [user]);
+  const hoverColor = useMemo(() => {
+    if (user == null) return Colors.Yellow.Yuhlow;
+    if (user.role === HibiscusRole.HACKER) return Colors.Yellow.Yuhlow;
+    if (user.role === HibiscusRole.SPONSOR) return Colors.Red.Redward;
+    return Colors.Yellow.Yuhlow;
+  }, [user]);
 
   return (
     <>
@@ -136,7 +143,11 @@ function StyledSideNav() {
           </HeadingContainer>
 
           {items.map((it) => (
-            <ButtonContainer key={it.label} onClick={() => router.push(it.url)}>
+            <ButtonContainer
+              key={it.label}
+              onClick={() => router.push(it.url)}
+              hoverColor={hoverColor}
+            >
               <it.icon size={25} />
               <ButtonH1> {it.label} </ButtonH1>
             </ButtonContainer>
