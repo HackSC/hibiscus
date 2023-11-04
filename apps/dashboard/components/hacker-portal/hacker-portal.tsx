@@ -198,7 +198,9 @@ export function HackerPortal({ isEventOpen, appsOpen }: HackerPortalProps) {
   );
 
   if (user.attendanceConfirmed === true) {
-    if (isEventOpen) {
+    if (isEventOpen === null) {
+      return <></>;
+    } else if (isEventOpen) {
       router.push('/leaderboard');
       return <></>;
     } else {

@@ -7,12 +7,13 @@ import SponsorPortal from '../components/sponsor-portal/sponsor-portal';
 import { GetServerSideProps } from 'next';
 import AppsClosedPlaceholder from '../components/hacker-portal/apps-closed-placeholder';
 import { isHackerPostAppStatus } from '../common/utils';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAppDispatch } from '../hooks/redux/hooks';
 import { removeTabRoute } from '../store/menu-slice';
 import RSVPClosedPlaceholder from '../components/hacker-portal/rsvp-closed-placeholder';
 import { get } from '@vercel/edge-config';
 import { useRouter } from 'next/router';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 
 const RSVP_PERIOD = 4 * 24 * 60 * 60 * 1000; // 4 days in milliseconds
 
@@ -22,13 +23,38 @@ interface ServerSideProps {
   hackerPortalOpen: boolean;
 }
 
-export function Index({
-  appsOpen,
-  hackerPortalOpen,
-  waitlistOpen,
-}: ServerSideProps) {
+export function Index({ appsOpen, waitlistOpen }: ServerSideProps) {
   const dispatch = useAppDispatch();
+  const { supabase } = useHibiscusSupabase();
   const { user } = useHibiscusUser();
+
+  const [hackerPortalOpen, setHackerPortalOpen] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (user != null) {
+        const { data, error } = await supabase
+          .getClient()
+          .from('participants')
+          .select('wristband_id')
+          .eq('id', user.id);
+
+        if (error != null) {
+          console.log(error.message);
+          return;
+        }
+
+        console.log(data);
+
+        setHackerPortalOpen(
+          data?.[0]?.wristband_id !== null &&
+            data?.[0]?.wristband_id !== undefined
+        );
+      }
+    };
+
+    fetchData();
+  }, [user]);
 
   const router = useRouter();
 
