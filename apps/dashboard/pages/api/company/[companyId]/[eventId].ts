@@ -110,6 +110,7 @@ export default async function handler(
         if (!filterValues[i]) {
           continue;
         }
+        console.log(filterValues[i]);
         filteringArray = repo.filterAttendees(
           filterParams[i],
           filterValues[i].toLowerCase(),

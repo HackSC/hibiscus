@@ -115,8 +115,8 @@ export class AttendeeRepository {
     const returnArray = array.filter((ele) => {
       const testContains: string = (
         ele['participants'][filterParameter] as string
-      ).toLowerCase();
-      return testContains.includes(filterValue);
+      )?.toLowerCase();
+      return testContains?.includes(filterValue);
     });
 
     return returnArray;

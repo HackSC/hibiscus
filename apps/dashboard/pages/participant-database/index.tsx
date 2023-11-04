@@ -45,6 +45,12 @@ const Index = () => {
   const [attendeeName, setAttendeeName] = useState('');
 
   useEffect(() => {
+    if (modalActive) {
+      setInput(currentAttendee.quick_notes);
+    }
+  }, [modalActive]);
+
+  useEffect(() => {
     async function getFilteredAttendee() {
       SponsorServiceAPI.getFilteredAttendee(
         COMPANY_ID,
