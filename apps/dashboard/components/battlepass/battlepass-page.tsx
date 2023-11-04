@@ -1,6 +1,11 @@
 import { H3, Text } from '@hibiscus/ui';
 import { GlobalStyles } from '@hibiscus/styles';
-import { GlobalStyle, BodyTextSmall, BodyText } from '@hacksc/sctw-ui-kit';
+import {
+  GlobalStyle,
+  BodyTextSmall,
+  BodyText,
+  Heading,
+} from '@hacksc/sctw-ui-kit';
 import { useBattlepassAPI } from '../../hooks/use-battlepass-api/use-battlepass-api';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -119,7 +124,7 @@ const NextLevelTextSpan = styled.span`
   font-style: normal;
   font-weight: 700;
   line-height: normal;
-  letter-spacing: 4px;
+  letter-spacing: 0;
   text-transform: uppercase;
 `;
 
@@ -132,7 +137,7 @@ const YellowPoints = styled(BodyTextSmall)`
   font-style: normal;
   font-weight: 700;
   line-height: normal;
-  letter-spacing: 4px;
+  letter-spacing: 0;
   text-transform: uppercase;
 `;
 
@@ -171,7 +176,8 @@ const SecondSection = styled.div`
   }
 `;
 
-const WidgetHeader = styled(BodyText)`
+const WidgetHeader = styled.p`
+  font-family: 'filson-pro', sans-serif;
   color: var(--Redward, #ff514f);
   font-size: 20px;
   font-style: normal;

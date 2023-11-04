@@ -18,11 +18,10 @@ function PortalLayout({ children }: PortalLayoutProps) {
       {/* <StyledSideNav /> */}
       <TopBar userTag={user.tag} role={user.role} />
       <MenuLayoutWrapper>
-        <PortalMenu />
         <MenuWrapper>
-          <TopBar userTag={user.tag} role={user.role} />
-          <ChildrenWrapper>{children}</ChildrenWrapper>
+          <PortalMenu />
         </MenuWrapper>
+        <ChildrenWrapper>{children}</ChildrenWrapper>
       </MenuLayoutWrapper>
     </MainPageWrapper>
   );
@@ -39,13 +38,13 @@ const MainPageWrapper = styled.div`
 
 const MenuLayoutWrapper = styled.div`
   position: relative;
-  display: flex;
-
+  padding: 20px;
   height: 100%;
 `;
 
 const MenuWrapper = styled.div`
-  background: var(--Arthurs-Sweater, #ecb400);
+  position: absolute;
+  z-index: 999; // always on top
 `;
 
 const ChildrenWrapper = styled.div`

@@ -98,7 +98,6 @@ const Wrapper = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  background-color: white;
 `;
 
 const LayoutContainer = styled.div`
@@ -115,7 +114,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
   return {
     props: {
       appsOpen,
-      hackerPortalOpen: true,
+      hackerPortalOpen,
       waitlistOpen,
     } as ServerSideProps,
   };

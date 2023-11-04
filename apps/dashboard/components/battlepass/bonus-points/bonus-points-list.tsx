@@ -1,5 +1,5 @@
 import { H3, Modal, Text, Link } from '@hibiscus/ui';
-import { Button } from '@hibiscus/ui-kit-2023';
+import { Button } from '@hacksc/sctw-ui-kit';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useBattlepassAPI } from '../../../hooks/use-battlepass-api/use-battlepass-api';
@@ -37,7 +37,7 @@ function BattlepassBonusPointsList({ items }: Props) {
           <Text>{chosenBP?.description}</Text>
           <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <Link href={chosenBP?.link ?? ''} passHref>
-              <Button color="black">SUBMIT FORM</Button>
+              <Button color="yellow">SUBMIT FORM</Button>
             </Link>
           </div>
         </GrayBox>

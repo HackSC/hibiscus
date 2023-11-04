@@ -19,6 +19,7 @@ export const BattlepassWelcomeHeader = () => {
           style={{
             color: 'black',
             fontSize: '30px',
+            fontFamily: "'filson-pro', sans-serif",
           }}
         >
           Your Leaderboard
