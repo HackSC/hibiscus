@@ -73,6 +73,7 @@ const Content = styled.div`
   flex-direction: column;
 
   height: 100%;
+  min-height: 100vh;
   background-color: white;
   border-radius: 30px 0 0 30px;
 

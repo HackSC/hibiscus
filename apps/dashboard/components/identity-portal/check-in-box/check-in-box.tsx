@@ -1,8 +1,10 @@
+import { getEnv } from '@hibiscus/env';
 import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import { Colors2023 } from '@hibiscus/styles';
 import { Modal } from '@hibiscus/ui';
 import { Button, Checkbox, OneLineText } from '@hibiscus/ui-kit-2023';
-import { useState } from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 interface CheckInBoxProps {
@@ -20,11 +22,18 @@ export function CheckInBox(props: CheckInBoxProps) {
   const { isModalOpen, setModalOpen, user } = props;
   const [modalScreen, setModalScreen] = useState(ModalScreen.ASSIGN);
   const [wristbandId, setWristbandId] = useState(null);
-  const [admitted, setAdmitted] = useState(false);
-  const [age, setAge] = useState(false);
-  const [status, setStatus] = useState(user?.email?.endsWith('edu') ?? false);
+  const [discordVerified, setDiscordVerified] = useState(false);
+  const [waiver, setWaiver] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const { supabase } = useHibiscusSupabase();
+
+  useEffect(() => {
+    if (user != null) {
+      checkDiscord(user.id).then((v) => setDiscordVerified(v));
+      console.log(user.waiver_signed);
+      setWaiver(user.waiver_signed);
+    }
+  }, [user]);
 
   const handleClick = (setter: (value: boolean) => void) => (value: boolean) =>
     setter(value);
@@ -32,6 +41,18 @@ export function CheckInBox(props: CheckInBoxProps) {
   function handleAssign() {
     if (isReady()) {
       setModalScreen(ModalScreen.CONFIRM);
+    }
+  }
+
+  async function checkDiscord(userId: string): Promise<boolean> {
+    try {
+      const res = await axios.get(
+        `${getEnv().Hibiscus.Discord.ApiUrl}/checkUserIsVerified/${userId}`
+      );
+
+      return res.data.verified;
+    } catch (e) {
+      console.log(e.response.data);
     }
   }
 
@@ -62,13 +83,10 @@ export function CheckInBox(props: CheckInBoxProps) {
     setModalOpen(false);
     setModalScreen(ModalScreen.ASSIGN);
     setWristbandId(null);
-    setAdmitted(false);
-    setAge(false);
-    setStatus(false);
   }
 
   function isReady() {
-    return admitted && age && status;
+    return discordVerified && waiver;
   }
 
   return (
@@ -80,7 +98,7 @@ export function CheckInBox(props: CheckInBoxProps) {
               {user.first_name} {user.last_name}
             </Name>
             <InfoText>{user.email}</InfoText>
-            <InfoText>{user.major}</InfoText>
+            <InfoText>{user.dob}</InfoText>
           </UpperDiv>
           <LowerDiv>
             <LowerLeft>
@@ -88,19 +106,15 @@ export function CheckInBox(props: CheckInBoxProps) {
               <VerificationBox>
                 <Checkbox
                   color="yellow"
-                  label="Admitted"
-                  onInput={handleClick(setAdmitted)}
+                  label="Discord verification"
+                  checked={discordVerified}
+                  onInput={handleClick(setDiscordVerified)}
                 />
                 <Checkbox
                   color="yellow"
-                  label="Age"
-                  onInput={handleClick(setAge)}
-                />
-                <Checkbox
-                  color="yellow"
-                  label="Education Status"
-                  onInput={handleClick(setStatus)}
-                  checked={status}
+                  label="Waiver"
+                  checked={waiver}
+                  onInput={handleClick(setWaiver)}
                 />
               </VerificationBox>
             </LowerLeft>
