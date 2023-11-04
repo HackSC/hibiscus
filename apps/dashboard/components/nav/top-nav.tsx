@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Colors2023 } from '@hibiscus/styles';
 import Image from 'next/image';
-import hibiscusIcon from '../../../../images/hibiscus-platform-logo.png';
+import hibiscusIcon from '../../../../images/hibiscus-platform-logo-hi.png';
 import { BsPersonFill } from 'react-icons/bs';
 import { BsCalendarCheck } from 'react-icons/bs';
 import { HiOutlineSquares2X2 } from 'react-icons/hi2';
@@ -10,6 +10,7 @@ import { HibiscusRole } from '@hibiscus/types';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 import { useMemo } from 'react';
 import { useRouter } from 'next/router';
+import { BiFolder } from 'react-icons/bi';
 
 // #CEA00C
 
@@ -75,6 +76,10 @@ const SquaresIcon = styled(HiOutlineSquares2X2)`
   margin-left: 20px;
 `;
 
+const FileIcon = styled(BiFolder)`
+  margin-left: 20px;
+`;
+
 const BoothIcon = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -102,6 +107,11 @@ const JUDGE_NAVBAR = [
 
 const SPONSOR_NAVBAR = [
   { label: 'My Booth', icon: BoothIcon, url: '/sponsor-booth' },
+  {
+    label: 'Representative Packet',
+    icon: FileIcon,
+    url: '/representative-packet.pdf',
+  },
 ];
 
 function StyledTopNav() {
@@ -137,7 +147,7 @@ function StyledTopNav() {
                 width={40}
                 height={40}
               />
-              <StyledH1> HackSC 2023 </StyledH1>
+              <StyledH1> HackSC X </StyledH1>
             </HeadingContainer>
             <HeadingContainer style={{ marginRight: '20px' }}>
               {items.map((it) => (
