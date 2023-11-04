@@ -65,5 +65,5 @@ Thumbs.db
 /**/.serverless/
 
 # Chalice
-/**/.chalice/deployments
 /**/.chalice/config.json
+/**/.chalice/deployments
