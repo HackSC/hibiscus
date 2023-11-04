@@ -70,7 +70,7 @@ const ProjectDraggable: FC<ProjectDraggableProps> = ({
             className={styles.cursorPointer}
             onClick={() => expandProject(project)}
           >
-            {project.name}
+            {project.projectName}
           </h3>
           <span className={styles.thinFont}>{project.description}</span>
         </div>

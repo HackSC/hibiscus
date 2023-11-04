@@ -53,7 +53,7 @@ const ProjectDetails: FC<ProjectDetailsProps> = ({
               className={styles.detailsButtons}
             />
           </Link>
-          <h2>{project.name}</h2>
+          <h2>{project.projectName}</h2>
           <h3>
             By:&nbsp;
             {project.teamMembers?.map((mem, i) =>

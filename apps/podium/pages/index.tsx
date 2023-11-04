@@ -23,7 +23,7 @@ import unrankProject from '../utils/unrankProject';
 import ProjectDetails from '../components/ProjectDetails';
 import OnHoldPreview from '../components/OnHoldPreview';
 import { Project } from '../types';
-import { BiSearch } from 'react-icons/bi';
+import { BsQuestionCircle } from 'react-icons/bs';
 import { Modal } from '../utils/modal/modal';
 import smoothscroll from 'smoothscroll-polyfill';
 import { getCookie } from 'cookies-next';
@@ -337,18 +337,23 @@ const Index = () => {
 
       <header className={`${styles.header} ${styles.flexCenter}`}>
         <img src="logo_word.png" alt="Hibiscus HackSC Logo" />
-        <BiSearch
+        {/* <BiSearch
           color="#FFFFFF"
           size="30px"
           style={{ position: 'absolute', right: '20px' }}
           className={styles.cursorPointer}
           onClick={() => setIsSearchOpen(true)}
+        /> */}
+        <BsQuestionCircle
+          color="#FFFFFF"
+          size="30px"
+          style={{ position: 'absolute', right: '20px' }}
+          className={styles.cursorPointer}
+          onClick={() => setIsInstructionsOpen(true)}
         />
       </header>
 
-      <Modal
-        isOpen={isSearchOpen}
-        closeModal={() => setIsSearchOpen(false)}>
+      <Modal isOpen={isSearchOpen} closeModal={() => setIsSearchOpen(false)}>
         <div className={`${styles.containerSearch} ${styles.roundCorners}`}>
           <input
             type="text"
@@ -376,8 +381,11 @@ const Index = () => {
 
       <Modal
         isOpen={isInstructionsOpen}
-        closeModal={() => setIsInstructionsOpen(false)}>
-        <div className={`${styles.containerInstructions} ${styles.roundCorners}`}>
+        closeModal={() => setIsInstructionsOpen(false)}
+      >
+        <div
+          className={`${styles.containerInstructions} ${styles.roundCorners}`}
+        >
           <div className={styles.flexBetween}>
             <h1>Judging Criteria</h1>
             <img
@@ -386,38 +394,78 @@ const Index = () => {
               className={styles.cursorPointer}
               onClick={() => setIsInstructionsOpen(false)}
             />
-          </div> <br />
-          <p>There are general criteria that apply to every project, as well as vertical-specific criteria that will only be used by judges that are assigned to that vertical. The following will provide an overview of the criteria we're looking for. We recommend considering these criteria when ranking the projects in the judging portal.</p>
+          </div>{' '}
+          <br />
+          <p>
+            There are general criteria that apply to every project, as well as
+            vertical-specific criteria that will only be used by judges that are
+            assigned to that vertical. The following will provide an overview of
+            the criteria we're looking for. We recommend considering these
+            criteria when ranking the projects in the judging portal.
+          </p>
           <h3>Technological complexity</h3>
           <ul>
-            <li>• How challenging was it for the team to complete in the 24-hour window?</li>
-            <li>• Is the project technologically impressive? Complex? Does it seem remarkable that someone could achieve this hack in just a day or two?</li>
+            <li>
+              • How challenging was it for the team to complete in the 24-hour
+              window?
+            </li>
+            <li>
+              • Is the project technologically impressive? Complex? Does it seem
+              remarkable that someone could achieve this hack in just a day or
+              two?
+            </li>
           </ul>
           <h3>Functionality</h3>
           <ul>
             <li>• How functional is this hack at the time of the demo?</li>
-            <li>• Completeness - has the team thought through and/or planned how to develop and launch/release their product?</li>
-            <li>• Is the project realistic? This includes vetting of idea, plans for development, marketing, deployment, etc.</li>
+            <li>
+              • Completeness - has the team thought through and/or planned how
+              to develop and launch/release their product?
+            </li>
+            <li>
+              • Is the project realistic? This includes vetting of idea, plans
+              for development, marketing, deployment, etc.
+            </li>
           </ul>
           <h3>Feasibility</h3>
           <ul>
-            <li>• How practical and achievable is the hack idea being presented (considering the 36-hour window, technology, and other resources)? Is it scalable?</li>
+            <li>
+              • How practical and achievable is the hack idea being presented
+              (considering the 36-hour window, technology, and other resources)?
+              Is it scalable?
+            </li>
           </ul>
           <h3>“Wow factor”</h3>
           <ul>
             <li>• Impressiveness - How original is the idea?</li>
-            <li>• Creativity - Has this hack been done before? Does this project make others think this is a really cool idea and question why they didn't think of it before?</li>
+            <li>
+              • Creativity - Has this hack been done before? Does this project
+              make others think this is a really cool idea and question why they
+              didn't think of it before?
+            </li>
           </ul>
           <h3>Passion</h3>
           <ul>
-            <li>• How excited and passionate is the team about solving the problem they chose?</li>
+            <li>
+              • How excited and passionate is the team about solving the problem
+              they chose?
+            </li>
           </ul>
           <h3>Vertical Alignment</h3>
           <ul>
-            <li>• <strong>Energy:</strong> Power a Sustainable Future</li>
-            <li>• <strong>Accessibility:</strong> Opening the World</li>
-            <li>• <strong>Learning:</strong> Exploring Beyond the Classroom</li>
-            <li>• <strong>Healthcare:</strong> Patient Safety Technology Challenge <em>(Sponsored)</em></li>
+            <li>
+              • <strong>Energy:</strong> Power a Sustainable Future
+            </li>
+            <li>
+              • <strong>Accessibility:</strong> Opening the World
+            </li>
+            <li>
+              • <strong>Learning:</strong> Exploring Beyond the Classroom
+            </li>
+            <li>
+              • <strong>Healthcare:</strong> Patient Safety Technology Challenge{' '}
+              <em>(Sponsored)</em>
+            </li>
           </ul>
         </div>
       </Modal>
@@ -472,13 +520,8 @@ const Index = () => {
         )}
         <div style={{ margin: '0px 8px' }} className={styles.flexBetween}>
           <h1>Rank</h1>
-          <img
-            src="button_question.svg"
-            alt="Open judging instructions"
-            className={styles.cursorPointer}
-            onClick={() => setIsInstructionsOpen(true)}
-          />
-        </div> <br />
+        </div>
+        <br />
         {!allProjects[0] ? (
           <p style={{ marginLeft: '8px' }}>Loading...</p>
         ) : (
