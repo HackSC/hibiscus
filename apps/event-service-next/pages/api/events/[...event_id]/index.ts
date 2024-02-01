@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import repository from '../../../src/utils/repository';
+import repository from '../../../../src/utils/repository';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const METHOD = req.method;
