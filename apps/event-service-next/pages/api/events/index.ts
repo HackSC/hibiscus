@@ -2,6 +2,21 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import repository from '../../../src/utils/repository';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  const METHOD = req.method;
+  switch (METHOD) {
+    case 'GET':
+      get(req, res);
+      break;
+    case 'POST':
+      post(req, res);
+      break;
+    default:
+      res.status(400).json({ error: 'INVALID HTTP REQUEST' });
+      break;
+  }
+}
+
+function get(req: NextApiRequest, res: NextApiResponse) {
   let body = req.body;
   try {
     if (!body) {
@@ -50,5 +65,16 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     res.status(200).json({ page: page, events: events });
   } catch (error) {
     res.status(400).json({ error: `Failed to get requested events: ${error}` });
+  }
+}
+
+function post(req: NextApiRequest, res: NextApiResponse) {
+  // TODO: Implement This
+  const body = req.body;
+  try {
+    const event = repository.addEvent(body);
+    res.status(200).json({ event: event });
+  } catch (error) {
+    res.status(400).json({ error: `Failed to add event: ${error}` });
   }
 }
