@@ -1,11 +1,16 @@
+import 'reflect-metadata';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import repository from '../../../../src/utils/repository';
+import { container } from 'tsyringe';
+import { EventRepository } from '../../../../src/utils/repository';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const METHOD = req.method;
   switch (METHOD) {
     case 'GET':
-      get(req, res);
+      await get(req, res);
       break;
     case 'PUT':
       put(req, res);
@@ -19,7 +24,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-function get(req: NextApiRequest, res: NextApiResponse) {
+async function get(req: NextApiRequest, res: NextApiResponse) {
   // TODO: Check auth role
   let { event_id } = req.query;
   const isAdmin = false;
@@ -31,10 +36,11 @@ function get(req: NextApiRequest, res: NextApiResponse) {
   }
 
   try {
+    const repository = container.resolve(EventRepository);
     if (isAdmin) {
       event = repository.getEventAdmin(event_id);
     } else {
-      event = repository.getEvent(event_id);
+      event = await repository.getEvent(event_id);
     }
     res.status(200).json(event);
   } catch (error) {
@@ -50,6 +56,7 @@ function put(req: NextApiRequest, res: NextApiResponse) {
   const body = req.body;
   try {
     // TODO: Add kwargs
+    const repository = container.resolve(EventRepository);
     const new_event = repository.updateEvent(
       event_id,
       body.name,

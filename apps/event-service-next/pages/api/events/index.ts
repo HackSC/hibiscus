@@ -1,5 +1,7 @@
+import 'reflect-metadata';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import repository from '../../../src/utils/repository';
+import { container } from 'tsyringe';
+import { EventRepository } from '../../../src/utils/repository';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   const METHOD = req.method;
@@ -19,6 +21,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 function get(req: NextApiRequest, res: NextApiResponse) {
   let body = req.body;
   try {
+    const repo = container.resolve(EventRepository);
     if (!body) {
       body = {};
     }
@@ -53,8 +56,9 @@ function get(req: NextApiRequest, res: NextApiResponse) {
     } else {
       page_size = parseInt(page_size);
     }
+    repo.getClient();
 
-    const events = repository.getEvents(
+    const events = repo.getEvents(
       page,
       page_size,
       date,
@@ -72,7 +76,8 @@ function post(req: NextApiRequest, res: NextApiResponse) {
   // TODO: Implement This
   const body = req.body;
   try {
-    const event = repository.addEvent(body);
+    const repo = container.resolve(EventRepository);
+    const event = repo.addEvent(body);
     res.status(200).json({ event: event });
   } catch (error) {
     res.status(400).json({ error: `Failed to add event: ${error}` });
