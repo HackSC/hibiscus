@@ -1,7 +1,9 @@
-import 'reflect-metadata';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { container } from 'tsyringe';
-import { EventRepository } from '../../../../src/utils/repository';
+import {
+  getEvent,
+  getEventAdmin,
+  updateEvent,
+} from '../../../../src/utils/repository';
 
 export default async function handler(
   req: NextApiRequest,
@@ -36,11 +38,10 @@ async function get(req: NextApiRequest, res: NextApiResponse) {
   }
 
   try {
-    const repository = container.resolve(EventRepository);
     if (isAdmin) {
-      event = repository.getEventAdmin(event_id);
+      event = await getEventAdmin(event_id);
     } else {
-      event = await repository.getEvent(event_id);
+      event = await getEvent(event_id);
     }
     res.status(200).json(event);
   } catch (error) {
@@ -56,12 +57,7 @@ function put(req: NextApiRequest, res: NextApiResponse) {
   const body = req.body;
   try {
     // TODO: Add kwargs
-    const repository = container.resolve(EventRepository);
-    const new_event = repository.updateEvent(
-      event_id,
-      body.name,
-      body.description
-    );
+    const new_event = updateEvent(event_id, body.name, body.description);
     res.status(200).json(new_event);
   } catch (error) {
     res.status(400).json({ error: `Failed to update event: ${error}` });
