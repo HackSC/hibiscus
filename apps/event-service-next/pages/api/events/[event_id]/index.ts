@@ -3,6 +3,7 @@ import {
   getEvent,
   getEventAdmin,
   updateEvent,
+  deleteEvent,
 } from '../../../../src/utils/repository';
 
 export default async function handler(
@@ -29,7 +30,7 @@ export default async function handler(
 async function get(req: NextApiRequest, res: NextApiResponse) {
   // TODO: Check auth role
   let { event_id } = req.query;
-  const isAdmin = false;
+  const isAdmin = true;
   let event;
 
   // Ensure event_id is not an array
@@ -70,7 +71,7 @@ function del(req: NextApiRequest, res: NextApiResponse) {
     event_id = event_id[0];
   }
   try {
-    repository.deleteEvent(event_id);
+    deleteEvent(event_id);
     res.status(200).json({ deleted: event_id });
   } catch (error) {
     res.status(400).json({ error: `Failed to delete event: ${error}` });

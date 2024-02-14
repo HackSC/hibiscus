@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { getEnv } from '@hibiscus/env';
+import type { Event, EventAdmin } from '../utils/types.d.ts';
 
 const apiUrl = getEnv().Hibiscus.Supabase.apiUrl;
 const serviceKey = getEnv().Hibiscus.Supabase.serviceKey;
@@ -15,10 +16,43 @@ async function getEvent(event_id: string) {
     .eq('event_id', event_id)
     .single();
   if (error) throw new Error(error.message);
-  return data;
+
+  return {
+    eventId: data.event_id,
+    eventName: data.name,
+    startTime: data.start_time,
+    endTime: data.end_time,
+    location: data.location,
+    description: data.description,
+    eventTags: data.event_tags,
+    industryTags: data.industry_tags,
+    bpPoints: data.bp_points,
+  } as Event;
 }
+
 async function getEventAdmin(event_id: string) {
-  return -1;
+  const { data, error } = await client
+    .from('events')
+    .select('*, event_tags (*), industry_tags (*), pinned_events (*)')
+    .eq('event_id', event_id)
+    .single();
+  if (error) throw new Error(error.message);
+
+  return {
+    eventId: data.event_id,
+    eventName: data.name,
+    startTime: data.start_time,
+    endTime: data.end_time,
+    location: data.location,
+    description: data.description,
+    eventTags: data.event_tags,
+    industryTags: data.industry_tags,
+    bpPoints: data.bp_points,
+    rsvps: data.pinned_events.length,
+    capacity: data.capacity,
+    organizerDetails: data.organizer_details,
+    contactInfo: data.contact_info,
+  } as EventAdmin;
 }
 
 async function getEvents(
