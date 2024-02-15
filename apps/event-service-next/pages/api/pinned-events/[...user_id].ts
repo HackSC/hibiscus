@@ -44,7 +44,7 @@ async function get(req: NextApiRequest, res: NextApiResponse) {
   // res.status(200).json({ message: 'GET' });
 }
 
-function post(req: NextApiRequest, res: NextApiResponse) {
+async function post(req: NextApiRequest, res: NextApiResponse) {
   let user_id = req.query.user_id;
   if (Array.isArray(user_id)) {
     user_id = user_id[0];
@@ -52,22 +52,22 @@ function post(req: NextApiRequest, res: NextApiResponse) {
   const body = req.body;
 
   try {
-    addPinnedEvent(user_id, body.pin_event);
+    await addPinnedEvent(user_id, body.pin_event);
     res.status(200).json({ pinned_event: body.pin_event });
   } catch (error) {
     res.status(400).json({ error: `Failed to pin event: ${error}` });
   }
 }
 
-function del(req: NextApiRequest, res: NextApiResponse) {
+async function del(req: NextApiRequest, res: NextApiResponse) {
   let user_id = req.query.user_id;
   if (Array.isArray(user_id)) {
     user_id = user_id[0];
   }
   const body = req.body;
-
+  console.log('body', body);
   try {
-    removePinnedEvent(user_id, body.unpin_event);
+    await removePinnedEvent(user_id, body.unpin_event);
     res.status(200).json({ unpinned_event: body.unpin_event });
   } catch (error) {
     res.status(400).json({ error: `Failed to unpin event: ${error}` });
