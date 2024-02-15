@@ -66,8 +66,30 @@ async function getEvents(
   return -1;
 }
 
-async function addEvent(event: any) {
-  return -1;
+async function addEvent(event: EventAdmin) {
+  // TODO: Test this
+  const { data: event_id, error } = await client
+    .from('events')
+    .insert(event)
+    .select('event_id');
+  if (error) throw new Error(error.message);
+  if (event.eventTags) {
+    const { error } = await client.from('event_tags').insert(event.eventTags);
+    if (error) throw new Error(error.message);
+  }
+  if (event.industryTags) {
+    const { error } = await client
+      .from('industry_tags')
+      .insert(event.industryTags);
+    if (error) throw new Error(error.message);
+  }
+  if (event.contactInfo) {
+    const { error } = await client
+      .from('contact_info')
+      .insert(event.contactInfo);
+    if (error) throw new Error(error.message);
+  }
+  return event_id;
 }
 
 async function updateEvent(
@@ -80,7 +102,11 @@ async function updateEvent(
 }
 
 async function deleteEvent(event_id: string) {
-  return -1;
+  const { error } = await client
+    .from('events')
+    .delete()
+    .eq('event_id', event_id);
+  if (error) throw new Error(error.message);
 }
 
 async function getPinnedEvents(user_id: string) {
