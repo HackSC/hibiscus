@@ -148,11 +148,19 @@ async function getRSVPUsers(event_id: string) {
 }
 
 async function addEventTag(event_id: string, event_tag: string) {
-  return -1;
+  const { error } = await client
+    .from('event_tags')
+    .insert({ event_id, event_tag });
+  if (error) throw new Error(error.message);
 }
 
 async function removeEventTag(event_id: string, event_tag: string) {
-  return -1;
+  const { error } = await client
+    .from('event_tags')
+    .delete()
+    .eq('event_id', event_id)
+    .eq('event_tag', event_tag);
+  if (error) throw new Error(error.message);
 }
 
 async function addIndustryTag(event_id: string, industry_tag: string) {
