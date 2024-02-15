@@ -139,7 +139,12 @@ async function removePinnedEvent(user_id: string, event_id: string) {
 }
 
 async function getRSVPUsers(event_id: string) {
-  return -1;
+  const { data, error } = await client
+    .from('pinned_events')
+    .select('user_id')
+    .eq('event_id', event_id);
+  if (error) throw new Error(error.message);
+  return data as unknown as string[];
 }
 
 async function addEventTag(event_id: string, event_tag: string) {
