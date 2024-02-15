@@ -107,6 +107,7 @@ const BoothIcon = () => (
 const JUDGE_NAVBAR = [
   { label: 'Events', icon: CalendarIcon, url: '/events' },
   { label: 'Leaderboard', icon: SquaresIcon, url: '/leaderboard' },
+  { label: 'Team Matching', icon: SquaresIcon, url: '/team-matching' },
   // { label: 'Profile', icon: PersonIcon, url: '/profile' },
 ];
 
