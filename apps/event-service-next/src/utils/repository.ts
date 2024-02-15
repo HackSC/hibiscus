@@ -110,7 +110,16 @@ async function deleteEvent(event_id: string) {
 }
 
 async function getPinnedEvents(user_id: string) {
-  return -1;
+  //TODO: Fix ordering
+  const { data, error } = await client
+    .from('pinned_events')
+    .select('events (*)')
+    .eq('user_id', user_id)
+    .order('start_time', { foreignTable: 'events', ascending: false });
+
+  if (error) throw new Error(error.message);
+
+  return data;
 }
 
 async function addPinnedEvent(user_id: string, event_id: string) {
