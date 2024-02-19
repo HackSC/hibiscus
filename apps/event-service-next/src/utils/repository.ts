@@ -58,12 +58,61 @@ async function getEventAdmin(event_id: string) {
 async function getEvents(
   page: number = null,
   page_size: number = null,
-  date?: Date,
-  after?: Date,
   name?: string,
-  location?: string
+  location?: string,
+  date?: Date,
+  after?: Date
 ) {
-  return -1;
+  // TODO: Test
+  let query = client
+    .from('events')
+    .select(
+      'event_id, name, start_time, end_time, location, description, event_tags (*), industry_tags (*), bp_points'
+    );
+  if (name) {
+    query = query
+      .ilike('name', `%${name}%`)
+      .order('name', { ascending: false });
+  }
+  if (location) {
+    query = query
+      .ilike('location', `%${location}%`)
+      .order('location', { ascending: false });
+  }
+  if (date) {
+    const day = 60 * 60 * 24 * 1000;
+    query = query
+      .gte('end_time', date)
+      .lte('start_time', new Date(date.getTime() + day));
+  }
+  if (after) {
+    query = query.gte('end_time', after);
+  }
+
+  query.order('start_time', { ascending: false });
+
+  if (page_size >= 0) {
+    query.range((page - 1) * page_size, page * page_size);
+  }
+
+  const { data, error } = await query;
+  if (error) throw new Error(error.message);
+
+  const events = data.map((event) => {
+    return {
+      eventId: event.event_id,
+      eventName: event.name,
+      startTime: event.start_time,
+      endTime: event.end_time,
+      location: event.location,
+      description: event.description,
+      eventTags: event.event_tags,
+      industryTags: event.industry_tags,
+      bpPoints: event.bp_points,
+    } as Event;
+  });
+
+  return events;
 }
 
 async function addEvent(event: EventAdmin) {
@@ -95,10 +144,61 @@ async function addEvent(event: EventAdmin) {
 async function updateEvent(
   event_id: string,
   event_tags?: string[],
-  industry_tags?: string[]
+  industry_tags?: string[],
+  eventValues = {}
 ) {
-  //TODO: Add kwargs
-  return -1;
+  let data;
+  if (eventValues) {
+    const { data: data, error } = await client
+      .from('events')
+      .update(eventValues)
+      .eq('event_id', event_id)
+      .select()
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+  } else {
+    const { data: data, error } = await client
+      .from('events')
+      .select('*, event_tags (*), industry_tags (*), pinned_events (*)')
+      .eq('event_id', event_id)
+      .single();
+    if (error) throw new Error(error.message);
+  }
+  if (event_tags) {
+    // Delete event_tags
+    await client.from('event_tags').delete().eq('event_id', event_id);
+    // Insert event_tags
+    const { error } = await client
+      .from('event_tags')
+      .insert(event_tags.map((event_tag) => ({ event_id, event_tag })));
+    if (error) throw new Error(error.message);
+  }
+  if (industry_tags) {
+    // Delete industry_tags
+    await client.from('industry_tags').delete().eq('event_id', event_id);
+    // Insert industry_tags
+    const { error } = await client
+      .from('industry_tags')
+      .insert(
+        industry_tags.map((industry_tag) => ({ event_id, industry_tag }))
+      );
+    if (error) throw new Error(error.message);
+  }
+  return {
+    eventId: data.event_id,
+    eventName: data.name,
+    startTime: data.start_time,
+    endTime: data.end_time,
+    location: data.location,
+    description: data.description,
+    eventTags: data.event_tags,
+    industryTags: data.industry_tags,
+    bpPoints: data.bp_points,
+    rsvps: data.pinned_events.length,
+    capacity: data.capacity,
+    organizerDetails: data.organizer_details,
+    contactInfo: data.contact_info,
+  } as EventAdmin;
 }
 
 async function deleteEvent(event_id: string) {
@@ -163,28 +263,6 @@ async function removeEventTag(event_id: string, event_tag: string) {
   if (error) throw new Error(error.message);
 }
 
-async function addIndustryTag(event_id: string, industry_tag: string) {
-  return -1;
-}
-
-async function removeIndustryTag(event_id: string, industry_tag: string) {
-  return -1;
-}
-
-async function addContact(
-  event_id: string,
-  name: string,
-  role?: string,
-  phone?: string,
-  email?: string
-) {
-  return -1;
-}
-
-async function removeContact(contact_id: string) {
-  return -1;
-}
-
 export {
   getEvent,
   getEventAdmin,
@@ -198,8 +276,4 @@ export {
   getRSVPUsers,
   addEventTag,
   removeEventTag,
-  addIndustryTag,
-  removeIndustryTag,
-  addContact,
-  removeContact,
 };

@@ -19,6 +19,7 @@ export function Index() {
 
           <div id="hero" className="rounded">
             <div className="text-container">
+              <input></input>
               <h2>
                 <svg
                   fill="none"

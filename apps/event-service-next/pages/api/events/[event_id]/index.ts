@@ -57,8 +57,23 @@ function put(req: NextApiRequest, res: NextApiResponse) {
   }
   const body = req.body;
   try {
-    // TODO: Add kwargs
-    const new_event = updateEvent(event_id, body.name, body.description);
+    const new_event = updateEvent(
+      event_id,
+      body.event_tags ? body.event_tags : undefined,
+      body.industry_tags ? body.industry_tags : undefined,
+      {
+        name: body.name ? body.eventName : undefined,
+        description: body.description ? body.description : undefined,
+        start_time: body.startTime ? body.start_time : undefined,
+        end_time: body.endTime ? body.end_time : undefined,
+        location: body.location ? body.location : undefined,
+        bp_points: body.bpPoints ? body.bp_points : undefined,
+        capacity: body.capacity ? body.capacity : undefined,
+        organizer_details: body.organizerDetails
+          ? body.organizer_details
+          : undefined,
+      }
+    );
     res.status(200).json(new_event);
   } catch (error) {
     res.status(400).json({ error: `Failed to update event: ${error}` });
