@@ -50,29 +50,49 @@ async function get(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-function put(req: NextApiRequest, res: NextApiResponse) {
+async function put(req: NextApiRequest, res: NextApiResponse) {
   let event_id = req.query.event_id;
   if (Array.isArray(event_id)) {
     event_id = event_id[0];
   }
+
+  let event_tags = req.body.event_tags;
+  if (event_tags && !Array.isArray(event_tags)) {
+    event_tags = [event_tags];
+  }
+
+  let industry_tags = req.body.industry_tags;
+  if (industry_tags && !Array.isArray(industry_tags)) {
+    industry_tags = [industry_tags];
+  }
+
   const body = req.body;
   try {
-    const new_event = updateEvent(
-      event_id,
-      body.event_tags ? body.event_tags : undefined,
-      body.industry_tags ? body.industry_tags : undefined,
-      {
-        name: body.name ? body.eventName : undefined,
-        description: body.description ? body.description : undefined,
-        start_time: body.startTime ? body.start_time : undefined,
-        end_time: body.endTime ? body.end_time : undefined,
-        location: body.location ? body.location : undefined,
-        bp_points: body.bpPoints ? body.bp_points : undefined,
-        capacity: body.capacity ? body.capacity : undefined,
-        organizer_details: body.organizerDetails
-          ? body.organizer_details
-          : undefined,
+    //TODO: Dates
+    const eventValues = {
+      name: body.eventName,
+      description: body.description,
+      start_time: body.startTime
+        ? new Date(body.startTime).toISOString()
+        : undefined,
+      end_time: body.endTime ? Date.parse(body.endTime).toString() : undefined,
+      location: body.location,
+      bp_points: body.bpPoints,
+      capacity: body.capacity,
+      organizer_details: body.organizerDetails,
+    };
+    // Remove undefined values
+    Object.keys(eventValues).forEach((key) => {
+      if (eventValues[key] === null || eventValues[key] === undefined) {
+        delete eventValues[key];
       }
+    });
+
+    const new_event = await updateEvent(
+      event_id,
+      event_tags,
+      industry_tags,
+      eventValues
     );
     res.status(200).json(new_event);
   } catch (error) {

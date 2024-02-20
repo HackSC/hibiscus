@@ -48,7 +48,7 @@ async function getEventAdmin(event_id: string) {
     eventTags: data.event_tags,
     industryTags: data.industry_tags,
     bpPoints: data.bp_points,
-    rsvps: data.pinned_events.length,
+    rsvps: data.pinned_events ? data.pinned_events.length : 0,
     capacity: data.capacity,
     organizerDetails: data.organizer_details,
     contactInfo: data.contact_info,
@@ -145,24 +145,31 @@ async function updateEvent(
   event_id: string,
   event_tags?: string[],
   industry_tags?: string[],
-  eventValues = {}
+  eventValues?: object
 ) {
-  let data;
-  if (eventValues) {
-    const { data: data, error } = await client
+  console.log(eventValues);
+  console.log('event_tags', event_tags);
+  console.log('industry_tags', industry_tags);
+  let event;
+  if (Object.keys(eventValues).length > 0) {
+    console.log('updating');
+    const { data, error } = await client
       .from('events')
       .update(eventValues)
       .eq('event_id', event_id)
       .select()
       .maybeSingle();
     if (error) throw new Error(error.message);
+    event = data;
+    console.log('event', event);
   } else {
-    const { data: data, error } = await client
+    const { data, error } = await client
       .from('events')
       .select('*, event_tags (*), industry_tags (*), pinned_events (*)')
       .eq('event_id', event_id)
       .single();
     if (error) throw new Error(error.message);
+    event = data;
   }
   if (event_tags) {
     // Delete event_tags
@@ -185,19 +192,19 @@ async function updateEvent(
     if (error) throw new Error(error.message);
   }
   return {
-    eventId: data.event_id,
-    eventName: data.name,
-    startTime: data.start_time,
-    endTime: data.end_time,
-    location: data.location,
-    description: data.description,
-    eventTags: data.event_tags,
-    industryTags: data.industry_tags,
-    bpPoints: data.bp_points,
-    rsvps: data.pinned_events.length,
-    capacity: data.capacity,
-    organizerDetails: data.organizer_details,
-    contactInfo: data.contact_info,
+    eventId: event.event_id,
+    eventName: event.name,
+    startTime: event.start_time,
+    endTime: event.end_time,
+    location: event.location,
+    description: event.description,
+    eventTags: event_tags ? event_tags : event.event_tags,
+    industryTags: industry_tags ? industry_tags : event.industry_tags,
+    bpPoints: event.bp_points,
+    rsvps: event.pinned_events ? event.pinned_events.length : 0,
+    capacity: event.capacity,
+    organizerDetails: event.organizer_details,
+    contactInfo: event.contact_info,
   } as EventAdmin;
 }
 
