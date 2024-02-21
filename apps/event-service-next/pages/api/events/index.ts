@@ -68,12 +68,34 @@ function get(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-function post(req: NextApiRequest, res: NextApiResponse) {
-  // TODO: Implement This
+async function post(req: NextApiRequest, res: NextApiResponse) {
   const body = req.body;
+
+  let event_tags = req.body.eventTags;
+  if (event_tags && !Array.isArray(event_tags)) {
+    event_tags = [event_tags];
+  }
+
+  let industry_tags = req.body.industryTags;
+  if (industry_tags && !Array.isArray(industry_tags)) {
+    industry_tags = [industry_tags];
+  }
+
   try {
-    const event = addEvent(body);
-    res.status(200).json({ event: event });
+    const event = {
+      name: body.eventName,
+      description: body.description,
+      start_time: body.startTime
+        ? new Date(body.startTime).toISOString()
+        : undefined,
+      end_time: body.endTime ? new Date(body.endTime).toISOString() : undefined,
+      location: body.location,
+      bp_points: body.bpPoints,
+      capacity: body.capacity,
+      organizer_details: body.organizerDetails,
+    };
+    const eventId = await addEvent(event, event_tags, industry_tags);
+    res.status(200).json({ event: eventId });
   } catch (error) {
     res.status(400).json({ error: `Failed to add event: ${error}` });
   }

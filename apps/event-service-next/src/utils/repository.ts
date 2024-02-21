@@ -115,21 +115,30 @@ async function getEvents(
   return events;
 }
 
-async function addEvent(event: EventAdmin) {
-  // TODO: Test this
-  const { data: event_id, error } = await client
-    .from('events')
-    .insert(event)
-    .select('event_id');
+async function addEvent(
+  event: any,
+  event_tags?: string[],
+  industry_tags?: string[]
+) {
+  console.log('event', event);
+  const {
+    data: { event_id },
+    error,
+  } = await client.from('events').insert(event).select('event_id').single();
   if (error) throw new Error(error.message);
-  if (event.eventTags) {
-    const { error } = await client.from('event_tags').insert(event.eventTags);
+  if (event_tags) {
+    const { error } = await client
+      .from('event_tags')
+      .insert(event_tags.map((event_tag) => ({ event_id, event_tag })));
     if (error) throw new Error(error.message);
   }
-  if (event.industryTags) {
+  if (industry_tags) {
+    console.log('industryTags', event.industry_tags);
     const { error } = await client
       .from('industry_tags')
-      .insert(event.industryTags);
+      .insert(
+        industry_tags.map((industry_tag) => ({ event_id, industry_tag }))
+      );
     if (error) throw new Error(error.message);
   }
   if (event.contactInfo) {

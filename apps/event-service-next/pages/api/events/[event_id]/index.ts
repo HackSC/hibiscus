@@ -56,12 +56,12 @@ async function put(req: NextApiRequest, res: NextApiResponse) {
     event_id = event_id[0];
   }
 
-  let event_tags = req.body.event_tags;
+  let event_tags = req.body.eventTags;
   if (event_tags && !Array.isArray(event_tags)) {
     event_tags = [event_tags];
   }
 
-  let industry_tags = req.body.industry_tags;
+  let industry_tags = req.body.industryTags;
   if (industry_tags && !Array.isArray(industry_tags)) {
     industry_tags = [industry_tags];
   }
@@ -75,7 +75,7 @@ async function put(req: NextApiRequest, res: NextApiResponse) {
       start_time: body.startTime
         ? new Date(body.startTime).toISOString()
         : undefined,
-      end_time: body.endTime ? Date.parse(body.endTime).toString() : undefined,
+      end_time: body.endTime ? new Date(body.endTime).toISOString() : undefined,
       location: body.location,
       bp_points: body.bpPoints,
       capacity: body.capacity,
