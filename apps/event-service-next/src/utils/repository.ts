@@ -63,7 +63,6 @@ async function getEvents(
   date?: Date,
   after?: Date
 ) {
-  // TODO: Test
   let query = client
     .from('events')
     .select(
@@ -82,11 +81,11 @@ async function getEvents(
   if (date) {
     const day = 60 * 60 * 24 * 1000;
     query = query
-      .gte('end_time', date)
-      .lte('start_time', new Date(date.getTime() + day));
+      .gte('end_time', date.toISOString())
+      .lte('start_time', new Date(date.getTime() + day).toISOString());
   }
-  if (after) {
-    query = query.gte('end_time', after);
+  if (after !== undefined) {
+    query = query.gte('end_time', after.toISOString());
   }
 
   query.order('start_time', { ascending: false });
@@ -120,7 +119,6 @@ async function addEvent(
   event_tags?: string[],
   industry_tags?: string[]
 ) {
-  console.log('event', event);
   const {
     data: { event_id },
     error,
@@ -133,7 +131,6 @@ async function addEvent(
     if (error) throw new Error(error.message);
   }
   if (industry_tags) {
-    console.log('industryTags', event.industry_tags);
     const { error } = await client
       .from('industry_tags')
       .insert(
@@ -156,12 +153,8 @@ async function updateEvent(
   industry_tags?: string[],
   eventValues?: object
 ) {
-  console.log(eventValues);
-  console.log('event_tags', event_tags);
-  console.log('industry_tags', industry_tags);
   let event;
   if (Object.keys(eventValues).length > 0) {
-    console.log('updating');
     const { data, error } = await client
       .from('events')
       .update(eventValues)
@@ -170,7 +163,6 @@ async function updateEvent(
       .maybeSingle();
     if (error) throw new Error(error.message);
     event = data;
-    console.log('event', event);
   } else {
     const { data, error } = await client
       .from('events')

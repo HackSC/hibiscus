@@ -1,14 +1,17 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getEvents, addEvent } from '../../../src/utils/repository';
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const METHOD = req.method;
   switch (METHOD) {
     case 'GET':
-      get(req, res);
+      await get(req, res);
       break;
     case 'POST':
-      post(req, res);
+      await post(req, res);
       break;
     default:
       res.status(400).json({ error: 'INVALID HTTP REQUEST' });
@@ -16,7 +19,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-function get(req: NextApiRequest, res: NextApiResponse) {
+async function get(req: NextApiRequest, res: NextApiResponse) {
   let body = req.body;
   try {
     if (!body) {
@@ -54,13 +57,13 @@ function get(req: NextApiRequest, res: NextApiResponse) {
       page_size = parseInt(page_size);
     }
 
-    const events = getEvents(
+    const events = await getEvents(
       page,
       page_size,
-      date,
-      after,
       body.name,
-      body.location
+      body.location,
+      date,
+      after
     );
     res.status(200).json({ page: page, events: events });
   } catch (error) {
