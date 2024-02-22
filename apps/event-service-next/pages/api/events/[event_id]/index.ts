@@ -16,10 +16,10 @@ export default async function handler(
       await get(req, res);
       break;
     case 'PUT':
-      put(req, res);
+      await put(req, res);
       break;
     case 'DELETE':
-      del(req, res);
+      await del(req, res);
       break;
     default:
       res.status(400).json({ error: 'INVALID HTTP REQUEST' });
@@ -68,7 +68,6 @@ async function put(req: NextApiRequest, res: NextApiResponse) {
 
   const body = req.body;
   try {
-    //TODO: Dates
     const eventValues = {
       name: body.eventName,
       description: body.description,
@@ -100,13 +99,13 @@ async function put(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-function del(req: NextApiRequest, res: NextApiResponse) {
+async function del(req: NextApiRequest, res: NextApiResponse) {
   let event_id = req.query.event_id;
   if (Array.isArray(event_id)) {
     event_id = event_id[0];
   }
   try {
-    deleteEvent(event_id);
+    await deleteEvent(event_id);
     res.status(200).json({ deleted: event_id });
   } catch (error) {
     res.status(400).json({ error: `Failed to delete event: ${error}` });

@@ -223,7 +223,7 @@ async function getPinnedEvents(user_id: string) {
     .from('pinned_events')
     .select('events (*)')
     .eq('user_id', user_id)
-    .order('start_time', { foreignTable: 'events', ascending: false });
+    .order('start_time', { foreignTable: 'events', ascending: true });
 
   if (error) throw new Error(error.message);
 
