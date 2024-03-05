@@ -36,6 +36,10 @@ export const getEnv = () => {
       RSVPForm: {
         ResumeStorageBucketName: 'rsvp-resume-hacker-2023',
       },
+      EventService: {
+        authServiceUrl: process.env.EVENT_AUTH_SERVICE_URL,
+        masterToken: process.env.EVENT_MASTER_TOKEN,
+      },
       FeatureFlag: {
         RedisURL: process.env.HIBISCUS_FEATURE_FLAG_REDIS_URL,
         MongoURI: process.env.HIBISCUS_FEATURE_FLAG_MONGO_URI,
