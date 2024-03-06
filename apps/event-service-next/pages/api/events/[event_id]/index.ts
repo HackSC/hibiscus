@@ -28,7 +28,6 @@ export default async function handler(
 }
 
 async function get(req: NextApiRequest, res: NextApiResponse) {
-  // TODO: Check auth role
   let { event_id } = req.query;
   const isAdmin = true;
   let event;

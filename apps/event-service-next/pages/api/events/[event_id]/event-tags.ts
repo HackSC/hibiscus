@@ -25,6 +25,9 @@ async function post(req: NextApiRequest, res: NextApiResponse) {
     event_id = event_id[0];
   }
   const body = req.body;
+  if (Array.isArray(body.eventTag)) {
+    return res.status(400).json({ error: 'Can only add one tag at at time.' });
+  }
   try {
     await addEventTag(event_id, body.eventTag);
     res.status(200).json({ eventTag: body.eventTag });
