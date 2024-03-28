@@ -29,6 +29,7 @@ import smoothscroll from 'smoothscroll-polyfill';
 import { getCookie } from 'cookies-next';
 import { getEnv } from '@hibiscus/env';
 import { HibiscusRole } from '@hibiscus/types';
+import { BiSearch } from 'react-icons/bi';
 
 const Index = () => {
   const env = getEnv();
@@ -115,7 +116,7 @@ const Index = () => {
     if (element) {
       element.scrollIntoView({
         behavior: 'smooth',
-        block: 'center',
+        block: 'start',
       });
     }
   };
@@ -337,13 +338,13 @@ const Index = () => {
 
       <header className={`${styles.header} ${styles.flexCenter}`}>
         <img src="logo_word.png" alt="Hibiscus HackSC Logo" />
-        {/* <BiSearch
+        <BiSearch
           color="#FFFFFF"
           size="30px"
-          style={{ position: 'absolute', right: '20px' }}
+          style={{ position: 'absolute', right: '70px' }}
           className={styles.cursorPointer}
           onClick={() => setIsSearchOpen(true)}
-        /> */}
+        />
         <BsQuestionCircle
           color="#FFFFFF"
           size="30px"
@@ -363,15 +364,15 @@ const Index = () => {
             onChange={() => handleSearch()}
           />
           <ul>
-            {allProjects.map(
+            { allProjects.map(
               (p) =>
-                searchInput &&
-                p.name.toLowerCase().includes(searchInput.toLowerCase()) && (
+                searchInput && p.projectName.toLowerCase().includes(searchInput.toLowerCase()) && (
                   <li
+                    key={p.projectId}
                     className={styles.searchResult}
                     onClick={() => handleScroll(p.projectId)}
                   >
-                    {p.name}
+                    {p.projectName}
                   </li>
                 )
             )}
