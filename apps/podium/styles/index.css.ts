@@ -75,6 +75,8 @@ export const searchBar = style({
 });
 
 export const searchResult = style({
+  backgroundColor: '#FFFFFF',
+  color: 'black',
   padding: '8px 16px',
   selectors: {
     '&:hover': {
