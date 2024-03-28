@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "incremental": true,
+    "types": ["jest", "node"]
+  },
+  "include": ["../podium-service/**/*.ts", "../podium-service/**/*.tsx", "../podium-service/**/*.js", "../podium-service/**/*.jsx", "../podium-service/next-env.d.ts"],
+  "exclude": [
+    "../podium-service/node_modules",
+    "../podium-service/jest.config.ts",
+    "../podium-service/src/**/*.spec.ts",
+    "../podium-service/src/**/*.test.ts"
+  ]
+}
