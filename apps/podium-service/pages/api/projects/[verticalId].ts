@@ -1,7 +1,7 @@
 import { supabase } from 'apps/podium-service/libs/supabase';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(req: NextApiRequest,res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method, query, body } = req;
   const verticalId = query.verticalId as string;
 
@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
       try {
         const { data, error } = await supabase
           .from('projects')
-          .select()
+          .select('*, verticals!inner(name)')
           .eq('vertical_id', verticalId);
 
         if (error) {
@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest,res: NextApiResponse) 
           projectId: p.project_id,
           projectName: p.name,
           verticalId: p.vertical_id,
-          verticalName: p.vertical_name,
+          verticalName: p.verticals.name,
           teamMembers: p.team,
           description: p.description,
           imageUrl: p.image_url,

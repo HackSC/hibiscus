@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const project: ProjectData = data[0];
 
-        return res.json({ project });
+        return res.json(project);
       } catch (error) {
         return res.status(500).json({ error: 'Internal Server Error' });
       }
