@@ -2,7 +2,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 import { createClient, SupabaseClient, User } from '@supabase/supabase-js';
-import { getEnv } from '../../libs/env/src';
 
 const INSTRUCTIONS = `
   Usage:
@@ -50,20 +49,15 @@ async function createUser(): Promise<User | null> {
 }
 
 function createSupabaseServiceClient(): SupabaseClient {
-  const env = getEnv();
-  if (
-    env.Hibiscus.Supabase.apiUrl == null ||
-    env.Hibiscus.Supabase.serviceKey == null
-  ) {
+  const apiUrl = process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_API_URL;
+  const serviceKey = process.env.HIBISCUS_SUPABASE_SERVICE_KEY;
+  if (apiUrl == null || serviceKey == null) {
     throw new Error(
       'Supabase API URL or service key not defined in environment variables'
     );
   }
 
-  return createClient(
-    getEnv().Hibiscus.Supabase.apiUrl ?? '',
-    getEnv().Hibiscus.Supabase.serviceKey ?? ''
-  );
+  return createClient(apiUrl ?? '', serviceKey ?? '');
 }
 
 (async () => {
