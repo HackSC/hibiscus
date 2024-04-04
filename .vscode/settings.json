@@ -1,4 +1,7 @@
 {
-  "python.formatting.provider": "black",
-  "nixEnvSelector.suggestion": false
+  "python.formatting.provider": "none",
+  "nixEnvSelector.suggestion": false,
+  "[python]": {
+    "editor.defaultFormatter": "ms-python.black-formatter"
+  }
 }

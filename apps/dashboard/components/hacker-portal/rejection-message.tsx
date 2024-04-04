@@ -3,7 +3,7 @@ import { H3, Link } from '@hibiscus/ui';
 export const RejectionMessage = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-      <H3>Thank you so much for your interest in HackSC 2023!</H3>
+      <H3>Thank you so much for your interest in HackSC X!</H3>
       <H3>
         We truly appreciate the time and effort you’ve put in your application.
         Unfortunately, after careful consideration, we sincerely regret to

@@ -1,0 +1,4 @@
+.serverless/
+dist/
+.coverage
+requirements.txt

@@ -4,7 +4,6 @@ import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 import Image from 'next/image';
 import { Colors2023 } from '@hibiscus/styles';
 import { BoldText, H1 } from '@hibiscus/ui';
-import Clock from 'react-live-clock';
 import { Text } from '@hibiscus/ui';
 import { HackerTab } from '../../components/sponsor-portal/hacker-tab';
 import HackerProfile from '../../components/sponsor-portal/hacker-profile';
@@ -12,14 +11,22 @@ import { useRouter } from 'next/router';
 import { Attendee } from '../../common/mock-sponsor';
 import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import { HibiscusRole } from '@hibiscus/types';
-import { Button, ParagraphText } from '@hibiscus/ui-kit-2023';
+import { ParagraphText } from '@hibiscus/ui-kit-2023';
 import { getWordCount } from '../../common/utils';
 import { SponsorServiceAPI } from '../../common/api';
 import { MutatingDots } from 'react-loader-spinner';
+import {
+  Button,
+  BodyText,
+  BodyTextLarge,
+  Colors as SctwColors,
+  GlobalStyle,
+  Heading,
+} from '@hacksc/sctw-ui-kit';
 
 const Index = () => {
   const { user } = useHibiscusUser();
-  const [COMPANY_ID, setCompnayId] = useState('');
+  const [COMPANY_ID, setCompanyId] = useState('');
   const [EVENT_ID, setEventId] = useState('');
   const [attendees, setAttendees] = useState<Attendee[]>([]);
   const [savedAttendees, setSavedAttendees] = useState<Attendee[] | null>(null);
@@ -34,12 +41,18 @@ const Index = () => {
   const supabase = useHibiscusSupabase().supabase.getClient();
 
   useEffect(() => {
+    if (modalActive) {
+      setInput(currentAttendee.quick_notes);
+    }
+  }, [modalActive]);
+
+  useEffect(() => {
     SponsorServiceAPI.getCompanyIdAndEventId(user.id)
       .then(({ data, error }) => {
         if (error) {
           console.log(error);
         }
-        setCompnayId(data.data.company_id);
+        setCompanyId(data.data.company_id);
         setEventId(data.data.event_id);
       })
       .catch((error) => {
@@ -132,24 +145,15 @@ const Index = () => {
         <MutatingDots
           height="100"
           width="100"
-          color={Colors2023.BLUE.LIGHT}
-          secondaryColor={Colors2023.BLUE.LIGHT}
+          color={SctwColors.Red.Rash}
+          secondaryColor={SctwColors.Red.Rash}
           radius="12.5"
           ariaLabel="mutating-dots-loading"
         />
       </div>
     ) : (
       <SavedAttendeeContainer>
-        <Text
-          style={{
-            width: '100%',
-            textAlign: 'center',
-            marginTop: '3rem',
-            fontSize: '20px',
-          }}
-        >
-          No recently saved
-        </Text>
+        <BodyText style={{ color: 'black' }}>No check-ins yet!</BodyText>
       </SavedAttendeeContainer>
     );
   };
@@ -185,8 +189,8 @@ const Index = () => {
         <MutatingDots
           height="100"
           width="100"
-          color={Colors2023.BLUE.LIGHT}
-          secondaryColor={Colors2023.BLUE.LIGHT}
+          color={SctwColors.Red.Rash}
+          secondaryColor={SctwColors.Red.Rash}
           radius="12.5"
           ariaLabel="mutating-dots-loading"
         />
@@ -238,11 +242,28 @@ const Index = () => {
     note: string
   ) {
     SponsorServiceAPI.setAttendeeNote(companyId, attendeeId, note)
-      .then(({ data, error }) => {
+      .then(async ({ data, error }) => {
         if (error) {
           console.log(error);
         }
         console.log(`Updated note: ${data.data.note}`);
+
+        // Update note in UI in real time
+        const i = attendees.findIndex((it) => it.id === attendeeId);
+        if (i >= 0) {
+          setAttendees((prev) => {
+            const newAttendees = [...prev];
+            newAttendees[i].quick_notes = note;
+            return newAttendees;
+          });
+          setCurrentAttendee((prev) => {
+            if (prev.id === attendeeId) {
+              const newAttendee = { ...prev };
+              newAttendee.quick_notes = note;
+              return newAttendee;
+            }
+          });
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -276,16 +297,10 @@ const Index = () => {
   }
 
   return (
-    <Wrapper style={{ position: 'relative' }}>
-      <StyledButton
-        onClick={() => {
-          router.replace('/');
-        }}
-      >
-        <Image width="30" height="30" src={'/arrow.svg'} alt="Illustration" />
-      </StyledButton>
-      <MainContainer>
-        <LeftContainer>
+    <Wrapper>
+      <GlobalStyle />
+      <LeftContainer>
+        <LeftWrapper>
           <div
             style={{
               display: 'flex',
@@ -294,266 +309,159 @@ const Index = () => {
             }}
           >
             <CompanySection>
-              <H1
-                style={{
-                  color: Colors2023.GRAY.LIGHT,
-                  fontSize: '35px',
-                  textShadow: `0px 0px 10px ${Colors2023.GREEN.DARK}`,
-                }}
-              >
-                {user.firstName} {user.lastName}
-              </H1>
-              <ClockContainer>
-                <H1
-                  style={{
-                    color: Colors2023.GRAY.LIGHT,
-                    fontSize: '25px',
-                    textShadow: `0px 0px 10px ${Colors2023.GRAY.SHLIGHT}`,
-                  }}
-                >
-                  <Clock
-                    format={'HH:mma'}
-                    ticking={true}
-                    timezone={'US/Pacific'}
-                    style={{
-                      letterSpacing: '0.5rem',
-                      textTransform: 'uppercase',
-                    }}
-                  />
-                </H1>
-              </ClockContainer>
+              <SctwTitle style={{ color: SctwColors.Blue.DarkBloo }}>
+                Welcome {user.firstName} {user.lastName}
+              </SctwTitle>
+              <SctwTextBlack>
+                This is your booth! Search through your booth attendees and
+                review their qualifications!
+              </SctwTextBlack>
             </CompanySection>
-            <Image
-              width="90"
-              height="180"
-              src={'/hackform-illustrations/stacking-puzzle.svg'}
-              alt="Illustration"
-            />
           </div>
           <SupportSection>
-            <H1
-              style={{
-                color: Colors2023.GRAY.LIGHT,
-                fontSize: '25px',
-                textAlign: 'left',
-                letterSpacing: '0.3rem',
-              }}
-            >
-              HACKSC SUPPORT
-            </H1>
-            <Text
-              style={{
-                color: Colors2023.GRAY.LIGHT,
-                fontSize: '20px',
-                textAlign: 'left',
-              }}
-            >
-              (213) 513 HACK
-            </Text>
-            <Text
-              style={{
-                color: Colors2023.GRAY.LIGHT,
-                fontSize: '20px',
-                textAlign: 'left',
-              }}
-            >
-              dayof@hacksc.com
-            </Text>
-            <Text
-              style={{
-                color: Colors2023.GRAY.LIGHT,
-                fontSize: '20px',
-                textAlign: 'left',
-              }}
-            >
-              Discord: #sponsors-support
-            </Text>
+            <SctwHeading>HACKSC SUPPORT</SctwHeading>
+            <SctwUnderlinedText>(213) - 513 - HACK</SctwUnderlinedText>
+            <SctwText>dayof@hacksc.com</SctwText>
           </SupportSection>
           <SavedSection>
             <>
-              <H1
-                style={{
-                  color: Colors2023.GRAY.LIGHT,
-                  fontSize: '25px',
-                  textAlign: 'left',
-                  letterSpacing: '0.3rem',
-                }}
-              >
-                RECENTLY SAVED
-              </H1>
+              <SctwHeading>RECENTLY SAVED</SctwHeading>
               {showSavedAttendees()}
             </>
           </SavedSection>
-          <ViewAllButton
-            style={
-              currentAttendee !== null ? { width: '100%' } : { width: '70%' }
-            }
-            onClick={() =>
-              router.push({
-                pathname: '/participant-database',
-                query: {
-                  viewSaved: true,
-                  companyId: COMPANY_ID,
-                  eventId: EVENT_ID,
-                },
-              })
-            }
-          >
-            <H1
-              style={{
-                color: Colors2023.GREEN.STANDARD,
-                fontSize: '25px',
-                letterSpacing: '0.4rem',
-              }}
-            >
-              VIEW ALL SAVED
-            </H1>
-          </ViewAllButton>
-        </LeftContainer>
+        </LeftWrapper>
+        <SctwViewAllButton
+          fitWidth
+          onClick={() =>
+            router.push({
+              pathname: '/participant-database',
+              query: {
+                viewSaved: true,
+                companyId: COMPANY_ID,
+                eventId: EVENT_ID,
+              },
+            })
+          }
+        >
+          VIEW ALL SAVED
+        </SctwViewAllButton>
+      </LeftContainer>
 
-        <MiddleContainer>
-          <Text
-            style={{
-              color: Colors2023.GRAY.LIGHT,
-              fontSize: '30px',
-            }}
-          >
-            All Check-Ins
-          </Text>
-          <StyledScrollBar>{getAttendees()}</StyledScrollBar>
-          <ViewAllButton
-            style={
-              currentAttendee !== null ? { width: '100%' } : { width: '70%' }
-            }
-            onClick={() =>
-              router.push({
-                pathname: '/participant-database',
-                query: {
-                  companyId: COMPANY_ID,
-                  eventId: EVENT_ID,
-                },
-              })
-            }
-          >
-            <H1
-              style={{
-                color: Colors2023.GREEN.STANDARD,
-                fontSize: '25px',
-                letterSpacing: '0.4rem',
-              }}
-            >
-              VIEW ALL ATTENDEES
-            </H1>
-          </ViewAllButton>
-          {modalActive && (
-            <ModalContainer>
-              <QuickNoteContainer>
-                <CloseButton
-                  style={{ justifyContent: 'flex-end' }}
+      <MiddleContainer>
+        <SctwHeading
+          style={{ fontSize: '30px', color: SctwColors.Blue.DarkBloo }}
+        >
+          All Check-Ins
+        </SctwHeading>
+        <StyledScrollBar>{getAttendees()}</StyledScrollBar>
+        <SctwViewAllButton
+          fitWidth
+          onClick={() =>
+            router.push({
+              pathname: '/participant-database',
+              query: {
+                companyId: COMPANY_ID,
+                eventId: EVENT_ID,
+              },
+            })
+          }
+        >
+          VIEW ALL ATTENDEES
+        </SctwViewAllButton>
+        {modalActive && (
+          <ModalContainer>
+            <QuickNoteContainer>
+              <CloseButton
+                style={{ justifyContent: 'flex-end' }}
+                onClick={() => {
+                  setModalActive(false);
+                  setInput('');
+                }}
+              >
+                <Image
+                  width="20"
+                  height="20"
+                  src={'/x-button.svg'}
+                  alt="x-button"
+                />
+              </CloseButton>
+              <SctwHeading>QUICK NOTES</SctwHeading>
+              <BodyText style={{ fontSize: '25px', marginTop: '1rem' }}>
+                {attendeeName}
+              </BodyText>
+              <TextWrapper>
+                <StyledInput
+                  value={textInput}
+                  placeholder={'Add quick note . . . '}
+                  onChange={(e) => {
+                    setInput(e.target.value);
+                  }}
+                />
+                <WordCountText>
+                  Word count: {getWordCount(textInput)}
+                </WordCountText>
+              </TextWrapper>
+              <div style={{ marginTop: '1rem', display: 'flex' }}>
+                <Button
+                  color={'yellow'}
                   onClick={() => {
                     setModalActive(false);
                     setInput('');
                   }}
                 >
-                  <Image
-                    width="20"
-                    height="20"
-                    src={'/x-button.svg'}
-                    alt="x-button"
-                  />
-                </CloseButton>
-                <H1 style={{ fontSize: '30px', letterSpacing: '0.2rem' }}>
-                  QUICK NOTES
-                </H1>
-                <Text style={{ fontSize: '25px', marginTop: '1rem' }}>
-                  {attendeeName}
-                </Text>
-                <TextWrapper>
-                  <StyledParagraphText
-                    value={textInput}
-                    placeholder={'Add quick note . . . '}
-                    onChange={(e) => {
-                      setInput(e.target.value);
-                    }}
-                  />
-                  <WordCountText>
-                    Word count: {getWordCount(textInput)}
-                  </WordCountText>
-                </TextWrapper>
-                <div style={{ marginTop: '1rem', display: 'flex' }}>
+                  CANCEL
+                </Button>
+                <div style={{ marginLeft: '0.5rem' }}>
                   <Button
-                    color={'red'}
+                    color={'yellow'}
                     onClick={() => {
+                      setAttendeeNote(
+                        COMPANY_ID,
+                        currentAttendee.id,
+                        textInput
+                      );
                       setModalActive(false);
                       setInput('');
                     }}
                   >
-                    CANCEL
+                    SAVE
                   </Button>
-                  <div style={{ marginLeft: '0.5rem' }}>
-                    <Button
-                      color={'black'}
-                      onClick={() => {
-                        setAttendeeNote(
-                          COMPANY_ID,
-                          currentAttendee.id,
-                          textInput
-                        );
-                        setModalActive(false);
-                        setInput('');
-                      }}
-                    >
-                      SAVE
-                    </Button>
-                  </div>
                 </div>
-              </QuickNoteContainer>
-            </ModalContainer>
-          )}
-        </MiddleContainer>
+              </div>
+            </QuickNoteContainer>
+          </ModalContainer>
+        )}
+      </MiddleContainer>
 
-        <RightContainer
-          style={
-            // currentAttendee !== null ? { display: 'flex' } : { display: 'none' }
-            currentAttendee !== null
-              ? { visibility: 'visible', maxWidth: '35%' }
-              : { visibility: 'hidden', maxWidth: '0%' }
-          }
+      <RightContainer
+        style={
+          currentAttendee !== null
+            ? { maxWidth: '33%' }
+            : { display: 'none', maxWidth: '0%', padding: 0 }
+        }
+      >
+        <CloseButton
+          onClick={() => {
+            setCurrentAttendee(null);
+          }}
         >
-          <CloseButton
-            onClick={() => {
-              setCurrentAttendee(null);
-            }}
-          >
-            <BoldText
-              style={{
-                fontSize: '20px',
-                color: Colors2023.GREEN.STANDARD,
-                letterSpacing: '0.2rem',
-              }}
-            >
-              HACKER
-            </BoldText>
-            <Image
-              width="20"
-              height="20"
-              src={'/x-button.svg'}
-              alt="x-button"
+          <SctwHeading style={{ color: SctwColors.Yellow.BabyFood }}>
+            HACKER
+          </SctwHeading>
+          <Image width="20" height="20" src={'/x-button.svg'} alt="x-button" />
+        </CloseButton>
+        {currentAttendee !== null ? (
+          <div style={{ marginTop: '1.5rem' }}>
+            <HackerProfile
+              hacker={currentAttendee}
+              companyId={COMPANY_ID}
+              noteOnClick={() => openQuickNote(currentAttendee)}
             />
-          </CloseButton>
-          {currentAttendee !== null ? (
-            <div style={{ marginTop: '1.5rem' }}>
-              <HackerProfile
-                hacker={currentAttendee}
-                companyId={COMPANY_ID}
-                noteOnClick={() => openQuickNote(currentAttendee)}
-              />
-            </div>
-          ) : (
-            <></>
-          )}
-        </RightContainer>
-      </MainContainer>
+          </div>
+        ) : (
+          <></>
+        )}
+      </RightContainer>
     </Wrapper>
   );
 };
@@ -563,8 +471,8 @@ export default Index;
 const Wrapper = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
-  padding-left: 6rem;
+  /* flex-direction: column; */
+  /* padding-left: 6rem; */
 `;
 
 const StyledButton = styled.button`
@@ -588,22 +496,41 @@ const StyledButton = styled.button`
   }
 `;
 
-const MainContainer = styled.div`
-  display: flex;
-  width: 100%;
-  height: 100%;
-  padding: 30px;
-`;
-
 const LeftContainer = styled.div`
   display: flex;
-  flex-grow: 2;
-  /* width: 24%; */
+  /* flex-grow: 1; */
+  flex: 1;
   flex-direction: column;
   justify-content: flex-start;
   padding: 30px;
-  margin-left: -3.5rem;
-  margin-top: -2.5rem;
+  /* margin-left: -3.5rem;
+  margin-top: -2.5rem; */
+`;
+
+const LeftWrapper = styled.div`
+  flex-grow: 1;
+`;
+
+const MiddleContainer = styled.div`
+  /* flex-grow: 1; */
+  flex: 1;
+  padding: 30px;
+  /* margin-top: -4rem; */
+  height: 100%;
+`;
+
+const RightContainer = styled.div`
+  display: flex;
+  /* flex-grow: 1; */
+  flex: 1;
+  padding: 30px;
+  flex-direction: column;
+  justify-content: flex-start;
+  color: white;
+  background-color: ${SctwColors.Blue.BlueIvy};
+  border-radius: 10px;
+  /* margin-top: -3rem; */
+  transition: max-width 0.5s;
 `;
 
 const CompanySection = styled.div`
@@ -612,53 +539,39 @@ const CompanySection = styled.div`
   justify-content: space-around;
 `;
 
-const ClockContainer = styled.div`
-  display: 'flex';
-  padding: 15px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: ${Colors2023.GRAY.STANDARD};
-  border-radius: 10px;
-  border: 4px solid ${Colors2023.GRAY.MEDIUM};
-`;
-
 const SupportSection = styled.div`
-  display: 'flex';
-  margin-top: 1.5rem;
-  padding: 15px;
+  display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: ${Colors2023.GRAY.STANDARD};
+
+  gap: 15px;
+  padding: 20px;
+  margin-top: 1.5rem;
+
+  color: white;
+  background-color: ${SctwColors.Red.Rash};
   border-radius: 10px;
-  border: 4px solid ${Colors2023.GRAY.MEDIUM};
+  border: 4px solid ${SctwColors.Red.Redward};
 `;
 
 const SavedSection = styled.div`
-  display: 'flex';
-  height: 230px;
-  margin-top: 1.5rem;
-  padding: 30px 15px;
+  display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: ${Colors2023.GRAY.STANDARD};
+
+  gap: 15px;
+  padding: 20px;
+  margin-top: 1.5rem;
+
+  color: white;
+  background-color: ${SctwColors.Red.Redward};
   border-radius: 10px;
-  border: 4px solid ${Colors2023.GRAY.MEDIUM};
+  border: 4px solid ${SctwColors.Red.Rash};
 `;
 
 const SavedAttendeeContainer = styled.div`
   width: 100%;
   display: flex;
-  border-bottom: solid 1px ${Colors2023.GRAY.SHLIGHT};
+  border-bottom: solid 1px ${SctwColors.Red.Rash};
   cursor: pointer;
-`;
-
-const MiddleContainer = styled.div`
-  flex-grow: 2;
-  padding: 30px;
-  margin-top: -4rem;
 `;
 
 const ModalContainer = styled.div`
@@ -669,21 +582,18 @@ const ModalContainer = styled.div`
   left: 0;
   z-index: 999;
   background-color: rgba(0, 0, 0, 0.8);
-  border-radius: 15px;
-  border: 4px solid ${Colors2023.GRAY.MEDIUM};
 `;
 
 const QuickNoteContainer = styled.div`
+  color: white;
   margin: auto;
   margin-top: 10rem;
-  padding: 20px;
+  padding: 20px 20px 40px 40px;
   display: flex;
   flex-direction: column;
   width: 50%;
-  background-color: ${Colors2023.GRAY.STANDARD};
+  background-color: ${SctwColors.Blue.BlueIvy};
   border-radius: 10px;
-  border: 4px solid ${Colors2023.GRAY.MEDIUM};
-  box-shadow: 1px 2px 15px ${Colors2023.GRAY.MEDIUM};
 `;
 
 const TextWrapper = styled.div`
@@ -695,29 +605,51 @@ const WordCountText = styled(Text)`
   font-size: small;
 `;
 
-const StyledParagraphText = styled(ParagraphText)`
+const StyledInput = styled.textarea`
+  background-color: ${SctwColors.Yellow.BabyFood};
+  padding: 20px 60px 60px 20px;
+
+  border-radius: 10px;
   width: 80%;
+
+  :focus {
+    outline: none;
+  }
 `;
 
-const RightContainer = styled.div`
-  display: flex;
-  width: 35%;
-  padding: 30px;
-  flex-direction: column;
-  justify-content: flex-start;
-  background-color: ${Colors2023.GRAY.STANDARD};
-  border-radius: 10px;
-  border: 4px solid ${Colors2023.GRAY.MEDIUM};
-  box-shadow: 1px 2px 15px ${Colors2023.GRAY.MEDIUM};
-  margin-top: -3rem;
-  transition: max-width 0.5s;
+const SctwTitle = styled(Heading)`
+  font-size: 45px;
+  letter-spacing: 0.05rem;
+`;
+
+const SctwHeading = styled(Heading)`
+  font-size: 25px;
+  letter-spacing: 0.05rem;
+`;
+
+const SctwText = styled(BodyText)`
+  font-size: 20px;
+  text-align: left;
+`;
+
+const SctwTextBlack = styled(BodyText)`
+  font-size: 20px;
+  text-align: left;
+  color: black;
+`;
+
+const SctwUnderlinedText = styled(BodyText)`
+  font-size: 20px;
+  text-align: left;
+  text-decoration-line: underline;
+  width: fit-content;
 `;
 
 const CloseButton = styled.button`
   display: flex;
   width: 100%;
   justify-content: space-between;
-  background-color: ${Colors2023.GRAY.STANDARD};
+  background-color: rgba(0, 0, 0, 0); // Transpanrent Background
   cursor: pointer;
   :hover {
     opacity: 0.5;
@@ -727,32 +659,34 @@ const CloseButton = styled.button`
   }
 `;
 
-const ViewAllButton = styled.button`
+// TODO: Temp Delete When Done;
+const ViewAllButton = styled(Button)`
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 2rem;
   padding: 10px 0px;
-  background-color: ${Colors2023.GRAY.DARK};
-  border-radius: 15px;
-  border: 3px solid ${Colors2023.GREEN.STANDARD};
+  border-radius: 50px;
   gap: 10px;
-  cursor: pointer;
-  transition: all 0.5s;
+`;
 
-  &:hover {
-    background-color: ${Colors2023.GREEN.DARK};
-    transition: all 0.3s;
-  }
+const SctwViewAllButton = styled(Button)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+  padding: 3px 20px;
+  border-radius: 20px;
+  gap: 10px;
 `;
 
 const HackerTabContainer = styled.button`
   display: flex;
   margin-top: 10px;
+  margin-right: 10px;
   padding: 5px 15px;
-  background-color: ${Colors2023.GRAY.STANDARD};
+  background-color: ${SctwColors.Blue.BlueIvy};
   border-radius: 10px;
-  border: 4px solid ${Colors2023.GRAY.MEDIUM};
   color: ${Colors2023.GRAY.LIGHT};
   cursor: pointer;
 
@@ -765,17 +699,17 @@ const StyledScrollBar = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 602px;
+  height: 600px;
   overflow-y: auto;
 
   &::-webkit-scrollbar {
     width: 6px;
-    background-color: ${Colors2023.GRAY.MEDIUM};
+    background-color: ${SctwColors.Red.DonatedBlood};
     border-radius: 50px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background-color: ${Colors2023.GREEN.DARK};
+    background-color: ${SctwColors.Red.Redward};
     border-radius: 50px;
   }
 `;

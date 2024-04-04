@@ -10,6 +10,7 @@ export interface HibiscusUser {
   email: string;
   applicationId?: string;
   applicationStatus: ApplicationStatus;
+  applicationStatusLastChanged?: Date;
   teamId?: string;
   attendanceConfirmed?: boolean;
   points?: number;

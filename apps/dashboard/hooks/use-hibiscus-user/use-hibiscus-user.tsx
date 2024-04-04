@@ -44,6 +44,9 @@ const getUserProfile = async (
       applicationId: profile.app_id,
       applicationStatus:
         Object.values(ApplicationStatus)[profile.application_status - 1],
+      applicationStatusLastChanged: new Date(
+        profile.application_status_last_changed
+      ),
       teamId: profile.team_id,
       attendanceConfirmed: profile.attendance_confirmed,
       email: profile.email,

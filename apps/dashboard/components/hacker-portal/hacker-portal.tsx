@@ -17,10 +17,17 @@ import { CongratsMessage } from './congrats-message';
 import { RejectionMessage } from './rejection-message';
 import BattlepassPage from '../battlepass/battlepass-page';
 import { BattlepassAPIProvider } from '../../hooks/use-battlepass-api/use-battlepass-api';
+import ConfirmedPlaceholder from './confirmed-placeholder';
+import { useRouter } from 'next/router';
 
 type RSVPChoice = 'DECLINE' | 'ACCEPT';
 
-export function HackerPortal() {
+interface HackerPortalProps {
+  isEventOpen: boolean;
+  appsOpen: boolean;
+}
+
+export function HackerPortal({ isEventOpen, appsOpen }: HackerPortalProps) {
   const [modalOpen, setModalOpen] = useState(false);
   const { user, updateUser } = useHibiscusUser();
   const closeModal = () => setModalOpen(false);
@@ -28,6 +35,8 @@ export function HackerPortal() {
   const [choice, setChoice] = useState<RSVPChoice | null>(null);
   const { supabase: hbc } = useHibiscusSupabase();
   const client = hbc.getClient();
+
+  const router = useRouter();
 
   const WelcomeHeader = () => (
     <div
@@ -108,14 +117,16 @@ export function HackerPortal() {
             shadowColor={Colors2023.BLUE.STANDARD}
             style={{ fontSize: 20 }}
           >
-            You have not applied to HackSC X yet!
+            {appsOpen
+              ? 'You have not applied to HackSC X yet!'
+              : 'Applications for HackSC X has closed'}
           </GlowSpan>
           <ApplyButton>
             <Link
               href="/apply-2023-x"
               anchortagpropsoverride={{ target: '_self' }}
             >
-              Apply now
+              {appsOpen ? 'Apply now' : 'Join the waitlist'}
             </Link>
           </ApplyButton>
         </BannerContainer>
@@ -164,7 +175,7 @@ export function HackerPortal() {
         <H2>Are you sure?</H2>
         <Text>
           Once submitted, you confirm that you will not be able to join HackSC
-          2023. This action is irreversible.
+          X. This action is irreversible.
         </Text>
       </div>
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -187,11 +198,14 @@ export function HackerPortal() {
   );
 
   if (user.attendanceConfirmed === true) {
-    return (
-      <BattlepassAPIProvider mock={false}>
-        <BattlepassPage />
-      </BattlepassAPIProvider>
-    );
+    if (isEventOpen === null) {
+      return <></>;
+    } else if (isEventOpen) {
+      router.push('/leaderboard');
+      return <></>;
+    } else {
+      return <ConfirmedPlaceholder />;
+    }
   } else if (user.attendanceConfirmed === false) {
     return <DeclinedPlaceholder />;
   }
@@ -239,7 +253,7 @@ export default HackerPortal;
 
 const ApplyButton = styled.button`
   cursor: pointer;
-  background-color: #979797;
+  background-color: ${Colors2023.GREEN.DARK};
   color: #f4f4f4;
   font-weight: 500;
   padding: 8px;
@@ -249,7 +263,7 @@ const ApplyButton = styled.button`
   margin-left: 10px;
 
   &:hover {
-    background-color: #6f9a28;
+    background-color: #026440;
     color: #e9ffc5;
     transition: all 0.3s;
   }

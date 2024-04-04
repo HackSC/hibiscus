@@ -7,6 +7,7 @@ import { Attendee } from '../../common/mock-sponsor';
 import { useEffect, useState } from 'react';
 import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import { SponsorServiceAPI } from '../../common/api';
+import { Heading, BodyText, Colors as SctwColors } from '@hacksc/sctw-ui-kit';
 
 interface Props {
   hacker: Attendee;
@@ -66,13 +67,15 @@ export function HackerProfile({ hacker, companyId, noteOnClick }: Props) {
           justifyContent: 'space-between',
         }}
       >
-        <BoldText style={{ fontSize: '30px' }}>{hacker.full_name}</BoldText>
+        <SctwSubheading style={{ fontSize: '30px' }}>
+          {hacker.full_name}
+        </SctwSubheading>
       </div>
-      <Text style={{ fontSize: '15px' }}>School: {hacker.school}</Text>
-      <Text style={{ fontSize: '15px' }}>Major: {hacker.major}</Text>
-      <Text style={{ fontSize: '15px' }}>
+      <BodyText style={{ fontSize: '15px' }}>School: {hacker.school}</BodyText>
+      <BodyText style={{ fontSize: '15px' }}>Major: {hacker.major}</BodyText>
+      <BodyText style={{ fontSize: '15px' }}>
         Grad Year: {hacker.graduation_year}
-      </Text>
+      </BodyText>
       <div
         style={{
           width: '100%',
@@ -81,13 +84,15 @@ export function HackerProfile({ hacker, companyId, noteOnClick }: Props) {
           justifyContent: 'space-between',
         }}
       >
-        <TitleText style={{ marginTop: '1rem' }}>QUICK NOTES</TitleText>
+        <SctwSubheading style={{ marginTop: '1rem' }}>
+          QUICK NOTES
+        </SctwSubheading>
         <StyledButton style={{ marginTop: '0.5rem' }} onClick={noteOnClick}>
           <Image width="30" height="30" src={'/note.svg'} alt="note-button" />
         </StyledButton>
       </div>
       <NoteContainer>
-        <Text>{quickNote !== '' ? quickNote : 'No note found'}</Text>
+        <BodyText>{quickNote !== '' ? quickNote : 'No note found'}</BodyText>
       </NoteContainer>
       <div
         style={{
@@ -97,7 +102,7 @@ export function HackerProfile({ hacker, companyId, noteOnClick }: Props) {
           marginTop: '2rem',
         }}
       >
-        <TitleText>RESUME</TitleText>
+        <SctwSubheading>RESUME</SctwSubheading>
         <div
           style={{
             display: 'flex',
@@ -125,7 +130,7 @@ export function HackerProfile({ hacker, companyId, noteOnClick }: Props) {
           <Text>No resume found</Text>
         )}
       </NoteContainer>
-
+      {/* 
       <div
         style={{
           width: '100%',
@@ -147,6 +152,7 @@ export function HackerProfile({ hacker, companyId, noteOnClick }: Props) {
           )}
         </NoteContainer>
       </div>
+*/}
     </Container>
   );
 }
@@ -172,15 +178,15 @@ const NoteContainer = styled.div`
   justify-content: center;
   padding: 10px;
   margin-top: 0.5rem;
-  background-color: ${Colors2023.GRAY.MEDIUM};
+  background-color: ${SctwColors.Yellow.ArthurSweater};
   border-radius: 10px;
-  border: 3px solid ${Colors2023.GRAY.SHLIGHT};
+  border: 3px solid ${SctwColors.Yellow.BabyFood};
 `;
 
 const StyledButton = styled.button`
   display: flex;
   cursor: pointer;
-  background-color: ${Colors2023.GRAY.STANDARD};
+  background-color: rgba(0, 0, 0, 0);
   z-index: 10;
 
   :hover {
@@ -190,4 +196,9 @@ const StyledButton = styled.button`
   :active {
     opacity: 0.8;
   }
+`;
+
+const SctwSubheading = styled(Heading)`
+  font-size: 25px;
+  font-weight: 500;
 `;

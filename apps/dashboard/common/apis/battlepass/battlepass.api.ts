@@ -2,6 +2,9 @@ import { faker } from '@faker-js/faker';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { BonusPointsStatus } from './types';
+import { container } from 'tsyringe';
+import { BattlePassRepository } from '../../../repository/battlepass.repository';
+import axios from 'axios';
 
 const getNumberStatusBonusPoint = (status: BonusPointsStatus) => {
   switch (status) {
@@ -34,11 +37,11 @@ export interface BattlepassAPIInterface {
       page_number: number;
       page_count: number;
       leaderboard: {
-        user_id: string;
         first_name: string;
         last_name: string;
         bonus_points: number;
         event_points: number;
+        total_points: number;
       }[];
     };
   }>;
@@ -61,6 +64,7 @@ export interface BattlepassAPIInterface {
     bonusPointsId: string,
     status: BonusPointsStatus
   ) => Promise<void>;
+  setBonusPointPending: (userId: string, bonusPointId: string) => Promise<void>;
 }
 
 export class BattlepassAPI implements BattlepassAPIInterface {
@@ -77,11 +81,11 @@ export class BattlepassAPI implements BattlepassAPIInterface {
       page_number: number;
       page_count: number;
       leaderboard: {
-        user_id: string;
         first_name: string;
         last_name: string;
         bonus_points: number;
         event_points: number;
+        total_points: number;
       }[];
     };
   }> {
@@ -92,11 +96,11 @@ export class BattlepassAPI implements BattlepassAPIInterface {
           page_count: pageSize,
           leaderboard: Array.from(Array(pageSize).keys())
             .map(() => ({
-              user_id: faker.datatype.uuid(),
               first_name: faker.name.firstName(),
               last_name: faker.name.lastName(),
               bonus_points: faker.datatype.number(),
               event_points: faker.datatype.number(),
+              total_points: faker.datatype.number(),
             }))
             .sort(
               (a, b) =>
@@ -107,46 +111,41 @@ export class BattlepassAPI implements BattlepassAPIInterface {
         },
       };
     }
-    const res = await this.client.from('leaderboard').select(
-      `user_profiles(user_id,first_name,last_name), 
-        bonus_points, event_points`
-    );
-    if (!res.data) res.data = [];
-    const leaderboard = res.data
-      .sort((a, b) => {
-        return (
-          b.bonus_points + b.event_points - (a.bonus_points + a.event_points)
-        );
-      })
-      .slice(pageNum * pageSize - pageSize, pageNum * pageSize);
-    const returnData = {
-      data: {
-        page_number: pageNum,
-        page_count: pageSize,
-        leaderboard: leaderboard.map((item) => {
-          const userProfile = item.user_profiles as any;
-          return {
-            user_id: userProfile.user_id,
-            bonus_points: item.bonus_points,
-            event_points: item.event_points,
-            first_name: userProfile.first_name,
-            last_name: userProfile.last_name,
-          };
-        }),
-      },
-    };
-    return returnData;
+
+    try {
+      const res = await axios.get(
+        `/api/battlepass/leaderboard?pageNumber=${pageNum}&pageSize=${pageSize}`
+      );
+
+      return res.data;
+    } catch {
+      throw new Error('Failed to fetch leaderboard');
+    }
   }
 
   async getUserRankLeaderboard(
     userId: string
   ): Promise<{ data: { place: number } }> {
     if (this.mock) return { data: { place: faker.datatype.number() } };
-    const leaderboardRes = await this.getLeaderboard(10000, 1);
-    const userFoundIndex = leaderboardRes.data.leaderboard.findIndex(
-      (user) => user.user_id == userId
-    );
-    return { data: { place: userFoundIndex + 1 } };
+
+    try {
+      const res = await axios.get(`/api/battlepass/user-rank/${userId}`);
+
+      return res.data;
+    } catch {
+      throw new Error('Failed to get user rank');
+    }
+  }
+
+  async setBonusPointPending(userId: string, bonusPointId: string) {
+    try {
+      await axios.post('/api/battlepass/bonus-points', {
+        userId,
+        bonusPointId,
+      });
+    } catch (e) {
+      throw new Error('Failed to set bonus points');
+    }
   }
 
   async getBonusPointEventsUserStatus(userId: string): Promise<{
@@ -266,20 +265,13 @@ export class BattlepassAPI implements BattlepassAPIInterface {
         data: { points: faker.datatype.number() },
       };
     }
-    const userLeaderboardRes = await this.client
-      .from('leaderboard')
-      .select('bonus_points,event_points')
-      .eq('user_id', userId)
-      .single();
-    if (userLeaderboardRes.error) {
-      throw userLeaderboardRes.error;
+
+    try {
+      const res = await axios.get(`/api/battlepass/user-points/${userId}`);
+
+      return res.data;
+    } catch {
+      throw new Error('Failed to get user rank');
     }
-    return {
-      data: {
-        points:
-          userLeaderboardRes.data.bonus_points +
-          userLeaderboardRes.data.event_points,
-      },
-    };
   }
 }

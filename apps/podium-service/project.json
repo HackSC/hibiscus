@@ -1,0 +1,130 @@
+{
+  "name": "podium-service",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/podium-service/podium_service",
+  "targets": {
+    "lock": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry lock --no-update",
+        "cwd": "apps/podium-service"
+      }
+    },
+    "add": {
+      "executor": "@nxlv/python:add",
+      "options": {}
+    },
+    "update": {
+      "executor": "@nxlv/python:update",
+      "options": {}
+    },
+    "remove": {
+      "executor": "@nxlv/python:remove",
+      "options": {}
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["install"],
+      "options": {
+        "cwd": "apps/podium-service",
+        "command": "poetry build -n -C dist/"
+      }
+    },
+    "install": {
+      "executor": "@nxlv/python:install",
+      "options": {
+        "silent": false,
+        "args": "",
+        "cacheDir": ".cache/pypoetry",
+        "verbose": false,
+        "debug": false
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/podium-service",
+        "command": "poetry run flake8"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run coverage run -m pytest tests/",
+        "cwd": "apps/podium-service"
+      }
+    },
+    "deployment-setup": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/podium-service",
+        "command": "SLS_INTERACTIVE_SETUP_ENABLE=1 sls --org hacksc"
+      }
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "poetry export -f requirements.txt --output requirements.txt",
+          "poetry run chalice deploy"
+        ],
+        "color": true,
+        "cwd": "apps/podium-service",
+        "parallel": false
+      }
+    },
+    "package": {
+      "executor": "@nxlv/python:sls-package",
+      "dependsOn": ["build"],
+      "options": {}
+    },
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run black .",
+        "cwd": "apps/podium-service"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run chalice local",
+        "cwd": "apps/podium-service"
+      }
+    },
+    "coverage": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "poetry run coverage report",
+        "cwd": "apps/podium-service"
+      }
+    },
+    "db-setup": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker build -t postgres-podium .",
+        "cwd": "apps/podium-service"
+      }
+    },
+    "db-start": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker run --name postgres-podium -p 5432:5432 -d postgres-podium",
+        "cwd": "apps/podium-service"
+      }
+    },
+    "db-stop": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "docker stop postgres-podium",
+          "docker rm postgres-podium"
+        ],
+        "parallel": false,
+        "cwd": "apps/podium-service"
+      }
+    }
+  },
+  "tags": []
+}

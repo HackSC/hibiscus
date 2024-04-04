@@ -7,6 +7,8 @@ import { Colors2023 } from '@hibiscus/styles';
 import Image from 'next/image';
 import { Option } from '@hibiscus/types';
 import { Combobox } from '@hibiscus/ui-kit-2023';
+import { Colors as SctwColors } from '@hacksc/sctw-ui-kit';
+
 interface Props {
   title: string;
   options: Option[] | (() => Promise<Option[]>);
@@ -101,6 +103,28 @@ export function DropDown({
           />
         </BlueFilterButton>
       )}
+      {color === 'lightblue' && (
+        <LightBlueFilterButton onClick={() => setShowOptions(true)}>
+          <Text>{title}</Text>
+          <Image
+            width="20"
+            height="20"
+            src={'/dropdown-arrow.svg'}
+            alt="x-button"
+          />
+        </LightBlueFilterButton>
+      )}
+      {color === 'red' && (
+        <RedFilterButton onClick={() => setShowOptions(true)}>
+          <Text>{title}</Text>
+          <Image
+            width="20"
+            height="20"
+            src={'/dropdown-arrow.svg'}
+            alt="x-button"
+          />
+        </RedFilterButton>
+      )}
       {showOptions && (
         <SearchContainer>
           <Combobox
@@ -157,19 +181,37 @@ const PurpleFilterButton = styled(PinkFilterButton)`
 `;
 
 const YellowFilterButton = styled(PinkFilterButton)`
-  background-color: ${Colors2023.YELLOW.DARK};
-  border: 2px solid ${Colors2023.YELLOW.STANDARD};
+  background-color: #dcab0f; // aardvark sweater
+  border: 2px solid ${SctwColors.Yellow.Yuhlow};
 
   &:hover {
-    background-color: ${Colors2023.YELLOW.STANDARD};
+    background-color: ${SctwColors.Yellow.Yuhlow};
   }
 `;
 
 const BlueFilterButton = styled(PinkFilterButton)`
-  background-color: ${Colors2023.BLUE.DARK};
-  border: 2px solid ${Colors2023.BLUE.STANDARD};
+  background-color: ${SctwColors.Blue.Bloo};
+  border: 2px solid #94b0f8; // Blooberry
 
   &:hover {
-    background-color: ${Colors2023.BLUE.STANDARD};
+    background-color: #94b0f8; // Blooberry
+  }
+`;
+
+const LightBlueFilterButton = styled(PinkFilterButton)`
+  background-color: #94b0f8; // Blooberry
+  border: 2px solid #fef7e5;
+
+  &:hover {
+    background-color: #fef7e5;
+  }
+`;
+
+const RedFilterButton = styled(PinkFilterButton)`
+  background-color: ${SctwColors.Red.Redward};
+  border: 2px solid #ffacab; // Light Redward
+
+  &:hover {
+    background-color: #ffacab; // Light Redward
   }
 `;

@@ -80,7 +80,11 @@ export function Index() {
   return (
     <Container>
       <CenterContainer>
-        <H3>Your application has been submitted!</H3>
+        <H3>
+          Your application has been submitted! Our team is currently reviewing
+          applications and will be sending out the acceptances in phases after
+          the application period closes.
+        </H3>
         <Link href={'/'} passHref anchortagpropsoverride={{ target: '_self' }}>
           <Button color="black">Go back to home</Button>
         </Link>

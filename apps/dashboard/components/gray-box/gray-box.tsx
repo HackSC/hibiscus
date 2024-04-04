@@ -12,4 +12,8 @@ export const GrayBox = styled.div`
   background: #363636;
   border: 2px solid #5a5a5a;
   border-radius: 10px;
+  border-radius: 10px;
+  border: 2px solid var(--Blue-Ivy, #002990);
+  background: var(--Blue-Ivy, #002990);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 `;

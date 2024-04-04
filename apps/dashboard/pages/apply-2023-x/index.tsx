@@ -23,9 +23,10 @@ function isQueryComplete(query: ParsedUrlQuery): boolean {
 
 interface ServerSideProps {
   appsOpen: boolean;
+  waitlistOpen: boolean;
 }
 
-export function Index({ appsOpen }: ServerSideProps) {
+export function Index({ appsOpen, waitlistOpen }: ServerSideProps) {
   const { user } = useHibiscusUser();
 
   const router = useRouter();
@@ -81,7 +82,7 @@ export function Index({ appsOpen }: ServerSideProps) {
     );
   }
 
-  if (!appsOpen) {
+  if (!appsOpen && !waitlistOpen) {
     return (
       <Container>
         <CenterContainer>
@@ -126,9 +127,11 @@ const MarginContainer = styled.div`
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const appsOpen = await get('APPS_OPEN_HACKSC_X_2023');
+  const waitlistOpen = await get('APPS_WAITLIST_OPEN_HACKSC_X_2023');
   return {
     props: {
       appsOpen,
+      waitlistOpen,
     } as ServerSideProps,
   };
 };

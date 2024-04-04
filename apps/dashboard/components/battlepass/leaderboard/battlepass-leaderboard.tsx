@@ -55,6 +55,15 @@ function BattlepassLeaderboard() {
             pageSize: res.data.page_count,
             pageNumber: res.data.page_number,
           });
+        })
+        .catch(() => {
+          setLeaderboardResults({
+            data: [],
+            loading: false,
+            fetch: false,
+            pageSize: BATTLEPASS_LEADERBOARD_PAGE_SIZE,
+            pageNumber: leaderboardResults.pageNumber,
+          });
         });
     }
   }, [leaderboardResults.fetch]);
@@ -62,19 +71,31 @@ function BattlepassLeaderboard() {
   useEffect(() => {
     // MOCK
     (async () => {
-      const [resUserRank, resUserTotPoints] = await Promise.all([
-        battlepassAPI.getUserRankLeaderboard(user.id),
-        battlepassAPI.getUserTotalPoints(user.id),
-      ]);
-      setUserRankLeaderboard({
-        data: {
-          rank: resUserRank.data.place,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          points: resUserTotPoints.data.points,
-        },
-        loading: false,
-      });
+      try {
+        const [resUserRank, resUserTotPoints] = await Promise.all([
+          battlepassAPI.getUserRankLeaderboard(user.id),
+          battlepassAPI.getUserTotalPoints(user.id),
+        ]);
+        setUserRankLeaderboard({
+          data: {
+            rank: resUserRank.data.place,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            points: resUserTotPoints.data.points,
+          },
+          loading: false,
+        });
+      } catch {
+        setUserRankLeaderboard({
+          data: {
+            rank: 0,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            points: 0,
+          },
+          loading: false,
+        });
+      }
     })();
   }, []);
 
@@ -206,6 +227,10 @@ const LeaderboardPageTabs = (props: LeaderboardPageTabsProps) => {
 const GrayContainer = styled(GrayBox)`
   gap: 20px;
   padding: 30px;
+  border-radius: 10px;
+  border: 2px solid var(--Blue-Ivy, #002990);
+  background: var(--Blue-Ivy, #002990);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 `;
 
 const Entry = styled.div`
