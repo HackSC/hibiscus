@@ -43,6 +43,9 @@ async function createUser(): Promise<User | null> {
       bonus_points: bonus_points,
       event_points: event_points,
     });
+    await supabase.from('participants').insert({
+      id: user.id,
+    });
   }
 
   return user;
