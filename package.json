@@ -29,7 +29,7 @@
     "@sentry/browser": "^7.34.0",
     "@sentry/nextjs": "^7.34.0",
     "@supabase/auth-helpers-nextjs": "^0.5.2",
-    "@supabase/supabase-js": "^2.2.0",
+    "@supabase/supabase-js": "^2.39.3",
     "@vanilla-extract/css": "^1.13.0",
     "@vanilla-extract/dynamic": "^2.0.3",
     "@vanilla-extract/recipes": "^0.5.0",
