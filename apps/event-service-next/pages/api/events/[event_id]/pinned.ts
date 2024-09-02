@@ -5,6 +5,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  if (req.method !== 'GET') {
+    res.status(405).json({ error: 'METHOD NOT ALLOWED' });
+    return;
+  }
+
   let event_id = req.query.event_id;
   if (Array.isArray(event_id)) {
     event_id = event_id[0];

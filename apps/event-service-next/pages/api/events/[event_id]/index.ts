@@ -29,7 +29,7 @@ export default async function handler(
 
 async function get(req: NextApiRequest, res: NextApiResponse) {
   let { event_id } = req.query;
-  const isAdmin = true;
+  const isAdmin = false;
   let event;
 
   // Ensure event_id is not an array

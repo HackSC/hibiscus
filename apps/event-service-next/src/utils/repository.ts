@@ -45,8 +45,8 @@ async function getEventAdmin(event_id: string) {
     endTime: data.end_time,
     location: data.location,
     description: data.description,
-    eventTags: data.event_tags,
-    industryTags: data.industry_tags,
+    eventTags: data.event_tags.map((it) => it.event_tag),
+    industryTags: data.industry_tags.map((it) => it.industry_tag),
     bpPoints: data.bp_points,
     rsvps: data.pinned_events ? data.pinned_events.length : 0,
     capacity: data.capacity,
@@ -88,7 +88,7 @@ async function getEvents(
     query = query.gte('end_time', after.toISOString());
   }
 
-  query.order('start_time', { ascending: false });
+  query.order('start_time', { ascending: true });
 
   if (page_size >= 0) {
     query.range((page - 1) * page_size, page * page_size);

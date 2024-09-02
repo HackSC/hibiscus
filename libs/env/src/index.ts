@@ -51,9 +51,9 @@ export const getEnv = () => {
         WaiverURL: process.env.NEXT_PUBLIC_WAIVER_URL,
         HackerPacketURL: process.env.NEXT_PUBLIC_HACKER_PACKET_URL,
       },
-      EventService: {
-        authServiceUrl: process.env.EVENT_AUTH_SERVICE_URL,
-        masterToken: process.env.EVENT_MASTER_TOKEN,
+      EventService: {},
+      AuthService: {
+        ApiUrl: process.env.EVENT_AUTH_SERVICE_URL,
       },
       FeatureFlag: {
         RedisURL: process.env.HIBISCUS_FEATURE_FLAG_REDIS_URL,
@@ -61,6 +61,7 @@ export const getEnv = () => {
       },
       Events: {
         ApiUrl: process.env.NEXT_PUBLIC_HIBISCUS_EVENTS_API_URL,
+        MasterToken: process.env.EVENT_MASTER_TOKEN,
       },
       Discord: {
         ApiUrl: process.env.NEXT_PUBLIC_DISCORD_API_URL,

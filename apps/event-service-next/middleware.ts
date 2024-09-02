@@ -11,8 +11,8 @@ export async function middleware(request: NextRequest) {
   ) {
     return NextResponse.next();
   }
-  const authServiceUrl = getEnv().Hibiscus.EventService.authServiceUrl;
-  const masterToken = getEnv().Hibiscus.EventService.masterToken;
+  const authServiceUrl = getEnv().Hibiscus.AuthService.ApiUrl;
+  const masterToken = getEnv().Hibiscus.Events.MasterToken;
 
   const headers = request.headers;
   let accessToken = headers.get('Authorization');
@@ -60,7 +60,7 @@ export async function middleware(request: NextRequest) {
       (path.pathname === '/api/events' && method === 'GET') ||
       // has {user_id} in path
       (path.pathname.startsWith('/api/events/') &&
-        path.pathname.split('/').length === 3 &&
+        path.pathname.split('/').length === 4 &&
         method === 'GET')
     ) {
       return NextResponse.next(); // Bypass the middleware for these routes
@@ -78,6 +78,15 @@ export async function middleware(request: NextRequest) {
         request.nextUrl.pathname = '/api/error';
         return NextResponse.redirect(request.nextUrl);
       }
+    } else {
+      // Non-admin attempt to access admin-only endpoints
+      request.nextUrl.searchParams.set('status', '401');
+      request.nextUrl.searchParams.set(
+        'message',
+        'Access denied. User is unauthorized to access this endpoint'
+      );
+      request.nextUrl.pathname = '/api/error';
+      return NextResponse.redirect(request.nextUrl);
     }
   } catch (error) {
     request.nextUrl.searchParams.set('status', '500');

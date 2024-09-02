@@ -24,7 +24,7 @@ import { getEnv } from '@hibiscus/env';
 
 @injectable()
 export class HibiscusSupabaseClient {
-  private client: SupabaseClient<'events'>;
+  private client: SupabaseClient;
 
   constructor() {
     const apiUrl = getEnv().Hibiscus.Supabase.apiUrl;
