@@ -1,1 +1,3 @@
-import React, { useEffect } from 'react';
+console.log("Hello, World!");
+
+//frontend
