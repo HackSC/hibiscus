@@ -28,23 +28,20 @@ function transformPayload(payload) {
   const application = payload.data;
 
   const fieldsToMap = [
-    'question_vGEkZg',
-    'question_0Q1YDN',
-    'question_44A6Pr',
-    'question_KYvAb8',
-    'question_pbRXaJ',
-    'question_Xx1dXg',
-    'question_0Q1zXy',
-    'question_xX474r',
-    'question_Y5pX8B',
-    'question_dWKXro',
-    'question_ja5RGQ',
-    'question_5B8Yp6',
-    'question_dWKovq',
-    'question_ZjvAvo',
-    'question_2E1WOe',
-    'question_xX4q9d',
-    'question_Zjv7PV',
+    'question_G6q8y2',
+    'question_VGb2ya',
+    'question_jZJ12R',
+    'question_prJ89V',
+    'question_MX6oyY',
+    'question_PpbVyQ',
+    'question_8q675A',
+    'question_0dZN5Z',
+    'question_dE8BVz',
+    'question_5beW5M',
+    'question_2XlQ5p',
+    'question_EKZyYo',
+    'question_r5JzWM',
+    'question_OabOyK',
   ];
 
   for (const key of fieldsToMap) {
