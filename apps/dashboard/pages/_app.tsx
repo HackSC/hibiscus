@@ -1,4 +1,4 @@
-import { GlobalStyles2023 } from '@hibiscus/styles';
+import { GlobalStyles2023, GlobalStyles2024 } from '@hibiscus/styles';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import './styles.css';
@@ -54,8 +54,7 @@ function CustomApp({ Component, pageProps }: AppProps) {
       </Head>
       <Main>
         <Toaster />
-        <GlobalStyles2023 />
-        <GlobalStyle />
+        <GlobalStyles2024 />
         <SupabaseContextProvider>
           <TeamProvider>
             <HibiscusUserProvider>
