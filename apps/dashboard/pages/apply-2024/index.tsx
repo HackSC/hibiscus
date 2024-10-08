@@ -49,7 +49,7 @@ export function Index({ appsOpen, waitlistOpen }: ServerSideProps) {
     return (
       <Container>
         <CenterContainer>
-          <H3>Loading...</H3>
+          <Heading>Loading...</Heading>
         </CenterContainer>
       </Container>
     );
@@ -59,7 +59,7 @@ export function Index({ appsOpen, waitlistOpen }: ServerSideProps) {
     return (
       <Container>
         <CenterContainer>
-          <H3>Invalid user ID provided!</H3>
+          <Heading>Invalid user ID provided!</Heading>
         </CenterContainer>
       </Container>
     );
@@ -69,13 +69,13 @@ export function Index({ appsOpen, waitlistOpen }: ServerSideProps) {
     return (
       <Container>
         <CenterContainer>
-          <H3>You have already applied!</H3>
+          <Heading>You have already applied!</Heading>
           <Link
             href={'/'}
             passHref
             anchortagpropsoverride={{ target: '_self' }}
           >
-            <Button color="black">Go back to home</Button>
+            <RedButton>Go back to home</RedButton>
           </Link>
         </CenterContainer>
       </Container>
@@ -86,13 +86,13 @@ export function Index({ appsOpen, waitlistOpen }: ServerSideProps) {
     return (
       <Container>
         <CenterContainer>
-          <H3>Apps for HackSC X have closed!</H3>
+          <Heading>Apps for SoCal Tech Week have closed!</Heading>
           <Link
             href={'/'}
             passHref
             anchortagpropsoverride={{ target: '_self' }}
           >
-            <Button color="black">Go back to home</Button>
+            <RedButton>Go back to home</RedButton>
           </Link>
         </CenterContainer>
       </Container>
@@ -101,7 +101,7 @@ export function Index({ appsOpen, waitlistOpen }: ServerSideProps) {
 
   return (
     <MarginContainer>
-      <HackformTally tallyUrl={getEnv().Hibiscus.Hackform.TallyApps2023XUrl} />
+      <HackformTally tallyUrl={getEnv().Hibiscus.Hackform.TallyApps2024Url} />
     </MarginContainer>
   );
 }
@@ -123,6 +123,42 @@ const CenterContainer = styled.div`
 
 const MarginContainer = styled.div`
   margin: 0 5rem;
+`;
+
+const Heading = styled(H3)`
+  color: #ff6347;
+`;
+
+const RedButton = styled.button`
+  padding: 12px 40px 12px 40px;
+  border-radius: 8px;
+  border: 1px solid black;
+
+  width: fit-content;
+  height: 45px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background: #ffb1a3;
+  //fonts
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 36px;
+  text-align: center;
+  color: black;
+  :hover {
+    background: #ffded9;
+    box-shadow: 0px 0px 5px rgba(239, 118, 118, 0.5);
+    cursor: pointer;
+    transition: 0.1s;
+  }
+  :active {
+    background: #ff6347;
+  }
 `;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
