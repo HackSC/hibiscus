@@ -1,6 +1,6 @@
 import { getEnv } from '@hibiscus/env';
 import { createClient, PostgrestSingleResponse } from '@supabase/supabase-js';
-import { NextApiHandler } from 'next';
+import { NextApiHandler, NextApiResponse } from 'next';
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method === 'POST') {
@@ -13,6 +13,7 @@ const handler: NextApiHandler = async (req, res) => {
       );
       if (field === undefined || field === null || field.value === '') {
         return createResponse(
+          res,
           400,
           `No user ID provided for application ID ${body.data.responseId}`
         );
@@ -23,19 +24,21 @@ const handler: NextApiHandler = async (req, res) => {
 
       if (error !== null) {
         return createResponse(
+          res,
           500,
           `Unable to update user ${field.value} application ID ${body.data.responseId} in Supabase: ${error.message}`
         );
       } else if (data === null || data.length === 0) {
         return createResponse(
+          res,
           500,
           `Unable to update user ${field.value} application ID ${body.data.responseId} in Supabase: user does not exist`
         );
       }
 
-      return createResponse(200, 'Success');
+      return createResponse(res, 200, 'Success');
     } else {
-      return createResponse(400, 'Invalid request body');
+      return createResponse(res, 400, 'Invalid request body');
     }
   } else {
     return res.status(405).send('Method not allowed');
@@ -83,14 +86,8 @@ async function updateDb(
   return res;
 }
 
-function createResponse(status: number, message: string): Response {
-  return new Response(
-    JSON.stringify({ meta: { statusCode: status, message } }),
-    {
-      status,
-      headers: { 'Content-Type': 'application/json' },
-    }
-  );
+function createResponse(res: NextApiResponse, status: number, message: string) {
+  return res.status(status).json({ meta: { statusCode: status, message } });
 }
 
 export default handler;

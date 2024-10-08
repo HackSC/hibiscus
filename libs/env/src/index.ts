@@ -22,6 +22,9 @@ export const getEnv = () => {
         anonKey: process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_ANON_KEY,
         serviceKey: process.env.HIBISCUS_SUPABASE_SERVICE_KEY,
       },
+      MongoDB: {
+        URL: process.env.MONGODB_URL,
+      },
       AWS: {
         accessKeyID: process.env.HIBISCUS_AWS_ACCESS_KEY_ID,
         secretAccessKey: process.env.HIBISCUS_AWS_SECRET_ACCESS_KEY,

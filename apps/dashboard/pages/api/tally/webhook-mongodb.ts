@@ -3,7 +3,7 @@ import { MongoClient } from 'mongodb';
 
 const handler = async (req, res) => {
   if (req.method !== 'POST') {
-    return createResponse(400, `Method ${req.method} not supported`);
+    return createResponse(res, 400, `Method ${req.method} not supported`);
   }
 
   const payload = req.body;
@@ -12,12 +12,13 @@ const handler = async (req, res) => {
 
   if (!success) {
     return createResponse(
+      res,
       500,
       `Unable to insert application ${application?.responseId}`
     );
   }
 
-  return createResponse(200, 'Success');
+  return createResponse(res, 200, 'Success');
 };
 
 /**
@@ -77,7 +78,7 @@ function normalizeFields(arr) {
 }
 
 async function write(application) {
-  const client = new MongoClient(getEnv().Hibiscus.FeatureFlag.MongoURI);
+  const client = new MongoClient(getEnv().Hibiscus.MongoDB.URL);
 
   try {
     const db = client.db('hacksc-f24');
@@ -86,17 +87,14 @@ async function write(application) {
     // Write
     const res = await coll.insertOne(application);
     return res.acknowledged;
-  } catch {
+  } catch (e) {
+    console.log(e);
     return false;
   }
 }
 
-function createResponse(status, message) {
-  return {
-    statusCode: status,
-    headers: { 'Content-Type': 'application/json' },
-    body: { meta: { statusCode: status, message } },
-  };
+function createResponse(res, status, message) {
+  return res.status(status).json({ meta: { statusCode: status, message } });
 }
 
 export default handler;
