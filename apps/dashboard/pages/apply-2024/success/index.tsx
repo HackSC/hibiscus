@@ -35,13 +35,9 @@ export function Index() {
       <Container>
         <CenterContainer>
           <Heading>Sorry, you are not allowed to access this page.</Heading>
-          <Link
-            href={'/'}
-            passHref
-            anchortagpropsoverride={{ target: '_self' }}
-          >
-            <Button color="black">Go back to home</Button>
-          </Link>
+          <RedButton onClick={() => window.open('/', '_self')}>
+            Go back to home
+          </RedButton>
         </CenterContainer>
       </Container>
     );
@@ -65,13 +61,9 @@ export function Index() {
             <a href="mailto:team@hacksc.com">team@hacksc.com</a> for further
             assistance.
           </Heading>
-          <Link
-            href={'/'}
-            passHref
-            anchortagpropsoverride={{ target: '_self' }}
-          >
-            <RedButton>Go back to home</RedButton>
-          </Link>
+          <RedButton onClick={() => window.open('/', '_self')}>
+            Go back to home
+          </RedButton>
         </CenterContainer>
       </Container>
     );
@@ -85,9 +77,9 @@ export function Index() {
           applications and will be sending out the acceptances in phases after
           the application period closes.
         </Heading>
-        <Link href={'/'} passHref anchortagpropsoverride={{ target: '_self' }}>
-          <RedButton>Go back to home</RedButton>
-        </Link>
+        <RedButton onClick={() => window.open('/', '_self')}>
+          Go back to home
+        </RedButton>
       </CenterContainer>
     </Container>
   );
