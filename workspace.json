@@ -20,6 +20,7 @@
     "hibiscus-supabase-context": "libs/hibiscus-supabase-context",
     "hibiscus-user-context": "libs/hibiscus-user-context",
     "icons": "libs/icons",
+    "identity-service": "apps/identity-service",
     "interim": "apps/interim",
     "log-server": "apps/log-server",
     "metadata": "libs/metadata",
