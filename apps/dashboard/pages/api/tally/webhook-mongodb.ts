@@ -43,6 +43,7 @@ function transformPayload(payload) {
     'question_EKZyYo',
     'question_r5JzWM',
     'question_OabOyK',
+    'question_W2qvdP',
   ];
 
   for (const key of fieldsToMap) {
