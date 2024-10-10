@@ -87,8 +87,8 @@ const Index = () => {
   if (user == null) {
     return <>Loading</>;
   }
-  // Limit access to only sponsor role
-  if (user?.role !== HibiscusRole.SPONSOR) {
+  // Limit access to only sponsor or admin role
+  if (![HibiscusRole.SPONSOR, HibiscusRole.ADMIN].includes(user?.role)) {
     router.push('/');
     return <></>;
   }
