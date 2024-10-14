@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { DatePicker } from '@hibiscus/ui-kit-2023';
-import { Calendar } from '@hibiscus/ui-kit-2023';
-import { CiCalendar } from "react-icons/ci";
+import Select from 'react-select';
 import { IoMdClose } from "react-icons/io";
+
 
 
 import styled from 'styled-components';
@@ -19,34 +18,7 @@ import styled from 'styled-components';
 
 //import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 
-
-export function Index() {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    //const { user } = useHibiscusUser();
-
-    const toggleModal = () => {
-        setIsModalOpen(!isModalOpen); 
-    };
-
-    return (
-        <LayoutContainer>
-            <ProfileBox>
-                
-                <ProfileText style={{ color: 'black' }}>Profile</ProfileText>
-
-                
-                
-                <EditButton onClick={toggleModal} >Edit</EditButton>
-                
-            </ProfileBox>
-        {isModalOpen && <EditModal onClose={toggleModal} />}
-        </LayoutContainer>
-    );
-}
-
 const EditModal = ({ onClose }) => {
-    const stopPropagation = (e) => e.stopPropagation();
-    
     return(
        <ModalOverlay>
             <ModalContainer>
@@ -95,13 +67,28 @@ const EditModal = ({ onClose }) => {
 
                 </FormContainer>
 
-
+                const options = [
+                    { value: 'fall 2024', label: 'Fall 2024' },
+                    { value: 'spring 2025', label: 'Spring 2025' },
+                    { value: 'fall 2025', label: 'Fall 2025' },
+                    { value: 'spring 2026', label: 'Spring 2026' },
+                    { value: 'fall 2026', label: 'Fall 2026' },
+                    { value: 'spring 2027', label: 'Spring 2027' },
+                    { value: 'fall 2027', label: 'Fall 2027' },
+                    { value: 'spring 2028', label: 'Spring 2028' },
+                    { value: 'fall 2028', label: 'Fall 2028' },
+                    { value: 'spring 2029', label: 'Spring 2029' },
+                    { value: 'fall 2029', label: 'Fall 2029' },
+                    { value: 'spring 2030', label: 'Spring 2030' }
+                ]
                 <FormContainer>
                     <InfoRow>
                         <FieldLabel>Graduation Year</FieldLabel>
-                        <Input type="text" placeholder="--" />
+                        const MyComponent = () => (
+                            <Select options={options} />
+                        )
                         
-                        {/* need to add calendar function*/}
+                        
                     </InfoRow>
                 </FormContainer>
                 
@@ -109,6 +96,31 @@ const EditModal = ({ onClose }) => {
        </ModalOverlay> 
     );
 }
+
+export function Index() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    //const { user } = useHibiscusUser();
+
+
+
+    const toggleModal = () => {
+        setIsModalOpen(!isModalOpen); 
+    };
+
+    return (
+        <LayoutContainer>
+            <ProfileBox>
+                
+                <ProfileText style={{ color: 'black' }}>Profile</ProfileText>
+                <EditButton onClick={toggleModal} >Edit</EditButton>
+                
+            </ProfileBox>
+        {isModalOpen && <EditModal onClose={toggleModal} />}
+        </LayoutContainer>
+    );
+}
+
+
 
 export default Index;
 
