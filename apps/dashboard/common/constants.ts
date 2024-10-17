@@ -2,6 +2,7 @@ import { Option } from '@hibiscus/types';
 import { ApplicationStatus } from '@hibiscus/types';
 
 export const ALLOWED_RESUME_FORMATS = ['pdf', 'docx', 'txt', 'odt'];
+export const ALLOWED_PFP_FORMATS = ['png', 'jpg', 'jpeg'];
 export const DEFAULT_OTHERS_FIELD_LABEL = 'Others';
 
 export const hackformLinks = {
