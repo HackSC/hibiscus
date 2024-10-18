@@ -100,36 +100,33 @@ function BattlepassLeaderboard() {
   }, []);
 
   return (
-    <GrayContainer>
+    <div className="border rounded-lg p-[30px] text-theme-gray">
       {leaderboardResults.data.map((item) => (
-        <Entry key={item.rank}>
-          <Text>{item.rank}</Text>
-          <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-            <Text>
+        <div key={item.rank} className="flex py-[10px] text-sm">
+          <p className="w-[50px] flex-[1]">{item.rank}</p>
+          <div className="flex flex-[2] items-center">
+            <p className="truncate min-w-0">
               {item.firstName} {item.lastName}
-            </Text>
-            {item.rank === 1 && <TfiCrown color="yellow" />}
-            {item.rank === 2 && <TfiCrown color="silver" />}
-            {item.rank === 3 && <TfiCrown color="#FFD23C" />}
+            </p>
+            {item.rank === 1 && (
+              <TfiCrown color="#ECB400" className="ml-[10px]" />
+            )}
+            {item.rank === 2 && (
+              <TfiCrown color="#979797" className="ml-[10px]" />
+            )}
+            {item.rank === 3 && (
+              <TfiCrown color="#AE8C1D" className="ml-[10px]" />
+            )}
           </div>
-          <Text>{item.points} pts</Text>
-        </Entry>
+          <p>{item.points} pts</p>
+        </div>
       ))}
       {!userRankLeaderboard.loading && (
-        <CurrentUserEntry>
-          <Text style={{ fontWeight: 'bold' }}>
-            {userRankLeaderboard.data.rank}
-          </Text>
+        <div className="mt-[15px] bg-theme-redward flex justify-between text-white py-[10px] px-[20px] border border-black rounded-lg text-sm font-medium">
+          <p>{userRankLeaderboard.data.rank}</p>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-            <Text
-              style={{
-                fontWeight: 'bold',
-                gap: '10px',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              {user.firstName} {user.lastName}
+            <p>
+              You
               {userRankLeaderboard.data.rank === 1 && (
                 <TfiCrown color="yellow" />
               )}
@@ -139,14 +136,12 @@ function BattlepassLeaderboard() {
               {userRankLeaderboard.data.rank === 3 && (
                 <TfiCrown color="#FFD23C" />
               )}
-            </Text>
+            </p>
           </div>
-          <Text style={{ fontWeight: 'bold' }}>
-            {userRankLeaderboard.data.points} pts
-          </Text>
-        </CurrentUserEntry>
+          <p>{userRankLeaderboard.data.points} pts</p>
+        </div>
       )}
-      <LeaderboardPageTabs
+      {/* <LeaderboardPageTabs
         totalPages={MAX_BATTLEPASS_PAGES}
         onClickNext={(num) => {
           setLeaderboardResults((prev) => ({
@@ -162,90 +157,64 @@ function BattlepassLeaderboard() {
             pageNumber: num,
           }));
         }}
-      />
-    </GrayContainer>
+      /> */}
+    </div>
   );
 }
 
 export default BattlepassLeaderboard;
 
-interface LeaderboardPageTabsProps {
-  totalPages: number;
-  onClickNext: (newPageNumber: number) => void;
-  onClickPrev: (newPageNumber: number) => void;
-}
+// interface LeaderboardPageTabsProps {
+//   totalPages: number;
+//   onClickNext: (newPageNumber: number) => void;
+//   onClickPrev: (newPageNumber: number) => void;
+// }
 
-const LeaderboardPageTabs = (props: LeaderboardPageTabsProps) => {
-  const [currentPageNum, setCPN] = useState(1);
-  const minPageNumber = 1;
+// const LeaderboardPageTabs = (props: LeaderboardPageTabsProps) => {
+//   const [currentPageNum, setCPN] = useState(1);
+//   const minPageNumber = 1;
 
-  const handleClickPrev = () => {
-    if (currentPageNum === minPageNumber) return;
-    setCPN((prev) => prev - 1);
-    props.onClickPrev(currentPageNum - 1);
-  };
+//   const handleClickPrev = () => {
+//     if (currentPageNum === minPageNumber) return;
+//     setCPN((prev) => prev - 1);
+//     props.onClickPrev(currentPageNum - 1);
+//   };
 
-  const handleClickNext = () => {
-    if (currentPageNum >= props.totalPages - 1) return;
-    setCPN((prev) => prev + 1);
-    props.onClickNext(currentPageNum + 1);
-  };
+//   const handleClickNext = () => {
+//     if (currentPageNum >= props.totalPages - 1) return;
+//     setCPN((prev) => prev + 1);
+//     props.onClickNext(currentPageNum + 1);
+//   };
 
-  return (
-    <LeaderboardTabContainer>
-      <button
-        style={{
-          appearance: 'none',
-          background: 'none',
-          color: 'white',
-          cursor: 'pointer',
-        }}
-        onClick={handleClickPrev}
-      >
-        <Text>
-          <AiFillCaretLeft />
-        </Text>
-      </button>
-      <Text>{currentPageNum}</Text>
-      <button
-        style={{
-          appearance: 'none',
-          background: 'none',
-          color: 'white',
-          cursor: 'pointer',
-        }}
-        onClick={handleClickNext}
-      >
-        <Text>
-          <AiFillCaretRight />
-        </Text>
-      </button>
-    </LeaderboardTabContainer>
-  );
-};
-
-const GrayContainer = styled(GrayBox)`
-  gap: 20px;
-  padding: 30px;
-  border-radius: 10px;
-  border: 2px solid var(--Blue-Ivy, #002990);
-  background: var(--Blue-Ivy, #002990);
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-`;
-
-const Entry = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const CurrentUserEntry = styled(Entry)`
-  background-color: ${Colors2023.GRAY.SCHEMDIUM};
-  padding: 10px;
-  border-radius: 5px;
-`;
-
-const LeaderboardTabContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-`;
+//   return (
+//     <div className="flex justify-between">
+//       <button
+//         style={{
+//           appearance: 'none',
+//           background: 'none',
+//           color: 'black',
+//           cursor: 'pointer',
+//         }}
+//         onClick={handleClickPrev}
+//       >
+//         <Text>
+//           <AiFillCaretLeft />
+//         </Text>
+//       </button>
+//       <Text>{currentPageNum}</Text>
+//       <button
+//         style={{
+//           appearance: 'none',
+//           background: 'none',
+//           color: 'black',
+//           cursor: 'pointer',
+//         }}
+//         onClick={handleClickNext}
+//       >
+//         <Text>
+//           <AiFillCaretRight />
+//         </Text>
+//       </button>
+//     </div>
+//   );
+// };

@@ -1,7 +1,6 @@
 import { H3, Modal, Text, Link } from '@hibiscus/ui';
 import { Button } from '@hacksc/sctw-ui-kit';
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { useBattlepassAPI } from '../../../hooks/use-battlepass-api/use-battlepass-api';
 import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
 import { GrayBox } from '../../gray-box/gray-box';
@@ -19,7 +18,7 @@ function BattlepassBonusPointsList({ items }: Props) {
   const { user } = useHibiscusUser();
 
   return (
-    <Div>
+    <div className="border rounded-lg p-[30px]">
       <Modal
         isOpen={open}
         closeModal={() => {
@@ -42,23 +41,21 @@ function BattlepassBonusPointsList({ items }: Props) {
           </div>
         </GrayBox>
       </Modal>
-      {items.map((item, i) => (
-        <BonusPointsItem
-          data={item}
-          key={i}
-          handleClick={async () => {
-            setChosenBP(item);
-            setOpen(true);
-            await battlepassApi.setBonusPointPending(user.id, item.id);
-          }}
-        />
-      ))}
-    </Div>
+      <div className="space-y-[30px]">
+        {items.map((item, i) => (
+          <BonusPointsItem
+            data={item}
+            key={i}
+            handleClick={async () => {
+              setChosenBP(item);
+              setOpen(true);
+              await battlepassApi.setBonusPointPending(user.id, item.id);
+            }}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
 export default BattlepassBonusPointsList;
-
-const Div = styled(GrayBox)`
-  gap: 10px;
-`;
