@@ -1,6 +1,4 @@
-import { Colors2023 } from '@hibiscus/styles';
 import React from 'react';
-import styled from 'styled-components';
 
 interface Props {
   rangeMinPoint: number;
@@ -21,47 +19,22 @@ function BattlepassPointsBar(props: Props) {
   );
 
   return (
-    <Container>
-      <BarBack>
-        <BarFront progress={progress} />
-      </BarBack>
-      <BottomDiv>
-        <div style={{ color: '#ecb400' }}>{props.minLabel}</div>
-        <div style={{ color: '#ce0c0a' }}>{props.maxLabel}</div>
-      </BottomDiv>
-    </Container>
+    <div className="space-y-[5px]">
+      <div className="relative h-[25px]">
+        {progress > 0 && (
+          <div
+            className="bg-theme-red absolute rounded h-full border"
+            style={{ width: progress * 100 + '%' }}
+          />
+        )}
+        <div className="absolute rounded w-full h-full border"></div>
+      </div>
+      <div className="flex justify-between">
+        <div>{props.minLabel}</div>
+        <div>{props.maxLabel}</div>
+      </div>
+    </div>
   );
 }
 
 export default BattlepassPointsBar;
-
-const Container = styled.div`
-  width: 26rem;
-  max-width: 100%;
-`;
-
-const BarBack = styled.div`
-  position: relative;
-  width: 100%;
-  height: 1.3rem;
-  border: 3px solid #ff514f;
-  border-radius: 100px;
-  box-shadow: 0px 0px 10px 0px #fe513980;
-`;
-
-const BarFront = styled.div<{ progress: number }>`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: ${(props) => props.progress * 100}%;
-  height: 100%;
-  border-radius: inherit;
-  background-color: #ff514f;
-  text-shadow: 0px 0px 10px #ffffff;
-`;
-
-const BottomDiv = styled.div`
-  margin-top: 8px;
-  display: flex;
-  justify-content: space-between;
-`;
