@@ -85,6 +85,7 @@ const EditModal = ({ onClose }) => {
                         <FieldLabel>School</FieldLabel>
                         <Select 
                             options={schoolOptions}
+                            placeholder="Select or type..."
                             menuPlacement='auto'
                             menuPortalTarget={document.body}
                             menuPosition={'fixed'}
@@ -153,6 +154,7 @@ const EditModal = ({ onClose }) => {
                         <FieldLabel>Graduation Year</FieldLabel>
                         <Select 
                             options={options} 
+                            placeholder="Select or type..."
                             menuPlacement='auto'
                             menuPortalTarget={document.body}
                             menuPosition={'fixed'}
