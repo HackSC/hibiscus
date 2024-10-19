@@ -1,6 +1,5 @@
 import 'reflect-metadata';
 import { HackformResumeUploadClient } from '@hibiscus/hackform-client';
-import { LocalAPIResponses } from '../../common/types';
 import { NextApiHandler } from 'next';
 import { container } from 'tsyringe';
 import formidable, { IncomingForm } from 'formidable';
@@ -72,12 +71,19 @@ const handler: NextApiHandler = async (req, res) => {
     const data = fs.readFileSync(file.filepath);
     const uploadClient = container.resolve(HackformResumeUploadClient);
     try {
-      const meta = await uploadClient.uploadResume(data, key);
-      return res.status(200).json({
-        key,
-        filepath: file.filepath,
-        meta,
-      } as LocalAPIResponses['/resume']);
+      if (!uploadClient.resumeExists(user.user_id)) {
+        const meta = await uploadClient.uploadResume(data, user.user_id);
+        return res.status(200).json({
+          success: true,
+          path: meta.path,
+        });
+      } else {
+        const meta = await uploadClient.updateResume(data, user.user_id);
+        return res.status(200).json({
+          success: true,
+          path: meta.path,
+        });
+      }
     } catch (e) {
       console.error(e);
       // TODO: better handling

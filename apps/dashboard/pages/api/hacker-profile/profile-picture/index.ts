@@ -1,9 +1,7 @@
 import 'reflect-metadata';
 import {
-  HackformResumeUploadClient,
   HackFromProfilePictureClient,
 } from '@hibiscus/hackform-client';
-import { LocalAPIResponses } from '../../../../common/types';
 import { NextApiHandler } from 'next';
 import { container } from 'tsyringe';
 import formidable, { IncomingForm } from 'formidable';

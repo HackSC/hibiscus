@@ -1,59 +1,80 @@
-import {
-  GetObjectCommand,
-  PutObjectCommand,
-  S3Client,
-} from '@aws-sdk/client-s3';
-import { injectable } from 'tsyringe';
-import { credentials, region } from './aws';
+import { injectable, container } from 'tsyringe';
+import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { StorageError } from '@supabase/storage-js';
+
+interface ResumeResponse {
+  path: string;
+  success: boolean;
+}
 
 @injectable()
 export class HackformResumeUploadClient {
-  private readonly s3: S3Client;
-  private readonly bucket = '2023-hacker-resumes';
+  private readonly supabaseClient: HibiscusSupabaseClient;
+  private readonly bucket: string = 'resume';
 
   constructor() {
-    this.s3 = new S3Client({
-      region,
-      credentials,
-    });
+    this.supabaseClient = container.resolve(HibiscusSupabaseClient);
   }
 
   /**
    * Upload hacker resume file with given key
    * @param buf bytes Buffer object data representing the hacker resume's upload
-   * @param key identifier for this resume file (must be unique)
-   * @returns status code from the operation, attempts taken, and request ID
-   * to the ext service
+   * @param userId userId of user that is uploading the resume
+   * @returns ResumeResponse object containing the path of the uploaded resume and a boolean indicating success
    */
-  async uploadResume(
-    buf: Buffer,
-    key: string
-  ): Promise<{ httpStatusCode: number; attempts: number; requestId: string }> {
-    const { $metadata } = await this.s3.send(
-      new PutObjectCommand({
-        Bucket: this.bucket,
-        Key: key,
-        Body: buf,
-      })
-    );
+  async uploadResume(buf: Buffer, userId: string): Promise<ResumeResponse> {
+    const blob = new Blob([buf], { type: 'application/pdf' });
+    const { data, error } = await this.supabaseClient
+      .getClient()
+      .storage.from(this.bucket)
+      .upload(`${userId}/resume.pdf`, blob);
+    if (error) {
+      throw new StorageError(error.message);
+    }
+
     return {
-      httpStatusCode: $metadata.httpStatusCode,
-      attempts: $metadata.attempts,
-      requestId: $metadata.requestId,
+      path: data.path,
+      success: true,
     };
   }
 
-  async getResumeMetadata(key: string) {
-    const result = await this.s3.send(
-      new GetObjectCommand({
-        Bucket: this.bucket,
-        Key: key,
-      })
-    );
-    return result.$metadata;
+  /**
+   * Update hacker resume file with given key
+   * @param buf bytes Buffer object data representing the hacker resume's upload
+   * @param userId userId of user that is uploading the resume
+   * @returns ResumeResponse object containing the path of the uploaded resume and a boolean indicating success
+   */
+  async updateResume(buf: Buffer, userId: string): Promise<ResumeResponse> {
+    const blob = new Blob([buf], { type: 'application/pdf' });
+    const { data, error } = await this.supabaseClient
+      .getClient()
+      .storage.from(this.bucket)
+      .update(`${userId}/resume.pdf`, blob);
+    if (error) {
+      throw new StorageError(error.message);
+    }
+
+    return {
+      path: data.path,
+      success: true,
+    };
   }
 
-  async getResumePresignedUrl(key: string): Promise<string | null> {
-    return '';
+  /**
+   * Check if a resume exists for a given user
+   * @param userId userId of user to check for resume
+   * @returns boolean indicating if a resume exists for the given user
+   */
+  async resumeExists(userId: string): Promise<boolean> {
+    const { data, error } = await this.supabaseClient
+      .getClient()
+      .storage.from(this.bucket)
+      .list(`${userId}/`);
+
+    if (error) {
+      throw new StorageError(error.message);
+    }
+
+    return data.length > 0;
   }
 }
