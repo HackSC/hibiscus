@@ -125,7 +125,7 @@ const Wrapper = styled.div`
   min-height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
 `;
 
@@ -142,7 +142,7 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
   return {
     props: {
-      appsOpen,
+      appsOpen: true,
       hackerPortalOpen,
       waitlistOpen,
     } as ServerSideProps,
