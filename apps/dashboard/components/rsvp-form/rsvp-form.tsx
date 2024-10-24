@@ -59,7 +59,7 @@ function RSVPForm({ closeModal }: Props) {
       dob: Yup.date()
         .required('This field is required')
         .max(
-          new Date(2005, 11, 4),
+          new Date(2006, 11, 8),
           'You must be 18 years old or above to join this event'
         )
         .typeError('Invalid date provided'),
