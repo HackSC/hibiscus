@@ -7,6 +7,7 @@ import { Colors2023 } from '@hibiscus/styles';
 import { Button, ColorSpanBold } from '@hibiscus/ui-kit-2023';
 import { StyledAuthCard } from '../auth-components/styled-card';
 import { Input } from '../auth-components/styled-input';
+import { BackgroundShapes } from '../colored-shapes/background-shapes'
 // import { Input } from '../auth-components/styled-input';
 
 /* eslint-disable-next-line */
@@ -47,14 +48,15 @@ export function ResetCard(props: ResetCardProps) {
   }
 
   return (
+    <>
+    <BackgroundShapes />
+    <HackSCTag>HackSC</HackSCTag>
     <StyledAuthCard>
-      <img src="/static/images/logo-2023.svg" alt="HackSC Logo" width="100px" />
-      <H3>
-        Reset your{' '}
-        <ColorSpanBold color={Colors2023.BLUE.STANDARD}>
-          HackSC password
-        </ColorSpanBold>
-      </H3>
+      <HeadingContainer>
+        <h1>
+          Reset Password
+        </h1>
+      </HeadingContainer>
       <StyledForm onSubmit={handleSubmit}>
         <Input
           placeholder="new password"
@@ -74,9 +76,10 @@ export function ResetCard(props: ResetCardProps) {
         >
           {errorMessage}
         </StyledErrorText>
-        <Button color="blue">SUBMIT</Button>
+        <Button color="beige">SUBMIT</Button>
       </StyledForm>
     </StyledAuthCard>
+    </>
   );
 }
 
@@ -97,3 +100,33 @@ const StyledErrorText = styled(Text)`
   padding-top: 1rem;
   color: red;
 `;
+
+const HeadingContainer = styled.div`
+  display:flex; 
+  justify-content: center; 
+  align-items: flex-end; 
+  > h1 {
+    font-family: 'Hanken Grotesk', sans-serif; 
+    font-size: 48px;
+    font-weight: 500;
+    line-height: 62.54px;
+    text-align: left;
+  }
+`;
+
+const HackSCTag = styled.div`
+  min-width: 7%; 
+  min-height: 7%;
+  background: #429FEE;
+  display: flex; 
+  border: 0.5px solid #000000; 
+  justify-content: center; 
+  align-items: center; 
+  border-radius: 5px;
+  position: fixed; 
+  right: 3.5%; 
+  top: 3%; 
+  font-size: 1.5vw;  
+  color: black; 
+`;
+

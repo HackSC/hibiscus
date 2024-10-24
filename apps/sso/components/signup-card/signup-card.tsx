@@ -17,6 +17,7 @@ import {
 import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import { Input } from '../auth-components/styled-input';
 import { StyledAuthCard } from '../auth-components/styled-card';
+import { BackgroundShapes } from '../colored-shapes/background-shapes'; 
 
 /* eslint-disable-next-line */
 export interface SignUpProps {}
@@ -76,19 +77,20 @@ export function SignUpCard(props: SignUpProps) {
   };
 
   return (
+    <>
+    {/* Add Styled Shapes for page */}
+    <BackgroundShapes></BackgroundShapes>
+    {/* end */}
+    <HackSCTag>HackSC</HackSCTag>
     <StyledAuthCard>
-      <Image
-        src="/static/images/logo-2023.svg"
-        alt="HackSC Logo"
-        width={100}
-        height={100}
-      />
-      <H3>
-        Create a{' '}
-        <ColorSpanBold color={Colors2023.BLUE.STANDARD}>
-          HackSC Account
-        </ColorSpanBold>
-      </H3>
+      <HeadingContainer>
+        <h1>
+          HackSC
+        </h1>
+        <h2>
+          Create an Account
+        </h2>
+      </HeadingContainer>
       <StyledForm onSubmit={handleSubmit}>
         <Input placeholder="first name" type="text" name="firstname" required />
         <Input placeholder="last name" type="text" name="lastname" required />
@@ -115,7 +117,7 @@ export function SignUpCard(props: SignUpProps) {
         >
           {errorMessage}
         </StyledErrorText>
-        <Button color="blue">SIGN UP</Button>
+        <Button color="beige">SIGN UP</Button>
       </StyledForm>
       <GrayLink href="/login">Have an account? Login</GrayLink>
 
@@ -132,6 +134,7 @@ export function SignUpCard(props: SignUpProps) {
         ''
       )}
     </StyledAuthCard>
+    </>
   );
 }
 
@@ -151,4 +154,39 @@ const StyledErrorText = styled(Text)`
   font-size: 20px;
   padding-top: 1rem;
   color: red;
+`;
+
+const HackSCTag = styled.div`
+  min-width: 7%; 
+  min-height: 7%;
+  background: #429FEE;
+  display: flex; 
+  border: 0.5px solid #000000; 
+  justify-content: center; 
+  align-items: center; 
+  border-radius: 5px;
+  position: fixed; 
+  right: 3.5%; 
+  top: 3%; 
+  font-size: 1.5vw;  
+  color: black; 
+`
+
+const HeadingContainer = styled.div`
+  display:flex; 
+  justify-content: center; 
+  align-items: flex-end; 
+  > h1 {
+    font-family: 'Hanken Grotesk', sans-serif; 
+    font-size: 48px; 
+    font-weight: 700; 
+    margin-right: 1px;
+  }
+  > h2 {
+    font-family: 'Hanken Grotesk', sans-serif; 
+    font-size: 32px; 
+    font-weight: 400; 
+    line-height: 70px; 
+    margin-left: 1px; 
+  }
 `;
