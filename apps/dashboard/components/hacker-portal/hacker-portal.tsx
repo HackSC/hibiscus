@@ -294,7 +294,7 @@ export function HackerPortal({ isEventOpen, appsOpen }: HackerPortalProps) {
     );
   }
 
-  if (user.applicationId === undefined || user.applicationId === null) {
+  if (user.applicationStatus == ApplicationStatus.NOT_APPLIED) {
     return (
       <Container>
         <Stars>
