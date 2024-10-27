@@ -5,6 +5,7 @@ import { GlowSpan } from '@hibiscus/ui-kit-2023';
 import { HibiscusRole } from '@hibiscus/types';
 import { Colors2023 } from '@hibiscus/styles';
 import { logout } from '@hibiscus/sso-client';
+import HackSCLogo from '../svg/hacksc-logo';
 
 /* eslint-disable-next-line */
 export interface TopBarProps {
@@ -17,24 +18,21 @@ export function TopBar(props: TopBarProps) {
   return (
     <StyledTopBar>
       <Link href="/" anchortagpropsoverride={{ target: '_self' }}>
-        <Image
+        {/* <Image
           style={{ margin: '5px 0 0 20px' }}
           width="200"
           height="100"
           src="/hacksc-logo.svg"
           alt="HackSC logo"
-        />
+        /> */}
+        <HackSCLogo />
       </Link>
       <RightUtilityContainer>
         <UserText>{props.userTag}</UserText>
-        <RoleText>
-          <GlowSpan color={userColors.light} shadowColor={userColors.standard}>
-            {props.role}
-          </GlowSpan>
-        </RoleText>
+        <RoleText style={{ color: '#FF6347' }}>{props.role}</RoleText>
         <LogoutButton onClick={logout}>
           <Image
-            style={{ position: 'relative', top: 3 }}
+            style={{ position: 'relative' }}
             width="18"
             height="18"
             src="/log-out.svg"
@@ -52,7 +50,8 @@ const StyledTopBar = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  padding-right: 3rem;
+  padding: 2rem 3rem;
+  flex-wrap: wrap;
 `;
 
 const UserText = styled(Text)``;

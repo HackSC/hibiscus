@@ -19,6 +19,7 @@ export function HackformTally(props: HackformTally) {
     <>
       <iframe
         data-tally-src={props.tallyUrl}
+        loading="lazy"
         width="100%"
         height="335"
         frameBorder="0"
