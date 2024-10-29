@@ -31,158 +31,158 @@ const EditProfileCard = ({ onClose }) => {
                 <IoMdClose color="black" size={25} onClick={onClose}/>
                 <SaveButton onClick={onClose}>Save</SaveButton>
                 <FormContainer>
-                    <InfoRow>
-                        <FieldLabel>Name</FieldLabel>
-                        <Input type="text" placeholder="Full Name" />
-                    </InfoRow>
-                
-                    <InfoRow>
-                        <FieldLabel>Username</FieldLabel>
-                        <Input type="text" placeholder="Username" />
-                    </InfoRow>
+                  <InfoRow>
+                      <FieldLabel>Name</FieldLabel>
+                      <Input type="text" placeholder="Full Name" />
+                  </InfoRow>
+              
+                  <InfoRow>
+                      <FieldLabel>Username</FieldLabel>
+                      <Input type="text" placeholder="Username" />
+                  </InfoRow>
                 </FormContainer>
                 
                 <FormContainer>
-                    <InfoRow>
-                        <FieldLabel>Field of Study</FieldLabel>
-                        <Input type="text" placeholder="--" />
-                    </InfoRow>
-               
-                    <InfoRow>
-                        <FieldLabel>Password</FieldLabel>
-                        <Input type="text" placeholder="************" />
-                    </InfoRow>
+                  <InfoRow>
+                      <FieldLabel>Field of Study</FieldLabel>
+                      <Input type="text" placeholder="--" />
+                  </InfoRow>
+              
+                  <InfoRow>
+                      <FieldLabel>Password</FieldLabel>
+                      <Input type="text" placeholder="************" />
+                  </InfoRow>
 
                 </FormContainer>
 
                 <FormContainer>
-                    <InfoRow>
-                        <FieldLabel>Profile Bio</FieldLabel>
-                        <Input type="text" placeholder="--" />
-                        
-                    </InfoRow>
-                    
-                    <InfoRow>
-                        <FieldLabel>School</FieldLabel>
-                        <Select 
-                            options={schoolOptions}
-                            placeholder="Select or type..."
-                            menuPlacement='auto'
-                            menuPortalTarget={document.body}
-                            menuPosition={'fixed'}
-                            menuShouldScrollIntoView={true}
-                            
-                            
-                            styles={{
-                                
-                                control: (baseStyles, state) => ({
-                                    ...baseStyles,
-                                    
-                                    backgroundColor: '#f5f5f5',
-                                    borderBottom: 'solid #7E7E7E 2px',
-                                    borderTop: 'none',
-                                    borderLeft: 'none',
-                                    borderRight: 'none',
-                                    display: 'flex',
-                                    flexWrap: 'wrap',  
-                                    alignItems: 'flex-start', 
-                                    minHeight: '40px',  
-                                    borderRadius: '8px',
-                                    height:'auto'
-                                    
-                                }),
-                                
-                                menu: (baseStyles, state) => ({
-                                    ...baseStyles,
-                                    color: 'black',
-                                    zIndex: 9999,
-                                    borderRadius: '8px'
-                                }),
-                                singleValue: (baseStyles) => ({
-                                    ...baseStyles,
-                                    whiteSpace: 'normal',  
-                                    display: 'inline-block',  
-                                }),
-                        
-                                menuList: (baseStyles, state) => ({
-                                    ...baseStyles,
-                                    maxHeight: '115px',  
-                                    overflowY: 'auto',
-                                    backgroundColor: '#f5f5f5',
-                                    borderRadius: '8px'
-                                    
-                                }),
-                                option: (baseStyles, state) => ({
-                                    ...baseStyles,
-                                    backgroundColor: state.isFocused ? '#FF9966' : '#f5f5f5', // Change hover color
-                                    color: 'black',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    flexWrap: 'wrap',
-                                    
-                                }),
-                                
-                            }}    
-                        />
-                    </InfoRow>
+                  <InfoRow>
+                      <FieldLabel>Profile Bio</FieldLabel>
+                      <Input type="text" placeholder="--" />
+                      
+                  </InfoRow>
+                  
+                  <InfoRow>
+                      <FieldLabel>School</FieldLabel>
+                      <Select 
+                          options={schoolOptions}
+                          placeholder="Select or type..."
+                          menuPlacement='auto'
+                          menuPortalTarget={document.body}
+                          menuPosition={'fixed'}
+                          menuShouldScrollIntoView={true}
+                          
+                          
+                          styles={{
+                              
+                              control: (baseStyles, state) => ({
+                                  ...baseStyles,
+                                  
+                                  backgroundColor: '#f5f5f5',
+                                  borderBottom: 'solid #7E7E7E 2px',
+                                  borderTop: 'none',
+                                  borderLeft: 'none',
+                                  borderRight: 'none',
+                                  display: 'flex',
+                                  flexWrap: 'wrap',  
+                                  alignItems: 'flex-start', 
+                                  minHeight: '40px',  
+                                  borderRadius: '8px',
+                                  height:'auto'
+                                  
+                              }),
+                              
+                              menu: (baseStyles, state) => ({
+                                  ...baseStyles,
+                                  color: 'black',
+                                  zIndex: 9999,
+                                  borderRadius: '8px'
+                              }),
+                              singleValue: (baseStyles) => ({
+                                  ...baseStyles,
+                                  whiteSpace: 'normal',  
+                                  display: 'inline-block',  
+                              }),
+                      
+                              menuList: (baseStyles, state) => ({
+                                  ...baseStyles,
+                                  maxHeight: '115px',  
+                                  overflowY: 'auto',
+                                  backgroundColor: '#f5f5f5',
+                                  borderRadius: '8px'
+                                  
+                              }),
+                              option: (baseStyles, state) => ({
+                                  ...baseStyles,
+                                  backgroundColor: state.isFocused ? '#FF9966' : '#f5f5f5', // Change hover color
+                                  color: 'black',
+                                  cursor: 'pointer',
+                                  display: 'flex',
+                                  flexWrap: 'wrap',
+                                  
+                              }),
+                              
+                          }}    
+                      />
+                  </InfoRow>
 
 
                 </FormContainer>
 
                 
                 <FormContainer>
-                    <InfoRow>
-                        <FieldLabel>Graduation Year</FieldLabel>
-                        <Select 
-                            options={options} 
-                            placeholder="Select or type..."
-                            menuPlacement='auto'
-                            menuPortalTarget={document.body}
-                            menuPosition={'fixed'}
-                            menuShouldScrollIntoView={true}
-                            
-                            
-                            styles={{
-                                
-                                control: (baseStyles, state) => ({
-                                    ...baseStyles,
-                                    
-                                    backgroundColor: '#f5f5f5',
-                                    borderBottom: 'solid #7E7E7E 2px',
-                                    borderTop: 'none',
-                                    borderLeft: 'none',
-                                    borderRight: 'none',
-                                    width: '28vh',
-                                    borderRadius: '8px',
-                                    
-                                }),
-                                
-                                menu: (baseStyles, state) => ({
-                                    ...baseStyles,
-                                    color: 'black',
-                                    zIndex: 9999,
-                                    borderRadius: '8px'
-                                }),
-                                menuList: (baseStyles, state) => ({
-                                    ...baseStyles,
-                                    maxHeight: '115px',  
-                                    overflowY: 'auto',
-                                    backgroundColor: '#f5f5f5',
-                                    borderRadius: '8px'
-                                    
-                                }),
-                                option: (baseStyles, state) => ({
-                                    ...baseStyles,
-                                    backgroundColor: state.isFocused ? '#FF9966' : '#f5f5f5', // Change hover color
-                                    color: 'black',
-                                    cursor: 'pointer',
-                                }),
-                                
-                            }}    
-                        />
-                        
-                        
-                    </InfoRow>
+                  <InfoRow>
+                      <FieldLabel>Graduation Year</FieldLabel>
+                      <Select 
+                          options={options} 
+                          placeholder="Select or type..."
+                          menuPlacement='auto'
+                          menuPortalTarget={document.body}
+                          menuPosition={'fixed'}
+                          menuShouldScrollIntoView={true}
+                          
+                          
+                          styles={{
+                              
+                              control: (baseStyles, state) => ({
+                                  ...baseStyles,
+                                  
+                                  backgroundColor: '#f5f5f5',
+                                  borderBottom: 'solid #7E7E7E 2px',
+                                  borderTop: 'none',
+                                  borderLeft: 'none',
+                                  borderRight: 'none',
+                                  width: '28vh',
+                                  borderRadius: '8px',
+                                  
+                              }),
+                              
+                              menu: (baseStyles, state) => ({
+                                  ...baseStyles,
+                                  color: 'black',
+                                  zIndex: 9999,
+                                  borderRadius: '8px'
+                              }),
+                              menuList: (baseStyles, state) => ({
+                                  ...baseStyles,
+                                  maxHeight: '115px',  
+                                  overflowY: 'auto',
+                                  backgroundColor: '#f5f5f5',
+                                  borderRadius: '8px'
+                                  
+                              }),
+                              option: (baseStyles, state) => ({
+                                  ...baseStyles,
+                                  backgroundColor: state.isFocused ? '#FF9966' : '#f5f5f5', // Change hover color
+                                  color: 'black',
+                                  cursor: 'pointer',
+                              }),
+                              
+                          }}    
+                      />
+                      
+                      
+                  </InfoRow>
                 </FormContainer>
                 
             </ModalContainer>
@@ -203,6 +203,7 @@ const ModalOverlay = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index:10;
 `;
     
 const ModalContainer = styled.div`
@@ -214,6 +215,7 @@ const ModalContainer = styled.div`
     border-radius: 10px;
     position: relative;
     flex-shrink:0;
+    z-index:5;
 `;
 
 const FormContainer = styled.div`

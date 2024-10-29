@@ -126,6 +126,7 @@ const ProfileImage = styled.img`
     width: 100%;
     height: 100%;
     object-fit: cover;
+    
 `;
 
 
@@ -282,8 +283,9 @@ const EditButton = styled.button`
     color: black; 
     border: 1px solid black; 
     border-radius: 10px; 
+    z-index: 2;
     cursor: pointer;
-  
+    
 `;
 
 const ResumeButton = styled.button`
