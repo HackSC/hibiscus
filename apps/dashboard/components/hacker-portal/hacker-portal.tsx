@@ -307,7 +307,8 @@ export function HackerPortal({ isEventOpen, appsOpen }: HackerPortalProps) {
           <Heading>HackSC 2024 Application</Heading>
           <TextBody>
             Ready for another fun year of hacking? Join us at our SoCal Tech
-            Week 24 hour hackathon!
+            Week 24 hour hackathon! While the application deadline has passed,
+            you can still join our waitlist.
           </TextBody>
 
           <HackSCGuy style={{ marginBottom: -30, zIndex: 1, marginTop: 30 }} />
@@ -316,7 +317,7 @@ export function HackerPortal({ isEventOpen, appsOpen }: HackerPortalProps) {
             passHref
             anchortagpropsoverride={{ target: '_self' }}
           >
-            <RedButton>Start Application</RedButton>
+            <RedButton>Join the Waitlist</RedButton>
           </Link>
         </CenterContainer>
       </Container>
@@ -329,9 +330,8 @@ export function HackerPortal({ isEventOpen, appsOpen }: HackerPortalProps) {
         <CenterContainer>
           <HackSCGuy />
           <Heading3>
-            Your application has been submitted! Our team is currently reviewing
-            applications and will be sending out the acceptances in phases after
-            the application period closes.
+            Your application has been submitted! We will get back to you a few
+            days before the event in the case that a spot opens up.
           </Heading3>
         </CenterContainer>
       </Container>
