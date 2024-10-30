@@ -239,7 +239,50 @@ export function HackerPortal({ isEventOpen, appsOpen }: HackerPortalProps) {
   //   </>
   // );
 
-  const { user } = useHibiscusUser();
+  const [modalOpen, setModalOpen] = useState(false);
+  const { user, updateUser } = useHibiscusUser();
+  const closeModal = () => setModalOpen(false);
+  const [choice, setChoice] = useState<RSVPChoice | null>(null);
+  const { supabase: hbc } = useHibiscusSupabase();
+  const client = hbc.getClient();
+
+  const DeclineSpotContent = () => (
+    <GrayBox
+      style={{
+        maxWidth: '30rem',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '20px',
+        background: 'white',
+        color: '#ff6347',
+        borderColor: '#ffb1a3',
+      }}
+    >
+      <div>
+        <H2>Are you sure?</H2>
+        <Text>
+          Once submitted, you confirm that you will not be able to join SoCal
+          Tech Week. This action is irreversible.
+        </Text>
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <RedButton
+          color="red"
+          onClick={async (e) => {
+            e.stopPropagation();
+            setModalOpen(false);
+            await client
+              .from('user_profiles')
+              .update({ attendance_confirmed: false })
+              .eq('user_id', user.id);
+            updateUser({ attendanceConfirmed: false });
+          }}
+        >
+          CONFIRM
+        </RedButton>
+      </div>
+    </GrayBox>
+  );
 
   if (user === null) {
     return (
@@ -251,7 +294,7 @@ export function HackerPortal({ isEventOpen, appsOpen }: HackerPortalProps) {
     );
   }
 
-  if (user.applicationId === undefined || user.applicationId === null) {
+  if (user.applicationStatus == ApplicationStatus.NOT_APPLIED) {
     return (
       <Container>
         <Stars>
@@ -264,7 +307,8 @@ export function HackerPortal({ isEventOpen, appsOpen }: HackerPortalProps) {
           <Heading>HackSC 2024 Application</Heading>
           <TextBody>
             Ready for another fun year of hacking? Join us at our SoCal Tech
-            Week 24 hour hackathon!
+            Week 24 hour hackathon! While the application deadline has passed,
+            you can still join our waitlist.
           </TextBody>
 
           <HackSCGuy style={{ marginBottom: -30, zIndex: 1, marginTop: 30 }} />
@@ -273,24 +317,82 @@ export function HackerPortal({ isEventOpen, appsOpen }: HackerPortalProps) {
             passHref
             anchortagpropsoverride={{ target: '_self' }}
           >
-            <RedButton>Start Application</RedButton>
+            <RedButton>Join the Waitlist</RedButton>
           </Link>
         </CenterContainer>
       </Container>
     );
   }
 
-  return (
-    <Container>
-      <CenterContainer>
-        <Heading3>
-          Your application has been submitted! Our team is currently reviewing
-          applications and will be sending out the acceptances in phases after
-          the application period closes.
-        </Heading3>
-      </CenterContainer>
-    </Container>
-  );
+  if (user.applicationStatus == ApplicationStatus.IN_REVIEW) {
+    return (
+      <Container>
+        <CenterContainer>
+          <HackSCGuy />
+          <Heading3>
+            Your application has been submitted! We will get back to you a few
+            days before the event in the case that a spot opens up.
+          </Heading3>
+        </CenterContainer>
+      </Container>
+    );
+  }
+
+  if (
+    user.applicationStatus == ApplicationStatus.ADMITTED &&
+    user.attendanceConfirmed == null
+  ) {
+    return (
+      <Container>
+        <CenterContainer>
+          <CongratsMessage />
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <RedButton
+              onClick={() => {
+                setChoice('DECLINE');
+                setModalOpen(true);
+              }}
+            >
+              DECLINE YOUR SPOT
+            </RedButton>
+            <GreenButton
+              onClick={() => {
+                setChoice('ACCEPT');
+                setModalOpen(true);
+              }}
+            >
+              CONFIRM YOUR SPOT
+            </GreenButton>
+          </div>
+        </CenterContainer>
+
+        <Modal isOpen={modalOpen} closeModal={closeModal}>
+          {choice === 'ACCEPT' && <RSVPForm closeModal={closeModal} />}
+          {choice === 'DECLINE' && <DeclineSpotContent />}
+        </Modal>
+      </Container>
+    );
+  }
+
+  if (user.attendanceConfirmed === true) {
+    return (
+      <Container>
+        <CenterContainer>
+          <ConfirmedPlaceholder />
+        </CenterContainer>
+      </Container>
+    );
+  }
+
+  if (user.attendanceConfirmed === false) {
+    return (
+      <Container>
+        <CenterContainer>
+          <DeclinedPlaceholder />
+        </CenterContainer>
+      </Container>
+    );
+  }
 }
 
 export default HackerPortal;
@@ -361,7 +463,39 @@ const RedButton = styled.button`
     transition: 0.1s;
   }
   :active {
-    background: #ff6347;
+    background: #ffb1a3;
+  }
+`;
+
+const GreenButton = styled.button`
+  padding: 12px 40px 12px 40px;
+  border-radius: 8px;
+  border: 1px solid black;
+
+  width: fit-content;
+  height: 45px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background: #ddfc75;
+  //fonts
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 36px;
+  text-align: center;
+  color: black;
+  :hover {
+    background: #e5fdc7;
+    box-shadow: 0px 0px 5px rgba(239, 118, 118, 0.5);
+    cursor: pointer;
+    transition: 0.1s;
+  }
+  :active {
+    background: #ddfc75;
   }
 `;
 

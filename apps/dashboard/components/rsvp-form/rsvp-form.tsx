@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { H2, Text } from '@hibiscus/ui';
+import { H2, H3, Text } from '@hibiscus/ui';
 import { GrayBox } from '../gray-box/gray-box';
 import { Button, Checkbox, DatePicker } from '@hibiscus/ui-kit-2023';
 import { useFormik } from 'formik';
@@ -21,33 +21,33 @@ interface Props {
 }
 
 function RSVPForm({ closeModal }: Props) {
-  const [discordToken, setDiscordToken] = useState<string | null>(null);
+  // const [discordToken, setDiscordToken] = useState<string | null>(null);
   const { user, updateUser } = useHibiscusUser();
   const { supabase } = useHibiscusSupabase();
 
   const discordInvite = getEnv().Hibiscus.Discord.InviteUrl;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (user != null) {
-        try {
-          const token = await axios.get(`/api/discord/${user.id}`);
-          setDiscordToken(token.data.token);
-        } catch {
-          setDiscordToken('ERROR');
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (user != null) {
+  //       try {
+  //         const token = await axios.get(`/api/discord/${user.id}`);
+  //         setDiscordToken(token.data.token);
+  //       } catch {
+  //         setDiscordToken('ERROR');
+  //       }
+  //     }
+  //   };
 
-    fetchData();
-  }, [user]);
+  //   fetchData();
+  // }, [user]);
 
   const formik = useFormik({
     initialValues: {
       dob: '',
       acknowledgementInPerson: false,
       acknowledgementDiscord: false,
-      acknowledgementWaiver: false,
+      // acknowledgementWaiver: false,
       acknowledgementPacket: false,
     },
 
@@ -59,7 +59,7 @@ function RSVPForm({ closeModal }: Props) {
       dob: Yup.date()
         .required('This field is required')
         .max(
-          new Date(2005, 11, 4),
+          new Date(2006, 11, 8),
           'You must be 18 years old or above to join this event'
         )
         .typeError('Invalid date provided'),
@@ -68,9 +68,9 @@ function RSVPForm({ closeModal }: Props) {
         .isTrue('This field is required')
         .required('This field is required'),
 
-      acknowledgementWaiver: Yup.boolean()
-        .isTrue('This field is required')
-        .required('This field is required'),
+      // acknowledgementWaiver: Yup.boolean()
+      //   .isTrue('This field is required')
+      //   .required('This field is required'),
 
       acknowledgementPacket: Yup.boolean()
         .isTrue('This field is required')
@@ -92,7 +92,7 @@ function RSVPForm({ closeModal }: Props) {
           throw error;
         }
         updateUser({ attendanceConfirmed: true });
-        toast.success('Confirmation received! Welcome to HackSC X 🌺', {
+        toast.success('Confirmation received! Welcome to SoCal Tech Week 🌺', {
           icon: '🎉',
         });
         formikHelpers.setSubmitting(false);
@@ -110,17 +110,17 @@ function RSVPForm({ closeModal }: Props) {
       <OwnGrayBox>
         {discordInvite ? (
           <>
-            <H2>Please confirm some details</H2>
+            <Heading3>Please confirm some details</Heading3>
 
             <QuestionWrap>
               <label htmlFor="dob">
-                <Text>
+                <TextBody>
                   Date of birth (remember to bring your government ID to verify
                   this):
                   <SpanRed>*</SpanRed>
-                </Text>
+                </TextBody>
               </label>
-              <DatePicker
+              <DatePickerOwn
                 name="dob"
                 id="dob"
                 valueOneLineText={formik.values.dob}
@@ -137,15 +137,17 @@ function RSVPForm({ closeModal }: Props) {
 
             <QuestionWrap>
               <Checkbox
+                color="red"
                 onInput={(newVal) => {
                   formik.setFieldValue('acknowledgementInPerson', newVal);
                 }}
                 label={
-                  <Text>
-                    By RSVPing, I confirm that I will be attending HackSC X
-                    in-person. Below are the opening and closing ceremony times:
+                  <TextBody>
+                    By RSVPing, I confirm that I will be attending SoCal Tech
+                    Week in-person. Below are the opening and closing ceremony
+                    times:
                     <SpanRed>*</SpanRed>
-                  </Text>
+                  </TextBody>
                 }
               />
               {formik.touched.acknowledgementInPerson &&
@@ -156,25 +158,30 @@ function RSVPForm({ closeModal }: Props) {
             <div
               style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}
             >
-              <Text>
+              <TextBody>
                 <span style={{ fontWeight: 'bold' }}>Opening Ceremony:</span>
-                <Text>Sat, Nov 4 @ 1:00pm - MG Studio</Text>
-              </Text>
-              <Text>
+                <TextBody>
+                  Sat, Nov 9 @ 12:00pm - RTCC Trojan Grand Ballroom
+                </TextBody>
+              </TextBody>
+              <TextBody>
                 <span style={{ fontWeight: 'bold' }}>Closing Ceremony:</span>
-                <Text>Sun, Nov 5 @ 4:00pm - MG Studio</Text>
-              </Text>
+                <TextBody>
+                  Sun, Nov 10 @ 4:30pm - RTCC Trojan Grand Ballroom
+                </TextBody>
+              </TextBody>
             </div>
 
             <QuestionWrap>
               <Checkbox
+                color="red"
                 onInput={(newVal) => {
                   formik.setFieldValue('acknowledgementDiscord', newVal);
                 }}
                 label={
-                  <Text>
+                  <TextBody>
                     I confirm that I have joined the official Discord server for
-                    HackSC X at{' '}
+                    SoCal Tech Week at{' '}
                     <a
                       href={`https://discord.gg/${discordInvite}`}
                       target="_blank"
@@ -185,28 +192,28 @@ function RSVPForm({ closeModal }: Props) {
                       }}
                     >
                       discord.gg/{discordInvite}
-                    </a>{' '}
-                    and verified my account
+                    </a>
                     <SpanRed>*</SpanRed>
-                  </Text>
+                  </TextBody>
                 }
               />
-              <Text>
+              {/* <TextBody>
                 Your Discord verification token is{' '}
                 {discordToken ? discordToken : '...Loading...'}
-              </Text>
+              </TextBody> */}
               {formik.touched.acknowledgementDiscord && (
                 <SpanRed>{formik.errors.acknowledgementDiscord}</SpanRed>
               )}
             </QuestionWrap>
 
-            <QuestionWrap>
+            {/* <QuestionWrap>
               <Checkbox
+                color="red"
                 onInput={(newVal) => {
                   formik.setFieldValue('acknowledgementWaiver', newVal);
                 }}
                 label={
-                  <Text>
+                  <TextBody>
                     I confirm that I have completed and signed the{' '}
                     <a
                       href={getEnv().Hibiscus.RSVPForm.WaiverURL}
@@ -220,22 +227,23 @@ function RSVPForm({ closeModal }: Props) {
                       HackSC waiver
                     </a>
                     <SpanRed>*</SpanRed>
-                  </Text>
+                  </TextBody>
                 }
               />
 
               {formik.touched.acknowledgementWaiver && (
                 <SpanRed>{formik.errors.acknowledgementWaiver}</SpanRed>
               )}
-            </QuestionWrap>
+            </QuestionWrap> */}
 
             <QuestionWrap>
               <Checkbox
+                color="red"
                 onInput={(newVal) => {
                   formik.setFieldValue('acknowledgementPacket', newVal);
                 }}
                 label={
-                  <Text>
+                  <TextBody>
                     I confirm that I have read the{' '}
                     <a
                       href={getEnv().Hibiscus.RSVPForm.HackerPacketURL}
@@ -249,7 +257,7 @@ function RSVPForm({ closeModal }: Props) {
                       Hacker Welcome Packet
                     </a>
                     <SpanRed>*</SpanRed>
-                  </Text>
+                  </TextBody>
                 }
               />
 
@@ -258,8 +266,7 @@ function RSVPForm({ closeModal }: Props) {
               )}
             </QuestionWrap>
 
-            <Button
-              color="blue"
+            <RedButton
               type="submit"
               onClick={(e) => {
                 e.preventDefault();
@@ -267,10 +274,10 @@ function RSVPForm({ closeModal }: Props) {
               }}
             >
               SUBMIT AND CONFIRM YOUR SPOT!
-            </Button>
+            </RedButton>
           </>
         ) : (
-          <H2>Loading...</H2>
+          <Heading3>Loading...</Heading3>
         )}
       </OwnGrayBox>
     </form>
@@ -289,6 +296,11 @@ const OwnGrayBox = styled(GrayBox)`
   align-items: center;
   gap: 20px;
   padding: 30px;
+  background: white;
+  border-color: #ffb1a3;
+
+  // -ms-overflow-style: none;
+  // scrollbar-width: none;
 `;
 
 const QuestionWrap = styled.div`
@@ -296,4 +308,55 @@ const QuestionWrap = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 10px;
+`;
+
+const Heading3 = styled(H3)`
+  color: #ff6347;
+`;
+
+const TextBody = styled.p`
+  font-family: Inter;
+  font-size: 16px;
+  font-weight: 400;
+  text-align: center;
+  color: #ff6347;
+  margin: 0;
+`;
+
+const RedButton = styled.button`
+  padding: 12px 40px 12px 40px;
+  border-radius: 8px;
+  border: 1px solid black;
+
+  width: fit-content;
+  height: 45px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background: #ffb1a3;
+  //fonts
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 36px;
+  text-align: center;
+  color: black;
+  :hover {
+    background: #ffded9;
+    box-shadow: 0px 0px 5px rgba(239, 118, 118, 0.5);
+    cursor: pointer;
+    transition: 0.1s;
+  }
+  :active {
+    background: #ffb1a3;
+  }
+`;
+
+const DatePickerOwn = styled(DatePicker)`
+  color: #ff6347;
+  background: white;
+  border-color: #ff6347;
 `;
