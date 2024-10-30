@@ -10,6 +10,9 @@ import { HibiscusRole } from '@hibiscus/types';
 import { Colors2023 } from '@hibiscus/styles';
 import { useMediaQuery } from 'react-responsive';
 import StyledTopNav from '../components/nav/top-nav';
+import SideNav from '../components/nav/side-nav2';
+import { MdOutlineCalendarViewMonth, MdStarOutline } from 'react-icons/md';
+import { FaRegUserCircle } from 'react-icons/fa';
 
 export type ThemelessLayoutProps = React.PropsWithChildren;
 
@@ -29,6 +32,16 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
     if (user.role === HibiscusRole.SPONSOR) return Colors.Red.Redward;
     return Colors.Yellow.Yuhlow;
   }, [user]);
+  const navbarOptions = useMemo(() => {
+    if (user == null) return [];
+    if (user.role === HibiscusRole.HACKER)
+      return [
+        { name: 'Events', url: '/events', image: MdOutlineCalendarViewMonth },
+        { name: 'Leaderboard', url: '/leaderboard', image: MdStarOutline },
+        { name: 'Profile', url: '/profile', image: FaRegUserCircle },
+      ];
+    return [];
+  }, [user]);
 
   if (user == null) {
     return <></>;
@@ -41,7 +54,7 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
     </VerticalMainPageWrapper>
   ) : (
     <MainPageWrapper style={{ backgroundColor: color }}>
-      <StyledSideNav />
+      <SideNav options={navbarOptions} />
       <Content>
         <RightUtilityContainer>
           <UserText>{user.tag}</UserText>
