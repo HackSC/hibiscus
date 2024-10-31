@@ -9,18 +9,76 @@ import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import { MutatingDots } from 'react-loader-spinner';
 import { StyledAuthCard } from '../auth-components/styled-card';
 import { Input } from '../auth-components/styled-input';
-import {
-  Button,
-  ColorSpanBold,
-  OneLinePassword,
-  OneLineText,
-} from '@hibiscus/ui-kit-2023';
+import { Button, ColorSpanBold } from '@hibiscus/ui-kit-2023';
+import { AuthError, Session, User } from '@supabase/supabase-js';
+import useLoadGoogle from '../../hooks/useLoadGoogle';
+
+type SupabaseRes =
+  | {
+      user: User;
+      session: Session;
+    }
+  | {
+      user: null;
+      session: null;
+    };
 
 export function LoginCard() {
   const [hideErrorMessage, setHideErrorMessage] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [loggedInState, setLoggedInState] = useState('');
   const { supabase } = useHibiscusSupabase();
+
+  const GoogleCard = useLoadGoogle();
+
+  window.handleSignInWithGoogle = async (response) => {
+    console.log(response);
+    const { data, error } = await supabase.getClient().auth.signInWithIdToken({
+      provider: 'google',
+      token: response.credential,
+    });
+
+    console.log(data, error);
+
+    const email = data.user.email!;
+    const name = data.user.user_metadata.full_name;
+    const first_name = name.split(' ')[0];
+    const last_name = name.split(' ')[1] ? name.split(' ')[1] : '';
+
+    if (!email) {
+      setErrorMessage('Email not found');
+      setHideErrorMessage(false);
+    }
+    console.log(email);
+
+    const { data: profileData, error: profileError } = await supabase
+      .getClient()
+      .from('user_profiles')
+      .select()
+      .eq('email', email);
+
+    if (profileError) {
+      console.error(profileError);
+    }
+
+    if (profileData && profileData.length === 0) {
+      console.log('inserting');
+      const res = await fetch('/api/googleSignUp', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: email,
+          first_name: first_name,
+          last_name: last_name,
+          user_id: data.user.id,
+        }),
+      });
+      if (res.status !== 200) {
+        console.error('Failed to insert user profile');
+      }
+    }
+
+    await signIn(data, error);
+  };
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -30,6 +88,10 @@ export function LoginCard() {
 
     const { data, error } = await supabase.signInWithPassword(email, password);
 
+    await signIn(data, error);
+  }
+
+  async function signIn(data: SupabaseRes, error: AuthError) {
     if (error) {
       if (typeof error === 'object' && error !== null && 'message' in error) {
         const message = error.message;
@@ -85,6 +147,7 @@ export function LoginCard() {
         </StyledErrorText>
         <Button color="blue">SIGN IN</Button>
       </StyledForm>
+      <GoogleCard />
       <GrayLink href="/reset-email">Forgot Password?</GrayLink>
       <GrayLink href="/signup">Create a HackSC account</GrayLink>
 
