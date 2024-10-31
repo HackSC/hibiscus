@@ -8,15 +8,11 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import GrayLink from '../gray-link/gray-link';
 import { MutatingDots } from 'react-loader-spinner';
-import {
-  OneLineText,
-  Button,
-  ColorSpanBold,
-  OneLinePassword,
-} from '@hibiscus/ui-kit-2023';
+import { Button, ColorSpanBold } from '@hibiscus/ui-kit-2023';
 import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import { Input } from '../auth-components/styled-input';
 import { StyledAuthCard } from '../auth-components/styled-card';
+import useLoadGoogle from '../../hooks/useLoadGoogle';
 
 /* eslint-disable-next-line */
 export interface SignUpProps {}
@@ -27,6 +23,61 @@ export function SignUpCard(props: SignUpProps) {
   const [hideErrorMessage, setHideErrorMessage] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
   const [signUpState, setSignUpState] = useState('');
+
+  const GoogleCard = useLoadGoogle();
+
+  window.handleSignInWithGoogle = async (response) => {
+    console.log(response);
+    const { data, error } = await supabase.getClient().auth.signInWithIdToken({
+      provider: 'google',
+      token: response.credential,
+    });
+
+    console.log(data, error);
+
+    const email = data.user.email!;
+    const name = data.user.user_metadata.full_name;
+    const first_name = name.split(' ')[0];
+    const last_name = name.split(' ')[1] ? name.split(' ')[1] : '';
+
+    if (!email) {
+      setErrorMessage('Email not found');
+      setHideErrorMessage(false);
+    }
+    console.log(email);
+
+    const { data: profileData, error: profileError } = await supabase
+      .getClient()
+      .from('user_profiles')
+      .select()
+      .eq('email', email);
+
+    if (profileError) {
+      console.error(profileError);
+    }
+
+    if (profileData && profileData.length === 0) {
+      console.log('inserting');
+      const res = await fetch('/api/googleSignUp', {
+        method: 'POST',
+        body: JSON.stringify({
+          email: email,
+          first_name: first_name,
+          last_name: last_name,
+          user_id: data.user.id,
+        }),
+      });
+      if (res.status !== 200) {
+        console.error('Failed to insert user profile');
+      }
+    }
+
+    setSignUpState('signing up');
+    router.push({
+      pathname: '/verify',
+      query: { email, first_name, last_name },
+    });
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -116,6 +167,7 @@ export function SignUpCard(props: SignUpProps) {
           {errorMessage}
         </StyledErrorText>
         <Button color="blue">SIGN UP</Button>
+        <GoogleCard />
       </StyledForm>
       <GrayLink href="/login">Have an account? Login</GrayLink>
 
