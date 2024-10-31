@@ -22,6 +22,9 @@ export const getEnv = () => {
         anonKey: process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_ANON_KEY,
         serviceKey: process.env.HIBISCUS_SUPABASE_SERVICE_KEY,
       },
+      MongoDB: {
+        URL: process.env.MONGODB_URL,
+      },
       AWS: {
         accessKeyID: process.env.HIBISCUS_AWS_ACCESS_KEY_ID,
         secretAccessKey: process.env.HIBISCUS_AWS_SECRET_ACCESS_KEY,
@@ -45,11 +48,17 @@ export const getEnv = () => {
         HackerAppResponsesTable:
           process.env.HIBISCUS_HACKER_APP_RESPONSES_TABLENAME,
         TallyApps2023XUrl: process.env.NEXT_PUBLIC_TALLY_APPS_2023_X,
+        TallyApps2024Url: process.env.NEXT_PUBLIC_TALLY_APPS_2024,
+        TallyAPIToken: process.env.TALLY_API_MASTER_TOKEN,
       },
       RSVPForm: {
         ResumeStorageBucketName: 'rsvp-resume-hacker-2023',
         WaiverURL: process.env.NEXT_PUBLIC_WAIVER_URL,
         HackerPacketURL: process.env.NEXT_PUBLIC_HACKER_PACKET_URL,
+      },
+      EventService: {},
+      AuthService: {
+        ApiUrl: process.env.EVENT_AUTH_SERVICE_URL,
       },
       FeatureFlag: {
         RedisURL: process.env.HIBISCUS_FEATURE_FLAG_REDIS_URL,
@@ -57,6 +66,7 @@ export const getEnv = () => {
       },
       Events: {
         ApiUrl: process.env.NEXT_PUBLIC_HIBISCUS_EVENTS_API_URL,
+        MasterToken: process.env.EVENT_MASTER_TOKEN,
       },
       Discord: {
         ApiUrl: process.env.NEXT_PUBLIC_DISCORD_API_URL,

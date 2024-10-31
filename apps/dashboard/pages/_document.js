@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-key */
 import Document from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
 
@@ -26,6 +27,18 @@ export default class MyDocument extends Document {
             {sheet.getStyleElement()}
           </>
         ),
+        head: [
+          <link rel="preconnect" href="https://fonts.googleapis.com" />,
+          <link
+            rel="preconnect"
+            href="https://fonts.gstatic.com"
+            crossOrigin="true"
+          />,
+          <link
+            href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&display=swap"
+            rel="stylesheet"
+          />,
+        ],
       };
     } finally {
       sheet.seal();

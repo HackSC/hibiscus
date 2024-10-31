@@ -13,6 +13,8 @@
     "discord-identity-bot": "apps/discord-identity-bot",
     "env": "libs/env",
     "event-service": "apps/event-service",
+    "event-service-next": "apps/event-service-next",
+    "event-service-next-e2e": "apps/event-service-next-e2e",
     "hackform-client": "libs/hackform-client",
     "hibiscus-supabase-client": "libs/hibiscus-supabase-client",
     "hibiscus-supabase-context": "libs/hibiscus-supabase-context",

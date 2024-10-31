@@ -101,8 +101,9 @@ const Index = () => {
   }, [isSearchOpen]);
 
   const handleSearch = () => {
-    let searchQuery = (document.getElementById('searchbox') as HTMLInputElement)
-      .value;
+    const searchQuery = (
+      document.getElementById('searchbox') as HTMLInputElement
+    ).value;
     setSearchInput(searchQuery);
   };
 
@@ -311,7 +312,7 @@ const Index = () => {
     return <></>;
   }
 
-  if (user?.role !== HibiscusRole.JUDGE) {
+  if (![HibiscusRole.JUDGE, HibiscusRole.ADMIN].includes(user?.role)) {
     window.location.assign(env.Hibiscus.AppURL.portal);
     return <></>;
   }
