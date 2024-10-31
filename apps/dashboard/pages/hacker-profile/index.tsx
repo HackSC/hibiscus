@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import EditProfileCard from '../../components/hacker-profile/edit-profile-card';
 import styled from 'styled-components';
-import Star5 from '../../components/svg/star-5';
+
 import Star4 from '../../components/svg/star-4';
 import { GrEdit } from "react-icons/gr";
 
@@ -20,23 +20,12 @@ export function Index() {
     return (
         
         <LayoutContainer>
-            <Star5Container>
-                <Star5 />
-            </Star5Container>
-            <ProfileBox>
-                
-                <ProfileText style={{ color: 'black' }}>Profile</ProfileText>
-                {!isEditing && (
-                    <EditButton onClick={() => setIsEditing(true)}>
-                        Edit
-                    </EditButton>
-                )}
-                
-            </ProfileBox>
+           
+           
             {isEditing && <EditProfileCard onClose={() => setIsEditing(false)} />}
             <Body>
                 <BasicInfoContainer>
-                    <ProfileContainer>
+                    
                         <ProfileImageContainer>
                             <ProfileImage src={profileImage || ""} />
                             <EditIconButton onClick={() => document.getElementById('imageUpload').click()}>
@@ -52,8 +41,17 @@ export function Index() {
                                 />
                             </EditIconButton>
                         </ProfileImageContainer>
-                    </ProfileContainer>
-                    <UserName>Steven Sun</UserName>
+                    
+                    <ProfileBox>
+                        <UserName>Steven Sun</UserName>
+                        
+                        {!isEditing && (
+                        <EditButton onClick={() => setIsEditing(true)}>
+                            Edit
+                        </EditButton>
+                        )}
+                    </ProfileBox>
+                   
                     <InfoRow>
                         <InfoItem>
                             <Label>School</Label>
@@ -70,7 +68,8 @@ export function Index() {
                     </InfoRow>
 
                 </BasicInfoContainer>
-                <Divider />
+                
+                <DividerLine />
                 <AboutContainer>
                 <Header3>About Me</Header3>
                 <TextBox>Hi I'm a freshman</TextBox>
@@ -83,6 +82,7 @@ export function Index() {
                     Upload Resume
                 </ResumeButton>
             </Body>
+            
             <Star4Container>
                 <Star4 />
             </Star4Container>
@@ -102,15 +102,10 @@ export default Index;
 
 
 
-const ProfileContainer = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-`;
+
 
 const ProfileImageContainer = styled.div`
-  
+    
     width: 150px;
     height: 150px;
     border-radius: 50%;
@@ -156,11 +151,12 @@ const BasicInfoContainer = styled.div`
 `;
 
 const UserName = styled.h2`
-    font-size: 24px;
+    font-size: 28px;
     margin-bottom: 20px;
     color: black;
     font-weight: bold;
     padding-bottom:25px;
+    padding-right:30px;
     margin:0;
 `;
 
@@ -187,13 +183,14 @@ const InfoText = styled.span`
     color: black;
 `;
 
-const Divider = styled.hr`
+const DividerLine = styled.hr`
     width: 85%;
-    border: 0;
-    height: 2px;
-    background-color: #989898;
+    border: 10;
+    height: 10px;
+    color: #989898;
     margin: 20px 0;
-`;
+    z-index:10;
+`
 
 const AboutContainer = styled.div`
     padding-bottom:10px;
@@ -216,15 +213,7 @@ const Star4Container = styled.div`
     
 `;
 
-const Star5Container = styled.div`
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 200px; 
-    overflow: hidden; 
-    display: flex;
-    justify-content: center; 
-`;
+
 
 const Header3 = styled.h3`
     margin-right:10px;
@@ -263,8 +252,8 @@ const ProfileBox = styled.div`
     display: flex;
     
     justify-content: flex-start;
-    align-items: center;
-    padding: 40px;
+    align-items: flex-start;
+    padding-top: 40px;
     background-color: #f5f5f5;
     border-radius: 10px;
     width: 50%;
