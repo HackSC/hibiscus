@@ -1,8 +1,15 @@
 import { getEnv } from '@hibiscus/env';
+import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export async function middleware(req: NextRequest) {
+  console.log(`Middeware ${req.method}`);
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    return NextResponse.json(null, { status: 200 });
+  }
+
   const path = req.nextUrl;
 
   if (
@@ -41,9 +48,29 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const res = await fetch(`${authServiceUrl}/verify-token/${accessToken}`);
-
-  if (res.status !== 200) {
+  const supabase = createClient(
+    getEnv().Hibiscus.Supabase.apiUrl,
+    getEnv().Hibiscus.Supabase.serviceKey
+  );
+  const user = await supabase.auth.getUser(accessToken);
+  if (user.error != null) {
+    req.nextUrl.searchParams.set('status', '401');
+    req.nextUrl.searchParams.set('message', 'Invalid access token');
+    req.nextUrl.pathname = '/api/error';
+    return NextResponse.redirect(req.nextUrl);
+  }
+  const userId = user.data.user?.id;
+  if (!userId) {
+    req.nextUrl.searchParams.set('status', '401');
+    req.nextUrl.searchParams.set('message', 'Invalid access token');
+    req.nextUrl.pathname = '/api/error';
+    return NextResponse.redirect(req.nextUrl);
+  }
+  const { data: userData, error: userError } = await supabase
+    .from('user_profiles')
+    .select('*, role (name)')
+    .eq('user_id', userId);
+  if (userError || userData?.length === 0) {
     req.nextUrl.searchParams.set('status', '401');
     req.nextUrl.searchParams.set('message', 'Invalid access token');
     req.nextUrl.pathname = '/api/error';
@@ -65,6 +92,7 @@ export async function middleware(req: NextRequest) {
     { route: '/comments/id/[commentId]', methods: ['PUT'] },
     { route: '/comments/[projectId]', methods: ['GET'] },
     { route: '/judges/[judgeId]', methods: ['GET'] },
+    { route: '/projects/[verticalId]', methods: ['GET'] },
   ];
 
   const isAccessingJudgeRoute = judgeRoutes.some(({ route, methods }) => {
@@ -73,8 +101,7 @@ export async function middleware(req: NextRequest) {
   });
 
   try {
-    const data = await res.json();
-    const role = data.role;
+    const role = userData[0].role.name;
 
     if (role === 'SUPERADMIN') {
       return NextResponse.next();
