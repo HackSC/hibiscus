@@ -24,8 +24,7 @@
       "defaultConfiguration": "development",
       "options": {
         "buildTarget": "podium-service:build",
-        "dev": true,
-        "port": 8080
+        "dev": true
       },
       "configurations": {
         "development": {
