@@ -1,27 +1,29 @@
 import { supabase } from 'apps/podium-service/libs/supabase';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { method, query, body } = req;
   const verticalId = query.verticalId as string;
   const projectId = query.projectId as string;
 
   switch (method) {
+    case 'OPTIONS':
+      return res.status(200).send('ok');
     case 'PUT':
       const fields = ['name', 'description'];
       const updateVertical = {};
 
       try {
-        const {
-          name,
-          description,
-        } = body;
+        const { name, description } = body;
 
         fields.forEach((field) => {
           if (typeof body[field] !== undefined) {
             updateVertical[field] = body[field];
           }
-        })
+        });
 
         const { error } = await supabase
           .from('verticals')

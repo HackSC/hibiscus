@@ -1,12 +1,17 @@
 import { supabase } from 'apps/podium-service/libs/supabase';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { method, query, body } = req;
   const verticalId = query.verticalId as string;
   const userId = query.userId as string;
 
   switch (method) {
+    case 'OPTIONS':
+      return res.status(200).send('ok');
     case 'GET':
       try {
         const { data, error } = await supabase
@@ -35,7 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           rank: p.ranking.length > 0 ? p.ranking[0].rank : null,
         }));
 
-        return res.json({ projects });
+        return res.json({ rankings: projects });
       } catch (error) {
         return res.status(500).json({ error: 'Internal Server Error' });
       }

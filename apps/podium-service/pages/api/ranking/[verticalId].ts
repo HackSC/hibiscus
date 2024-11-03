@@ -3,23 +3,30 @@ import { isLocked } from 'apps/podium-service/libs/isLocked';
 import { supabase } from 'apps/podium-service/libs/supabase';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { method, query, body } = req;
   const verticalId = query.verticalId as string;
 
   switch (method) {
+    case 'OPTIONS':
+      return res.status(200).send('ok');
     case 'GET':
       try {
         // If the vertical is not locked, then calculate the overall rankings first
         if (!isLocked(verticalId)) {
           calculateRankings(verticalId);
         }
-        
+
         const { data, error } = await supabase
           .from('projects')
-          .select(`*, 
+          .select(
+            `*, 
             ranking_final( rank ), 
-            verticals( name )`)
+            verticals( name )`
+          )
           .eq('vertical_id', verticalId);
 
         if (error) {

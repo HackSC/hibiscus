@@ -1,10 +1,15 @@
 import { supabase } from 'apps/podium-service/libs/supabase';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { method, body } = req;
 
   switch (method) {
+    case 'OPTIONS':
+      return res.status(200).send('ok');
     case 'GET':
       try {
         const { data, error } = await supabase.from('verticals').select('*');
@@ -31,7 +36,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       try {
         const { name, description } = body;
         if (!name || typeof name !== 'string') {
-          return res.status(400).json({ error: 'Invalid request! Name is required and must be a string.'});
+          return res.status(400).json({
+            error: 'Invalid request! Name is required and must be a string.',
+          });
         }
 
         const { error } = await supabase
