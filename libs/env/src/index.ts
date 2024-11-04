@@ -22,6 +22,9 @@ export const getEnv = () => {
         anonKey: process.env.NEXT_PUBLIC_HIBISCUS_SUPABASE_ANON_KEY,
         serviceKey: process.env.HIBISCUS_SUPABASE_SERVICE_KEY,
       },
+      MongoDB: {
+        URL: process.env.MONGODB_URL,
+      },
       AWS: {
         accessKeyID: process.env.HIBISCUS_AWS_ACCESS_KEY_ID,
         secretAccessKey: process.env.HIBISCUS_AWS_SECRET_ACCESS_KEY,
@@ -45,6 +48,8 @@ export const getEnv = () => {
         HackerAppResponsesTable:
           process.env.HIBISCUS_HACKER_APP_RESPONSES_TABLENAME,
         TallyApps2023XUrl: process.env.NEXT_PUBLIC_TALLY_APPS_2023_X,
+        TallyApps2024Url: process.env.NEXT_PUBLIC_TALLY_APPS_2024,
+        TallyAPIToken: process.env.TALLY_API_MASTER_TOKEN,
       },
       RSVPForm: {
         ResumeStorageBucketName: 'rsvp-resume-hacker-2023',

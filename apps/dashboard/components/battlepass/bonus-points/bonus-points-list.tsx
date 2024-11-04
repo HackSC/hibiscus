@@ -1,7 +1,6 @@
 import { H3, Modal, Text, Link } from '@hibiscus/ui';
 import { Button } from '@hacksc/sctw-ui-kit';
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { useBattlepassAPI } from '../../../hooks/use-battlepass-api/use-battlepass-api';
 import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
 import { GrayBox } from '../../gray-box/gray-box';
@@ -19,46 +18,51 @@ function BattlepassBonusPointsList({ items }: Props) {
   const { user } = useHibiscusUser();
 
   return (
-    <Div>
+    <div className="border rounded-lg p-[30px]">
       <Modal
         isOpen={open}
         closeModal={() => {
           setOpen(false);
         }}
       >
-        <GrayBox style={{ maxWidth: '30rem', gap: '10px', padding: '30px' }}>
-          <H3 style={{ fontWeight: 'bold' }}>{chosenBP?.title}</H3>
-          <Text>
-            <span style={{ fontWeight: 'bold', textDecoration: 'underline' }}>
-              POINTS
-            </span>
-            : {chosenBP?.points}
-          </Text>
-          <Text>{chosenBP?.description}</Text>
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <div className="flex flex-col gap-[2rem] w-[30rem] p-[30px] bg-white rounded-[10px] border-solid border-black border-[1px]">
+          <h2 className="text-lg font-bold m-0 text-theme-redward">
+            {chosenBP?.title}
+          </h2>
+          <div>
+            <p className="text-base m-0 font-bold text-theme-redward">Points</p>
+            <p className="text-base m-0">{chosenBP?.points}</p>
+          </div>
+          <div>
+            <p className="text-base m-0 font-bold text-theme-redward">
+              Description
+            </p>
+            <p className="text-base m-0">{chosenBP?.description}</p>
+          </div>
+          <div className="flex justify-end">
             <Link href={chosenBP?.link ?? ''} passHref>
-              <Button color="yellow">SUBMIT FORM</Button>
+              <button className="bg-theme-redward px-[16px] py-[8px] border-black border-[1px] rounded-[8px] text-sm m-0 hover:bg-red-400">
+                SUBMIT FORM
+              </button>
             </Link>
           </div>
-        </GrayBox>
+        </div>
       </Modal>
-      {items.map((item, i) => (
-        <BonusPointsItem
-          data={item}
-          key={i}
-          handleClick={async () => {
-            setChosenBP(item);
-            setOpen(true);
-            await battlepassApi.setBonusPointPending(user.id, item.id);
-          }}
-        />
-      ))}
-    </Div>
+      <div className="space-y-[30px]">
+        {items.map((item, i) => (
+          <BonusPointsItem
+            data={item}
+            key={i}
+            handleClick={async () => {
+              setChosenBP(item);
+              setOpen(true);
+              await battlepassApi.setBonusPointPending(user.id, item.id);
+            }}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
 
 export default BattlepassBonusPointsList;
-
-const Div = styled(GrayBox)`
-  gap: 10px;
-`;

@@ -10,7 +10,8 @@
       "defaultConfiguration": "production",
       "options": {
         "root": "apps/dashboard",
-        "outputPath": "dist/apps/dashboard"
+        "outputPath": "dist/apps/dashboard",
+        "postcssConfig": "apps/dashboard/postcss.config.js"
       },
       "configurations": {
         "development": {

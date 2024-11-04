@@ -6,40 +6,36 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { getEnv } from '@hibiscus/env';
 import { Button } from '@hibiscus/ui-kit-2023';
+import HackSCGuy from '../svg/hacksc-guy';
 
 export const ConfirmedPlaceholder = () => {
-  const [discordToken, setDiscordToken] = useState<string | null>(null);
+  // const [discordToken, setDiscordToken] = useState<string | null>(null);
   const { user } = useHibiscusUser();
 
   const discordInvite = getEnv().Hibiscus.Discord.InviteUrl;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (user != null) {
-        try {
-          const token = await axios.get(`/api/discord/${user.id}`);
-          setDiscordToken(token.data.token);
-        } catch {
-          setDiscordToken('ERROR');
-        }
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     if (user != null) {
+  //       try {
+  //         const token = await axios.get(`/api/discord/${user.id}`);
+  //         setDiscordToken(token.data.token);
+  //       } catch {
+  //         setDiscordToken('ERROR');
+  //       }
+  //     }
+  //   };
 
-    fetchData();
-  }, [user]);
+  //   fetchData();
+  // }, [user]);
 
   return (
     <Container>
-      <Image
-        alt="Airplane postcard illustration"
-        src="/hackform-illustrations/postcard-plane.svg"
-        width={200}
-        height={200}
-      />
-      <H1>You have confirmed your spot for HackSC X!</H1>
-      <H3>We look forward to seeing you 🌺</H3>
+      <HackSCGuy />
+      <Heading>You have confirmed your spot for SoCal Tech Week!</Heading>
+      <TextBody>We look forward to seeing you 🌺</TextBody>
       <br />
-      <H3>
+      {/* <TextBody>
         If you haven&apos;t already, please complete and sign the{' '}
         <a
           href={getEnv().Hibiscus.RSVPForm.WaiverURL}
@@ -53,11 +49,11 @@ export const ConfirmedPlaceholder = () => {
           HackSC waiver
         </a>{' '}
         as soon as possible!
-      </H3>
-      <br />
-      <H3>
-        If you haven&apos;t already, join our official HackSC X Discord server
-        at{' '}
+      </TextBody>
+      <br /> */}
+      <TextBody>
+        If you haven&apos;t already, join our official SoCal Tech Week Discord
+        server at{' '}
         <a
           href={`https://discord.gg/${discordInvite}`}
           target="_blank"
@@ -69,23 +65,22 @@ export const ConfirmedPlaceholder = () => {
         >
           discord.gg/{discordInvite}
         </a>{' '}
-        and verify your account by following the provided instructions!
-      </H3>
-      <H3>
+      </TextBody>
+      {/* <H3>
         Your Discord verification token is{' '}
         {discordToken ? discordToken : '...Loading...'}
-      </H3>
+      </H3> */}
       <br />
 
-      <H3>Review the Hacker Welcome Packet below!</H3>
+      <TextBody>Review the Hacker Welcome Packet below!</TextBody>
       <a
         href={getEnv().Hibiscus.RSVPForm.HackerPacketURL}
         target="_blank"
         rel="noreferrer"
       >
-        <Button color="black" style={{ marginTop: '10px' }}>
+        <RedButton color="black" style={{ marginTop: '10px' }}>
           Hacker Welcome Packet
-        </Button>
+        </RedButton>
       </a>
     </Container>
   );
@@ -94,3 +89,53 @@ export const ConfirmedPlaceholder = () => {
 export default ConfirmedPlaceholder;
 
 const Container = styled.div``;
+
+const Heading = styled.h1`
+  font-family: Inter;
+  font-size: 40px;
+  font-weight: 500;
+  letter-spacing: -0.05em;
+  text-align: left;
+  color: #ff6347;
+  margin: 0 0 1rem 0;
+`;
+
+const TextBody = styled.p`
+  font-family: Inter;
+  font-size: 25px;
+  font-weight: 400;
+  line-height: 30.26px;
+  color: #ffb1a3;
+`;
+
+const RedButton = styled.button`
+  padding: 12px 40px 12px 40px;
+  border-radius: 8px;
+  border: 1px solid black;
+
+  width: fit-content;
+  height: 45px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  background: #ffb1a3;
+  //fonts
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 36px;
+  text-align: center;
+  color: black;
+  :hover {
+    background: #ffded9;
+    box-shadow: 0px 0px 5px rgba(239, 118, 118, 0.5);
+    cursor: pointer;
+    transition: 0.1s;
+  }
+  :active {
+    background: #ffb1a3;
+  }
+`;

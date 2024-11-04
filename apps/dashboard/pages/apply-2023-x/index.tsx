@@ -130,7 +130,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const waitlistOpen = await get('APPS_WAITLIST_OPEN_HACKSC_X_2023');
   return {
     props: {
-      appsOpen,
+      appsOpen: true,
       waitlistOpen,
     } as ServerSideProps,
   };

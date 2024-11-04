@@ -46,6 +46,9 @@ Thumbs.db
 .supabase.env
 .vercel
 
+# Nx
+.nx/
+
 # Next.js
 .next
 
@@ -65,5 +68,5 @@ Thumbs.db
 /**/.serverless/
 
 # Chalice
-/**/.chalice/deployments
 /**/.chalice/config.json
+/**/.chalice/deployments

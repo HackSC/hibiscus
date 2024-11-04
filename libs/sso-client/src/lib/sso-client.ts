@@ -36,6 +36,23 @@ export const middlewareHandler =
       return res;
     }
 
+    // Special routes
+    // TODO: rewrite this to make it more generic
+    if (request.nextUrl.pathname.startsWith('/api/tally/')) {
+      const auth_header = request.headers.get('Authorization');
+      if (
+        auth_header !== null &&
+        auth_header.startsWith('Bearer ') &&
+        auth_header.substring(7) === getEnv().Hibiscus.Hackform.TallyAPIToken
+      ) {
+        return NextResponse.next();
+      } else {
+        return NextResponse.redirect(
+          `${getEnv().Hibiscus.AppURL.sso}/api/unauthorized`
+        );
+      }
+    }
+
     let access_token = request.cookies.get(
       getEnv().Hibiscus.Cookies.accessTokenName
     );
