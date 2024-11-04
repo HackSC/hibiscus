@@ -111,7 +111,7 @@ export async function getPinnedEvents(
   const apiUrl = getEnv().Hibiscus.Events.ApiUrl;
 
   try {
-    const res = await axios(`${apiUrl}/events/pinned-events/${userId}`, {
+    const res = await axios(`${apiUrl}/pinned-events/${userId}`, {
       method: 'GET',
       headers: { Authorization: `Bearer ${accessToken}` },
     });
@@ -138,7 +138,7 @@ export async function pinEvent(
   const apiUrl = getEnv().Hibiscus.Events.ApiUrl;
 
   try {
-    const res = await axios(`${apiUrl}/events/pinned-events/${userId}`, {
+    const res = await axios(`${apiUrl}/pinned-events/${userId}`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${accessToken}` },
       data: {
@@ -164,7 +164,7 @@ export async function unpinEvent(
   const apiUrl = getEnv().Hibiscus.Events.ApiUrl;
 
   try {
-    const res = await axios(`${apiUrl}/events/pinned-events/${userId}`, {
+    const res = await axios(`${apiUrl}/pinned-events/${userId}`, {
       method: 'DELETE',
       headers: { Authorization: `Bearer ${accessToken}` },
       data: {

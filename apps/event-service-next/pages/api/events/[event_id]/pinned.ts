@@ -5,6 +5,10 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  if (req.method === 'OPTIONS') {
+    return res.status(200).send('ok');
+  }
+
   if (req.method !== 'GET') {
     res.status(405).json({ error: 'METHOD NOT ALLOWED' });
     return;
