@@ -48,3 +48,12 @@ body {
   }
 }
 `;
+
+export const GlobalStylesSCTW = createGlobalStyle`
+body {
+  background: white;
+  color: black;
+  margin: 0;
+  padding: 0;
+}
+`;

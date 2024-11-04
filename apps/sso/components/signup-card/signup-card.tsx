@@ -17,7 +17,10 @@ import {
 import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import { Input } from '../auth-components/styled-input';
 import { StyledAuthCard } from '../auth-components/styled-card';
-import { BackgroundShapes } from '../colored-shapes/background-shapes'; 
+import { BackgroundShapes } from '../colored-shapes/background-shapes';
+import HackSCGuyDrawing from '../svg/hacksc-guy-drawing';
+import HackSCLogo from '../svg/hacksc-logo';
+import Link from 'next/link';
 
 /* eslint-disable-next-line */
 export interface SignUpProps {}
@@ -78,62 +81,69 @@ export function SignUpCard(props: SignUpProps) {
 
   return (
     <>
-    {/* Add Styled Shapes for page */}
-    <BackgroundShapes></BackgroundShapes>
-    {/* end */}
-    <HackSCTag>HackSC</HackSCTag>
-    <StyledAuthCard>
-      <HeadingContainer>
-        <h1>
-          HackSC
-        </h1>
-        <h2>
-          Create an Account
-        </h2>
-      </HeadingContainer>
-      <StyledForm onSubmit={handleSubmit}>
-        <Input placeholder="first name" type="text" name="firstname" required />
-        <Input placeholder="last name" type="text" name="lastname" required />
-        <Input
-          placeholder="sample@email.edu"
-          type="email"
-          name="email"
-          required
-        />
-        <Input
-          placeholder="password"
-          type="password"
-          name="password"
-          required
-        />
-        <Input
-          placeholder="re-enter password"
-          type="password"
-          name="confirmPassword"
-          required
-        />
-        <StyledErrorText
-          style={{ display: !hideErrorMessage ? 'block' : 'none' }}
-        >
-          {errorMessage}
-        </StyledErrorText>
-        <Button color="beige">SIGN UP</Button>
-      </StyledForm>
-      <GrayLink href="/login">Have an account? Login</GrayLink>
+      {/* Add Styled Shapes for page */}
+      <BackgroundShapes></BackgroundShapes>
+      <StyledAuthCard>
+        <HackSCGuyDrawing />
+        <HeadingContainer>
+          <HackSCLogo />
+          <h2 className="m-0 mb-[10px] text-lg">Create an Account</h2>
+        </HeadingContainer>
+        <StyledForm onSubmit={handleSubmit}>
+          <Input
+            placeholder="first name"
+            type="text"
+            name="firstname"
+            required
+          />
+          <Input placeholder="last name" type="text" name="lastname" required />
+          <Input
+            placeholder="sample@email.edu"
+            type="email"
+            name="email"
+            required
+          />
+          <Input
+            placeholder="password"
+            type="password"
+            name="password"
+            required
+          />
+          <Input
+            placeholder="re-enter password"
+            type="password"
+            name="confirmPassword"
+            required
+          />
+          <StyledErrorText
+            style={{ display: !hideErrorMessage ? 'block' : 'none' }}
+          >
+            {errorMessage}
+          </StyledErrorText>
+          <button
+            type="submit"
+            className="py-[8px] w-[278px] rounded-[8px] border-[1px] bg-red-300 hover:bg-theme-redward"
+          >
+            Create Account
+          </button>
+        </StyledForm>
+        <Link href="/login" className="text-sm underline font-light">
+          Have an account? Sign in
+        </Link>
 
-      {signUpState === 'signing up' ? (
-        <MutatingDots
-          height="100"
-          width="100"
-          color={Colors2023.BLUE.LIGHT}
-          secondaryColor={Colors2023.BLUE.LIGHT}
-          radius="12.5"
-          ariaLabel="mutating-dots-loading"
-        />
-      ) : (
-        ''
-      )}
-    </StyledAuthCard>
+        {signUpState === 'signing up' ? (
+          <MutatingDots
+            height="100"
+            width="100"
+            color={Colors2023.BLUE.LIGHT}
+            secondaryColor={Colors2023.BLUE.LIGHT}
+            radius="12.5"
+            ariaLabel="mutating-dots-loading"
+          />
+        ) : (
+          ''
+        )}
+      </StyledAuthCard>
     </>
   );
 }
@@ -157,36 +167,36 @@ const StyledErrorText = styled(Text)`
 `;
 
 const HackSCTag = styled.div`
-  min-width: 7%; 
+  min-width: 7%;
   min-height: 7%;
-  background: #429FEE;
-  display: flex; 
-  border: 0.5px solid #000000; 
-  justify-content: center; 
-  align-items: center; 
+  background: #429fee;
+  display: flex;
+  border: 0.5px solid #000000;
+  justify-content: center;
+  align-items: center;
   border-radius: 5px;
-  position: fixed; 
-  right: 3.5%; 
-  top: 3%; 
-  font-size: 1.5vw;  
-  color: black; 
-`
+  position: fixed;
+  right: 3.5%;
+  top: 3%;
+  font-size: 1.5vw;
+  color: black;
+`;
 
 const HeadingContainer = styled.div`
-  display:flex; 
-  justify-content: center; 
-  align-items: flex-end; 
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
   > h1 {
-    font-family: 'Hanken Grotesk', sans-serif; 
-    font-size: 48px; 
-    font-weight: 700; 
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
     margin-right: 1px;
   }
-  > h2 {
-    font-family: 'Hanken Grotesk', sans-serif; 
-    font-size: 32px; 
-    font-weight: 400; 
-    line-height: 70px; 
-    margin-left: 1px; 
-  }
+  // > h2 {
+  //   font-family: 'Hanken Grotesk', sans-serif;
+  //   font-size: 32px;
+  //   font-weight: 400;
+  //   line-height: 70px;
+  //   margin-left: 1px;
+  // }
 `;

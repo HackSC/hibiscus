@@ -2,13 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 
 export const BackgroundShapes = () => (
-    <>
-      <BlueCircle />
-      <StyledPinkStar />
-      <SoftStar />
-    </>
-  );
-  
+  <div className="opacity-50">
+    <BlueCircle />
+    <StyledPinkStar />
+    <SoftStar />
+  </div>
+);
 
 // PINK STAR SVG
 
@@ -22,9 +21,9 @@ const PinkStarSvg = styled.svg`
   right: 0;
 
   path {
-    fill: #FDBCB1;
+    fill: #fdbcb1;
     stroke: black;
-    stroke-width: 2;
+    stroke-width: 1;
   }
 `;
 
@@ -34,23 +33,22 @@ const StyledPinkStar = () => (
   </PinkStarSvg>
 );
 
-
 // BLUE CIRCLE SVG
 
 const StyledSVG = styled.svg`
   width: 32%;
-  height: 44%; 
-  max-width: 32%; 
+  height: 44%;
+  max-width: 32%;
   max-height: 44%;
   fill: none;
 
   rect {
     fill: #a4d4fc;
     stroke: black;
-    stroke-width: 2;
+    stroke-width: 1;
   }
-  position: fixed; 
-  left: -2%; 
+  position: fixed;
+  left: -2%;
 `;
 
 const BlueCircle = () => (
@@ -66,16 +64,16 @@ const StyledSoftStar = styled.svg`
   max-width: 20%;
   max-height: 35%;
   fill: none;
-  position: fixed; 
-  left: 17%; 
-  top: 5%; 
-  z-index: 2; 
+  position: fixed;
+  left: 17%;
+  top: 5%;
+  z-index: 2;
 `;
 
 const SoftStartPath = styled.path`
   fill: #ddfc75;
   stroke: #656565;
-  stroke-width: 2;
+  stroke-width: 1;
 `;
 
 const SoftStar = () => (
