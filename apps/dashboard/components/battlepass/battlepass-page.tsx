@@ -50,16 +50,6 @@ function BattlepassPage() {
 
   return (
     <div className="border-neutral-200 border">
-      {/* header */}
-      <div className="space-y-[10px] pb-[20px] border-b mb-[30px]">
-        <h1 className="m-0 text-5xl truncate font-bold text-left">
-          Your Leaderboard
-        </h1>
-        <p className="text-theme-gray text-xs">
-          Check your ranking on the leaderboard and win prizes!
-        </p>
-      </div>
-
       {/* content */}
       <div className="flex space-x-[90px]">
         {/* left column */}
