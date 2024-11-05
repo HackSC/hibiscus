@@ -85,7 +85,7 @@ export const OTPInputSection = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 3rem;
+  // margin-top: 3rem;
 `;
 
 export const HiddenTextInput = styled.input`
@@ -103,11 +103,11 @@ export const OTPInputContainer = styled.button`
 
 export const OTPInputField = styled.div`
   width: 4rem;
-  height: 4rem;
-  border-color: ${Colors2023.GRAY.LIGHT};
-  border-width: 15%;
-  border-width: 2px;
-  border-radius: 10px;
+  height: 4.5rem;
+  // border-color: ${Colors2023.GRAY.LIGHT};
+  // border-width: 15%;
+  border-bottom: dashed 1px black;
+  // border-radius: 10px;
   padding-top: 15px;
   margin-right: 10px;
   @media (max-width: 500px) {
@@ -125,12 +125,11 @@ export const OTPInputField = styled.div`
 `;
 
 export const OTPInputText = styled(Text)`
-  font-size: 22px;
-  font-weight: bold;
+  font-size: 40px;
+  // font-weight: bold;
   text-align: center;
-  color: ${Colors2023.GRAY.LIGHT};
 `;
 
 export const OTPInputFocused = styled(OTPInputField)`
-  border-color: ${Colors2023.BLUE.STANDARD};
+  border-color: ${Colors2023.RED.DARK};
 `;

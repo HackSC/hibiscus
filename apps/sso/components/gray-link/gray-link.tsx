@@ -16,7 +16,10 @@ export function GrayLink(props: GrayLinkProps) {
 export default GrayLink;
 
 const StyledText = styled(Text)`
-  font-size: 1rem;
-  color: ${Colors2023.GRAY.LIGHT};
+  font-size: 16px;
+  font-family: "Hanken Grotesk";
   text-decoration: underline;
+  color: #000000;
+  font-weight: 300;
+  margin-top: 6px;
 `;
