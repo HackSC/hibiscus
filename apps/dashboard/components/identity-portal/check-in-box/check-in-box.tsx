@@ -29,7 +29,7 @@ export function CheckInBox(props: CheckInBoxProps) {
 
   useEffect(() => {
     if (user != null) {
-      checkDiscord(user.id).then((v) => setDiscordVerified(v));
+      // checkDiscord(user.id).then((v) => setDiscordVerified(v));
       console.log(user.waiver_signed);
       setWaiver(user.waiver_signed);
     }

@@ -20,11 +20,11 @@ export function Search({ placeholder, onInput }: searchProps) {
       <OuterDiv>
         <BiSearch
           style={{
-            color: 'gray',
+            color: 'black',
             position: 'relative',
-            top: '6px',
+            // top: '6px',
             right: '8px',
-            fontSize: '1.5em',
+            fontSize: '1em',
           }}
         />
         <Input ref={ref} placeholder={placeholder} />
@@ -38,15 +38,25 @@ export default Search;
 const Input = styled.input`
   all: unset;
   width: 90%;
+  font-size: 12px;
+  color: black;
+
+  ::placeholder {
+    color: black;
+  }
 `;
 
 const OuterDiv = styled.div`
-  background: #313131;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  // background: #313131;
   /* gray/light */
   width: 250px;
-  height: 42px;
-  border: 1.5px solid #f4f4f4;
-  border-radius: 11px;
+  height: 35px;
+  border: 1.5px solid black;
+  border-radius: 5px;
   padding-left: 20px;
 
   font-family: 'Inter';

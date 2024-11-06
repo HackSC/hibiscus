@@ -13,8 +13,13 @@ import { ImCross } from 'react-icons/im';
 import { formatTimestamp } from '../../../common/format-timestamp';
 import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
 import { HibiscusRole } from '@hibiscus/types';
-import { calculateBattlepassProgress } from '../../../common/calculate-battlepass-progress';
+import {
+  BATTLEPASS_LEVEL_POINTS,
+  calculateBattlepassProgress,
+} from '../../../common/calculate-battlepass-progress';
 import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
+import BattlepassPointsBar from 'apps/dashboard/components/battlepass/battlepass-points-bar';
+import { BsExclamationTriangle } from 'react-icons/bs';
 
 const COLUMN_WIDTH = 510;
 const TEAM_MEMBER_ICONS = [
@@ -167,141 +172,90 @@ export function Index() {
 
   return (
     <>
-      <Container>
-        <ColumnSpacedLeft>
-          <BackButton link="/identity-portal/attendee-details-scan" />
+      <div className="flex flex-col gap-[20px]">
+        <h2 className="text-3xl m-0">
+          {user.first_name} {user.last_name}
+        </h2>
 
-          <ColumnSpacedCenter>
-            <UserCardContainer>
-              <GlowSpan
-                color={Colors2023.YELLOW.LIGHT}
-                style={{ fontSize: '2em' }}
-              >
-                {user.first_name} {user.last_name}
-              </GlowSpan>
-              <div>
-                <ItalicText>{user.school ?? 'No school provided'}</ItalicText>
-                <ItalicText>
-                  {user.graduation_year ?? 'No graduation date provided'}
-                </ItalicText>
-                <ItalicText>{user.major ?? 'No major provided'}</ItalicText>
-              </div>
-              <div>
-                <Text>{user.email}</Text>
-              </div>
-              <div
-                style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
-              >
-                <GlowSpan
-                  style={{ letterSpacing: '0.2em', fontWeight: 'bold' }}
-                >
-                  CHECKED IN?
-                </GlowSpan>
-                {user.wristband_id != null ? (
-                  <BiCheckCircle color={Colors2023.GREEN.DARK} size="1.5em" />
-                ) : (
-                  <ImCross color={Colors2023.RED.DARK} size="1em" />
-                )}
-              </div>
-            </UserCardContainer>
-
-            <Button color="yellow" onClick={() => setModalOpen(true)}>
-              {user.wristband_id != null ? 'RE' : ''}ASSIGN BAND
-            </Button>
-          </ColumnSpacedCenter>
-        </ColumnSpacedLeft>
-
-        <ColumnSpacedLeft>
-          <div>
-            <Text>{user.first_name}&apos;s Points</Text>
-            <ProgressBarOuter>
-              <ProgressBarInner progress={battlepassProgress.progress} />
-            </ProgressBarOuter>
-            {user.event_points != null ? (
-              <SpacedRow>
-                <GlowSpan
-                  color={Colors2023.YELLOW.STANDARD}
-                  style={{ letterSpacing: '0.2em', fontWeight: 'bold' }}
-                >
-                  {user.event_points + user.bonus_points} PTS
-                </GlowSpan>
-                {battlepassProgress.nextLevel ? (
-                  <div style={{ display: 'flex', gap: '0.3em' }}>
-                    <span
-                      style={{
-                        color: Colors2023.GRAY.SHLIGHT,
-                        fontSize: '0.9em',
-                      }}
-                    >
-                      Next prize @
-                    </span>
-                    <GlowSpan
-                      color={Colors2023.YELLOW.STANDARD}
-                      style={{ letterSpacing: '0.2em', fontWeight: 'bold' }}
-                    >
-                      {battlepassProgress.nextLevel} PTS
-                    </GlowSpan>
+        <div className="flex flex-row gap-[40px] flex-wrap">
+          <div className="flex flex-col flex-1 gap-[10px]">
+            <div>
+              <h3 className="text-xl m-0">Points</h3>
+              <BattlepassPointsBar
+                rangeMinPoint={battlepassProgress.level}
+                rangeMaxPoint={battlepassProgress.nextLevel}
+                currentPoint={battlepassProgress.points}
+                minLabel={
+                  <div className="text-sm italic">
+                    {battlepassProgress.points + ' pts'}
                   </div>
-                ) : (
-                  <div>Max level</div>
-                )}
-              </SpacedRow>
-            ) : (
-              <Text>ERROR: User has no leaderboard entry</Text>
-            )}
+                }
+                maxLabel={
+                  BATTLEPASS_LEVEL_POINTS[battlepassProgress.level] <
+                  BATTLEPASS_LEVEL_POINTS[3] ? (
+                    <div className="text-theme-gray text-sm">
+                      {'NEXT LEVEL @ '}{' '}
+                      <span className="text-theme-blue italic font-medium">
+                        {battlepassProgress.nextLevel + ' pts'}
+                      </span>
+                    </div>
+                  ) : null
+                }
+              />
+            </div>
+
+            <div>
+              <h3 className="text-xl m-0">Profile Details</h3>
+              <div className="flex flex-col gap-[20px] border-solid border-black border-[1px] rounded-[8px] p-[30px] text-sm">
+                <div>
+                  <p className="text-theme-blue">Email:</p>
+                  <p>{user.email}</p>
+                </div>
+                <div>
+                  <p className="text-theme-blue">School:</p>
+                  <p>{user.school}</p>
+                </div>
+                <div>
+                  <p className="text-theme-blue">Year:</p>
+                  <p>{user.graduation_year}</p>
+                </div>
+                <div>
+                  <p className="text-theme-blue">Major:</p>
+                  <p>{user.major}</p>
+                </div>
+
+                <div className="flex flex-row justify-between text-theme-redward ">
+                  <div className="flex flex-row gap-[10px] items-center">
+                    <p className="text-xl font-medium">NOT CHECKED IN</p>
+                    <BsExclamationTriangle size={20} />
+                  </div>
+                  <button
+                    onClick={() => setModalOpen(true)}
+                    className="bg-theme-redward hover:bg-red-400 active:bg-theme-redward px-[20px] py-[8px] text-white rounded-[8px] border-black border-[1px] border-solid text-xs"
+                  >
+                    Assign Band
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div>
-            <Text>Most recent swipes</Text>
-            <ScrollableListBox width={`${COLUMN_WIDTH}px`} height="200px">
+          <div className="flex flex-col flex-1 h-full">
+            <h3 className="text-xl m-0">Recent Activity</h3>
+            <ScrollableListBox width={`100%`} height="425px">
               {user.checkIns.map((event) => (
                 <ScrollableListBox.Item key={event.log_id}>
-                  <BoldText style={{ fontSize: '1em' }}>
-                    {event.events.name}
-                  </BoldText>
-                  <Text style={{ fontSize: '0.75em' }}>
+                  <p>{event.events.name}</p>
+                  <p>
                     {event.events.location} on{' '}
                     {formatTimestamp(event.check_in_time)}
-                  </Text>
+                  </p>
                 </ScrollableListBox.Item>
               ))}
             </ScrollableListBox>
           </div>
-
-          <div>
-            <Text>{user.first_name}&apos;s Team</Text>
-            {user.team == null ? (
-              <TeamContainerEmpty>
-                {user.first_name} is not in a team!
-              </TeamContainerEmpty>
-            ) : user.team.length == 0 ? (
-              <TeamContainerEmpty>
-                No other team members to display
-              </TeamContainerEmpty>
-            ) : user.team.length > 3 ? (
-              <TeamContainerEmpty>
-                ERROR: Team has more than 3 members!
-              </TeamContainerEmpty>
-            ) : (
-              <TeamContainer>
-                {user.team.map((member, i) => (
-                  <TeamMember key={member.user_id}>
-                    <Image
-                      src={TEAM_MEMBER_ICONS[i]}
-                      width={100}
-                      height={100}
-                      alt=""
-                    />
-                    <Text>
-                      {member.first_name} {member.last_name}
-                    </Text>
-                  </TeamMember>
-                ))}
-              </TeamContainer>
-            )}
-          </div>
-        </ColumnSpacedLeft>
-      </Container>
+        </div>
+      </div>
 
       <CheckInBox
         isModalOpen={isModalOpen}
