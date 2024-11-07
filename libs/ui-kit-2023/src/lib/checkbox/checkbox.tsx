@@ -25,6 +25,21 @@ export function Checkbox({
     }
     onInput(ref.current.checked);
   }
+  if (color === 'red') {
+    return (
+      <StyledRedCheckbox>
+        <TextWrap disabled={disabled}>{label}</TextWrap>
+        <input
+          ref={ref}
+          disabled={disabled}
+          onChange={handleChange}
+          type="checkbox"
+          checked={checked}
+        />
+        <span className="checkmark"></span>
+      </StyledRedCheckbox>
+    );
+  }
   if (color === 'yellow') {
     return (
       <StyledYellowCheckbox>
@@ -54,7 +69,8 @@ export function Checkbox({
     </StyledCheckbox>
   );
 }
-const StyledYellowCheckbox = styled.label`
+
+const StyledRedCheckbox = styled.label`
   color: white;
   display: block;
   position: relative;
@@ -80,17 +96,17 @@ const StyledYellowCheckbox = styled.label`
     left: 0;
     height: 25px;
     width: 25px;
-    background-color: #565656;
-    border: 1px solid #ae8c1d;
+    background-color: white;
+    border: 1px solid #ff6347;
     border-radius: 5px;
   }
 
   :hover input ~ .checkmark {
     /* background-color: #ccc; */
-    filter: drop-shadow(0px 0px 15px #c2c2c2);
+    filter: drop-shadow(0px 0px 15px #ffded9);
   }
   input:checked ~ .checkmark {
-    background-color: #ffe89c;
+    background-color: #ffded9;
   }
 
   .checkmark:after {
@@ -109,6 +125,89 @@ const StyledYellowCheckbox = styled.label`
     height: 10px;
     border: solid #ae8c1d;
     border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+
+  input:disabled ~ .checkmark {
+    background-color: #7a7a7a;
+  }
+
+  input:disabled ~ .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid #585858;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+
+  :hover input:disabled ~ .checkmark {
+    /* background-color: #ccc; */
+    filter: none;
+    cursor: not-allowed;
+  }
+`;
+
+const StyledYellowCheckbox = styled.label`
+  color: black;
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 22px;
+  font-family: 'Inter';
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    // background-color: #565656;
+    border: 1px solid black;
+    border-radius: 50%;
+  }
+
+  :hover input ~ .checkmark {
+    /* background-color: #ccc; */
+    filter: drop-shadow(0px 0px 15px #c2c2c2);
+  }
+  input:checked ~ .checkmark {
+    background-color: #ddfc75;
+  }
+
+  .checkmark:after {
+    content: '';
+    position: absolute;
+    display: block;
+  }
+  // input:checked ~ .checkmark:after {
+  //   display: block;
+  // }
+
+  .checkmark:after {
+    left: 9px;
+    top: 6px;
+    width: 5px;
+    height: 10px;
+    border: solid black;
+    border-width: 0 1px 1px 0;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
@@ -220,5 +319,6 @@ const StyledCheckbox = styled.label`
 
 const TextWrap = styled(Text)<{ disabled?: boolean }>`
   text-align: left;
-  color: ${(props) => (props.disabled ? Colors2023.GRAY.MEDIUM : 'white')};
+  color: ${(props) => (props.disabled ? Colors2023.GRAY.MEDIUM : 'black')};
+  font-size: 16px;
 `;

@@ -73,9 +73,8 @@ export function Index() {
     <Container>
       <CenterContainer>
         <Heading>
-          Your application has been submitted! Our team is currently reviewing
-          applications and will be sending out the acceptances in phases after
-          the application period closes.
+          Your application has been submitted! We will get back to you a few
+          days before the event in the case that a spot opens up.
         </Heading>
         <RedButton onClick={() => window.open('/', '_self')}>
           Go back to home

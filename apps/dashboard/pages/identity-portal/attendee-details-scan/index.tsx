@@ -23,50 +23,31 @@ export function Index() {
   }
 
   return (
-    <>
-      <div style={{ position: 'absolute', left: '100px' }}>
-        <BackButton link="/" />
+    <div className="flex flex-col">
+      <p className="mb-[64px]">Search for hackers!</p>
+
+      <div className="flex flex-col gap-[10px]">
+        <h2 className="m-0 text-xl text-theme-redward">Search by Name</h2>
+        <SearchUserBox
+          onClick={(id) =>
+            router.push(`/identity-portal/attendee-details?user_id=${id}`)
+          }
+          placeholder="Search by attendee name"
+        />
       </div>
 
-      <ColumnSpacedCenter>
-        <GlowSpan
-          color={Colors2023.YELLOW.STANDARD}
-          style={{ fontSize: '3em' }}
-        >
-          Attendee Details
-        </GlowSpan>
+      <p className="my-[30px]">or</p>
 
-        <FlexRow>
-          <div>
-            <LabelText>Search by Name</LabelText>
-            <SearchUserBox
-              onClick={(id) =>
-                router.push(`/identity-portal/attendee-details?user_id=${id}`)
-              }
-            />
-          </div>
-
-          <Text>or</Text>
-
-          <div>
-            <FlexRowTight>
-              <LabelText>Scan Wristband</LabelText>
-              <BiWifi2 size={36} style={{ transform: 'rotate(90deg)' }} />
-            </FlexRowTight>
-            <Search
-              placeholder="ID number"
-              onInput={(id) =>
-                router.push(
-                  `/identity-portal/attendee-details?wristband_id=${id}`
-                )
-              }
-            />
-          </div>
-        </FlexRow>
-
-        {/* <Button color="yellow">SUBMIT</Button> */}
-      </ColumnSpacedCenter>
-    </>
+      <div className="flex flex-col gap-[10px]">
+        <h2 className="m-0 text-xl text-theme-redward">Scan Wristband</h2>
+        <Search
+          placeholder="ID number"
+          onInput={(id) =>
+            router.push(`/identity-portal/attendee-details?wristband_id=${id}`)
+          }
+        />
+      </div>
+    </div>
   );
 }
 

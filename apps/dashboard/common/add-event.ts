@@ -3,7 +3,7 @@ import { PostgrestError } from '@supabase/supabase-js';
 
 export default async function addEvent(
   event_id: number,
-  user_id: string,
+  wristband_id: string,
   supabase: HibiscusSupabaseClient
 ): Promise<PostgrestError | true> {
   const eventnameMatches = await supabase
@@ -16,7 +16,7 @@ export default async function addEvent(
     .getClient()
     .from('participants')
     .select()
-    .eq('wristband_id', `${user_id}`);
+    .eq('wristband_id', `${wristband_id}`);
 
   if (nameMatches.data.length === 0) {
     return {

@@ -20,7 +20,7 @@ const MainPageWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   min-height: 100vh;
-  background: #22222;
+  background: white;
   background-position: fixed;
   background-attachment: local;
   background-repeat: no-repeat;

@@ -10,7 +10,8 @@
       "defaultConfiguration": "production",
       "options": {
         "root": "apps/sso",
-        "outputPath": "dist/apps/sso"
+        "outputPath": "dist/apps/sso",
+        "postcssConfig": "apps/dashboard/postcss.config.js"
       }
     },
     "serve": {
