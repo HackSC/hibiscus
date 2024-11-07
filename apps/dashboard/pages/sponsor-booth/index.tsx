@@ -15,6 +15,7 @@ import { ParagraphText } from '@hibiscus/ui-kit-2023';
 import { getWordCount } from '../../common/utils';
 import { SponsorServiceAPI } from '../../common/api';
 import { MutatingDots } from 'react-loader-spinner';
+import searchEvent from '../../common/search-event';
 import {
   Button,
   BodyText,
@@ -23,6 +24,8 @@ import {
   GlobalStyle,
   Heading,
 } from '@hacksc/sctw-ui-kit';
+import { IoBookmark } from 'react-icons/io5';
+import { FaArrowRight } from 'react-icons/fa';
 
 const Index = () => {
   const { user } = useHibiscusUser();
@@ -37,8 +40,15 @@ const Index = () => {
   const [savedSpinner, setSavedSpinner] = useState(false);
   const [checkInSpinner, setCheckInSpinner] = useState(false);
 
+  const [events, setEvents] = useState<Event[]>([]);
+
   const router = useRouter();
   const supabase = useHibiscusSupabase().supabase.getClient();
+  const hibiscusSupabaseClient = useHibiscusSupabase().supabase;
+
+  useEffect(() => {
+    searchEvent(hibiscusSupabaseClient).then(setEvents);
+  }, [hibiscusSupabaseClient]);
 
   useEffect(() => {
     if (modalActive) {
@@ -105,7 +115,15 @@ const Index = () => {
         if (error) {
           console.log(error);
         }
-        setAttendees(data.data as Attendee[]);
+        // sort attendees so that saved attendees are first
+        if (data.data) {
+          const sortedAttendees = data.data.slice().sort((a, b) => {
+            if (a.saved && !b.saved) return -1;
+            if (!a.saved && b.saved) return 1;
+            return 0;
+          });
+          setAttendees(sortedAttendees);
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -297,173 +315,256 @@ const Index = () => {
   }
 
   return (
-    <Wrapper>
-      <GlobalStyle />
-      <LeftContainer>
-        <LeftWrapper>
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-            }}
-          >
-            <CompanySection>
-              <SctwTitle style={{ color: SctwColors.Blue.DarkBloo }}>
-                Welcome {user.firstName} {user.lastName}
-              </SctwTitle>
-              <SctwTextBlack>
-                This is your booth! Search through your booth attendees and
-                review their qualifications!
-              </SctwTextBlack>
-            </CompanySection>
-          </div>
-          <SupportSection>
-            <SctwHeading>HACKSC SUPPORT</SctwHeading>
-            <SctwUnderlinedText>(213) - 513 - HACK</SctwUnderlinedText>
-            <SctwText>dayof@hacksc.com</SctwText>
-          </SupportSection>
-          <SavedSection>
-            <>
-              <SctwHeading>RECENTLY SAVED</SctwHeading>
-              {showSavedAttendees()}
-            </>
-          </SavedSection>
-        </LeftWrapper>
-        <SctwViewAllButton
-          fitWidth
-          onClick={() =>
-            router.push({
-              pathname: '/participant-database',
-              query: {
-                viewSaved: true,
-                companyId: COMPANY_ID,
-                eventId: EVENT_ID,
-              },
-            })
-          }
-        >
-          VIEW ALL SAVED
-        </SctwViewAllButton>
-      </LeftContainer>
-
-      <MiddleContainer>
-        <SctwHeading
-          style={{ fontSize: '30px', color: SctwColors.Blue.DarkBloo }}
-        >
-          All Check-Ins
-        </SctwHeading>
-        <StyledScrollBar>{getAttendees()}</StyledScrollBar>
-        <SctwViewAllButton
-          fitWidth
-          onClick={() =>
-            router.push({
-              pathname: '/participant-database',
-              query: {
-                companyId: COMPANY_ID,
-                eventId: EVENT_ID,
-              },
-            })
-          }
-        >
-          VIEW ALL ATTENDEES
-        </SctwViewAllButton>
-        {modalActive && (
-          <ModalContainer>
-            <QuickNoteContainer>
-              <CloseButton
-                style={{ justifyContent: 'flex-end' }}
-                onClick={() => {
-                  setModalActive(false);
-                  setInput('');
+    <div
+      style={{
+        height: '100%',
+        width: '100%',
+        display: 'flex',
+      }}
+    >
+      <div style={{ width: '60%', height: '100%' }}>
+        {/* <Events events={events as Event[]} /> */}
+      </div>
+      <div
+        style={{
+          width: '40%',
+          height: '100%',
+          borderLeft: '1px solid black',
+          paddingRight: 40,
+          paddingLeft: 40,
+          paddingTop: 20,
+          paddingBottom: 20,
+        }}
+      >
+        <div style={{ fontSize: 25, marginBottom: 20 }}>Hacker Attendees</div>
+        <div style={{}}>
+          {attendees.slice(0, 8).map((attendee, index) => (
+            <div
+              key={index}
+              style={{
+                marginBottom: 12,
+                border: '1px solid black',
+                padding: 10,
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              <div
+                style={{
+                  height: 10,
+                  width: 10,
+                  backgroundColor: '#E8FF9C',
+                  borderRadius: 30,
+                  border: '1px solid black',
+                  marginLeft: 10,
+                  marginRight: 20,
+                }}
+              />
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  width: '100%',
+                  alignItems: 'center',
                 }}
               >
-                <Image
-                  width="20"
-                  height="20"
-                  src={'/x-button.svg'}
-                  alt="x-button"
-                />
-              </CloseButton>
-              <SctwHeading>QUICK NOTES</SctwHeading>
-              <BodyText style={{ fontSize: '25px', marginTop: '1rem' }}>
-                {attendeeName}
-              </BodyText>
-              <TextWrapper>
-                <StyledInput
-                  value={textInput}
-                  placeholder={'Add quick note . . . '}
-                  onChange={(e) => {
-                    setInput(e.target.value);
-                  }}
-                />
-                <WordCountText>
-                  Word count: {getWordCount(textInput)}
-                </WordCountText>
-              </TextWrapper>
-              <div style={{ marginTop: '1rem', display: 'flex' }}>
-                <Button
-                  color={'yellow'}
-                  onClick={() => {
-                    setModalActive(false);
-                    setInput('');
-                  }}
-                >
-                  CANCEL
-                </Button>
-                <div style={{ marginLeft: '0.5rem' }}>
-                  <Button
-                    color={'yellow'}
-                    onClick={() => {
-                      setAttendeeNote(
-                        COMPANY_ID,
-                        currentAttendee.id,
-                        textInput
-                      );
-                      setModalActive(false);
-                      setInput('');
-                    }}
-                  >
-                    SAVE
-                  </Button>
-                </div>
+                <div>{attendee.full_name}</div>
+                {attendee.saved && (
+                  <div style={{ marginRight: 5 }}>
+                    <IoBookmark color="#1480DC" />
+                  </div>
+                )}
               </div>
-            </QuickNoteContainer>
-          </ModalContainer>
-        )}
-      </MiddleContainer>
-
-      <RightContainer
-        style={
-          currentAttendee !== null
-            ? { maxWidth: '33%' }
-            : { display: 'none', maxWidth: '0%', padding: 0 }
-        }
-      >
-        <CloseButton
-          onClick={() => {
-            setCurrentAttendee(null);
+            </div>
+          ))}
+        </div>
+        <button
+          style={{
+            cursor: 'pointer',
+            border: '1px solid black',
+            borderRadius: 10,
+            padding: 10,
+            marginTop: 20,
+            display: 'flex',
+            alignItems: 'center',
+            backgroundColor: '#E8FF9C',
           }}
+          onClick={() => router.push(`${router.asPath}/hacker-attendees`)}
         >
-          <SctwHeading style={{ color: SctwColors.Yellow.BabyFood }}>
-            HACKER
-          </SctwHeading>
-          <Image width="20" height="20" src={'/x-button.svg'} alt="x-button" />
-        </CloseButton>
-        {currentAttendee !== null ? (
-          <div style={{ marginTop: '1.5rem' }}>
-            <HackerProfile
-              hacker={currentAttendee}
-              companyId={COMPANY_ID}
-              noteOnClick={() => openQuickNote(currentAttendee)}
-            />
-          </div>
-        ) : (
-          <></>
-        )}
-      </RightContainer>
-    </Wrapper>
+          <div style={{ marginRight: 10 }}>View all attendees</div>
+          <FaArrowRight />
+        </button>
+      </div>
+    </div>
   );
+  // return (
+  //   <Wrapper>
+  //     <GlobalStyle />
+  //     <LeftContainer>
+  //       <LeftWrapper>
+  //         <div
+  //           style={{
+  //             display: 'flex',
+  //             flexDirection: 'row',
+  //             justifyContent: 'space-between',
+  //           }}
+  //         >
+  //           <CompanySection>
+  //             <SctwTitle style={{ color: SctwColors.Blue.DarkBloo }}>
+  //               Welcome {user.firstName} {user.lastName}
+  //             </SctwTitle>
+  //             <SctwTextBlack>
+  //               This is your booth! Search through your booth attendees and
+  //               review their qualifications!
+  //             </SctwTextBlack>
+  //           </CompanySection>
+  //         </div>
+  //         <SupportSection>
+  //           <SctwHeading>HACKSC SUPPORT</SctwHeading>
+  //           <SctwUnderlinedText>(213) - 513 - HACK</SctwUnderlinedText>
+  //           <SctwText>dayof@hacksc.com</SctwText>
+  //         </SupportSection>
+  //         <SavedSection>
+  //           <>
+  //             <SctwHeading>RECENTLY SAVED</SctwHeading>
+  //             {showSavedAttendees()}
+  //           </>
+  //         </SavedSection>
+  //       </LeftWrapper>
+  //       <SctwViewAllButton
+  //         fitWidth
+  //         onClick={() =>
+  //           router.push({
+  //             pathname: '/participant-database',
+  //             query: {
+  //               viewSaved: true,
+  //               companyId: COMPANY_ID,
+  //               eventId: EVENT_ID,
+  //             },
+  //           })
+  //         }
+  //       >
+  //         VIEW ALL SAVED
+  //       </SctwViewAllButton>
+  //     </LeftContainer>
+
+  //     <MiddleContainer>
+  //       <SctwHeading
+  //         style={{ fontSize: '30px', color: SctwColors.Blue.DarkBloo }}
+  //       >
+  //         All Check-Ins
+  //       </SctwHeading>
+  //       <StyledScrollBar>{getAttendees()}</StyledScrollBar>
+  //       <SctwViewAllButton
+  //         fitWidth
+  //         onClick={() =>
+  //           router.push({
+  //             pathname: '/participant-database',
+  //             query: {
+  //               companyId: COMPANY_ID,
+  //               eventId: EVENT_ID,
+  //             },
+  //           })
+  //         }
+  //       >
+  //         VIEW ALL ATTENDEES
+  //       </SctwViewAllButton>
+  //       {modalActive && (
+  //         <ModalContainer>
+  //           <QuickNoteContainer>
+  //             <CloseButton
+  //               style={{ justifyContent: 'flex-end' }}
+  //               onClick={() => {
+  //                 setModalActive(false);
+  //                 setInput('');
+  //               }}
+  //             >
+  //               <Image
+  //                 width="20"
+  //                 height="20"
+  //                 src={'/x-button.svg'}
+  //                 alt="x-button"
+  //               />
+  //             </CloseButton>
+  //             <SctwHeading>QUICK NOTES</SctwHeading>
+  //             <BodyText style={{ fontSize: '25px', marginTop: '1rem' }}>
+  //               {attendeeName}
+  //             </BodyText>
+  //             <TextWrapper>
+  //               <StyledInput
+  //                 value={textInput}
+  //                 placeholder={'Add quick note . . . '}
+  //                 onChange={(e) => {
+  //                   setInput(e.target.value);
+  //                 }}
+  //               />
+  //               <WordCountText>
+  //                 Word count: {getWordCount(textInput)}
+  //               </WordCountText>
+  //             </TextWrapper>
+  //             <div style={{ marginTop: '1rem', display: 'flex' }}>
+  //               <Button
+  //                 color={'yellow'}
+  //                 onClick={() => {
+  //                   setModalActive(false);
+  //                   setInput('');
+  //                 }}
+  //               >
+  //                 CANCEL
+  //               </Button>
+  //               <div style={{ marginLeft: '0.5rem' }}>
+  //                 <Button
+  //                   color={'yellow'}
+  //                   onClick={() => {
+  //                     setAttendeeNote(
+  //                       COMPANY_ID,
+  //                       currentAttendee.id,
+  //                       textInput
+  //                     );
+  //                     setModalActive(false);
+  //                     setInput('');
+  //                   }}
+  //                 >
+  //                   SAVE
+  //                 </Button>
+  //               </div>
+  //             </div>
+  //           </QuickNoteContainer>
+  //         </ModalContainer>
+  //       )}
+  //     </MiddleContainer>
+
+  //     <RightContainer
+  //       style={
+  //         currentAttendee !== null
+  //           ? { maxWidth: '33%' }
+  //           : { display: 'none', maxWidth: '0%', padding: 0 }
+  //       }
+  //     >
+  //       <CloseButton
+  //         onClick={() => {
+  //           setCurrentAttendee(null);
+  //         }}
+  //       >
+  //         <SctwHeading style={{ color: SctwColors.Yellow.BabyFood }}>
+  //           HACKER
+  //         </SctwHeading>
+  //         <Image width="20" height="20" src={'/x-button.svg'} alt="x-button" />
+  //       </CloseButton>
+  //       {currentAttendee !== null ? (
+  //         <div style={{ marginTop: '1.5rem' }}>
+  //           <HackerProfile
+  //             hacker={currentAttendee}
+  //             companyId={COMPANY_ID}
+  //             noteOnClick={() => openQuickNote(currentAttendee)}
+  //           />
+  //         </div>
+  //       ) : (
+  //         <></>
+  //       )}
+  //     </RightContainer>
+  //   </Wrapper>
+  // );
 };
 
 export default Index;
