@@ -77,7 +77,7 @@ function EventDetails(props: EventDetailsProps) {
             </Button>
           )}
 
-          {props.pinnedEvents.find((e) => e.eventId === props.event.eventId) ===
+          {/* {props.pinnedEvents.find((e) => e.eventId === props.event.eventId) ===
           undefined ? (
             // Event is not pinned
             <Button
@@ -114,7 +114,7 @@ function EventDetails(props: EventDetailsProps) {
             >
               - Remove From My Events
             </Button>
-          )}
+          )} */}
         </Row>
       </Container>
     );
@@ -257,8 +257,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 
-  background-color: #ff514f;
-  border: 3px solid #ff514f;
+  background-color: #F6F6F6;
+  border: 3px solid #121212;
   border-radius: 10px;
 
   padding: 2rem;

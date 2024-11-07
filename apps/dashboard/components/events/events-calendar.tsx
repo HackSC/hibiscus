@@ -1,12 +1,12 @@
 import { Colors2023 } from '@hibiscus/styles';
 import styled from 'styled-components';
 import { useEffect, useRef, useState, ReactNode } from 'react';
-import { Text } from '@hibiscus/ui';
+import { H1, Text } from '@hibiscus/ui';
 import { Event, getDayDate } from '../../common/events.utils';
 import CalendarCard from './calendar-card';
 
 const COLUMN_WIDTH = 210;
-const COLUMN_HEIGHT = 2000;
+const COLUMN_HEIGHT = 100;
 const COLUMN_MILLIS = 24 * 60 * 60 * 1000;
 const COLUMN_START_MILLIS = 0; // number of millis after 00:00
 const COLUMN_MARGIN = 10;
@@ -18,11 +18,30 @@ interface EventsCalendarProps {
 
 function EventsCalendar(props: EventsCalendarProps) {
   const ref = useRef(null);
-  const [columns, setColumns] = useState(2);
+  const scrollRefs = useRef([]);
+  const [columns, setColumns] = useState(3);
   const [offset, setOffset] = useState(0);
   const [cards, setCards] = useState<ReactNode[][] | null>(null);
 
   const events = props.events;
+
+  const hours = Array.from({ length: 24 }, (_, index) => {
+    const hour = index === 0 ? 12 : index % 12 === 0 ? 12 : index % 12;
+    const period = index <= 12 ? 'AM' : 'PM';
+    return `${hour} ${period}`;
+  });
+
+   // Function to synchronize scroll positions
+   const syncScroll = (event) => {
+    const scrollTop = event.target.scrollTop;
+    
+    // Update scroll position for each .row2 element except the one being scrolled
+    scrollRefs.current.forEach((el) => {
+      if (el && el !== event.target) {
+        el.scrollTop = scrollTop;
+      }
+    });
+  };
 
   // Queries width of component to calculate number of columns
   // Dynamically recalculates on resize
@@ -54,48 +73,93 @@ function EventsCalendar(props: EventsCalendarProps) {
   }, [events, columns, offset]);
 
   return (
-    <Container>
-      <CalendarGrid ref={ref} columns={columns}>
+    <>
+        <CalendarGrid ref={ref} columns={columns}>
         {cards && (
           <>
-            {offset > 0 && (
+
+            <Span></Span> {/* Take space in the row1 col1*/}
+              <Times  onScroll={syncScroll} ref={(el) => (scrollRefs.current[3] = el)} >
+                {hours.map((time, index) => (
+                  <Time key={index}>{time}</Time>
+                ))}
+              </Times>
+
+            {/* Note:  Arrows to toggle between dates */}
+            {/* {offset > 0 && (
               <LeftArrow
                 onClick={() => setOffset(Math.max(offset - columns, 0))}
               >
                 &lt;
               </LeftArrow>
             )}
-            {offset + columns < events.length && (
+
+            {offset < events.length && (
               <RightArrow onClick={() => setOffset(offset + columns)}>
                 &gt;
               </RightArrow>
-            )}
+            )} */}
+
+            {/* Note: Map Event dates to Headers */}
+            {[...Array(columns)].map((_, idx) => (
+                  <CalendarHeader key={idx}>
+                      {events[idx + offset] && (
+                      <>
+                        <Text>
+                          {getDayDate(
+                            events[idx + offset][0].startTime
+                          ).toLocaleDateString('en-us', { month: 'short' })}
+                        </Text>
+                        <NumText>
+                          {getDayDate(
+                            events[idx + offset][0].startTime
+                          ).toLocaleDateString('en-us', { day: '2-digit' })}
+                        </NumText>
+                      </>
+                    )}
+                  </CalendarHeader>
+            ))}
+
+            {/* Note: Temporary Hard coded Headers */}
+            {/* <CalendarHeader >
+                  <Text>
+                    Nov
+                  </Text>
+                  <NumText>
+                    08
+                  </NumText>
+            </CalendarHeader>
+
+            <CalendarHeader >
+                  <Text>
+                    Nov
+                  </Text>
+                  <NumText>
+                    09
+                  </NumText>
+            </CalendarHeader>
+
+            <CalendarHeader >
+                  <Text>
+                    Nov
+                  </Text>
+                  <NumText>
+                    10
+                  </NumText>
+            </CalendarHeader> */}
 
             {[...Array(columns)].map((_, idx) => (
-              <CalendarHeader key={idx}>
-                {events[idx + offset] && (
-                  <>
-                    <Text>
-                      {getDayDate(
-                        events[idx + offset][0].startTime
-                      ).toLocaleDateString('en-us', { month: 'short' })}
-                    </Text>
-                    <NumText>
-                      {getDayDate(
-                        events[idx + offset][0].startTime
-                      ).toLocaleDateString('en-us', { day: '2-digit' })}
-                    </NumText>
-                  </>
-                )}
-              </CalendarHeader>
-            ))}
-            {[...Array(columns)].map((_, idx) => (
-              <CalendarColumn key={idx}>{cards[idx]}</CalendarColumn>
+                <CalendarColumn onScroll={syncScroll} ref={(el) => (scrollRefs.current[idx] = el)} key={idx}>
+                  <ColumnGrid>
+                    {cards[idx]}
+                  </ColumnGrid>
+                  
+                </CalendarColumn>
             ))}
           </>
         )}
       </CalendarGrid>
-    </Container>
+    </>
   );
 }
 
@@ -105,10 +169,38 @@ interface CalendarGridProps {
   columns: number;
 }
 
-const Container = styled.div``;
+const ColumnGrid = styled.div`
+  display: grid;
+  grid-template-rows: repeat(24, 100px);
+  grid-template-columns: auto;
+  /* grid-template-columns: span 2; */
+  /* grid-column-start: /1; */
+  column-gap: 10px;
+  width: 100%;
+`;
+
+const Times = styled.div`
+  grid-row-start: 2;
+  grid-row-end: 3;
+
+  display:grid;
+  grid-template-rows: repeat(24, 100px);
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none; 
+`;
+
+const Time = styled.div`
+  color: #9B9191;
+  /* margin-bottom: 50px; */
+`;
+
+const Span = styled.div`
+  grid-column-start: 1;
+`;
 
 const NumText = styled.p`
-  font-family: 'Neue Haas Unica', sans-serif;
+  font-family: 'Hanken Grotesk', 'Neue Haas Unica', sans-serif;
   font-weight: 500;
   font-size: 31px;
 `;
@@ -116,16 +208,16 @@ const NumText = styled.p`
 const CalendarGrid = styled.div<CalendarGridProps>`
   position: relative;
   display: grid;
-  grid-template-rows: auto 1fr;
-  grid-template-columns: repeat(${(props) => props.columns}, 1fr);
-  width: 50vw;
+  grid-template-rows: auto 1fr; 
+  grid-template-columns: 50px repeat(${(props) => props.columns}, 1fr);
+  width: 70vw;
 
   border-radius: 5px;
 
-  height: 63vh;
-  overflow-y: auto;
+  height: 50vh;
+  /* overflow-y: auto;
   scrollbar-width: none;
-  -ms-overflow-style: none;
+  -ms-overflow-style: none; */
 
   &::-webkit-scrollbar {
     width: 0;
@@ -139,7 +231,7 @@ const CalendarHeader = styled.div`
   flex-direction: column;
   align-items: center;
 
-  background-color: #ce0c0a;
+  border: 1px solid black;
 
   padding: 1rem;
 `;
@@ -151,15 +243,23 @@ const CalendarColumn = styled.div`
 
   position: relative;
 
-  height: ${COLUMN_HEIGHT}px;
+  height: 50vh;
+  padding-left: 15px;
+  padding-right: 15px;
 
-  background-color: #fef8e5;
-  border-right: 3px solid #ce0c0a;
-  border-top: 3px solid #ce0c0a;
+  border: 1px solid black;
 
-  :nth-last-child(1) {
+  /* background-color: #fef8e5; */
+  /* border-right: 3px solid #ce0c0a; */
+  /* border-top: 3px solid #ce0c0a; */
+
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+
+  /* :nth-last-child(1) {
     border-right: none;
-  }
+  } */
 `;
 
 const LeftArrow = styled.a`
@@ -283,8 +383,10 @@ function renderCalendarColumn(
     const left = (earliestIdx / cols) * 100;
 
     // Adjust for timezone
-    const top =
-      ((start - date.getTime() - COLUMN_START_MILLIS) / COLUMN_MILLIS) * 100;
+    const startHour = earliestEvent.startTime.getHours();
+    const endHour = earliestEvent.endTime.getHours();
+    const startMins = earliestEvent.startTime.getMinutes();
+    const endMins = earliestEvent.endTime.getMinutes();
 
     // Adjust for "margins"
     let widthSubtract = COLUMN_MARGIN;
@@ -304,12 +406,17 @@ function renderCalendarColumn(
     const leftCSS = `calc(${left}% + ${leftAdd}px)`;
 
     nodes.push(
+
       <CalendarCard
         openModal={openModal}
-        width={widthCSS}
-        height={`${height}%`}
-        left={leftCSS}
-        top={`${top}%`}
+        // width={widthCSS}
+        // height={`${height}%`}
+        // left={leftCSS}
+        top={`${((startMins/60) * 100) + 5}px`}
+        bottom={`${((endMins/60) * 100) + 5}px`}
+        gridRowStart={`${startHour +  1}`}
+        gridRowEnd={`${endHour +  1}`}
+        // top={`${top}%`}
         {...earliestEvent}
       ></CalendarCard>
     );

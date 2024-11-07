@@ -3,10 +3,13 @@ import styled from 'styled-components';
 
 interface EventCardProps {
   // CSS values for absolute position (percentage, px, etc.)
-  width: string;
-  height: string;
+  // width: string;
+  // height: string;
+  // left: string;
   top: string;
-  left: string;
+  bottom: string;
+  gridRowStart: string;
+  gridRowEnd: string;
 
   // Event details
   eventId: string;
@@ -45,25 +48,33 @@ function CalendarCard(props: EventCardProps) {
 export default CalendarCard;
 
 const Card = styled.div<EventCardProps>`
-  position: absolute;
-
-  width: ${(props) => props.width};
-  height: ${(props) => props.height};
-  top: ${(props) => props.top};
-  left: ${(props) => props.left};
-
-  background-color: #ce0c0a;
-
-  padding: 0.5rem;
   margin: 0;
+  padding: 0.5rem;
+  font-size: 0.75em;
+
+  grid-row-start: ${(props) => props.gridRowStart};
+  grid-row-end: ${(props) => props.gridRowEnd};
+
+  &:only-child {
+    background-color: pink;
+  }
+
+  width: 100%;
+  overflow:hidden;
+  overflow-y: auto;
+  overflow-x: auto;
+  scrollbar-width: none;
+  white-space:nowrap;
+
+  background-color: #DAEEFF;
+  border: 1px solid black;
+  border-radius: 10px;
 
   display: flex;
   flex-direction: column;
 
-  border-radius: 10px;
-
-  font-size: 0.75rem;
-
   cursor: pointer;
-  margin-top: 15px;
+  margin-top: ${(props) => props.top};
+  margin-bottom: 5px;
+  padding-bottom: ${(props) => props.bottom};
 `;

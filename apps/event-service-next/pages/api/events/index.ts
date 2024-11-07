@@ -22,7 +22,7 @@ export default async function handler(
 }
 
 async function get(req: NextApiRequest, res: NextApiResponse) {
-  let body = req.body;
+  let body = req.query;
   try {
     if (!body) {
       body = {};

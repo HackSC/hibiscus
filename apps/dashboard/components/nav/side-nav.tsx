@@ -52,7 +52,7 @@ const ButtonContainer = styled.div<{ hoverColor: string }>`
 `;
 
 const ButtonH1 = styled.h1`
-  font-family: 'Neue Haas Unica', sans-serif;
+  font-family: 'Hanken Grotesk', 'Neue Haas Unica', sans-serif;
   font-weight: 310;
   font-size: 18px;
   display: inline;
