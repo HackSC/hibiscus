@@ -10,6 +10,15 @@ import { HibiscusRole } from '@hibiscus/types';
 import { Colors2023 } from '@hibiscus/styles';
 import { useMediaQuery } from 'react-responsive';
 import StyledTopNav from '../components/nav/top-nav';
+import SideNav from '../components/nav/side-nav2';
+import {
+  MdOutlineCalendarViewMonth,
+  MdOutlinePeopleAlt,
+  MdOutlinePlaylistAddCheck,
+  MdStarOutline,
+} from 'react-icons/md';
+import { FaRegUserCircle } from 'react-icons/fa';
+import { useRouter } from 'next/router';
 
 export type ThemelessLayoutProps = React.PropsWithChildren;
 
@@ -19,7 +28,8 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
   const { user } = useHibiscusUser();
   const color = useMemo(() => {
     if (user == null) return Colors.Yellow.ArthurSweater;
-    if (user.role === HibiscusRole.HACKER) return Colors.Yellow.ArthurSweater;
+    if (user.role === HibiscusRole.HACKER) return Colors.Red.Redward;
+    if (user.role === HibiscusRole.VOLUNTEER) return Colors.Red.Redward;
     if (user.role === HibiscusRole.SPONSOR) return Colors.Red.DonatedBlood;
     return Colors.Yellow.ArthurSweater;
   }, [user]);
@@ -29,42 +39,80 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
     if (user.role === HibiscusRole.SPONSOR) return Colors.Red.Redward;
     return Colors.Yellow.Yuhlow;
   }, [user]);
+  const navbarOptions = useMemo(() => {
+    if (user == null) return [];
+    if (user.role === HibiscusRole.HACKER)
+      return [
+        { name: 'Events', url: '/events', image: MdOutlineCalendarViewMonth },
+        { name: 'Leaderboard', url: '/leaderboard', image: MdStarOutline },
+        { name: 'Profile', url: '/profile', image: FaRegUserCircle },
+      ];
+    if (user.role === HibiscusRole.VOLUNTEER)
+      return [
+        {
+          name: 'Identity Portal',
+          url: '/identity-portal/attendee-details-scan',
+          image: MdOutlinePeopleAlt,
+        },
+        {
+          name: 'Event Check-in',
+          url: '/identity-portal/event-checkin',
+          image: MdOutlinePlaylistAddCheck,
+        },
+      ];
+    return [];
+  }, [user]);
 
-  if (user == null) {
+  const router = useRouter();
+  const pageTitle = useMemo(() => {
+    const map = {
+      '/leaderboard': 'Leaderboard',
+      '/identity-portal/attendee-details-scan': 'Identity Portal',
+      '/identity-portal/attendee-details': 'Attendee Details',
+      '/identity-portal/attendee-event-scan': 'Event Check-in',
+      '/identity-portal/event-checkin': 'Event Check-in',
+    };
+    return map[router.pathname] ?? '';
+  }, [router]);
+
+  if (user == null || router == null) {
     return <></>;
   }
 
-  return isSmallScreen ? (
-    <VerticalMainPageWrapper style={{ backgroundColor: color }}>
-      <StyledTopNav />
-      <VerticalContent>{children}</VerticalContent>
-    </VerticalMainPageWrapper>
-  ) : (
-    <MainPageWrapper style={{ backgroundColor: color }}>
-      <StyledSideNav />
+  return (
+    <MainPageWrapper>
+      <SideNav options={navbarOptions} />
       <Content>
-        <RightUtilityContainer>
-          <UserText>{user.tag}</UserText>
-          <RoleText>
-            <GlowSpan color={color} shadowColor={shadowColor}>
-              {user.role}
-            </GlowSpan>
-          </RoleText>
-          <LogoutButton onClick={logout}>
-            <Image
-              style={{ position: 'relative', top: 3 }}
-              width="18"
-              height="18"
-              src="/log-out.svg"
-              alt="Log out of Hibiscus"
-            />
-          </LogoutButton>
-        </RightUtilityContainer>
-
+        <div className="flex flex-col px-[40px] pt-[40px] pb-[20px] gap-[10px]">
+          <RightUtilityContainer>
+            <UserText>{user.tag}</UserText>
+            <RoleText>
+              <GlowSpan color={color} shadowColor={shadowColor}>
+                {user.role}
+              </GlowSpan>
+            </RoleText>
+            <LogoutButton onClick={logout}>
+              <Image
+                width="18"
+                height="18"
+                src="/log-out.svg"
+                alt="Log out of Hibiscus"
+              />
+            </LogoutButton>
+          </RightUtilityContainer>
+          <h1 className="m-0">{pageTitle}</h1>
+        </div>
+        <hr />
         <ChildrenWrapper>{children}</ChildrenWrapper>
       </Content>
     </MainPageWrapper>
   );
+  /* isSmallScreen ? (
+    <VerticalMainPageWrapper style={{ backgroundColor: color }}>
+      <StyledTopNav />
+      <VerticalContent>{children}</VerticalContent>
+    </VerticalMainPageWrapper>
+  ) : */
 }
 
 export default ThemelessLayout;
@@ -84,11 +132,11 @@ const Content = styled.div`
   height: 100%;
   min-height: 100vh;
   background-color: white;
-  border-radius: 30px 0 0 30px;
+  // border-radius: 30px 0 0 30px;
 
-  padding: 40px;
+  // padding: 40px;
 
-  gap: 20px;
+  // gap: 20px;
 
   flex-grow: 1;
   flex-shrink: 1;
@@ -114,11 +162,13 @@ const RightUtilityContainer = styled.div`
   align-items: center;
   gap: 20px;
   margin-left: auto;
+  // padding: 40px 40px 0;
 `;
 
 const ChildrenWrapper = styled.div`
   height: 100%;
   max-height: 100%;
+  padding: 40px;
 `;
 
 const VerticalMainPageWrapper = styled.div`

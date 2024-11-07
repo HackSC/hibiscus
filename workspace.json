@@ -26,6 +26,7 @@
     "podium": "apps/podium",
     "podium-e2e": "apps/podium-e2e",
     "podium-service": "apps/podium-service",
+    "podium-service-e2e": "apps/podium-service-e2e",
     "pointr": "apps/pointr",
     "recruitment": "apps/recruitment",
     "sso": "apps/sso",

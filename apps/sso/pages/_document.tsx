@@ -1,4 +1,4 @@
-import { GlobalStyles } from '@hibiscus/styles';
+import { GlobalStylesSCTW } from '@hibiscus/styles';
 import Document from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
 
@@ -24,7 +24,7 @@ export default class MyDocument extends Document {
         styles: (
           <>
             {initialProps.styles}
-            <GlobalStyles />
+            <GlobalStylesSCTW />
             {sheet.getStyleElement()}
           </>
         ),
