@@ -1,17 +1,15 @@
 import 'reflect-metadata';
-import {
-  HackFromProfilePictureClient,
-} from '@hibiscus/hackform-client';
+import { HackformResumeUploadClient } from '@hibiscus/hackform-client';
 import { NextApiHandler } from 'next';
 import { container } from 'tsyringe';
 import formidable, { IncomingForm } from 'formidable';
 import fs from 'fs';
-import { ALLOWED_PFP_FORMATS } from '../../../../common/constants';
+import { ALLOWED_RESUME_FORMATS } from '../../../../../common/constants';
 import mime from 'mime-types';
 import {
   getTokensFromNextRequest,
   rateLimitHandler,
-} from '../../../../common/utils';
+} from '../../../../../common/utils';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 
 export const config = {
@@ -23,7 +21,7 @@ export const config = {
 
 // validates via mimetype
 const validateFormat = (file: formidable.File) => {
-  return ALLOWED_PFP_FORMATS.map((it) => mime.lookup(it)).includes(
+  return ALLOWED_RESUME_FORMATS.map((it) => mime.lookup(it)).includes(
     file.mimetype
   );
 };
@@ -35,15 +33,12 @@ const handler: NextApiHandler = async (req, res) => {
   if (req.method !== 'POST') {
     return res.status(405).send('Method not allowed');
   }
-  const { accessToken } = getTokensFromNextRequest(req);
-  const user = await hbc.getUserProfile(accessToken);
-  if (!user) {
+
+  const { userId } = req.query;
+  const userIdString = userId as string;
+
+  if (!userIdString) {
     return res.status(400).json({ message: 'Unauthorized' });
-  }
-  if (user?.app_id !== null) {
-    return res
-      .status(400)
-      .json({ message: 'You have already submitted your application!' });
   }
 
   try {
@@ -67,34 +62,27 @@ const handler: NextApiHandler = async (req, res) => {
     if (!validateFormat(file)) {
       return res.status(400).json({
         msg: 'Wrong format',
-        description: `We only accept these file extensions: ${ALLOWED_PFP_FORMATS.join(
+        description: `We only accept these file extensions: ${ALLOWED_RESUME_FORMATS.join(
           ','
         )}`,
       });
     }
+
     const data = fs.readFileSync(file.filepath);
-    const uploadClient = container.resolve(HackFromProfilePictureClient);
+    const uploadClient = container.resolve(HackformResumeUploadClient);
     try {
-      const checkExist = await uploadClient.pfpExists(user.user_id);
-      if (checkExist) {
-        const response = await uploadClient.updatePfp(
-          user.user_id,
-          data,
-          file.mimetype
-        );
+      const checkExists = await uploadClient.resumeExists(userIdString);
+      if (!checkExists) {
+        const meta = await uploadClient.uploadResume(data, userIdString);
         return res.status(200).json({
           success: true,
-          path: response.path,
+          path: meta.path,
         });
       } else {
-        const response = await uploadClient.uploadPfp(
-          user.user_id,
-          data,
-          file.mimetype
-        );
+        const meta = await uploadClient.updateResume(data, userIdString);
         return res.status(200).json({
           success: true,
-          path: response.path,
+          path: meta.path,
         });
       }
     } catch (e) {

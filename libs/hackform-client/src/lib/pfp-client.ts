@@ -69,4 +69,13 @@ export class HackFromProfilePictureClient {
 
     return data.length > 0;
   }
+
+  public async getPfpUrl(userId: string): Promise<string> {
+    const { data } = await this.supabaseClient
+      .getClient()
+      .storage.from(this.bucket)
+      .getPublicUrl(`${userId}/pfp.jpeg`);
+
+    return data.publicUrl;
+  }
 }
