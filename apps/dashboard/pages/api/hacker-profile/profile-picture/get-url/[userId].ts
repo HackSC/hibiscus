@@ -23,9 +23,11 @@ const handler: NextApiHandler = async (req, res) => {
 
   const pfpClient = container.resolve(HackFromProfilePictureClient);
 
+  const checkExist = await pfpClient.pfpExists(userIdString);
+
   const url = await pfpClient.getPfpUrl(userIdString);
 
-  return res.status(200).json({ url });
+  return res.status(200).json({ exist: pfpClient, url });
 };
 
 export default handler;

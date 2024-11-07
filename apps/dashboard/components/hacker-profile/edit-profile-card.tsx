@@ -142,18 +142,13 @@ const EditProfileCard = ({ onClose }) => {
           });
       }
       formikHelpers.setSubmitting(false);
+      window.location.reload();
     },
   });
 
-  console.log(
-    formik.values.graduationYear
-    // .toUpperCase() +
-    //   formik.values.graduationYear.slice(1)
-  );
-
   return (
     <ModalOverlay>
-      <ModalContainer>
+      <ModalContainer className="modal-profile">
         {/*close x button
          */}
         <IoMdClose color="black" size={25} onClick={onClose} />
@@ -237,7 +232,7 @@ const EditProfileCard = ({ onClose }) => {
               }}
               options={schoolOptions}
               menuPlacement="auto"
-              menuPortalTarget={document.body}
+              menuPortalTarget={document.getElementsByClassName('modal-profile')[0] as HTMLElement}
               menuPosition={'fixed'}
               menuShouldScrollIntoView={true}
               styles={{
@@ -259,7 +254,6 @@ const EditProfileCard = ({ onClose }) => {
                 menu: (baseStyles, state) => ({
                   ...baseStyles,
                   color: 'black',
-                  zIndex: 9999,
                   borderRadius: '8px',
                 }),
                 singleValue: (baseStyles) => ({
@@ -291,9 +285,10 @@ const EditProfileCard = ({ onClose }) => {
             <Select
               name="graduationYear"
               id="graduationYear"
+              
               options={options}
               placeholder={
-                formik.values.graduationYear !== '' ? formik.values.graduationYear[0].toUpperCase() +
+                formik.values.graduationYear ? formik.values.graduationYear[0].toUpperCase() +
                   formik.values.graduationYear.slice(1) : 'Select your year'
               }
               onChange={(e) => {
@@ -304,6 +299,7 @@ const EditProfileCard = ({ onClose }) => {
               menuPosition={'fixed'}
               menuShouldScrollIntoView={true}
               styles={{
+                
                 control: (baseStyles, state) => ({
                   ...baseStyles,
 
@@ -314,13 +310,15 @@ const EditProfileCard = ({ onClose }) => {
                   borderRight: 'none',
                   width: '28vh',
                   borderRadius: '8px',
+                  
                 }),
+                menuPortal: base => ({ ...base, zIndex: 9999 }),
 
-                menu: (baseStyles, state) => ({
+                menu: (baseStyles, state, ) => ({
                   ...baseStyles,
                   color: 'black',
-                  zIndex: 9999,
                   borderRadius: '8px',
+                  zIndex:9999
                 }),
                 menuList: (baseStyles, state) => ({
                   ...baseStyles,
@@ -328,6 +326,7 @@ const EditProfileCard = ({ onClose }) => {
                   overflowY: 'auto',
                   backgroundColor: '#f5f5f5',
                   borderRadius: '8px',
+                  zIndex:9999
                 }),
                 option: (baseStyles, state) => ({
                   ...baseStyles,
@@ -411,7 +410,7 @@ const ModalOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-    z-index:10;
+    z-index:2;
 `;
 
 const ModalContainer = styled.div`
@@ -423,7 +422,7 @@ const ModalContainer = styled.div`
   border-radius: 10px;
   position: relative;
   flex-shrink: 0;
-    z-index:5;
+    
 `;
 
 const FormContainer = styled.div`

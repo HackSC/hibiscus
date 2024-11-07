@@ -71,19 +71,21 @@ export function Index() {
         '/api/hacker-profile/profile-picture/get-url/' + user.id
       );
       let data = await response.json();
-      setProfileImage(data.url);
+      data.exist && setProfileImage(data.url);
     };
 
     const fetchResume = async () => {
       const response = await fetch('/api/hacker-profile/resume/get-resume/' + user.id);
       const data = await response.json();
-      setResume(data.url);
+      data.exist && setResume(data.url);
     };
 
     fetchData();
     fetchProfileImage();
     fetchResume();
   }, []);
+
+  console.log(resume);
 
   return (
     <LayoutContainer>
@@ -94,7 +96,6 @@ export function Index() {
             <ProfileImage src={profileImage || ''} />
             <EditIconButton
               onClick={() => document.getElementById('imageUpload').click()}
-              style={{ zIndex: 5 }}
             >
               <GrEdit size="17px" />
 
@@ -135,7 +136,7 @@ export function Index() {
           </InfoRow>
         </BasicInfoContainer>
 
-        <DividerLine />
+        <div style={{border: '1px solid', width: '60%', color: '#989898'}} />
         <AboutContainer>
           <Header3>About Me</Header3>
           <TextBox>{profileBio}</TextBox>
@@ -209,13 +210,13 @@ const EditIconButton = styled.button`
 const BasicInfoContainer = styled.div``;
 
 const UserName = styled.h2`
-  font-size: 28px;
-  margin-bottom: 20px;
+  font-size: 38px;
+  margin-bottom: 30px;
   color: black;
   font-weight: bold;
-  padding-bottom: 25px;
+  margin-left:0;
   padding-right: 30px;
-  margin: 0;
+  text-wrap: nowrap;
 `;
 
 const InfoRow = styled.div`
@@ -265,6 +266,7 @@ const Star4Container = styled.div`
   overflow: hidden;
   display: flex;
   justify-content: flex-end;
+  z-index:0;
 `;
 
 const Header3 = styled.h3`
@@ -300,9 +302,9 @@ const LayoutContainer = styled.div`
 const ProfileBox = styled.div`
   display: flex;
 
-  justify-content: flex-start;
-  align-items: flex-start;
-  padding-top: 40px;
+  justify-content: space-between;
+  align-items: center;
+  
   background-color: #f5f5f5;
   border-radius: 10px;
   width: 50%;
@@ -322,6 +324,8 @@ const EditButton = styled.button`
   border-radius: 10px;
   z-index: 2;
   cursor: pointer;
+  float:right;
+  margin-bottom:13px;
 `;
 
 const ResumeButton = styled.button`
@@ -332,4 +336,5 @@ const ResumeButton = styled.button`
   border: 1px solid black;
   border-radius: 10px;
   cursor: pointer;
+  z-index:1;
 `;

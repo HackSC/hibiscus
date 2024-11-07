@@ -20,11 +20,13 @@ const handler: NextApiHandler = async (req, res) => {
     return res.status(429).send('Too many requests');
   }
 
-  const pfpClient = container.resolve(HackformResumeUploadClient);
+  const resumeClient = container.resolve(HackformResumeUploadClient);
 
-  const url = await pfpClient.getResumeUrl(userIdString);
+  const checkExist = await resumeClient.resumeExists(userIdString);
 
-  return res.status(200).json({ url });
+  const url = await resumeClient.getResumeUrl(userIdString);
+
+  return res.status(200).json({ exist: checkExist, url });
 };
 
 export default handler;
