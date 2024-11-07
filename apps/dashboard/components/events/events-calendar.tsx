@@ -43,16 +43,40 @@ function EventsCalendar(props: EventsCalendarProps) {
     });
   };
 
+  // Preset scroll to current time
+  useEffect(() => {
+    const d = new Date();
+    
+      scrollRefs.current.forEach((el) => {
+      if (el) {
+        el.scrollTop = d.getHours() * 100;
+      }
+    });
+  }); // Empty dependency array to ensure this only runs on mount
+
+  useEffect(() => {
+    const gridContainer = document.querySelectorAll('.grid-container');
+    if(gridContainer.length > 0) {
+      const gridStyle = window.getComputedStyle(gridContainer[0]);
+      const gridTemplateColumns = gridStyle.getPropertyValue('grid-template-columns');
+      const numberOfColumns = gridTemplateColumns.split(' ').length;
+      console.log(numberOfColumns);
+    }
+   
+
+    // console.log(numberOfColumns);
+  }, [cards] )
+
   // Queries width of component to calculate number of columns
   // Dynamically recalculates on resize
-  useEffect(() => {
-    // setColumns(calcColumns(COLUMN_WIDTH, ref.current?.offsetWidth ?? 0));
-    // const getwidth = () => {
-    //   setColumns(calcColumns(COLUMN_WIDTH, ref.current?.offsetWidth ?? 0));
-    // };
-    // window.addEventListener('resize', getwidth);
-    // return () => window.removeEventListener('resize', getwidth);
-  }, []);
+  // useEffect(() => {
+  //   setColumns(calcColumns(COLUMN_WIDTH, ref.current?.offsetWidth ?? 0));
+  //   const getwidth = () => {
+  //     setColumns(calcColumns(COLUMN_WIDTH, ref.current?.offsetWidth ?? 0));
+  //   };
+  //   window.addEventListener('resize', getwidth);
+  //   return () => window.removeEventListener('resize', getwidth);
+  // }, []);
 
   // Render event cards
   useEffect(() => {
@@ -67,9 +91,9 @@ function EventsCalendar(props: EventsCalendarProps) {
         const colCards = renderCalendarColumn(es, date, props.openModal);
         cards.push(colCards);
       }
-
       setCards(cards);
     }
+    
   }, [events, columns, offset]);
 
   return (
@@ -150,8 +174,8 @@ function EventsCalendar(props: EventsCalendarProps) {
 
             {[...Array(columns)].map((_, idx) => (
                 <CalendarColumn onScroll={syncScroll} ref={(el) => (scrollRefs.current[idx] = el)} key={idx}>
-                  <ColumnGrid>
-                    {cards[idx]}
+                  <ColumnGrid key={idx} className="grid-container">
+                      {cards[idx]}
                   </ColumnGrid>
                   
                 </CalendarColumn>
@@ -167,6 +191,10 @@ export default EventsCalendar;
 
 interface CalendarGridProps {
   columns: number;
+}
+
+interface LastRowProps {
+  isLastInRow: boolean;
 }
 
 const ColumnGrid = styled.div`
@@ -409,14 +437,10 @@ function renderCalendarColumn(
 
       <CalendarCard
         openModal={openModal}
-        // width={widthCSS}
-        // height={`${height}%`}
-        // left={leftCSS}
         top={`${((startMins/60) * 100) + 5}px`}
         bottom={`${((endMins/60) * 100) + 5}px`}
         gridRowStart={`${startHour +  1}`}
         gridRowEnd={`${endHour +  1}`}
-        // top={`${top}%`}
         {...earliestEvent}
       ></CalendarCard>
     );
