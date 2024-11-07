@@ -2,9 +2,9 @@ import { getEnv } from '@hibiscus/env';
 import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import { Colors2023 } from '@hibiscus/styles';
 import { Modal } from '@hibiscus/ui';
-import { Button, Checkbox, OneLineText } from '@hibiscus/ui-kit-2023';
+import { Button, Checkbox, OneLineText, Search } from '@hibiscus/ui-kit-2023';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 interface CheckInBoxProps {
@@ -22,16 +22,18 @@ export function CheckInBox(props: CheckInBoxProps) {
   const { isModalOpen, setModalOpen, user } = props;
   const [modalScreen, setModalScreen] = useState(ModalScreen.ASSIGN);
   const [wristbandId, setWristbandId] = useState(null);
+  const [admitted, setAdmitted] = useState(false);
   const [discordVerified, setDiscordVerified] = useState(false);
   const [waiver, setWaiver] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const { supabase } = useHibiscusSupabase();
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (user != null) {
       // checkDiscord(user.id).then((v) => setDiscordVerified(v));
-      console.log(user.waiver_signed);
       setWaiver(user.waiver_signed);
+      setAdmitted(user.application_state === 5);
     }
   }, [user]);
 
@@ -92,64 +94,107 @@ export function CheckInBox(props: CheckInBoxProps) {
   return (
     <Modal isOpen={isModalOpen} closeModal={closeModal}>
       {modalScreen === ModalScreen.ASSIGN ? (
-        <Container>
-          <UpperDiv>
-            <Name>
+        <div className="flex flex-row justify-between bg-white border-[1px] border-black border-solid rounded-[8px] p-[50px] w-[700px] h-[400px]">
+          <div className="flex flex-col">
+            <h2 className="text-3xl m-0">
               {user.first_name} {user.last_name}
-            </Name>
-            <InfoText>{user.email}</InfoText>
-            <InfoText>{user.dob}</InfoText>
-          </UpperDiv>
-          <LowerDiv>
-            <LowerLeft>
-              <SubHeader1>Verification</SubHeader1>
-              <VerificationBox>
-                <Checkbox
-                  color="yellow"
-                  label="Discord verification"
-                  checked={discordVerified}
-                  onInput={handleClick(setDiscordVerified)}
-                />
-                <Checkbox
-                  color="yellow"
-                  label="Waiver"
-                  checked={waiver}
-                  onInput={handleClick(setWaiver)}
-                />
-              </VerificationBox>
-            </LowerLeft>
-            <LowerRight onSubmit={handleAssign}>
-              <SubHeader2>Scan Wristband</SubHeader2>
-              <OneLineText
+            </h2>
+            <p className="text-xs text-gray-500">{user.email}</p>
+            <br />
+            <p className="text-xs font-bold mb-[5px]">{user.school}</p>
+            <p className="text-xs font-bold">{user.major}</p>
+
+            <div className="flex flex-col gap-[10px] mt-[64px]">
+              <h2 className="m-0 text-xl text-theme-redward">Scan Wristband</h2>
+              <Search
                 placeholder="ID number"
-                value={wristbandId}
-                onChange={(e) => setWristbandId(e.target.value)}
-              ></OneLineText>
-              <Button color="yellow" disabled={!isReady()}>
-                Assign
-              </Button>
-            </LowerRight>
-          </LowerDiv>
-        </Container>
+                externalRef={(element) => {
+                  inputRef.current = element;
+                }}
+                onInput={() => {
+                  return;
+                }}
+              />
+              <button
+                onClick={() => {
+                  setWristbandId(inputRef.current.value);
+                  handleAssign();
+                }}
+                disabled={!(admitted && waiver && discordVerified)}
+                className="w-fit bg-red-300 hover:bg-theme-redward disabled:bg-gray-300 border-black border-[1px] border-solid rounded-[8px] text-xs px-[12px] py-[8px]"
+              >
+                Assign Band
+              </button>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-[20px]">
+            <h2 className="m-0 text-xl text-theme-redward">Verification</h2>
+            <div className="border-black border-[1px] rounded-[13px] p-[40px] flex flex-col gap-[30px]">
+              <Checkbox
+                color="yellow"
+                label="Admitted"
+                checked={admitted}
+                onInput={handleClick(setAdmitted)}
+              />
+              <Checkbox
+                color="yellow"
+                label="Signed Waiver"
+                checked={waiver}
+                onInput={handleClick(setWaiver)}
+              />
+              <Checkbox
+                color="yellow"
+                label="Joined Discord"
+                checked={discordVerified}
+                onInput={handleClick(setDiscordVerified)}
+              />
+            </div>
+          </div>
+        </div>
       ) : (
-        <Container>
-          <Name>Confirm</Name>
-          <ConfirmText>
-            Please confirm you would like to map wristband “{wristbandId}” to{' '}
-            {user.first_name} {user.last_name}.{'\n'}
+        <div className="flex flex-col justify-center items-center gap-[20px] bg-white border-[1px] border-black border-solid rounded-[8px] w-[700px] h-[400px]">
+          <h2 className="text-2xl m-0">Confirm</h2>
+          <p className="text-sm">
+            Please confirm you would like to map wristband &quot;{wristbandId}
+            &quot; to {user.first_name} {user.last_name}.{'\n'}
             <span style={{ color: Colors2023.RED.STANDARD }}>
               {errorMessage}
             </span>
-          </ConfirmText>
-          <ButtonDiv>
-            <Button color="grey" onClick={closeModal}>
-              CANCEL
-            </Button>
-            <Button color="yellow" onClick={handleConfirm}>
-              CONFIRM
-            </Button>
-          </ButtonDiv>
-        </Container>
+          </p>
+          <div className="flex flex-row gap-[20px]">
+            <button
+              onClick={closeModal}
+              className="w-fit bg-white hover:bg-gray-300 border-black border-[1px] border-solid rounded-[8px] text-xs px-[12px] py-[8px]"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleConfirm}
+              className="w-fit bg-lime-200 hover:bg-lime-400 border-black border-[1px] border-solid rounded-[8px] text-xs px-[20px] py-[8px]"
+            >
+              Confirm
+            </button>
+          </div>
+        </div>
+        // <Container>
+        //   <Name>Confirm</Name>
+        //   <ConfirmText>
+        //     Please confirm you would like to map wristband “{wristbandId}” to{' '}
+        //     {user.first_name} {user.last_name}.{'\n'}
+        //     <span style={{ color: Colors2023.RED.STANDARD }}>
+        //       {errorMessage}
+        //     </span>
+        //   </ConfirmText>
+        //   <ButtonDiv>
+        //     <Button color="grey" onClick={closeModal}>
+        //       CANCEL
+        //     </Button>
+        //     <Button color="yellow" onClick={handleConfirm}>
+        //       CONFIRM
+        //     </Button>
+        //   </ButtonDiv>
+        // </Container>
       )}
     </Modal>
   );

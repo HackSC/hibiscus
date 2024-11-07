@@ -7,9 +7,10 @@ import { ScrollableListBox } from '../scrollable-list-box/scrollable-list-box';
 
 interface SearchUserBoxProps {
   onClick: (value: string) => void;
+  placeholder: string;
 }
 
-export function SearchUserBox({ onClick }: SearchUserBoxProps) {
+export function SearchUserBox({ onClick, placeholder }: SearchUserBoxProps) {
   const [isModalOpen, setModalOpen] = useState(false);
   const [searchRes, setSearchRes] = useState(
     [] as Awaited<ReturnType<typeof searchUser>>
@@ -25,7 +26,7 @@ export function SearchUserBox({ onClick }: SearchUserBoxProps) {
 
   return (
     <>
-      <Search placeholder="Search by attendee name" onInput={search}></Search>
+      <Search placeholder={placeholder} onInput={search}></Search>
 
       <Modal isOpen={isModalOpen} closeModal={() => setModalOpen(false)}>
         <ScrollableListBox width={500} height={500}>

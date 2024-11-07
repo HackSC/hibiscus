@@ -154,7 +154,7 @@ const StyledRedCheckbox = styled.label`
 `;
 
 const StyledYellowCheckbox = styled.label`
-  color: white;
+  color: black;
   display: block;
   position: relative;
   padding-left: 35px;
@@ -179,9 +179,9 @@ const StyledYellowCheckbox = styled.label`
     left: 0;
     height: 25px;
     width: 25px;
-    background-color: #565656;
-    border: 1px solid #ae8c1d;
-    border-radius: 5px;
+    // background-color: #565656;
+    border: 1px solid black;
+    border-radius: 50%;
   }
 
   :hover input ~ .checkmark {
@@ -189,25 +189,25 @@ const StyledYellowCheckbox = styled.label`
     filter: drop-shadow(0px 0px 15px #c2c2c2);
   }
   input:checked ~ .checkmark {
-    background-color: #ffe89c;
+    background-color: #ddfc75;
   }
 
   .checkmark:after {
     content: '';
     position: absolute;
-    display: none;
-  }
-  input:checked ~ .checkmark:after {
     display: block;
   }
+  // input:checked ~ .checkmark:after {
+  //   display: block;
+  // }
 
   .checkmark:after {
     left: 9px;
-    top: 5px;
+    top: 6px;
     width: 5px;
     height: 10px;
-    border: solid #ae8c1d;
-    border-width: 0 3px 3px 0;
+    border: solid black;
+    border-width: 0 1px 1px 0;
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
@@ -319,5 +319,6 @@ const StyledCheckbox = styled.label`
 
 const TextWrap = styled(Text)<{ disabled?: boolean }>`
   text-align: left;
-  color: ${(props) => (props.disabled ? Colors2023.GRAY.MEDIUM : 'white')};
+  color: ${(props) => (props.disabled ? Colors2023.GRAY.MEDIUM : 'black')};
+  font-size: 16px;
 `;

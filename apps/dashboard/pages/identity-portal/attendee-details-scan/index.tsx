@@ -32,6 +32,7 @@ export function Index() {
           onClick={(id) =>
             router.push(`/identity-portal/attendee-details?user_id=${id}`)
           }
+          placeholder="Search by attendee name"
         />
       </div>
 

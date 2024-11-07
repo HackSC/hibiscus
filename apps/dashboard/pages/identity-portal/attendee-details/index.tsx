@@ -20,6 +20,7 @@ import {
 import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import BattlepassPointsBar from 'apps/dashboard/components/battlepass/battlepass-points-bar';
 import { BsExclamationTriangle } from 'react-icons/bs';
+import { MdCheckCircleOutline } from 'react-icons/md';
 
 const COLUMN_WIDTH = 510;
 const TEAM_MEMBER_ICONS = [
@@ -224,10 +225,19 @@ export function Index() {
                   <p>{user.major}</p>
                 </div>
 
-                <div className="flex flex-row justify-between text-theme-redward ">
+                <div className="flex flex-row justify-between">
                   <div className="flex flex-row gap-[10px] items-center">
-                    <p className="text-xl font-medium">NOT CHECKED IN</p>
-                    <BsExclamationTriangle size={20} />
+                    {user.wristband_id == null ? (
+                      <div className="text-theme-redward">
+                        <p className="text-xl font-medium">NOT CHECKED IN</p>
+                        <BsExclamationTriangle size={20} />
+                      </div>
+                    ) : (
+                      <>
+                        <p className="text-xl font-medium">CHECKED IN</p>
+                        <MdCheckCircleOutline size={20} />
+                      </>
+                    )}
                   </div>
                   <button
                     onClick={() => setModalOpen(true)}

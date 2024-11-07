@@ -1,16 +1,17 @@
 import styled from 'styled-components';
 import { BiSearch } from 'react-icons/bi';
-import { FormEvent, useRef } from 'react';
+import { FormEvent, MutableRefObject, useRef } from 'react';
 
 /* eslint-disable-next-line */
 export interface searchProps {
   placeholder: string;
   onInput: (value: string) => void;
+  externalRef?: (instance: HTMLInputElement | null) => void;
 }
 
-export function Search({ placeholder, onInput }: searchProps) {
-  const ref = useRef<HTMLInputElement>(null);
-  function handleSubmit(e: FormEvent) {
+export function Search({ placeholder, onInput, externalRef }: searchProps) {
+  const ref = useRef<HTMLInputElement | null>(null);
+  async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (!ref.current) return;
     onInput(ref.current.value);
@@ -27,7 +28,15 @@ export function Search({ placeholder, onInput }: searchProps) {
             fontSize: '1em',
           }}
         />
-        <Input ref={ref} placeholder={placeholder} />
+        <Input
+          ref={(element) => {
+            ref.current = element;
+            if (externalRef !== undefined) {
+              externalRef(element);
+            }
+          }}
+          placeholder={placeholder}
+        />
       </OuterDiv>
     </form>
   );

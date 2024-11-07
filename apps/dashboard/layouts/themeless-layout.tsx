@@ -56,7 +56,7 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
         },
         {
           name: 'Event Check-in',
-          url: '/identity-portal/attendee-event-scan',
+          url: '/identity-portal/event-checkin',
           image: MdOutlinePlaylistAddCheck,
         },
       ];
@@ -68,7 +68,7 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
     const map = {
       '/leaderboard': 'Leaderboard',
       '/identity-portal/attendee-details-scan': 'Identity Portal',
-      '/identity-portal/attendee-details': 'Identity Portal',
+      '/identity-portal/attendee-details': 'Attendee Details',
       '/identity-portal/attendee-event-scan': 'Event Check-in',
       '/identity-portal/event-checkin': 'Event Check-in',
     };
