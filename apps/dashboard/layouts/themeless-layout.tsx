@@ -14,6 +14,7 @@ import SideNav from '../components/nav/side-nav2';
 import {
   MdOutlineCalendarViewMonth,
   MdOutlinePeopleAlt,
+  MdOutlineCalendarMonth,
   MdOutlinePlaylistAddCheck,
   MdStarOutline,
 } from 'react-icons/md';
@@ -60,7 +61,19 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
           image: MdOutlinePlaylistAddCheck,
         },
       ];
-    return [];
+    if (user.role === HibiscusRole.SPONSOR)
+      return [
+        {
+          name: 'Events',
+          url: '/sponsor-booth',
+          image: MdOutlineCalendarMonth,
+        },
+        {
+          name: 'Hacker Attendees',
+          url: '/participant-database',
+          image:MdOutlinePeopleAlt,
+        },
+    ];
   }, [user]);
 
   const router = useRouter();
@@ -129,8 +142,8 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
 
-  height: 100%;
-  min-height: 100vh;
+  height: 100vh;
+  /* min-height: 100vh; */
   background-color: white;
   // border-radius: 30px 0 0 30px;
 
@@ -168,7 +181,7 @@ const RightUtilityContainer = styled.div`
 const ChildrenWrapper = styled.div`
   height: 100%;
   max-height: 100%;
-  padding: 40px;
+  /* padding: 40px; */
 `;
 
 const VerticalMainPageWrapper = styled.div`
