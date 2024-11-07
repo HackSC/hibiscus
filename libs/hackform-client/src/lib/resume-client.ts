@@ -77,4 +77,13 @@ export class HackformResumeUploadClient {
 
     return data.length > 0;
   }
+
+  async getResumeUrl(userId: string): Promise<string> {
+    const { data } = await this.supabaseClient
+      .getClient()
+      .storage.from(this.bucket)
+      .getPublicUrl(`${userId}/resume.pdf`);
+
+    return data.publicUrl;
+  }
 }

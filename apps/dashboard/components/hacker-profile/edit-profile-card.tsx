@@ -411,6 +411,7 @@ const ModalOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+    z-index:10;
 `;
 
 const ModalContainer = styled.div`
@@ -422,6 +423,7 @@ const ModalContainer = styled.div`
   border-radius: 10px;
   position: relative;
   flex-shrink: 0;
+    z-index:5;
 `;
 
 const FormContainer = styled.div`
