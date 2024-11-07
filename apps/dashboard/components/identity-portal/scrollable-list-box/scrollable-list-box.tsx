@@ -44,7 +44,7 @@ ScrollableListBox.Item = styled.div`
   padding: 1em 0;
 
   &:not(:last-child) {
-    border-bottom: thin solid ${Colors2023.GRAY.MEDIUM};
+    border-bottom: thin solid black;
   }
 `;
 
@@ -55,31 +55,32 @@ const Container = styled.div`
   width: 360px;
   height: 385px;
 
-  padding: 1.5em 2.5em;
+  padding: 0 1em;
 
-  background-color: ${Colors2023.GRAY.STANDARD};
+  background-color: white;
 
-  border: thick solid ${Colors2023.GRAY.MEDIUM};
+  border: 1px solid black;
   border-radius: 9px;
 
   overflow-y: scroll;
+  overflow-x: hidden;
 `;
 
 const Clickable = styled.div`
   cursor: pointer;
 
   &:not(:last-child) {
-    border-bottom: thin solid ${Colors2023.GRAY.MEDIUM};
+    border-bottom: thin solid black;
   }
 
   &:hover {
-    background-color: ${Colors2023.GRAY.MEDIUM};
+    background-color: ${Colors2023.GRAY.SHLIGHT};
     padding: 0 1.5em;
     margin: 0 -1.5em;
   }
 
   &:active {
-    background-color: ${Colors2023.GRAY.DARK};
+    background-color: ${Colors2023.GRAY.MEDIUM};
     padding: 0 1.5em;
     margin: 0 -1.5em;
   }

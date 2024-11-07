@@ -28,6 +28,7 @@ export function calculateBattlepassProgress(
       level: 0,
       progress: points / BATTLEPASS_LEVEL_POINTS[1],
       nextLevel: BATTLEPASS_LEVEL_POINTS[1],
+      points,
     };
   }
 }
@@ -43,4 +44,5 @@ export interface BattlepassProgress {
   level: number;
   progress: number;
   nextLevel?: number;
+  points?: number;
 }

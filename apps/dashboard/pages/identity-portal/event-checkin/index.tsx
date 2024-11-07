@@ -11,15 +11,16 @@ import { ScrollableListBox } from '../../../components/identity-portal/scrollabl
 import { useEffect, useState } from 'react';
 import searchEvent from '../../../common/search-event';
 import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
+import { SearchUserBox } from 'apps/dashboard/components/identity-portal/search-user-box/search-user-box';
+import Select from 'react-select';
 
 export function Index() {
   const { user: authUser } = useHibiscusUser();
   const { supabase } = useHibiscusSupabase();
 
   //search for all events in supabase table
-  const [searchRes, setSearchRes] = useState(
-    [] as Awaited<ReturnType<typeof searchEvent>>
-  );
+  const [searchRes, setSearchRes] = useState(null);
+  const [selected, setSelected] = useState(null);
 
   useEffect(() => {
     search();
@@ -40,37 +41,34 @@ export function Index() {
 
   return (
     <>
-      <div style={{ position: 'absolute', left: '100px' }}>
-        <BackButton link="/" />
+      <div className="flex flex-col">
+        <p className="mb-[64px]">Select an event!</p>
+
+        <div className="flex flex-col gap-[10px]">
+          <h2 className="m-0 text-xl text-theme-redward">Select an event!</h2>
+          <Select
+            isSearchable={true}
+            isDisabled={searchRes == null}
+            isLoading={searchRes == null}
+            options={searchRes}
+            getOptionLabel={(option) => option.name}
+            getOptionValue={(option) => option.id}
+            onChange={(option) => setSelected(option.id)}
+            className="w-[250px]"
+            classNamePrefix="select"
+          />
+
+          <button
+            onClick={() =>
+              router.push(`/identity-portal/attendee-event-scan?id=${selected}`)
+            }
+            disabled={selected == null}
+            className="w-fit bg-red-300 hover:bg-theme-redward disabled:bg-gray-300 border-black border-[1px] border-solid rounded-[8px] text-xs px-[20px] py-[8px]"
+          >
+            Submit
+          </button>
+        </div>
       </div>
-      <Container>
-        <ColumnSpacedCenter>
-          <ColumnCenter>
-            <GlowSpan
-              color={Colors2023.YELLOW.STANDARD}
-              style={{ fontSize: '3rem' }}
-            >
-              Check-in to an Event
-            </GlowSpan>
-            <Text>Search for your event.</Text>
-          </ColumnCenter>
-          <ScrollableListBox width={500}>
-            {searchRes.map((event, i) => (
-              <ScrollableListBox.ItemClickable
-                key={i}
-                value={event.id}
-                onClick={(id) =>
-                  router.push(`/identity-portal/attendee-event-scan?id=${id}`)
-                }
-              >
-                <BoldText style={{ fontSize: '1em' }}>{event.name}</BoldText>
-                <Text style={{ fontSize: '0.75em' }}>{event.location}</Text>
-                <Text style={{ fontSize: '0.75em' }}>{event.points}</Text>
-              </ScrollableListBox.ItemClickable>
-            ))}
-          </ScrollableListBox>
-        </ColumnSpacedCenter>
-      </Container>
     </>
   );
 }
