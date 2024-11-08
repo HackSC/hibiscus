@@ -1,13 +1,15 @@
 import 'reflect-metadata';
 import { HackformResumeUploadClient } from '@hibiscus/hackform-client';
-import { LocalAPIResponses } from '../../common/types';
 import { NextApiHandler } from 'next';
 import { container } from 'tsyringe';
 import formidable, { IncomingForm } from 'formidable';
 import fs from 'fs';
-import { ALLOWED_RESUME_FORMATS } from '../../common/constants';
+import { ALLOWED_RESUME_FORMATS } from '../../../../../common/constants';
 import mime from 'mime-types';
-import { getTokensFromNextRequest, rateLimitHandler } from '../../common/utils';
+import {
+  getTokensFromNextRequest,
+  rateLimitHandler,
+} from '../../../../../common/utils';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 
 export const config = {
@@ -31,15 +33,12 @@ const handler: NextApiHandler = async (req, res) => {
   if (req.method !== 'POST') {
     return res.status(405).send('Method not allowed');
   }
-  const { accessToken } = getTokensFromNextRequest(req);
-  const user = await hbc.getUserProfile(accessToken);
-  if (!user) {
+
+  const { userId } = req.query;
+  const userIdString = userId as string;
+
+  if (!userIdString) {
     return res.status(400).json({ message: 'Unauthorized' });
-  }
-  if (user?.app_id !== null) {
-    return res
-      .status(400)
-      .json({ message: 'You have already submitted your application!' });
   }
 
   try {
@@ -72,12 +71,20 @@ const handler: NextApiHandler = async (req, res) => {
     const data = fs.readFileSync(file.filepath);
     const uploadClient = container.resolve(HackformResumeUploadClient);
     try {
-      const meta = await uploadClient.uploadResume(data, key);
-      return res.status(200).json({
-        key,
-        filepath: file.filepath,
-        meta,
-      } as LocalAPIResponses['/resume']);
+      const checkExists = await uploadClient.resumeExists(userIdString);
+      if (!checkExists) {
+        const meta = await uploadClient.uploadResume(data, userIdString);
+        return res.status(200).json({
+          success: true,
+          path: meta.path,
+        });
+      } else {
+        const meta = await uploadClient.updateResume(data, userIdString);
+        return res.status(200).json({
+          success: true,
+          path: meta.path,
+        });
+      }
     } catch (e) {
       console.error(e);
       // TODO: better handling
