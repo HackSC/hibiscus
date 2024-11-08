@@ -23,7 +23,7 @@ export function Index() {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col p-[40px]">
       <p className="mb-[64px]">Search for hackers!</p>
 
       <div className="flex flex-col gap-[10px]">

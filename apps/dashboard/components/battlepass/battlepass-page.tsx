@@ -49,7 +49,7 @@ function BattlepassPage() {
   }, []);
 
   return (
-    <div className="border-neutral-200 border">
+    <div className="border-neutral-200 border p-[40px]">
       {/* content */}
       <div className="flex space-x-[90px]">
         {/* left column */}
