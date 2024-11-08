@@ -31,10 +31,10 @@ function EventsCalendar(props: EventsCalendarProps) {
     return `${hour} ${period}`;
   });
 
-   // Function to synchronize scroll positions
-   const syncScroll = (event) => {
+  // Function to synchronize scroll positions
+  const syncScroll = (event) => {
     const scrollTop = event.target.scrollTop;
-    
+
     // Update scroll position for each .row2 element except the one being scrolled
     scrollRefs.current.forEach((el) => {
       if (el && el !== event.target) {
@@ -46,26 +46,27 @@ function EventsCalendar(props: EventsCalendarProps) {
   // Preset scroll to current time
   useEffect(() => {
     const d = new Date();
-    
-      scrollRefs.current.forEach((el) => {
+
+    scrollRefs.current.forEach((el) => {
       if (el) {
         el.scrollTop = d.getHours() * 100;
       }
     });
-  }); // Empty dependency array to ensure this only runs on mount
+  }, []); // Empty dependency array to ensure this only runs on mount
 
   useEffect(() => {
     const gridContainer = document.querySelectorAll('.grid-container');
-    if(gridContainer.length > 0) {
+    if (gridContainer.length > 0) {
       const gridStyle = window.getComputedStyle(gridContainer[0]);
-      const gridTemplateColumns = gridStyle.getPropertyValue('grid-template-columns');
+      const gridTemplateColumns = gridStyle.getPropertyValue(
+        'grid-template-columns'
+      );
       const numberOfColumns = gridTemplateColumns.split(' ').length;
       console.log(numberOfColumns);
     }
-   
 
     // console.log(numberOfColumns);
-  }, [cards] )
+  }, [cards]);
 
   // Queries width of component to calculate number of columns
   // Dynamically recalculates on resize
@@ -93,22 +94,22 @@ function EventsCalendar(props: EventsCalendarProps) {
       }
       setCards(cards);
     }
-    
   }, [events, columns, offset]);
 
   return (
     <>
-        <CalendarGrid ref={ref} columns={columns}>
+      <CalendarGrid ref={ref} columns={columns}>
         {cards && (
           <>
-
             <Span></Span> {/* Take space in the row1 col1*/}
-              <Times  onScroll={syncScroll} ref={(el) => (scrollRefs.current[3] = el)} >
-                {hours.map((time, index) => (
-                  <Time key={index}>{time}</Time>
-                ))}
-              </Times>
-
+            <Times
+              onScroll={syncScroll}
+              ref={(el) => (scrollRefs.current[3] = el)}
+            >
+              {hours.map((time, index) => (
+                <Time key={index}>{time}</Time>
+              ))}
+            </Times>
             {/* Note:  Arrows to toggle between dates */}
             {/* {offset > 0 && (
               <LeftArrow
@@ -123,27 +124,25 @@ function EventsCalendar(props: EventsCalendarProps) {
                 &gt;
               </RightArrow>
             )} */}
-
             {/* Note: Map Event dates to Headers */}
             {[...Array(columns)].map((_, idx) => (
-                  <CalendarHeader key={idx}>
-                      {events[idx + offset] && (
-                      <>
-                        <Text>
-                          {getDayDate(
-                            events[idx + offset][0].startTime
-                          ).toLocaleDateString('en-us', { month: 'short' })}
-                        </Text>
-                        <NumText>
-                          {getDayDate(
-                            events[idx + offset][0].startTime
-                          ).toLocaleDateString('en-us', { day: '2-digit' })}
-                        </NumText>
-                      </>
-                    )}
-                  </CalendarHeader>
+              <CalendarHeader key={idx}>
+                {events[idx + offset] && (
+                  <>
+                    <Text>
+                      {getDayDate(
+                        events[idx + offset][0].startTime
+                      ).toLocaleDateString('en-us', { month: 'short' })}
+                    </Text>
+                    <NumText>
+                      {getDayDate(
+                        events[idx + offset][0].startTime
+                      ).toLocaleDateString('en-us', { day: '2-digit' })}
+                    </NumText>
+                  </>
+                )}
+              </CalendarHeader>
             ))}
-
             {/* Note: Temporary Hard coded Headers */}
             {/* <CalendarHeader >
                   <Text>
@@ -171,14 +170,16 @@ function EventsCalendar(props: EventsCalendarProps) {
                     10
                   </NumText>
             </CalendarHeader> */}
-
             {[...Array(columns)].map((_, idx) => (
-                <CalendarColumn onScroll={syncScroll} ref={(el) => (scrollRefs.current[idx] = el)} key={idx}>
-                  <ColumnGrid key={idx} className="grid-container">
-                      {cards[idx]}
-                  </ColumnGrid>
-                  
-                </CalendarColumn>
+              <CalendarColumn
+                onScroll={syncScroll}
+                ref={(el) => (scrollRefs.current[idx] = el)}
+                key={idx}
+              >
+                <ColumnGrid key={idx} className="grid-container">
+                  {cards[idx]}
+                </ColumnGrid>
+              </CalendarColumn>
             ))}
           </>
         )}
@@ -211,15 +212,15 @@ const Times = styled.div`
   grid-row-start: 2;
   grid-row-end: 3;
 
-  display:grid;
+  display: grid;
   grid-template-rows: repeat(24, 100px);
   overflow-y: auto;
   scrollbar-width: none;
-  -ms-overflow-style: none; 
+  -ms-overflow-style: none;
 `;
 
 const Time = styled.div`
-  color: #9B9191;
+  color: #9b9191;
   /* margin-bottom: 50px; */
 `;
 
@@ -236,7 +237,7 @@ const NumText = styled.p`
 const CalendarGrid = styled.div<CalendarGridProps>`
   position: relative;
   display: grid;
-  grid-template-rows: auto 1fr; 
+  grid-template-rows: auto 1fr;
   grid-template-columns: 50px repeat(${(props) => props.columns}, 1fr);
   width: 70vw;
 
@@ -434,13 +435,12 @@ function renderCalendarColumn(
     const leftCSS = `calc(${left}% + ${leftAdd}px)`;
 
     nodes.push(
-
       <CalendarCard
         openModal={openModal}
-        top={`${((startMins/60) * 100) + 5}px`}
-        bottom={`${((endMins/60) * 100) + 5}px`}
-        gridRowStart={`${startHour +  1}`}
-        gridRowEnd={`${endHour +  1}`}
+        top={`${(startMins / 60) * 100 + 5}px`}
+        bottom={`${(endMins / 60) * 100 + 5}px`}
+        gridRowStart={`${startHour + 1}`}
+        gridRowEnd={`${endHour + 1}`}
         {...earliestEvent}
       ></CalendarCard>
     );

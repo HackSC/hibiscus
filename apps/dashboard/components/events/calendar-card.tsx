@@ -47,8 +47,6 @@ function CalendarCard(props: EventCardProps) {
 
 export default CalendarCard;
 
-
-
 const Card = styled.div<EventCardProps>`
   margin: 0;
   padding: 0.5rem;
@@ -58,13 +56,13 @@ const Card = styled.div<EventCardProps>`
   grid-row-end: ${(props) => props.gridRowEnd};
 
   width: 100%;
-  overflow:hidden;
+  overflow: hidden;
   overflow-y: auto;
   overflow-x: auto;
   scrollbar-width: none;
-  white-space:nowrap;
+  white-space: nowrap;
 
-  background-color: #DAEEFF;
+  background-color: #daeeff;
   border: 1px solid black;
   border-radius: 10px;
 
@@ -76,4 +74,3 @@ const Card = styled.div<EventCardProps>`
   margin-bottom: 5px;
   padding-bottom: ${(props) => props.bottom};
 `;
-
