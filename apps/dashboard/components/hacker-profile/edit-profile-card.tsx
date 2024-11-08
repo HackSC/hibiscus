@@ -220,7 +220,6 @@ const EditProfileCard = ({ onClose }) => {
         </FormContainer>
 
         <FormContainer>
-
           <InfoRow>
             <FieldLabel>School</FieldLabel>
             <Select
@@ -232,7 +231,11 @@ const EditProfileCard = ({ onClose }) => {
               }}
               options={schoolOptions}
               menuPlacement="auto"
-              menuPortalTarget={document.getElementsByClassName('modal-profile')[0] as HTMLElement}
+              menuPortalTarget={
+                document.getElementsByClassName(
+                  'modal-profile'
+                )[0] as HTMLElement
+              }
               menuPosition={'fixed'}
               menuShouldScrollIntoView={true}
               styles={{
@@ -285,11 +288,12 @@ const EditProfileCard = ({ onClose }) => {
             <Select
               name="graduationYear"
               id="graduationYear"
-              
               options={options}
               placeholder={
-                formik.values.graduationYear ? formik.values.graduationYear[0].toUpperCase() +
-                  formik.values.graduationYear.slice(1) : 'Select your year'
+                formik.values.graduationYear
+                  ? formik.values.graduationYear[0].toUpperCase() +
+                    formik.values.graduationYear.slice(1)
+                  : 'Select your year'
               }
               onChange={(e) => {
                 formik.setFieldValue('graduationYear', e.value);
@@ -299,7 +303,6 @@ const EditProfileCard = ({ onClose }) => {
               menuPosition={'fixed'}
               menuShouldScrollIntoView={true}
               styles={{
-                
                 control: (baseStyles, state) => ({
                   ...baseStyles,
 
@@ -310,15 +313,14 @@ const EditProfileCard = ({ onClose }) => {
                   borderRight: 'none',
                   width: '28vh',
                   borderRadius: '8px',
-                  
                 }),
-                menuPortal: base => ({ ...base, zIndex: 9999 }),
+                menuPortal: (base) => ({ ...base, zIndex: 9999 }),
 
-                menu: (baseStyles, state, ) => ({
+                menu: (baseStyles, state) => ({
                   ...baseStyles,
                   color: 'black',
                   borderRadius: '8px',
-                  zIndex:9999
+                  zIndex: 9999,
                 }),
                 menuList: (baseStyles, state) => ({
                   ...baseStyles,
@@ -326,7 +328,7 @@ const EditProfileCard = ({ onClose }) => {
                   overflowY: 'auto',
                   backgroundColor: '#f5f5f5',
                   borderRadius: '8px',
-                  zIndex:9999
+                  zIndex: 9999,
                 }),
                 option: (baseStyles, state) => ({
                   ...baseStyles,
@@ -406,11 +408,11 @@ const ModalOverlay = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.25);
+  // background-color: rgba(0, 0, 0, 0.25);
   display: flex;
   justify-content: center;
   align-items: center;
-    z-index:2;
+  z-index: 2;
 `;
 
 const ModalContainer = styled.div`
@@ -422,7 +424,6 @@ const ModalContainer = styled.div`
   border-radius: 10px;
   position: relative;
   flex-shrink: 0;
-    
 `;
 
 const FormContainer = styled.div`

@@ -2,9 +2,7 @@ import 'reflect-metadata';
 import { HackFromProfilePictureClient } from '@hibiscus/hackform-client';
 import { NextApiHandler } from 'next';
 import { container } from 'tsyringe';
-import {
-  rateLimitHandler,
-} from '../../../../../common/utils';
+import { rateLimitHandler } from '../../../../../common/utils';
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
 
 const handler: NextApiHandler = async (req, res) => {
@@ -27,7 +25,7 @@ const handler: NextApiHandler = async (req, res) => {
 
   const url = await pfpClient.getPfpUrl(userIdString);
 
-  return res.status(200).json({ exist: pfpClient, url });
+  return res.status(200).json({ exist: checkExist, url });
 };
 
 export default handler;

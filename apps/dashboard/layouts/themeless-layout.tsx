@@ -71,6 +71,7 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
       '/identity-portal/attendee-details': 'Attendee Details',
       '/identity-portal/attendee-event-scan': 'Event Check-in',
       '/identity-portal/event-checkin': 'Event Check-in',
+      '/hacker-profile': 'Profile',
     };
     return map[router.pathname] ?? '';
   }, [router]);
@@ -129,7 +130,7 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
 
-  height: 100%;
+  // height: 100%;
   min-height: 100vh;
   background-color: white;
   // border-radius: 30px 0 0 30px;
@@ -168,7 +169,6 @@ const RightUtilityContainer = styled.div`
 const ChildrenWrapper = styled.div`
   height: 100%;
   max-height: 100%;
-  padding: 40px;
 `;
 
 const VerticalMainPageWrapper = styled.div`

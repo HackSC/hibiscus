@@ -75,7 +75,9 @@ export function Index() {
     };
 
     const fetchResume = async () => {
-      const response = await fetch('/api/hacker-profile/resume/get-resume/' + user.id);
+      const response = await fetch(
+        '/api/hacker-profile/resume/get-resume/' + user.id
+      );
       const data = await response.json();
       data.exist && setResume(data.url);
     };
@@ -136,7 +138,14 @@ export function Index() {
           </InfoRow>
         </BasicInfoContainer>
 
-        <div style={{border: '1px solid', width: '60%', color: '#989898'}} />
+        <div
+          style={{
+            border: '1px solid',
+            width: '60%',
+            color: '#989898',
+            marginBottom: '2rem',
+          }}
+        />
         <AboutContainer>
           <Header3>About Me</Header3>
           <TextBox>{profileBio}</TextBox>
@@ -214,7 +223,7 @@ const UserName = styled.h2`
   margin-bottom: 30px;
   color: black;
   font-weight: bold;
-  margin-left:0;
+  margin-left: 0;
   padding-right: 30px;
   text-wrap: nowrap;
 `;
@@ -252,7 +261,7 @@ const DividerLine = styled.hr`
 `;
 
 const AboutContainer = styled.div`
-  padding-bottom: 10px;
+  margin-bottom: 20px;
 `;
 
 const TextBox = styled.div``;
@@ -266,11 +275,12 @@ const Star4Container = styled.div`
   overflow: hidden;
   display: flex;
   justify-content: flex-end;
-  z-index:0;
+  z-index: 0;
 `;
 
 const Header3 = styled.h3`
-  margin-right: 10px;
+  font-size: 1.5rem;
+  margin-bottom: 5px;
 `;
 
 const Body = styled.div`
@@ -279,7 +289,6 @@ const Body = styled.div`
   justify-content: center;
   align-items: flex-start;
   flex-direction: column;
-  height: 70vh;
   background-color: #f5f5f5;
 
   padding: 40px;
@@ -293,10 +302,9 @@ const LayoutContainer = styled.div`
   display: flex;
   justify-content: flex-start;
   align-items: stretch;
-  height: 100vh;
+  height: 100%;
   background-color: #f5f5f5;
   flex-direction: column;
-  margin-bottom: 50px;
 `;
 
 const ProfileBox = styled.div`
@@ -304,7 +312,7 @@ const ProfileBox = styled.div`
 
   justify-content: space-between;
   align-items: center;
-  
+
   background-color: #f5f5f5;
   border-radius: 10px;
   width: 50%;
@@ -324,17 +332,17 @@ const EditButton = styled.button`
   border-radius: 10px;
   z-index: 2;
   cursor: pointer;
-  float:right;
-  margin-bottom:13px;
+  float: right;
+  margin-bottom: 13px;
 `;
 
 const ResumeButton = styled.button`
   padding: 10px 20px;
-  margin-top: 0;
+  margin-top: 10px;
   background-color: #ff6347;
   color: black;
   border: 1px solid black;
   border-radius: 10px;
   cursor: pointer;
-  z-index:1;
+  z-index: 1;
 `;
