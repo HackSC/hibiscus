@@ -11,7 +11,12 @@ import { Colors2023 } from '@hibiscus/styles';
 import { useMediaQuery } from 'react-responsive';
 import StyledTopNav from '../components/nav/top-nav';
 import SideNav from '../components/nav/side-nav2';
-import { MdOutlineCalendarViewMonth, MdStarOutline } from 'react-icons/md';
+import {
+  MdOutlineCalendarViewMonth,
+  MdOutlinePeopleAlt,
+  MdOutlinePlaylistAddCheck,
+  MdStarOutline,
+} from 'react-icons/md';
 import { FaRegUserCircle } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 
@@ -24,6 +29,7 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
   const color = useMemo(() => {
     if (user == null) return Colors.Yellow.ArthurSweater;
     if (user.role === HibiscusRole.HACKER) return Colors.Red.Redward;
+    if (user.role === HibiscusRole.VOLUNTEER) return Colors.Red.Redward;
     if (user.role === HibiscusRole.SPONSOR) return Colors.Red.DonatedBlood;
     return Colors.Yellow.ArthurSweater;
   }, [user]);
@@ -39,7 +45,20 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
       return [
         { name: 'Events', url: '/events', image: MdOutlineCalendarViewMonth },
         { name: 'Leaderboard', url: '/leaderboard', image: MdStarOutline },
-        { name: 'Profile', url: '/profile', image: FaRegUserCircle },
+        { name: 'Profile', url: '/hacker-profile', image: FaRegUserCircle },
+      ];
+    if (user.role === HibiscusRole.VOLUNTEER)
+      return [
+        {
+          name: 'Identity Portal',
+          url: '/identity-portal/attendee-details-scan',
+          image: MdOutlinePeopleAlt,
+        },
+        {
+          name: 'Event Check-in',
+          url: '/identity-portal/event-checkin',
+          image: MdOutlinePlaylistAddCheck,
+        },
       ];
     return [];
   }, [user]);
@@ -48,6 +67,11 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
   const pageTitle = useMemo(() => {
     const map = {
       '/leaderboard': 'Leaderboard',
+      '/identity-portal/attendee-details-scan': 'Identity Portal',
+      '/identity-portal/attendee-details': 'Attendee Details',
+      '/identity-portal/attendee-event-scan': 'Event Check-in',
+      '/identity-portal/event-checkin': 'Event Check-in',
+      '/hacker-profile': 'Profile',
     };
     return map[router.pathname] ?? '';
   }, [router]);
@@ -106,7 +130,7 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
 
-  height: 100%;
+  // height: 100%;
   min-height: 100vh;
   background-color: white;
   // border-radius: 30px 0 0 30px;
@@ -145,7 +169,6 @@ const RightUtilityContainer = styled.div`
 const ChildrenWrapper = styled.div`
   height: 100%;
   max-height: 100%;
-  padding: 40px;
 `;
 
 const VerticalMainPageWrapper = styled.div`

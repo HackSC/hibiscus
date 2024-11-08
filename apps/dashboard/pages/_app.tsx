@@ -28,6 +28,11 @@ const newLayoutRoutes = [
   '/leaderboard',
   '/sponsor-booth',
   '/participant-database',
+  '/identity-portal/attendee-details',
+  '/identity-portal/attendee-details-scan',
+  '/identity-portal/attendee-event-scan',
+  '/identity-portal/event-checkin',
+  '/hacker-profile',
 ];
 
 function CustomApp({ Component, pageProps }: AppProps) {

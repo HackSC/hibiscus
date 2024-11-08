@@ -11,6 +11,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "incremental": true,
+   
     "types": ["jest", "node"]
   },
   "include": ["**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", "next-env.d.ts"],
@@ -24,7 +25,7 @@
   ],
   "references": [
     {
-      "path": "./.storybook/tsconfig.json"
+      "path": "./.storybook/tsconfig.json",
     }
   ]
 }

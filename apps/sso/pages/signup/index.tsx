@@ -33,4 +33,5 @@ const MainPageWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   min-height: 100vh;
+  background-color: white; 
 `;
