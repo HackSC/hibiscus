@@ -173,7 +173,7 @@ export function Index() {
 
   return (
     <>
-      <div className="flex flex-col gap-[20px]">
+      <div className="flex flex-col gap-[20px] p-[40px]">
         <h2 className="text-3xl m-0">
           {user.first_name} {user.last_name}
         </h2>

@@ -46,7 +46,7 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
       return [
         { name: 'Events', url: '/events', image: MdOutlineCalendarViewMonth },
         { name: 'Leaderboard', url: '/leaderboard', image: MdStarOutline },
-        { name: 'Profile', url: '/profile', image: FaRegUserCircle },
+        { name: 'Profile', url: '/hacker-profile', image: FaRegUserCircle },
       ];
     if (user.role === HibiscusRole.VOLUNTEER)
       return [
@@ -71,9 +71,9 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
         {
           name: 'Hacker Attendees',
           url: '/participant-database',
-          image:MdOutlinePeopleAlt,
+          image: MdOutlinePeopleAlt,
         },
-    ];
+      ];
   }, [user]);
 
   const router = useRouter();
@@ -84,6 +84,7 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
       '/identity-portal/attendee-details': 'Attendee Details',
       '/identity-portal/attendee-event-scan': 'Event Check-in',
       '/identity-portal/event-checkin': 'Event Check-in',
+      '/hacker-profile': 'Profile',
     };
     return map[router.pathname] ?? '';
   }, [router]);
@@ -142,8 +143,8 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
 
-  height: 100vh;
-  /* min-height: 100vh; */
+  // height: 100%;
+  min-height: 100vh;
   background-color: white;
   // border-radius: 30px 0 0 30px;
 
@@ -181,7 +182,6 @@ const RightUtilityContainer = styled.div`
 const ChildrenWrapper = styled.div`
   height: 100%;
   max-height: 100%;
-  /* padding: 40px; */
 `;
 
 const VerticalMainPageWrapper = styled.div`

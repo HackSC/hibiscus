@@ -137,14 +137,14 @@ function EventPage() {
     if (pinnedEvents && eventsGrouped) {
       // Group events by date
       const eventsByDate: Event[][] = [];
-      let column = 0;
+      const column = 0;
       for (const e of pinnedEvents) {
-        while (!isSameDate(e.startTime, eventsGrouped[column][0].startTime)) {
-          if (eventsByDate.length <= column) {
-            eventsByDate.push([]);
-          }
-          column++;
-        }
+        // while (!isSameDate(e.startTime, eventsGrouped[column][0].startTime)) {
+        //   if (eventsByDate.length <= column) {
+        //     eventsByDate.push([]);
+        //   }
+        //   column++;
+        // }
 
         if (eventsByDate.length <= column) {
           eventsByDate.push([e]);
@@ -275,23 +275,19 @@ function EventPage() {
           </MobilePage>
         </>
       ) : (
-        <>
+        <div className="p-[40px]">
           <Container>
-            <Text style={{ color: '#000000B2', marginLeft: '2px' }}>
-              Welcome, {user.firstName}!
-            </Text>
-            <Subheading style={{ color: 'black' }}>Events</Subheading>
-            <Text style={{ color: '#989898', marginTop: '10px' }}>
-              Let&apos;s build your HackSC schedule!
-            </Text>
+            <StyledH1 style={{ color: 'black' }}>
+              {user.firstName} {user.lastName}'s Calendar
+            </StyledH1>
           </Container>
-          <EventsContainer>
-            <EventsCalendar
-              events={eventsGrouped}
-              openModal={(eventId) => setActiveEvent(eventId)}
-            />
-            <EventsColumn>
-              <PinkText>Your Points</PinkText>
+          {/* <EventsContainer> */}
+          <EventsCalendar
+            events={eventsGrouped}
+            openModal={(eventId) => setActiveEvent(eventId)}
+          />
+          {/* <EventsColumn> */}
+          {/* <PinkText>Your Points</PinkText>
               {bpProg && (
                 <BattlepassPointsBar
                   rangeMinPoint={bpProg.level}
@@ -312,8 +308,8 @@ function EventPage() {
                     ) : null
                   }
                 />
-              )}
-              <PinkText>Your Events</PinkText>
+              )} */}
+          {/* <PinkText>Your Events</PinkText>
               {(!pinnedEvents || pinnedEvents.length == 0) && (
                 <EmptyPinnedEvents>No Pinned Events!</EmptyPinnedEvents>
               )}
@@ -323,10 +319,10 @@ function EventPage() {
                   events={pinnedEvents}
                   openModal={(eventId) => setActiveEvent(eventId)}
                 />
-              )}
-            </EventsColumn>
-          </EventsContainer>
-        </>
+              )} */}
+          {/* </EventsColumn> */}
+          {/* </EventsContainer> */}
+        </div>
       )}
 
       <Modal
@@ -432,7 +428,7 @@ const MobilePage = styled.div`
 `;
 
 const StyledH1 = styled.h1`
-  font-family: 'Filson Pro', sans-serif;
+  font-family: 'Hanken Grotesk', 'Neue Haas Unica', sans-serif;
   font-weight: 700;
   font-size: 27px;
   display: inline;

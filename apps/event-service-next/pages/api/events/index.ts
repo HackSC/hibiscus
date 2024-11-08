@@ -7,6 +7,8 @@ export default async function handler(
 ) {
   const METHOD = req.method;
   switch (METHOD) {
+    case 'OPTIONS':
+      return res.status(200).send('ok');
     case 'GET':
       await get(req, res);
       break;
@@ -20,7 +22,7 @@ export default async function handler(
 }
 
 async function get(req: NextApiRequest, res: NextApiResponse) {
-  let body = req.body;
+  let body = req.query;
   try {
     if (!body) {
       body = {};
