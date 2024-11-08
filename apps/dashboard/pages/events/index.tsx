@@ -275,17 +275,19 @@ function EventPage() {
           </MobilePage>
         </>
       ) : (
-        <>
+        <div className="p-[40px]">
           <Container>
-            <StyledH1 style={{ color: 'black' }}>{user.firstName} {user.lastName}'s Calendar</StyledH1>
+            <StyledH1 style={{ color: 'black' }}>
+              {user.firstName} {user.lastName}'s Calendar
+            </StyledH1>
           </Container>
           {/* <EventsContainer> */}
-            <EventsCalendar
-              events={eventsGrouped}
-              openModal={(eventId) => setActiveEvent(eventId)}
-            />
-            {/* <EventsColumn> */}
-              {/* <PinkText>Your Points</PinkText>
+          <EventsCalendar
+            events={eventsGrouped}
+            openModal={(eventId) => setActiveEvent(eventId)}
+          />
+          {/* <EventsColumn> */}
+          {/* <PinkText>Your Points</PinkText>
               {bpProg && (
                 <BattlepassPointsBar
                   rangeMinPoint={bpProg.level}
@@ -307,7 +309,7 @@ function EventPage() {
                   }
                 />
               )} */}
-              {/* <PinkText>Your Events</PinkText>
+          {/* <PinkText>Your Events</PinkText>
               {(!pinnedEvents || pinnedEvents.length == 0) && (
                 <EmptyPinnedEvents>No Pinned Events!</EmptyPinnedEvents>
               )}
@@ -318,9 +320,9 @@ function EventPage() {
                   openModal={(eventId) => setActiveEvent(eventId)}
                 />
               )} */}
-            {/* </EventsColumn> */}
+          {/* </EventsColumn> */}
           {/* </EventsContainer> */}
-        </>
+        </div>
       )}
 
       <Modal
