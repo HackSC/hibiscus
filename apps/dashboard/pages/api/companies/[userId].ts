@@ -30,17 +30,25 @@ export default async function handler(
         console.log(companyData);
 
         //we know companies can't be null. This indexes down the object tree to get event_id. ASSUMED THAT NOTHING IS NULL OR ANYTHING
-        const event = companyData.data['companies']['events'] as any[];
+        const event = companyData.data['companies']['events'];
         let eventId: number | null;
+        let companyName: string | null;
         console.log(event);
         if (event.length) {
           eventId = event.at(0)['id'];
+          companyName = event.at(0)['name'];
         }
         const companyId = companyData.data['company_id'];
 
         return res
           .status(200)
-          .json({ data: { company_id: companyId, event_id: eventId } });
+          .json({
+            data: {
+              company_id: companyId,
+              event_id: eventId,
+              company_name: companyName,
+            },
+          });
       } else {
         return res.status(401).json({ message: 'Unauthorized access.' });
       }

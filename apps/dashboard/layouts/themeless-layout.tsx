@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import useHibiscusUser from '../hooks/use-hibiscus-user/use-hibiscus-user';
 import StyledSideNav from '../components/nav/side-nav';
@@ -19,6 +19,7 @@ import {
 } from 'react-icons/md';
 import { FaRegUserCircle } from 'react-icons/fa';
 import { useRouter } from 'next/router';
+import { SponsorServiceAPI } from '../common/api';
 
 export type ThemelessLayoutProps = React.PropsWithChildren;
 
@@ -60,7 +61,33 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
           image: MdOutlinePlaylistAddCheck,
         },
       ];
-    return [];
+    if (user.role === HibiscusRole.SPONSOR)
+      return [
+        {
+          name: 'Events',
+          url: '/sponsor-booth',
+          image: MdOutlineCalendarViewMonth,
+        },
+        {
+          name: 'Hacker Attendees',
+          url: '/participant-database',
+          image: MdOutlinePeopleAlt,
+        },
+      ];
+  }, [user]);
+
+  const [companyName, setCompanyName] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await SponsorServiceAPI.getCompanyIdAndEventId(user.id);
+      if (data.data != null) {
+        setCompanyName(data.data.data.company_name);
+      }
+    };
+
+    if (user != null && user.role === HibiscusRole.SPONSOR) {
+      fetchData();
+    }
   }, [user]);
 
   const router = useRouter();
@@ -72,9 +99,10 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
       '/identity-portal/attendee-event-scan': 'Event Check-in',
       '/identity-portal/event-checkin': 'Event Check-in',
       '/hacker-profile': 'Profile',
+      '/sponsor-booth': companyName ? `Welcome ${companyName}` : 'Welcome',
     };
     return map[router.pathname] ?? '';
-  }, [router]);
+  }, [router, companyName]);
 
   if (user == null || router == null) {
     return <></>;
