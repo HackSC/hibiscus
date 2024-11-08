@@ -7,6 +7,8 @@ import { SponsorServiceAPI } from 'apps/dashboard/common/api';
 import { FaBookmark, FaChevronUp, FaRegBookmark } from 'react-icons/fa6';
 import { FiSearch } from 'react-icons/fi';
 import { FaChevronDown } from 'react-icons/fa';
+import Link from 'next/link';
+import { HiOutlineDocumentText } from 'react-icons/hi2';
 
 type SortKey = keyof Pick<Attendee, 'full_name' | 'graduation_year' | 'major' | 'school'>;
 
@@ -124,7 +126,10 @@ export default function Index() {
                   </button>
                 </th>
               ))}
-              <th className='w-48 py-3 text-right text-md text-gray-900 tracking-wider'>
+              <th className='py-3 text-right text-md text-gray-900 tracking-wider'>
+                <span className='sr-only'>Resume</span>
+              </th>
+              <th className='py-3 text-right text-md text-gray-900 tracking-wider'>
                 <span className='sr-only'>Save</span>
               </th>
             </tr>
@@ -136,7 +141,14 @@ export default function Index() {
                 <td className='px-2 py-3 whitespace-nowrap text-md text-gray-500'>{attendee.graduation_year}</td>
                 <td className='px-2 py-3 whitespace-nowrap text-md text-gray-500'>{attendee.major}</td>
                 <td className='px-2 py-3 whitespace-nowrap text-md text-gray-500'>{attendee.school}</td>
-                <td className='w-48 py-3 whitespace-nowrap'>
+                <td className='py-3 whitespace-nowrap'>
+                  {attendee.resume ?
+                    <Link href={attendee.resume} target='_blank'>
+                      <HiOutlineDocumentText />
+                    </Link>
+                  : <></>}
+                </td>
+                <td className='py-3 whitespace-nowrap'>
                   <button
                     onClick={() => handleSave(attendee.id, attendee.saved)}
                     className='cursor-pointer float-end'
@@ -162,12 +174,19 @@ export default function Index() {
                 <span className='text-sm text-gray-500 mt-1 mr-4'>{attendee.major}</span>
                 <span className='text-sm text-gray-500 mt-1 mr-4'>{attendee.school}</span>
               </div>
-              <button
-                onClick={() => handleSave(attendee.id, attendee.saved)}
-                className='cursor-pointer'
-              >
-                {attendee.saved ? <FaBookmark /> : <FaRegBookmark />}
-              </button>
+              <div className='flex'>
+                {attendee.resume ?
+                  <Link href={attendee.resume} target='_blank'>
+                    <HiOutlineDocumentText />
+                  </Link>
+                  : <></>}
+                <button
+                  onClick={() => handleSave(attendee.id, attendee.saved)}
+                  className='cursor-pointer'
+                >
+                  {attendee.saved ? <FaBookmark /> : <FaRegBookmark />}
+                </button>
+              </div>
             </div>
           ))}
         </div>
