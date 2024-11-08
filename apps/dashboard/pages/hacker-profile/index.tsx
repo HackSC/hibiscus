@@ -87,7 +87,9 @@ export function Index() {
     fetchResume();
   }, []);
 
-  console.log(resume);
+  if (name === '') {
+    return <LayoutContainer>Loading...</LayoutContainer>;
+  }
 
   return (
     <LayoutContainer>
@@ -291,8 +293,6 @@ const Body = styled.div`
   flex-direction: column;
   background-color: #f5f5f5;
 
-  padding: 40px;
-
   padding-left: 250px;
 `;
 
@@ -305,6 +305,7 @@ const LayoutContainer = styled.div`
   height: 100%;
   background-color: #f5f5f5;
   flex-direction: column;
+  padding: 40px;
 `;
 
 const ProfileBox = styled.div`

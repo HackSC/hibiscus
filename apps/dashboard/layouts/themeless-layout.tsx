@@ -45,7 +45,7 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
       return [
         { name: 'Events', url: '/events', image: MdOutlineCalendarViewMonth },
         { name: 'Leaderboard', url: '/leaderboard', image: MdStarOutline },
-        { name: 'Profile', url: '/profile', image: FaRegUserCircle },
+        { name: 'Profile', url: '/hacker-profile', image: FaRegUserCircle },
       ];
     if (user.role === HibiscusRole.VOLUNTEER)
       return [
