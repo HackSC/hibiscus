@@ -7,6 +7,8 @@ export default async function handler(
 ) {
   const METHOD = req.method;
   switch (METHOD) {
+    case 'OPTIONS':
+      return res.status(200).send('ok');
     case 'POST':
       await post(req, res);
       break;

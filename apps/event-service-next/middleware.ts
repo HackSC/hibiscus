@@ -1,9 +1,15 @@
 import { getEnv } from '@hibiscus/env';
+import { createClient } from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
   const path = request.nextUrl;
+
+  // Handle preflight requests
+  if (request.method === 'OPTIONS') {
+    return NextResponse.next();
+  }
 
   if (
     path.pathname.startsWith('/api/error') ||
@@ -11,7 +17,6 @@ export async function middleware(request: NextRequest) {
   ) {
     return NextResponse.next();
   }
-  const authServiceUrl = getEnv().Hibiscus.AuthService.ApiUrl;
   const masterToken = getEnv().Hibiscus.Events.MasterToken;
 
   const headers = request.headers;
@@ -39,10 +44,31 @@ export async function middleware(request: NextRequest) {
   if (accessToken === masterToken) {
     return NextResponse.next();
   }
-  const apiUrl = `${authServiceUrl}/verify-token/${accessToken}`;
-  const response = await fetch(apiUrl);
 
-  if (response.status !== 200) {
+  // Authenticate user
+  const supabase = createClient(
+    getEnv().Hibiscus.Supabase.apiUrl,
+    getEnv().Hibiscus.Supabase.serviceKey
+  );
+  const user = await supabase.auth.getUser(accessToken);
+  if (user.error != null) {
+    request.nextUrl.searchParams.set('status', '401');
+    request.nextUrl.searchParams.set('message', 'Invalid access token');
+    request.nextUrl.pathname = '/api/error';
+    return NextResponse.redirect(request.nextUrl);
+  }
+  const userId = user.data.user?.id;
+  if (!userId) {
+    request.nextUrl.searchParams.set('status', '401');
+    request.nextUrl.searchParams.set('message', 'Invalid access token');
+    request.nextUrl.pathname = '/api/error';
+    return NextResponse.redirect(request.nextUrl);
+  }
+  const { data: userData, error: userError } = await supabase
+    .from('user_profiles')
+    .select('*, role (name)')
+    .eq('user_id', userId);
+  if (userError || userData?.length === 0) {
     request.nextUrl.searchParams.set('status', '401');
     request.nextUrl.searchParams.set('message', 'Invalid access token');
     request.nextUrl.pathname = '/api/error';
@@ -50,8 +76,7 @@ export async function middleware(request: NextRequest) {
   }
 
   try {
-    const data = await response.json();
-    const role = data.role;
+    const role = userData[0].role.name;
     const method = request.method;
     if (role === 'SUPERADMIN') {
       return NextResponse.next();
@@ -67,7 +92,7 @@ export async function middleware(request: NextRequest) {
     } else if (path.pathname.startsWith('/api/pinned-events')) {
       const userId = path.pathname.split('/')[3];
 
-      if (userId === data.user_id) {
+      if (userId === userData[0].user_id) {
         return NextResponse.next();
       } else {
         request.nextUrl.searchParams.set('status', '403');
