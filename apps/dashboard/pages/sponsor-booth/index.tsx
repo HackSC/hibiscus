@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
 import Image from 'next/image';
 import { Colors2023 } from '@hibiscus/styles';
-import { BoldText, H1 } from '@hibiscus/ui';
+import { BoldText, H1, Modal } from '@hibiscus/ui';
 import { Text } from '@hibiscus/ui';
 import { HackerTab } from '../../components/sponsor-portal/hacker-tab';
 import HackerProfile from '../../components/sponsor-portal/hacker-profile';
@@ -26,6 +26,16 @@ import {
 } from '@hacksc/sctw-ui-kit';
 import { IoBookmark } from 'react-icons/io5';
 import { FaArrowRight } from 'react-icons/fa';
+import EventsCalendar from 'apps/dashboard/components/events/events-calendar';
+import {
+  Event,
+  getAllEvents,
+  getPinnedEvents,
+  isSameDate,
+} from 'apps/dashboard/common/events.utils';
+import { getEnv } from '@hibiscus/env';
+import { getCookie } from 'cookies-next';
+import EventDetails from 'apps/dashboard/components/events/event-details';
 
 const Index = () => {
   const { user } = useHibiscusUser();
@@ -40,7 +50,15 @@ const Index = () => {
   const [savedSpinner, setSavedSpinner] = useState(false);
   const [checkInSpinner, setCheckInSpinner] = useState(false);
 
-  const [events, setEvents] = useState<Event[]>([]);
+  const [events, setEvents] = useState<Event[] | null>(null);
+  const [eventsGrouped, setEventsGrouped] = useState<Event[][] | null>(null);
+  const [pinnedEvents, setPinnedEvents] = useState<Event[] | null>(null);
+  const [pinnedEventsGrouped, setPinnedEventsGrouped] = useState<
+    Event[][] | null
+  >(null);
+
+  // Modal state
+  const [activeEvent, setActiveEvent] = useState<string | null>(null);
 
   const router = useRouter();
   const supabase = useHibiscusSupabase().supabase.getClient();
@@ -93,6 +111,75 @@ const Index = () => {
       supabase.removeChannel(events);
     };
   }, [COMPANY_ID, EVENT_ID]);
+
+  // Get events
+  useEffect(() => {
+    async function fetchEvents() {
+      try {
+        const events = await getAllEvents(
+          getCookie(getEnv().Hibiscus.Cookies.accessTokenName)?.toString()
+        );
+        setEvents(events);
+
+        // Group events by date
+        const eventsByDate: Event[][] = [];
+        for (const e of events) {
+          if (
+            eventsByDate.length === 0 ||
+            !isSameDate(eventsByDate.at(-1)[0].startTime, e.startTime)
+          ) {
+            eventsByDate.push([e]);
+          } else {
+            eventsByDate.at(-1).push(e);
+          }
+        }
+        setEventsGrouped(eventsByDate);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    fetchEvents();
+  }, []);
+
+  // Get pinned events
+  useEffect(() => {
+    async function fetchPinnedEvents() {
+      try {
+        const pinnedEvents = await getPinnedEvents(
+          user.id,
+          getCookie(getEnv().Hibiscus.Cookies.accessTokenName)?.toString()
+        );
+        setPinnedEvents(pinnedEvents);
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    fetchPinnedEvents();
+  }, [user.id]);
+
+  useEffect(() => {
+    if (pinnedEvents && eventsGrouped) {
+      // Group events by date
+      const eventsByDate: Event[][] = [];
+      const column = 0;
+      for (const e of pinnedEvents) {
+        // while (!isSameDate(e.startTime, eventsGrouped[column][0].startTime)) {
+        //   if (eventsByDate.length <= column) {
+        //     eventsByDate.push([]);
+        //   }
+        //   column++;
+        // }
+
+        if (eventsByDate.length <= column) {
+          eventsByDate.push([e]);
+        } else {
+          eventsByDate.at(-1).push(e);
+        }
+      }
+      setPinnedEventsGrouped(eventsByDate);
+    }
+  }, [pinnedEvents, eventsGrouped]);
 
   if (user == null) {
     return <>Loading</>;
@@ -315,87 +402,120 @@ const Index = () => {
   }
 
   return (
-    <div
-      style={{
-        height: '100%',
-        width: '100%',
-        display: 'flex',
-      }}
-    >
-      <div style={{ width: '60%', height: '100%' }}>
-        {/* <Events events={events as Event[]} /> */}
-      </div>
+    <>
       <div
         style={{
-          width: '40%',
           height: '100%',
-          borderLeft: '1px solid black',
-          paddingRight: 40,
-          paddingLeft: 40,
-          paddingTop: 20,
-          paddingBottom: 20,
+          width: '100%',
+          display: 'flex',
         }}
       >
-        <div style={{ fontSize: 25, marginBottom: 20 }}>Hacker Attendees</div>
-        <div style={{}}>
-          {attendees.slice(0, 8).map((attendee, index) => (
-            <div
-              key={index}
-              style={{
-                marginBottom: 12,
-                border: '1px solid black',
-                padding: 10,
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
+        <div
+          style={{
+            width: '60%',
+            height: '100%',
+            paddingRight: 40,
+            paddingLeft: 40,
+            paddingTop: 20,
+            paddingBottom: 20,
+          }}
+        >
+          <div style={{ fontSize: 25, marginBottom: 20 }}>Events</div>
+          <EventsCalendar
+            events={eventsGrouped}
+            openModal={(eventId) => setActiveEvent(eventId)}
+          />
+        </div>
+        <div
+          style={{
+            width: '40%',
+            height: '100%',
+            borderLeft: '1px solid black',
+            paddingRight: 40,
+            paddingLeft: 40,
+            paddingTop: 20,
+            paddingBottom: 20,
+          }}
+        >
+          <div style={{ fontSize: 25, marginBottom: 20 }}>Hacker Attendees</div>
+          <div style={{}}>
+            {attendees.slice(0, 8).map((attendee, index) => (
               <div
+                key={index}
                 style={{
-                  height: 10,
-                  width: 10,
-                  backgroundColor: '#E8FF9C',
-                  borderRadius: 30,
+                  marginBottom: 12,
                   border: '1px solid black',
-                  marginLeft: 10,
-                  marginRight: 20,
-                }}
-              />
-              <div
-                style={{
+                  borderRadius: 2,
+                  padding: 10,
                   display: 'flex',
-                  justifyContent: 'space-between',
-                  width: '100%',
                   alignItems: 'center',
                 }}
               >
-                <div>{attendee.full_name}</div>
-                {attendee.saved && (
-                  <div style={{ marginRight: 5 }}>
-                    <IoBookmark color="#1480DC" />
-                  </div>
-                )}
+                <div
+                  style={{
+                    height: 10,
+                    width: 10,
+                    backgroundColor: '#E8FF9C',
+                    borderRadius: 30,
+                    border: '1px solid black',
+                    marginLeft: 10,
+                    marginRight: 20,
+                  }}
+                />
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    width: '100%',
+                    alignItems: 'center',
+                  }}
+                >
+                  <div>{attendee.full_name}</div>
+                  {attendee.saved && (
+                    <div style={{ marginRight: 5 }}>
+                      <IoBookmark color="#1480DC" />
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+          <button
+            style={{
+              cursor: 'pointer',
+              border: '1px solid black',
+              borderRadius: 10,
+              padding: 10,
+              marginTop: 20,
+              display: 'flex',
+              alignItems: 'center',
+              backgroundColor: '#E8FF9C',
+            }}
+            onClick={() => router.push(`${router.asPath}/hacker-attendees`)}
+          >
+            <div style={{ marginRight: 10 }}>View all attendees</div>
+            <FaArrowRight />
+          </button>
         </div>
-        <button
-          style={{
-            cursor: 'pointer',
-            border: '1px solid black',
-            borderRadius: 10,
-            padding: 10,
-            marginTop: 20,
-            display: 'flex',
-            alignItems: 'center',
-            backgroundColor: '#E8FF9C',
-          }}
-          onClick={() => router.push(`${router.asPath}/hacker-attendees`)}
-        >
-          <div style={{ marginRight: 10 }}>View all attendees</div>
-          <FaArrowRight />
-        </button>
       </div>
-    </div>
+
+      <Modal
+        isOpen={activeEvent !== null && activeEvent !== undefined}
+        closeModal={() => setActiveEvent(null)}
+      >
+        {activeEvent !== null && activeEvent !== undefined && (
+          <EventDetails
+            event={events.find((e) => e.eventId === activeEvent)}
+            userId={user.id}
+            pinnedEvents={pinnedEvents}
+            setError={() => {}}
+            setPinnedEvents={setPinnedEvents}
+            refresh={() => {}}
+            admin={user.role === HibiscusRole.ADMIN}
+          />
+        )}
+      </Modal>
+    </>
   );
   // return (
   //   <Wrapper>

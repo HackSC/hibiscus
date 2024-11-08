@@ -239,7 +239,7 @@ const CalendarGrid = styled.div<CalendarGridProps>`
   display: grid;
   grid-template-rows: auto 1fr;
   grid-template-columns: 50px repeat(${(props) => props.columns}, 1fr);
-  width: 70vw;
+  max-width: 70vw;
 
   border-radius: 5px;
 
