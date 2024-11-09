@@ -46,13 +46,14 @@ function EventsCalendar(props: EventsCalendarProps) {
   // Preset scroll to current time
   useEffect(() => {
     const d = new Date();
+    console.log(d.getHours() * 100);
 
     scrollRefs.current.forEach((el) => {
       if (el) {
         el.scrollTop = d.getHours() * 100;
       }
     });
-  }, []); // Empty dependency array to ensure this only runs on mount
+  }, [cards]); // Empty dependency array to ensure this only runs on mount
 
   useEffect(() => {
     const gridContainer = document.querySelectorAll('.grid-container');

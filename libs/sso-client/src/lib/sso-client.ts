@@ -36,6 +36,10 @@ export const middlewareHandler =
       return res;
     }
 
+    if (request.nextUrl.pathname.startsWith('/hacker-packet')) {
+      return NextResponse.redirect(getEnv().Hibiscus.RSVPForm.HackerPacketURL);
+    }
+
     // Special routes
     // TODO: rewrite this to make it more generic
     if (request.nextUrl.pathname.startsWith('/api/tally/')) {

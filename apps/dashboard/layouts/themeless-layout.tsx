@@ -20,6 +20,7 @@ import {
 import { FaRegUserCircle } from 'react-icons/fa';
 import { useRouter } from 'next/router';
 import { SponsorServiceAPI } from '../common/api';
+import { IoDocumentTextOutline } from 'react-icons/io5';
 
 export type ThemelessLayoutProps = React.PropsWithChildren;
 
@@ -47,6 +48,11 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
         { name: 'Events', url: '/events', image: MdOutlineCalendarViewMonth },
         { name: 'Leaderboard', url: '/leaderboard', image: MdStarOutline },
         { name: 'Profile', url: '/hacker-profile', image: FaRegUserCircle },
+        {
+          name: 'Hacker Packet',
+          url: '/hacker-packet',
+          image: IoDocumentTextOutline,
+        },
       ];
     if (user.role === HibiscusRole.VOLUNTEER)
       return [
