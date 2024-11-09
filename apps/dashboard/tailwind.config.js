@@ -1,17 +1,14 @@
-const { createGlobPatternsForDependencies } = require('@nrwl/react/tailwind');
-const { join } = require('path');
-
-/** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    join(
-      __dirname,
-      '{src,pages,components}/**/*!(*.stories|*.spec).{ts,tsx,html}'
-    ),
-    ...createGlobPatternsForDependencies(__dirname),
-  ],
+  content: ['apps/dashboard/{pages,components,layouts}/**/*.{js,jsx,ts,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'theme-red': '#FF6347',
+        'theme-redward': '#FF514F',
+        'theme-blue': '#429FEE',
+        'theme-gray': '#777777',
+      },
+    },
   },
   plugins: [],
 };

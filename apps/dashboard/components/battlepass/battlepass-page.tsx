@@ -1,28 +1,16 @@
-import { H3, Text } from '@hibiscus/ui';
-import { GlobalStyles } from '@hibiscus/styles';
-import {
-  GlobalStyle,
-  BodyTextSmall,
-  BodyText,
-  Heading,
-} from '@hacksc/sctw-ui-kit';
+import { Text } from '@hibiscus/ui';
 import { useBattlepassAPI } from '../../hooks/use-battlepass-api/use-battlepass-api';
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import BattlepassPointsBar from './battlepass-points-bar';
-import { BattlepassWelcomeHeader } from './battlepass-welcome-header';
 import BattlepassLeaderboard from './leaderboard/battlepass-leaderboard';
 import { BonusPointItem } from './bonus-points/types';
 import BattlepassBonusPointsList from './bonus-points/bonus-points-list';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
-import Image from 'next/image';
 import {
   BattlepassProgress,
   BATTLEPASS_LEVEL_POINTS,
   calculateBattlepassProgress,
 } from '../../common/calculate-battlepass-progress';
-import { GlowSpan } from '@hibiscus/ui-kit-2023';
-import { Colors2023 } from '@hibiscus/styles';
 
 function BattlepassPage() {
   const battlepassAPI = useBattlepassAPI();
@@ -61,127 +49,54 @@ function BattlepassPage() {
   }, []);
 
   return (
-    <Wrapper>
-      <BattlepassWelcomeHeader />
-      <WidgetContainer>
-        <WidgetHeader>Your Points</WidgetHeader>
-        {bpProg !== null && (
-          <BattlepassPointsBar
-            rangeMinPoint={bpProg.level}
-            rangeMaxPoint={bpProg.nextLevel}
-            currentPoint={userPoints}
-            minLabel={<YellowPoints>{userPoints} PTS</YellowPoints>}
-            maxLabel={
-              BATTLEPASS_LEVEL_POINTS[bpProg.level] <
-              BATTLEPASS_LEVEL_POINTS[3] ? (
-                <PreNextLevelText>
-                  Next level @{' '}
-                  <NextLevelTextSpan color={Colors2023.BLUE.STANDARD}>
-                    {bpProg.nextLevel} PTS
-                  </NextLevelTextSpan>
-                </PreNextLevelText>
-              ) : null
-            }
-          />
-        )}
-      </WidgetContainer>
-      <SecondSection>
-        <LeftColumnSecondSection>
-          <WidgetContainer>
-            <WidgetHeader>Leaderboard</WidgetHeader>
-            <BattlepassLeaderboard />
-          </WidgetContainer>
-        </LeftColumnSecondSection>
-        <RightColumnSecondSection>
-          <WidgetContainer>
-            <WidgetHeader>Bonus Points</WidgetHeader>
+    <div className="border-neutral-200 border p-[40px]">
+      {/* content */}
+      <div className="flex space-x-[90px]">
+        {/* left column */}
+        <div className="flex-1 space-y-[60px] flex flex-col justify-between">
+          {/* points bar */}
+          <div>
+            <h2 className="text-base m-0 mb-[10px]">Points</h2>
+            {bpProg !== null && (
+              <BattlepassPointsBar
+                rangeMinPoint={bpProg.level}
+                rangeMaxPoint={bpProg.nextLevel}
+                currentPoint={userPoints}
+                minLabel={
+                  <div className="text-sm italic">{userPoints + ' pts'}</div>
+                }
+                maxLabel={
+                  BATTLEPASS_LEVEL_POINTS[bpProg.level] <
+                  BATTLEPASS_LEVEL_POINTS[3] ? (
+                    <div className="text-theme-gray text-sm">
+                      {'NEXT LEVEL @ '}{' '}
+                      <span className="text-theme-blue italic font-medium">
+                        {bpProg.nextLevel + ' pts'}
+                      </span>
+                    </div>
+                  ) : null
+                }
+              />
+            )}
+          </div>
+          {/* bonus points activities */}
+          <div>
+            <h2 className="text-base m-0 mb-[10px]">Bonus Points</h2>
             {bonusPointItems.loading ? (
               <Text>Loading</Text>
             ) : (
               <BattlepassBonusPointsList items={bonusPointItems.data} />
             )}
-          </WidgetContainer>
-        </RightColumnSecondSection>
-      </SecondSection>
-    </Wrapper>
+          </div>
+        </div>
+        {/* leaderboard */}
+        <div className="flex-1">
+          <h2 className="text-base m-0 mb-[10px]">Leaderboard</h2>
+          <BattlepassLeaderboard />
+        </div>
+      </div>
+    </div>
   );
 }
 
 export default BattlepassPage;
-
-const PreNextLevelText = styled(BodyTextSmall)`
-  color: #939393;
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-`;
-const NextLevelTextSpan = styled.span`
-  color: var(--Redward, #ff514f);
-  text-align: center;
-  /* smaller red glow */
-  text-shadow: 0px 0px 10px rgba(255, 94, 92, 0.5);
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-  letter-spacing: 0;
-  text-transform: uppercase;
-`;
-
-const YellowPoints = styled(BodyTextSmall)`
-  color: var(--Arthurs-Sweater, #ecb400);
-  text-align: center;
-  /* smaller yellow glow */
-  text-shadow: 0px 0px 10px #ffd13c;
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-  letter-spacing: 0;
-  text-transform: uppercase;
-`;
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-  background-color: white;
-  padding-bottom: 50px;
-`;
-
-const WidgetContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-const LeftColumnSecondSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-`;
-
-const RightColumnSecondSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-`;
-
-const SecondSection = styled.div`
-  display: flex;
-
-  gap: 30px;
-  @media (max-width: 1024px) {
-    flex-direction: column;
-  }
-`;
-
-const WidgetHeader = styled.p`
-  font-family: 'filson-pro', sans-serif;
-  color: var(--Redward, #ff514f);
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-  letter-spacing: -1.25px;
-`;

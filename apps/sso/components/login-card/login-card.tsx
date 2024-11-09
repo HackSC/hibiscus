@@ -9,12 +9,16 @@ import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import { MutatingDots } from 'react-loader-spinner';
 import { StyledAuthCard } from '../auth-components/styled-card';
 import { Input } from '../auth-components/styled-input';
+import { BackgroundShapes } from '../colored-shapes/background-shapes';
 import {
   Button,
   ColorSpanBold,
   OneLinePassword,
   OneLineText,
 } from '@hibiscus/ui-kit-2023';
+import Link from 'next/link';
+import HackSCLogo from '../svg/hacksc-logo';
+import HackSCGuy from '../svg/hacksc-guy';
 
 export function LoginCard() {
   const [hideErrorMessage, setHideErrorMessage] = useState(true);
@@ -52,55 +56,69 @@ export function LoginCard() {
   }
 
   return (
-    <StyledAuthCard>
-      <Image
-        src="/static/images/logo-2023.svg"
-        alt="HackSC Logo"
-        width={100}
-        height={100}
-      />
-      <H3>
-        Log in to your{' '}
-        <ColorSpanBold color={Colors2023.BLUE.STANDARD}>
-          HackSC Account
-        </ColorSpanBold>
-      </H3>
-      <StyledForm onSubmit={handleSubmit}>
-        <Input
-          placeholder="enter your email"
-          type="email"
-          name="email"
-          required
-        />
-        <Input
-          placeholder="enter your password"
-          type="password"
-          name="password"
-          required
-        />
-        <StyledErrorText
-          style={{ display: !hideErrorMessage ? 'block' : 'none' }}
-        >
-          {errorMessage}
-        </StyledErrorText>
-        <Button color="blue">SIGN IN</Button>
-      </StyledForm>
-      <GrayLink href="/reset-email">Forgot Password?</GrayLink>
-      <GrayLink href="/signup">Create a HackSC account</GrayLink>
+    <>
+      {/* Add Styled Shapes for page */}
+      <BackgroundShapes></BackgroundShapes>
+      <StyledAuthCard>
+        <HackSCGuy />
+        <HeadingContainer>
+          <HackSCLogo />
+          <h2 className="m-0 mb-[10px] text-lg">Sign-In</h2>
+        </HeadingContainer>
+        <StyledForm onSubmit={handleSubmit}>
+          <Input
+            placeholder="Enter your email"
+            type="email"
+            name="email"
+            required
+          />
+          <Input
+            placeholder="Password"
+            type="password"
+            name="password"
+            required
+          />
+          <StyledErrorText
+            style={{ display: !hideErrorMessage ? 'block' : 'none' }}
+          >
+            {errorMessage}
+          </StyledErrorText>
 
-      {loggedInState === 'logging in' ? (
-        <MutatingDots
-          height="100"
-          width="100"
-          color={Colors2023.BLUE.LIGHT}
-          secondaryColor={Colors2023.BLUE.LIGHT}
-          radius="12.5"
-          ariaLabel="mutating-dots-loading"
-        />
-      ) : (
-        ''
-      )}
-    </StyledAuthCard>
+          <button
+            type="submit"
+            className="py-[8px] w-[278px] rounded-[8px] border-[1px] bg-red-300 hover:bg-theme-redward"
+          >
+            Sign In
+          </button>
+
+          <Link href="/signup">
+            <button
+              type="button"
+              className="py-[8px] w-[278px] rounded-[8px] border-[1px] bg-white hover:bg-gray-300"
+            >
+              Create an Account
+            </button>
+          </Link>
+        </StyledForm>
+
+        <Link href="/reset-email" className="text-sm underline font-light">
+          Forgot Password?
+        </Link>
+
+        {loggedInState === 'logging in' ? (
+          <MutatingDots
+            height="100"
+            width="100"
+            color={Colors2023.BLUE.LIGHT}
+            secondaryColor={Colors2023.BLUE.LIGHT}
+            radius="12.5"
+            ariaLabel="mutating-dots-loading"
+          />
+        ) : (
+          ''
+        )}
+      </StyledAuthCard>
+    </>
   );
 }
 
@@ -120,4 +138,39 @@ const StyledErrorText = styled(Text)`
   font-size: 20px;
   padding-top: 1rem;
   color: red;
+`;
+
+const HeadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  > h1 {
+    font-family: 'Hanken Grotesk', sans-serif;
+    font-size: 48px;
+    font-weight: 700;
+    margin-right: 1px;
+  }
+  // > h2 {
+  //   font-family: 'Hanken Grotesk', sans-serif;
+  //   font-size: 32px;
+  //   font-weight: 400;
+  //   line-height: 70px;
+  //   margin-left: 1px;
+  // }
+`;
+
+const HackSCTag = styled.div`
+  min-width: 7%;
+  min-height: 7%;
+  background: #429fee;
+  display: flex;
+  border: 0.5px solid #000000;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  position: fixed;
+  right: 3.5%;
+  top: 3%;
+  font-size: 1.5vw;
+  color: black;
 `;

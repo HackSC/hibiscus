@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction } from 'react';
 import styled from 'styled-components';
 import { IconType } from 'react-icons';
 import React from 'react';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
 
 interface Props {
   name: string;
@@ -23,7 +23,7 @@ const SideNavButton = ({
 
   const handleClick = () => {
     setSelectedButton(name);
-    router.push(`/${router.pathname}/${url}`);
+    router.push(url);
   };
 
   return (

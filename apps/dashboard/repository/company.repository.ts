@@ -133,7 +133,8 @@ export class CompanyRepository {
         company_id,
         companies(
           events(
-            id
+            id,
+            name
           )
         )
       `

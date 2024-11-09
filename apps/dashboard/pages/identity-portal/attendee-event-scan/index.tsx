@@ -1,7 +1,7 @@
 import { Colors2023 } from '@hibiscus/styles';
 import { BoldText, Text } from '@hibiscus/ui';
-import { useEffect, useState } from 'react';
-import { Button, GlowSpan, OneLineText } from '@hibiscus/ui-kit-2023';
+import { useEffect, useRef, useState } from 'react';
+import { Button, GlowSpan, OneLineText, Search } from '@hibiscus/ui-kit-2023';
 import addEvent from '../../../common/add-event';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
@@ -18,6 +18,7 @@ import { PostgrestError } from '@supabase/supabase-js';
 import { HibiscusRole } from '@hibiscus/types';
 import useHibiscusUser from '../../../hooks/use-hibiscus-user/use-hibiscus-user';
 import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
+import { SearchUserBox } from 'apps/dashboard/components/identity-portal/search-user-box/search-user-box';
 
 const SUCCESS_MESSAGE = 'Success';
 
@@ -54,6 +55,8 @@ export function Index() {
   const [attendees, setAttendees] = useState<Attendee[]>([]);
 
   const { supabase } = useHibiscusSupabase();
+
+  const wristbandIdRef = useRef(null);
 
   async function search(id: number) {
     setEventName(await searchEventId(id, supabase));
@@ -168,7 +171,7 @@ export function Index() {
       }
       setIsAlertVisible(true);
       setResponse(null);
-      setTimeout(() => setIsAlertVisible(false), 50);
+      setTimeout(() => setIsAlertVisible(false), 1000);
     }
   }, [response]);
 
@@ -231,64 +234,41 @@ export function Index() {
 
   return (
     <>
-      <div style={{ position: 'absolute', left: '100px' }}>
-        <BackButton link="/" />
-      </div>
+      <div className="flex flex-col p-[40px]">
+        <p className="mb-[64px]">Scan attendee in for {eventName}</p>
 
-      <div style={{ position: 'absolute', right: '100px' }}>
-        <GlowSpan color={Colors2023.GRAY.DARK} style={{ fontSize: '.68em' }}>
-          <div>
-            <SuccessText
-              className={isAlertVisible ? 'shown' : 'hidden'}
-              error={alertMessage !== SUCCESS_MESSAGE}
-            >
-              {alertMessage}
-            </SuccessText>
-          </div>
-        </GlowSpan>
-      </div>
-
-      <Container>
-        <GlowSpan
-          color={Colors2023.YELLOW.STANDARD}
-          style={{ fontSize: '3em' }}
-        >
-          {eventName} Check-in
-        </GlowSpan>
-
-        <ContainerInner>
-          <ColumnSpaced onSubmit={handleSubmit}>
-            <div>
-              <LabelText>Search by Name</LabelText>
-              <SearchUserEventBox
-                onClick={(value) =>
-                  addEventUserId(eventId, value, supabase).then(setResponse)
-                }
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                searchRes={searchRes}
-                isModalOpen={isModalOpen}
-                setModalOpen={setModalOpen}
+        <div className="flex flex-row justify-between">
+          <div className="flex flex-col">
+            <div className="flex flex-col gap-[10px]">
+              <h2 className="m-0 text-xl text-theme-redward">Search by Name</h2>
+              <SearchUserBox
+                onClick={async (id) => {
+                  {
+                    const res = await addEventUserId(eventId, id, supabase);
+                    setResponse(res);
+                  }
+                }}
+                placeholder="Search by attendee name"
               />
             </div>
 
-            <Text>or</Text>
+            <p className="my-[30px]">or</p>
 
-            <div>
-              <FlexRowTight>
-                <LabelText>Scan Wristband</LabelText>
-                <BiWifi2 size={36} style={{ transform: 'rotate(90deg)' }} />
-              </FlexRowTight>
-              <OneLineText
-                autoFocus
+            <div className="flex flex-col gap-[10px]">
+              <h2 className="m-0 text-xl text-theme-redward">Scan Wristband</h2>
+              <Search
                 placeholder="ID number"
-                value={wristbandId}
-                onChange={(e) => setWristbandId(e.target.value)}
+                onInput={async (id) => {
+                  wristbandIdRef.current.value = '';
+                  const res = await addEvent(eventId, id, supabase);
+                  setResponse(res);
+                }}
+                externalRef={(element) => {
+                  wristbandIdRef.current = element;
+                }}
               />
             </div>
-
-            <Button color="yellow">SUBMIT</Button>
-          </ColumnSpaced>
+          </div>
 
           <ScrollableListBox width={510}>
             {attendees.map((attendee, i) => (
@@ -302,8 +282,19 @@ export function Index() {
               </ScrollableListBox.Item>
             ))}
           </ScrollableListBox>
-        </ContainerInner>
-      </Container>
+        </div>
+      </div>
+
+      <div style={{ position: 'absolute', right: '100px', top: '100px' }}>
+        <div>
+          <SuccessText
+            className={isAlertVisible ? 'shown' : 'hidden'}
+            error={alertMessage !== SUCCESS_MESSAGE}
+          >
+            {alertMessage}
+          </SuccessText>
+        </div>
+      </div>
     </>
   );
 }
@@ -359,10 +350,9 @@ const SuccessText = styled(Text)<{ error: boolean }>`
   padding-bottom: 0.3em;
   border-radius: 0.5em;
   border: 0.4em solid
-    ${(props) =>
-      props.error ? Colors2023.RED.STANDARD : Colors2023.YELLOW.STANDARD};
+    ${(props) => (props.error ? Colors2023.RED.LIGHT : Colors2023.YELLOW.LIGHT)};
   background-color: ${(props) =>
-    props.error ? Colors2023.RED.STANDARD : Colors2023.YELLOW.STANDARD};
+    props.error ? Colors2023.RED.LIGHT : Colors2023.YELLOW.LIGHT};
 
   &.shown {
     opacity: 1;

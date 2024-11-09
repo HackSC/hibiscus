@@ -10,6 +10,7 @@ import { MutatingDots } from 'react-loader-spinner';
 import { Button } from '@hibiscus/ui-kit-2023';
 import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import axios from 'axios';
+import { StyledAuthCard } from '../auth-components/styled-card';
 
 const updateRole = async (userId: string) => {
   try {
@@ -67,20 +68,10 @@ export function VerifyCard() {
   };
 
   return (
-    <StyledVerifyCard>
-      <Image
-        src="/static/images/logo-2023.svg"
-        alt="HackSC Logo"
-        width={100}
-        height={100}
-      />
-      <StyledText>
-        We&apos;ve sent you an email containing a unique 6-digit PIN code.
-      </StyledText>
-      <ItalicText>
-        This email may take up to 2 minutes to arrive. Do not share this code
-        with anyone else.
-      </ItalicText>
+    <StyledAuthCard>
+      <h2 className="m-0 mb-[10px] font-light text-3xl">HackSC</h2>
+      <h2 className="m-0 mb-[10px] font-bold text-4xl">Verify Email Address</h2>
+
       <OTPInput
         setPinReady={setPinReady}
         code={code}
@@ -88,23 +79,30 @@ export function VerifyCard() {
         maxLength={MAX_CODE_LENGTH}
         handleKeyDown={handleKeyDown}
       />
+      <p className="m-0 mt-[20px] mb-[10px] text-base">
+        We&apos;ve sent you an email containing a unique 6-digit PIN code.
+      </p>
+      <p className="m-0 mb-[10px] text-base">
+        This email may take up to 2 minutes to arrive. Do not share this code
+        with anyone else.
+      </p>
       <StyledErrorText style={{ display: hideErrorMessage ? 'block' : 'none' }}>
         Token is expired or incorrect.
       </StyledErrorText>
-      <Button
+      <button
         color="blue"
         onClick={handleOTP}
         disabled={!pinReady}
-        style={{
-          opacity: !pinReady ? 0.5 : 1,
-          cursor: 'pointer',
-          transitionDuration: '0.5s',
-        }}
+        className={`py-[8px] w-[278px] rounded-[8px] border-[1px] ${
+          pinReady ? 'bg-red-300 hover:bg-theme-redward' : 'bg-gray-300'
+        }`}
       >
-        SUBMIT
-      </Button>
+        Submit
+      </button>
 
-      <Text>If you did not receive your email, please sign up again</Text>
+      <p className="m-0 mt-[10px] text-sm">
+        If you did not receive your email, please sign up again
+      </p>
 
       {verifyState === 'verifying' ? (
         <MutatingDots
@@ -118,7 +116,7 @@ export function VerifyCard() {
       ) : (
         ''
       )}
-    </StyledVerifyCard>
+    </StyledAuthCard>
   );
 }
 

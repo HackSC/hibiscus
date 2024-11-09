@@ -4,7 +4,7 @@ import { Colors2023 } from '@hibiscus/styles';
 
 /* eslint-disable-next-line */
 export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  color: 'blue' | 'black' | 'purple' | 'red' | 'yellow' | 'grey';
+  color: 'blue' | 'black' | 'purple' | 'red' | 'yellow' | 'grey' | 'beige';
   disabled?: boolean;
 }
 
@@ -22,6 +22,8 @@ export function Button(props: ButtonProps) {
     return <YellowButton {...props}>{props.children}</YellowButton>;
   } else if (props.color === 'grey') {
     return <GreyButton {...props}>{props.children}</GreyButton>;
+  } else if (props.color === 'beige'){
+    return <PinkButton {...props}>{props.children}</PinkButton>;
   } else {
     return <RedButton {...props}>{props.children}</RedButton>;
   }
@@ -178,7 +180,7 @@ const BlueButton = styled.button`
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  padding: 10px 30px;
+  padding: 11.8px, 26.98px, 11.8px, 26.98px;
   gap: 0px;
   background: #76d3ef;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -270,3 +272,41 @@ const DisabledButton = styled.button`
   color: #cecece;
   border: 1.5px solid #cecece;
 `;
+
+
+const PinkButton = styled.button`
+  width: fit-content;
+  height: 55px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 20px 30px;
+  gap: 0px;
+  font-family: 'DM Sans';
+  background:#FF6347;
+  border-radius: 10px;
+  //fonts
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 36px;
+  text-align: center;
+  letter-spacing: 0.2em;
+  border: none;
+  color: white;
+  margin-top: 10px; 
+  :hover {
+    background:#FFB1A3;
+    color: white;
+    cursor: pointer;
+    transition: 0.1s;
+  }
+  :active {
+    background: #FFB1A3;;
+    color: white;
+    border-radius: 10px;
+  }
+`;
+

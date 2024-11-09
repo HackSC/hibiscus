@@ -5,6 +5,7 @@ import ArrowRight from '../../public/arrow-right.svg';
 import { useState } from 'react';
 import { IconType } from 'react-icons';
 import styled from 'styled-components';
+import { logout } from '@hibiscus/sso-client';
 
 interface Props {
   options: { name: string; url: string; image: IconType }[];
@@ -16,6 +17,7 @@ const SideNav = ({ options }: Props) => {
   return (
     <div
       style={{
+        height: '100vh',
         backgroundColor: 'white',
         width: '250px',
         display: 'flex',
@@ -53,10 +55,17 @@ const SideNav = ({ options }: Props) => {
         ))}
       </div>
 
-      <LogoutButton>
-        <div>Log out</div>
-        <Image src={ArrowRight} alt={'->'} width={20} height={20}></Image>
-      </LogoutButton>
+      <div style={{width: '100%'}}>
+        <div style={{ fontSize: 11, margin: 25 }}>
+          <div style={{marginBottom: 5}}>Contact HackSC Support</div>
+          <div>(213)-513-1234</div>
+          <div>team@hacksc.com</div>
+        </div>
+        <LogoutButton onClick={logout}>
+          <div>Log out</div>
+          <Image src={ArrowRight} alt={'->'} width={20} height={20}></Image>
+        </LogoutButton>
+      </div>
     </div>
   );
 };
