@@ -74,12 +74,22 @@ const handler: NextApiHandler = async (req, res) => {
       const checkExists = await uploadClient.resumeExists(userIdString);
       if (!checkExists) {
         const meta = await uploadClient.uploadResume(data, userIdString);
+        await hbc
+          .getClient()
+          .from('participants')
+          .update({ resume: meta.path })
+          .eq('id', userIdString);
         return res.status(200).json({
           success: true,
           path: meta.path,
         });
       } else {
         const meta = await uploadClient.updateResume(data, userIdString);
+        await hbc
+          .getClient()
+          .from('participants')
+          .update({ resume: meta.path })
+          .eq('id', userIdString);
         return res.status(200).json({
           success: true,
           path: meta.path,

@@ -491,7 +491,7 @@ const Index = () => {
               alignItems: 'center',
               backgroundColor: '#E8FF9C',
             }}
-            onClick={() => router.push(`${router.asPath}/hacker-attendees`)}
+            onClick={() => router.push('/participant-database')}
           >
             <div style={{ marginRight: 10 }}>View all attendees</div>
             <FaArrowRight />

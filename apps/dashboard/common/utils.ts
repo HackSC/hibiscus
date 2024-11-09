@@ -122,7 +122,7 @@ export async function createSignedResumeUrl(resumeFilePath: string) {
   repo.setOptions({ useServiceKey: true });
   const { data, error } = await repo
     .getClient()
-    .storage.from('rsvp-resume-hacker-2023')
+    .storage.from('resume')
     .createSignedUrl(resumeFilePath, 300);
 
   if (error) console.log(`Resume storage error: ${error.message}`);
