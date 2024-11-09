@@ -1,6 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { getEnv } from '@hibiscus/env';
-import type { Event, EventAdmin } from '../utils/types.d.ts';
+import type { Event, EventAdmin } from './types';
 
 const apiUrl = getEnv().Hibiscus.Supabase.apiUrl;
 const serviceKey = getEnv().Hibiscus.Supabase.serviceKey;
