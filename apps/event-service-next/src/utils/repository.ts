@@ -218,10 +218,10 @@ async function deleteEvent(event_id: string) {
 }
 
 async function getPinnedEvents(user_id: string) {
-  const { data, error } = await client
+  const { data, error } = (await client
     .from('pinned_events')
     .select('events (*)')
-    .eq('user_id', user_id);
+    .eq('user_id', user_id)) as any;
 
   // You can't order by a nested column (lame), so we have to sort the data manually
   data.sort((a, b) => {
