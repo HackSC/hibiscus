@@ -7,7 +7,7 @@ const handler: NextApiHandler = async (req, res) => {
     const body = req.body;
 
     const field = body.data.fields.find(
-      ({ label, type }) => label === 'question_DB9A6R' && type === 'INPUT_TEXT'
+      ({ key, type }) => key === 'question_DB9A6R' && type === 'INPUT_TEXT'
     );
     if (field === undefined || field === null || field.value === '') {
       return createResponse(
