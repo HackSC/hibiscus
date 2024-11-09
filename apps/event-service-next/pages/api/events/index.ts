@@ -28,21 +28,21 @@ async function get(req: NextApiRequest, res: NextApiResponse) {
       body = {};
     }
 
-    let date = body.date;
+    let date: any = body.date;
     console.log('date', date);
     if (date) {
       date = new Date(date);
       console.log('date', date);
     }
 
-    let after = body.after;
+    let after: any = body.after;
     console.log('after', after);
     if (after) {
       after = new Date(after);
       console.log('after', after);
     }
 
-    let page = body.page;
+    let page: any = body.page;
     console.log('page', page);
     if (!page) {
       page = 1;
@@ -51,7 +51,7 @@ async function get(req: NextApiRequest, res: NextApiResponse) {
     }
     console.log('page', page);
 
-    let page_size = body.page_size;
+    let page_size: any = body.page_size;
     console.log('page_size', page_size);
     if (!page_size) {
       page_size = 20;
@@ -62,8 +62,8 @@ async function get(req: NextApiRequest, res: NextApiResponse) {
     const events = await getEvents(
       page,
       page_size,
-      body.name,
-      body.location,
+      body.name as string,
+      body.location as string,
       date,
       after
     );
