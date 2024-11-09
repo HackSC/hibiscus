@@ -17,7 +17,6 @@ const SideNav = ({ options }: Props) => {
   return (
     <div
       style={{
-        height: '100vh',
         backgroundColor: 'white',
         width: '250px',
         display: 'flex',
@@ -55,9 +54,9 @@ const SideNav = ({ options }: Props) => {
         ))}
       </div>
 
-      <div style={{width: '100%'}}>
+      <div style={{ width: '100%' }}>
         <div style={{ fontSize: 11, margin: 25 }}>
-          <div style={{marginBottom: 5}}>Contact HackSC Support</div>
+          <div style={{ marginBottom: 5 }}>Contact HackSC Support</div>
           <div>(213)-513-1234</div>
           <div>team@hacksc.com</div>
         </div>

@@ -1,737 +1,257 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import { useEffect, useMemo, useState } from 'react';
 import useHibiscusUser from '../../hooks/use-hibiscus-user/use-hibiscus-user';
-import { BoldText, Text, H1 } from '@hibiscus/ui';
-import { Colors2023 } from '@hibiscus/styles';
-import { Option } from '@hibiscus/types';
-import Image from 'next/image';
-import DropDown from '../../components/sponsor-portal/dropdown';
-import APIService from '../../common/api';
-import { HibiscusRole } from '@hibiscus/types';
+import { Attendee } from 'apps/dashboard/common/mock-sponsor';
 import { useRouter } from 'next/router';
-import { HackerTab } from '../../components/sponsor-portal/hacker-tab';
-import { Attendee } from '../../common/mock-sponsor';
-import { Button, ParagraphText } from '@hibiscus/ui-kit-2023';
-import { getWordCount } from '../../common/utils';
-import HackerProfile from '../../components/sponsor-portal/hacker-profile';
-import { SponsorServiceAPI } from '../../common/api';
-import {
-  Button as SctwButton,
-  BodyText,
-  Colors as SctwColors,
-  GlobalStyle,
-  Heading,
-} from '@hacksc/sctw-ui-kit';
+import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
+import { SponsorServiceAPI } from 'apps/dashboard/common/api';
+import { FaBookmark, FaChevronUp, FaRegBookmark } from 'react-icons/fa6';
+import { FiSearch } from 'react-icons/fi';
+import { FaChevronDown } from 'react-icons/fa';
+import Link from 'next/link';
+import { HiOutlineDocumentText } from 'react-icons/hi2';
 
-const Index = () => {
+type SortKey = keyof Pick<
+  Attendee,
+  'full_name' | 'graduation_year' | 'major' | 'school'
+>;
+
+export default function Index() {
   const router = useRouter();
-  const getViewSaved = () => {
-    if (router.query?.viewSaved)
-      return { value: 'saved', displayName: 'Saved' } as Option;
-    return null;
-  };
-
-  const COMPANY_ID = router.query.companyId as string;
-  const EVENT_ID = router.query.eventId as string;
-  const [textInput, setInput] = useState('');
-  const [chosenYearOption, setYearOption] = useState<Option | null>(null);
-  const [chosenMajorOption, setMajorOption] = useState<Option | null>(null);
-  const [chosenSchoolOption, setSchoolOption] = useState<Option | null>(null);
-  const [chosenParicipantOption, setParticipantOption] =
-    useState<Option | null>(getViewSaved());
-  const [attendees, setAttendees] = useState<Attendee[]>([]);
-  const [currentAttendee, setCurrentAttendee] = useState<Attendee>(null);
-  const [modalActive, setModalActive] = useState(false);
-  const [attendeeName, setAttendeeName] = useState('');
-
-  useEffect(() => {
-    if (modalActive) {
-      setInput(currentAttendee.quick_notes);
-    }
-  }, [modalActive]);
-
-  useEffect(() => {
-    async function getFilteredAttendee() {
-      SponsorServiceAPI.getFilteredAttendee(
-        COMPANY_ID,
-        EVENT_ID,
-        chosenMajorOption?.value,
-        chosenYearOption?.value,
-        chosenSchoolOption?.value,
-        chosenParicipantOption
-          ? chosenParicipantOption.value === 'saved'
-          : false
-      )
-        .then(({ data, error }) => {
-          if (error) {
-            console.log(error);
-          }
-          setAttendees(data.data as Attendee[]);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-    getFilteredAttendee();
-  }, [
-    chosenMajorOption,
-    chosenYearOption,
-    chosenSchoolOption,
-    chosenParicipantOption,
-    COMPANY_ID,
-    EVENT_ID,
-  ]);
+  const supabase = useHibiscusSupabase().supabase.getClient();
 
   const { user } = useHibiscusUser();
-  if (user == null) {
-    return <>Loading</>;
-  }
-  // Limit access to only sponsor role
-  if (user?.role !== HibiscusRole.SPONSOR) {
-    router.push('/');
-    return <></>;
-  }
+  const [COMPANY_ID, setCompanyId] = useState(null);
+  const [EVENT_ID, setEventId] = useState(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (user == null) {
+        return;
+      }
 
-  const getSchoolOptions = async () => {
-    const schools = await APIService.getSchools();
-    const opts: Option[] = schools.map((str, i) => ({
-      displayName: str,
-      value: str.toString(),
-    }));
+      const res = await SponsorServiceAPI.getCompanyIdAndEventId(user.id);
+      if (res.data == null) {
+        return;
+      }
 
-    return opts;
-  };
-
-  const yearOptionsList: Option[] = [
-    { value: 'Spring 2023', displayName: 'Spring 2023' },
-    { value: 'Fall 2023', displayName: 'Fall 2023' },
-    { value: 'Spring 2024', displayName: 'Spring 2024' },
-    { value: 'Fall 2024', displayName: 'Fall 2024' },
-    { value: 'Spring 2025', displayName: 'Spring 2025' },
-    { value: 'Fall 2025', displayName: 'Fall 2025' },
-    { value: 'Spring 2026', displayName: 'Spring 2026' },
-    { value: 'Fall 2026', displayName: 'Fall 2026' },
-    { value: 'Spring 2027', displayName: 'Spring 2027' },
-    { value: 'Fall 2027', displayName: 'Fall 2027' },
+      setCompanyId(res.data.data.company_id);
+      setEventId(res.data.data.event_id);
+    };
+    fetchData();
+  }, [user]);
+  const [attendees, setAttendees] = useState<Attendee[]>([]);
+  const [search, setSearch] = useState<string>('');
+  const [sortBy, setSortBy] = useState<{
+    key: SortKey | null;
+    direction: 'asc' | 'desc';
+  }>({ key: null, direction: 'asc' });
+  const sortButtons: { key: SortKey; label: string }[] = [
+    { key: 'full_name', label: 'Name' },
+    { key: 'graduation_year', label: 'Year' },
+    { key: 'major', label: 'Major' },
+    { key: 'school', label: 'School' },
   ];
 
-  const majorOptionsList: Option[] = [
-    {
-      value: 'Computer Science',
-      displayName: 'Computer science/computer engineering',
-    },
-    {
-      value: 'engineering',
-      displayName: `Civil, Electrical, Mechanical, etc. Engineering)`,
-    },
-    {
-      value: 'natural science',
-      displayName: `A natural science (such as biology, chemistry, physics, etc.)`,
-    },
-    {
-      value: 'mathematics',
-      displayName: `Mathematics or statistics`,
-    },
-    {
-      value: 'web dev',
-      displayName: `Web development or web design`,
-    },
-    {
-      value: 'business',
-      displayName: `Business discipline (such as accounting, finance, marketing, etc.)`,
-    },
-    {
-      value: 'humanities',
-      displayName:
-        'Humanities discipline (such as literature, history, philosophy, etc.)',
-    },
-    {
-      value: 'arts',
-      displayName: `Fine arts or performing arts (such as graphic design, music, studio art, etc.)`,
-    },
-  ];
-
-  const participantOptionsList: Option[] = [
-    { displayName: 'All', value: 'all' },
-    { displayName: 'Saved', value: 'saved' },
-  ];
-
-  const clearAllFilter = () => {
-    setYearOption(null);
-    setMajorOption(null);
-    setSchoolOption(null);
-    setParticipantOption(null);
-  };
-
-  const getAttendees = () => {
-    return attendees.map((attendee, index) => (
-      <HackerTabContainer
-        key={index}
-        onClick={() => {
-          setCurrentAttendee(attendee);
-        }}
-      >
-        <HackerTab
-          user={attendee}
-          showYear={true}
-          showMajor={true}
-          showSchool={true}
-          showSaveButton={true}
-          onNoteClick={() => {
-            setCurrentAttendee(attendee);
-          }}
-          onSaveClick={() => toggleSaveAttendee(COMPANY_ID, attendee)}
-          circleColor={'#FFACAB'} // light Redward
-        />
-      </HackerTabContainer>
-    ));
-  };
-
-  const openQuickNote = (attendee: Attendee) => {
-    setModalActive(true);
-    setAttendeeName(`${attendee.full_name}`);
-  };
-
-  async function setAttendeeNote(
-    companyId: string,
-    attendeeId: string,
-    note: string
-  ) {
-    SponsorServiceAPI.setAttendeeNote(companyId, attendeeId, note)
-      .then(({ data, error }) => {
-        if (error) {
-          console.log(error);
-        }
-        console.log(`Updated note: ${data.data.note}`);
-
-        // Update note in UI in real time
-        const i = attendees.findIndex((it) => it.id === attendeeId);
-        if (i >= 0) {
-          setAttendees((prev) => {
-            const newAttendees = [...prev];
-            newAttendees[i].quick_notes = note;
-            return newAttendees;
-          });
-          setCurrentAttendee((prev) => {
-            if (prev.id === attendeeId) {
-              const newAttendee = { ...prev };
-              newAttendee.quick_notes = note;
-              return newAttendee;
-            }
-          });
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  async function fetchData() {
-    SponsorServiceAPI.getFilteredAttendee(
-      COMPANY_ID,
-      EVENT_ID,
-      chosenMajorOption?.value,
-      chosenYearOption?.value,
-      chosenSchoolOption?.value,
-      chosenParicipantOption ? chosenParicipantOption.value === 'saved' : false
-    )
-      .then(({ data, error }) => {
-        if (error) {
-          console.log(error);
-        }
-        setAttendees(data.data as Attendee[]);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  async function toggleSaveAttendee(companyId: string, attendee: Attendee) {
-    if (!attendee.saved) {
-      SponsorServiceAPI.saveAttendee(companyId, attendee.id)
-        .then(({ data, error }) => {
-          if (error) {
-            console.log(error);
-          }
-          fetchData();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } else {
-      SponsorServiceAPI.unsaveAttendee(companyId, attendee.id)
-        .then(({ data, error }) => {
-          if (error) {
-            console.log(error);
-          }
-          fetchData();
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+  useEffect(() => {
+    if (COMPANY_ID != null && EVENT_ID != null) {
+      getAttendees();
     }
+  }, [COMPANY_ID, EVENT_ID]);
+
+  async function getAttendees() {
+    try {
+      const res = await SponsorServiceAPI.getCheckInAttendee(
+        COMPANY_ID,
+        EVENT_ID
+      );
+
+      if (res.error) {
+        console.error(res.error);
+      } else {
+        setAttendees(res.data.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const filteredAttendees = useMemo(() => {
+    let filtered = search
+      ? attendees.filter((attendee) => {
+          const info = attendee.full_name + attendee.major + attendee.school;
+          return info.toLowerCase().includes(search.toLowerCase());
+        })
+      : attendees;
+
+    if (sortBy.key) {
+      filtered.sort((a, b) => {
+        const direction = sortBy.direction === 'asc' ? 1 : -1;
+        return (a[sortBy.key] < b[sortBy.key] ? -1 : 1) * direction;
+      });
+    }
+
+    filtered.sort((a, b) => {
+      if (a.saved === b.saved) return 0;
+      return a.saved ? -1 : 1;
+    });
+
+    return filtered;
+  }, [attendees, search, sortBy]);
+
+  async function handleSave(id: string, isSaved: boolean) {
+    try {
+      if (isSaved) {
+        await SponsorServiceAPI.unsaveAttendee(COMPANY_ID, id);
+      } else {
+        await SponsorServiceAPI.saveAttendee(COMPANY_ID, id);
+      }
+
+      setAttendees((prev) =>
+        prev.map((attendee) =>
+          attendee.id === id ? { ...attendee, saved: !isSaved } : attendee
+        )
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  function handleSort(key: SortKey) {
+    setSortBy((current) => ({
+      key,
+      direction:
+        current.key === key && current.direction === 'asc' ? 'desc' : 'asc',
+    }));
   }
 
   return (
-    <Wrapper>
-      <GlobalStyle />
-      <SctwTitle>All HackSC Participants</SctwTitle>
-      <Container>
-        <FilterContainer>
-          <SctwHeading>Sort by</SctwHeading>
-          <DropDownContainer>
-            <DropDown
-              title={'YEAR'}
-              options={yearOptionsList}
-              color={'red'}
-              placeholder={'Enter class year'}
-              chooseOption={setYearOption}
-            />
-          </DropDownContainer>
-          <DropDownContainer>
-            <DropDown
-              title={'MAJOR'}
-              options={majorOptionsList}
-              color={'blue'}
-              placeholder={'Enter a major'}
-              chooseOption={setMajorOption}
-            />
-          </DropDownContainer>
-          <DropDownContainer>
-            <DropDown
-              title={'SCHOOL'}
-              options={getSchoolOptions}
-              color={'yellow'}
-              placeholder={'Enter a school'}
-              chooseOption={setSchoolOption}
-            />
-          </DropDownContainer>
-          <DropDownContainer>
-            <DropDown
-              title={'PARTICIPANT'}
-              options={participantOptionsList}
-              color={'lightblue'}
-              placeholder={'Enter type of participant'}
-              chooseOption={setParticipantOption}
-            />
-          </DropDownContainer>
-        </FilterContainer>
-        <ChosenFilterContainer>
-          {(chosenYearOption ||
-            chosenMajorOption ||
-            chosenSchoolOption ||
-            chosenParicipantOption) && (
-            <ClearAllButton onClick={() => clearAllFilter()}>
-              <Text>Clear All</Text>
-            </ClearAllButton>
-          )}
-
-          {chosenYearOption !== null && (
-            <FilterPill>
-              <Text>{chosenYearOption.displayName}</Text>
-              <DeleteFilterButton onClick={() => setYearOption(null)}>
-                <Image
-                  width="15"
-                  height="15"
-                  src={'/x-button.svg'}
-                  alt="x-button"
-                />
-              </DeleteFilterButton>
-            </FilterPill>
-          )}
-          {chosenMajorOption !== null && (
-            <FilterPill>
-              <Text>{chosenMajorOption.displayName}</Text>
-              <DeleteFilterButton onClick={() => setMajorOption(null)}>
-                <Image
-                  width="15"
-                  height="15"
-                  src={'/x-button.svg'}
-                  alt="x-button"
-                />
-              </DeleteFilterButton>
-            </FilterPill>
-          )}
-          {chosenSchoolOption !== null && (
-            <FilterPill>
-              <Text>{chosenSchoolOption.displayName}</Text>
-              <DeleteFilterButton onClick={() => setSchoolOption(null)}>
-                <Image
-                  width="15"
-                  height="15"
-                  src={'/x-button.svg'}
-                  alt="x-button"
-                />
-              </DeleteFilterButton>
-            </FilterPill>
-          )}
-          {chosenParicipantOption !== null && (
-            <FilterPill>
-              <Text>{chosenParicipantOption.displayName}</Text>
-              <DeleteFilterButton onClick={() => setParticipantOption(null)}>
-                <Image
-                  width="15"
-                  height="15"
-                  src={'/x-button.svg'}
-                  alt="x-button"
-                />
-              </DeleteFilterButton>
-            </FilterPill>
-          )}
-        </ChosenFilterContainer>
-      </Container>
-
-      <DatabaseContainer>
-        <Container style={{ flex: 2 }}>
-          <StyledScrollBar>{getAttendees()}</StyledScrollBar>
-        </Container>
-        <RightContainer
-          style={
-            currentAttendee !== null ? { display: 'flex' } : { display: 'none' }
-          }
-        >
-          <CloseButton
-            onClick={() => {
-              setCurrentAttendee(null);
+    <div className="p-[40px]">
+      <div>
+        <h2 className="m-0 text-2xl">Hacker Attendees</h2>
+        <div className="w-full flex items-center my-8 px-4 py-3 bg-gray-100 border-solid border-[1px] border-gray600 rounded-md text-sm">
+          <FiSearch className="mr-2" />
+          <input
+            className="w-full bg-transparent placeholder:text-gray-600 text-gray-600 border-none focus:border-none focus:outline-none focus:ring-transparent"
+            type="search"
+            placeholder="Search for an attendee"
+            onChange={(e) => {
+              setSearch(e.target.value);
             }}
-          >
-            <SctwHeading style={{ color: SctwColors.Yellow.BabyFood }}>
-              HACKER
-            </SctwHeading>
-            <Image
-              width="20"
-              height="20"
-              src={'/x-button.svg'}
-              alt="x-button"
-            />
-          </CloseButton>
-          {currentAttendee !== null ? (
-            <div style={{ marginTop: '1.5rem' }}>
-              <HackerProfile
-                hacker={currentAttendee}
-                companyId={COMPANY_ID}
-                noteOnClick={() => openQuickNote(currentAttendee)}
-              />
-            </div>
-          ) : (
-            <></>
-          )}
-        </RightContainer>
-      </DatabaseContainer>
+          />
+        </div>
 
-      {modalActive && (
-        <ModalContainer>
-          <QuickNoteContainer>
-            <CloseButton
-              style={{ justifyContent: 'flex-end' }}
-              onClick={() => {
-                setModalActive(false);
-                setInput('');
-              }}
-            >
-              <Image
-                width="20"
-                height="20"
-                src={'/x-button.svg'}
-                alt="x-button"
-              />
-            </CloseButton>
-            <SctwHeading>QUICK NOTES</SctwHeading>
-            <BodyText style={{ fontSize: '25px', marginTop: '1rem' }}>
-              {attendeeName}
-            </BodyText>
-            <TextWrapper>
-              <StyledInput
-                value={textInput}
-                placeholder={'Add quick note . . . '}
-                onChange={(e) => {
-                  setInput(e.target.value);
-                }}
-              />
-              <WordCountText>
-                Word count: {getWordCount(textInput)}
-              </WordCountText>
-            </TextWrapper>
-            <div style={{ marginTop: '1rem', display: 'flex' }}>
-              <SctwButton
-                color={'yellow'}
-                onClick={() => {
-                  setModalActive(false);
-                  setInput('');
-                }}
-              >
-                CANCEL
-              </SctwButton>
-              <div style={{ marginLeft: '0.5rem' }}>
-                <SctwButton
-                  color={'yellow'}
-                  onClick={() => {
-                    setAttendeeNote(COMPANY_ID, currentAttendee.id, textInput);
-                    setModalActive(false);
-                    setInput('');
-                  }}
+        {/* Mobile sorting */}
+
+        {/* Desktop list */}
+        <table className="hidden md:table w-full table-auto">
+          <thead>
+            <tr>
+              {sortButtons.map((category) => (
+                <th
+                  key={category.key}
+                  className="px-2 py-3 text-left text-md text-gray-900 tracking-wider"
                 >
-                  SAVE
-                </SctwButton>
+                  <button
+                    onClick={() => handleSort(category.key)}
+                    className="flex items-center cursor-pointer"
+                  >
+                    <span className="mr-2">{category.label}</span>
+                    {sortBy.key === category.key ? (
+                      sortBy.direction === 'asc' ? (
+                        <FaChevronUp />
+                      ) : (
+                        <FaChevronDown />
+                      )
+                    ) : (
+                      <FaChevronDown />
+                    )}
+                  </button>
+                </th>
+              ))}
+              <th className="py-3 text-right text-md text-gray-900 tracking-wider">
+                <span className="sr-only">Resume</span>
+              </th>
+              <th className="py-3 text-right text-md text-gray-900 tracking-wider">
+                <span className="sr-only">Save</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredAttendees.map((attendee) => (
+              <tr key={attendee.id}>
+                <td className="px-2 py-3 whitespace-nowrap text-md text-gray-500">
+                  {attendee.full_name}
+                </td>
+                <td className="px-2 py-3 whitespace-nowrap text-md text-gray-500">
+                  {attendee.graduation_year}
+                </td>
+                <td className="px-2 py-3 whitespace-nowrap text-md text-gray-500">
+                  {attendee.major}
+                </td>
+                <td className="px-2 py-3 whitespace-nowrap text-md text-gray-500">
+                  {attendee.school}
+                </td>
+                <td className="py-3 whitespace-nowrap">
+                  {attendee.resume ? (
+                    <Link href={attendee.resume} target="_blank">
+                      <HiOutlineDocumentText />
+                    </Link>
+                  ) : (
+                    <></>
+                  )}
+                </td>
+                <td className="py-3 whitespace-nowrap">
+                  <button
+                    onClick={() => handleSave(attendee.id, attendee.saved)}
+                    className="cursor-pointer float-end"
+                  >
+                    {attendee.saved ? <FaBookmark /> : <FaRegBookmark />}
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+        {/* Mobile list */}
+        <div className="md:hidden">
+          {filteredAttendees.map((attendee) => (
+            <div
+              key={attendee.id}
+              className="flex items-center justify-between py-4"
+            >
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">
+                  {attendee.full_name}
+                </h3>
+                <span className="text-sm text-gray-500 mt-1 mr-4">
+                  {attendee.graduation_year}
+                </span>
+                <span className="text-sm text-gray-500 mt-1 mr-4">
+                  {attendee.major}
+                </span>
+                <span className="text-sm text-gray-500 mt-1 mr-4">
+                  {attendee.school}
+                </span>
+              </div>
+              <div className="flex">
+                {attendee.resume ? (
+                  <Link href={attendee.resume} target="_blank">
+                    <HiOutlineDocumentText />
+                  </Link>
+                ) : (
+                  <></>
+                )}
+                <button
+                  onClick={() => handleSave(attendee.id, attendee.saved)}
+                  className="cursor-pointer"
+                >
+                  {attendee.saved ? <FaBookmark /> : <FaRegBookmark />}
+                </button>
               </div>
             </div>
-          </QuickNoteContainer>
-        </ModalContainer>
-      )}
-    </Wrapper>
+          ))}
+        </div>
+      </div>
+    </div>
   );
-};
-
-export default Index;
-
-const StyledButton = styled.button`
-  width: 60px;
-  height: 60px;
-  padding-top: 12px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: ${Colors2023.GRAY.STANDARD};
-  border-radius: 15px;
-  border: 4px solid ${Colors2023.GRAY.MEDIUM};
-  gap: 10px;
-  cursor: pointer;
-  transition: all 0.3s;
-  box-shadow: 1px 2px 15px ${Colors2023.GRAY.MEDIUM};
-
-  &:hover {
-    -color: ${Colors2023.GRAY.SHLIGHT};
-    transition: all 0.3s;
-  }
-`;
-
-const DatabaseContainer = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  color: white;
-`;
-
-const Wrapper = styled.div`
-  width: 95%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-left: 6rem;
-  padding-bottom: 30px;
-`;
-
-const Container = styled.div`
-  width: 100%;
-  display: 'flex';
-  padding: 15px;
-  margin-top: 2rem;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  background-color: #ffe48e; /* lite yuhloow (Sctw Colors) */
-  border-radius: 10px;
-`;
-
-const FilterContainer = styled.div`
-  width: 100%;
-  display: flex;
-  /* justify-content: space-around; */
-  align-items: center;
-  padding: 30px;
-`;
-
-const StyledTitle = styled(Text)`
-  font-size: 25px;
-  color: ${Colors2023.GREEN.LIGHT};
-`;
-
-const ChosenFilterContainer = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding-left: 2rem;
-`;
-
-const ClearAllButton = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 15px;
-  color: white;
-  font-size: 16px;
-  letter-spacing: 0.2rem;
-  background-color: ${SctwColors.Red.Redward};
-  border-radius: 25px;
-  border: 2px solid #ffacab; // Light Redward
-  gap: 10px;
-  cursor: pointer;
-  transition: all 0.3s;
-
-  &:hover {
-    background-color: #ffacab; // Light Redward
-    transition: all 0.3s;
-  }
-`;
-
-const FilterPill = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 10px 15px;
-  color: white;
-  font-size: 15px;
-  letter-spacing: 0.2rem;
-  background-color: ${SctwColors.Red.Redward};
-  border-radius: 25px;
-  border: 2px solid #ffacab; // Light Redward
-  gap: 10px;
-  margin-left: 2rem;
-`;
-
-const DeleteFilterButton = styled.button`
-  background-color: ${SctwColors.Red.Redward};
-
-  cursor: pointer;
-  transition: all 0.3s;
-
-  &:hover {
-    opacity: 0.5;
-    transition: all 0.3s;
-  }
-`;
-
-const DropDownContainer = styled.div`
-  margin-left: 3rem;
-`;
-
-const HackerTabContainer = styled.button`
-  width: 100%;
-  display: flex;
-  padding: 5px 15px;
-  margin-top: 0.5rem;
-  background-color: #ffe48e; /* lite yuhloow (Sctw Colors) */
-  border-bottom: 1px solid ${SctwColors.Red.Rash};
-  cursor: pointer;
-
-  :active {
-    opacity: 0.5;
-  }
-`;
-
-const CloseButton = styled.button`
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  background-color: ${SctwColors.Blue.BlueIvy};
-  cursor: pointer;
-  :hover {
-    opacity: 0.5;
-  }
-  :active {
-    opacity: 0.8;
-  }
-`;
-
-const RightContainer = styled.div`
-  display: flex;
-  flex: 1;
-  margin-top: 2rem;
-  margin-left: 1rem;
-  padding: 30px;
-  flex-direction: column;
-  justify-content: flex-start;
-  background-color: ${SctwColors.Blue.BlueIvy};
-  border-radius: 10px;
-
-  transition: max-width 0.5s;
-`;
-
-const TextWrapper = styled.div`
-  margin-top: 0.5rem;
-`;
-
-const WordCountText = styled(Text)`
-  color: ${Colors2023.GRAY.SHLIGHT};
-  font-size: small;
-`;
-
-const StyledParagraphText = styled(ParagraphText)`
-  width: 80%;
-`;
-
-const ModalContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 999;
-  background-color: rgba(0, 0, 0, 0.8);
-`;
-
-const QuickNoteContainer = styled.div`
-  color: white;
-  margin: auto;
-  margin-top: 10rem;
-  padding: 20px 20px 40px 40px;
-  display: flex;
-  flex-direction: column;
-  width: 50%;
-  background-color: ${SctwColors.Blue.BlueIvy};
-  border-radius: 10px;
-`;
-
-const StyledInput = styled.textarea`
-  background-color: ${SctwColors.Yellow.BabyFood};
-  padding: 20px 60px 60px 20px;
-
-  border-radius: 10px;
-  width: 80%;
-
-  :focus {
-    outline: none;
-  }
-`;
-
-const StyledScrollBar = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  height: 560px;
-  overflow-y: auto;
-
-  &::-webkit-scrollbar {
-    width: 8px;
-    background-color: ${SctwColors.Red.DonatedBlood};
-    border-radius: 50px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: ${SctwColors.Red.Redward};
-    border-radius: 50px;
-  }
-`;
-
-const SctwTitle = styled(Heading)`
-  color: ${SctwColors.Blue.DarkBloo};
-  font-size: 45px;
-  letter-spacing: 0.4rem;
-`;
-
-const SctwHeading = styled(Heading)`
-  font-size: 25px;
-  letter-spacing: 0.4rem;
-`;
-
-const SctwText = styled(BodyText)`
-  font-size: 20px;
-  text-align: left;
-`;
-
-const SctwUnderlinedText = styled(BodyText)`
-  font-size: 20px;
-  text-align: left;
-  text-decoration-line: underline;
-  width: fit-content;
-`;
+}

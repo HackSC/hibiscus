@@ -31,7 +31,7 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
     if (user == null) return Colors.Yellow.ArthurSweater;
     if (user.role === HibiscusRole.HACKER) return Colors.Red.Redward;
     if (user.role === HibiscusRole.VOLUNTEER) return Colors.Red.Redward;
-    if (user.role === HibiscusRole.SPONSOR) return Colors.Red.DonatedBlood;
+    if (user.role === HibiscusRole.SPONSOR) return Colors.Red.Redward;
     return Colors.Yellow.ArthurSweater;
   }, [user]);
   const shadowColor = useMemo(() => {
@@ -116,9 +116,7 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
           <RightUtilityContainer>
             <UserText>{user.tag}</UserText>
             <RoleText>
-              <GlowSpan color={color} shadowColor={shadowColor}>
-                {user.role}
-              </GlowSpan>
+              <GlowSpan color={color}>{user.role}</GlowSpan>
             </RoleText>
             <LogoutButton onClick={logout}>
               <Image
