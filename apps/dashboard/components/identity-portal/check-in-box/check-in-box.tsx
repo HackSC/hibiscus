@@ -33,7 +33,7 @@ export function CheckInBox(props: CheckInBoxProps) {
     if (user != null) {
       // checkDiscord(user.id).then((v) => setDiscordVerified(v));
       setWaiver(user.waiver_signed);
-      setAdmitted(user.application_state === 5);
+      setAdmitted(user.application_status === 5);
     }
   }, [user]);
 
@@ -145,7 +145,7 @@ export function CheckInBox(props: CheckInBoxProps) {
               />
               <Checkbox
                 color="yellow"
-                label="Joined Discord"
+                label="Verify ID"
                 checked={discordVerified}
                 onInput={handleClick(setDiscordVerified)}
               />
