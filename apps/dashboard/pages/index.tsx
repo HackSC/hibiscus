@@ -97,6 +97,9 @@ export function Index({ appsOpen, waitlistOpen }: ServerSideProps) {
         !rsvpFormOpen
       ) {
         return <RSVPClosedPlaceholder />;
+      } else if (user.attendanceConfirmed === true) {
+        router.push('/leaderboard');
+        return <></>;
       }
       return (
         <HackerPortal isEventOpen={hackerPortalOpen} appsOpen={appsOpen} />
@@ -107,7 +110,10 @@ export function Index({ appsOpen, waitlistOpen }: ServerSideProps) {
     } else if (user.role === HibiscusRole.JUDGE) {
       window.location.replace('https://podium.hacksc.com');
       return <></>;
-    } else if (user.role === HibiscusRole.VOLUNTEER) return <IdentityPortal />;
+    } else if (user.role === HibiscusRole.VOLUNTEER) {
+      router.push('/identity-portal/attendee-event-scan');
+      return <></>;
+    }
   };
 
   return (

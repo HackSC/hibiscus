@@ -1,4 +1,5 @@
 import { HibiscusSupabaseClient } from '@hibiscus/hibiscus-supabase-client';
+import { HibiscusRole } from '@hibiscus/types';
 import { NextApiHandler } from 'next';
 import { container } from 'tsyringe';
 
@@ -29,7 +30,7 @@ const handler: NextApiHandler = async (req, res) => {
     const resRole = await supabase
       .getClient()
       .from('user_invites')
-      .select('role')
+      .select('role, sponsor_company')
       .eq('email', email);
 
     if (resRole.error != null) {
@@ -52,6 +53,13 @@ const handler: NextApiHandler = async (req, res) => {
 
     if (resUpdate.error != null) {
       return res.status(500).json({ message: resUpdate.error.message });
+    }
+
+    if (role === 3 /* SPONSOR */) {
+      await supabase.getClient().from('sponsor_user_bridge_company').insert({
+        user_id: userIdString,
+        company_id: resRole.data[0].sponsor_company,
+      });
     }
 
     return res.status(200).json({ message: 'Success' });
