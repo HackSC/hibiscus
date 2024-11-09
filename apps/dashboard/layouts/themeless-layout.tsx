@@ -79,6 +79,11 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
           url: '/participant-database',
           image: MdOutlinePeopleAlt,
         },
+        {
+          name: 'Event Check-in',
+          url: '/identity-portal/event-checkin',
+          image: MdOutlinePlaylistAddCheck,
+        },
       ];
   }, [user]);
 

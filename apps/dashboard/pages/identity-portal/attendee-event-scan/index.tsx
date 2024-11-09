@@ -212,7 +212,10 @@ export function Index() {
     return <>Loading</>;
   }
   // Limit access to only volunteer role
-  if (authUser?.role !== HibiscusRole.VOLUNTEER) {
+  if (
+    authUser?.role !== HibiscusRole.VOLUNTEER &&
+    authUser?.role !== HibiscusRole.SPONSOR
+  ) {
     router.push('/');
     return <></>;
   }
