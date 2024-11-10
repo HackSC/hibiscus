@@ -72,4 +72,53 @@ export class BattlePassRepository {
 
     if (res.error) throw res.error;
   }
+
+  async setBonusPointApproved(userId: string, bonusPointId: string) {
+    const exists = await this.client
+      .from('bonus_points_log')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('bonus_points_id', bonusPointId)
+      .eq('status', 1);
+
+    if (exists.error != null) {
+      throw exists.error;
+    }
+
+    if (exists.data.length === 0) {
+      const res = await this.client
+        .from('bonus_points_log')
+        .upsert({
+          user_id: userId,
+          bonus_points_id: bonusPointId,
+          status: 1,
+        })
+        .select('bonus_points (points)');
+
+      if (res.error) throw res.error;
+
+      const userLeaderboardMatches = await this.client
+        .from('leaderboard')
+        .select()
+        .eq('user_id', `${userId}`);
+
+      if (userLeaderboardMatches.data.length == 0) {
+        const resLeaderboard = await this.client.from('leaderboard').insert({
+          user_id: userId,
+          bonus_points: res.data[0].bonus_points.points,
+        });
+        if (resLeaderboard.error) throw resLeaderboard.error;
+      } else {
+        const resLeaderboard = await this.client
+          .from('leaderboard')
+          .update({
+            bonus_points:
+              res.data[0].bonus_points.points +
+              userLeaderboardMatches.data[0].bonus_points,
+          })
+          .eq('user_id', userId);
+        if (resLeaderboard.error) throw resLeaderboard.error;
+      }
+    }
+  }
 }

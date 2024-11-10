@@ -21,6 +21,7 @@ import { useHibiscusSupabase } from '@hibiscus/hibiscus-supabase-context';
 import BattlepassPointsBar from 'apps/dashboard/components/battlepass/battlepass-points-bar';
 import { BsExclamationTriangle } from 'react-icons/bs';
 import { MdCheckCircleOutline } from 'react-icons/md';
+import axios from 'axios';
 
 const COLUMN_WIDTH = 510;
 const TEAM_MEMBER_ICONS = [
@@ -41,6 +42,8 @@ export function Index() {
   const [state, setState] = useState(State.LOADING);
   const [isModalOpen, setModalOpen] = useState(false);
   const [battlepassProgress, setBattlepassProgress] = useState(null);
+  const [bonusPoints, setBonusPoints] = useState(null);
+  const [hackerBonusPoints, setHackerBonusPoints] = useState(null);
   const router = useRouter();
   const { supabase } = useHibiscusSupabase();
 
@@ -139,6 +142,28 @@ export function Index() {
       }
     }
   }, [router.isReady, router.query]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await supabase.getClient().from('bonus_points').select();
+      if (res.error) return;
+
+      const res_ = await supabase
+        .getClient()
+        .from('bonus_points_log')
+        .select()
+        .eq('user_id', user.user_id)
+        .eq('status', 1);
+      if (res_.error) return;
+
+      setBonusPoints(res.data);
+      setHackerBonusPoints(res_.data.map((d) => d.bonus_points_id));
+    };
+
+    if (user != null) {
+      fetchData();
+    }
+  }, [user]);
 
   const { user: authUser } = useHibiscusUser();
   if (authUser == null) {
@@ -263,6 +288,48 @@ export function Index() {
                 </ScrollableListBox.Item>
               ))}
             </ScrollableListBox>
+          </div>
+        </div>
+
+        <div className="flex flex-row gap-[40px] flex-wrap">
+          <div className="flex flex-col flex-1 gap-[10px]">
+            <h3 className="text-xl m-0">Bonus Points</h3>
+            <div className="flex flex-col gap-[20px] border-solid border-black border-[1px] rounded-[8px] p-[30px] text-sm">
+              {bonusPoints?.map((bp) => (
+                <div
+                  key={bp.id}
+                  className="flex flex-row gap-[20px] items-center"
+                >
+                  <p>{bp.name}</p>
+                  {hackerBonusPoints.includes(bp.id) ? (
+                    <button
+                      disabled={true}
+                      className="bg-theme-redward px-[20px] py-[8px] text-white rounded-[8px] border-black border-[1px] border-solid text-xs"
+                    >
+                      Already given
+                    </button>
+                  ) : (
+                    <button
+                      onClick={async () => {
+                        const res = await axios.post(
+                          '/api/battlepass/bonus-points-approve',
+                          {
+                            userId: user.user_id,
+                            bonusPointId: bp.id,
+                          }
+                        );
+                        if (res.status === 200) {
+                          setHackerBonusPoints([...hackerBonusPoints, bp.id]);
+                        }
+                      }}
+                      className="bg-red-300 hover:bg-theme-redward active:bg-red-300 px-[20px] py-[8px] text-white rounded-[8px] border-black border-[1px] border-solid text-xs"
+                    >
+                      Submit
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
