@@ -29,7 +29,8 @@
       "configurations": {
         "development": {
           "buildTarget": "podium-service:build:development",
-          "dev": true
+          "dev": true,
+          "port": 8080
         },
         "production": {
           "buildTarget": "podium-service:build:production",

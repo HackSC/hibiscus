@@ -1,11 +1,16 @@
 import { supabase } from 'apps/podium-service/libs/supabase';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { method, query, body } = req;
   const verticalId = query.verticalId as string;
 
   switch (method) {
+    case 'OPTIONS':
+      return res.status(200).send('ok');
     case 'GET':
       try {
         const { data, error } = await supabase
@@ -37,9 +42,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       } catch (error) {
         return res.status(500).json({ error: 'Internal Server Error' });
       }
-    case 'POST':
-      const fields = ['name', 'teamMembers', 'description', 'imageUrl', 'devpostUrl', 'videoUrl'];
-      const fieldsDB = ['name', 'team', 'description', 'image_url', 'devpost_url', 'video_url'];
+    case 'POST': {
+      const fields = [
+        'name',
+        'teamMembers',
+        'description',
+        'imageUrl',
+        'devpostUrl',
+        'videoUrl',
+      ];
+      const fieldsDB = [
+        'name',
+        'team',
+        'description',
+        'image_url',
+        'devpost_url',
+        'video_url',
+      ];
       const addProject = {};
 
       try {
@@ -59,10 +78,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         addProject['vertical_id'] = verticalId;
-        
-        const { error } = await supabase
-          .from('projects')
-          .insert(addProject);
+
+        const { error } = await supabase.from('projects').insert(addProject);
 
         if (error) {
           throw new Error('Failed to add new project');
@@ -72,6 +89,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       } catch (error) {
         return res.status(500).json({ error: 'Internal Server Error' });
       }
+    }
     default:
       res.status(405).end();
       break;
