@@ -108,7 +108,8 @@ export function Index({ appsOpen, waitlistOpen }: ServerSideProps) {
       router.push('/sponsor-booth');
       return <></>;
     } else if (user.role === HibiscusRole.JUDGE) {
-      window.location.replace('https://podium.hacksc.com');
+      // window.location.replace('https://podium.hacksc.com');
+      router.push('/judge-portal'); //
       return <></>;
     } else if (user.role === HibiscusRole.VOLUNTEER) {
       router.push('/identity-portal/attendee-event-scan');
