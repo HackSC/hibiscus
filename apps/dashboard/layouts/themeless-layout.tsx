@@ -85,19 +85,19 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
           image: MdOutlinePlaylistAddCheck,
         },
       ];
-    // if (user.role === HibiscusRole.JUDGE)
-    //   return [
-    //     {
-    //       name: 'Judge Portal',
-    //       url: '/judge-portal',
-    //       image: MdOutlinePlaylistAddCheck,
-    //     },
-    //     // {
-    //     //   name: 'Judges',
-    //     //   url: '/judge-portal/judges',
-    //     //   image: MdOutlinePlaylistAddCheck,
-    //     // },
-    //   ];
+    if (user.role === HibiscusRole.JUDGE)
+      return [
+        {
+          name: 'Judge Portal',
+          url: '/judge-portal',
+          image: MdOutlinePlaylistAddCheck,
+        },
+        {
+          name: 'Judges',
+          url: '/judge-portal/judges',
+          image: MdOutlinePlaylistAddCheck,
+        },
+      ];
   }, [user]);
 
   const [companyName, setCompanyName] = useState(null);
@@ -123,8 +123,8 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
       '/identity-portal/attendee-event-scan': 'Event Check-in',
       '/identity-portal/event-checkin': 'Event Check-in',
       '/hacker-profile': 'Profile',
-      // '/judge-portal': 'Judge Portal',
-      // '/judge-portal/judges': 'Judges',
+      '/judge-portal': 'Judge Portal',
+      '/judge-portal/judges': 'Judges',
       '/sponsor-booth': companyName ? `Welcome ${companyName}` : 'Welcome',
     };
     return map[router.pathname] ?? '';
