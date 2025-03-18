@@ -34,7 +34,9 @@ const newLayoutRoutes = [
   '/identity-portal/event-checkin',
   '/hacker-profile',
   '/judge-portal',
-  '/judge-portal/judges'
+  '/judge-portal/judges',
+  '/judge-portal/projects',
+  '/judge-portal/rankings'
 ];
 
 function CustomApp({ Component, pageProps }: AppProps) {

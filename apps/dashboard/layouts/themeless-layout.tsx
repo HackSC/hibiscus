@@ -97,6 +97,16 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
           url: '/judge-portal/judges',
           image: MdOutlinePlaylistAddCheck,
         },
+        {
+          name: 'Projects',
+          url: '/judge-portal/projects',
+          image: MdOutlinePlaylistAddCheck,
+        },
+        {
+          name: 'Rankings',
+          url: '/judge-portal/rankings',
+          image: MdOutlinePlaylistAddCheck,
+        },
       ];
   }, [user]);
 
@@ -125,6 +135,8 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
       '/hacker-profile': 'Profile',
       '/judge-portal': 'Judge Portal',
       '/judge-portal/judges': 'Judges',
+      '/judge-portal/projects': 'Projects',
+      '/judge-portal/rankings': 'Rankings',
       '/sponsor-booth': companyName ? `Welcome ${companyName}` : 'Welcome',
     };
     return map[router.pathname] ?? '';
