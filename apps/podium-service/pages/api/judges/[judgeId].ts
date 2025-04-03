@@ -34,6 +34,7 @@ export default async function handler(
 
         return res.json(judge);
       } catch (error) {
+        console.log(error);
         return res.status(500).json({ error: 'Internal Server Error' });
       }
     case 'POST':
