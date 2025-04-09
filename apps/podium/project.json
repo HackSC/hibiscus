@@ -10,7 +10,8 @@
       "defaultConfiguration": "production",
       "options": {
         "root": "apps/podium",
-        "outputPath": "dist/apps/podium"
+        "outputPath": "dist/apps/podium",
+        "postcssConfig": "apps/podium/postcss.config.js"
       },
       "configurations": {
         "development": {

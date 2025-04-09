@@ -1,10 +1,8 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useProjectContext } from '../ProjectContext';
 import { IconType } from 'react-icons';
-import { Gi3DMeeple } from "react-icons/gi";
-export * from './lib/hibiscus-layout';
-import { ThemelessLayout } from '@hibiscus/hibiscus-layout';
-
+import { Gi3DMeeple } from 'react-icons/gi';
+import { HibiscusLayout } from '@hibiscus/hibiscus-layout';
 
 import {
   Active,
@@ -324,10 +322,7 @@ const Index = () => {
     return <></>;
   }
 
-  
-
   return (
-    
     <DndContext
       sensors={sensors}
       onDragStart={handleDragStart}
@@ -346,9 +341,11 @@ const Index = () => {
       </Modal>
       {isDragging && <OnHoldDroppable type={'OnHoldAdd'} />}
 
-      
       <header className={`${styles.header} ${styles.flexCenter}`}>
-        <img src="apps/dashboard/images/hibiscus-platform-logo.png" alt="Hibiscus HackSC Logo" />
+        <img
+          src="apps/dashboard/images/hibiscus-platform-logo.png"
+          alt="Hibiscus HackSC Logo"
+        />
         {/* <BiSearch
           color="#FFFFFF"
           size="30px"
@@ -356,8 +353,15 @@ const Index = () => {
           className={styles.cursorPointer}
           onClick={() => setIsSearchOpen(true)}
         /> */}
-        <button id="Criteria"
-          style={{ position: 'absolute', right: '20px', color:'2px black', backgroundColor:'#DDFC75', borderColor: '3px solid black' }}
+        <button
+          id="Criteria"
+          style={{
+            position: 'absolute',
+            right: '20px',
+            color: '2px black',
+            backgroundColor: '#DDFC75',
+            borderColor: '3px solid black',
+          }}
           className={styles.cursorPointer}
           onClick={() => setIsInstructionsOpen(true)}
         >
@@ -491,7 +495,6 @@ const Index = () => {
       </Modal>
 
       <div className={styles.containerMain}>
-        
         {onHoldProjects[0] ? (
           <div>
             <div className={styles.flexBetween}>
@@ -501,9 +504,8 @@ const Index = () => {
               </button>
             </div>
             <br />
-            
+
             <div>
-            
               {isOnHoldExpanded ? (
                 <SortableContext items={onHoldProjectIds}>
                   <ul className={styles.onHoldStackExpanded}>
@@ -542,7 +544,6 @@ const Index = () => {
           <></>
         )}
         <div style={{ margin: '0px 8px' }} className={styles.flexBetween}>
-          
           <h1>Rank</h1>
         </div>
         <br />

@@ -30,6 +30,7 @@
     "podium-service-e2e": "apps/podium-service-e2e",
     "pointr": "apps/pointr",
     "recruitment": "apps/recruitment",
+    "sponsor-service-api": "libs/sponsor-service-api",
     "sso": "apps/sso",
     "sso-client": "libs/sso-client",
     "sso-e2e": "apps/sso-e2e",

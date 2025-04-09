@@ -85,14 +85,13 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
           image: MdOutlinePlaylistAddCheck,
         },
       ];
-      if (user.role == HibiscusRole.JUDGE)
-        return [
-          {
-            name: 'Judging Portal',
-            url: '/podium/pages',
-            image: FaRegUserCircle,
-
-          },
+    if (user.role == HibiscusRole.JUDGE)
+      return [
+        {
+          name: 'Judging Portal',
+          url: '/podium/pages',
+          image: FaRegUserCircle,
+        },
       ];
   }, [user]);
 

@@ -31,6 +31,9 @@
       ],
       "@hibiscus/icons": ["libs/icons/src/index.ts"],
       "@hibiscus/metadata": ["libs/metadata/src/index.ts"],
+      "@hibiscus/sponsor-service-api": [
+        "libs/sponsor-service-api/src/index.ts"
+      ],
       "@hibiscus/sso-client": ["libs/sso-client/src/index.ts"],
       "@hibiscus/styles": ["libs/styles/src/index.ts"],
       "@hibiscus/types": ["libs/types/src/index.ts"],
