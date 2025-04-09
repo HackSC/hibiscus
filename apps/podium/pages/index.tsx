@@ -1,5 +1,11 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useProjectContext } from '../ProjectContext';
+import { IconType } from 'react-icons';
+import { Gi3DMeeple } from "react-icons/gi";
+export * from './lib/hibiscus-layout';
+import { ThemelessLayout } from '@hibiscus/hibiscus-layout';
+
+
 import {
   Active,
   useSensors,
@@ -29,6 +35,7 @@ import smoothscroll from 'smoothscroll-polyfill';
 import { getCookie } from 'cookies-next';
 import { getEnv } from '@hibiscus/env';
 import { HibiscusRole } from '@hibiscus/types';
+import SideNav from '../components/side-nav2';
 
 const Index = () => {
   const env = getEnv();
@@ -317,7 +324,10 @@ const Index = () => {
     return <></>;
   }
 
+  
+
   return (
+    
     <DndContext
       sensors={sensors}
       onDragStart={handleDragStart}
@@ -336,8 +346,9 @@ const Index = () => {
       </Modal>
       {isDragging && <OnHoldDroppable type={'OnHoldAdd'} />}
 
+      
       <header className={`${styles.header} ${styles.flexCenter}`}>
-        <img src="logo_word.png" alt="Hibiscus HackSC Logo" />
+        <img src="apps/dashboard/images/hibiscus-platform-logo.png" alt="Hibiscus HackSC Logo" />
         {/* <BiSearch
           color="#FFFFFF"
           size="30px"
@@ -345,13 +356,21 @@ const Index = () => {
           className={styles.cursorPointer}
           onClick={() => setIsSearchOpen(true)}
         /> */}
-        <BsQuestionCircle
+        <button id="Criteria"
+          style={{ position: 'absolute', right: '20px', color:'2px black', backgroundColor:'#DDFC75', borderColor: '3px solid black' }}
+          className={styles.cursorPointer}
+          onClick={() => setIsInstructionsOpen(true)}
+        >
+          Criteria Help
+        </button>
+        {/* <BsQuestionCircle
+          
           color="#FFFFFF"
           size="30px"
           style={{ position: 'absolute', right: '20px' }}
           className={styles.cursorPointer}
           onClick={() => setIsInstructionsOpen(true)}
-        />
+        /> */}
       </header>
 
       <Modal isOpen={isSearchOpen} closeModal={() => setIsSearchOpen(false)}>
@@ -472,6 +491,7 @@ const Index = () => {
       </Modal>
 
       <div className={styles.containerMain}>
+        
         {onHoldProjects[0] ? (
           <div>
             <div className={styles.flexBetween}>
@@ -481,7 +501,9 @@ const Index = () => {
               </button>
             </div>
             <br />
+            
             <div>
+            
               {isOnHoldExpanded ? (
                 <SortableContext items={onHoldProjectIds}>
                   <ul className={styles.onHoldStackExpanded}>
@@ -520,6 +542,7 @@ const Index = () => {
           <></>
         )}
         <div style={{ margin: '0px 8px' }} className={styles.flexBetween}>
+          
           <h1>Rank</h1>
         </div>
         <br />

@@ -15,7 +15,7 @@ export const containerMain = style({
 });
 
 export const header = style({
-  backgroundColor: '#002990',
+  backgroundColor: '#DDFC75',
   padding: '12px',
 });
 

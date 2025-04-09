@@ -85,6 +85,15 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
           image: MdOutlinePlaylistAddCheck,
         },
       ];
+      if (user.role == HibiscusRole.JUDGE)
+        return [
+          {
+            name: 'Judging Portal',
+            url: '/podium/pages',
+            image: FaRegUserCircle,
+
+          },
+      ];
   }, [user]);
 
   const [companyName, setCompanyName] = useState(null);
@@ -110,6 +119,7 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
       '/identity-portal/attendee-event-scan': 'Event Check-in',
       '/identity-portal/event-checkin': 'Event Check-in',
       '/hacker-profile': 'Profile',
+      '/podium/pages': 'Judging Portal',
       '/sponsor-booth': companyName ? `Welcome ${companyName}` : 'Welcome',
     };
     return map[router.pathname] ?? '';
