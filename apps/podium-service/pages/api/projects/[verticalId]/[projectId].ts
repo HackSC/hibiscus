@@ -1,12 +1,17 @@
 import { supabase } from 'apps/podium-service/libs/supabase';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { method, query, body } = req;
-  const verticalId  = query.verticalId as string;
+  const verticalId = query.verticalId as string;
   const projectId = query.projectId as string;
 
   switch (method) {
+    case 'OPTIONS':
+      return res.status(200).send('ok');
     case 'GET':
       try {
         const { data, error } = await supabase
@@ -30,8 +35,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(500).json({ error: 'Internal Server Error' });
       }
     case 'PUT':
-      const fields = ['name', 'teamMembers', 'description', 'imageUrl', 'devpostUrl', 'videoUrl'];
-      const fieldsDB = ['name',' team', 'description', 'image_url', 'devpost_url', 'video_url'];
+      const fields = [
+        'name',
+        'teamMembers',
+        'description',
+        'imageUrl',
+        'devpostUrl',
+        'videoUrl',
+      ];
+      const fieldsDB = [
+        'name',
+        ' team',
+        'description',
+        'image_url',
+        'devpost_url',
+        'video_url',
+      ];
       const updateProject: Partial<EditableProjectData> = {};
 
       try {

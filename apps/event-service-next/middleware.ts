@@ -8,7 +8,8 @@ export async function middleware(request: NextRequest) {
 
   // Handle preflight requests
   if (request.method === 'OPTIONS') {
-    return NextResponse.next();
+    const res = NextResponse.next();
+    return res;
   }
 
   if (

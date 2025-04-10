@@ -7,6 +7,7 @@ export const getJudgeDetails = async (
   accessToken: string
 ): Promise<JudgeDetails> => {
   try {
+    console.log(accessToken);
     const response = await axios.get(
       `${HIBISCUS_PODIUM_API_URL}/judges/${userId}`,
       { headers: { Authorization: `Bearer ${accessToken}` } }

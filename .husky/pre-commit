@@ -3,5 +3,8 @@
 
 staged=$(git diff --name-only --staged --diff-filter=d)
 export NIXPKGS_ALLOW_INSECURE=1
-nix develop --impure --command bash -c "yarn format && pre-commit run --all-files"
+nix develop --impure \
+  --extra-experimental-features nix-command \
+  --extra-experimental-features flakes \
+  --command bash -c "yarn format && pre-commit run --all-files"
 git add ${staged}

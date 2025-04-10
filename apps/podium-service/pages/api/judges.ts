@@ -1,10 +1,15 @@
 import { supabase } from 'apps/podium-service/libs/supabase';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { method, body } = req;
 
   switch (method) {
+    case 'OPTIONS':
+      return res.status(200).send('ok');
     case 'GET':
       try {
         const { data: judgeData, error: judgeError } = await supabase
@@ -13,9 +18,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           .select('*')
           .eq('role', 7);
 
-        const { data: judgeVerticalData, error: judgeVerticalError } = await supabase
-          .from('judges')
-          .select('*, verticals!inner(name)');
+        const { data: judgeVerticalData, error: judgeVerticalError } =
+          await supabase.from('judges').select('*, verticals!inner(name)');
 
         if (judgeError || judgeVerticalError) {
           throw new Error('Failed to fetch judges');
@@ -45,7 +49,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             judge.verticalId = j.vertical_id;
             judge.verticalName = j.verticals.name;
           }
-        })
+        });
 
         return res.json({ judges });
       } catch (error) {

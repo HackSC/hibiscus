@@ -1,13 +1,32 @@
 import { supabase } from 'apps/podium-service/libs/supabase';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { method, body } = req;
 
   switch (method) {
+    case 'OPTIONS':
+      return res.status(200).send('ok');
     case 'POST':
-      const fields = ['name', 'teamMembers', 'description', 'imageUrl', 'devpostUrl', 'videoUrl'];
-      const fieldsDB = ['name', 'team', 'description', 'image_url', 'devpost_url', 'video_url'];
+      const fields = [
+        'name',
+        'teamMembers',
+        'description',
+        'imageUrl',
+        'devpostUrl',
+        'videoUrl',
+      ];
+      const fieldsDB = [
+        'name',
+        'team',
+        'description',
+        'image_url',
+        'devpost_url',
+        'video_url',
+      ];
       const addProjects = [];
       const verticals = {};
 
@@ -24,17 +43,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       } catch (error) {
         return res.status(500).json({ error: 'Internal Server Error' });
       }
-      
+
       try {
         const { data } = body;
 
         data.forEach((p) => {
-          if (!p.vertical || typeof p.vertical !== 'string' || typeof p.name !== 'string') {
-            return res.status(400).json({ error: 'Invalid request! Name and vertical are required and must be strings.'});
+          if (
+            !p.vertical ||
+            typeof p.vertical !== 'string' ||
+            typeof p.name !== 'string'
+          ) {
+            return res.status(400).json({
+              error:
+                'Invalid request! Name and vertical are required and must be strings.',
+            });
           } else if (!verticals?.[p.vertical]) {
-            return res.status(400).json({ error: 'The specified vertical does not exist.' });
+            return res
+              .status(400)
+              .json({ error: 'The specified vertical does not exist.' });
           }
-          
+
           const project = {};
           project['vertical_id'] = verticals[p.vertical];
 
@@ -45,11 +73,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           }
 
           addProjects.push(project);
-        })
+        });
 
-        const { error } = await supabase
-          .from('projects')
-          .insert(addProjects);
+        const { error } = await supabase.from('projects').insert(addProjects);
 
         if (error) {
           throw new Error('Failed to add new projects');

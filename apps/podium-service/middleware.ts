@@ -1,9 +1,33 @@
 import { getEnv } from '@hibiscus/env';
+import {
+  createClient,
+  SupabaseClient,
+  UserResponse,
+} from '@supabase/supabase-js';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export async function middleware(req: NextRequest) {
   const path = req.nextUrl;
+
+  // Handle preflight requests
+  if (req.method === 'OPTIONS') {
+    const res = NextResponse.next();
+
+    // add the CORS headers to the response
+    res.headers.append('Access-Control-Allow-Credentials', 'true');
+    res.headers.append('Access-Control-Allow-Origin', '*'); // Allow all origins
+    res.headers.append(
+      'Access-Control-Allow-Methods',
+      'GET,DELETE,PATCH,POST,PUT'
+    );
+    res.headers.append(
+      'Access-Control-Allow-Headers',
+      'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Authorization, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+    );
+
+    return res;
+  }
 
   if (
     path.pathname.startsWith('/api/error') ||
@@ -41,9 +65,9 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next();
   }
 
-  const res = await fetch(`${authServiceUrl}/verify-token/${accessToken}`);
+  const res = await verifyToken(accessToken);
 
-  if (res.status !== 200) {
+  if (res.error != null) {
     req.nextUrl.searchParams.set('status', '401');
     req.nextUrl.searchParams.set('message', 'Invalid access token');
     req.nextUrl.pathname = '/api/error';
@@ -53,6 +77,7 @@ export async function middleware(req: NextRequest) {
   const judgeRoutes = [
     { route: '/verticals', methods: ['GET'] },
     { route: '/projects', methods: ['GET'] },
+    { route: '/projects/[verticalId]', methods: ['GET'] },
     {
       route: '/ranking/[verticalId]/[userId]',
       methods: ['POST', 'GET', 'DELETE'],
@@ -73,12 +98,17 @@ export async function middleware(req: NextRequest) {
   });
 
   try {
-    const data = await res.json();
-    const role = data.role;
+    const supabase = createSupabaseServiceClient();
+    const roleRes = await supabase
+      .from('user_profiles')
+      .select('role')
+      .eq('user_id', res.data.user.id)
+      .maybeSingle();
+    const role = roleRes.data.role;
 
-    if (role === 'SUPERADMIN') {
+    if (role === 1) {
       return NextResponse.next();
-    } else if (isAccessingJudgeRoute && role === 'JUDGE') {
+    } else if (isAccessingJudgeRoute && role === 7) {
       return NextResponse.next();
     } else {
       req.nextUrl.searchParams.set('status', '403');
@@ -100,3 +130,19 @@ export async function middleware(req: NextRequest) {
 export const config = {
   matcher: '/api/:path*',
 };
+
+async function verifyToken(access_token: string): Promise<UserResponse> {
+  const supabase = createSupabaseServiceClient();
+
+  // Verify access token
+  const userRes = await supabase.auth.getUser(access_token);
+
+  return userRes;
+}
+
+function createSupabaseServiceClient(): SupabaseClient {
+  return createClient(
+    getEnv().Hibiscus.Supabase.apiUrl,
+    getEnv().Hibiscus.Supabase.serviceKey
+  );
+}

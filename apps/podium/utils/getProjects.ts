@@ -71,17 +71,17 @@ const getProjects = async (
   verticalId: string,
   accessToken: string
 ) => {
-  let unranked = [];
-  let ranked = [];
+  const unranked = [];
+  const ranked = [];
 
   const allProjects = await getVerticalProjects(verticalId, accessToken);
   const rankedBasic = await getRanked(userId, verticalId, accessToken);
 
   const rankedIds = rankedBasic.map((p) => p.projectId);
-  
+
   allProjects.forEach((p) => {
     rankedIds.includes(p.projectId) ? ranked.push(p) : unranked.push(p);
-  })
+  });
 
   return [unranked, ranked];
 };

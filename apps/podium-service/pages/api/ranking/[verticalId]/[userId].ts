@@ -1,12 +1,17 @@
 import { supabase } from 'apps/podium-service/libs/supabase';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { method, query, body } = req;
   const verticalId = query.verticalId as string;
   const userId = query.userId as string;
 
   switch (method) {
+    case 'OPTIONS':
+      return res.status(200).send('ok');
     case 'GET':
       try {
         const { data, error } = await supabase
@@ -27,15 +32,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           return res.status(404).json({ error: 'No rankings found' });
         }
 
-        const projects = data.map((p: any) => ({
-          projectId: p.project_id,
-          projectName: p.name,
-          verticalId: p.vertical_id,
-          verticalName: p.verticals.name,
-          rank: p.ranking.length > 0 ? p.ranking[0].rank : null,
-        }));
+        const projects = data
+          .map((p: any) => ({
+            projectId: p.project_id,
+            projectName: p.name,
+            verticalId: p.vertical_id,
+            verticalName: p.verticals.name,
+            rank: p.ranking.length > 0 ? p.ranking[0].rank : null,
+          }))
+          .filter((p) => p.rank != null);
 
-        return res.json({ projects });
+        return res.json({ rankings: projects });
       } catch (error) {
         return res.status(500).json({ error: 'Internal Server Error' });
       }
