@@ -21,10 +21,7 @@ export default async function handler(
         }
 
         const { data, error } = await supabase.auth.admin.inviteUserByEmail(
-          judgeEmail,
-          {
-            redirectTo: 'google.com',
-          }
+          judgeEmail
         );
 
         console.log(error);
