@@ -1,6 +1,6 @@
-import { calculateRankings } from 'apps/podium-service/libs/calculateRankings';
-import { isLocked } from 'apps/podium-service/libs/isLocked';
-import { supabase } from 'apps/podium-service/libs/supabase';
+import { calculateRankings } from '../../../libs/calculateRankings';
+import { isLocked } from '../../../libs/isLocked';
+import { supabase } from '../../../libs/supabase';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(

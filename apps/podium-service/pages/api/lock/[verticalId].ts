@@ -1,5 +1,5 @@
-import { calculateRankings } from 'apps/podium-service/libs/calculateRankings';
-import { supabase } from 'apps/podium-service/libs/supabase';
+import { calculateRankings } from '../../../libs/calculateRankings';
+import { supabase } from '../../../libs/supabase';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(

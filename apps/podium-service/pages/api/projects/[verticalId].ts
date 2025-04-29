@@ -1,4 +1,4 @@
-import { supabase } from 'apps/podium-service/libs/supabase';
+import { supabase } from '../../../libs/supabase';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
@@ -40,7 +40,7 @@ export default async function handler(
       } catch (error) {
         return res.status(500).json({ error: 'Internal Server Error' });
       }
-    case 'POST':
+    case 'POST': {
       const fields = [
         'name',
         'teamMembers',
@@ -87,6 +87,7 @@ export default async function handler(
       } catch (error) {
         return res.status(500).json({ error: 'Internal Server Error' });
       }
+    }
     default:
       res.status(405).end();
       break;

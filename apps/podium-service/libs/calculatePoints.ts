@@ -15,10 +15,13 @@ const calculatePoints = (rankings: Ranking[]): number => {
     switch (r.rank) {
       case 1:
         totalPoints += 10;
+        break;
       case 2:
         totalPoints += 5;
+        break;
       case 3:
         totalPoints += 2;
+        break;
       default:
         totalPoints += 1;
     }
