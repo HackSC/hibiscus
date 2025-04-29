@@ -38,12 +38,10 @@ export default async function handler(
       try {
         const { verticalId } = body;
         if (!verticalId || typeof verticalId !== 'string') {
-          return res
-            .status(400)
-            .json({
-              error:
-                'Invalid request! Vertical ID is required and must be a string.',
-            });
+          return res.status(400).json({
+            error:
+              'Invalid request! Vertical ID is required and must be a string.',
+          });
         }
 
         const { error } = await supabase

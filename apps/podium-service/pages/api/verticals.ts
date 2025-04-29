@@ -34,11 +34,9 @@ export default async function handler(
       try {
         const { name, description } = body;
         if (!name || typeof name !== 'string') {
-          return res
-            .status(400)
-            .json({
-              error: 'Invalid request! Name is required and must be a string.',
-            });
+          return res.status(400).json({
+            error: 'Invalid request! Name is required and must be a string.',
+          });
         }
 
         const { error } = await supabase

@@ -18,10 +18,14 @@ jobs:
       SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
       SENTRY_LOG_LEVEL: info
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/cache@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'yarn'
+      - uses: actions/cache@v4
         with:
           path: |
             **/node_modules
@@ -37,10 +41,14 @@ jobs:
     name: Test affected apps
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/cache@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'yarn'
+      - uses: actions/cache@v4
         with:
           path: |
             **/node_modules
@@ -56,10 +64,14 @@ jobs:
     name: Lint affected apps
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/cache@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'yarn'
+      - uses: actions/cache@v4
         with:
           path: |
             **/node_modules

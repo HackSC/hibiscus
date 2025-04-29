@@ -51,12 +51,10 @@ export default async function handler(
             typeof p.vertical !== 'string' ||
             typeof p.name !== 'string'
           ) {
-            return res
-              .status(400)
-              .json({
-                error:
-                  'Invalid request! Name and vertical are required and must be strings.',
-              });
+            return res.status(400).json({
+              error:
+                'Invalid request! Name and vertical are required and must be strings.',
+            });
           } else if (!verticals?.[p.vertical]) {
             return res
               .status(400)
