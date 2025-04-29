@@ -1,0 +1,23 @@
+.checkbox {
+    appearance: none;
+    border: 2px solid black;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+  }
+  
+  .checkbox:checked {
+    background-color: #BAE627;
+    border-color: black;
+  }
+  
+  .checkbox:checked::after {
+    content: '✔';
+    color: black;
+    font-size: 14px;
+    line-height: 1;
+  }
+  
