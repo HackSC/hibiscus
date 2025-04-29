@@ -35,7 +35,6 @@ jobs:
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
       - run: yarn install --frozen-lockfile
-      - run: yarn nx run-many --target=install --parallel
       - run: yarn nx affected:build --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
   test:
     name: Test affected apps
@@ -58,7 +57,6 @@ jobs:
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
       - run: yarn install --frozen-lockfile
-      - run: yarn nx run-many --target=install --parallel
       - run: yarn nx affected:test --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
   lint:
     name: Lint affected apps
@@ -81,5 +79,4 @@ jobs:
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
       - run: yarn install --frozen-lockfile
-      - run: yarn nx run-many --target=install --parallel
       - run: yarn nx affected:lint --parallel --base=${{ env.NX_BASE }} --head=${{ env.NX_HEAD }}
