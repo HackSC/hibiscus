@@ -60,6 +60,7 @@
     "next": "13.0.0",
     "next-redux-wrapper": "^8.1.0",
     "nprogress": "^0.2.0",
+    "papaparse": "^5.5.2",
     "postcss": "^8.4.47",
     "react": "18.2.0",
     "react-calendar": "^4.0.0",

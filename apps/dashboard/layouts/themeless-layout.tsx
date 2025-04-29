@@ -100,7 +100,7 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
         {
           name: 'Projects',
           url: '/judge-portal/projects',
-          image: MdOutlinePlaylistAddCheck,
+          image: MdOutlinePeopleAlt,
         },
         {
           name: 'Rankings',
