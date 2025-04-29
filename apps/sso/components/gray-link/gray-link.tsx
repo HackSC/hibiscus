@@ -17,7 +17,7 @@ export default GrayLink;
 
 const StyledText = styled(Text)`
   font-size: 16px;
-  font-family: "Hanken Grotesk";
+  font-family: 'Hanken Grotesk';
   text-decoration: underline;
   color: #000000;
   font-weight: 300;

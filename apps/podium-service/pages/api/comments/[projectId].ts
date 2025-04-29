@@ -1,7 +1,10 @@
 import { supabase } from 'apps/podium-service/libs/supabase';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { method, query, body } = req;
   const projectId = query.projectId as string;
 
@@ -34,7 +37,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // For faster lookup later
         const judgesMap = new Map();
         judgeData.forEach((judge) => {
-          judgesMap.set(judge.user_id, `${judge.first_name} ${judge.last_name}`);
+          judgesMap.set(
+            judge.user_id,
+            `${judge.first_name} ${judge.last_name}`
+          );
         });
 
         const comments: CommentData[] = commentsData.map((c: any) => ({

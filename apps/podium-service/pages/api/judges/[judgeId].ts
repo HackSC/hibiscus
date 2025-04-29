@@ -1,7 +1,10 @@
 import { supabase } from 'apps/podium-service/libs/supabase';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { method, query, body } = req;
   const judgeId = query.judgeId as string;
 
@@ -35,12 +38,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       try {
         const { verticalId } = body;
         if (!verticalId || typeof verticalId !== 'string') {
-          return res.status(400).json({ error: 'Invalid request! Vertical ID is required and must be a string.'});
+          return res
+            .status(400)
+            .json({
+              error:
+                'Invalid request! Vertical ID is required and must be a string.',
+            });
         }
 
         const { error } = await supabase
           .from('judges')
-          .upsert({ 'user_id': judgeId, 'vertical_id': verticalId });
+          .upsert({ user_id: judgeId, vertical_id: verticalId });
 
         if (error) {
           throw new Error('Failed to set judge vertical');

@@ -22,7 +22,7 @@ export function Button(props: ButtonProps) {
     return <YellowButton {...props}>{props.children}</YellowButton>;
   } else if (props.color === 'grey') {
     return <GreyButton {...props}>{props.children}</GreyButton>;
-  } else if (props.color === 'beige'){
+  } else if (props.color === 'beige') {
     return <PinkButton {...props}>{props.children}</PinkButton>;
   } else {
     return <RedButton {...props}>{props.children}</RedButton>;
@@ -273,7 +273,6 @@ const DisabledButton = styled.button`
   border: 1.5px solid #cecece;
 `;
 
-
 const PinkButton = styled.button`
   width: fit-content;
   height: 55px;
@@ -284,7 +283,7 @@ const PinkButton = styled.button`
   padding: 20px 30px;
   gap: 0px;
   font-family: 'DM Sans';
-  background:#FF6347;
+  background: #ff6347;
   border-radius: 10px;
   //fonts
   font-family: 'Inter';
@@ -296,17 +295,16 @@ const PinkButton = styled.button`
   letter-spacing: 0.2em;
   border: none;
   color: white;
-  margin-top: 10px; 
+  margin-top: 10px;
   :hover {
-    background:#FFB1A3;
+    background: #ffb1a3;
     color: white;
     cursor: pointer;
     transition: 0.1s;
   }
   :active {
-    background: #FFB1A3;;
+    background: #ffb1a3;
     color: white;
     border-radius: 10px;
   }
 `;
-

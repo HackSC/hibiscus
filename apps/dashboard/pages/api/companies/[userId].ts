@@ -40,15 +40,13 @@ export default async function handler(
         }
         const companyId = companyData.data['company_id'];
 
-        return res
-          .status(200)
-          .json({
-            data: {
-              company_id: companyId,
-              event_id: eventId,
-              company_name: companyName,
-            },
-          });
+        return res.status(200).json({
+          data: {
+            company_id: companyId,
+            event_id: eventId,
+            company_name: companyName,
+          },
+        });
       } else {
         return res.status(401).json({ message: 'Unauthorized access.' });
       }

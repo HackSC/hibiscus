@@ -13,9 +13,9 @@ const isLocked = async (verticalId: string): Promise<boolean> => {
 
     return data.length > 0;
   } catch (error) {
-    console.error("Internal Server Error");
+    console.error('Internal Server Error');
     return false;
   }
-}
+};
 
 export { isLocked };

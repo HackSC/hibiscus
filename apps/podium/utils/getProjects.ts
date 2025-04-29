@@ -78,10 +78,10 @@ const getProjects = async (
   const rankedBasic = await getRanked(userId, verticalId, accessToken);
 
   const rankedIds = rankedBasic.map((p) => p.projectId);
-  
+
   allProjects.forEach((p) => {
     rankedIds.includes(p.projectId) ? ranked.push(p) : unranked.push(p);
-  })
+  });
 
   return [unranked, ranked];
 };

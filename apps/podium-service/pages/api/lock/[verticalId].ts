@@ -2,7 +2,10 @@ import { calculateRankings } from 'apps/podium-service/libs/calculateRankings';
 import { supabase } from 'apps/podium-service/libs/supabase';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const { method, query, body } = req;
   const verticalId = query.verticalId as string;
 
@@ -13,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           .from('ranking_locks')
           .select()
           .eq('vertical_id', verticalId);
-        
+
         if (error) {
           throw new Error('Failed to fetch lockings');
         }

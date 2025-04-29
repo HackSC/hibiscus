@@ -2,9 +2,7 @@ import 'reflect-metadata';
 import { HackformResumeUploadClient } from '@hibiscus/hackform-client';
 import { NextApiHandler } from 'next';
 import { container } from 'tsyringe';
-import {
-  rateLimitHandler,
-} from '../../../../../common/utils';
+import { rateLimitHandler } from '../../../../../common/utils';
 
 const handler: NextApiHandler = async (req, res) => {
   const { userId } = req.query;

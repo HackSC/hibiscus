@@ -45,12 +45,12 @@ interface JudgeData {
 }
 
 interface CommentData {
-  comment: string,
-  name: string,
-  profilePicUrl: string,
-  createdAt: Date,
+  comment: string;
+  name: string;
+  profilePicUrl: string;
+  createdAt: Date;
 }
 
 interface NotesData {
-  notes: string,
+  notes: string;
 }

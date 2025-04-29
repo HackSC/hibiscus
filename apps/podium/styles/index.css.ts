@@ -11,7 +11,7 @@ globalStyle('body', {
 
 export const containerMain = style({
   padding: '12px',
-  paddingTop: '28px'
+  paddingTop: '28px',
 });
 
 export const header = style({
@@ -44,7 +44,7 @@ export const projectPreview = style({
     '&:active': {
       cursor: 'grabbing',
     },
-  }
+  },
 });
 
 export const rankBasic = style({
@@ -160,7 +160,7 @@ export const dragToOnHold = style({
   width: '100%',
   height: '147px',
   backgroundColor: '#002990',
-  color: '#FFFFFF'
+  color: '#FFFFFF',
 });
 
 export const onHoldStack = style({
@@ -218,7 +218,7 @@ export const heavyFont = style({
 
 export const textCenter = style({
   textAlign: 'center',
-})
+});
 
 export const zTop = style({
   zIndex: 9,
@@ -249,7 +249,7 @@ export const flexCenter = style({
 
 export const cursorPointer = style({
   cursor: 'pointer',
-})
+});
 
 export const boxShadowY = style({
   boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.2)',

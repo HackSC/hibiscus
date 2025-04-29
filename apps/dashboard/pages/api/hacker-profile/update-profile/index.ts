@@ -20,8 +20,8 @@ const handler: NextApiHandler = async (req, res) => {
       newUsername,
     } = req.body;
 
-    console.log("Body", req.body);
-  
+    console.log('Body', req.body);
+
     if (newName && newName.split(' ').length !== 2) {
       return res.status(400).json({ message: 'Not a full name.' });
     }

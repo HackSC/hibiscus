@@ -40,14 +40,13 @@ const MainPageWrapper = styled.div`
   flex-direction: column;
   justify-content: space-between;
   min-height: 100vh;
-  background-color: white; 
+  background-color: white;
 `;
 
-
 const Circle = styled.div`
-  width: 400px; 
-  height: 400px;   
-  background: #A4D4FC;
+  width: 400px;
+  height: 400px;
+  background: #a4d4fc;
   border-radius: 50%;
   border: 2px solid #000000;
-`
+`;

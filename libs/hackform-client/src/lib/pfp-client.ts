@@ -25,7 +25,7 @@ export class HackFromProfilePictureClient {
     const { data, error } = await this.supabaseClient
       .getClient()
       .storage.from(this.bucket)
-      .upload(`${userId}/pfp.${mimeType.split("/")[1]}`, blob);
+      .upload(`${userId}/pfp.${mimeType.split('/')[1]}`, blob);
     if (error) {
       throw new StorageError(error.message);
     }
@@ -45,7 +45,7 @@ export class HackFromProfilePictureClient {
     const { data, error } = await this.supabaseClient
       .getClient()
       .storage.from(this.bucket)
-      .update(`${userId}/pfp.${mimeType.split("/")[1]}`, blob);
+      .update(`${userId}/pfp.${mimeType.split('/')[1]}`, blob);
     if (error) {
       throw new StorageError(error.message);
     }

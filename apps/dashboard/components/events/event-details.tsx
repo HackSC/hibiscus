@@ -257,7 +257,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
 
-  background-color: #F6F6F6;
+  background-color: #f6f6f6;
   border: 3px solid #121212;
   border-radius: 10px;
 

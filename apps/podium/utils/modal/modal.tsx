@@ -46,7 +46,7 @@ const Backdrop = styled.div`
   background-color: rgba(0, 0, 0, 0);
   backdrop-filter: blur(0);
   transition: all 1s;
-  
+
   &.blurred {
     backdrop-filter: blur(5px);
     background-color: rgba(0, 0, 0, 0.25);

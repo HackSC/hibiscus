@@ -53,7 +53,7 @@ const handler: NextApiHandler = async (req, res) => {
 
   if (!userParticipantProfile.error) {
     userObj = { ...userObj, ...userParticipantProfile.data };
-  };
+  }
 
   return res.status(200).json({ success: true, data: userObj });
 };

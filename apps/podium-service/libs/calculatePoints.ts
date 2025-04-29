@@ -22,9 +22,9 @@ const calculatePoints = (rankings: Ranking[]): number => {
       default:
         totalPoints += 1;
     }
-  })
+  });
 
   return totalPoints;
-}
+};
 
 export { calculatePoints };
