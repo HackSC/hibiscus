@@ -1,3 +1,5 @@
+import { Ranking } from '../types/types';
+
 /*
       Overall rankings are calculated as follows:
       - Rank 1: 10 pts

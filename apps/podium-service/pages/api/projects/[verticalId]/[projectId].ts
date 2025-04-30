@@ -1,3 +1,4 @@
+import { EditableProjectData, ProjectData } from '../../../../types/types';
 import { supabase } from '../../../../libs/supabase';
 import { NextApiRequest, NextApiResponse } from 'next';
 

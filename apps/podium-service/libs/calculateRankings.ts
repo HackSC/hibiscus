@@ -1,3 +1,4 @@
+import { RankedProject, RankedProjectData } from '../types/types';
 import { calculatePoints } from './calculatePoints';
 import { supabase } from './supabase';
 
