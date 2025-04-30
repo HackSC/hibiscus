@@ -1,4 +1,4 @@
-import { supabase } from 'apps/podium-service/libs/supabase';
+import { supabase } from '../../../../../libs/supabase';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
@@ -14,12 +14,9 @@ export default async function handler(
       try {
         const { comment } = body;
         if (!comment || typeof comment !== 'string') {
-          return res
-            .status(400)
-            .json({
-              error:
-                'Invalid request! Comment is required and must be a string.',
-            });
+          return res.status(400).json({
+            error: 'Invalid request! Comment is required and must be a string.',
+          });
         }
 
         const { error } = await supabase.from('comments').insert({

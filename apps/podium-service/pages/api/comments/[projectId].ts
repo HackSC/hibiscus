@@ -1,4 +1,5 @@
-import { supabase } from 'apps/podium-service/libs/supabase';
+import { CommentData } from '../../../types/types';
+import { supabase } from '../../../libs/supabase';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(

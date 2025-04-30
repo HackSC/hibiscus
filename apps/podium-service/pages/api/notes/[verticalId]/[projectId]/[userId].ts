@@ -1,4 +1,5 @@
-import { supabase } from 'apps/podium-service/libs/supabase';
+import { NotesData } from '../../../../../types/types';
+import { supabase } from '../../../../../libs/supabase';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
@@ -37,12 +38,9 @@ export default async function handler(
       try {
         const { notes } = body;
         if (!notes || typeof notes !== 'string') {
-          return res
-            .status(400)
-            .json({
-              error:
-                'Invalid request! Notes are required and must be a string.',
-            });
+          return res.status(400).json({
+            error: 'Invalid request! Notes are required and must be a string.',
+          });
         }
 
         const { error } = await supabase.from('notes').insert({

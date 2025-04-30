@@ -1,10 +1,10 @@
-interface VerticalData {
+export interface VerticalData {
   verticalId: string;
   name: string;
   description: string | null;
 }
 
-interface ProjectData {
+export interface ProjectData {
   projectId: string;
   name: string;
   teamMembers: string[] | null;
@@ -16,15 +16,15 @@ interface ProjectData {
   verticalName: string;
 }
 
-interface EditableProjectData extends ProjectData {
+export interface EditableProjectData extends ProjectData {
   verticalNew: string;
 }
 
-interface Ranking {
+export interface Ranking {
   rank: number;
 }
 
-interface RankedProject {
+export interface RankedProject {
   projectId: string;
   projectName: string;
   verticalId: string;
@@ -32,11 +32,11 @@ interface RankedProject {
   rankings: Ranking[];
 }
 
-interface RankedProjectData extends Omit<RankedProject, 'rankings'> {
+export interface RankedProjectData extends Omit<RankedProject, 'rankings'> {
   rank: number;
 }
 
-interface JudgeData {
+export interface JudgeData {
   id: string;
   name: string;
   email: string;
@@ -44,13 +44,13 @@ interface JudgeData {
   verticalName: string | null;
 }
 
-interface CommentData {
+export interface CommentData {
   comment: string;
   name: string;
   profilePicUrl: string;
   createdAt: Date;
 }
 
-interface NotesData {
+export interface NotesData {
   notes: string;
 }

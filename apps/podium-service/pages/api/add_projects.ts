@@ -1,4 +1,4 @@
-import { supabase } from 'apps/podium-service/libs/supabase';
+import { supabase } from '../../libs/supabase';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function handler(
@@ -8,7 +8,7 @@ export default async function handler(
   const { method, body } = req;
 
   switch (method) {
-    case 'POST':
+    case 'POST': {
       const fields = [
         'name',
         'teamMembers',
@@ -51,12 +51,10 @@ export default async function handler(
             typeof p.vertical !== 'string' ||
             typeof p.name !== 'string'
           ) {
-            return res
-              .status(400)
-              .json({
-                error:
-                  'Invalid request! Name and vertical are required and must be strings.',
-              });
+            return res.status(400).json({
+              error:
+                'Invalid request! Name and vertical are required and must be strings.',
+            });
           } else if (!verticals?.[p.vertical]) {
             return res
               .status(400)
@@ -85,6 +83,7 @@ export default async function handler(
       } catch (error) {
         return res.status(500).json({ error: 'Internal Server Error' });
       }
+    }
     default:
       res.status(405).end();
       break;

@@ -1,4 +1,4 @@
-import { supabase } from 'apps/podium-service/libs/supabase';
+import { supabase } from './supabase';
 
 const isLocked = async (verticalId: string): Promise<boolean> => {
   try {

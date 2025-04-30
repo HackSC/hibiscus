@@ -1,5 +1,6 @@
-import { calculatePoints } from 'apps/podium-service/libs/calculatePoints';
-import { supabase } from 'apps/podium-service/libs/supabase';
+import { RankedProject, RankedProjectData } from '../types/types';
+import { calculatePoints } from './calculatePoints';
+import { supabase } from './supabase';
 
 interface ProjectPointsData {
   project: RankedProject;
