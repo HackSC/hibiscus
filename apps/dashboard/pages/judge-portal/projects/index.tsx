@@ -8,6 +8,8 @@ import Modal from 'apps/dashboard/components/modal/modal';
 import SearchBar from "apps/dashboard/components/search-bar/search-bar";
 import Papa from 'papaparse';
 import Project from "apps/dashboard/components/project-card/project";
+import { getEnv } from '@hibiscus/env';
+import axios from 'axios';
 
 export function Index() {
     const { user: authUser } = useHibiscusUser();
@@ -15,9 +17,9 @@ export function Index() {
     
     // default project state
     const defaultProjects = [
-        { id: 1, title: "My Project", vertical: "Vertical 1", shortDescription: "This project is about this and this.", color: "bg-white border-green-700", file: "project1.csv" },
-        { id: 2, title: "My Project", vertical: "Vertical 4", shortDescription: "This project is about this and this.", color: "bg-red-200", file: "project2.csv" },
-        { id: 3, title: "My Project", vertical: "Vertical 2", shortDescription: "This project is about this and this.", color: "bg-blue-100", file: "project3.csv" }
+        // { id: 1, title: "My Project", vertical: "Vertical 1", shortDescription: "This project is about this and this.", color: "bg-white border-green-700", file: "project1.csv" },
+        // { id: 2, title: "My Project", vertical: "Vertical 4", shortDescription: "This project is about this and this.", color: "bg-red-200", file: "project2.csv" },
+        // { id: 3, title: "My Project", vertical: "Vertical 2", shortDescription: "This project is about this and this.", color: "bg-blue-100", file: "project3.csv" }
     ];
     
     const [projects, setProjects] = useState(defaultProjects);
@@ -45,11 +47,8 @@ export function Index() {
         if (!projects) return;
         
         let filtered = projects;
-        
-        // Filter by vertical if not "All"
         if (activeVertical !== 'All') {
             filtered = filtered.filter(project => 
-                // Fix: Trim whitespace and do case-insensitive comparison
                 project.vertical.trim().toLowerCase() === activeVertical.trim().toLowerCase()
             );
         }
@@ -73,13 +72,18 @@ export function Index() {
                     const vertical = row["Vertical"] ? row["Vertical"].trim() : "Uncategorized";
                     
                     return {
-                        id: `new-${index}`,
+                        id: `project-${Date.now()}-${index}`,
                         title: row["Project Title"] || "Untitled Project",
                         vertical: vertical,
                         description: row["About The Project"] || "",
                         shortDescription: row["Built With"] || "",
                         color: "bg-blue-100",
                         file: fileName,
+                        teamMembers: row["Please Provide A List Of Your Team Members' Names. If There Are None, Put N/A."] || "",
+                        devpostUrl: row["Submission Url"] || "",
+                        videoUrl: row["Video Demo Link"] || "",
+                        githubUrl: row['"Try it out" Links'] || "",
+                        imageUrl: ""
                     };
                 });
                 
@@ -154,6 +158,7 @@ export function Index() {
         
         // Simulate upload progress
         simulateFileUpload(newUpload.id);
+        submitProjects(pendingProjects);
     };
     
 
@@ -184,6 +189,48 @@ export function Index() {
         setSearchTerm(value);
     };
     
+    // project upload to database
+
+    const submitProjects = async (projectsToSend = projects) => {
+        try {
+          const projectsToSubmit = projectsToSend.map(project => ({
+            name: project.title,
+            teamMembers: project.teamMembers,
+            description: project.description,
+            imageUrl: project.imageUrl,
+            devpostUrl: project.devpostUrl,
+            videoUrl: project.videoUrl,
+            vertical: project.vertical
+          }));
+      
+          const apiUrl = process.env.NEXT_PUBLIC_HIBISCUS_PODIUM_API_URL;
+        //   const token = getEnv().Hibiscus.Supabase.serviceKey;
+          console.log('Formatted projects:', projectsToSubmit);
+        //   console.log('Auth token:', token);
+          console.log('API URL:', apiUrl);
+          
+        //   const response = await axios({
+        //     method: 'POST',
+        //     url: `${apiUrl}/add_projects`,
+        //     headers: {
+        //       'Content-Type': 'application/json',
+        //       'Authorization': `Bearer ${token}`
+        //     },
+        //     data: { data: projectsToSubmit }
+        //   });
+
+        const response = await axios.post(`${apiUrl}/add_projects`, {
+            data: projectsToSubmit
+          });
+      
+          console.log('Projects submitted successfully');
+          return response.data;
+        } catch (error) {
+          console.error('Error submitting projects:', error);
+          throw error;
+        }
+      };
+
     if (authUser === null) {
         return <>Loading</>;
     }

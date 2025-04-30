@@ -1,9 +1,13 @@
-import { useState } from "react";
-
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 export function Project({project}) {
+    const router = useRouter();
     return(
+        // change
+        <Link  href={`/project/${project.id}`}>
+
         
-        <div key={project.id} className="border border-gray-700 rounded-md overflow-hidden">
+        <div key={project.id} className="border border-gray-700 rounded-md overflow-hidden transition-all duration-200 hover:border-gray-900 hover:border-2">
             <div className="p-4">
                 <p className="text-gray-700">{project.vertical}</p>
                 <h3 className="text-2xl font-bold italic">{project.title}</h3>
@@ -16,6 +20,7 @@ export function Project({project}) {
                 <p className="text-gray-700">{project.shortDescription}</p>
             </div>
         </div>
+        </Link>
     );
 
 }

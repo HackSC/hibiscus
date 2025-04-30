@@ -78,6 +78,7 @@ export async function middleware(req: NextRequest) {
     { route: '/verticals', methods: ['GET'] },
     { route: '/projects', methods: ['GET'] },
     { route: '/projects/[verticalId]', methods: ['GET'] },
+    // { route: '/add_projects', methods: ['POST'] },
     {
       route: '/ranking/[verticalId]/[userId]',
       methods: ['POST', 'GET', 'DELETE'],
