@@ -30,7 +30,10 @@ export function Index() {
     return <>Loading</>;
   }
   // Limit access to judge role
-  if (authUser?.role !== HibiscusRole.JUDGE) {
+  if (
+    authUser?.role !== HibiscusRole.JUDGE &&
+    authUser?.role !== HibiscusRole.ADMIN
+  ) {
     router.push('/');
     return <></>;
   }
