@@ -108,6 +108,29 @@ function ThemelessLayout({ children }: ThemelessLayoutProps) {
           image: MdOutlinePlaylistAddCheck,
         },
       ];
+    if (user.role === HibiscusRole.ADMIN)
+      return [
+        {
+          name: 'Judge Portal',
+          url: '/judge-portal',
+          image: MdOutlinePlaylistAddCheck,
+        },
+        {
+          name: 'Judges',
+          url: '/judge-portal/judges',
+          image: MdOutlinePlaylistAddCheck,
+        },
+        {
+          name: 'Projects',
+          url: '/judge-portal/projects',
+          image: MdOutlinePeopleAlt,
+        },
+        {
+          name: 'Rankings',
+          url: '/judge-portal/rankings',
+          image: MdOutlinePlaylistAddCheck,
+        },
+      ];
   }, [user]);
 
   const [companyName, setCompanyName] = useState(null);
