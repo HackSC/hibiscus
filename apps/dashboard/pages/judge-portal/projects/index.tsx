@@ -30,10 +30,10 @@ export function Index() {
   const [activeVertical, setActiveVertical] = useState('All');
   const [verticals, setVerticals] = useState([
     'All',
-    'Vertical 1',
-    'Vertical 2',
-    'Vertical 3',
-    'Vertical 4',
+    // 'Vertical 1',
+    // 'Vertical 2',
+    // 'Vertical 3',
+    // 'Vertical 4',
   ]);
   const [searchTerm, setSearchTerm] = useState('');
 
