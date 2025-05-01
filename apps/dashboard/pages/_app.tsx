@@ -36,7 +36,7 @@ const newLayoutRoutes = [
   '/judge-portal',
   '/judge-portal/judges',
   '/judge-portal/projects',
-  '/judge-portal/rankings'
+  '/judge-portal/rankings',
 ];
 
 function CustomApp({ Component, pageProps }: AppProps) {

@@ -107,7 +107,7 @@ const BoothIcon = () => (
 const JUDGE_NAVBAR = [
   { label: 'Events', icon: CalendarIcon, url: '/events' },
   { label: 'Leaderboard', icon: SquaresIcon, url: '/leaderboard' },
-  // { label: 'Profile', icon: PersonIcon, url: '/profile' },
+  { label: 'Judge Portal', icon: PersonIcon, url: '/judge-portal' },
 ];
 
 const SPONSOR_NAVBAR = [
@@ -129,6 +129,7 @@ function StyledSideNav() {
   const items = useMemo(() => {
     if (user == null) return [];
     if (user.role === HibiscusRole.HACKER) return JUDGE_NAVBAR;
+    if (user.role === HibiscusRole.JUDGE) return JUDGE_NAVBAR;
     if (user.role === HibiscusRole.SPONSOR) return SPONSOR_NAVBAR;
     return [];
   }, [user]);
