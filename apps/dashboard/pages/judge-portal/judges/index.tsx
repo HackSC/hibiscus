@@ -19,6 +19,7 @@ import { DropdownIndicator } from 'react-select/dist/declarations/src/components
 import DropDown from 'apps/dashboard/components/sponsor-portal/dropdown';
 import JudgeSelectionRow from 'apps/dashboard/components/judge-selection/judge-selection-row';
 import styles from './GreenButton.module.css';
+import { InviteJudgesModal } from 'apps/dashboard/components/modal/invite-judge-modal/invite-judge-modal';
 
 export function Index() {
   const judge_test = [
@@ -58,6 +59,7 @@ export function Index() {
     new Array(judge_test.length).fill(false)
   );
   const [selectAll, setSelectAll] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     search();
@@ -88,10 +90,18 @@ export function Index() {
     setSelectAll(newCheckedItems.every((item) => item));
   };
 
+  const handleInviteJudges = (emails: string) => {
+    // TODO: Implement the actual invite functionality
+    console.log('Inviting judges:', emails);
+  };
+
   return (
     <>
       <div className="flex flex-col px-10 py-5 gap-2">
-        <button className="w-[150px] border border-black rounded-[5px] px-[20px] py-[6px] text-base text-white bg-[#429FEE]">
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="w-[150px] border border-black rounded-[5px] px-[20px] py-[6px] text-base text-white bg-[#429FEE]"
+        >
           Invite Judge
         </button>
         <div className="flex justify-between text-xs">
@@ -125,6 +135,11 @@ export function Index() {
           />
         </div>
       </div>
+      <InviteJudgesModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleInviteJudges}
+      />
     </>
   );
 }
